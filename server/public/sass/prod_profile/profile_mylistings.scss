@@ -179,8 +179,20 @@
 
 #table-body {
   display: block;
-  max-height: 696px;
+  max-height: 629px;
   overflow-y: auto;
+  @media screen and (min-height: 566px) and (max-height: 655px) {
+    max-height: 314px;
+  }
+  @media screen and (min-height: 656px) and (max-height: 744px) {
+    max-height: 404px;
+  }
+  @media screen and (min-height: 745px) and (max-height: 835px) {
+    max-height: 494px;
+  }
+  @media screen and (min-height: 836px) and (max-height: 900px) {
+    max-height: 584px;
+  }
 }
 
 .nothing-exists-row {

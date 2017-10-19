@@ -1359,7 +1359,6 @@ pre {
     background-position: 0 -32px; }
 
 .nav-link {
-  color: rgba(0, 0, 0, 0.66);
   padding: 5px; }
   .nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.is-active {
     opacity: 0.7; }
@@ -1747,12 +1746,18 @@ pre {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
+    @media screen and (max-width: 456px) {
+      .table td,
+      .table th {
+        font-size: 14px; } }
   .table th {
     font-weight: 500;
     padding: 10px; }
   .table td {
     padding: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    .table td.is-danger {
+      color: #EF5350; }
   .table thead th {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   .table thead.has-hover-effect th:not(:first-child):hover {
@@ -1763,7 +1768,7 @@ pre {
   .table tbody tr.is-active {
     background-color: #efefef; }
   .table tbody tr.no-hover-effect:hover {
-    cursor: default; }
+    cursor: auto; }
   .table.is-bordered td,
   .table.is-bordered th {
     border-width: 1px; }
@@ -2695,6 +2700,10 @@ input:-webkit-autofill {
     height: 38px;
     padding-left: 14px;
     padding-right: 14px; }
+    @media screen and (max-width: 456px) {
+      .button.is-stylish {
+        font-size: 12px;
+        height: 32px; } }
     .button.is-stylish.is-small {
       font-size: 12px;
       height: 32px;
@@ -3242,6 +3251,15 @@ button {
 
 .company-logo {
   margin-bottom: 30px; }
+
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch; }
+  .button-wrapper .button,
+  .button-wrapper .select {
+    margin-right: 10px;
+    margin-bottom: 8px; }
 
 #preview-img {
   background-image: url("https://source.unsplash.com/category/nature"); }
