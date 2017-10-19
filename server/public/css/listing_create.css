@@ -507,7 +507,7 @@ a {
   color: #212121;
   font-weight: 400;
   text-decoration: none;
-  word-break: break-word; }
+  word-break: break-all; }
   a:active {
     outline: none; }
   a:active, a:hover, a:focus {
@@ -1731,6 +1731,8 @@ pre {
   color: #212121;
   margin-bottom: 20px;
   width: 100%; }
+  .table.is-fixed {
+    table-layout: fixed; }
   .table.is-narrow {
     width: auto; }
   .table.no-borders td,
@@ -1754,8 +1756,9 @@ pre {
     .table th.is-400 {
       font-weight: 400; }
   .table td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    word-break: break-all; }
     .table td.is-danger {
       color: #EF5350; }
     .table td.is-primary {
