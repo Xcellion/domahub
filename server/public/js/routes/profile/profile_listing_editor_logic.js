@@ -1605,7 +1605,7 @@ function updateDNSRecordAndWhois(listing_info, total_unverified, row_index){
   var cloned_www_row = cloned_table.find(".doma-www-record");
 
   //table header text
-  var table_header_text = "Current DNS Settings for " + listing_info.domain_name;
+  var table_header_text = "Current DNS Settings for " + "<span class='is-bold'" + listing_info.domain_name + "</span";
   if (total_unverified > 1){
     table_header_text = "Domain " + (row_index + 1) + " / " + total_unverified + " - " + table_header_text;
   }
