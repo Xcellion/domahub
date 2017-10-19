@@ -133,7 +133,7 @@
   height: 31px;
 }
 
-#filters {
+#filter-menu {
   @include mobile {
     select {
       width: 68px;
@@ -169,14 +169,20 @@
 
 // table
 #listings-table {
-  display: block;
-  max-height: calc(100vh - 226px);
-  overflow-y: auto;
   thead,
   tbody tr {
     display: table;
     table-layout: fixed;
     width: 100%;
+  }
+}
+
+#table-body {
+  display: block;
+  max-height: calc(100vh - 295px);
+  overflow-y: auto;
+  @include mobile {
+    max-height: calc(100vh - 325px);
   }
 }
 
