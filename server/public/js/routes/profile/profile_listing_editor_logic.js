@@ -148,7 +148,7 @@ function updateEditorEditing(selected_domain_ids){
     var domain_names_list = getSelectedDomains("domain_name");
     for (var x = 0 ; x < domain_names_list.length ; x++){
       var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
-      $("#view-listings-button-drop").append("<li><a target='_blank' href='" + listing_href + "' class='is-primary is-underlined'>" + domain_names_list[x] + "</a></li>");
+      $("#view-listings-button-drop").append("<a target='_blank' href='" + listing_href + "' class='is-primary is-underlined'>" + domain_names_list[x] + "</a>");
     }
   }
   else {
@@ -206,7 +206,7 @@ function setupEditingButtons(){
 
       //show specific tab
       $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
-      $("#tab-title").text($("#" + new_tab + "-tab-drop").data('title'));
+      // $("#tab-title").text($("#" + new_tab + "-tab-drop").data('title'));
       $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
     }
   });
@@ -219,14 +219,14 @@ function updateStatus(listing_info){
 
   //turned on, turn off?
   if (listing_info.status == 1){
-    $("#status-color").addClass("is-primary").removeClass('is-danger');
+    $("#status-toggle-button").addClass("is-primary").removeClass('is-danger');
     $("#status-icon").addClass("fa-toggle-on").removeClass('fa-toggle-off');
-    $("#status-text").text("Active").addClass("is-primary").removeClass('is-danger');
+    $("#status-text").text("Active");
   }
   else {
-    $("#status-color").addClass('is-danger').removeClass("is-primary");
+    $("#status-toggle-button").addClass('is-danger').removeClass("is-primary");
     $("#status-icon").addClass('fa-toggle-off').removeClass("fa-toggle-on");
-    $("#status-text").text("Inactive").addClass("is-danger").removeClass('is-primary');
+    $("#status-text").text("Inactive");
   }
 }
 
@@ -260,16 +260,16 @@ function checkBox(module_value, elem, child){
 
     //categories
     //remove any existing categories
-    $(".category-selector").removeClass('is-dark');
+    $(".category-selector").removeClass('is-primary');
     var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
     for (var x = 0; x < listing_categories.length; x++){
       //color existing categories
-      var temp_category = $("." + listing_categories[x] + "-category").addClass('is-dark');
+      var temp_category = $("." + listing_categories[x] + "-category").addClass('is-primary');
     }
     updateHiddenCategoryInput();
   }
   function updateHiddenCategoryInput(){
-    var joined_categories = $(".category-selector.is-dark").map(function() {
+    var joined_categories = $(".category-selector.is-primary").map(function() {
       return $(this).data("category");
     }).toArray().sort().join(" ");
     joined_categories = (joined_categories == "") ? null : joined_categories;
@@ -528,7 +528,7 @@ function checkBox(module_value, elem, child){
 
     //click to add this category
     $(".category-selector").off().on("click", function(e){
-      $(this).toggleClass('is-dark');
+      $(this).toggleClass('is-primary');
       updateHiddenCategoryInput();
       changedValue($("#categories-input"), listing_info);
     });
