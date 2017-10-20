@@ -875,27 +875,6 @@ module.exports = {
 
   //<editor-fold>-------------------------------GETS------------------------------
 
-  //gets all offers for a specific domain
-  getListingOffers : function(req, res, next){
-    console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");
-    var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    Data.getListingOffers(req.params.domain_name, function(result){
-
-      //set server side offers
-      if (result.state == "success"){
-        listing_obj.offers = result.info;
-      }
-      else {
-        listing_obj.offers = false;
-      }
-
-      res.send({
-        state: "success",
-        listing: listing_obj
-      });
-    });
-  },
-
   //gets all statistics for a specific domain
   getListingStats : function(req, res, next){
     console.log("F: Finding the all verified statistics for " + req.params.domain_name + "...");

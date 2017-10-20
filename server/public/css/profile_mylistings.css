@@ -3809,6 +3809,10 @@ button {
 .delete-modal-cloned-domain {
   word-break: break-all; }
 
+#delete-modal-domains {
+  max-height: 250px;
+  overflow-y: auto; }
+
 .media {
   -moz-transition: background-color 0.25s ease;
   -o-transition: background-color 0.25s ease;

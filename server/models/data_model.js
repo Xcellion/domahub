@@ -202,10 +202,11 @@ data_model.prototype.getListingOffererContactInfoByCode = function(domain_name, 
   listing_query(query, "Failed to get contact info for an offer for " + domain_name + "!", callback, [domain_name, verification_code]);
 }
 
-//gets all offers for a specific domain
-data_model.prototype.getListingOffers = function(domain_name, callback){
-  console.log("DB: Attempting to get all verified offers for domain: " + domain_name + "...");
+//gets all offers for specific domains
+data_model.prototype.getOffersMulti = function(domain_ids, callback){
+  console.log("DB: Attempting to get all verified offers for posted domains...");
   query = 'SELECT \
+        listings.id AS listing_id, \
         stats_contact_history.id, \
         stats_contact_history.timestamp, \
         stats_contact_history.deadline, \
@@ -221,9 +222,9 @@ data_model.prototype.getListingOffers = function(domain_name, callback){
       FROM stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
-      WHERE listings.domain_name = ? \
+      WHERE listings.id IN (?) \
       AND stats_contact_history.verified = 1'
-  listing_query(query, "Failed to get offers for " + domain_name + "!", callback, domain_name);
+  listing_query(query, "Failed to get offers for posted domains!", callback, domain_ids);
 }
 
 //gets view statistics for a specific domain

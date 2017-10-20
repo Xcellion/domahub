@@ -350,7 +350,6 @@ function toggleSelectRow(row, event){
   var selected = (row.hasClass("is-selected")) ? false : true;
   row.toggleClass('is-selected');
   row.find(".select-button").prop("checked", selected);
-  multiSelectButtons(row);
 
   //shift click to select/deselect all in between
   if (event.shiftKey && last_selected >= 0){
@@ -361,6 +360,7 @@ function toggleSelectRow(row, event){
     }
   }
   last_selected = row.index(".table-row:not('.clone-row')");
+  multiSelectButtons(row);
 }
 
 //function to select all rows
