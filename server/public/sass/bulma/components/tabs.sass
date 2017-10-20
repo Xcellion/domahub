@@ -11,7 +11,7 @@
   white-space: nowrap
   a
     align-items: center
-    border-bottom: 1px solid $border
+    border-bottom: 1px solid transparent
     color: $text
     display: flex
     justify-content: center
@@ -30,6 +30,7 @@
     &.is-active
       a
         border-bottom-color: $black-primary
+        border-bottom-width: 3px
   ul
     align-items: center
     border-bottom: 1px solid $border
@@ -95,29 +96,30 @@
         &:hover,
         &:active,
         &:focus
-          color: $black-disabled
+          opacity: 0.7
           outline: 0
       &.is-active
         a
           color: $primary
           font-weight: 500
-      &.side-tabs
-        border-left: 2px solid $black-secondary
-        padding-left: 20px
   &.is-boxed
+    ul
+      border-bottom: none
+      flex-shrink: 1
     a
-      border: 1px solid transparent
-      border-radius: $radius $radius 0 0
-      &:hover
-        background-color: $grey-lighter
-        border-bottom-color: $border
+      border: none
+      padding-top: 10px
+      padding-bottom: 10px
+      opacity: 0.8
+      &:hover,
+      &:active,
+      &:focus
+        opacity: 1
     li
       &.is-active
         a
-          background-color: $white
-          border-color: $border
-          border-bottom-color: transparent !important
           color: $primary
+          font-weight: 500
   &.is-fullwidth
     li
       flex-grow: 1

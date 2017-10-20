@@ -17,6 +17,7 @@ button[data-balloon] {
   bottom: 100%;
   left: 50%;
   position: absolute;
+  word-break: normal;
   z-index: 10;
   -webkit-transform: translate(-50%, 10px);
   -ms-transform: translate(-50%, 10px);
@@ -1740,7 +1741,7 @@ pre {
   white-space: nowrap; }
   .tabs a {
     align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid transparent;
     color: #212121;
     display: flex;
     justify-content: center;
@@ -1755,7 +1756,8 @@ pre {
     .tabs li:not(:last-child) {
       margin-right: 20px; }
     .tabs li.is-active a {
-      border-bottom-color: rgba(0, 0, 0, 0.88); }
+      border-bottom-color: rgba(0, 0, 0, 0.88);
+      border-bottom-width: 3px; }
   .tabs ul {
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -1811,25 +1813,24 @@ pre {
     margin-bottom: 0;
     padding: 0; }
     .tabs.no-borders li a:hover, .tabs.no-borders li a:active, .tabs.no-borders li a:focus {
-      color: rgba(0, 0, 0, 0.38);
+      opacity: 0.7;
       outline: 0; }
   .tabs.no-borders li.is-active a {
     color: #3cbc8d;
     font-weight: 500; }
-  .tabs.no-borders li.side-tabs {
-    border-left: 2px solid rgba(0, 0, 0, 0.66);
-    padding-left: 20px; }
+  .tabs.is-boxed ul {
+    border-bottom: none;
+    flex-shrink: 1; }
   .tabs.is-boxed a {
-    border: 1px solid transparent;
-    border-radius: 3px 3px 0 0; }
-    .tabs.is-boxed a:hover {
-      background-color: #f1f1f1;
-      border-bottom-color: rgba(0, 0, 0, 0.12); }
+    border: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    opacity: 0.8; }
+    .tabs.is-boxed a:hover, .tabs.is-boxed a:active, .tabs.is-boxed a:focus {
+      opacity: 1; }
   .tabs.is-boxed li.is-active a {
-    background-color: white;
-    border-color: rgba(0, 0, 0, 0.12);
-    border-bottom-color: transparent !important;
-    color: #3cbc8d; }
+    color: #3cbc8d;
+    font-weight: 500; }
   .tabs.is-fullwidth li {
     flex-grow: 1; }
   .tabs.is-toggle a {
@@ -2108,9 +2109,9 @@ pre {
   margin-top: 10px; }
 
 .box {
-  -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
   background-color: white;
   border-radius: 5px;
   display: block;
@@ -2338,6 +2339,7 @@ input:-webkit-autofill {
   vertical-align: top;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 3px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16), 0 -1px 1px #FFF, 0 1px 0 #FFF;
   max-width: 100%;
   width: 100%; }
   @media screen and (max-width: 456px) {
@@ -2405,6 +2407,8 @@ input:-webkit-autofill {
     line-height: 40px;
     padding-left: 12px;
     padding-right: 12px; }
+  .input.no-shadow, .no-shadow.textarea {
+    box-shadow: none; }
   .input.is-narrow, .is-narrow.textarea {
     width: auto; }
   .input.is-fullwidth, .is-fullwidth.textarea {
@@ -2612,7 +2616,7 @@ input:-webkit-autofill {
   position: relative;
   text-align: left; }
   .control:not(:last-child) {
-    margin-bottom: 20px; }
+    margin-bottom: 25px; }
   .control.has-text-centered {
     text-align: center; }
   .control.has-addons {
