@@ -3903,7 +3903,7 @@ button {
   height: 31px; }
 
 @media screen and (max-width: 768px) {
-  #filters select {
+  #filter-menu select {
     width: 68px; } }
 
 .tabs-menu {
@@ -3930,15 +3930,19 @@ button {
     overflow-x: auto;
     white-space: nowrap; } }
 
-#listings-table {
+#listings-table thead,
+#listings-table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%; }
+
+#table-body {
   display: block;
-  max-height: calc(100vh - 226px);
+  max-height: calc(100vh - 295px);
   overflow-y: auto; }
-  #listings-table thead,
-  #listings-table tbody tr {
-    display: table;
-    table-layout: fixed;
-    width: 100%; }
+  @media screen and (max-width: 768px) {
+    #table-body {
+      max-height: calc(100vh - 325px); } }
 
 .dns-status {
   padding: 5px;
