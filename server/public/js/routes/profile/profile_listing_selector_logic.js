@@ -6,8 +6,8 @@ $(document).ready(function(){
   //<editor-fold>-------------------------------FILTERS-------------------------------
 
   //sort by header
-  $(".header-sort").on("click", function(){
-    $(".header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+  $(".listing-header-sort").on("click", function(){
+    $(".listing-header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
     $(this).addClass('is-primary').find(".fa").toggleClass("fa-sort");
     var sort_value = $(this).data("value");
     var sort_direction = ($(this).data("sort_direction")) ? true : false;
