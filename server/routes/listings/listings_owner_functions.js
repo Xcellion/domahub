@@ -128,12 +128,14 @@ module.exports = {
       for (var x = 0; x < posted_domains.length; x++){
         var bad_reasons = [];
 
+        var parsed_domain = parseDomain(posted_domains[x].domain_name);
+
         //check domain
         if (!validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
           bad_reasons.push("Invalid domain name!");
         }
         //subdomains are not allowed
-        if (parseDomain(posted_domains[x].domain_name).subdomain != ""){
+        if (parsed_domain != null && parsed_domain.subdomain != ""){
           bad_reasons.push("No sub-domains!");
         }
         //check for duplicates among valid FQDN domains
@@ -874,27 +876,6 @@ module.exports = {
   //</editor-fold>
 
   //<editor-fold>-------------------------------GETS------------------------------
-
-  //gets all offers for a specific domain
-  getListingOffers : function(req, res, next){
-    console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");
-    var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    Data.getListingOffers(req.params.domain_name, function(result){
-
-      //set server side offers
-      if (result.state == "success"){
-        listing_obj.offers = result.info;
-      }
-      else {
-        listing_obj.offers = false;
-      }
-
-      res.send({
-        state: "success",
-        listing: listing_obj
-      });
-    });
-  },
 
   //gets all statistics for a specific domain
   getListingStats : function(req, res, next){

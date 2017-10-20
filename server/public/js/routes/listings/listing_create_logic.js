@@ -155,7 +155,7 @@ function createTable(bad_listings, good_listings){
 //function to show the table
 function showTable(){
   showHelpText("table");
-  $("#domains-submit").removeClass('is-hidden is-disabled');
+  $("#domains-submit").removeClass('is-hidden');
   $("#table-column").removeClass('is-hidden');
   $("#review-table-button").addClass('is-hidden');
 }
@@ -200,10 +200,10 @@ function handleSubmitDisabled(){
   if ($(".domain-name-input").filter(function(){ return $(this).val() != "" && !$(this).hasClass("is-disabled")}).length > 0
   && $(".notification.is-danger:not(.is-hidden)").length == 0
   && $(".domain-name-input.is-danger").length == 0){
-    $("#domains-submit").removeClass('is-disabled');
+    $("#domains-submit").removeClass('is-hidden');
   }
   else {
-    $("#domains-submit").addClass('is-disabled');
+    $("#domains-submit").addClass('is-hidden');
   }
 }
 
@@ -229,7 +229,7 @@ function submitDomains(submit_elem){
   //show warning that something needs fixed
   else {
     errorMessage("invalid domains");
-    $("#domains-submit").addClass('is-disabled');
+    $("#domains-submit").addClass('is-hidden');
   }
 
 }
@@ -346,7 +346,7 @@ function refreshRows(bad_listings, good_listings){
   }
 
   //disable submit and unclick terms
-  $("#domains-submit").addClass('is-disabled');
+  $("#domains-submit").addClass('is-hidden');
 }
 
 //function to refresh notifications if there are no relative rows
@@ -390,6 +390,7 @@ function badTableRows(bad_listings){
 //function to edit the rows to append any bad reasons
 function handleBadReasons(reasons, row){
   if (reasons){
+    $("#clear-errored-button").removeClass('is-hidden');
 
     //refresh the row
     row.addClass('errored-row');

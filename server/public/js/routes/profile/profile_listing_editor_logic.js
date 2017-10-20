@@ -3,6 +3,37 @@ var referer_chart = false;
 var traffic_chart = false;
 var completed_domains = 0;
 
+//accepted / deposited
+// //money has been deposited!
+// if (listing_info.deposited == 1){
+//   $("#offers-toolbar").addClass('is-hidden');
+//   $('.unaccepted-offer').addClass('is-hidden');
+//   $("#deposited-offer").removeClass('is-hidden');
+//   $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"));
+//
+//   //resend the deposited offer email button
+//   $("#resend-deposit").off().on("click", function(){
+//     resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), true);
+//   });
+// }
+// else {
+//   $("#deposited-offer").addClass('is-hidden');
+//
+//   //accepted an offer! hide other offers
+//   if (listing_info.accepted == 1){
+//     $('.unaccepted-offer').addClass('is-hidden');
+//     $("#accepted-offer").removeClass('is-hidden');
+//
+//     //resend the accepted offer email button
+//     $("#resend-accept").off().on("click", function(){
+//       resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), false);
+//     });
+//   }
+//   else {
+//     $("#accepted-offer").addClass('is-hidden');
+//   }
+// }
+
 $(document).ready(function(){
 
   //<editor-fold>-------------------------------OTHER-------------------------------
@@ -63,16 +94,20 @@ function updateEditorDomains(selected_domain_ids){
 
     $(".current-domain-list").remove();
     var domain_names_substr = [];
-    var selected_domain_names = getSelectedDomains("domain_name")
-    for (var x = 0 ; x < selected_domain_names.length ; x++){
-      domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
-    }
-    $(".title-wrapper").append(' \
+    var selected_domain_names = getSelectedDomains("domain_name");
+
+    //minimum 50 for tooltip
+    if (selected_domain_names.length < 50){
+      for (var x = 0 ; x < selected_domain_names.length ; x++){
+        domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
+      }
+      $(".title-wrapper").append(' \
       <span class="current-domain-list icon is-tooltip" \
-       data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" \
-       data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
+      data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" \
+      data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
       </span> \
-    ');
+      ');
+    }
   }
 }
 
@@ -835,17 +870,19 @@ function updateEditorOffers(selected_domain_ids){
     $(".editor-title").text("Viewing Offers - ");
   }
 
+  //select verified rows here so we can keep the heading as "My Offers"
   if (selected_domain_ids.length == 0){
     selectSpecificRows("verified", 1);
     selected_domain_ids = getSelectedDomains("id");
   }
   setupOfferButtons(selected_domain_ids);
-  showLoadingOffers();
   createOffersTable(selected_domain_ids);
 }
 
 //function to set up offer buttons
 function setupOfferButtons(selected_domain_ids){
+
+  //no verified listings to select!
   if (selected_domain_ids.length == 0){
     $(".offer-button").addClass('is-hidden');
   }
@@ -864,7 +901,6 @@ function setupOfferButtons(selected_domain_ids){
 
     //refresh offers button
     $("#refresh-offers-button").removeClass('is-hidden').off().on('click', function(){
-      $(this).addClass('is-loading');
       showLoadingOffers();
       createOffersTable(selected_domain_ids, true);
     });
@@ -931,56 +967,92 @@ function showOffers(search_term, show_rejected){
     }
   });
 
-  //hide no offers if there are any offers (including rejected)
+  //show no offers if there arent any offers (including rejected)
   if ($(".offer-row:not(#offer-clone, .is-hidden)").length == 0){
-    $("#no-offers").removeClass('is-hidden');
+    $("#no-offers-table").removeClass('is-hidden');
+    $("#offers-table").addClass('is-hidden');
   }
   else {
-    $("#no-offers").addClass('is-hidden');
+    $("#no-offers-table").addClass('is-hidden');
+    $("#offers-table").removeClass('is-hidden');
   }
 }
 
 //function to show loading offers row
 function showLoadingOffers(){
-  $("#loading-offers").removeClass('is-hidden');
-  $("#no-offers").addClass('is-hidden');
+  $("#loading-offers-table").removeClass('is-hidden');
   $(".hidden-while-loading-offers").addClass('is-hidden');
 }
 
 //function to create offer rows
 function createOffersTable(selected_domain_ids, force){
-  $("#offers-wrapper").find(".offer-row:not(#offer-clone)").remove();
-  completed_domains = 0;
+  var selected_listings = [];
 
-  if (selected_domain_ids.length > 0){
+  //no selected listings to get offers (no verified or no listings)
+  if (selected_domain_ids.length == 0){
+    $("#no-verified-listings-table").removeClass('is-hidden');
+
+    //no verified listings
+    if (listings.length > 0){
+      $(".offer-table-no-verified").removeClass('is-hidden');
+    }
+    //no listings
+    else {
+      $(".offer-table-no-listings").removeClass('is-hidden');
+      $(".offer-table-no-verified").addClass('is-hidden');
+    }
+  }
+  else {
+    showLoadingOffers();
+    $("#offers-wrapper").find(".offer-row:not(#offer-clone)").remove();
+    completed_domains = 0;
+
     for (var x = 0; x < selected_domain_ids.length; x++){
       var listing_info = getDomainByID(selected_domain_ids[x]);
 
       //if we havent gotten offers yet
       if (listing_info.offers == undefined || force){
-        getDomainOffers(listing_info, selected_domain_ids.length);
+        selected_listings.push({
+          domain_name : listing_info.domain_name,
+          id : listing_info.id,
+        });
       }
       else {
         updateOffersTable(listing_info, selected_domain_ids.length);
       }
     }
   }
-  else {
-    finishedOfferTable();
+
+  //if any offers to get
+  if (selected_listings.length > 0){
+    getListingOffers(selected_listings, selected_domain_ids);
   }
 }
 
 //function to get offers on a domain
-function getDomainOffers(listing_info, total_domains){
+function getListingOffers(selected_listings, selected_domain_ids){
   $.ajax({
-    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/getoffers",
-    method: "POST"
-  }).done(function(data){
-    if (data.listing){
-      listing_info = data.listing;
-      updateOffersTable(listing_info, total_domains);
+    url: "/profile/mylistings/offers",
+    method: "POST",
+    data: {
+      selected_listings : selected_listings
     }
-    else if (data.state != "success") {
+  }).done(function(data){
+    if (data.state == "success"){
+      listings = data.listings;
+
+      //make offer rows for domains we didnt yet
+      for (var x = 0 ; x < selected_listings.length ; x++){
+        for (var y = 0 ; y < listings.length ; y++){
+          if (listings[y].id == selected_listings[x].id){
+            selected_listings[x].offers = listings[y].offers;
+            updateOffersTable(selected_listings[x], selected_domain_ids.length);
+            break;
+          }
+        }
+      }
+    }
+    else {
       errorMessage(data.message);
     }
   });
@@ -1022,36 +1094,6 @@ function updateOffersTable(listing_info, total_domains){
     }
 
     completed_domains++;
-
-    //money has been deposited!
-    if (listing_info.deposited == 1){
-      $("#offers-toolbar").addClass('is-hidden');
-      $('.unaccepted-offer').addClass('is-hidden');
-      $("#deposited-offer").removeClass('is-hidden');
-      $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"));
-
-      //resend the deposited offer email button
-      $("#resend-deposit").off().on("click", function(){
-        resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), true);
-      });
-    }
-    else {
-      $("#deposited-offer").addClass('is-hidden');
-
-      //accepted an offer! hide other offers
-      if (listing_info.accepted == 1){
-        $('.unaccepted-offer').addClass('is-hidden');
-        $("#accepted-offer").removeClass('is-hidden');
-
-        //resend the accepted offer email button
-        $("#resend-accept").off().on("click", function(){
-          resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), false);
-        });
-      }
-      else {
-        $("#accepted-offer").addClass('is-hidden');
-      }
-    }
   }
 
   //all offers gotten
@@ -1062,32 +1104,9 @@ function updateOffersTable(listing_info, total_domains){
 
 //function to finish creating offers table
 function finishedOfferTable(){
-  //hide loading offers
-  $("#loading-offers").addClass('is-hidden');
-  $("#refresh-offers-button").removeClass('is-loading');
-
-  //no offers!
-  if ($(".offer-row:not(#offer-clone)").length == 0){
-    $("#no-offers").removeClass('is-hidden');
-  }
-  //offers exist
-  else {
-    //show rows (show rejected if button toggled)
-    if (!$("#show-rejected-offers").hasClass('is-primary')){
-      $(".offer-row:not(#offer-clone, .rejected-offer)").removeClass('is-hidden');
-    }
-    else {
-      $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
-    }
-
-    //hide no offers if there are any offers (that arent rejected)
-    if ($(".offer-row:not(.rejected-offer, #offer-clone)").length){
-      $("#no-offers").addClass('is-hidden');
-    }
-    else {
-      $("#no-offers").removeClass('is-hidden');
-    }
-  }
+  $("#loading-offers-table").addClass('is-hidden');
+  $(".hidden-while-loading-offers").removeClass('is-hidden');
+  showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
 }
 
 //function to edit modal with specific offer info
@@ -1225,11 +1244,7 @@ function offerSuccessHandler(accept, listing_info, offer_id){
 
     //hide the offer row
     $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".offer-accepted").text('Rejected - ').addClass('is-danger');
-
-    //no more offers!
-    if ($(".offer-row:not(.rejected-offer):not(#offer-clone").length == 0){
-      $("#no-offers").removeClass('is-hidden');
-    }
+    showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
   }
 }
 
@@ -1255,6 +1270,7 @@ function offerErrorHandler(message, offer_id){
 //function to view editor stats mode
 function updateEditorStats(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
+
   //change domain name header
   if (selected_domain_ids.length == 0){
     $(".editor-title").text("My Listing Stats");
@@ -1262,9 +1278,6 @@ function updateEditorStats(selected_domain_ids){
   else {
     $(".editor-title").text("Viewing Stats - ");
   }
-  $("#status-toggle-button").addClass('is-hidden');
-  $("#refresh-offers-button").addClass('is-hidden');
-  $("#refresh-stats-button").removeClass('is-hidden');
 }
 
 //function to get stats on a domain
@@ -1517,6 +1530,13 @@ function updateEditorUnverified(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
   $(".non-verify-elem").addClass('is-hidden');
   $(".verify-elem").removeClass('is-hidden');
+
+  //select verified rows here so we can keep the heading as "My Offers"
+  if (selected_domain_ids.length == 0){
+    selectSpecificRows("verified", false);
+    selected_domain_ids = getSelectedDomains("id");
+  }
+
   setupVerificationButtons(selected_domain_ids);
 
   //change domain name header
@@ -1569,13 +1589,13 @@ function createDNSRecordRows(selected_domain_ids, force){
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-table").remove();
-  var needs_dns_info = [];
+  var selected_listings = [];
   for (var x = 0; x < selected_domain_ids.length; x++){
     var listing_info = getDomainByID(selected_domain_ids[x]);
 
     //get who is an A record data if we haven't yet (or being refreshed)
     if (listing_info.a_records == undefined || listing_info.whois == undefined || force){
-      needs_dns_info.push({
+      selected_listings.push({
         domain_name : listing_info.domain_name,
         id : selected_domain_ids[x],
         client_index : x
@@ -1587,30 +1607,30 @@ function createDNSRecordRows(selected_domain_ids, force){
   }
 
   //if we need to get any DNS records, get them in one call
-  if (needs_dns_info.length > 0){
-    getDNSRecords(needs_dns_info, selected_domain_ids);
+  if (selected_listings.length > 0){
+    getDNSRecords(selected_listings, selected_domain_ids);
   }
 }
 
 //function to get DNS settings at once for all selected domains (and unknown DNS)
-function getDNSRecords(needs_dns_info, selected_domain_ids){
+function getDNSRecords(selected_listings, selected_domain_ids){
   $.ajax({
     url: "/profile/mylistings/dnsrecords",
     method: "POST",
     data: {
-      needs_dns_info : needs_dns_info
+      selected_listings : selected_listings
     }
   }).done(function(data){
     if (data.state == "success"){
       listings = data.listings;
 
       //make tables for domains we didnt yet
-      for (var x = 0 ; x < needs_dns_info.length ; x++){
+      for (var x = 0 ; x < selected_listings.length ; x++){
         for (var y = 0 ; y < listings.length ; y++){
-          if (listings[y].id == needs_dns_info[x].id){
-            needs_dns_info[x].a_records = listings[y].a_records;
-            needs_dns_info[x].whois = listings[y].whois;
-            createDNSTable(needs_dns_info[x], selected_domain_ids.length, needs_dns_info[x].client_index);
+          if (listings[y].id == selected_listings[x].id){
+            selected_listings[x].a_records = listings[y].a_records;
+            selected_listings[x].whois = listings[y].whois;
+            createDNSTable(selected_listings[x], selected_domain_ids.length, selected_listings[x].client_index);
             break;
           }
         }

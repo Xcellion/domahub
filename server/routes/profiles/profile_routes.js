@@ -37,6 +37,14 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.deleteListings
   ]);
 
+  //mylistings multi offer
+  app.post("/profile/mylistings/offers", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    profile_functions.getAccountListings,
+    profile_functions.getOffersMulti
+  ]);
+
   //mylistings multi DNS records
   app.post("/profile/mylistings/dnsrecords", [
     urlencodedParser,
