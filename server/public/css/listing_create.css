@@ -2771,7 +2771,8 @@ button {
   margin-top: 20px; }
 
 .content p {
-  line-height: 1.5; }
+  line-height: 1.5;
+  word-break: normal; }
 
 .content li.has-icon {
   line-height: 24px; }
@@ -3181,6 +3182,7 @@ button {
       font-weight: 500; }
   @media screen and (max-width: 768px) {
     .left-menu {
+      display: none;
       background-color: white;
       left: -123%;
       position: absolute;
@@ -3267,31 +3269,6 @@ button {
     margin-right: 10px;
     margin-bottom: 8px; }
 
-#preview-img {
-  background-image: url("https://source.unsplash.com/category/nature"); }
-
-#premium-form {
-  margin-top: 5px; }
-  #premium-form label::before {
-    top: 0;
-    left: 0; }
-
-#premium-label {
-  width: 24px;
-  height: 24px;
-  padding: 0; }
-
-.control-label.is-small {
-  width: 40px; }
-
-.control > .input.input-number, .control > .input-number.textarea {
-  width: 100%; }
-
-@media screen and (max-width: 768px) {
-  .flex-column-mobile {
-    display: flex;
-    flex-direction: column; } }
-
 #domain-input-table thead,
 #domain-input-table tbody tr {
   display: table;
@@ -3301,17 +3278,11 @@ button {
 #domain-input-body {
   display: block;
   max-height: 390px;
+  max-height: calc(100vh - 247px);
   overflow-y: auto; }
-
-@media screen and (max-width: 456px) {
-  #table-buttons th {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch; }
-    #table-buttons th .button {
-      margin-right: 5px;
-      margin-bottom: 5px;
-      flex-grow: 1; } }
+  @media screen and (max-width: 768px) {
+    #domain-input-body {
+      max-height: calc(100vh - 315px); } }
 
 .td-min-price {
   width: 25%; }
@@ -3326,6 +3297,3 @@ button {
 
 .aligned {
   vertical-align: top !important; }
-
-.what-is-premium {
-  text-align: right !important; }

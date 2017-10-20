@@ -3319,7 +3319,8 @@ button {
   margin-top: 20px; }
 
 .content p {
-  line-height: 1.5; }
+  line-height: 1.5;
+  word-break: normal; }
 
 .content li.has-icon {
   line-height: 24px; }
@@ -3729,6 +3730,7 @@ button {
       font-weight: 500; }
   @media screen and (max-width: 768px) {
     .left-menu {
+      display: none;
       background-color: white;
       left: -123%;
       position: absolute;
