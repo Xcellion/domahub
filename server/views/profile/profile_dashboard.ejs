@@ -38,9 +38,11 @@
 												Total
 											</small>
 											<h1 class="counter"><%= user.listings.length %></h1>
-											<a tabindex="0" href="/listings/create" class="is-underlined">
-                        Create Listings
-                      </a>
+                      <% if (user.listings.length > 0){ %>
+                        <a tabindex="0" href="/profile/mylistings" class="is-underlined">View Listings</a>
+                      <% } else { %>
+                        <a tabindex="0" href="/listings/create" class="is-underlined">Create Listings</a>
+                      <% } %>
 										</div>
 									</div>
 									<div class="level-item has-text-centered">
