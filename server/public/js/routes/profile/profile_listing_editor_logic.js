@@ -94,16 +94,20 @@ function updateEditorDomains(selected_domain_ids){
 
     $(".current-domain-list").remove();
     var domain_names_substr = [];
-    var selected_domain_names = getSelectedDomains("domain_name")
-    for (var x = 0 ; x < selected_domain_names.length ; x++){
-      domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
-    }
-    $(".title-wrapper").append(' \
+    var selected_domain_names = getSelectedDomains("domain_name");
+
+    //minimum 50 for tooltip
+    if (selected_domain_names.length < 50){
+      for (var x = 0 ; x < selected_domain_names.length ; x++){
+        domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
+      }
+      $(".title-wrapper").append(' \
       <span class="current-domain-list icon is-tooltip" \
-       data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" \
-       data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
+      data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" \
+      data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
       </span> \
-    ');
+      ');
+    }
   }
 }
 
@@ -866,6 +870,7 @@ function updateEditorOffers(selected_domain_ids){
     $(".editor-title").text("Viewing Offers - ");
   }
 
+  //select verified rows here so we can keep the heading as "My Offers"
   if (selected_domain_ids.length == 0){
     selectSpecificRows("verified", 1);
     selected_domain_ids = getSelectedDomains("id");
@@ -876,6 +881,8 @@ function updateEditorOffers(selected_domain_ids){
 
 //function to set up offer buttons
 function setupOfferButtons(selected_domain_ids){
+
+  //no verified listings to select!
   if (selected_domain_ids.length == 0){
     $(".offer-button").addClass('is-hidden');
   }
@@ -960,29 +967,46 @@ function showOffers(search_term, show_rejected){
     }
   });
 
-  //hide no offers if there are any offers (including rejected)
+  //show no offers if there arent any offers (including rejected)
   if ($(".offer-row:not(#offer-clone, .is-hidden)").length == 0){
-    $("#no-offers").removeClass('is-hidden');
+    $("#no-offers-table").removeClass('is-hidden');
+    $("#offers-table").addClass('is-hidden');
   }
   else {
-    $("#no-offers").addClass('is-hidden');
+    $("#no-offers-table").addClass('is-hidden');
+    $("#offers-table").removeClass('is-hidden');
   }
 }
 
 //function to show loading offers row
 function showLoadingOffers(){
-  $("#loading-offers").removeClass('is-hidden');
+  $("#loading-offers-table").removeClass('is-hidden');
   $(".hidden-while-loading-offers").addClass('is-hidden');
 }
 
 //function to create offer rows
 function createOffersTable(selected_domain_ids, force){
-  showLoadingOffers();
-  $("#offers-wrapper").find(".offer-row:not(#offer-clone)").remove();
-  completed_domains = 0;
   var selected_listings = [];
 
-  if (selected_domain_ids.length > 0){
+  //no selected listings to get offers (no verified or no listings)
+  if (selected_domain_ids.length == 0){
+    $("#no-verified-listings-table").removeClass('is-hidden');
+
+    //no verified listings
+    if (listings.length > 0){
+      $(".offer-table-no-verified").removeClass('is-hidden');
+    }
+    //no listings
+    else {
+      $(".offer-table-no-listings").removeClass('is-hidden');
+      $(".offer-table-no-verified").addClass('is-hidden');
+    }
+  }
+  else {
+    showLoadingOffers();
+    $("#offers-wrapper").find(".offer-row:not(#offer-clone)").remove();
+    completed_domains = 0;
+
     for (var x = 0; x < selected_domain_ids.length; x++){
       var listing_info = getDomainByID(selected_domain_ids[x]);
 
@@ -997,9 +1021,6 @@ function createOffersTable(selected_domain_ids, force){
         updateOffersTable(listing_info, selected_domain_ids.length);
       }
     }
-  }
-  else {
-    finishedOfferTable();
   }
 
   //if any offers to get
@@ -1017,7 +1038,6 @@ function getListingOffers(selected_listings, selected_domain_ids){
       selected_listings : selected_listings
     }
   }).done(function(data){
-    console.log(data);
     if (data.state == "success"){
       listings = data.listings;
 
@@ -1084,31 +1104,9 @@ function updateOffersTable(listing_info, total_domains){
 
 //function to finish creating offers table
 function finishedOfferTable(){
-  $("#loading-offers").addClass('is-hidden');
+  $("#loading-offers-table").addClass('is-hidden');
   $(".hidden-while-loading-offers").removeClass('is-hidden');
-
-  //no offers!
-  if ($(".offer-row:not(#offer-clone)").length == 0){
-    $("#no-offers").removeClass('is-hidden');
-  }
-  //offers exist
-  else {
-    //show rows (show rejected if button toggled)
-    if (!$("#show-rejected-offers").hasClass('is-primary')){
-      $(".offer-row:not(#offer-clone, .rejected-offer)").removeClass('is-hidden');
-    }
-    else {
-      $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
-    }
-
-    //hide no offers if there are any offers (that arent rejected)
-    if ($(".offer-row:not(.rejected-offer, #offer-clone)").length){
-      $("#no-offers").addClass('is-hidden');
-    }
-    else {
-      $("#no-offers").removeClass('is-hidden');
-    }
-  }
+  showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
 }
 
 //function to edit modal with specific offer info
@@ -1246,11 +1244,7 @@ function offerSuccessHandler(accept, listing_info, offer_id){
 
     //hide the offer row
     $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".offer-accepted").text('Rejected - ').addClass('is-danger');
-
-    //no more offers!
-    if ($(".offer-row:not(.rejected-offer):not(#offer-clone").length == 0){
-      $("#no-offers").removeClass('is-hidden');
-    }
+    showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
   }
 }
 
@@ -1536,6 +1530,13 @@ function updateEditorUnverified(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
   $(".non-verify-elem").addClass('is-hidden');
   $(".verify-elem").removeClass('is-hidden');
+
+  //select verified rows here so we can keep the heading as "My Offers"
+  if (selected_domain_ids.length == 0){
+    selectSpecificRows("verified", false);
+    selected_domain_ids = getSelectedDomains("id");
+  }
+
   setupVerificationButtons(selected_domain_ids);
 
   //change domain name header
