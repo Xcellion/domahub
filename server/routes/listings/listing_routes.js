@@ -23,6 +23,7 @@ module.exports = function(app, db, auth, error, stripe){
   //render listing create
   app.get('/listings/create', [
     auth.checkLoggedIn,
+    profile_functions.getAccountListings,
     stripe.getAccountInfo,
     owner_functions.renderCreateListing
   ]);
@@ -65,17 +66,6 @@ module.exports = function(app, db, auth, error, stripe){
   app.get('/listings/create*', function(req, res){
     res.redirect("/listings/create");
   });
-
-  //get offers for a verified domain
-  app.post('/listing/:domain_name/getoffers', [
-    auth.checkLoggedIn,
-    urlencodedParser,
-    checkDomainValid,
-    checkDomainListed,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.getListingOffers
-  ]);
 
   //get stats for a verified domain
   app.post('/listing/:domain_name/getstats', [
