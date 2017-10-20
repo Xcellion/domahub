@@ -1067,7 +1067,7 @@ function updateOffersTable(listing_info, total_domains){
       cloned_offer_row.removeAttr("id");
       cloned_offer_row.find(".td-offer-domain").text(listing_info.domain_name);
       cloned_offer_row.find(".td-offer-name").text(listing_info.offers[x].name);
-      cloned_offer_row.find(".td-offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - h:mmA"));
+      cloned_offer_row.find(".td-offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY")).attr("title", moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - hh:mm:A"));
       cloned_offer_row.find(".td-offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
       cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
       cloned_offer_row.data("domain_name", listing_info.domain_name).data("offer", listing_info.offers[x]);
@@ -1741,13 +1741,14 @@ function checkDNSAllDone(total_unverified){
 
     //all DNS settings are good
     if ($(".cloned-dns-table .needs-action-row").length == 0){
-      $("#verify-button, #verification-done").removeClass('is-hidden');
-      $("#refresh-dns-button, #verification-left").addClass('is-hidden');
+      $("#verify-button").removeClass('is-hidden');
+      $("#refresh-dns-button").addClass('is-hidden');
+      $("#verification-left").addClass('is-primary').removeClass('is-danger').text("All DNS settings look good! Click the button below to verify your domains.");
     }
     else {
-      $("#verify-button, #verification-done").addClass('is-hidden');
-      $("#refresh-dns-button, #verification-left").removeClass('is-hidden');
-      $("#verification-left-num").text($(".cloned-dns-table .needs-action-row").length);
+      $("#verify-button").addClass('is-hidden');
+      $("#refresh-dns-button").removeClass('is-hidden');
+      $("#verification-left").addClass('is-danger').removeClass('is-primary').text("You have " + $(".cloned-dns-table .needs-action-row").length + " DNS settings left to modify.");
     }
   }
 }

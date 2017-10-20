@@ -5,23 +5,36 @@ $(document).ready(function(){
 
   //<editor-fold>-------------------------------FILTERS-------------------------------
 
-  //sorting
-  $("#sort-select").on("change", function(){
-    var sort_value = $(this).val().split("-");
-    var sort_by = sort_value[0];
-    var sort_order = sort_value[1];
+  //sort by header
+  $(".header-sort").on("click", function(){
+    $(".header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+    $(this).addClass('is-primary').find(".fa").toggleClass("fa-sort");
+    var sort_value = $(this).data("value");
+    var sort_direction = ($(this).data("sort_direction")) ? true : false;
+    listings.sort(function(a,b){
+      if (sort_value == "domain_name"){
+        var a_sort = a[sort_value].toLowerCase();
+        var b_sort = b[sort_value].toLowerCase();
+      }
+      else {
+        var a_sort = a[sort_value];
+        var b_sort = b[sort_value];
+      }
 
-    if (sort_order == "asc"){
-      listings.sort(function(a,b){
-        return a[sort_by] > b[sort_by];
-      });
+      if (sort_direction){
+        return (a_sort > b_sort) ? 1 : (a_sort < b_sort) ? -1 : 0;
+      }
+      else {
+        return (a_sort > b_sort) ? -1 : (a_sort < b_sort) ? 1 : 0;
+      }
+    });
+    $(this).data("sort_direction", !sort_direction).find(".fa").addClass()
+    if (sort_direction){
+      $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
     }
-    else if (sort_order == "desc"){
-      listings.sort(function(a,b){
-        return a[sort_by] < b[sort_by];
-      });
+    else {
+      $(this).find(".fa").addClass("fa-sort-desc").removeClass("fa-sort-asc");
     }
-
     createRows();
   });
 
@@ -317,7 +330,7 @@ function updateDomainRow(tempRow, listing_info){
   var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
 
-  tempRow.find(".td-domain").html("<a target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
+  tempRow.find(".td-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mm:A"));
   tempRow.find(".td-status").text((listing_info.verified) ? ((listing_info.status) ? "Active" : "Inactive") : "Unverified");
   tempRow.find(".td-min").text((listing_info.min_price) ? moneyFormat.to(parseFloat(listing_info.min_price)) : "-");
