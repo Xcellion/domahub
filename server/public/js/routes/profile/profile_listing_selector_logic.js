@@ -176,9 +176,9 @@ $(document).ready(function(){
   else if (url_selected_listings != "" && url_tab == "offers"){
     viewDomainOffers();
   }
-  else if (url_selected_listings != "" && url_tab == "stats"){
-    viewDomainStats();
-  }
+  // else if (url_selected_listings != "" && url_tab == "stats"){
+  //   viewDomainStats();
+  // }
   else {
     showSelector();
   }
@@ -448,12 +448,11 @@ function viewDomainDetails(url_tab){
       url_tab = "info";
     }
     showEditor(url_tab, selected_domain_ids);
-    $("#edit-toolbar").removeClass('is-hidden');
-    $("#offers-toolbar").addClass('is-hidden');
     updateEditorEditing(selected_domain_ids);
   }
   else {
     window.history.replaceState({}, "", "/profile/mylistings");
+    showSelector();
   }
 }
 
@@ -461,8 +460,6 @@ function viewDomainDetails(url_tab){
 function viewDomainOffers(url_tab){
   var selected_domain_ids = getSelectedDomains("id", true);
   showEditor("offers", selected_domain_ids);
-  $("#edit-toolbar").addClass('is-hidden');
-  $("#offers-toolbar").removeClass('is-hidden');
   updateEditorOffers(selected_domain_ids);
 }
 
@@ -470,22 +467,14 @@ function viewDomainOffers(url_tab){
 function viewDomainStats(url_tab){
   var selected_domain_ids = getSelectedDomains("id", true);
   showEditor("stats", selected_domain_ids);
-  $("#edit-toolbar").addClass('is-hidden');
-  $("#offers-toolbar").addClass('is-hidden');
   updateEditorStats(selected_domain_ids);
 }
 
 //function to change domain
 function viewDomainDNS(){
   var selected_domain_ids = getSelectedDomains("id", false);
-  if (selected_domain_ids.length > 0){
-    showEditor("verify", selected_domain_ids);
-    $("#edit-toolbar").addClass('is-hidden');
-    updateEditorUnverified(selected_domain_ids);
-  }
-  else {
-    window.history.replaceState({}, "", "/profile/mylistings");
-  }
+  showEditor("verify", selected_domain_ids);
+  updateEditorUnverified(selected_domain_ids);
 }
 
   //<editor-fold>-------------------------------DELETE LISTINGS-------------------------------
@@ -526,12 +515,13 @@ function viewDomainDNS(){
       delete_button.removeClass('is-loading');
       $("#delete-modal").removeClass('is-active');
 
-      //deselect all rows
-      selectAllRows(false);
       if (data.state == "success"){
         deletionHandler(data.rows, $(".table-row:not(.clone-row).is-selected"));
         successMessage("Successfully deleted " + deletion_ids.length + " listings!");
       }
+
+      //deselect all rows
+      selectAllRows(false);
     });
   }
 
@@ -546,7 +536,7 @@ function viewDomainDNS(){
     if (rows.length == 0){
       $(".yes-listings-elem").addClass('is-hidden');
       $(".no-listings-elem").removeClass('is-hidden');
-      $("#loading-tab").addClass('is-hidden');
+      $("#offers-left-tab").addClass('is-hidden');    //hide left offers menu tab if 0 listings
     }
     //recreate the rows
     else {

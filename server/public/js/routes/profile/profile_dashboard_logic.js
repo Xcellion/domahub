@@ -25,15 +25,14 @@ $(document).ready(function() {
 
 //find out how many domains are unverified
 function calcUnverified() {
-  var unverified_listings_id = user.listings.reduce(function(arr, listing) {
-    if (!listing.verified) { arr.push(listing.id); }
-    return arr;
-  }, []);
-  var unverified_href = "/profile/mylistings?listings=" + unverified_listings_id.join(",") + "&tab=verify";
+  var unverified_listings = user.listings.filter(function(listing) {
+    return !listing.verified;
+  })
+  var unverified_href = "/profile/mylistings?tab=verify";
 
-  $("#unverified-counter").text(unverified_listings_id.length);
-  if (unverified_listings_id.length > 0){
-    appendNotification("Verify " + unverified_listings_id.length + " <a tabindex='0' class='is-underlined' href='" + unverified_href + "'>unverified domains</a>.", true);
+  $("#unverified-counter").text(unverified_listings.length);
+  if (unverified_listings.length > 0){
+    appendNotification("Verify " + unverified_listings.length + " <a tabindex='0' class='is-underlined' href='" + unverified_href + "'>unverified domains</a>.", true);
     $("#unverified-button").attr("href", unverified_href);
   }
   else {
@@ -60,6 +59,10 @@ function showNotifications() {
   //if bank account is not connected
   if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
     appendNotification("Connect your <a tabindex='0' class='is-underlined' href='/profile/settings#payout-bank'>bank account</a>.", true);
+  }
+
+  if (!user.listings || user.listings.length == 0){
+    appendNotification("Create some <a tabindex='0' class='is-underlined' href='/listings/create'>DomaHub listings</a>.", true);
   }
 
   calcNotificationCounter();
