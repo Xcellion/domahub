@@ -18,18 +18,16 @@
 			<%- include("profile_left_menu.ejs"); %>
 
       <div class="right-content">
-				<div class="columns">
-          <div class="column">
-            <h2 class="is-bold">Dashboard</h2>
-            <p>
-              Welcome <%= user.username %>!
-            </p>
-          </div>
-				</div>
+				<div class="content">
+          <h2 class="is-bold">Dashboard</h2>
+          <p>
+            Welcome <%= user.username %>!
+          </p>
+        </div>
         <div class="columns">
 					<div class="column is-7">
-						<div class="card no-shadow is-fullwidth">
-							<div class="card-header is-grey">
+						<div class="card is-fullwidth">
+							<div class="card-header">
 								<h3 class="card-header-title">Portfolio Overview</h3>
 							</div>
 							<div class="card-content">
@@ -73,47 +71,34 @@
 								</div>
 							</div>
 						</div>
-						<div class="card no-shadow is-fullwidth">
-							<div class="card-header is-grey">
-								<h3 class="card-header-title">Traffic Overview</h3>
-								<%# <a tabindex="0" class="is-stylish is-small card-header-icon button">
-									<span class="icon"><i class="fa fa-calendar"></i></span>
-									<span>Change Date</span>
-								</a>%>
+						<div class="card is-fullwidth">
+							<div class="card-header">
+								<h3 class="card-header-title is-bold">Get Free Months of Premium!</h3>
+								<a tabindex="0" href="/features#pricing" class="button is-primary">Learn More</a>
 							</div>
-							<div class="card-content">
-                <div class="content">
-                  <p>
-										Statistics and traffic data are currently being developed.
-										Please <a class="is-underlined is-primary" href="/contact">let us know</a>
-										what kind of traffic tools you'd like to see on your DomaHub dashboard!
-									</p>
-								</div>
+              <div class="card-content">
+								<div class="content">
+	                <p>
+	                  Invite your friends to try DomaHub using your unique promo code and get a free month of premium
+	                  for each friend that signs up for a Premium account!
+	                </p>
+	                <p>
+	                  Check the status of your existing referrals <a class="is-underlined" href="/profile/settings#promo">here</a>.
+	                </p>
+	                <div class="control has-addons">
+	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username %>" class="input no-shadow" placeholder="Invite your friends!"/>
+	                  <a id="referral-link-copy" class="button no-shadow">
+	                    <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
+	                    <p>Copy Link</p>
+	                  </a>
+	                </div>
+	              </div>
 							</div>
-						</div>
+            </div>
 					</div>
           <div class="column is-5">
-						<div class="notification is-info no-shadow">
-              <div class="content">
-                <h3 class="is-bold is-white">Get Free Months of <a tabindex="0" href="/features#pricing" class="is-bold is-underlined">Premium</a>.</h3>
-                <p class="is-white">
-                  Invite your friends to try DomaHub using your unique promo code and get a free month of premium
-                  for each friend that signs up for a Premium account!
-                </p>
-                <p class="is-white">
-                  Check the status of your existing referrals <a class="is-underlined" href="/profile/settings#promo">here</a>.
-                </p>
-                <div class="control has-addons">
-                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username %>" class="input no-shadow" placeholder="Invite your friends!"/>
-                  <a id="referral-link-copy" class="button no-shadow">
-                    <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
-                    <p>Copy Link</p>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="card no-shadow is-fullwidth">
-              <div class="card-header is-grey">
+            <div class="card is-fullwidth">
+              <div class="card-header">
                 <h3 class="card-header-title">
                   <span id="notification-counter" class="is-white"></span>
                   Notifications
@@ -126,8 +111,8 @@
                 </div>
               </div>
             </div>
-            <div class="card no-shadow is-fullwidth">
-              <div class="card-header is-grey">
+            <div class="card is-fullwidth">
+              <div class="card-header">
                 <h3 class="card-header-title">Account Status</h3>
               </div>
               <div class="card-content">
@@ -210,6 +195,24 @@
                 </div>
               </div>
             </div>
+						<div class="card is-fullwidth">
+							<div class="card-header">
+								<h3 class="card-header-title">Traffic Overview</h3>
+								<%# <a tabindex="0" class="is-stylish is-small card-header-icon button">
+									<span class="icon"><i class="fa fa-calendar"></i></span>
+									<span>Change Date</span>
+								</a>%>
+							</div>
+							<div class="card-content">
+                <div class="content">
+                  <p>
+										Statistics and traffic data are currently being developed.
+										Please <a class="is-underlined is-primary" href="/contact">let us know</a>
+										what kind of traffic tools you'd like to see on your DomaHub dashboard!
+									</p>
+								</div>
+							</div>
+						</div>
           </div>
         </div>
       </div>
