@@ -2806,7 +2806,8 @@ button {
   margin-top: 20px; }
 
 .content p {
-  line-height: 1.5; }
+  line-height: 1.5;
+  word-break: normal; }
 
 .content li.has-icon {
   line-height: 24px; }
