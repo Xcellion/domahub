@@ -230,11 +230,13 @@ module.exports = {
         });
       });
     }
-    if (req.body.needs_dns_info){
-      for (var x = 0; x < req.body.needs_dns_info.length; x++){
+
+    if (req.body.selected_listings){
+      for (var x = 0; x < req.body.selected_listings.length; x++){
         for (var y = 0; y < req.user.listings.length; y++){
           //user object has the same listing id as the listing being verified
-          if (req.user.listings[y].id == req.body.needs_dns_info[x].id){
+          if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
+          && req.user.listings[y].id == req.body.selected_listings[x].id){
             if (req.user.listings[y].verified != 1){
               //add to list of promises
               dns_record_promises.push(q_function({
@@ -269,6 +271,42 @@ module.exports = {
         });
       });
     }
+  },
+
+  //gets all offers for multiple listings
+  getOffersMulti : function(req, res, next){
+    console.log("F: Finding the all verified offers for the posted domains...");
+
+    var listing_ids = [];
+    for (var x = 0; x < req.body.selected_listings.length; x++){
+      for (var y = 0; y < req.user.listings.length; y++){
+        //user object has the same listing id as the listing being verified
+        if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
+        && req.user.listings[y].id == req.body.selected_listings[x].id){
+          listing_ids.push(req.body.selected_listings[x].id);
+          break;
+        }
+      }
+    }
+    Data.getOffersMulti(listing_ids, function(result){
+
+      //update req.user.listings
+      if (result.state == "success"){
+        for (var x = 0 ; x < req.user.listings.length ; x++){
+          req.user.listings[x].offers = [];
+          for (var y = 0; y < result.info.length; y++){
+            if (req.user.listings[x].id == result.info[y].listing_id){
+              req.user.listings[x].offers.push(result.info[y]);
+            }
+          }
+        }
+      }
+
+      res.send({
+        state: "success",
+        listings: req.user.listings
+      });
+    });
   },
 
   //</editor-fold>
