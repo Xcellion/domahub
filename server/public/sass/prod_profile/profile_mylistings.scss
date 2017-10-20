@@ -34,6 +34,13 @@
   overflow-y: auto;
 }
 
+.box-drop {
+  @include widescreen {
+    margin-right: 22%;
+  }
+}
+
+// offers
 .media {
   @include transition(background-color 0.25s ease);
   border-radius: $radius-small;
@@ -132,12 +139,6 @@
   z-index: 5;
 }
 
-#status-toggle-button {
-  border: none;
-  justify-content: flex-start;
-  height: 31px;
-}
-
 #filter-menu {
   @include mobile {
     select {
@@ -146,28 +147,55 @@
   }
 }
 
-// my listing edit toolbar
-.tabs-menu {
-  width: 300px;
-  max-width: 300px;
-  @include mobile {
-    width: 100%;
-    max-width: 100%;
+// edit listing tabs
+#edit-toolbar {
+  margin-bottom: 20px;
+  .tabs {
+    margin-top: 20px;
+    overflow: visible;
+    overflow-x: visible;
+    ul {
+      flex-wrap: wrap;
+    }
+    @include mobile {
+      li {
+        &:not(:last-child) {
+          margin-right: 5px;
+        }
+      }
+    }
   }
 }
 
-#edit-toolbar {
-  .menu-list {
+.sub-tabs {
+  position: relative;
+  padding-right: 20px;
+  &:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    height: 50%;
+    top: 25%;
+    width: 2px;
+    background: $border;
     @include mobile {
-      @include unselectable;
-      @include overflow-touch;
-      align-items: stretch;
-      display: flex;
-      font-size: $size-normal;
-      justify-content: space-between;
-      overflow: hidden;
-      overflow-x: auto;
-      white-space: nowrap;
+      right: 15px;
+    }
+  }
+}
+
+.child-module {
+  &.is-disabled {
+    opacity:0.25;
+  }
+}
+
+#view-listings-button-drop {
+  a {
+    padding: 0;
+    justify-content: flex-start;
+    &:not(:last-child) {
+      margin-bottom: 8px;
     }
   }
 }
