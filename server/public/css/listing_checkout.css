@@ -17,6 +17,7 @@ button[data-balloon] {
   bottom: 100%;
   left: 50%;
   position: absolute;
+  word-break: normal;
   z-index: 10;
   -webkit-transform: translate(-50%, 10px);
   -ms-transform: translate(-50%, 10px);
@@ -1539,7 +1540,8 @@ pre {
   padding: 15px 20px;
   border-radius: 3px 3px 0 0; }
   .card-header.is-grey {
-    background-color: #f1f1f1; }
+    background-color: #f1f1f1;
+    border-bottom: none; }
   .card-header.is-justified-start {
     justify-content: flex-start; }
     .card-header.is-justified-start .card-header-title {
@@ -1615,16 +1617,16 @@ pre {
     margin-right: 5px; }
 
 .card {
-  -webkit-box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.12);
-  box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
   background-color: white;
   border-radius: 3px;
   max-width: 100%;
   position: relative;
   width: 325px; }
   .card:not(:last-child) {
-    margin-bottom: 25px; }
+    margin-bottom: 50px; }
   .card .media:not(:last-child) {
     margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
@@ -1657,9 +1659,9 @@ pre {
     min-height: 350px; }
 
 .box {
-  -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 8px 20px 2px rgba(0, 0, 0, 0.07);
   background-color: white;
   border-radius: 5px;
   display: block;
@@ -1930,6 +1932,7 @@ input:-webkit-autofill {
   vertical-align: top;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 3px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16), 0 -1px 1px #FFF, 0 1px 0 #FFF;
   max-width: 100%;
   width: 100%; }
   @media screen and (max-width: 456px) {
@@ -1997,6 +2000,8 @@ input:-webkit-autofill {
     line-height: 40px;
     padding-left: 12px;
     padding-right: 12px; }
+  .input.no-shadow, .no-shadow.textarea {
+    box-shadow: none; }
   .input.is-narrow, .is-narrow.textarea {
     width: auto; }
   .input.is-fullwidth, .is-fullwidth.textarea {
@@ -2204,7 +2209,7 @@ input:-webkit-autofill {
   position: relative;
   text-align: left; }
   .control:not(:last-child) {
-    margin-bottom: 20px; }
+    margin-bottom: 25px; }
   .control.has-text-centered {
     text-align: center; }
   .control.has-addons {
