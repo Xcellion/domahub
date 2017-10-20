@@ -43,6 +43,7 @@
     }
   }
   @include mobile {
+    display: none;
     background-color: $white;
     left: -123%;
     position: absolute;
