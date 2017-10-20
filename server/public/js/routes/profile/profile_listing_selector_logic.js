@@ -144,7 +144,7 @@ $(document).ready(function(){
   //replace URL tab if not a good tab
   var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
   var url_tab = getParameterByName("tab");
-  if (["verify", "info", "rental", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
+  if (["verify", "info", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
     removeURLParameter("tab");
     url_tab = "";
   }
@@ -167,7 +167,7 @@ $(document).ready(function(){
   }
 
   //requested specific tab
-  if (url_selected_listings != "" && ["info", "rental", "design"].indexOf(url_tab) != -1){
+  if (url_selected_listings != "" && ["info", "design"].indexOf(url_tab) != -1){
     viewDomainDetails(url_tab);
   }
   else if (url_selected_listings != "" && url_tab == "verify"){
