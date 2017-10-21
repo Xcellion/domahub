@@ -213,9 +213,15 @@
 #table-body {
   display: block;
   max-height: calc(100vh - 295px);
-  overflow-y: auto;
+  overflow-y:auto;
   @include mobile {
     max-height: calc(100vh - 325px);
+  }
+}
+
+.table {
+  &.no-border-bottom {
+    border-bottom-width: 0px !important;
   }
 }
 
@@ -229,6 +235,13 @@
   }
   &.is-complete {
     background-color: $primary;
+  }
+}
+
+.cloned-dns-table {
+  .table-header {
+    word-break: break-all;
+    line-height: 200%;
   }
 }
 

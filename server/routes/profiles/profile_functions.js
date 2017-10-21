@@ -212,6 +212,7 @@ module.exports = {
     //custom promise creation
     var q_function = function(listing_obj){
       return Q.Promise(function(resolve, reject, notify){
+        // console.log("Now looking up " + listing_obj.domain_name);
         whois.lookup(listing_obj.domain_name, function(err, data){
           var whoisObj = {};
           if (data){
@@ -225,6 +226,7 @@ module.exports = {
           //look up any existing DNS A Records
           dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
             listing_obj.a_records = addresses || false;
+            // console.log("Finished looking up " + listing_obj.domain_name);
             resolve(listing_obj);
           });
         });
@@ -257,6 +259,7 @@ module.exports = {
       //wait for all promises to finish
       Q.allSettled(dns_record_promises)
       .then(function(results) {
+        console.log("F: Finished looking up DNS records! Now parsing for info...");
 
         //update req.user.listings
         for (var x = 0; x < results.length; x++){
