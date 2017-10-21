@@ -889,6 +889,43 @@ function setupOfferButtons(selected_domain_ids){
   else {
     $(".offer-button").removeClass('is-hidden');
 
+    //sort by header
+    $(".offer-header-sort").on("click", function(){
+      var sort_value = $(this).data("value");
+      var sort_direction = ($(this).data("sort_direction")) ? true : false;
+
+      //sort icon
+      $(".offer-header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+      $(this).addClass('is-primary').find(".fa").toggleClass("fa-sort");
+      $(this).data("sort_direction", !sort_direction).find(".fa").addClass()
+      if (sort_direction){
+        $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
+      }
+      else {
+        $(this).find(".fa").addClass("fa-sort-desc").removeClass("fa-sort-asc");
+      }
+
+      //sort the rows
+      $(".offer-row:not(#offer-clone)").sort(function(a,b){
+        if (sort_value == "domain_name" || sort_value == "name"){
+          var a_sort = $(a).data("offer")[sort_value].toLowerCase();
+          var b_sort = $(b).data("offer")[sort_value].toLowerCase();
+        }
+        else {
+          var a_sort = $(a).data("offer")[sort_value];
+          var b_sort = $(b).data("offer")[sort_value];
+        }
+
+        if (sort_direction){
+          return (a_sort > b_sort) ? 1 : (a_sort < b_sort) ? -1 : 0;
+        }
+        else {
+          return (a_sort > b_sort) ? -1 : (a_sort < b_sort) ? 1 : 0;
+        }
+      }).appendTo("#offers-wrapper");
+
+    });
+
     //close offer modal
     $(".modal-close, .modal-background, #delete-nevermind").off().on("click", function(){
       $(this).closest(".modal").removeClass('is-active');
@@ -910,40 +947,6 @@ function setupOfferButtons(selected_domain_ids){
       $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
       showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
     }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
-
-    //sort offers
-    $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
-      var sort_value = $(this).val().split("_");
-      var sort_by = sort_value[0];
-      var sort_order = sort_value[1];
-
-      var offers_to_sort = $(".offer-row:not(#offer-clone)");
-      if (sort_order == "asc"){
-        offers_to_sort.sort(function(a,b){
-          if (sort_by == "name"){
-            return $(a).data("offer-data")[sort_by].toLowerCase() > $(b).data("offer-data")[sort_by].toLowerCase();
-          }
-          else {
-            return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
-          }
-        });
-      }
-      else {
-        offers_to_sort.sort(function(a,b){
-          if (sort_by == "name"){
-            return $(a).data("offer-data")[sort_by].toLowerCase() < $(b).data("offer-data")[sort_by].toLowerCase();
-          }
-          else {
-            return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
-          }
-        });
-      }
-
-      //re-order and append to parent
-      for (var i = 0; i < offers_to_sort.length; i++) {
-        offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
-      }
-    });
 
   }
 
@@ -1571,7 +1574,6 @@ function setupVerificationButtons(selected_domain_ids){
 
   //refresh the DNS table button
   $("#refresh-dns-button").off().on("click", function(){
-    $("#verify-toolbar").addClass('is-hidden');
     createDNSRecordRows(selected_domain_ids, true);
   });
 
@@ -1586,6 +1588,8 @@ function createDNSRecordRows(selected_domain_ids, force){
   //show loading
   $("#loading-dns-table").removeClass('is-hidden');
   $("#verify-toolbar").addClass("is-hidden");
+  $("#verification-left").addClass('is-hidden');
+  $("#remove-margin-bottom-when-loading").css("margin-bottom", "0px");
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-table").remove();
@@ -1621,6 +1625,7 @@ function getDNSRecords(selected_listings, selected_domain_ids){
       selected_listings : selected_listings
     }
   }).done(function(data){
+    console.log(data);
     if (data.state == "success"){
       listings = data.listings;
 
@@ -1648,10 +1653,12 @@ function createDNSTable(listing_info, total_unverified, row_index){
   var cloned_a_row = cloned_table.find(".doma-a-record");
   var cloned_www_row = cloned_table.find(".doma-www-record");
 
+  var clipped_domain_name = (listing_info.domain_name.length > 25) ? listing_info.domain_name.substr(0, 15) + "..." + listing_info.domain_name.substr(listing_info.domain_name.length - 7, listing_info.domain_name.length - 1) : listing_info.domain_name;
+
   //table header text
-  var table_header_text = "Current DNS Settings for " + "<span class='is-bold'>" + listing_info.domain_name + "</span>";
+  var table_header_text = "<span class='is-hidden-mobile'>Current DNS Settings for </span><span>" + clipped_domain_name + "</span>";
   if (total_unverified > 1){
-    table_header_text = "Domain " + (row_index + 1) + " / " + total_unverified + " - " + table_header_text;
+    table_header_text = "<span class='is-hidden-mobile'>Domain " + (row_index + 1) + " / " + total_unverified + " - </span>" + table_header_text;
   }
   if (listing_info.whois){
     var reg_name = (listing_info.whois["Registrar"] && listing_info.whois["Registrar"].length > 25) ? listing_info.whois["Registrar"].substr(0, 25) + "..." : listing_info.whois["Registrar"];
@@ -1740,15 +1747,16 @@ function checkDNSAllDone(total_unverified){
     }
 
     //all DNS settings are good
+    $("#remove-margin-bottom-when-loading").removeAttr('style');
     if ($(".cloned-dns-table .needs-action-row").length == 0){
       $("#verify-button").removeClass('is-hidden');
       $("#refresh-dns-button").addClass('is-hidden');
-      $("#verification-left").addClass('is-primary').removeClass('is-danger').text("All DNS settings look good! Click the button below to verify your domains.");
+      $("#verification-left").addClass('is-primary').removeClass('is-danger is-hidden').text("All DNS settings look good! Click the button below to verify your domains.");
     }
     else {
       $("#verify-button").addClass('is-hidden');
       $("#refresh-dns-button").removeClass('is-hidden');
-      $("#verification-left").addClass('is-danger').removeClass('is-primary').text("You have " + $(".cloned-dns-table .needs-action-row").length + " DNS settings left to modify.");
+      $("#verification-left").addClass('is-danger').removeClass('is-primary is-hidden').text("You have " + $(".cloned-dns-table .needs-action-row").length + " DNS settings left to modify.");
     }
   }
 }
