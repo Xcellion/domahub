@@ -147,7 +147,7 @@
             <div class="card-content">
               <div class="control">
                 <div class="content">
-                  <small class="tip">Don't see a category that fits your domain? <a class="is-primary" href="/contact">Let us know!</a></small>
+                  <small class="tip">Don't see a category that fits your domain? <a class="is-primary is-underlined" href="/contact">Let us know!</a></small>
                 </div>
                 <div id="categories" class="category-control">
                   <input id="categories-input" data-name="categories" onchange="" tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
@@ -173,7 +173,7 @@
                       <i class="fa fa-question-circle"></i>
                     </span>
                   </label>
-                  <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary">Why should I rent my domain out?</a></small>
+                  <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary is-underlined">Why should I rent my domain out?</a></small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -221,7 +221,7 @@
       <div id="premium-blackscreen" class="blackscreen">
         <div id="premium-only-notification" class="content has-text-centered">
           <p>
-            Please upgrade to a <a href="/features#pricing" class="is-primary">Premium Account</a> to customize the look and feel of your landing page!
+            Please upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to customize the look and feel of your landing page!
           </p>
           <div class="control has-text-centered">
             <a href="/profile/settings#premium" class="button is-primary is-stylish">
@@ -708,7 +708,7 @@
         </tr>
       </tbody>
     </table>
-    <table id="no-offers-table" class="is-hidden table is-fixed is-bordered">
+    <table id="no-offers-table" class="hidden-while-loading-offers is-hidden table is-fixed is-bordered">
       <tbody>
         <tr class="no-hover-effect">
           <td colspan="5">
@@ -776,7 +776,28 @@
     </table>
   </div>
 
-  <!-- ACCEPTED / DEPOSITED / STATS 
+  <!-- ACCEPTED / DEPOSITED / STATS -->
+  <div id="accepted-offer" class="is-hidden">
+    <div class="content">
+      <h2 class="is-bold">
+        I accepted the offer--what's next?
+      </h2>
+      <p>
+        The buyer has been sent an email with instructions on completing payment.
+        Once the payment has been verified, you will need to manually transfer the ownership of this domain to him/her.
+        If you do not know how to manually transfer a domain, please refer to our <a target="_blank" href="/faq#transferguide" class="is-primary is-underlined">Domain Transfer Guide</a>.
+      </p>
+      <p>
+        <span class="is-bold">There is no required action on your part just yet.</span> Hold tight, we are getting you your money.
+      </p>
+      <p>
+        If you have changed your mind about this offer, please <a href="/contact" class="is-primary is-underlined">let us know</a>.
+      </p>
+      <p class="resend-wrapper">
+        <a id="resend-accept" class="button ">Re-send payment email to buyer</a>
+      </p>
+    </div>
+  </div>
   <div id="deposited-offer" class="is-hidden">
     <div class="content">
       <h2 class="is-bold">
@@ -800,27 +821,6 @@
         <a class="is-primary" href="/contact">
           Having issues? Contact us for assistance.
         </a>
-      </p>
-    </div>
-  </div>
-  <div id="accepted-offer" class="is-hidden">
-    <div class="content">
-      <h2 class="is-bold">
-        I accepted the offer--what's next?
-      </h2>
-      <p>
-        The buyer has been sent an email with instructions on completing payment.
-        Once the payment has been verified, you will need to manually transfer the ownership of this domain to him/her.
-        If you do not know how to manually transfer a domain, please refer to our <a target="_blank" href="/faq#transferguide" class="is-primary is-underlined">Domain Transfer Guide</a>.
-      </p>
-      <p>
-        <span class="is-bold">There is no required action on your part just yet.</span> Hold tight, we are getting you your money.
-      </p>
-      <p>
-        If you have changed your mind about this offer, please <a href="/contact" class="is-primary">let us know</a>.
-      </p>
-      <p class="resend-wrapper">
-        <a id="resend-accept" class="button ">Re-send payment email to buyer</a>
       </p>
     </div>
   </div>
@@ -858,12 +858,11 @@
       </div>
       <div class="content">
         <p>
-          Is there a specific statistic you would like to see for your domains? Please <a class="is-primary" href="/contact">let us know</a>!
+          Is there a specific statistic you would like to see for your domains? Please <a class="is-primary is-underlined" href="/contact">let us know</a>!
         </p>
       </div>
     </div>
   </div>
-  -->
 
   <!-- VERIFICATION -->
   <div id="verify-section" class="verify-elem non-offer-elem non-edit-elem is-hidden">

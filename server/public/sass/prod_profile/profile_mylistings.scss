@@ -131,9 +131,8 @@
 
 .blackscreen {
   position: absolute;
-  height: calc(100% + 60px);
+  height:100%;
   width: 100%;
-  top: -60px;
   left: 0;
   background-color: $black-secondary;
   z-index: 5;

@@ -933,7 +933,7 @@ function setupOfferButtons(selected_domain_ids){
 
     //search offers input
     $("#offer-search").off().on('input', function(){
-      showOffers($(this).val(), $("#show-rejected-offers").hasClass('is-primary'));
+      refreshOfferRows($(this).val(), $("#show-rejected-offers").hasClass('is-primary'));
     });
 
     //refresh offers button
@@ -945,7 +945,7 @@ function setupOfferButtons(selected_domain_ids){
     //rejected offers button
     $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
       $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
-      showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
+      refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
     }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
 
   }
@@ -953,7 +953,7 @@ function setupOfferButtons(selected_domain_ids){
 }
 
 //show or hide offers based on toggle and search term
-function showOffers(search_term, show_rejected){
+function refreshOfferRows(search_term, show_rejected){
   $(".offer-row:not(#offer-clone)").addClass('is-hidden').each(function(){
     if (search_term){
       //if offerer name or domain name is being searched for
@@ -1041,6 +1041,7 @@ function getListingOffers(selected_listings, selected_domain_ids){
       selected_listings : selected_listings
     }
   }).done(function(data){
+    console.log(data);
     if (data.state == "success"){
       listings = data.listings;
 
@@ -1075,14 +1076,15 @@ function updateOffersTable(listing_info, total_domains){
       cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
       cloned_offer_row.data("domain_name", listing_info.domain_name).data("offer", listing_info.offers[x]);
 
-      //click to open modal
-      cloned_offer_row.off().on("click", function(){
-        editOfferModal($(this).data("offer"), listing_info);
-      });
-
       //accepted an offer!
-      if (listing_info.offers[x].accepted == 1){
-        cloned_offer_row.find(".td-offer-status").text('Accepted').addClass('is-success');
+      if (listing_info.offers[x].deposited == 1 && listing_info.offers[x].transferred != -1){
+        cloned_offer_row.find(".td-offer-status").text('Sold (Not Transferred)').addClass('is-primary');
+      }
+      else if (listing_info.offers[x].deposited == 1 && listing_info.offers[x].transferred == 1){
+        cloned_offer_row.find(".td-offer-status").text('Sold (Transferred)').addClass('is-primary');
+      }
+      else if (listing_info.offers[x].accepted == 1){
+        cloned_offer_row.find(".td-offer-status").text('Accepted').addClass('is-primary');
       }
       else if (listing_info.offers[x].accepted == 0){
         cloned_offer_row.find(".td-offer-status").text('Rejected').addClass('is-danger');
@@ -1092,6 +1094,11 @@ function updateOffersTable(listing_info, total_domains){
         cloned_offer_row.find(".td-offer-status").text('Unanswered');
         cloned_offer_row.addClass('unaccepted-offer');
       }
+
+      //click to open modal
+      cloned_offer_row.off().on("click", function(){
+        editOfferModal($(this).data("offer"), listing_info);
+      });
 
       $("#offers-wrapper").prepend(cloned_offer_row);
     }
@@ -1109,7 +1116,7 @@ function updateOffersTable(listing_info, total_domains){
 function finishedOfferTable(){
   $("#loading-offers-table").addClass('is-hidden');
   $(".hidden-while-loading-offers").removeClass('is-hidden');
-  showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
+  refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
 }
 
 //function to edit modal with specific offer info
@@ -1181,21 +1188,10 @@ function acceptOrRejectOffer(accept, button_elem, listing_info, offer_id){
       response: response_to_offerer
     }
   }).done(function(data){
+    $("#offer-modal").removeClass('is-active');
     button_elem.removeClass('is-loading');
     if (data.state == "success"){
-
-      //set the response text
-      getOffer(listing_info.offers, offer_id).response = response_to_offerer;
-
-      //hide stuff if accepted!
-      if (accept){
-        $("#offers-toolbar").addClass('is-hidden');
-
-        //show purchased tab, hide other tabs
-        $(".purchased-elem").removeClass('is-hidden');
-        $(".unpurchased-elem").addClass("is-hidden");
-      }
-      offerSuccessHandler(accept, listing_info, offer_id);
+      offerSuccessHandler(accept, listing_info, offer_id, response_to_offerer);
     }
     else {
       offerErrorHandler(data.message, offer_id);
@@ -1213,52 +1209,40 @@ function getOffer(offers, offer_id){
 }
 
 //function for offer accept success
-function offerSuccessHandler(accept, listing_info, offer_id){
-  var accept_text = (accept) ? "accepted" :  "rejected";
-  successMessage("Successfully " + accept_text + " the offer!");
-  $("#offer-modal").removeClass('is-active');
+function offerSuccessHandler(accept, listing_info, offer_id, response_to_offerer){
+  successMessage("Successfully " + ((accept) ? "accepted" :  "rejected") + " the offer!");
+
+  //set the real listing info accepted and offer response
+  var real_listing_info_obj = getListingInfo(listing_info.id);
+  var current_offer_obj = getOffer(listing_info.offers, offer_id);
+  current_offer_obj.response = response_to_offerer;
+  current_offer_obj.accepted = accept;
+  real_listing_info_obj.offers = listing_info.offers;
+  real_listing_info_obj.accepted = accept;
 
   //accepted offer
   if (accept){
+    //change class on the offer row
+    $("#offer-row-" + offer_id).removeClass('unaccepted-offer').find(".td-offer-status").text('Accepted').addClass('is-primary');
 
-    //change offer to accepted
-    listing_info.accepted = 1;
-    for (var x = 0 ; x < listing_info.offers.length; x++){
-      if (listing_info.offers[x].id == offer_id){
-        listing_info.offers[x].accepted = 1;
-        break;
-      }
-    }
-
-    //show accepted view
-    $("#offer-row-" + offer_id).removeClass('unaccepted-offer').find(".offer-accepted").text('Accepted - ').addClass('is-success');
-    $('.unaccepted-offer').addClass('is-hidden');
-    $("#accepted-offer").removeClass('is-hidden');
+    //recreate rows and only select this listing
+    createRows(listing_info.id);
+    showSelector();
   }
   //rejected offer
   else {
-    //remove offer from listing_info
-    for (var x = 0 ; x < listing_info.offers.length; x++){
-      if (listing_info.offers[x].id == offer_id){
-        listing_info.offers[x].accepted = 0;
-        break;
-      }
-    }
-
-    //hide the offer row
-    $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".offer-accepted").text('Rejected - ').addClass('is-danger');
-    showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
+    //change class on the offer row
+    $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".td-offer-status").text('Rejected').addClass('is-danger');
   }
+
+  //refresh offers
+  refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
 }
 
 //function for offer accept error
 function offerErrorHandler(message, offer_id){
-  $("#offer-modal").removeClass('is-active');
-
   //show accepted view if already accepted
   if (message == "already-accepted"){
-    $('.unaccepted-offer').addClass('is-hidden');
-    $("#accepted-offer").removeClass('is-hidden');
     errorMessage("You have already accepted an offer for this listing!");
   }
   else {
@@ -1890,6 +1874,15 @@ function getCommonListingInfo(listing_ids){
     }
     return arr;
   }, Object.assign({}, listings[0]));
+}
+
+//function to get the listing
+function getListingInfo(id){
+  for (var x = 0 ; x < listings.length ; x++){
+    if (listings[x].id == id){
+      return listings[x];
+    }
+  }
 }
 
 //</editor-fold>
