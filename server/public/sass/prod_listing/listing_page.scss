@@ -21,6 +21,10 @@
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 
+.min-height {
+  min-height: calc(100vh - 110px) !important;
+}
+
 // tutorial
 #step-1 {
   left: 20px !important;

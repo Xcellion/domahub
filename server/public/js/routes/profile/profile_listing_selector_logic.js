@@ -258,7 +258,7 @@ function createRows(selected_ids){
   else if (!selected_ids && url_listings){
     selected_ids = url_listings.split(",");
   }
-  else {
+  else if (!selected_ids){
     selected_ids = [];
   }
 
@@ -324,6 +324,7 @@ function updateRowData(row, listing_info){
   row.data("domain_name", listing_info.domain_name);
   row.data("unverified", (listing_info.verified) ? false : true);
   row.data("verified", (listing_info.verified) ? true : false);
+  row.data("accepted", (listing_info.accepted) ? true : false);
   row.data("rented", listing_info.rented);
   row.data("status", (listing_info.status == 1) ? true : false);
   row.data("inactive", (listing_info.status == 0 && listing_info.verified) ? true : false);
@@ -336,7 +337,28 @@ function updateDomainRow(tempRow, listing_info){
 
   tempRow.find(".td-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mm:A"));
-  tempRow.find(".td-status").text((listing_info.verified) ? ((listing_info.status) ? "Active" : "Inactive") : "Unverified");
+
+  //status text
+  if (listing_info.transferred){
+    var status_text = "Sold (Transferred)";
+  }
+  else if (listing_info.deposited){
+    var status_text = "Sold (Not Transferred)";
+  }
+  else if (listing_info.accepted){
+    var status_text = "Accepted An Offer";
+  }
+  else if (listing_info.verified && listing_info.status){
+    var status_text = "Active";
+  }
+  else if (listing_info.verified && !listing_info.status){
+    var status_text = "Inactive";
+  }
+  else {
+    var status_text = "Unverified";
+  }
+
+  tempRow.find(".td-status").text(status_text);
   tempRow.find(".td-min").text((listing_info.min_price) ? moneyFormat.to(parseFloat(listing_info.min_price)) : "-");
   tempRow.find(".td-bin").text((listing_info.buy_price) ? moneyFormat.to(parseFloat(listing_info.buy_price)) : "-");
   tempRow.find(".select-button").off().on('click', function(e){
@@ -409,31 +431,42 @@ function selectSpecificRows(type, value){
 function multiSelectButtons(clicked_row){
   var selected_rows = $(".table-row:not(.clone-row).is-selected");
   var not_selected_rows = $(".table-row:not(.clone-row, .is-selected)");
-  var verified_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == false});
-  var unverified_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == true});
+  var editable_selected_rows = selected_rows.filter(function(){
+    return $(this).data("unverified") == false && $(this).data("accepted") == false
+  });
+  var offer_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == false });
+  var unverified_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == true });
 
-  //selected something (show delete)
+  //selected something
   if (selected_rows.length > 0){
     $(".selector-button").removeClass("is-hidden");
+
+    //verified selections (show edit)
+    if (editable_selected_rows.length == selected_rows.length){
+      $("#selector-edit-button").removeClass("is-hidden");
+    }
+    else {
+      $("#selector-edit-button").addClass("is-hidden");
+    }
+
+    //accepted selections (show offer)
+    if (offer_selected_rows.length == selected_rows.length){
+      $("#selector-offers-button").removeClass("is-hidden");
+    }
+    else {
+      $("#selector-offers-button").addClass("is-hidden");
+    }
+
+    //if any unverified domains were selected
+    if (unverified_selected_rows.length == selected_rows.length){
+      $("#selector-verify-button").removeClass("is-hidden");
+    }
+    else {
+      $("#selector-verify-button").addClass("is-hidden");
+    }
   }
   else {
     $(".selector-button").addClass("is-hidden");
-  }
-
-  //verified selections (show edit and status toggle)
-  if (verified_selected_rows.length > 0 && unverified_selected_rows.length == 0){
-    $(".selector-verified-button").removeClass("is-hidden");
-  }
-  else {
-    $(".selector-verified-button").addClass("is-hidden");
-  }
-
-  //if any unverified domains were selected
-  if (unverified_selected_rows.length > 0 && verified_selected_rows.length == 0){
-    $(".selector-unverified-button").removeClass("is-hidden");
-  }
-  else {
-    $(".selector-unverified-button").addClass("is-hidden");
   }
 
   //every row is selected
@@ -459,7 +492,7 @@ function multiSelectButtons(clicked_row){
 
 //function to view domain details and edit them
 function viewDomainDetails(url_tab){
-  var selected_domain_ids = getSelectedDomains("id", true);
+  var selected_domain_ids = getSelectedDomains("id", true, true);
   if (selected_domain_ids.length > 0){
     if (!url_tab){
       url_tab = "info";
@@ -575,31 +608,47 @@ var moneyFormat = wNumb({
 });
 
 //get domain_name or ID of all selected rows
-function getSelectedDomains(data_name, verified){
+function getSelectedDomains(data_name, verified, editable){
 
-  //return all selected
+  //return all selected data
   if (typeof verified == undefined){
     return $(".table-row:not(.clone-row).is-selected").map(function(){
       return $(this).data(data_name)
     }).toArray();
   }
 
-  //return verified or unverified selected
+  //return verified, unverified, editable, or offer-only
   else {
+    if (editable){
+      //deselect other ones
+      $(".table-row:not(.clone-row).is-selected").filter(function(){
+        return $(this).data("unverified") == verified && $(this).data("accepted") == editable
+      }).each(function(){
+        selectRow($(this), false);
+      });
 
-    //deselect other ones
-    $(".table-row:not(.clone-row).is-selected").filter(function(){
-      return $(this).data("unverified") == verified
-    }).each(function(){
-      selectRow($(this), false);
-    });
+      //return selected ones
+      return $(".table-row:not(.clone-row).is-selected").filter(function(){
+        return $(this).data("unverified") != verified && $(this).data("accepted") != editable
+      }).map(function(){
+        return $(this).data(data_name)
+      }).toArray();
+    }
+    else {
+      //deselect other ones
+      $(".table-row:not(.clone-row).is-selected").filter(function(){
+        return $(this).data("unverified") == verified
+      }).each(function(){
+        selectRow($(this), false);
+      });
 
-    //return selected ones
-    return $(".table-row:not(.clone-row).is-selected").filter(function(){
-      return $(this).data("unverified") != verified
-    }).map(function(){
-      return $(this).data(data_name)
-    }).toArray();
+      //return selected ones
+      return $(".table-row:not(.clone-row).is-selected").filter(function(){
+        return $(this).data("unverified") != verified
+      }).map(function(){
+        return $(this).data(data_name)
+      }).toArray();
+    }
   }
 }
 

@@ -3,37 +3,6 @@ var referer_chart = false;
 var traffic_chart = false;
 var completed_domains = 0;
 
-//accepted / deposited
-// //money has been deposited!
-// if (listing_info.deposited == 1){
-//   $("#offers-toolbar").addClass('is-hidden');
-//   $('.unaccepted-offer').addClass('is-hidden');
-//   $("#deposited-offer").removeClass('is-hidden');
-//   $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"));
-//
-//   //resend the deposited offer email button
-//   $("#resend-deposit").off().on("click", function(){
-//     resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), true);
-//   });
-// }
-// else {
-//   $("#deposited-offer").addClass('is-hidden');
-//
-//   //accepted an offer! hide other offers
-//   if (listing_info.accepted == 1){
-//     $('.unaccepted-offer').addClass('is-hidden');
-//     $("#accepted-offer").removeClass('is-hidden');
-//
-//     //resend the accepted offer email button
-//     $("#resend-accept").off().on("click", function(){
-//       resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), false);
-//     });
-//   }
-//   else {
-//     $("#accepted-offer").addClass('is-hidden');
-//   }
-// }
-
 $(document).ready(function(){
 
   //<editor-fold>-------------------------------OTHER-------------------------------
@@ -701,7 +670,7 @@ function checkBox(module_value, elem, child){
     refreshSubmitButtons();
 
     //revert all inputs
-    updateEditorEditing(getSelectedDomains("id", true));
+    updateEditorEditing(getSelectedDomains("id", true, true));
 
     errorMessage(false);
     successMessage(false);
@@ -716,7 +685,7 @@ function checkBox(module_value, elem, child){
 
     //append data for editing
     var formData = new FormData();
-    var selected_ids = getSelectedDomains("id", true);
+    var selected_ids = getSelectedDomains("id", true, true);
     formData.append("selected_ids", selected_ids);
     if (status_only){
       var new_status = ($("#status-toggle-button").data("status") == "1") ? 0 : 1;
@@ -873,7 +842,7 @@ function updateEditorOffers(selected_domain_ids){
   //select verified rows here so we can keep the heading as "My Offers"
   if (selected_domain_ids.length == 0){
     selectSpecificRows("verified", 1);
-    selected_domain_ids = getSelectedDomains("id");
+    selected_domain_ids = getSelectedDomains("id", true);
   }
   setupOfferButtons(selected_domain_ids);
   createOffersTable(selected_domain_ids);
@@ -984,7 +953,7 @@ function refreshOfferRows(search_term, show_rejected){
 //function to show loading offers row
 function showLoadingOffers(){
   $("#loading-offers-table").removeClass('is-hidden');
-  $(".hidden-while-loading-offers").addClass('is-hidden');
+  $(".hidden-while-loading-offers, .whats-next-offer").addClass('is-hidden');
 }
 
 //function to create offer rows
@@ -1108,15 +1077,20 @@ function updateOffersTable(listing_info, total_domains){
 
   //all offers gotten
   if (completed_domains == total_domains){
-    finishedOfferTable();
+    finishedOfferTable(total_domains, listing_info);
   }
 }
 
 //function to finish creating offers table
-function finishedOfferTable(){
+function finishedOfferTable(total_domains, listing_info){
   $("#loading-offers-table").addClass('is-hidden');
   $(".hidden-while-loading-offers").removeClass('is-hidden');
   refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
+  if (total_domains == 1){
+    if (listing_info.accepted || listing_info.deposited || listing_info.transferred){
+      whatsNextOfferView(listing_info, true);
+    }
+  }
 }
 
 //function to edit modal with specific offer info
@@ -1131,6 +1105,10 @@ function editOfferModal(offer, listing_info){
   $("#offer-modal-ip").text(offer.user_ip).attr("href", "http://whatismyipaddress.com/ip/" + offer.user_ip);
   $("#offer-modal-message").text(offer.message);
 
+  //whats next button
+  $("#offer-modal-whats-next").addClass('is-hidden');
+  $(".remove-margin-bottom-content").css("margin-bottom", "0px");
+
   //this offer was accepted or rejected! hide the buttons
   if (offer.accepted == 1 || offer.accepted == 0){
     $("#offer-modal-button-wrapper").addClass('is-hidden');
@@ -1138,6 +1116,14 @@ function editOfferModal(offer, listing_info){
     $("#offer-response").val((offer.response) ? offer.response : "You did not include a response.").addClass('is-disabled');
     var accept_or_reject_text = (offer.accepted == 1) ? "Accepted" : "Rejected";
     $("#offer-modal-domain").text(accept_or_reject_text + " offer for " + listing_info.domain_name);
+
+    //accepted and toolbar visible (not already displaying whats next)
+    if (offer.accepted && !$("#offers-toolbar").hasClass('is-hidden')){
+      $(".remove-margin-bottom-content").removeAttr("style");
+      $("#offer-modal-whats-next").removeClass('is-hidden').off().on("click", function(){
+        whatsNextOfferView(listing_info);
+      });
+    }
   }
   //not yet accepted
   else {
@@ -1146,43 +1132,45 @@ function editOfferModal(offer, listing_info){
     $("#offer-response-label").addClass('is-hidden');
     $("#offer-response").val("").removeClass('is-disabled');
     $("#accept_button").off().on("click", function(){
-      acceptOrRejectOffer(true, $(this), listing_info, offer.id);
+      acceptOrRejectOffer(true, $(this), listing_info, offer);
     });
     $("#reject_button").off().on("click", function(){
-      acceptOrRejectOffer(false, $(this), listing_info, offer.id);
+      acceptOrRejectOffer(false, $(this), listing_info, offer);
     });
   }
 }
 
 //function to resend the accepted offer email to offerer
 function resendAcceptEmail(resend_button, listing_info, offer_id, deposit){
-  resend_button.off().addClass('is-loading');
-  $.ajax({
-    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + offer_id + "/resend",
-    method: "POST"
-  }).done(function(data){
-    resend_button.removeClass('is-loading');
-    if (data.state == "success"){
-      var success_text = (deposit) ? "transfer verification" : "payment information";
-      successMessage("Successfully re-sent the " + success_text + " email to the buyer!");
-      resend_button.addClass('is-hidden');
+  if (offer_id){
+    resend_button.off().addClass('is-loading');
+    $.ajax({
+      url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + offer_id + "/resend",
+      method: "POST"
+    }).done(function(data){
+      resend_button.removeClass('is-loading');
+      if (data.state == "success"){
+        var success_text = (deposit) ? "transfer verification" : "payment information";
+        successMessage("Successfully re-sent the " + success_text + " email to the buyer!");
+        resend_button.addClass('is-hidden');
 
-      //remove the resend button (for margin bottom on previous p)
-      $(".resend-wrapper").remove();
-    }
-    else {
-      errorMessage(data.message);
-    }
-  });
+        //remove the resend button (for margin bottom on previous p)
+        $(".resend-wrapper").remove();
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
+  }
 }
 
 //function to submit ajax for accept or reject
-function acceptOrRejectOffer(accept, button_elem, listing_info, offer_id){
+function acceptOrRejectOffer(accept, button_elem, listing_info, offer){
   button_elem.addClass('is-loading');
   var accept_url = (accept) ? "/accept" : "/reject";
   var response_to_offerer = $("#offer-response").val();
   $.ajax({
-    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + offer_id + accept_url,
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + offer.id + accept_url,
     method: "POST",
     data: {
       response: response_to_offerer
@@ -1191,10 +1179,16 @@ function acceptOrRejectOffer(accept, button_elem, listing_info, offer_id){
     $("#offer-modal").removeClass('is-active');
     button_elem.removeClass('is-loading');
     if (data.state == "success"){
-      offerSuccessHandler(accept, listing_info, offer_id, response_to_offerer);
+      offerSuccessHandler(accept, listing_info, offer, response_to_offerer);
     }
     else {
-      offerErrorHandler(data.message, offer_id);
+      //show accepted view if already accepted
+      if (data.message == "already-accepted"){
+        errorMessage("You have already accepted an offer for this listing!");
+      }
+      else {
+        errorMessage(data.message);
+      }
     }
   });
 }
@@ -1209,45 +1203,70 @@ function getOffer(offers, offer_id){
 }
 
 //function for offer accept success
-function offerSuccessHandler(accept, listing_info, offer_id, response_to_offerer){
+function offerSuccessHandler(accept, listing_info, offer, response_to_offerer){
   successMessage("Successfully " + ((accept) ? "accepted" :  "rejected") + " the offer!");
 
   //set the real listing info accepted and offer response
   var real_listing_info_obj = getListingInfo(listing_info.id);
-  var current_offer_obj = getOffer(listing_info.offers, offer_id);
-  current_offer_obj.response = response_to_offerer;
-  current_offer_obj.accepted = accept;
+  offer.response = response_to_offerer;
+  offer.accepted = accept;
   real_listing_info_obj.offers = listing_info.offers;
   real_listing_info_obj.accepted = accept;
 
   //accepted offer
   if (accept){
     //change class on the offer row
-    $("#offer-row-" + offer_id).removeClass('unaccepted-offer').find(".td-offer-status").text('Accepted').addClass('is-primary');
-
-    //recreate rows and only select this listing
-    createRows(listing_info.id);
-    showSelector();
+    $("#offer-row-" + offer.id).removeClass('unaccepted-offer').find(".td-offer-status").text('Accepted').addClass('is-primary');
+    whatsNextOfferView(listing_info);
   }
   //rejected offer
   else {
     //change class on the offer row
-    $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".td-offer-status").text('Rejected').addClass('is-danger');
+    $("#offer-row-" + offer.id).addClass("is-hidden rejected-offer").find(".td-offer-status").text('Rejected').addClass('is-danger');
   }
 
   //refresh offers
   refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
 }
 
-//function for offer accept error
-function offerErrorHandler(message, offer_id){
-  //show accepted view if already accepted
-  if (message == "already-accepted"){
-    errorMessage("You have already accepted an offer for this listing!");
+//accepted the offer, unhide the accepted help text
+function whatsNextOfferView(listing_info, dont_reselect){
+  $("#offer-modal").removeClass('is-active');
+
+  //recreate rows and only select this listing if necessary
+  if (!dont_reselect){
+    createRows([listing_info.id]);
+    viewDomainOffers();
   }
-  else {
-    errorMessage(message);
+
+  $("#offers-toolbar, .whats-next-offer").addClass('is-hidden');
+  var deposit_offer = false;
+  var offer_id = false;
+  for (var x = 0 ; x < listing_info.offers.length ; x++){
+    if (listing_info.offers[x].accepted == 1){
+      offer_id = listing_info.offers[x].id;
+      break;
+    }
   }
+
+  //show appropriate next steps
+  if (listing_info.deposited){
+    $("#accepted-toolbar").addClass('is-hidden');
+    $("#deposited-offer").removeClass('is-hidden');
+    deposit_offer = true;
+  }
+  else if (listing_info.accepted){
+    $("#deposited-toolbar").addClass('is-hidden');
+    $("#accepted-offer").removeClass('is-hidden');
+  }
+
+  //resend payment email
+  $(".resend-offer-email-button").off().on("click", function(){
+    resendAcceptEmail($(this), listing_info, offer_id, deposit_offer);
+  });
+
+  //hide all rejected rows
+  $("#offers-table .offer-row.rejected-offer").addClass('is-hidden');
 }
 
 //</editor-fold>
@@ -1518,10 +1537,10 @@ function updateEditorUnverified(selected_domain_ids){
   $(".non-verify-elem").addClass('is-hidden');
   $(".verify-elem").removeClass('is-hidden');
 
-  //select verified rows here so we can keep the heading as "My Offers"
+  //select unverified rows only so we can keep the heading as "Verification"
   if (selected_domain_ids.length == 0){
     selectSpecificRows("verified", false);
-    selected_domain_ids = getSelectedDomains("id");
+    selected_domain_ids = getSelectedDomains("id", false);
   }
 
   setupVerificationButtons(selected_domain_ids);
@@ -1573,7 +1592,7 @@ function createDNSRecordRows(selected_domain_ids, force){
   $("#loading-dns-table").removeClass('is-hidden');
   $("#verify-toolbar").addClass("is-hidden");
   $("#verification-left").addClass('is-hidden');
-  $("#remove-margin-bottom-when-loading").css("margin-bottom", "0px");
+  $(".remove-margin-bottom-content").css("margin-bottom", "0px");
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-table").remove();
@@ -1731,7 +1750,7 @@ function checkDNSAllDone(total_unverified){
     }
 
     //all DNS settings are good
-    $("#remove-margin-bottom-when-loading").removeAttr('style');
+    $(".remove-margin-bottom-content").removeAttr('style');
     if ($(".cloned-dns-table .needs-action-row").length == 0){
       $("#verify-button").removeClass('is-hidden');
       $("#refresh-dns-button").addClass('is-hidden');
