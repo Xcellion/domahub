@@ -1010,7 +1010,6 @@ function getListingOffers(selected_listings, selected_domain_ids){
       selected_listings : selected_listings
     }
   }).done(function(data){
-    console.log(data);
     if (data.state == "success"){
       listings = data.listings;
 
@@ -1087,8 +1086,9 @@ function finishedOfferTable(total_domains, listing_info){
   $(".hidden-while-loading-offers").removeClass('is-hidden');
   refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
   if (total_domains == 1){
-    if (listing_info.accepted || listing_info.deposited || listing_info.transferred){
-      whatsNextOfferView(listing_info, true);
+    var real_listing_info_obj = getListingInfo(listing_info.id);
+    if (real_listing_info_obj.accepted || real_listing_info_obj.deposited || real_listing_info_obj.transferred){
+      whatsNextOfferView(real_listing_info_obj, true);
     }
   }
 }

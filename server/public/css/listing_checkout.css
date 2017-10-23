@@ -508,7 +508,7 @@ a {
   color: #212121;
   font-weight: 400;
   text-decoration: none;
-  word-break: break-all; }
+  word-break: keep-all; }
   a:active {
     outline: none; }
   a:active, a:hover, a:focus {
@@ -1574,7 +1574,8 @@ pre {
   transition: all 0.25s ease;
   align-items: center;
   display: flex;
-  justify-content: center; }
+  justify-content: center;
+  margin-left: 10px; }
   .card-header-icon:hover {
     cursor: pointer; }
 
@@ -1873,8 +1874,11 @@ pre {
     .table th.is-400 {
       font-weight: 400; }
   .table td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    word-break: break-all; }
+    .table td a {
+      word-break: break-all; }
     .table td.is-danger {
       color: #EF5350; }
     .table td.is-primary {
@@ -2135,8 +2139,6 @@ input:-webkit-autofill {
       box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.12); }
   .select.no-borders select {
     border: none; }
-  .select.no-borders:hover select {
-    background-color: #f1f1f1; }
   .select.is-fullwidth {
     width: 100%; }
     .select.is-fullwidth select {
