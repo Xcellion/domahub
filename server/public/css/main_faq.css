@@ -2013,6 +2013,8 @@ input:-webkit-autofill {
     border-radius: 0; }
   .box.no-border {
     border: none !important; }
+  .box.is-small {
+    max-width: 500px; }
 
 .box-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.12);

@@ -8,6 +8,7 @@
 @import '../bulma/components/media.sass';
 @import '../bulma/components/card.sass';
 @import '../bulma/components/tabs.sass';
+@import '../bulma/elements/content.sass';
 @import '../bulma/elements/box.sass';
 @import '../bulma/elements/tag.sass';
 @import '../bulma/elements/delete.sass';
@@ -214,6 +215,7 @@
   display: block;
   max-height: calc(100vh - 295px);
   overflow-y: auto;
+  overflow-x: hidden;
   @include mobile {
     max-height: calc(100vh - 325px);
   }
