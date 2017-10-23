@@ -278,7 +278,7 @@
 										<small class="tip">
 											These are people who have signed up using your Referral Code.
 											You can refer people by sending them the following link:
-											<a class="is-underlined is-primary" href="https://domahub.com/signup/<%= user.username %>">https://domahub.com/signup/<%= user.username %></a>.
+											<a class="is-underlined is-primary" href="https://domahub.com/signup/<%= user.username.toLowerCase() %>">https://domahub.com/signup/<%= user.username.toLowerCase() %></a>.
 										</small>
 									</div>
 
@@ -291,6 +291,20 @@
 											</tr>
 										</thead>
 										<tbody>
+                      <tr id="no-referrals" class="is-hidden">
+                        <td colspan="3">
+                          <div class="nothing-exists-row has-text-centered">
+                            <figure class="image is-64x64">
+                              <img src="/images/lib/ggface.png" />
+                            </figure>
+                            <div class="content">
+                              <p>
+                                You have no referrals. Let's invite some friends!
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
 											<tr id="referral-clone" class="is-hidden referral-row no-hover-effect">
 												<td class="referral-username"></td>
 	                      <td class="referral-created"></td>

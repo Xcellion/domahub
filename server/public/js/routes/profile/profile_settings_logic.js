@@ -205,7 +205,7 @@ function showSectionByURL(){
 
 //</editor-fold>
 
-//<editor-fold>
+//<editor-fold>-------------------------------REFERRALS-------------------------------
 
 //function to create the referrals table
 function createReferralsTable(){
@@ -223,6 +223,9 @@ function createReferralsTable(){
     }
 
     $(".referral-row:not(#referral-clone)").removeClass('is-hidden');
+  }
+  else {
+    $("#no-referrals").removeClass('is-hidden');
   }
 }
 

@@ -37,12 +37,13 @@
 											<small class="heading">
 												Total
 											</small>
-											<h1 class="counter"><%= user.listings.length %></h1>
-                      <% if (user.listings.length > 0){ %>
-                        <a tabindex="0" href="/profile/mylistings" class="is-underlined">View Listings</a>
-                      <% } else { %>
-                        <a tabindex="0" href="/listings/create" class="is-underlined">Create Listings</a>
-                      <% } %>
+                      <h1 class="counter">
+                        <% if (user.listings.length > 0){ %>
+                          <a tabindex="0" href="/profile/mylistings" class="counter-link"><%= user.listings.length %></a>
+                        <% } else { %>
+                          <a tabindex="0" href="/listings/create" class="counter-link"><%= user.listings.length %></a>
+                        <% } %>
+                      </h1>
 										</div>
 									</div>
 									<div class="level-item has-text-centered">
@@ -50,22 +51,19 @@
 											<small class="heading">
 												Offers
 											</small>
-											<h1 id="offers-counter" class="is-primary counter"></h1>
-                      <a tabindex="0" href="/profile/mylistings?tab=offers" class="is-underlined">
-                      View Offers
-                      </a>
+											<h1 class="counter">
+                        <a id="offers-counter" tabindex="0" href="/profile/mylistings?tab=offers" class="counter-link"></a>
+                      </h1>
                     </div>
 									</div>
                   <div class="level-item has-text-centered">
                     <div class="content">
                       <small class="heading">
-                        Unverified
+                        Sold
                       </small>
-                      <h1 id="unverified-counter" class="is-danger counter">
+                      <h1 class="counter">
+                        <a id="sold-counter" tabindex="0" href="/profile/mylistings?tab=offers" class="counter-link"></a>
                       </h1>
-                      <a id="unverified-button" tabindex="0" class="unverified-href is-underlined">
-                        Verify Listings
-                      </a>
                     </div>
                   </div>
 								</div>
@@ -119,24 +117,6 @@
                 <h3 class="card-header-title">Account Status</h3>
               </div>
               <div class="card-content">
-								<div class="control is-spaced">
-                  <div class="content control-left">
-                    <p>
-                      Premium
-                    </p>
-                  </div>
-									<% if (user.stripe_subscription_id) { %>
-									<p class="tag is-primary control-right has-text-right">
-                    <span class="icon is-small"><i class="fa fa-check"></i></span>
-                    <span>Active</span>
-                  </p>
-									<% } else { %>
-									<p class="tag is-danger control-right has-text-right">
-                    <span class="icon is-small"><i class="fa fa-times"></i></span>
-                    <span>Inactive</span>
-                  </p>
-									<% } %>
-                </div>
                 <div class="control is-spaced">
                   <div class="content control-left">
                     <p>
@@ -194,6 +174,24 @@
                       <span class="icon is-small"><i class="fa fa-times"></i></span>
                       <span>Not Connected</span>
                     </p>
+                  <% } %>
+                </div>
+                <div class="control is-spaced">
+                  <div class="content control-left">
+                    <p>
+                      Premium
+                    </p>
+                  </div>
+                  <% if (user.stripe_subscription_id) { %>
+                  <p class="tag is-primary control-right has-text-right">
+                    <span class="icon is-small"><i class="fa fa-check"></i></span>
+                    <span>Active</span>
+                  </p>
+                  <% } else { %>
+                  <p class="tag is-danger control-right has-text-right">
+                    <span class="icon is-small"><i class="fa fa-times"></i></span>
+                    <span>Inactive</span>
+                  </p>
                   <% } %>
                 </div>
               </div>
