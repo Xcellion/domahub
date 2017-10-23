@@ -212,11 +212,11 @@
 
 #table-body {
   display: block;
-  max-height: calc(100vh - 295px);
+  max-height: calc(100vh - 325px);
   overflow-y: auto;
   overflow-x: hidden;
   @include mobile {
-    max-height: calc(100vh - 325px);
+    max-height: calc(100vh - 365px);
   }
 }
 

@@ -75,6 +75,8 @@
       border-bottom: none
     li
       width: 100%
+      a
+        border-bottom: none
       &.is-active
         a
           background-color: $white
@@ -84,6 +86,8 @@
           &:hover,
           &:focus
             background-color: $grey-light
+      &:not(:last-child)
+        margin-right: 0
   &.no-borders
     ul
       border-bottom: none
