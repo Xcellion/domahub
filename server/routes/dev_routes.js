@@ -90,6 +90,7 @@ function emailViews(req, res, next){
     user: {
       username: "Blake Griffin"
     },
+    token: "",
     name : "offerer",
     owner_name : "OWNERFUCK",
     offerer_name: "BUYERTWAT",

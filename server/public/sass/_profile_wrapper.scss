@@ -8,13 +8,14 @@
 }
 
 .left-menu {
-  @include transition(all 0.2s);
+  @include transition(all 0.2s ease);
   background-color: $primary;
   padding: 40px 20px;
   height: 100%;
   min-width: 300px;
   width: 300px;
   position: fixed;
+  z-index: 1;
   &.is-active {
     left: -20px;
   }
@@ -26,6 +27,11 @@
     .menu-item {
       @include tablet-only {
         margin-top: 10px;
+        &.has-icon {
+          a {
+            margin-right: -4px;
+          }
+        }
       }
     }
     a {
@@ -34,6 +40,7 @@
           background-color: $primary-light;
         }
         &.is-active {
+          @include box-shadow(1px,1px,10px,$primary-dark,0);
           background-color: $primary-dark;
           p {
             font-weight: 500;
@@ -69,7 +76,7 @@
   left: 300px;
   height: 100%;
   overflow-x: hidden;
-  padding: 40px 40px 0;
+  padding: 40px 40px;
   position: absolute;
   width: calc(100% - 300px);
   @include tablet-only {
@@ -78,7 +85,7 @@
   }
   @include mobile {
     left: 0;
-    padding: 40px 20px 0;
+    padding: 40px 20px;
     position: relative;
     width: 100%;
   }
@@ -114,5 +121,5 @@
   position: absolute;
   left: 45px;
   top: -300px;
-  width: 159px;
+  width: 160px;
 }
