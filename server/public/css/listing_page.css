@@ -3793,6 +3793,9 @@ button {
     height: 100vh;
     width: 100%; }
 
+.min-height {
+  min-height: calc(100vh - 110px) !important; }
+
 #step-1 {
   left: 20px !important; }
 
