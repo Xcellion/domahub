@@ -1241,10 +1241,10 @@ function whatsNextOfferView(listing_info, dont_reselect){
 
   $("#offers-toolbar, .whats-next-offer").addClass('is-hidden');
   var deposit_offer = false;
-  var offer_id = false;
+  var offer = false;
   for (var x = 0 ; x < listing_info.offers.length ; x++){
     if (listing_info.offers[x].accepted == 1){
-      offer_id = listing_info.offers[x].id;
+      offer = listing_info.offers[x].id;
       break;
     }
   }
@@ -1254,6 +1254,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
     $("#accepted-toolbar").addClass('is-hidden');
     $("#deposited-offer").removeClass('is-hidden');
     deposit_offer = true;
+    $("#deposited-deadline").text(moment(offer.deadline).format("MMMM DD, YYYY"));
   }
   else if (listing_info.accepted){
     $("#deposited-toolbar").addClass('is-hidden');
@@ -1262,7 +1263,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
 
   //resend payment email
   $(".resend-offer-email-button").off().on("click", function(){
-    resendAcceptEmail($(this), listing_info, offer_id, deposit_offer);
+    resendAcceptEmail($(this), listing_info, offer.id, deposit_offer);
   });
 
   //hide all rejected rows
