@@ -32,7 +32,7 @@ function calcUnverified() {
 
   $("#unverified-counter").text(unverified_listings.length);
   if (unverified_listings.length > 0){
-    appendNotification("Verify " + unverified_listings.length + " <a tabindex='0' class='is-primary is-underlined' href='" + unverified_href + "'>unverified domains</a>.", true);
+    appendNotification("Verify " + unverified_listings.length + " <a tabindex='0' class='is-primary is-underlined' href='" + unverified_href + "'>unverified domains</a>.");
     $("#unverified-button").attr("href", unverified_href);
   }
   else {
@@ -53,20 +53,20 @@ function showNotifications() {
 
   //if stripe payout settings are not set
   if (!user.stripe_account) {
-    appendNotification("Complete your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-address'>payout settings</a> to start receiving payments.", true);
+    appendNotification("Complete your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-address'>payout settings</a> to start receiving payments.");
   }
 
   if (!user.stripe_subscription_id){
-    appendNotification("Sign up for a <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#premium'>Premum account</a> and sell more domains.", true);
+    appendNotification("Sign up for a <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#premium'>Premum account</a> and sell more domains.");
   }
 
   //if bank account is not connected
   if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
-    appendNotification("Connect your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-bank'>bank account</a> to start receiving payments.", true);
+    appendNotification("Connect your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-bank'>bank account</a> to start receiving payments.");
   }
 
   if (!user.listings || user.listings.length == 0){
-    appendNotification("Let's create some <a tabindex='0' class='is-primary is-underlined' href='/listings/create'>DomaHub listings</a>.", true);
+    appendNotification("Let's create some <a tabindex='0' class='is-primary is-underlined' href='/listings/create'>DomaHub listings</a>.");
   }
 
   calcNotificationCounter();
@@ -75,7 +75,7 @@ function showNotifications() {
 //when notifications tray is empty
 function calcNotificationCounter() {
   if ($("#notifications-tray li").length == 0) {
-    appendNotification("Nothing to show - you're all set!", false);
+    appendNotification("Nothing to show - you're all set!");
     $("#notification-counter").addClass('is-hidden');
   }
   else {
