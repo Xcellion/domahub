@@ -43,10 +43,10 @@
 #domain-input-body {
   display: block;
   max-height: 390px;
-  max-height: calc(100vh - 247px);
+  max-height: calc(100vh - 301px);
   overflow-y: auto;
   @include mobile {
-    max-height: calc(100vh - 315px);
+    max-height: calc(100vh - 375px);
   }
 }
 
