@@ -163,11 +163,13 @@ account_model.prototype.getAccountListings = function(account_id, callback){
       ) as offers_table_accepted \
       ON offers_table_accepted.listing_id = listings.id \
       LEFT JOIN \
-        (SELECT DISTINCT\
+        (SELECT \
           stats_contact_history.listing_id as listing_id, \
           COUNT(stats_contact_history.listing_id) as offers_count \
         FROM stats_contact_history \
-        WHERE stats_contact_history.accepted IS NULL \
+        WHERE stats_contact_history.verified IS NOT NULL \
+        AND stats_contact_history.accepted IS NULL \
+        GROUP BY stats_contact_history.listing_id \
       ) as offers_table_count \
       ON offers_table_count.listing_id = listings.id \
       WHERE owner_id = ? \

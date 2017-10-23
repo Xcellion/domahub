@@ -2361,9 +2361,8 @@ pre {
     .table th.is-400 {
       font-weight: 400; }
   .table td {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding: 10px;
-    word-break: break-all; }
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
     .table td.is-danger {
       color: #EF5350; }
     .table td.is-primary {
@@ -3952,9 +3951,8 @@ button {
 
 .blackscreen {
   position: absolute;
-  height: calc(100% + 60px);
+  height: 100%;
   width: 100%;
-  top: -60px;
   left: 0;
   background-color: rgba(0, 0, 0, 0.66);
   z-index: 5; }
@@ -4014,6 +4012,9 @@ button {
     #table-body {
       max-height: calc(100vh - 325px); } }
 
+.table.no-border-bottom {
+  border-bottom-width: 0px !important; }
+
 .dns-status {
   padding: 5px;
   margin-right: 10px;
@@ -4023,6 +4024,10 @@ button {
     background-color: #EF5350; }
   .dns-status.is-complete {
     background-color: #3cbc8d; }
+
+.cloned-dns-table .table-header {
+  word-break: break-all;
+  line-height: 200%; }
 
 .nothing-exists-row {
   padding: 25px;

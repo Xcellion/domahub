@@ -32,25 +32,25 @@
         <span class="icon is-small">
           <i class="fa fa-pencil-square-o"></i>
         </span>
-        <span>Edit Details</span>
+        <span class="is-hidden-mobile">Edit Details</span>
       </a>
       <a id="selector-verify-button" class="selector-unverified-button button is-primary is-inverted is-hidden" tabindex="0" title="Verify Ownership">
         <span class="icon is-small">
           <i class="fa fa-check-circle-o"></i>
         </span>
-        <span>Verify Ownership</span>
+        <span class="is-hidden-mobile">Verify Ownership</span>
       </a>
       <a id="selector-delete-button" class="selector-button button is-danger is-transparent is-hidden" tabindex="0" title="Delete Listing(s)">
         <span class="icon is-small">
           <i class="fa fa-trash"></i>
         </span>
-        <span id="multi-delete-text">Delete</span>
+        <span class="is-hidden-mobile">Delete</span>
       </a>
       <a id="selector-offers-button" class="selector-verified-button button is-black is-transparent is-hidden" tabindex="0" title="View Offers">
         <span class="icon is-small">
           <i class="fa fa-money"></i>
         </span>
-        <span>View Offers</span>
+        <span class="is-hidden-mobile">View Offers</span>
       </a>
       <%# <a id="selector-stats-button" class="selector-verified-button button is-hidden" tabindex="0" title="View Statistics">
         <span class="icon is-small">
@@ -62,7 +62,7 @@
         <span class="icon is-small">
           <i class="fa fa-plus"></i>
         </span>
-        <span>Create New Listings</span>
+        <span class="is-hidden-mobile">Create New Listings</span>
       </a>
     </div>
 
@@ -97,25 +97,25 @@
     <thead class="yes-listings-elem">
       <tr>
         <th class="checkbox-col"></th>
-        <th>
+        <th class="td-domain">
           <span>Domain Name</span>
-          <span data-value="domain_name" class="header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span data-value="domain_name" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
-        <th>
+        <th class="td-status">
           <span>Status</span>
-          <span data-value="status" class="header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span data-value="status" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
         <th class="is-hidden-mobile">
           <span>Created</span>
-          <span data-value="date_created" class="header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span data-value="date_created" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
         <th class="is-hidden-456px">
           <span>Min. Offer</span>
-          <span data-value="min_price" class="header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span data-value="min_price" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
         <th class="is-hidden-456px">
           <span>BIN</span>
-          <span data-value="buy_price" class="header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span data-value="buy_price" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
       </tr>
     </thead>

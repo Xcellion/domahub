@@ -6,11 +6,22 @@ $(document).ready(function(){
   //<editor-fold>-------------------------------FILTERS-------------------------------
 
   //sort by header
-  $(".header-sort").on("click", function(){
-    $(".header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
-    $(this).addClass('is-primary').find(".fa").toggleClass("fa-sort");
+  $(".listing-header-sort").on("click", function(){
     var sort_value = $(this).data("value");
     var sort_direction = ($(this).data("sort_direction")) ? true : false;
+
+    //sort icon
+    $(".listing-header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+    $(this).addClass('is-primary').find(".fa").toggleClass("fa-sort");
+    $(this).data("sort_direction", !sort_direction).find(".fa").addClass()
+    if (sort_direction){
+      $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
+    }
+    else {
+      $(this).find(".fa").addClass("fa-sort-desc").removeClass("fa-sort-asc");
+    }
+
+    //sort the rows
     listings.sort(function(a,b){
       if (sort_value == "domain_name"){
         var a_sort = a[sort_value].toLowerCase();
@@ -28,13 +39,6 @@ $(document).ready(function(){
         return (a_sort > b_sort) ? -1 : (a_sort < b_sort) ? 1 : 0;
       }
     });
-    $(this).data("sort_direction", !sort_direction).find(".fa").addClass()
-    if (sort_direction){
-      $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
-    }
-    else {
-      $(this).find(".fa").addClass("fa-sort-desc").removeClass("fa-sort-asc");
-    }
     createRows();
   });
 
