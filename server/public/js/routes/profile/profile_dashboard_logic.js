@@ -1,6 +1,7 @@
 $(document).ready(function() {
   calcUnverified();
   calcOffers();
+  calcSold();
   showNotifications();
 
   //delete notification when you click its respective X
@@ -27,16 +28,9 @@ $(document).ready(function() {
 function calcUnverified() {
   var unverified_listings = user.listings.filter(function(listing) {
     return !listing.verified;
-  })
-  var unverified_href = "/profile/mylistings?tab=verify";
-
-  $("#unverified-counter").text(unverified_listings.length);
+  });
   if (unverified_listings.length > 0){
-    appendNotification("Verify " + unverified_listings.length + " <a tabindex='0' class='is-primary is-underlined' href='" + unverified_href + "'>unverified domains</a>.");
-    $("#unverified-button").attr("href", unverified_href);
-  }
-  else {
-    $("#unverified-button").addClass("is-hidden");
+    appendNotification("Verify " + unverified_listings.length + " <a tabindex='0' class='is-primary is-underlined' href='/profile/mylistings?tab=verify'>unverified domains</a>.");
   }
 }
 
@@ -48,16 +42,24 @@ function calcOffers(){
   $("#offers-counter").text(num_total_offers);
 }
 
+//function to figure out sold domains
+function calcSold(){
+  $("#sold-counter").text(user.listings.filter(function(listing) {
+    return listing.deposited || listing.transferred;
+  }).length);
+}
+
 //populate the notifications tray
 function showNotifications() {
+
+  //if no listings
+  if (!user.listings || user.listings.length == 0){
+    appendNotification("Let's create some <a tabindex='0' class='is-primary is-underlined' href='/listings/create'>DomaHub listings</a>!");
+  }
 
   //if stripe payout settings are not set
   if (!user.stripe_account) {
     appendNotification("Complete your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-address'>payout settings</a> to start receiving payments.");
-  }
-
-  if (!user.stripe_subscription_id){
-    appendNotification("Sign up for a <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#premium'>Premum account</a> and sell more domains.");
   }
 
   //if bank account is not connected
@@ -65,8 +67,9 @@ function showNotifications() {
     appendNotification("Connect your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-bank'>bank account</a> to start receiving payments.");
   }
 
-  if (!user.listings || user.listings.length == 0){
-    appendNotification("Let's create some <a tabindex='0' class='is-primary is-underlined' href='/listings/create'>DomaHub listings</a>.");
+  //if not premium
+  if (!user.stripe_subscription_id){
+    appendNotification("Sign up for a <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#premium'>Premum account</a> and sell more domains.");
   }
 
   calcNotificationCounter();
@@ -84,12 +87,10 @@ function calcNotificationCounter() {
   }
 }
 
-function appendNotification(msg, delOption) {
+function appendNotification(msg) {
   var tray = $("#notifications-tray");
-  if (delOption) {
-    return tray.append("<li><span class='delete is-small is-transparent is-fc'></span>" + msg + "</li>");
-  }
-  else {
-    return tray.append("<li>" + msg + "</li>");
-  }
+  // if (delOption) {
+  //   return tray.append("<li><span class='delete is-small is-transparent is-fc'></span>" + msg + "</li>");
+  // }
+  return tray.append("<li>" + msg + "</li>");
 }
