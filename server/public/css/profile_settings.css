@@ -2114,9 +2114,8 @@ pre {
     .table th.is-400 {
       font-weight: 400; }
   .table td {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding: 10px;
-    word-break: break-all; }
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
     .table td.is-danger {
       color: #EF5350; }
     .table td.is-primary {

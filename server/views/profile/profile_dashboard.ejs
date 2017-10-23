@@ -3,22 +3,22 @@
 <html>
 
 <head>
-	<title>Dashboard - DomaHub</title>
-	<link rel="stylesheet" href="/css/min/profile_dashboard.min.css" />
-	<%- include("../templates/head_links"); %>
+  <title>Dashboard - DomaHub</title>
+  <link rel="stylesheet" href="/css/min/profile_dashboard.min.css" />
+  <%- include("../templates/head_links"); %>
 </head>
 
 <body>
 
-	<%- include("profile_nav.ejs"); %>
+  <%- include("profile_nav.ejs"); %>
 
   <section class="section is-fullscreen">
     <div class="wrapper">
 
-			<%- include("profile_left_menu.ejs"); %>
+      <%- include("profile_left_menu.ejs"); %>
 
       <div class="right-content">
-				<div class="content">
+        <div class="content">
           <h2 class="is-bold">Dashboard</h2>
           <p>
             Welcome <%= user.username %>!
@@ -48,26 +48,26 @@
 									<div class="level-item has-text-centered">
 										<div class="content">
 											<small class="heading">
-												Unverified
-											</small>
-											<h1 id="unverified-counter" class="is-danger counter">
-											</h1>
-                      <a id="unverified-button" tabindex="0" class="unverified-href is-underlined">
-                        Verify Listings
-                      </a>
-                    </div>
-                  </div>
-									<div class="level-item has-text-centered">
-										<div class="content">
-											<small class="heading">
 												Offers
 											</small>
-											<h1 id="offers-counter" class="is-primary counter">0</h1>
+											<h1 id="offers-counter" class="is-primary counter"></h1>
                       <a tabindex="0" href="/profile/mylistings?tab=offers" class="is-underlined">
                       View Offers
                       </a>
                     </div>
 									</div>
+                  <div class="level-item has-text-centered">
+                    <div class="content">
+                      <small class="heading">
+                        Unverified
+                      </small>
+                      <h1 id="unverified-counter" class="is-danger counter">
+                      </h1>
+                      <a id="unverified-button" tabindex="0" class="unverified-href is-underlined">
+                        Verify Listings
+                      </a>
+                    </div>
+                  </div>
 								</div>
 							</div>
 						</div>
@@ -86,10 +86,10 @@
 	                  for each friend that signs up for a Premium account!
 	                </p>
 	                <p>
-	                  Check the status of your existing referrals <a class="is-underlined" href="/profile/settings#promo">here</a>.
+	                  Check the status of your existing referrals <a class="is-primary is-underlined" href="/profile/settings#promo">here</a>.
 	                </p>
 	                <div class="control has-addons">
-	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username %>" class="input no-shadow" placeholder="Invite your friends!"/>
+	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input no-shadow" placeholder="Invite your friends!"/>
 	                  <a id="referral-link-copy" class="button no-shadow">
 	                    <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
 	                    <p>Copy Link</p>
