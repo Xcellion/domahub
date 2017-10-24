@@ -3,8 +3,9 @@ var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var rename = require('gulp-rename');
 var uncss = require('gulp-uncss');
-// var spritesmith = require('gulp.spritesmith');
+var moment = require('moment');
 
+// var spritesmith = require('gulp.spritesmith');
 // gulp.task('un-css', function() {
 //   return gulp.src('server/public/css/master.css')
 //     .pipe(uncss({
@@ -12,7 +13,6 @@ var uncss = require('gulp-uncss');
 //     }))
 //     .pipe(gulp.dest('server/public/css/uncssed'));
 // });
-
 // gulp.task('sprite', function() {
 //   var spriteData = gulp.src('server/public/images/dh-assets/flat-logo/*.png')
 //     .pipe(spritesmith({
@@ -33,6 +33,6 @@ gulp.task('watch', function() {
       suffix: '.min'
     }))
     .pipe(gulp.dest('server/public/css/min'));
-    console.log("Gulp! Delicious.");
+    console.log(moment().format("hh:mm:ss") + " - Gulp! Delicious.");
   });
 });
