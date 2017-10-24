@@ -2,6 +2,7 @@ var current_listing = {};
 var referer_chart = false;
 var traffic_chart = false;
 var completed_domains = 0;
+var premium_blackscreen = $("#premium-blackscreen").clone();
 
 $(document).ready(function(){
 
@@ -117,7 +118,8 @@ function updateEditorEditing(selected_domain_ids){
     var domain_names_list = getSelectedDomains("domain_name");
     for (var x = 0 ; x < domain_names_list.length ; x++){
       var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
-      $("#view-listings-button-drop").append("<a target='_blank' href='" + listing_href + "' class='is-primary is-underlined'>" + domain_names_list[x] + "</a>");
+      var clipped_domain_name = (domain_names_list[x].length > 25) ? domain_names_list[x].substr(0, 15) + "..." + domain_names_list[x].substr(domain_names_list[x].length - 7, domain_names_list[x].length - 1) : domain_names_list[x];
+      $("#view-listings-button-drop").append("<a target='_blank' href='" + listing_href + "' class='is-underlined'>" + clipped_domain_name + "</a>");
     }
   }
   else {
@@ -341,24 +343,7 @@ function checkBox(module_value, elem, child){
         $("#premium-blackscreen").removeClass("is-hidden");
       }
       else {
-        $("#design-tab-drop").prepend('<div id="premium-blackscreen" class="blackscreen"> \
-          <div id="premium-only-notification" class="content has-text-centered"> \
-            <p> \
-              Please upgrade to a Premium account to customize the look and feel of your landing page! \
-            </p> \
-            <a href="/features#pricing" class="is-primary"> \
-              What is a Premium account? \
-            </a> \
-            <div class="margin-top-15 control has-text-centered"> \
-              <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small"> \
-                <span class="icon is-small"> \
-                  <i class="fa fa-diamond"></i> \
-                </span> \
-                <span>Upgrade</span> \
-              </a> \
-            </div> \
-          </div> \
-        </div>');
+        $("#design-tab-drop").prepend(premium_blackscreen);
       }
     }
   }
@@ -635,9 +620,11 @@ function checkBox(module_value, elem, child){
     errorMessage(false);
     successMessage(false);
 
-    //only change if the value changed from existing
-    if (input_elem.val() != listing_info_comparison){
-      input_elem.data('changed', true);
+    //only change if the value changed from existing (and if premium elem, has premium)
+    if (input_elem.val() != listing_info_comparison &&
+      ((input_elem.hasClass('premium-input') && user.stripe_subscription_id) ||
+      (!input_elem.hasClass('premium-input')))
+    ){
       $("#save-changes-button").removeClass("is-hidden");
       $("#cancel-changes-button").removeClass("is-hidden");
 
@@ -651,11 +638,17 @@ function checkBox(module_value, elem, child){
         $("#example-logo").attr("src-image", "https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING");
       }
     }
-    //hide the cancel, disable the save
+    //hide the cancel / save
     else {
-      input_elem.data('changed', false);
-      $("#save-changes-button").addClass("is-hidden");
-      $("#cancel-changes-button").addClass("is-hidden");
+      //reset premium only inputs!
+      if (input_elem.hasClass('premium-input')){
+        input_elem.blur();
+        errorMessage("You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!");
+        cancelListingChanges(true);
+      }
+      else {
+        refreshSubmitButtons();
+      }
     }
   }
 
@@ -666,14 +659,16 @@ function checkBox(module_value, elem, child){
   }
 
   //function to cancel the listing submit
-  function cancelListingChanges(){
+  function cancelListingChanges(keep_message){
     refreshSubmitButtons();
 
     //revert all inputs
     updateEditorEditing(getSelectedDomains("id", true, true));
 
-    errorMessage(false);
-    successMessage(false);
+    if (!keep_message){
+      errorMessage(false);
+      successMessage(false);
+    }
   }
 
   //function to submit status change
@@ -692,7 +687,7 @@ function checkBox(module_value, elem, child){
       formData.append("status", new_status);
     }
     else {
-      $(".changeable-input").each(function(e){
+      $(".changeable-input, #paths-input").each(function(e){
         var input_name = $(this).data("name");
         var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
@@ -708,8 +703,8 @@ function checkBox(module_value, elem, child){
         }
 
         //if null or undefined
-        if (input_val != listing_comparison && input_val != null && input_val != undefined && listing_comparison != undefined){
-          if ((input_name == "logo_image_link" || input_name == "background_image_link") && $(this).data("uploading")){
+        if (input_val != listing_comparison && input_val != null && input_val != undefined){
+          if ((input_name == "logo_image_link" || input_name == "background_image_link") && input_val == "" && listing_comparison == undefined){
           }
           else {
             formData.append(input_name, input_val);
@@ -717,6 +712,11 @@ function checkBox(module_value, elem, child){
         }
       });
     }
+
+    // // Display the key/value pairs
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0]+ ', ' + pair[1]);
+    // }
 
     $.ajax({
       url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
@@ -729,9 +729,7 @@ function checkBox(module_value, elem, child){
     }, 'json').done(function(data){
       submit_button.removeClass('is-loading');
       refreshSubmitButtons();
-      console.log(data);
       if (data.state == "success"){
-
         //status only success message
         if (status_only){
           var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
@@ -748,34 +746,42 @@ function checkBox(module_value, elem, child){
         createRows();
       }
       else {
-        //listing is no longer pointed to domahub, revert to verify tab
-        if (data.message == "verification-error"){
-          var plural_error_msg = (selected_ids.length == 1) ? "This listing has" : "Some of the selected listings have";
-          var error_msg = plural_error_msg + " not been verified yet! Please verify that you own this domain by confirming your DNS settings.";
-        }
-        else if (data.message == "ownership-error"){
-          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
-          var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
-        }
-        else if (data.message == "accepted-error"){
-          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-          var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
-        }
-        else if (data.message == "deposited-error"){
-          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-          var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
-        }
-        else {
-          var error_msg = data.message;
-        }
-
         if (data.listings){
           listings = data.listings;
         }
 
+        //not premium but tried to update premium stuff
+        if (data.message == "not-premium"){
+          updateEditorEditing(selected_ids);
+          var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
+        }
+        else {
+          //listing is no longer pointed to domahub, revert to verify tab
+          if (data.message == "verification-error"){
+            var plural_error_msg = (selected_ids.length == 1) ? "This listing has" : "Some of the selected listings have";
+            var error_msg = plural_error_msg + " not been verified yet! Please verify that you own this domain by confirming your DNS settings.";
+          }
+          else if (data.message == "ownership-error"){
+            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
+            var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
+          }
+          else if (data.message == "accepted-error"){
+            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+            var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
+          }
+          else if (data.message == "deposited-error" || data.message == "transferred-error"){
+            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+            var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
+          }
+          else {
+            var error_msg = data.message;
+          }
+
+          createRows(false);
+          showSelector(true);
+        }
+
         errorMessage(error_msg);
-        createRows(false);
-        showSelector(true);
       }
     });
   }
@@ -786,17 +792,7 @@ function checkBox(module_value, elem, child){
     $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
     $("#error-upgrade-button").addClass('is-hidden');
 
-    if (message && message == "not-premium"){
-      updatePremiumNotification();
-      $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
-      $("#listing-msg-error-text").html("You must upgrade to a Premium Account to be able to edit that!");
-      $("#error-upgrade-button").removeClass('is-hidden');
-    }
-    else if (message && message == "nothing-changed"){
-      refreshSubmitButtons();
-      $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-    }
-    else if (message){
+    if (message){
       $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
       $("#listing-msg-error-text").html(message);
     }
@@ -1636,7 +1632,6 @@ function getDNSRecords(selected_listings, selected_domain_ids){
       selected_listings : selected_listings
     }
   }).done(function(data){
-    console.log(data);
     if (data.state == "success"){
       listings = data.listings;
 
