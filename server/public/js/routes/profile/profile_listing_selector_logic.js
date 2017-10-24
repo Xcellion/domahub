@@ -23,14 +23,14 @@ $(document).ready(function(){
     }
 
     //sort the rows
-    listings.sort(function(a,b){
-      if (sort_value == "domain_name"){
-        var a_sort = a[sort_value].toLowerCase();
-        var b_sort = b[sort_value].toLowerCase();
+    $(".table-row:not(.clone-row)").sort(function(a,b){
+      if (sort_value == "date_created" || sort_value == "min_price" || sort_value == "buy_price"){
+        var a_sort = $(a).data("listing_info")[sort_value];
+        var b_sort = $(b).data("listing_info")[sort_value];
       }
       else {
-        var a_sort = a[sort_value];
-        var b_sort = b[sort_value];
+        var a_sort = $(a).find("." + sort_value + "-sort-value").text().toLowerCase();
+        var b_sort = $(b).find("." + sort_value + "-sort-value").text().toLowerCase();
       }
 
       if (sort_direction){
@@ -39,8 +39,7 @@ $(document).ready(function(){
       else {
         return (a_sort > b_sort) ? -1 : (a_sort < b_sort) ? 1 : 0;
       }
-    });
-    createRows();
+    }).appendTo("#table-body");
   });
 
   //domain search
@@ -126,7 +125,7 @@ $(document).ready(function(){
   //refresh listings
   $("#refresh-listings-button").on("click", function(){
     $("#refresh-listings-button").addClass('is-loading');
-    $(".table-row:not(.clone-row)").addClass('is-hidden');
+    $(".table-row:not(.clone-row), #no-listings-row").addClass('is-hidden');
     $("#loading-listings-row").removeClass('is-hidden');
     $.ajax({
       url: "/profile/mylistings/refresh",
@@ -136,6 +135,7 @@ $(document).ready(function(){
       if (data.state == "success"){
         listings = data.listings;
         createRows();
+        showRows();
       }
     });
   });
@@ -258,7 +258,7 @@ function createRows(selected_ids){
   $("#table-body").find(".table-row:not(.clone-row)").remove();
   $("#loading-listings-row").addClass('is-hidden');
 
-  var url_listings = getParameterByName("listings")
+  var url_listings = getParameterByName("listings");
 
   if (selected_ids == false){
     selected_ids = [];
@@ -270,6 +270,10 @@ function createRows(selected_ids){
   else if (!selected_ids){
     selected_ids = [];
   }
+
+  //reset sort
+  $(".listing-header-sort").data("sort_direction", false).find(".icon").removeClass('is-primary')
+  $(".listing-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
 
   //if listings, create rows
   if (listings.length > 0){
@@ -294,7 +298,7 @@ function createRows(selected_ids){
   }
   //there are no listings to show!
   else {
-    $("#no-domains-row").removeClass('is-hidden');
+    $("#no-listings-row").removeClass('is-hidden');
     $(".yes-listings-elem").addClass('is-hidden');
   }
 }
@@ -329,7 +333,7 @@ function updateRowData(row, listing_info){
   }
 
   row.data("id", listing_info.id);
-  row.data("all", true);    //for selecting all
+  row.data("listing_info", listing_info);
   row.data("domain_name", listing_info.domain_name);
   row.data("unverified", (listing_info.verified) ? false : true);
   row.data("verified", (listing_info.verified) ? true : false);
