@@ -304,6 +304,18 @@
     margin-right: 10px;
     margin-bottom: 8px;
   }
+  &.is-mobile {
+    @include mobile {
+      .button {
+        .icon {
+          &:first-child {
+            margin-left: 0;
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 .checkbox-form {

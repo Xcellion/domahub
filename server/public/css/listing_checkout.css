@@ -547,7 +547,7 @@ input[type="radio"] {
 
 small {
   font-size: 14px;
-  line-height: normal; }
+  line-height: 1.5; }
   @media screen and (max-width: 456px) {
     small {
       font-size: 12px; } }
@@ -1875,8 +1875,7 @@ pre {
       font-weight: 400; }
   .table td {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 10px;
-    word-break: break-all; }
+    padding: 10px; }
     .table td a {
       word-break: break-all; }
     .table td.is-danger {
