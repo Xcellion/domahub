@@ -220,10 +220,8 @@
   }
 }
 
-.table {
-  &.no-border-bottom {
-    border-bottom-width: 0px !important;
-  }
+.no-border-bottom {
+  border-bottom-width: 0px !important;
 }
 
 .dns-status {
