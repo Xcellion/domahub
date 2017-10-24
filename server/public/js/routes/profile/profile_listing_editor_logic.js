@@ -858,15 +858,20 @@ function setupOfferButtons(selected_domain_ids){
   else {
     $(".offer-button").removeClass('is-hidden');
 
+    //reset sort
+    $(".offer-header-sort").data("sort_direction", false).find(".icon").removeClass('is-primary')
+    $(".offer-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+
     //sort by header
-    $(".offer-header-sort").on("click", function(){
+    $(".offer-header-sort").off().on("click", function(){
       var sort_value = $(this).data("value");
       var sort_direction = ($(this).data("sort_direction")) ? true : false;
 
       //sort icon
-      $(".offer-header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
-      $(this).addClass('is-primary').find(".fa").toggleClass("fa-sort");
-      $(this).data("sort_direction", !sort_direction).find(".fa").addClass()
+      $(".offer-header-sort").find(".icon").removeClass('is-primary')
+      $(".offer-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+      $(this).find(".icon").addClass('is-primary');
+      $(this).data("sort_direction", !sort_direction);
       if (sort_direction){
         $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
       }
@@ -1573,7 +1578,9 @@ function setupVerificationButtons(selected_domain_ids){
     var upcoming_index = $(".cloned-dns-table:not(.is-hidden)").data("index") + $(this).data("value");
     upcoming_index = (upcoming_index < 0) ? $(".cloned-dns-table").length - 1 : upcoming_index;
     upcoming_index = (upcoming_index > $(".cloned-dns-table").length - 1) ? 0 : upcoming_index;
-    $(".cloned-dns-table").addClass('is-hidden').eq(upcoming_index).removeClass('is-hidden');
+    $(".cloned-dns-table:not(.is-hidden)").addClass('is-hidden').stop().fadeOut(300, function(){
+      $(".cloned-dns-table").eq(upcoming_index).stop().fadeIn(300).removeClass('is-hidden');
+    });
   });
 
   //refresh the DNS table button
