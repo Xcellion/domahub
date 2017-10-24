@@ -758,8 +758,8 @@ function checkBox(module_value, elem, child){
         else {
           //listing is no longer pointed to domahub, revert to verify tab
           if (data.message == "verification-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "This listing has" : "Some of the selected listings have";
-            var error_msg = plural_error_msg + " not been verified yet! Please verify that you own this domain by confirming your DNS settings.";
+            var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
+            var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
           }
           else if (data.message == "ownership-error"){
             var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
