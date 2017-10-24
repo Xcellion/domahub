@@ -19,8 +19,8 @@
           <a class="select-drop-button" data-type="none" data-value=true>None</a>
           <a class="select-drop-button" data-type="verified" data-value=true>Verified</a>
           <a class="select-drop-button" data-type="unverified" data-value=true>Unverified</a>
-          <a class="select-drop-button" data-type="status" data-value=true>Active</a>
-          <a class="select-drop-button" data-type="status" data-value=false>Inactive</a>
+          <a class="select-drop-button" data-type="status" data-value=true>Active (Verified)</a>
+          <a class="select-drop-button" data-type="status" data-value=false>Inactive (Verified)</a>
           <a class="select-drop-button" data-type="rented" data-value=1>Rented Now</a>
           <a class="select-drop-button" data-type="accepted" data-value=1>Accepted An Offer</a>
           <a class="select-drop-button" data-type="deposited" data-value=1>Sold (Not Transferred)</a>
@@ -97,25 +97,25 @@
     <thead class="yes-listings-elem">
       <tr>
         <th class="checkbox-col"></th>
-        <th class="td-domain">
+        <th data-value="domain_name" class="td-domain listing-header-sort">
           <span>Domain Name</span>
-          <span data-value="domain_name" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span class="icon is-small"><i class="fa fa-sort"></i></span>
         </th>
-        <th class="td-status">
+        <th data-value="status" class="td-status listing-header-sort">
           <span>Status</span>
-          <span data-value="status" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
-        <th class="is-hidden-mobile">
+        <th data-value="date_created" class="is-hidden-mobile listing-header-sort">
           <span>Created</span>
-          <span data-value="date_created" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
-        <th class="is-hidden-456px">
+        <th data-value="min_price" class="is-hidden-456px listing-header-sort">
           <span>Min. Offer</span>
-          <span data-value="min_price" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
-        <th class="is-hidden-456px">
+        <th data-value="buy_price" class="is-hidden-456px listing-header-sort">
           <span>BIN</span>
-          <span data-value="buy_price" class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
       </tr>
     </thead>
@@ -176,7 +176,7 @@
           <span class="td-domain is-danger"></span>
           <span class="icon is-danger is-inline is-small" data-balloon-length="large"
           data-balloon="You must prove that you own this domain. Please verify ownership by selecting it and clicking the 'Verify Ownership' button above."
-          data-balloon-pos="right">
+          data-balloon-pos="up">
             <i class="fa fa-exclamation-circle"></i>
           </span>
         </td>

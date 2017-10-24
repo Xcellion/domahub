@@ -4023,7 +4023,7 @@ button {
     #table-body {
       max-height: calc(100vh - 365px); } }
 
-.table.no-border-bottom {
+.no-border-bottom {
   border-bottom-width: 0px !important; }
 
 .dns-status {

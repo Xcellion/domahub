@@ -11,8 +11,9 @@ $(document).ready(function(){
     var sort_direction = ($(this).data("sort_direction")) ? true : false;
 
     //sort icon
-    $(".listing-header-sort").removeClass('is-primary').find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
-    $(this).addClass('is-primary').find(".fa").toggleClass("fa-sort");
+    $(".listing-header-sort").find(".icon").removeClass('is-primary');
+    $(".listing-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+    $(this).find(".icon").addClass('is-primary');
     $(this).data("sort_direction", !sort_direction).find(".fa").addClass()
     if (sort_direction){
       $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
@@ -250,6 +251,10 @@ function createRows(selected_ids){
   $("#table-body").find(".table-row:not(.clone-row)").remove();
   $("#loading-tab").addClass('is-hidden');
 
+  //reset sort
+  $(".listing-header-sort").data("sort_direction", false).find(".icon").removeClass('is-primary');
+  $(".listing-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+
   var url_listings = getParameterByName("listings")
 
   if (selected_ids == false){
@@ -389,6 +394,8 @@ function selectRow(row, selected){
 //function to toggle a row select
 function toggleSelectRow(row, event){
   var selected = (row.hasClass("is-selected")) ? false : true;
+  $(".table-row").removeClass('last-selected');
+  row.addClass('last-selected');
   row.toggleClass('is-selected');
   row.find(".select-button").prop("checked", selected);
 
