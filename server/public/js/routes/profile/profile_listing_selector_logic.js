@@ -3,7 +3,7 @@ var last_selected;
 $(document).ready(function(){
   createRows();
 
-  //<editor-fold>-------------------------------FILTERS-------------------------------
+  //<editor-fold>-------------------------------FILTERS / SORT / SEARCH-------------------------------
 
   //sort by header
   $(".listing-header-sort").on("click", function(){
@@ -44,46 +44,13 @@ $(document).ready(function(){
   });
 
   //domain search
-  $("#domain-search").on("input keyup", function(){
-    $(".table-row:not(.clone-row)").addClass('is-hidden');
-
-    var search_term = $(this).val();
-
-    $(".table-row:not(.clone-row)").filter(function(){
-      if ($(this).data('domain_name').indexOf(search_term) != -1){
-        return true;
-      }
-    }).removeClass('is-hidden');
-
-    //something matches new filter
-    if ($(".table-row:not(.clone-row):visible:first").length > 0){
-      $("#no-listings-row").addClass('is-hidden');
-    }
-    //nothing matches the new filter
-    else {
-      $("#no-listings-row").removeClass('is-hidden');
-    }
+  $("#domain-search").on("input", function(){
+    showRows();
   });
 
   //filters
   $("#filter-select").on("change", function(){
-    $(".table-row:not(.clone-row)").addClass('is-hidden');
-
-    var filter_val = $(this).val();
-    $(".table-row:not(.clone-row)").filter(function(){
-      if ($(this).data(filter_val)){
-        return true;
-      }
-    }).removeClass('is-hidden');
-
-    //something matches new filter
-    if ($(".table-row:not(.clone-row):visible:first").length > 0){
-      $("#no-listings-row").addClass('is-hidden');
-    }
-    //nothing matches the new filter
-    else {
-      $("#no-listings-row").removeClass('is-hidden');
-    }
+    showRows();
   });
 
   //</editor-fold>
@@ -102,6 +69,7 @@ $(document).ready(function(){
     }
   });
 
+  //select specific rows
   $(".select-drop-button").on('click', function(){
     selectSpecificRows($(this).data("type"), $(this).data("value"));
     $("#select-all-drop").addClass('is-hidden');
@@ -153,6 +121,23 @@ $(document).ready(function(){
     if (e.which == 27) {
       $('.modal').removeClass('is-active');
     }
+  });
+
+  //refresh listings
+  $("#refresh-listings-button").on("click", function(){
+    $("#refresh-listings-button").addClass('is-loading');
+    $(".table-row:not(.clone-row)").addClass('is-hidden');
+    $("#loading-listings-row").removeClass('is-hidden');
+    $.ajax({
+      url: "/profile/mylistings/refresh",
+      method : "POST"
+    }).done(function(data){
+      $("#refresh-listings-button").removeClass('is-loading');
+      if (data.state == "success"){
+        listings = data.listings;
+        createRows();
+      }
+    });
   });
 
   //</editor-fold>
@@ -241,6 +226,28 @@ function showEditor(url_tab, selected_domain_ids){
   leftMenuActive();
 }
 
+//function to show rows based on filter + search
+function showRows(){
+  $(".table-row:not(.clone-row)").addClass('is-hidden');
+
+  var filter_val = $("#filter-select").val();
+  var search_term = $("#domain-search").val();
+  $(".table-row:not(.clone-row)").filter(function(){
+    if ($(this).data(filter_val) && $(this).data('domain_name').indexOf(search_term) != -1){
+      return true;
+    }
+  }).removeClass('is-hidden');
+
+  //something matches
+  if ($(".table-row:not(.clone-row):visible:first").length > 0){
+    $("#no-listings-row").addClass('is-hidden');
+  }
+  //nothing matches
+  else {
+    $("#no-listings-row").removeClass('is-hidden');
+  }
+}
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------CREATE ROWS OF DOMAINS-------------------------------
@@ -249,15 +256,12 @@ function showEditor(url_tab, selected_domain_ids){
 function createRows(selected_ids){
   //empty the table and hide loading
   $("#table-body").find(".table-row:not(.clone-row)").remove();
-  $("#loading-tab").addClass('is-hidden');
-
-  //reset sort
-  $(".listing-header-sort").data("sort_direction", false).find(".icon").removeClass('is-primary');
-  $(".listing-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+  $("#loading-listings-row").addClass('is-hidden');
 
   var url_listings = getParameterByName("listings")
 
   if (selected_ids == false){
+    selected_ids = [];
     removeURLParameter("listings");
   }
   else if (!selected_ids && url_listings){
@@ -269,7 +273,7 @@ function createRows(selected_ids){
 
   //if listings, create rows
   if (listings.length > 0){
-    $("#loading-tab").addClass('is-hidden');
+    $("#loading-listings-row").addClass('is-hidden');
     //create rows for each listing
     for (var x = 0; x < listings.length; x++){
 
@@ -395,8 +399,7 @@ function selectRow(row, selected){
 function toggleSelectRow(row, event){
   var selected = (row.hasClass("is-selected")) ? false : true;
   $(".table-row").removeClass('last-selected');
-  row.addClass('last-selected');
-  row.toggleClass('is-selected');
+  row.addClass('last-selected').toggleClass('is-selected');
   row.find(".select-button").prop("checked", selected);
 
   //shift click to select/deselect all in between
@@ -417,13 +420,13 @@ function selectAllRows(select){
   if (select){
     $("#select-all").data('selected', true).prop("checked", true);
     $(".table-row:not(.clone-row)").addClass('is-selected');
-    $(".table-row .select-button").prop("checked", true);
+    $(".table-row:not('.clone-row') .select-button").prop("checked", true);
   }
   //deselect all
   else {
     $("#select-all").data('selected', false).prop("checked", false);
     $(".table-row:not(.clone-row)").removeClass('is-selected');
-    $(".table-row .select-button").prop("checked", false);
+    $(".table-row:not('.clone-row') .select-button").prop("checked", false);
   }
   multiSelectButtons();
 }
@@ -448,7 +451,8 @@ function multiSelectButtons(clicked_row){
 
   //selected something
   if (selected_rows.length > 0){
-    $(".selector-button").removeClass("is-hidden");
+    $(".selector-button, #total-selected-text").removeClass("is-hidden");
+    $("#total-selected-text").text(" - " + selected_rows.length + " Selected");
 
     //verified selections (show edit)
     if (editable_selected_rows.length == selected_rows.length){
@@ -475,7 +479,7 @@ function multiSelectButtons(clicked_row){
     }
   }
   else {
-    $(".selector-button").addClass("is-hidden");
+    $(".selector-button, #total-selected-text").addClass("is-hidden");
   }
 
   //every row is selected
