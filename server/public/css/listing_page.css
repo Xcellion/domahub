@@ -547,7 +547,7 @@ input[type="radio"] {
 
 small {
   font-size: 14px;
-  line-height: normal; }
+  line-height: 1.5; }
   @media screen and (max-width: 456px) {
     small {
       font-size: 12px; } }
