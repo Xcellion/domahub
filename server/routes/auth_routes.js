@@ -3,7 +3,12 @@ var jsonParser = bodyParser.json();
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 module.exports = function(app, auth){
-  app.get('/login', auth.checkLoggedIn);
+  app.get('/login', [
+    auth.checkLoggedIn,
+    function(req, res){
+      res.redirect("/profile/dashboard");
+    }
+  ]);
   app.get('/logout', auth.logout);
 
   //cant access these routes if they are logged in
