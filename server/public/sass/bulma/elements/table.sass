@@ -4,7 +4,6 @@
   border-radius: $radius
   border-spacing: 0px
   border: 1px solid $border
-  border-bottom-width: 0
   box-shadow: none
   color: $text
   margin-bottom: 20px
@@ -65,9 +64,8 @@
       border-width: 1px
     tr
       &:last-child
-        td,
-        th
-          border-bottom-width: 1px
+        td
+          border-bottom-width: 0
   &.is-striped
     tbody
       tr

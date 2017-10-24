@@ -196,7 +196,7 @@
 											</label>
 											<div class="control is-grouped">
 												<p class="control has-icon">
-													<input id="cc-num" required tabindex="0" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+													<input id="cc-num" required tabindex="0" data-stripe="number" class="input has-shadow stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
 													<i id="cc-icon" class="fa fa-credit-card"></i>
 												</p>
 											</div>
@@ -208,7 +208,7 @@
                       </label>
                       <div class="control is-grouped">
                         <p class="control has-icon">
-                          <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                          <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input has-shadow stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                           <i class="fa fa-calendar-o"></i>
                         </p>
                       </div>
@@ -220,7 +220,7 @@
                       </label>
                       <div class="control is-grouped">
                         <p class="control has-icon">
-                          <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
+                          <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input has-shadow stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
                           <i class="fa fa-lock"></i>
                         </p>
                       </div>
@@ -232,7 +232,7 @@
 											</label>
 											<div class="control is-grouped">
 												<p class="control has-icon">
-													<input id="cc-zip" required tabindex="0" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+													<input id="cc-zip" required tabindex="0" maxlength="6" data-stripe="address_zip" class="input has-shadow stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
 													<i class="fa fa-map-marker"></i>
 												</p>
 											</div>
@@ -265,7 +265,7 @@
                     <div class="control-right">
                       <form id="promo-form">
                         <p class="control has-icon has-addons">
-                          <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
+                          <input id="promo-input" autocomplete="off" required tabindex="0" class="input has-shadow promo-input" type="text"/>
                           <i class="fa fa-tags"></i>
                           <button id="promo-submit" class="promo-input no-shadow is-small is-stylish is-primary button" text="Submit" type="submit">Submit</button>
                         </p>
@@ -411,7 +411,7 @@
 															<i class="fa fa-lock"></i>
 														</span>
 													</div>
-													<input required id="addressline1-input" class="input is-disabled stripe-input" type="text" name="addressline1" autocomplete=""/>
+													<input required id="addressline1-input" class="input has-shadow is-disabled stripe-input" type="text" name="addressline1" autocomplete=""/>
 												</div>
 												<div class="control">
 													<div class="label-icon">
@@ -420,7 +420,7 @@
 															<i class="fa fa-lock"></i>
 														</span>
 													</div>
-													<input id="addressline2-input" class="input is-disabled stripe-input" type="text" name="addressline2" autocomplete=""/>
+													<input id="addressline2-input" class="input has-shadow is-disabled stripe-input" type="text" name="addressline2" autocomplete=""/>
 												</div>
 												<div class="control">
 													<div class="label-icon">
@@ -429,7 +429,7 @@
 															<i class="fa fa-lock"></i>
 														</span>
 													</div>
-													<input required id="city-input" class="input is-disabled stripe-input" type="text" name="city" autocomplete=""/>
+													<input required id="city-input" class="input has-shadow is-disabled stripe-input" type="text" name="city" autocomplete=""/>
 												</div>
 												<div class="control">
 													<div class="label-icon">
@@ -438,7 +438,7 @@
 															<i class="fa fa-lock"></i>
 														</span>
 													</div>
-													<input required id="state-input" class="input is-disabled stripe-input" type="text" name="state" autocomplete=""/>
+													<input required id="state-input" class="input has-shadow is-disabled stripe-input" type="text" name="state" autocomplete=""/>
 												</div>
 												<div class="control">
 													<div class="label-icon">
@@ -447,7 +447,7 @@
 															<i class="fa fa-lock"></i>
 														</span>
 													</div>
-													<input required id="zip-input" class="input is-disabled stripe-input" type="text" name="zip" autocomplete=""/>
+													<input required id="zip-input" class="input has-shadow is-disabled stripe-input" type="text" name="zip" autocomplete=""/>
 												</div>
 												<div class="control hidden-edit is-hidden">
 													<button tabindex="0" id="payout-address-submit" class="submit-payout button is-stylish is-small is-primary is-disabled">
@@ -480,7 +480,7 @@
 															<i class="fa fa-lock"></i>
 														</span>
 													</div>
-													<input required id="first_name-input" class="input is-disabled stripe-input" type="text" name="first_name" />
+													<input required id="first_name-input" class="input has-shadow is-disabled stripe-input" type="text" name="first_name" />
 													<small class="tip">Other users cannot see your name.</small>
 												</div>
 												<div class="control" for="last_name-input">
@@ -490,7 +490,7 @@
 															<i class="fa fa-lock"></i>
 														</span>
 													</div>
-													<input required id="last_name-input" class="input is-disabled stripe-input" type="text" name="last_name" />
+													<input required id="last_name-input" class="input has-shadow is-disabled stripe-input" type="text" name="last_name" />
 													<small class="tip">Other users cannot see your name.</small>
 												</div>
 												<div class="control">
@@ -805,7 +805,7 @@
                           <i class="fa fa-lock"></i>
                         </span>
                       </div>
-                      <input id="paypal_email-input" class="input is-disabled account-input" type="text" value="<%= user.paypal_email %>" name="paypal_email" />
+                      <input id="paypal_email-input" class="input has-shadow is-disabled account-input" type="text" value="<%= user.paypal_email %>" name="paypal_email" />
                       <small class="tip">Please enter the email address of your PayPal account.</small>
                     </div>
                     <div class="control hidden-edit is-hidden">
