@@ -207,6 +207,7 @@ data_model.prototype.getOffersMulti = function(domain_ids, callback){
   console.log("DB: Attempting to get all verified offers for posted domains...");
   query = 'SELECT \
         listings.id AS listing_id, \
+        listings.domain_name, \
         stats_contact_history.id, \
         stats_contact_history.timestamp, \
         stats_contact_history.deadline, \
