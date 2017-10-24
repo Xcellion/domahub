@@ -547,7 +547,7 @@ input[type="radio"] {
 
 small {
   font-size: 14px;
-  line-height: normal; }
+  line-height: 1.5; }
   @media screen and (max-width: 456px) {
     small {
       font-size: 12px; } }
@@ -3638,6 +3638,12 @@ button {
 
 .counter {
   margin-bottom: 10px; }
+
+.counter-link {
+  padding: 8px;
+  border-radius: 100%; }
+  .counter-link:hover, .counter-link:focus {
+    background-color: #f1f1f1; }
 
 .company-logo {
   margin-bottom: 30px; }
