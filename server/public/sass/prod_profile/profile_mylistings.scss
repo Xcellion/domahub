@@ -216,7 +216,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   @include mobile {
-    max-height: calc(100vh - 365px);
+    max-height: calc(100vh - 345px);
   }
 }
 
@@ -277,6 +277,13 @@
   }
   &.is-selected {
     background-color:#ffc;
+  }
+}
+
+.table-row {
+  border-left: 2px solid transparent;
+  &.last-selected {
+    border-left-color: $primary;
   }
 }
 

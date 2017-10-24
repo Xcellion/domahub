@@ -100,7 +100,7 @@
 
   <!-- DOMAINS TABLE -->
   <table id="listings-table" class="table is-fixed is-bordered">
-    <thead class="yes-listings-elem">
+    <thead class="yes-listings-elem has-hover-effect">
       <tr>
         <th class="checkbox-col"></th>
         <th data-value="domain_name" class="td-domain listing-header-sort">
@@ -126,7 +126,7 @@
       </tr>
     </thead>
     <tbody id="table-body">
-      <tr id="loading-listings-row">
+      <tr id="loading-listings-row" class="no-hover-effect">
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
             <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
@@ -134,7 +134,7 @@
           </div>
         </td>
       </tr>
-      <tr id="no-domains-row" class="no-listings-elem is-hidden">
+      <tr id="no-domains-row" class="no-hover-effect no-listings-elem is-hidden">
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
             <img src="/images/lib/smile.png" />
@@ -150,7 +150,7 @@
           </div>
         </td>
       </tr>
-      <tr id="no-listings-row" class="is-hidden">
+      <tr id="no-listings-row" class="no-hover-effect is-hidden">
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
             <img src="/images/lib/ggface.png" />
