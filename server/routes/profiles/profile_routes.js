@@ -28,6 +28,22 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.renderMyListings
   ]);
 
+  //mylistings refresh listings
+  app.post("/profile/mylistings/refresh", [
+    auth.checkLoggedIn,
+    function(req, res, next){
+      delete req.user.listings;
+      next();
+    },
+    profile_functions.getAccountListings,
+    function(req, res, next){
+      res.send({
+        state: "success",
+        listings: req.user.listings
+      });
+    }
+  ]);
+
   //mylistings multi delete
   app.post("/profile/mylistings/delete", [
     urlencodedParser,

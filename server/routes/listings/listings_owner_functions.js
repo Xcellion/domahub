@@ -343,29 +343,36 @@ module.exports = {
       var verified_domains = 0;
       var accepted_domains = 0;
       var deposited_domains = 0;
+      var transferred_domains = 0;
 
       //loop through and check
       for (var x = 0 ; x < req.user.listings.length ; x++){
-        if (req.user.listings[x].verified == 1){
-          verified_domains++;
-        }
-
-        if (req.user.listings[x].accepted == 1){
-          accepted_domains++;
-        }
-
-        if (req.user.listings[x].deposited == 1){
-          deposited_domains++;
-        }
-
         //check ownership
         for (var y = 0 ; y < selected_ids.length ; y++){
           if (parseFloat(selected_ids[y]) == req.user.listings[x].id){
             owned_domains++;
+
+            if (req.user.listings[x].verified == 1){
+              verified_domains++;
+            }
+
+            if (req.user.listings[x].accepted == 1){
+              accepted_domains++;
+            }
+
+            if (req.user.listings[x].deposited == 1){
+              deposited_domains++;
+            }
+
+            if (req.user.listings[x].transferred == 1){
+              transferred_domains++;
+            }
+
             break;
           }
         }
       }
+      console.log(verified_domains, accepted_domains, deposited_domains)
 
       //all good!
       var error_message_plural = (req.body.selected_ids.length == 1) ? "this domain" : "some or all of these domains";
@@ -381,6 +388,9 @@ module.exports = {
       }
       else if (deposited_domains != 0){
         error.handler(req, res, "deposited-error", "json");
+      }
+      else if (transferred_domains != 0){
+        error.handler(req, res, "transferred-error", "json");
       }
       else {
         next();
@@ -965,7 +975,15 @@ module.exports = {
 
   //function to update a listing
   updateListingsInfo: function(req, res, next){
-    if (req.session.new_listing_info){
+
+    //check if we're changing anything
+    if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
+      res.json({
+        state: "success",
+        listings: (req.user) ? req.user.listings : false
+      });
+    }
+    else {
       console.log("F: Updating domain details...");
       var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
       Listing.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
@@ -977,12 +995,6 @@ module.exports = {
             listings: (req.user) ? req.user.listings : false
           });
         }
-      });
-    }
-    else {
-      res.json({
-        state: "success",
-        listings: (req.user) ? req.user.listings : false
       });
     }
   },

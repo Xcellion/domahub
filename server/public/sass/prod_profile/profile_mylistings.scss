@@ -259,6 +259,13 @@
   position: absolute;
   top:40px;
   z-index:99;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height:325px;
+  max-width:250px;
+  a {
+    word-wrap: break-word;
+  }
 }
 
 .table-row,

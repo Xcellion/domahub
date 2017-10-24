@@ -758,7 +758,7 @@ module.exports = {
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
               req.session.listing_info.status = 0;
 
-              Listing.updateListing(domain_name, {
+              Listing.updateListingsInfo(domain_name, {
                 verified: null,
                 status: 0
               }, function(result){

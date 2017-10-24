@@ -1,7 +1,7 @@
 <div id="domain-selector" class="is-hidden">
   <div class="content">
     <div class="content">
-      <h2 class="is-bold">My Listings</h2>
+      <h2 class="is-bold">My Listings<span id="total-selected-text" class="is-hidden"></span></h2>
     </div>
 
     <!-- BUTTON MENU -->
@@ -58,11 +58,17 @@
         </span>
         <span>View Statistics</span>
       </a>%>
-      <a class="button is-black is-transparent " title="Create New Listings" tabindex="0" href="/listings/create">
+      <a class="button is-black is-transparent" title="Create New Listings" tabindex="0" href="/listings/create">
         <span class="icon is-small">
           <i class="fa fa-plus"></i>
         </span>
         <span class="is-hidden-mobile">Create New Listings</span>
+      </a>
+      <a id="refresh-listings-button" class="button is-black is-transparent" title="Refresh Listings" tabindex="0">
+        <span class="icon is-small">
+          <i class="fa fa-refresh"></i>
+        </span>
+        <span class="is-hidden-mobile">Refresh Listings</span>
       </a>
     </div>
 
@@ -79,7 +85,7 @@
               <option value="rented">Rented Now</option>
               <option value="accepted">Accepted An Offer</option>
               <option value="deposited">Sold (Not Transferred)</option>
-              <option value="">Sold (Transferred)</option>
+              <option value="transferred">Sold (Transferred)</option>
             </select>
           </span>
           <i class="fa fa-filter"></i>
@@ -120,7 +126,7 @@
       </tr>
     </thead>
     <tbody id="table-body">
-      <tr id="loading-tab">
+      <tr id="loading-listings-row">
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
             <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
@@ -172,15 +178,15 @@
             <label for="select-button"></label>
           </form>
         </td>
+        <td class="td-domain"></td>
         <td>
-          <span class="td-domain is-danger"></span>
+          <span class="td-status"></span>
           <span class="icon is-danger is-inline is-small" data-balloon-length="large"
           data-balloon="You must prove that you own this domain. Please verify ownership by selecting it and clicking the 'Verify Ownership' button above."
           data-balloon-pos="up">
             <i class="fa fa-exclamation-circle"></i>
           </span>
         </td>
-        <td class="td-status"></td>
         <td class="td-date is-hidden-mobile"></td>
         <td class="td-min is-hidden-456px"></td>
         <td class="td-bin is-hidden-456px"></td>
