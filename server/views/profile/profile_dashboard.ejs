@@ -39,9 +39,11 @@
 											</small>
                       <h1 class="counter">
                         <% if (user.listings.length > 0){ %>
-                          <a tabindex="0" href="/profile/mylistings" class="counter-link"><%= user.listings.length %></a>
+                          <div>
+                            <a tabindex="0" href="/profile/mylistings" class="counter-link" title="View Domains"><%= user.listings.length %></a>
+                          </div>
                         <% } else { %>
-                          <a tabindex="0" href="/listings/create" class="counter-link"><%= user.listings.length %></a>
+                          <a tabindex="0" href="/listings/create" class="counter-link" title="View Domains"><%= user.listings.length %></a>
                         <% } %>
                       </h1>
 										</div>
@@ -52,7 +54,9 @@
 												Offers
 											</small>
 											<h1 class="counter">
-                        <a id="offers-counter" tabindex="0" href="/profile/mylistings?tab=offers" class="counter-link"></a>
+                        <div>
+                          <a id="offers-counter" tabindex="0" href="/profile/mylistings?tab=offers" class="counter-link" title="View Offers"></a>
+                        </div>
                       </h1>
                     </div>
 									</div>
@@ -62,7 +66,7 @@
                         Sold
                       </small>
                       <h1 class="counter">
-                        <a id="sold-counter" tabindex="0" href="/profile/mylistings?tab=offers" class="counter-link"></a>
+                        <a id="sold-counter" tabindex="0" href="/profile/mylistings?tab=offers" class="counter-link" title="View Sold"></a>
                       </h1>
                     </div>
                   </div>
@@ -84,11 +88,11 @@
 	                  for each friend that signs up for a Premium account!
 	                </p>
 	                <p>
-	                  Check the status of your existing referrals <a class="is-primary is-underlined" href="/profile/settings#promo">here</a>.
+	                  Check the status of your existing referrals <a class="is-primary is-underlined" href="/profile/settings#promo" tabindex="0">here</a>.
 	                </p>
 	                <div class="control has-addons">
 	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input no-shadow" placeholder="Invite your friends!"/>
-	                  <a id="referral-link-copy" class="button no-shadow">
+	                  <a id="referral-link-copy" class="button no-shadow" tabindex="0">
 	                    <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
 	                    <p>Copy Link</p>
 	                  </a>
