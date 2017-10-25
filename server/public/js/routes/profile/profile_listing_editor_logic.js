@@ -251,7 +251,7 @@ function checkBox(module_value, elem, child){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------RENTAL TAB EDITS-------------------------------
+  //<editor-fold>-------------------------------RENTAL EDITS-------------------------------
 
   function updateRentalTab(listing_info){
     checkBox(listing_info.rentable, $("#rentable-input"));
