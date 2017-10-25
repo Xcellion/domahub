@@ -1,0 +1,67 @@
+@import '../balloon';
+@import '../bulma/utilities/utilities.sass';
+@import '../bulma/base/base.sass';
+@import '../bulma/components/grid.sass';
+@import '../bulma/components/modal.sass';
+@import '../bulma/components/nav.sass';
+@import '../bulma/components/menu.sass';
+@import '../bulma/components/level.sass';
+@import '../bulma/components/card.sass';
+@import '../bulma/elements/title.sass';
+@import '../bulma/elements/notification.sass';
+@import '../bulma/elements/form.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/button.sass';
+@import '../bulma/elements/content.sass';
+@import '../bulma/elements/hamburger.sass';
+@import '../bulma/elements/icon.sass';
+@import '../bulma/layout/section.sass';
+@import '../profile_wrapper';
+
+.heading {
+  display: block;
+  letter-spacing: 1px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+#notification-counter {
+  background-color: $danger;
+  padding: 0 8px;
+  margin-right: 15px;
+  border-radius: 3px;
+}
+
+#notifications-tray {
+  li {
+    line-height: 1.5;
+  }
+}
+
+.counter {
+  margin-bottom: 10px;
+}
+
+.counter-link {
+  
+}
+
+.company-logo {
+  margin-bottom: 30px;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  .button,
+  .select {
+    margin-right: 10px;
+    margin-bottom: 8px;
+  }
+}
+
+.tag {
+  white-space: nowrap;
+}

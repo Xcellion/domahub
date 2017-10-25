@@ -1,0 +1,193 @@
+.tabs
+  @extend .block
+  @extend .unselectable
+  +overflow-touch
+  align-items: stretch
+  display: flex
+  font-size: $size-normal
+  justify-content: space-between
+  overflow: hidden
+  overflow-x: auto
+  white-space: nowrap
+  a
+    align-items: center
+    border-bottom: 1px solid transparent
+    color: $text
+    display: flex
+    justify-content: center
+    margin-bottom: -1px
+    padding: 5px 8px 8px
+    vertical-align: top
+    &:hover,
+    &:focus,
+    &:active
+      border-bottom-color: $black-secondary
+      outline: none
+  li
+    display: block
+    &:not(:last-child)
+      margin-right: 20px
+    &.is-active
+      a
+        border-bottom-color: $black-primary
+        border-bottom-width: 3px
+  ul
+    align-items: center
+    border-bottom: 1px solid $border
+    display: flex
+    flex-grow: 1
+    flex-shrink: 0
+    justify-content: flex-start
+    &.is-left
+      padding-right: 10px
+    &.is-center
+      flex: none
+      justify-content: center
+      padding-left: 10px
+      padding-right: 10px
+    &.is-right
+      justify-content: flex-end
+      padding-left: 10px
+  .icon
+    &:first-child
+      margin-right: 8px
+    &:last-child
+      margin-left: 8px
+  // Alignment
+  &.is-centered
+    ul
+      justify-content: center
+  &.is-right
+    ul
+      justify-content: flex-end
+  // Styles
+  &.is-primary
+    li
+      &.is-active
+        a
+          border-bottom-color: $primary
+  &.has-shadow
+    +box-shadow(0,3px,15px,$border,0)
+    background-color: $white
+    margin-bottom: 0
+    border-radius: $radius-large $radius-large 0 0
+    ul
+      border-bottom: none
+    li
+      width: 100%
+      a
+        border-bottom: none
+      &.is-active
+        a
+          background-color: $white
+      &:not(.is-active)
+        a
+          background-color: $grey-lighter
+          &:hover,
+          &:focus
+            background-color: $grey-light
+      &:not(:last-child)
+        margin-right: 0
+  &.no-borders
+    ul
+      border-bottom: none
+    li
+      a
+        +transition(color .2s ease)
+        border-bottom: none
+        margin-bottom: 0
+        padding: 0
+        &:hover,
+        &:active,
+        &:focus
+          opacity: 0.7
+          outline: 0
+      &.is-active
+        a
+          color: $primary
+          font-weight: 500
+  &.is-boxed
+    ul
+      border-bottom: none
+      flex-shrink: 1
+    a
+      border: none
+      padding-top: 10px
+      padding-bottom: 10px
+      opacity: 0.8
+      &:hover,
+      &:active,
+      &:focus
+        opacity: 1
+    li
+      &.is-active
+        a
+          color: $primary
+          font-weight: 500
+  &.is-fullwidth
+    li
+      flex-grow: 1
+  &.is-toggle
+    a
+      border: 1px solid $border
+      margin-bottom: 0
+      padding-bottom: 5px
+      padding-top: 5px
+      position: relative
+      &:hover,
+      &:focus
+        +box-shadow(0,0,0,$black,0)
+        z-index: 2
+        background-color: $grey-lighter
+    li
+      & + li
+        margin-left: -1px
+      &:first-child a
+        border-radius: $radius 0 0 $radius
+      &:last-child a
+        border-radius: 0 $radius $radius 0
+      &.is-attached
+        &:first-child a
+          border-radius: $radius 0 0 0
+        &:last-child a
+          border-radius: 0 $radius 0 0
+      &.is-active
+        a
+          +box-shadow(0,0,0,$black,0)
+          background-color: $primary
+          border-color: $primary
+          color: $primary-invert
+          z-index: 1
+          &:hover,
+          &:focus
+            +box-shadow(0,0,0,$black,0)
+    ul
+      border-bottom: none
+  // Sizes
+  &.is-small
+    font-size: $size-small
+    a
+      padding: 2px 8px
+    &.is-boxed,
+    &.is-toggle
+      a
+        padding-bottom: 1px
+        padding-top: 1px
+  &.is-medium
+    font-size: $size-medium
+    a
+      padding: 10px 16px
+    &.is-boxed,
+    &.is-toggle
+      a
+        padding-bottom: 9px
+        padding-top: 9px
+  &.is-large
+    font-size: $size-large
+    a
+      padding: 14px 20px
+    &.is-boxed,
+    &.is-toggle
+      a
+        padding-bottom: 13px
+        padding-top: 13px

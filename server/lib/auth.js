@@ -17,6 +17,7 @@ var mailOptions = {
   }
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
+var stripe = require('../lib/stripe.js');
 
 //</editor-fold>
 
@@ -181,13 +182,49 @@ module.exports = {
     }
   },
 
-  //function to check token length
+  //function to check token length (for pw reset, email verify)
   checkToken : function(req, res, next){
     if (req.params.token.length != 10 || !req.params.token){
       res.redirect('/');
     }
     else {
       next();
+    }
+  },
+
+  //function to check promo code for referral
+  checkReferralCode : function(req, res, next){
+    console.log("F: Checking referral code validity...");
+
+    if (!req.params.promo_code){
+      res.redirect("/signup");
+    }
+    else {
+
+      //check if code exists and is unused
+      Account.checkPromoCodeUnused(req.params.promo_code, function(result){
+        if (result.state == "success" && result.info.length > 0){
+          console.log("F: Promo code exists!");
+          req.session.promo_code_signup = req.params.promo_code;
+          req.session.message = "Promo code applied! Sign up below to get started.";
+          next();
+        }
+
+        //promo code doesnt exist, maybe it's a username (AKA referral)
+        else {
+
+          //get the username ID so we can create a referral code
+          Account.getAccountIDByUsername(req.params.promo_code, function(result){
+            if (result.state == "success" && result.info.length > 0){
+              console.log("F: Username referral code exists!");
+              req.session.referer_id = result.info[0].id;
+              req.session.message = "Promo code applied! Sign up below to get started.";
+            }
+            res.redirect("/signup");
+          });
+
+        }
+      });
     }
   },
 
@@ -310,8 +347,12 @@ module.exports = {
       error.handler(req, res, "Please enter an email address!");
     }
     //invalid username
-    else if (!username || /\s/.test(username)){
+    else if (!username){
       error.handler(req, res, "Please enter a username!");
+    }
+    //username has a space
+    else if (/\s/.test(username)){
+      error.handler(req, res, "Usernames cannot have a space!");
     }
     //username is too long
     else if (username.length > 70){
@@ -335,7 +376,7 @@ module.exports = {
     }
     //passwords aren't the same
     else if (password != verify_pw){
-      error.handler(req, res, "Please prove you're not a robot!");
+      error.handler(req, res, "Please prove that you are not a robot!");
     }
     //recaptcha is empty
     else if (!recaptcha){
@@ -357,20 +398,24 @@ module.exports = {
           var redirectUrl = (req.params.code) ? "/signup/" + req.params.code : "/signup";
 
           passport.authenticate('local-signup', {
-            failureRedirect : redirectUrl, // redirect back to the signup page if there is an error
+            failureRedirect : redirectUrl,    //redirect back to the signup page if there is an error
           }, function(user, info){
             if (!user && info){
               error.handler(req, res, info.message);
             }
             else {
-              //if code, update
-              if (req.params.code){
-                Account.useSignupCode(req.params.code, {
-                  account_id : user.id,
-                  code : null,
-                  date_accessed : new Date()
-                }, function(){
-                  console.log("Successfully used code!");
+              //create 1 promo code, with referer_id, and 1 duration_in_months
+              if (req.session.referer_id){
+                stripe.createPromoCode("1", req.session.referer_id, "1", function(result){
+                  Account.updatePromoCode(result[0], { account_id : user.id }, function(result){
+                    delete req.session.referer_id;
+                  });
+                });
+              }
+              //just update our database
+              else if (req.session.promo_code_signup){
+                Account.updatePromoCode(req.session.promo_code_signup, { account_id : user.id }, function(result){
+                  delete req.session.promo_code_signup;
                 });
               }
 
@@ -391,12 +436,16 @@ module.exports = {
   //function to login
   loginPost: function(req, res, next){
     var referer = req.header("Referer").split("/");
+    var redirectTo = "";
     //redirect to profile unless coming from a listing
     if (referer.indexOf('rentalpreview') != -1 || referer.indexOf("profile") != -1){
       redirectTo = req.header("Referer");
     }
+    else if (referer.indexOf("upgrade") != -1 || referer.indexOf("premium") != -1){
+      redirectTo = "/profile/settings#premium";
+    }
     else {
-      redirectTo = "/profile";
+      redirectTo = "/profile/dashboard";
     }
 
     passport.authenticate('local-login', function(err, user, info){
@@ -649,6 +698,7 @@ module.exports = {
   //</editor-fold>
 
 }
+
 //<editor-fold>------------------------------------------HELPERS---------------------------------------
 
 //resets message before returning it

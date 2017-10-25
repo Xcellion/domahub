@@ -4,7 +4,7 @@ var listing_themes = [
     primary_color : "#3CBC8D",
     secondary_color : "#FF5722",
     tertiary_color : "#2196F3",
-    font_name : "Lato",
+    font_name : "Rubik",
     font_color : "#000000",
     background_color : "#FFFFFF",
     background_image : "",
@@ -44,7 +44,7 @@ var listing_themes = [
     primary_color : "#E08E57",
     secondary_color : "#211B14",
     tertiary_color : "#944444",
-    font_name : "Lato",
+    font_name : "Rubik",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
     background_image : "https://images.unsplash.com/photo-1497002961800-ea7dbfe18696?dpr=1&auto=format&fit=crop&w=1500&h=997&q=80",
@@ -74,7 +74,7 @@ var listing_themes = [
     primary_color : "#3A9FD1",
     secondary_color : "#E3A468",
     tertiary_color : "#2196F3",
-    font_name : "Lato",
+    font_name : "Rubik",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
     background_image : "https://images.unsplash.com/photo-1497968021412-a86898ccbc4a?dpr=1&auto=format&fit=crop&cs=tinysrgb&crop=",
@@ -83,6 +83,7 @@ var listing_themes = [
 
 //function to populate theme dropdown
 function populateThemeDropdown(){
+  $("#theme-input").empty();
   for (var x = 0; x < listing_themes.length; x++){
     var theme_name_display = (listing_themes[x].theme_name == "DomaHub") ? "DomaHub (Basic)" : listing_themes[x].theme_name;
     $("#theme-input").append($("<option value=" + listing_themes[x].theme_name + ">" + theme_name_display + "</option>"));
