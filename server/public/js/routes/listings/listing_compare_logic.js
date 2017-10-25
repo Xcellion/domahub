@@ -883,11 +883,15 @@ function updateFontName(font_name){
 
 //function to update modules
 function updateModules(){
+  checkBox(listing_info.info_module, $("#info-module-input"));
+  checkBox(listing_info.domain_owner, $("#domain-owner-input"));
   checkBox(listing_info.domain_age, $("#domain-age-input"));
+  checkBox(listing_info.domain_list, $("#domain-list-input"));
   checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
   checkBox(listing_info.social_sharing, $("#social-sharing-input"));
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
-  checkBox(listing_info.info_module, $("#info-module-input"));
+  checkBox(listing_info.alexa_stats, $("#alexa-stats-input"));
+  checkBox(listing_info.traffic_graph, $("#traffic-graph-input"));
   checkBox(listing_info.history_module, $("#ticker-module-input"));
 
   //toggleable things (domain age, appraisal sites, social media)
