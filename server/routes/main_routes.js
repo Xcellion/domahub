@@ -53,9 +53,16 @@ module.exports = function(app, db, auth, error){
 
   app.get("/compare", comparePage);
 
-  //render a rental screenshot
-  app.get('/screenshot', [
-    renderRentalScreenshot
+  // //render a rental screenshot
+  // app.get('/screenshot', [
+  //   renderRentalScreenshot
+  // ]);
+
+  //redirect to demo
+  app.get("/demo", [
+    function(req, res){
+      res.redirect("/listing/cooldomains.com?compare=true&theme=Random")
+    }
   ]);
 
 }
