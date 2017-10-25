@@ -4,7 +4,7 @@
 <head>
   <title>Domain Name Sales Pages - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/main_index.min.css" />
-  <meta name="description" content="Simple, clean domain name sales pages." />
+  <meta name="description" content="Simple, clean landing pages for your domains." />
   <%- include("../templates/head_links"); %>
 </head>
 
@@ -14,7 +14,7 @@
 
 <section id="landing" class="section is-large">
   <div class="container">
-    <div class="content has-text-centered margin-bottom-25">
+    <div class="content has-text-centered">
       <h1 class="title is-2 is-bold">
         We Help Domainers Profit
       </h1>
@@ -22,32 +22,36 @@
         Build secure and user-friendly sales pages for your entire portfolio.
       </p>
     </div>
-    <form id="tryit-form" action="/compare?domain_name=">
-      <div class="button-wrapper">
-        <a href="/listing/cooldomains.com?compare=true&theme=Random" tabindex="0" class="button is-stylish is-primary is-large" for="domain-name-input">
-          <span class="icon">
-            <i class="fa fa-thumbs-up"></i>
-          </span>
-          <span>Try the Demo</span>
-        </a>
-        <a href="/signup" tabindex="0" class="button is-stylish is-primary is-outlined is-large" for="domain-name-input">
-          <span class="icon">
-            <i class="fa fa-user-circle"></i>
-          </span>
-          <span>Create Free Account</span>
-        </a>
-      </div>
-    </form>
-    <p class="is-blacklight has-text-centered margin-top-10">
-      It only takes minutes to set up!
-    </p>
+    <div class="content">
+      <form id="tryit-form" action="/compare?domain_name=">
+        <div class="button-wrapper">
+          <a href="/demo" tabindex="0" class="button is-stylish is-primary is-large" for="domain-name-input">
+            <span class="icon">
+              <i class="fa fa-thumbs-up"></i>
+            </span>
+            <span>Try the Demo</span>
+          </a>
+          <a href="/signup" tabindex="0" class="button is-stylish is-primary is-outlined is-large" for="domain-name-input">
+            <span class="icon">
+              <i class="fa fa-user-circle"></i>
+            </span>
+            <span>Create Free Account</span>
+          </a>
+        </div>
+      </form>
+    </div>
+    <div class="content">
+      <p class="is-blacklight has-text-centered">
+        It only takes minutes to set up!
+      </p>
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
     <div id="features" class="box">
-      <div class="content has-text-centered margin-bottom-40">
+      <div class="content has-text-centered">
         <h2 class="is-bold">Selling Domains the Easy Way</h2>
         <p>
           Learn how DomaHub can simplify your selling process.
@@ -88,7 +92,7 @@
           </div>
         </div>
       </div>
-      <div class="control has-text-centered">
+      <div class="content has-text-centered">
         <a tabindex="0" href="/features" class="is-primary is-bold">
           <span>Learn More</span>
           <span id="learn-more-arrow" class="icon is-small"><i class="fa fa-arrow-right"></i></span>

@@ -1,0 +1,169 @@
+=button-small
+  font-size: 12px
+  height: 26px
+  padding-left: 6px
+  padding-right: 6px
+=button-medium
+  font-size: 18px
+  height: 40px
+  padding-left: 14px
+  padding-right: 14px
+=button-large
+  font-size: 22px
+  height: 48px
+  padding-left: 20px
+  padding-right: 20px
+=button-stylish
+  text-transform: uppercase
+  letter-spacing: 1px
+  font-weight: 500
+
+.button
+  @extend .unselectable
+  +box-shadow(0,2px,4px,$border,0)
+  +control
+  justify-content: center
+  text-align: center
+  white-space: nowrap
+  strong
+    color: inherit
+  small
+    display: block
+    font-size: $size-small
+    line-height: 1
+    margin-top: 5px
+  .icon
+    &:first-child
+      margin-left: -3px
+      margin-right: 3px
+    &:last-child
+      margin-right: -3px
+    & + span
+      margin-left: 3px
+      margin-right: -3px
+  &:active
+    +box-shadow(0,0,0,$border,0)
+  &:hover,
+  &:focus
+    +box-shadow(0,2px,6px,$border,1px)
+  &:hover,
+  &:focus,
+  &.is-active
+    border-color: $black-disabled
+  &.is-active
+    &:hover,
+    &:focus
+      border-color: $black-secondary
+      color: $black-secondary
+  // Modifiers
+  &.no-shadow
+    +box-shadow(0,0,0,$black,0)
+  &.is-icon
+    border: none
+    &:hover,
+    &:focus
+      background-color: $border
+
+  // Colors
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      background-color: $color
+      border-color: transparent
+      color: $color-invert
+      &:hover,
+      &:focus,
+      &.is-active
+        background-color: darken($color, 5%)
+        border-color: transparent
+        color: $color-invert
+      &:active
+        border-color: transparent
+      &.is-transparent
+        background-color: transparent
+        color: $color
+        &:hover,
+        &:active,
+        &:focus
+          background-color: $lighter
+      &.is-inverted
+        background-color: $color-invert
+        color: $color
+        &:hover,
+        &:active,
+        &:focus
+          background-color: darken($color-invert, 5%)
+      &.is-loading
+        &:after
+          border-color: transparent transparent $grey $grey !important
+      &.is-outlined
+        background-color: $color-invert
+        border-color: $color
+        color: $color
+        &:hover,
+        &:active,
+        &:focus
+          background-color: darken($color-invert, 5%)
+
+  // Sizes
+  &.is-small
+    +button-small
+  &.is-medium
+    +button-medium
+  &.is-large
+    +button-large
+  &.is-stylish
+    +button-stylish
+    font-size: 14px
+    height: 38px
+    padding-left: 14px
+    padding-right: 14px
+    +mobile-456px
+      font-size: 12px
+      height: 32px
+    &.is-small
+      font-size: 12px
+      height: 32px
+      padding-left: 8px
+      padding-right: 8px
+    &.is-large
+      font-size: 16px
+      height: 44px
+      padding-left: 20px
+      padding-right: 20px
+      +mobile-456px
+        font-size: 14px
+        height: 38px
+        padding-left: 14px
+        padding-right: 14px
+  // Modifiers
+  &[disabled],
+  &.is-disabled
+    opacity: 0.7
+  &.is-fullwidth
+    display: flex
+    width: 100%
+  &.is-loading
+    +transition(none)
+    color: transparent !important
+    pointer-events: none
+    &:after
+      @extend .loader
+      +center(16px)
+      position: absolute !important
+
+button
+  +transition(all 0.25s ease)
+
+.loader
+  animation: spin-around 500ms infinite linear
+  border: 2px solid $black-disabled
+  border-radius: 290486px
+  border-right-color: transparent
+  border-top-color: transparent
+  content: ""
+  display: block
+  height: 16px
+  position: relative
+  width: 16px

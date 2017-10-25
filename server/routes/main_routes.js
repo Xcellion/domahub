@@ -34,7 +34,6 @@ module.exports = function(app, db, auth, error){
     "/features",
     "/privacy",
     "/faq",
-    // "/careers",
     "/contact",
     "/terms",
     "/nothinghere"
@@ -54,16 +53,17 @@ module.exports = function(app, db, auth, error){
 
   app.get("/compare", comparePage);
 
-  //render a rental screenshot
-  app.get('/screenshot', [
-    renderRentalScreenshot
-  ]);
-
-  // //to check email and sign up for beta
-  // app.post("/beta", [
-  //   urlencodedParser,
-  //   signupBeta
+  // //render a rental screenshot
+  // app.get('/screenshot', [
+  //   renderRentalScreenshot
   // ]);
+
+  //redirect to demo
+  app.get("/demo", [
+    function(req, res){
+      res.redirect("/listing/cooldomains.com?compare=true&theme=Random")
+    }
+  ]);
 
 }
 
@@ -202,68 +202,3 @@ function addProtocol(address){
     return "";
   }
 }
-
-// //to add email to sendgrid beta list
-// function signupBeta(req, res, next){
-//     console.log("F: Checking posted email for beta signup...");
-//   if (validator.isEmail(req.body.betaemail)){
-//     request({
-//       url: "https://api.sendgrid.com/v3/contactdb/recipients",
-//       method: "POST",
-//       'auth': {
-//           'bearer': "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"
-//        },
-//       body: [
-//         {
-//           email: req.body.betaemail
-//         }
-//       ],
-//       json: true
-//     }, function(err, response, body){
-//             if (!err){
-//                 console.log("F: Beta email is good! Sending welcome email...");
-//
-//                 var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.html');
-//                 var email_contents = fs.readFileSync(email_contents_path);
-//                 if (!email_contents){
-//                     email_contents = "<p>This email is to let you know that you have successfully signed up for DomaHub beta testing!</p><p>We'll be sure to let you know once we begin the next phase of the beta process.</p><p>Thank you!</p></br><p>-- DomaHub</p>"
-//                 }
-//
-//                 //email options
-//             var email = {
-//               to: req.body.betaemail,
-//               from: '"DomaHub Beta" <general@domahub.com>',
-//               subject: 'Thank you for signing up at DomaHub!',
-//               html: email_contents
-//             };
-//
-//             //send email
-//             mailer.sendMail(email, function(err) {
-//                     if (err) {
-//                         res.json({
-//                             state: "error",
-//                             message: "Please enter a valid email address!"
-//                         });
-//                     }
-//                     else {
-//                         res.send({
-//                             state: "success"
-//                         });
-//                     }
-//             });
-//             }
-//             else {
-//                 res.json({
-//                     state: "error",
-//                     message: "Please enter a valid email address!"
-//                 });
-//             }
-//     });
-//   }
-//   else {
-//     res.json({
-//       state: "error",
-//       message: "Please enter a valid email address!"
-//     });
-//   }
-// }

@@ -758,7 +758,7 @@ module.exports = {
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
               req.session.listing_info.status = 0;
 
-              Listing.updateListing(domain_name, {
+              Listing.updateListingsInfo(domain_name, {
                 verified: null,
                 status: 0
               }, function(result){
@@ -1082,8 +1082,9 @@ module.exports = {
     });
   },
 
+  //redirect to the root domain if premium (prevent domain/listing/domain)
   redirectPremium : function(req, res, next){
-    if (req.session.listing_info.premium && req.path != "/"){
+    if (node_env != "dev" && req.session.listing_info.premium && req.path != "/"){
       console.log("F: Redirecting premium domain to root domain...");
       res.redirect('https://' + req.session.listing_info.domain_name);
     }

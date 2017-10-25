@@ -1,0 +1,125 @@
+.wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  @include mobile {
+    padding-top: 40px;
+  }
+}
+
+.left-menu {
+  @include transition(all 0.2s ease);
+  background-color: $primary;
+  padding: 40px 20px;
+  height: 100%;
+  min-width: 300px;
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  &.is-active {
+    left: -20px;
+  }
+  .delete {
+    position: absolute;
+    right: 10px;
+  }
+  .menu-list {
+    .menu-item {
+      @include tablet-only {
+        margin-top: 10px;
+        &.has-icon {
+          a {
+            margin-right: -4px;
+          }
+        }
+      }
+    }
+    a {
+      &.primary-theme {
+        &:hover {
+          background-color: $primary-light;
+        }
+        &.is-active {
+          @include box-shadow(1px,1px,10px,$primary-dark,0);
+          background-color: $primary-dark;
+          p {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+  @include mobile {
+    display: none;
+    background-color: $white;
+    left: -123%;
+    position: absolute;
+    min-width: 0;
+    width: 0;
+  }
+  @include tablet-only {
+    min-width: 80px;
+    width: 80px;
+  }
+}
+
+#collapse-submenu {
+  @include tablet-only {
+    margin: 0;
+    padding-left: 0;
+    border-left: none;
+  }
+}
+
+.right-content {
+  @include transition(left 0.2s ease);
+  left: 300px;
+  height: 100%;
+  overflow-x: hidden;
+  padding: 40px 40px;
+  position: absolute;
+  width: calc(100% - 300px);
+  @include tablet-only {
+    left: 80px;
+    width: calc(100% - 80px);
+  }
+  @include mobile {
+    left: 0;
+    padding: 40px 20px 20px;
+    position: relative;
+    width: 100%;
+  }
+}
+
+.user-panel {
+  position: absolute;
+  bottom: 20px;
+}
+
+#user-dropdown-button {
+  @include box-shadow(0,3px,5px,$border,5px);
+  border-radius: 100%;
+  padding: 5px;
+  height: auto;
+  &:focus {
+    @include box-shadow(0,0,4px,#5E9ED6,0);
+    outline: none;
+    border: 1px solid #5E9ED6;
+  }
+  &.is-active {
+    @include box-shadow(0,0,0,#fff,0);
+    background-color: $primary-dark;
+    color: $white;
+  }
+}
+
+.user-dropdown-menu {
+  @include box-shadow(0,3px,15px,$border,2px);
+  background-color: $white;
+  border-radius: 5px 5px 5px 0;
+  padding: 5px 8px;
+  position: absolute;
+  left: 45px;
+  top: -300px;
+  width: 160px;
+}
