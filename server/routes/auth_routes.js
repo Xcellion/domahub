@@ -1,9 +1,14 @@
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 module.exports = function(app, auth){
-  app.get('/login', auth.checkLoggedIn);
+  app.get('/login', [
+    auth.checkLoggedIn,
+    function(req, res){
+      res.redirect("/profile/dashboard");
+    }
+  ]);
   app.get('/logout', auth.logout);
 
   //cant access these routes if they are logged in
@@ -18,10 +23,11 @@ module.exports = function(app, auth){
     }
   ]);
 
-  //redirect any old signup beta code URLs to just /signup
-  app.get("/signup/*", function(req, res){
-    res.redirect("/signup");
-  });
+  //signup referrals
+  app.get("/signup/:promo_code", [
+    auth.isNotLoggedIn,
+    auth.checkReferralCode
+  ]);
 
   //to render reset/verify page
   app.get("/reset/:token", [

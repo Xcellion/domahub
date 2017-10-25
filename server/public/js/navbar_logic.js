@@ -10,29 +10,30 @@ $(document).ready(function() {
     }
 
     //adds is-active to login button
-    $('.login-modal').click(function() {
+    $('.login-modal').on("click", function() {
       $('#modal-login').addClass('is-active');
     });
 
     //various ways to close login dropdown menu
-    $('.modal-close, .modal-background').click(function() {
+    $('.modal-close, .modal-background').on("click", function() {
       $('#modal-login').removeClass('is-active');
       $("#message").attr("style", "").text("Log in below");
     });
 
+    //ESC key to close modal
     $(document).keyup(function(e) {
       if (e.which == 27) {
-        $('#modal-login').removeClass('is-active');
+        $('.modal').removeClass('is-active');
       }
     });
 
     //close modal if user is logged in
     if (user){
-      $("#login_modal").removeAttr("style");
+      $('#modal-login').removeClass('is-active');
     }
 
     //hamburger toggle button
-    $(".nav-toggle").click(function() {
+    $(".nav-toggle").on("click", function() {
       $(this).toggleClass("is-active");
       $(".nav-menu").toggleClass("is-active");
     });

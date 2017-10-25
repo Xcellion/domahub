@@ -8,12 +8,14 @@
 
   <body>
     <div class="content has-text-centered clear-nav">
-      <h2 class="margin-bottom-5 has-text-centered">
+      <h2>
         <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
           <div class='is-inline-block flat-logo is-primary'></div>
         </a>
       </h2>
-      <p id="message" class="is-bold has-text-centered margin-top-0 margin-bottom-15">
+    </div>
+    <div class="content has-text-centered">
+      <p id="message">
         <% if (typeof message != "undefined") {%>
           <%= message %>
         <% } else { %>

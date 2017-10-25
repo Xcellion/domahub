@@ -39,7 +39,7 @@ var number_format = wNumb({
   thousand: ',',
   prefix: '$',
   decimals: 2,
-  postfix: " " + user.stripe_info.currency.toUpperCase()
+  postfix: " " + (user.stripe_info) ? user.stripe_info.currency.toUpperCase() : " "
 });
 var total_profit = 0;
 var total_fees = 0;
