@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 //helper function to remember cookie
 function rememberAccount(bool){
-  if (bool && validateEmail($("#email").val())){
+  if (bool){
     bakeCookie("remember", $("#email").val())
   }
   else {

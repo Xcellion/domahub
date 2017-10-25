@@ -84,7 +84,7 @@
 
             <div id="choices-selected" style="display:none;">
               <div id="stripe-choice-column" class="is-hidden choice-column">
-                <form id="stripe-form" autocomplete="off">
+                <form id="stripe-form" autocomplete="off" class="control">
                   <label class="label">Card Number</label>
                   <div class="control has-icon">
                     <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
@@ -113,7 +113,7 @@
                   </div>
                 </form>
 
-                <div class="control margin-top-30">
+                <div class="control">
                   <a tabindex="0" class="goback-button checkout-track button is-stylish">
                     <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
                     <span>Back to Payment Selection</span>
@@ -142,7 +142,7 @@
                   The owner of <strong><%= listing_info.domain_name %></strong> has been notified of your purchase and will reach out to you with details on how to take ownership of the domain.
                 </p>
                 <p>
-                  If you do not receive any communications from the domain owner, please do not hesitate to <a class="is-accent" href="/contact/">contact us</a>.
+                  If you do not receive any communications from the domain owner, please do not hesitate to <a class="is-primary is-underlined" href="/contact/">contact us</a>.
                 </p>
               </div>
             </div>

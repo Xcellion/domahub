@@ -20,15 +20,6 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------TABLE BINDINGS-------------------------------
 
-  //scroll to next error
-  $("#scroll-error-button").on("click", function(){
-    $('html, body').stop().animate({
-      scrollTop: $("input.is-danger").offset().top - 100
-    }, 500, function(){
-      $("input.is-danger:first").focus();
-    });
-  });
-
   //add row to table
   $(".add-domain-button").on("click", function(e){
     clearSuccessRows();
@@ -77,14 +68,13 @@ function errorMessage(message){
   //show errors or hide errors
   if (message == "invalid domains"){
     $("#domain-error-text").text("Some domain names were invalid! See below for more details.");
-    $("#scroll-error-button").removeClass('is-hidden');
+    $("#domain-error").removeClass("is-hidden").addClass("is-active");
+  }
+  else if (message == "max-domains-reached"){
+    $("#domain-error-text").html("You have reached the maximum 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
     $("#domain-error").removeClass("is-hidden").addClass("is-active");
   }
   else {
-
-    //hide scroll to button
-    $("#scroll-error-button").addClass('is-hidden');
-
     if (message){
       $("#domain-error-text").text(message);
       $("#domain-error").removeClass("is-hidden").addClass("is-active");
@@ -138,7 +128,7 @@ function submitDomainNames(submit_elem){
 //function to create the listing table from server info after initial textarea
 function createTable(bad_listings, good_listings){
   $("#domain-input-form").addClass('is-hidden');
-  $("#table-columns").removeClass('is-hidden');
+  $("#table-columns, #table-buttons-wrapper").removeClass('is-hidden');
 
   if (bad_listings.length > 0){
     errorMessage("invalid domains");
@@ -165,7 +155,7 @@ function createTable(bad_listings, good_listings){
 //function to show the table
 function showTable(){
   showHelpText("table");
-  $("#domains-submit").removeClass('is-hidden is-disabled');
+  $("#domains-submit").removeClass('is-hidden');
   $("#table-column").removeClass('is-hidden');
   $("#review-table-button").addClass('is-hidden');
 }
@@ -210,10 +200,10 @@ function handleSubmitDisabled(){
   if ($(".domain-name-input").filter(function(){ return $(this).val() != "" && !$(this).hasClass("is-disabled")}).length > 0
   && $(".notification.is-danger:not(.is-hidden)").length == 0
   && $(".domain-name-input.is-danger").length == 0){
-    $("#domains-submit").removeClass('is-disabled');
+    $("#domains-submit").removeClass('is-hidden');
   }
   else {
-    $("#domains-submit").addClass('is-disabled');
+    $("#domains-submit").addClass('is-hidden');
   }
 }
 
@@ -239,7 +229,7 @@ function submitDomains(submit_elem){
   //show warning that something needs fixed
   else {
     errorMessage("invalid domains");
-    $("#domains-submit").addClass('is-disabled');
+    $("#domains-submit").addClass('is-hidden');
   }
 
 }
@@ -272,7 +262,6 @@ function submitDomainsAjax(domains, submit_elem){
       domains: domains
     }
   }).done(function(data){
-    console.log(data);
     refreshNotification();
 
     //handle any good or bad listings
@@ -351,13 +340,13 @@ function refreshRows(bad_listings, good_listings){
     goodTableRows(good_listings);
 
     //how many were created successfully
-    var success_amount = (good_listings.length == 1) ? "1 domain" : good_listings.length + " domains"
+    var success_amount = (good_listings.length == 1) ? "a listing" : good_listings.length + " listings"
     $("#success-total").text(success_amount);
     $("#domain-success-message").removeClass("is-hidden").addClass("is-active");
   }
 
   //disable submit and unclick terms
-  $("#domains-submit").addClass('is-disabled');
+  $("#domains-submit").addClass('is-hidden');
 }
 
 //function to refresh notifications if there are no relative rows
@@ -401,6 +390,7 @@ function badTableRows(bad_listings){
 //function to edit the rows to append any bad reasons
 function handleBadReasons(reasons, row){
   if (reasons){
+    $("#clear-errored-button").removeClass('is-hidden');
 
     //refresh the row
     row.addClass('errored-row');

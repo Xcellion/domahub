@@ -1,7 +1,6 @@
 var listing_model = require('../../models/listing_model.js');
 var data_model = require('../../models/data_model.js');
 
-var search_functions = require("../listings/listings_search_functions.js");
 var renter_functions = require("../listings/listings_renter_functions.js");
 var buyer_functions = require("../listings/listings_buyer_functions.js");
 var owner_functions = require("../listings/listings_owner_functions.js");
@@ -19,64 +18,38 @@ module.exports = function(app, db, auth, error, stripe){
   Listing = new listing_model(db);
   Data = new data_model(db);
 
-  //render listing hub
-  // app.get("/listings", [
-  //   search_functions.renderListingHub
-  // ]);
-
-  //get more listings for the listings hub
-  app.post("/listings", [
-    urlencodedParser,
-    search_functions.getMoreListings
-  ]);
-
-  //<editor-fold>-------------------------------SEARCH LISTINGS-------------------------------
-
-  //get a random listing with specific category
-  app.get("/listing/random/:category", [
-    search_functions.getRandomListingByCategory
-  ]);
-
-  //get a random listing with specific category
-  app.post("/listing/related", [
-    urlencodedParser,
-    search_functions.getRelatedListings
-  ]);
-
-  //get random listings belonging to specific owner
-  app.post("/listing/otherowner", [
-    urlencodedParser,
-    search_functions.getOtherListings
-  ]);
-
-  // //search for a listing with specific filters
-  // app.post("/listing/search", [
-  //   urlencodedParser,
-  //   search_functions.checkSearchParams,
-  //   search_functions.getListingBySearchParams
-  // ]);
-
-  //</editor-fold>
-
   //<editor-fold>-------------------------------OWNER RELATED-------------------------------
 
   //render listing create
   app.get('/listings/create', [
     auth.checkLoggedIn,
+    profile_functions.getAccountListings,
     stripe.getAccountInfo,
     owner_functions.renderCreateListing
   ]);
 
-  // //render create listing multiple
-  // app.get('/listings/create/multiple', [
-  //   auth.checkLoggedIn,
-  //   owner_functions.renderCreateListingMultiple
-  // ]);
+  //multi update of listings details
+  app.post("/listings/multiupdate", [
+    auth.checkLoggedIn,
+    urlencodedParser,
+    owner_functions.checkImageUploadSize,
+    checkSelectedIDs,
+    profile_functions.getAccountListings,
+    owner_functions.checkPostedListingInfoMulti,
+    stripe.checkStripeSubscriptionUser,
+    profile_functions.updateAccountSettingsGet,
+    owner_functions.checkListingImage,
+    owner_functions.checkListingStatus,
+    owner_functions.checkListingPremiumDetails,
+    owner_functions.checkListingDetails,
+    owner_functions.updateListingsInfo
+  ]);
 
   //check all posted textarea domains to render table
   app.post("/listings/create/table", [
     urlencodedParser,
     auth.checkLoggedIn,
+    profile_functions.getAccountListings,    //to find out if we've reached max listings count for basic
     owner_functions.checkPostedDomainNames
   ]);
 
@@ -94,41 +67,10 @@ module.exports = function(app, db, auth, error, stripe){
     res.redirect("/listings/create");
   });
 
-  //verify that someone changed their DNS to point to domahub
-  app.post('/listing/:domain_name/verify', [
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    stripe.getAccountInfo,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.verifyListing,
-    owner_functions.updateListing
-  ]);
-
-  //get the whois and DNS records for an unverified domain
-  app.post('/listing/:domain_name/unverifiedInfo', [
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.getDNSRecordAndWhois
-  ]);
-
-  //get offers for a verified domain
-  app.post('/listing/:domain_name/getoffers', [
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.getListingOffers
-  ]);
-
   //get stats for a verified domain
   app.post('/listing/:domain_name/getstats', [
     auth.checkLoggedIn,
+    urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     profile_functions.getAccountListings,
@@ -139,6 +81,7 @@ module.exports = function(app, db, auth, error, stripe){
   //update listing information
   app.post('/listing/:domain_name/update', [
     auth.checkLoggedIn,
+    urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     profile_functions.getAccountListings,
@@ -152,9 +95,8 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingStatus,
     owner_functions.checkListingPremiumDetails,
     owner_functions.checkListingDetails,
-    owner_functions.checkListingExistingDetails,
     owner_functions.checkListingModules,
-    owner_functions.updateListing
+    owner_functions.updateListingsInfo
   ]);
 
   //</editor-fold>
@@ -265,7 +207,7 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.alertBuyerNextSteps,
     buyer_functions.deleteBINInfo,
     buyer_functions.disableListing,
-    owner_functions.updateListing
+    owner_functions.updateListingsInfo
   ]);
 
   //new buy it now
@@ -314,11 +256,13 @@ module.exports = function(app, db, auth, error, stripe){
 
   //get a domain's traffic
   app.post("/listing/:domain_name/traffic", [
+    urlencodedParser,
     renter_functions.getListingTraffic
   ]);
 
   //get a domain's alexa information
   app.post("/listing/:domain_name/alexa", [
+    urlencodedParser,
     renter_functions.getListingAlexa
   ]);
 
@@ -427,22 +371,6 @@ module.exports = function(app, db, auth, error, stripe){
     renter_functions.updateRentalObject
   ]);
 
-  //delete a rental
-  app.post('/listing/:domain_name/:rental_id/refund', [
-    // urlencodedParser,
-    // auth.checkLoggedIn,
-    // checkDomainValid,
-    // checkDomainListed,
-    // renter_functions.getRental,
-    // renter_functions.checkRentalDomain,
-    // renter_functions.checkDomainOwner,
-    // stripe.refundRental,
-    // renter_functions.createRentalObject,
-    // renter_functions.deactivateRental,
-    // renter_functions.editRental,
-    general_functions.sendSuccess
-  ]);
-
   //</editor-fold>
 
 }
@@ -517,6 +445,33 @@ function checkDomainNotListed(req, res, next){
       error.handler(req, res, "Invalid domain name!");
     }
   });
+}
+
+//function to check if posted selected IDs are numbers
+function checkSelectedIDs(req, res, next){
+  console.log("F: Checking posted domain IDs...");
+  var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
+  if (!selected_ids){
+    error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+  }
+  else if (selected_ids.length <= 0){
+    error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+  }
+  else {
+    var all_good = true;
+    for (var x = 0 ; x < selected_ids.length ; x++){
+      if (!validator.isInt(selected_ids[x], { min : 1 })){
+        all_good = false;
+        break;
+      }
+    }
+    if (!all_good){
+      error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+    }
+    else {
+      next();
+    }
+  }
 }
 
 //</editor-fold>

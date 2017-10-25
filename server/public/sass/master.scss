@@ -1,9 +1,5 @@
-@import 'bulma/bulma.sass';
-
-/********************** CUSTOM CLASS STYLING ******************/
-
 .min-height {
-  min-height: calc(100vh - 125px);
+  min-height: calc(100vh - 110px);
 }
 
 //prevents scroll jump when scrollbar appears, but prevents horizontal scroll as well
@@ -77,62 +73,4 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-}
-
-/*************************** CHECKBOX ************************/
-
-.checkbox-form label {
-	@include transition(all 0.25s ease);
-	color: $text;
-	cursor: pointer;
-	display: inline-block;
-	position: relative;
-  box-sizing: border-box;
-  font-size: $size-6;
-  padding: 6px 5px 6px 34px;
-  width: 100%;
-  &.has-border {
-    border: 1px solid $border;
-    border-radius: $radius;
-    &:focus,
-    &:active {
-      outline: none;
-      border-color: $black-secondary;
-    }
-  }
-  // Hover, focus, active effects
-  &:focus,
-  &:active {
-    outline: 1px solid $black-secondary;
-  }
-}
-
-.checkbox-form input[type="checkbox"],
-.checkbox-form input[type="radio"],
-.checkbox-form label::before {
-  cursor: pointer;
-  position: absolute;
-  height: 24px;
-  width: 24px;
-}
-
-.checkbox-form input[type="checkbox"],
-.checkbox-form input[type="radio"] {
-	opacity: 0;
-	z-index: 100;
-  -webkit-appearance: none;
-}
-
-.checkbox-form label::before {
-  content: url(/images/lib/material/unchecked-box.svg);
-  opacity: 0.7;
-  left: 5px;
-  top: 4px;
-	@include transition(all 0.25s ease);
-}
-
-.checkbox-form input[type="checkbox"]:checked + label::before,
-.checkbox-form input[type="radio"]:checked + label::before {
-  content: url(/images/lib/material/checked-box.svg);
-  opacity: 1;
 }

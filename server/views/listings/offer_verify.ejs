@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <section class="section is-medium min-height">
+  <section id="page-contents" class="is-hidden section is-medium min-height">
     <div class="container">
       <div class="columns">
         <div class="column is-6 is-offset-3">
@@ -52,15 +52,6 @@
 
   <%# LISTING FOOTER %>
   <%- include("listing_footer.ejs") %>
-
-  <% if (listing_info.premium) { %>
-    <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
-  <% } else { %>
-    <script>
-      $(document).ready(function(){
-        $("#dh-footer").removeClass('is-hidden');
-      });
-    </script>
-  <% } %>
+  <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
 </body>
 </html>
