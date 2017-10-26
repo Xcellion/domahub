@@ -49,7 +49,34 @@ module.exports = function(app, db, auth, error){
   app.get("/analysis/searchhistory", analysisSearchHistory);
   app.get("/analysis/:domain_name", analysisDomainTraffic);
 
+  app.get("/monkey", monkey);
 }
+
+//<editor-fold>-------------------------------MONKEY-------------------------------------
+
+function monkey(req, res, next){
+  request({
+    url : "https://us15.api.mailchimp.com/3.0/lists/9bcbd932cd/members",
+    method : "POST",
+    headers : {
+      "Authorization" : "Basic " + new Buffer('any:' + "8255be227b33934b7822c777f2cbb11e-us15" ).toString('base64')
+    },
+    json : {
+      email_address : "test@test.com",
+      status : "subscribed",
+      merge_fields : {
+        "USERNAME" : "testfuck"
+      }
+    }
+  }, function(err, response, body){
+    if (err){console.log(err)}
+    else {
+      res.send(body);
+    }
+  });
+}
+
+//</editor-fold>
 
 //<editor-fold>-------------------------------DEV-------------------------------------
 

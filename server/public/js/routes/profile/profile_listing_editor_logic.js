@@ -93,7 +93,6 @@ function updateEditorEditing(selected_domain_ids){
 
   //editing view specific things
   $(".editor-title").text("Editing - ");
-  $("#example-domain-name").text("Editing" + selected_domain_ids.length + "DomainNames.com");
   $(".non-edit-elem").addClass('is-hidden');
   $(".edit-elem").removeClass('is-hidden');
 
@@ -107,6 +106,9 @@ function updateEditorEditing(selected_domain_ids){
     //hide domain capitalization
     $("#domain-name-cap-missing").removeClass('is-hidden');
     $("#domain-name-input").addClass('is-hidden');
+
+    //change preview name
+    $("#example-domain-name").text("Editing" + selected_domain_ids.length + "DomainNames.com");
 
     //tooltip to view individual listings
     $("#view-listings-button").removeAttr("href").off().on('click', function(){
@@ -249,7 +251,7 @@ function checkBox(module_value, elem, child){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------RENTAL TAB EDITS-------------------------------
+  //<editor-fold>-------------------------------RENTAL EDITS-------------------------------
 
   function updateRentalTab(listing_info){
     checkBox(listing_info.rentable, $("#rentable-input"));

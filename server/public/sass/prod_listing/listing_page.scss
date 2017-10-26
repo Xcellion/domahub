@@ -25,6 +25,14 @@
   min-height: calc(100vh - 110px) !important;
 }
 
+.child-module {
+  border-left: 1px solid $grey;
+  padding-left: 20px;
+  &.is-disabled {
+    opacity:0.25;
+  }
+}
+
 // tutorial
 #step-1 {
   left: 20px !important;

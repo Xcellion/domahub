@@ -78,6 +78,12 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.getListingStats
   ]);
 
+  //get random listings belonging to specific owner
+  app.post("/listing/otherowner", [
+    urlencodedParser,
+    renter_functions.getOtherListings
+  ]);
+
   //update listing information
   app.post('/listing/:domain_name/update', [
     auth.checkLoggedIn,
