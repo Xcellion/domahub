@@ -34,7 +34,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </span>
       <span>Sign me up</span>
     </a>
-    <a class="button is-small is-stylish restart-tutorial-button">
+    <a class="button restart-tutorial-button">
       <span class="icon is-small">
         <i class="fa fa-refresh"></i>
       </span>
@@ -156,7 +156,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
             <i class="fa fa-picture-o"></i>
           </div>
           <div class="control">
-            <a id="random-theme-button" class="button is-small is-stylish">
+            <a id="random-theme-button" class="button">
               <span class="icon is-small">
                 <i class="fa fa-random"></i>
               </span>
@@ -185,7 +185,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       <div class="control">
         <label class="label">
           <span>Font Styling</span>
-          <span class="icon is-small is-tooltip " data-balloon-length="medium" data-balloon="The color of the main font on your landing page. Font names can include any standard web font or Google web font. Any fonts after the first are used as backup or fallback fonts." data-balloon-pos="up">
+          <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="You can choose both the color and the font-family." data-balloon-pos="up">
             <i class="fa fa-question-circle"></i>
           </span>
         </label>
@@ -207,7 +207,12 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </div>
       </div>
       <div class="control">
-        <label class="label" for="background-image-input">Background Image URL</label>
+        <label class="label">
+          <span>Background Image URL</span>
+          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Dimensions can be whatever you wish, but keep in mind your customers will have different resolutions. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
         <div class="control has-addons">
           <input id="background-image-input" type="text" class="input theme-changeable-input">
           <button id="background-image-refresh" class='is-disabled is-outlined button'>
@@ -218,15 +223,20 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </div>
       </div>
       <div class="control">
+        <label class="label">
+          <span>Background Color</span>
+          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
         <div class="control">
-          <label class="label" for="background-color-input">Background Color</label>
           <input id="background-color-input" type="text" class="input theme-changeable-input">
         </div>
       </div>
       <div class="control">
-        <label class="label" for="background-image-input">
+        <label class="label">
           <span>Logo Image URL</span>
-          <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="A logo to use on the footer of your listings page. It is included in various emails your customers receive and on checkout pages when customers rent/buy your domain. " data-balloon-pos="up">
+          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
             <i class="fa fa-question-circle"></i>
           </span>
         </label>
@@ -241,7 +251,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label" for="info-module-input">Info Module</label>
+          <label class="label" for="info-module-input">Information Tab</label>
           <small class="tip">Displays more detailed information about the domain and other related information.</small>
         </div>
         <div class="control-right">
@@ -251,7 +261,24 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           </form>
         </div>
       </div>
-      <div class="control is-spaced">
+      <div class="control is-spaced info-module-child child-module">
+        <div class="control-left">
+          <label class="label">
+            <span>Domain Owner</span>
+            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
+          <small class="tip">Displays a small sentence showing your username and when this listing was created.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="domain-owner-input" data-target="domain-owner" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
+            <label for="domain-owner-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced info-module-child child-module">
         <div class="control-left">
           <label class="label">
             <span>Domain Age</span>
@@ -268,11 +295,28 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           </form>
         </div>
       </div>
-      <div class="control is-spaced">
+      <div class="control is-spaced info-module-child child-module">
+        <div class="control-left">
+          <label class="label">
+            <span>Show Other Listings</span>
+            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
+          <small class="tip">Displays a list of other listings you own on DomaHub.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="domain-list-input" data-target="domain-list" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
+            <label for="domain-list-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced info-module-child child-module">
         <div class="control-left">
           <label class="label">
             <span>Appraisal Sites</span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
               <i class="fa fa-question-circle"></i>
             </span>
           </label>
@@ -285,11 +329,11 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           </form>
         </div>
       </div>
-      <div class="control is-spaced">
+      <div class="control is-spaced info-module-child child-module">
         <div class="control-left">
           <label class="label">
             <span>Social Media Sharing Buttons</span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
               <i class="fa fa-question-circle"></i>
             </span>
           </label>
@@ -304,9 +348,8 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label" for="traffic-module-input">Traffic Module</label>
-          <small class="tip">Displays detailed information about domain traffic including
-            <a class="is-primary"   href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa</a> data.</small>
+          <label class="label" for="traffic-module-input">Traffic Tab</label>
+          <small class="tip">Displays detailed traffic information about this listing.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
@@ -315,10 +358,44 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           </form>
         </div>
       </div>
+      <div class="control is-spaced traffic-module-child child-module">
+        <div class="control-left">
+          <label class="label">
+            <span>Traffic Graph</span>
+            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
+          <small class="tip">Displays a graph of the listing traffic.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="traffic-graph-input" data-name="traffic_graph" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+            <label for="traffic-graph-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced traffic-module-child child-module">
+        <div class="control-left">
+          <label class="label">
+            <span>Alexa Statistics</span>
+            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
+          <small class="tip">Displays <a class="is-primary" id="alexa_link">Alexa</a> traffic statistics.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="alexa-stats-input" data-name="alexa_stats" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+            <label for="alexa-stats-input"></label>
+          </form>
+        </div>
+      </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label" for="ticker-module-input">History Module</label>
-          <small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
+          <label class="label" for="ticker-module-input">History Tab</label>
+          <small class="tip">Displays recent activity on your listing - useful if you have rentals enabled.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
@@ -344,7 +421,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           </span>
           <span>Sign me up</span>
         </a>
-        <a class="button is-small is-stylish restart-tutorial-button">
+        <a class="button restart-tutorial-button">
           <span class="icon is-small">
             <i class="fa fa-refresh"></i>
           </span>

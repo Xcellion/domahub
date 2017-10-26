@@ -18,6 +18,8 @@ var mailOptions = {
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 var stripe = require('../lib/stripe.js');
+var monkey_api_key = "8255be227b33934b7822c777f2cbb11e-us15"
+var monkey_url = "https://us15.api.mailchimp.com/3.0/lists/9bcbd932cd/members"
 
 //</editor-fold>
 
@@ -418,6 +420,44 @@ module.exports = {
                   delete req.session.promo_code_signup;
                 });
               }
+
+              //sign up on mailchimp
+              console.log("F: Adding to Mailchimp list...");
+              request({
+                url : monkey_url,
+                method : "POST",
+                headers : {
+                  "Authorization" : "Basic " + new Buffer('any:' + monkey_api_key ).toString('base64')
+                },
+                json : {
+                  email_address : user.email,
+                  status : "subscribed",
+                  merge_fields : {
+                    "USERNAME" : user.username
+                  }
+                }
+              }, function(err, response, body){
+                if (err || body.errors || body.status == 400){
+                  //send email to notify
+                  console.log("F: Failed to add to Mailchimp list! Notifying...");
+                  mailer.sendMail({
+                    to: "general@domahub.com",
+                    from: 'general@domahub.com',
+                    subject: "New user signed up for DomaHub! Failed monkey insert!",
+                    html: "Username - " + user.username + "<br />Email - " + user.email + "<br />"
+                  });
+                }
+                else {
+                  //send email to notify
+                  console.log("F: Successfully added to Mailchimp list! Notifying...");
+                  mailer.sendMail({
+                    to: "general@domahub.com",
+                    from: 'general@domahub.com',
+                    subject: "New user signed up for DomaHub!",
+                    html: "Username - " + user.username + "<br />Email - " + user.email + "<br />"
+                  });
+                }
+              });
 
               generateVerify(req, res, email, username, function(state){
                 req.session.message = "Success! Please check your email for further instructions!";

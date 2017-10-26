@@ -105,35 +105,6 @@ module.exports = {
     }
   },
 
-  //returns three listing belonging to same person
-  getOtherListings : function(req, res, next){
-    console.log("F: Finding other listings by same owner...");
-    var owner_id = req.body.owner_id;
-    var domain_name_exclude = req.body.domain_name_exclude;
-
-    //make sure owner and domain exclude are legit
-    if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id)){
-      Listing.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
-        if (!result.info.length || result.state == "error"){
-          res.send({
-            state: "error"
-          });
-        }
-        else {
-          res.send({
-            state: "success",
-            listings: result.info
-          });
-        }
-      });
-    }
-    else {
-      res.send({
-        state: "error"
-      });
-    }
-  },
-
   //check the posted search parameters
   checkSearchParams : function(req, res, next){
     var posted_categories = (typeof req.body.categories == "string" && req.body.categories.length > 0) ? req.body.categories.toLowerCase().split(" ").filter(function(el) {return el.length != 0}) : [];
