@@ -27,7 +27,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
     </p>
     <a tabindex="0" class="is-primary" href="/features">Click here to learn more</a>!
   </div>
-  <div class="button-wrapper is-aligned-left">
+  <div class="control-wrapper">
     <a href="/signup" class="button is-small is-primary is-stylish">
       <span class="icon is-small">
         <i class="fa fa-user-circle"></i>
@@ -57,9 +57,9 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
   <!-- EDIT LISTING DETAIL TABS BUTTONS  -->
   <div id="compare-buttons">
     <div class="control is-spaced">
-      <div class="tabs is-primary margin-bottom-0 control-left">
+      <div class="tabs is-primary control-left">
         <ul>
-          <li id="info-edit-tab" class="margin-left-0 compare-tab is-active">
+          <li id="info-edit-tab" class="compare-tab is-active">
             <a tabindex="0">Information</a>
           </li>
           <li id="design-tab" class="compare-tab">
@@ -128,9 +128,10 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control">
         <label class="label" for="price-rate-input">Rental Price</label>
-        <div class="control has-addons margin-bottom-0">
+        <small class="tip">Price per unit of time for the domain rental.</small>
+        <div class="control has-addons">
           <input id="price-rate-input" placeholder="" type="number" min="1" step="1" class="padding-top-0 input ">
-          <span class="select price-type-span no-shadow">
+          <span class="select price-type-span">
             <div class="drop-form">
               <select tabindex="0" id="price-type-input" class="">
                 <option value="month">Month</option>
@@ -140,7 +141,6 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
             </div>
           </span>
         </div>
-        <small class="tip">Price per unit of time for the domain rental.</small>
       </div>
     </div>
 
@@ -210,7 +210,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         <label class="label" for="background-image-input">Background Image URL</label>
         <div class="control has-addons">
           <input id="background-image-input" type="text" class="input theme-changeable-input">
-          <button id="background-image-refresh" class='is-disabled no-shadow is-outlined button'>
+          <button id="background-image-refresh" class='is-disabled is-outlined button'>
             <span class="icon is-small">
               <i class="fa fa-refresh"></i>
             </span>
@@ -232,7 +232,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </label>
         <div class="control has-addons">
           <input id="logo-image-input" type="text" class="input theme-changeable-input">
-          <button id="logo-image-refresh" class='is-disabled no-shadow is-outlined button'>
+          <button id="logo-image-refresh" class='is-disabled is-outlined button'>
             <span class="icon is-small">
               <i class="fa fa-refresh"></i>
             </span>
@@ -337,7 +337,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </p>
         <a tabindex="0" class="is-primary" href="/features">Click here to learn more</a>!
       </div>
-      <div class="button-wrapper is-aligned-left">
+      <div class="control-wrapper">
         <a href="/signup" class="button is-small is-primary is-stylish">
           <span class="icon is-small">
             <i class="fa fa-user-circle"></i>

@@ -103,13 +103,13 @@ $(document).ready(function() {
               <span class='icon is-small'> \
                 <i class='fa fa-thumbs-up'></i> \
               </span> \
-              <span>Yes! Teach me how it works.</span> \
+              <span>Yes! Show me how it works.</span> \
             </button> \
             <button class='button is-small is-danger is-outlined' data-role='end'> \
               <span class='icon is-small'> \
                 <i class='fa fa-frown-o'></i> \
               </span> \
-              <span>Nah, I'll figure it out myself.</span> \
+              <span>No, I'll figure it out.</span> \
             </button> \
             </div> \
           </div> \
@@ -486,12 +486,14 @@ function toggleMenu(show){
   if (show){
     $("#compare-menu").addClass("is-active");
     $("#page-contents").addClass("is-active");
+    $("#modules-wrapper").addClass("is-active");
     $("#dh-footer").addClass("is-active");
     $("#show-menu-button").fadeIn(100).addClass("is-hidden");
   }
   else {
     $("#compare-menu").removeClass("is-active");
     $("#page-contents").removeClass("is-active");
+    $("#modules-wrapper").removeClass("is-active");
     $("#dh-footer").removeClass("is-active");
     $("#show-menu-button").fadeIn(100).removeClass("is-hidden");
   }
