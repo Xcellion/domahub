@@ -1,17 +1,24 @@
-//<editor-fold>----------------------------------------------------------------------VARIABLES
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
 
-var Categories = require("../../lib/categories.js");
-var Fonts = require("../../lib/fonts.js");
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+var account_model = require('../models/account_model.js');
+var listing_model = require('../models/listing_model.js');
+var data_model = require('../models/data_model.js');
+
+var stripe = require('./stripe_functions.js');
+
+var Categories = require("../lib/categories.js");
+var Fonts = require("../lib/fonts.js");
+var error = require('../lib/error.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var Q = require('q');
 var bcrypt = require("bcrypt-nodejs");
 var whois = require("whois");
 var parser = require('parse-whois');
 var dns = require("dns");
-var stripe = require('../../lib/stripe.js');
 
 //</editor-fold>
 
@@ -27,7 +34,7 @@ module.exports = {
 
     //if we dont already have the list of listings
     if (!req.user.listings){
-      Account.getAccountListings(req.user.id, function(result){
+      account_model.getAccountListings(req.user.id, function(result){
 
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
@@ -166,7 +173,7 @@ module.exports = {
   //multi-delete listings
   deleteListings : function(req, res, next){
     console.log("F: Deactivating listings...");
-    Listing.deleteListings(req.session.deletion_object, function(result){
+    listing_model.deleteListings(req.session.deletion_object, function(result){
       if (result.state == "success"){
         updateUserListingsObjectDelete(req.user.listings, req.session.deletion_object);
         delete req.session.deletion_object;
@@ -184,7 +191,7 @@ module.exports = {
   //multi-verify listings
   verifyListings : function(req, res, next){
     console.log("F: Updating verified listings...");
-    Listing.verifyListings(req.session.verification_object.to_verify_formatted, function(result){
+    listing_model.verifyListings(req.session.verification_object.to_verify_formatted, function(result){
       if (result.state == "success"){
         updateUserListingsObjectVerify(req.user.listings, req.session.verification_object.to_verify_formatted);
         var unverified_listings =  req.session.verification_object.unverified_listings;
@@ -291,7 +298,7 @@ module.exports = {
         }
       }
     }
-    Data.getOffersMulti(listing_ids, function(result){
+    data_model.getOffersMulti(listing_ids, function(result){
 
       //update req.user.listings
       if (result.state == "success"){
@@ -316,6 +323,59 @@ module.exports = {
 
   //<editor-fold>----------------------------------------------------------------------UPDATE ACCOUNT
 
+  //function to check account settings posted
+  checkAccountSettings: function(req, res, next){
+    console.log('F: Checking posted account settings...');
+
+    new_email = req.body.new_email;
+    username = req.body.username;
+    password = req.body.new_password;
+
+    //not a valid email
+    if (req.body.new_email && !validator.isEmail(new_email)){
+      error.handler(req, res, "Invalid email!", "json");
+    }
+    //username too long
+    else if (req.body.username && username.length > 70){
+      error.handler(req, res, "Username is too long!", "json");
+    }
+    //username too short
+    else if (req.body.username && username.length < 3){
+      error.handler(req, res, "Username is too short!", "json");
+    }
+    //username is invalid
+    else if (req.body.username && /\s/.test(username)){
+      error.handler(req, res, "Invalid name!", "json");
+    }
+    //password is too long
+    else if (req.body.new_password && password && 70 < password.length){
+      error.handler(req, res, "The new password is too long!", "json");
+    }
+    //password is too short
+    else if (req.body.new_password && password && password.length < 6){
+      error.handler(req, res, "The new password is too short!", "json");
+    }
+    //check the pw
+    else if (req.body.new_password || req.body.username || req.body.new_email){
+      req.body.email = req.body.email || req.user.email;
+      passport.authenticate('local-login', function(err, user, info){
+        if (!user && info){
+          error.handler(req, res, info.message, "json");
+        }
+        else {
+          next();
+        }
+      })(req, res, next);
+    }
+    //paypal
+    else if (validator.isEmail(req.body.paypal_email)){
+      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+    }
+  },
+
   //function to update account settings on a get
   updateAccountSettingsGet : function(req, res, next){
 
@@ -331,7 +391,7 @@ module.exports = {
       //remove old invalid stripe subscription ID
       //this function can be called from anonymous user (aka listing_info exists) or the account owner (aka listing_info doesnt exist)
       var owner_email = (req.session.listing_info) ? req.session.listing_info.owner_email : req.user.email;
-      Account.updateAccount(new_account_info, owner_email, function(result){
+      account_model.updateAccount(new_account_info, owner_email, function(result){
         if (result.state == "success" && !req.session.listing_info){
           for (var x in new_account_info){
             req.user[x] = new_account_info[x];
@@ -377,7 +437,7 @@ module.exports = {
 
     //update only if theres something to update
     if (!isEmptyObject(new_account_info)){
-      Account.updateAccount(new_account_info, req.user.email, function(result){
+      account_model.updateAccount(new_account_info, req.user.email, function(result){
         if (result.state=="error"){
           if (result.errcode == "ER_DUP_ENTRY"){
             error.handler(req, res, "A user with that email/username already exists!", "json");
@@ -410,7 +470,7 @@ module.exports = {
   updateAccountStripe : function(req, res, next){
     console.log('F: Updating account Stripe settings...');
 
-    Account.updateAccount({
+    account_model.updateAccount({
       stripe_account : req.session.stripe_results.id,
       stripe_secret : req.session.stripe_results.keys.secret,
       stripe_public : req.session.stripe_results.keys.publishable,
@@ -436,7 +496,6 @@ module.exports = {
 
   renderDashboard : function(req, res, next){
     res.render("profile/profile_dashboard.ejs", {
-      message: Auth.messageReset(req),
       user: req.user,
       listings: req.user.listings
     });
@@ -444,9 +503,8 @@ module.exports = {
 
   renderMyListings: function(req, res){
     res.render("profile/profile_mylistings.ejs", {
-      message: Auth.messageReset(req),
       user: req.user,
-      listings: req.user.listings || false,
+      listings: req.user.listings,
       categories: Categories.all(),
       fonts: Fonts.all()
     });
@@ -454,8 +512,8 @@ module.exports = {
 
   renderSettings: function(req, res){
     res.render("profile/profile_settings.ejs", {
-      message: Auth.messageReset(req),
-      user: req.user
+      user: req.user,
+      listings: req.user.listings
     });
   },
 
@@ -480,7 +538,7 @@ module.exports = {
   //function to get all referrals for a user
   getReferralsFromUser : function(req, res, next){
     console.log("F: Getting all referrals made by user...");
-    Account.getReferralsFromUser(req.user.id, function(result){
+    account_model.getReferralsFromUser(req.user.id, function(result){
       if (result.state == "success"){
         req.user.referrals = result.info;
       }
@@ -499,7 +557,7 @@ module.exports = {
   getExistingCoupon : function(req, res, next){
     console.log("F: Getting any existing coupons for user...");
 
-    Account.getExistingPromoCodeByUser(req.user.id, function(result){
+    account_model.getExistingPromoCodeByUser(req.user.id, function(result){
       if (result.state == "success" && result.info.length > 0 && result.info[0].code){
         req.user.existing_promo_code = result.info[0].code;
         req.user.existing_referer_id = result.info[0].referer_id;
@@ -518,7 +576,7 @@ module.exports = {
     else {
 
       //check if code exists and is unused
-      Account.checkPromoCodeUnused(req.body.code, function(result){
+      account_model.checkPromoCodeUnused(req.body.code, function(result){
         if (result.state == "success" && result.info.length > 0){
           console.log("F: Promo code exists!");
           req.user.promo_code = req.body.code;
@@ -529,7 +587,7 @@ module.exports = {
         else if (!req.user.stripe_subscription_id){
 
           //get the username ID so we can create a referral code
-          Account.getAccountIDByUsername(req.body.code, function(result){
+          account_model.getAccountIDByUsername(req.body.code, function(result){
             if (result.state == "success" && result.info.length > 0){
               console.log("F: Username exists!");
               var referer_id = result.info[0].id;
@@ -540,7 +598,7 @@ module.exports = {
               }
               else {
                 //check if current user has an existing promo code referral (if not, create a coupon)
-                Account.checkExistingReferral(req.user.id, referer_id, function(result){
+                account_model.checkExistingReferral(req.user.id, referer_id, function(result){
                   req.user.new_referer_id = referer_id;
                   if (result.state == "success" && result.info.length > 0){
                     error.handler(req, res, "Invalid promo code!", "json");
@@ -577,7 +635,7 @@ module.exports = {
   //check if this user has an existing promo code
   checkExistingPromoCode : function(req, res, next){
     console.log("F: Checking for any existing promo code for the user in our database...");
-    Account.getExistingPromoCodeByUser(req.user.id, function(result){
+    account_model.getExistingPromoCodeByUser(req.user.id, function(result){
 
       //exists! delete it and re-create a combined coupon
       if (result.state == "success" && result.info.length > 0 && result.info[0].code){
@@ -588,11 +646,11 @@ module.exports = {
         delete req.user.new_referer_id;
 
         //delete newly made code
-        Account.deletePromoCode(req.user.promo_code, function(result){
+        account_model.deletePromoCode(req.user.promo_code, function(result){
           if (result.state == "success"){
 
             //delete old existing code
-            Account.deletePromoCode(existing_coupon_code, function(result){
+            account_model.deletePromoCode(existing_coupon_code, function(result){
 
               //subtract any existing times redeemed from stripe
               if (req.user.stripe_used_months){
@@ -634,7 +692,7 @@ module.exports = {
     }
     //if not yet premium, just update our database
     else {
-      Account.updatePromoCode(req.user.promo_code, { account_id : req.user.id }, function(result){
+      account_model.updatePromoCode(req.user.promo_code, { account_id : req.user.id }, function(result){
         if (result.state == "success"){
           delete req.user.promo_code;
           res.send({

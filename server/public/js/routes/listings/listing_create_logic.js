@@ -31,14 +31,14 @@ $(document).ready(function() {
   $(".delete-domains-button").on("click", function(e){
     deleteAllRows();
     handleSubmitDisabled();
-    refreshNotification();
+    clearNotification();
   });
 
   //delete all errored rows
   $(".delete-errors-button").on("click", function(e){
     deleteErroredRows();
     handleSubmitDisabled();
-    refreshNotification();
+    clearNotification();
   });
 
   //submit to create listings
@@ -57,32 +57,6 @@ $(document).ready(function() {
 function showHelpText(help_text_id){
   $(".content-wrapper").addClass("is-hidden");
   $("#" + help_text_id + "-helptext").removeClass('is-hidden');
-}
-
-//helper function to display/hide error messages
-function errorMessage(message){
-
-  //hide success
-  $("#domain-success-message").addClass("is-hidden").removeClass("is-active");
-
-  //show errors or hide errors
-  if (message == "invalid domains"){
-    $("#domain-error-text").text("Some domain names were invalid! See below for more details.");
-    $("#domain-error").removeClass("is-hidden").addClass("is-active");
-  }
-  else if (message == "max-domains-reached"){
-    $("#domain-error-text").html("You have reached the maximum 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
-    $("#domain-error").removeClass("is-hidden").addClass("is-active");
-  }
-  else {
-    if (message){
-      $("#domain-error-text").text(message);
-      $("#domain-error").removeClass("is-hidden").addClass("is-active");
-    }
-    else {
-      $("#domain-error").addClass("is-hidden").removeClass("is-active");
-    }
-  }
 }
 
 //</editor-fold>
@@ -131,7 +105,7 @@ function createTable(bad_listings, good_listings){
   $("#table-columns, #table-buttons-wrapper").removeClass('is-hidden');
 
   if (bad_listings.length > 0){
-    errorMessage("invalid domains");
+    errorMessage("Some domain names were invalid! See below for more details.");
     for (var x = 0; x < bad_listings.length; x++){
       createTableRow(bad_listings[x]);
     }
@@ -177,7 +151,7 @@ function createTableRow(data){
     if ($(".delete-icon").length == 1){
       createTableRow("");
     }
-    refreshNotification();
+    clearNotification();
     handleSubmitDisabled();
   });
 
@@ -188,7 +162,7 @@ function createTableRow(data){
   temp_table_row.appendTo("#domain-input-body");
   temp_table_row.find(".domain-name-input").focus();
 
-  refreshNotification();
+  clearNotification();
 }
 
 //function to show or disable submit
@@ -215,7 +189,7 @@ function handleSubmitDisabled(){
 function submitDomains(submit_elem){
 
   //only if there are no error messages currently
-  if ($("#domain-error").hasClass("is-hidden") && $("td .is-danger").length == 0){
+  if ($("#profile-msg-error").hasClass("is-hidden") && $("td .is-danger").length == 0){
     deleteEmptyTableRows();
 
     var domains = getTableListingInfo(".domain-name-input");
@@ -228,7 +202,7 @@ function submitDomains(submit_elem){
 
   //show warning that something needs fixed
   else {
-    errorMessage("invalid domains");
+    errorMessage("Some domain names were invalid! See below for more details.");
     $("#domains-submit").addClass('is-hidden');
   }
 
@@ -262,18 +236,23 @@ function submitDomainsAjax(domains, submit_elem){
       domains: domains
     }
   }).done(function(data){
-    refreshNotification();
+    clearNotification();
 
     //handle any good or bad listings
     refreshRows(data.bad_listings, data.good_listings);
-
     if (data.state == "error"){
       //some unhandled error
       if (!data.bad_listings && !data.good_listings){
         showTable();
       }
 
-      errorMessage(data.message);
+      if (data.message == "max-domains-reached"){
+        errorMessage("You have reached the maximum 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
+      }
+      else {
+        errorMessage(data.message);
+      }
+
     }
 
     if (data.bad_listings && data.bad_listings.length == 0){
@@ -341,34 +320,16 @@ function refreshRows(bad_listings, good_listings){
 
     //how many were created successfully
     var success_amount = (good_listings.length == 1) ? "a listing" : good_listings.length + " listings"
-    $("#success-total").text(success_amount);
-    $("#domain-success-message").removeClass("is-hidden").addClass("is-active");
+    successMessage("Successfully created " + success_amount + "! Please go to your <a href='/profile/mylistings' class='is-underlined'>My Listings page</a> to view your newly created listings!")
   }
 
   //disable submit and unclick terms
   $("#domains-submit").addClass('is-hidden');
 }
 
-//function to refresh notifications if there are no relative rows
-function refreshNotification(){
-  //hide error notification
-  if ($("small.is-danger").length == 0){
-    $(".notification.is-danger").addClass("is-hidden").removeClass("is-active");
-    $("td small.is-danger").remove();
-    $("td .is-danger").removeClass("is-danger");
-  }
-
-  //hide success notification
-  if ($("tr .td-price .is-disabled").not("#clone-row").length == 0){
-    $("#domain-success-message").addClass("is-hidden").removeClass("is-active");
-  }
-}
-
 //function to remove all success/error messages
 function clearDangerSuccess(){
-  //notifications
-  errorMessage(false);
-  $("#domain-success-message").addClass("is-hidden").removeClass("is-active");
+  clearNotification();
 
   //remove small error reasons
   $("td small").remove();
@@ -380,7 +341,7 @@ function clearDangerSuccess(){
 
 //label the incorrect table rows
 function badTableRows(bad_listings){
-  errorMessage("invalid domains");
+  errorMessage("Some domain names were invalid! See below for more details.");
   for (var x = 0; x < bad_listings.length; x++){
     var table_row = $($(".table-row").not("#clone-row")[bad_listings[x].index]);
     handleBadReasons(bad_listings[x].reasons, table_row);
@@ -413,7 +374,7 @@ function handleBadReasons(reasons, row){
           row.removeClass('errored-row');
           $(this).removeClass('is-danger');
           $(this).closest("td").find("small").remove();
-          refreshNotification();
+          clearNotification();
         }
       }).closest('td').append(explanation);
     }

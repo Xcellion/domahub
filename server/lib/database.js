@@ -1,3 +1,5 @@
+console.log("Connecting to database...");
+
 var mysql = require('mysql');
 var pool = mysql.createPool({
   host: 'p3plcpnl0172.prod.phx3.secureserver.net',
@@ -12,43 +14,28 @@ var pool = mysql.createPool({
 });
 
 module.exports = {
-  connect: database_connect,
-
   //grab a connection from the pool, then run SQL query
-  query: function(custom_query, callback, post){
+  query: function(custom_query, error_description, callback, post){
     pool.getConnection(function(err, con){
+
+      //something went wrong with the mysql query!
       if (!err){
         con.query(custom_query, post, function(err, result){
           con.release();
-          callback(result, err);
+          callback({
+            state : "success",
+            info : result
+          });
         });
       }
       else {
-        callback(false, err);
+        console.log(err);
+        callback({
+          state : "error",
+          info : error_description,
+          errcode : err.code
+        });
       }
     });
   }
 };
-
-//connects to the mysql database
-function database_connect() {
-  //reconnect if errored
-  pool.on('error', function(err) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-      console.log("Reconnecting to MYSQL...");
-      database_connect();
-    }
-    else if (err.code === 'ECONNRESET') {
-      setTimeout(database_connect, 2000);
-    }
-    else {
-      throw err;
-    }
-  });
-
-  //timezone
-  pool.on('connection', function onConnection(connection) {
-    // console.log("Setting MYSQL session timezone settings to UTC...");
-    connection.query('SET time_zone = ?', '+0:00');
-  });
-}

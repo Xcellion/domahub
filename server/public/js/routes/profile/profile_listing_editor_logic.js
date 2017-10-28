@@ -43,8 +43,7 @@ function showSelector(keep_message){
   multiSelectButtons();
   leftMenuActive();
   if (!keep_message){
-    errorMessage(false);
-    successMessage(false);
+    clearNotification();
   }
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
@@ -167,8 +166,7 @@ function setupEditingButtons(){
 
     if (current_tab != new_tab){
       //clear any existing messages
-      errorMessage(false);
-      successMessage(false);
+      clearNotification();
 
       //update tab URL
       updateQueryStringParam("tab", new_tab);
@@ -619,8 +617,7 @@ function checkBox(module_value, elem, child){
     }
 
     //clear any existing messages
-    errorMessage(false);
-    successMessage(false);
+    clearNotification();
 
     //only change if the value changed from existing (and if premium elem, has premium)
     if (input_elem.val() != listing_info_comparison &&
@@ -668,16 +665,14 @@ function checkBox(module_value, elem, child){
     updateEditorEditing(getSelectedDomains("id", true, true));
 
     if (!keep_message){
-      errorMessage(false);
-      successMessage(false);
+      clearNotification();
     }
   }
 
   //function to submit status change
   function submitListingChanges(submit_button, status_only){
     //clear any existing messages
-    errorMessage(false);
-    successMessage(false);
+    clearNotification();
     submit_button.addClass('is-loading');
 
     //append data for editing
@@ -786,35 +781,6 @@ function checkBox(module_value, elem, child){
         errorMessage(error_msg);
       }
     });
-  }
-
-  //helper function to display/hide error messages per listing
-  function errorMessage(message){
-    //hide success
-    $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-    $("#error-upgrade-button").addClass('is-hidden');
-
-    if (message){
-      $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
-      $("#listing-msg-error-text").html(message);
-    }
-    else if (!message) {
-      $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-    }
-  }
-
-  //helper function to display success messages per listing
-  function successMessage(message){
-    //hide error
-    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-
-    if (message){
-      $("#listing-msg-success").removeClass('is-hidden').addClass("is-active");
-      $("#listing-msg-success-text").text(message);
-    }
-    else if (!message){
-      $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-    }
   }
 
   //</editor-fold>
@@ -1247,7 +1213,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
   var offer = false;
   for (var x = 0 ; x < listing_info.offers.length ; x++){
     if (listing_info.offers[x].accepted == 1){
-      offer = listing_info.offers[x].id;
+      offer = listing_info.offers[x];
       break;
     }
   }

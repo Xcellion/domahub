@@ -1,20 +1,19 @@
-//<editor-fold>-------------------------------NODE REQUIREMENTS-------------------------------
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
 
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
+var listing_model = require('../models/listing_model.js');
+var data_model = require('../models/data_model.js');
+
+var error = require('../lib/error.js');
+var mailer = require('../lib/mailer.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 var randomstring = require("randomstring");
 var validator = require("validator");
-
-var nodemailer = require('nodemailer');
-var sgTransport = require('nodemailer-sendgrid-transport');
-var mailOptions = {
-  auth: {
-    api_key: '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'
-  }
-}
-var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 
 var ejs = require('ejs');
 var path = require("path");
@@ -82,7 +81,7 @@ module.exports = {
   sendContactVerificationEmail : function(req, res, next){
     console.log("F: Sending email to offerer to verify email...");
 
-    var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
+    var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
     //figure out luminance based on primary color
     req.session.listing_info.font_luminance = calculateLuminance(req.session.listing_info.primary_color);
@@ -115,14 +114,19 @@ module.exports = {
     }
 
     //use helper function to email someone
-    emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, "Something went wrong! Please refresh the page and try again.");
+    mailer.sendEJSMail(pathEJSTemplate, EJSVariables, emailDetails, function(state){
+      if (state == "error"){
+        error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
+      }
+    });
   },
 
   //okay! verify the contact history entry
   verifyContactHistory : function(req, res, next){
     console.log("F: Verifying offer email...");
 
-    Data.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
+    data_model.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
+
       //asynchronously alert the owner!
       //get the listing owner contact information to email
       getListingOwnerContactInfo(req.params.domain_name, function(owner_result){
@@ -130,8 +134,8 @@ module.exports = {
           getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
             if (offer_result){
               console.log("F: Emailing owner about new verified offer...");
-              var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs');
-              var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer))
+              var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs');
+
               var EJSVariables = {
                 domain_name: req.params.domain_name,
                 owner_name: owner_result.username,
@@ -139,7 +143,7 @@ module.exports = {
                 offerer_email: offer_result.email,
                 offerer_phone: phoneUtil.format(phoneUtil.parse(offer_result.phone), PNF.INTERNATIONAL),
                 verification_code: req.params.verification_code,
-                offer: offer_formatted,
+                offer: moneyFormat.to(parseFloat(offer_result.offer)),
                 message: offer_result.message
               }
 
@@ -150,7 +154,7 @@ module.exports = {
               };
 
               //email the owner
-              emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+              mailer.sendEJSMail(pathEJSTemplate, EJSVariables, emailDetails, false);
             }
           });
         }
@@ -187,7 +191,7 @@ module.exports = {
     }
 
     //update the DB on accepted or rejected
-    Data.acceptRejectOffer(contact_item, req.params.domain_name, req.params.offer_id, function(offer_result){
+    data_model.acceptRejectOffer(contact_item, req.params.domain_name, req.params.offer_id, function(offer_result){
       var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
       //set accepted variable if accepted
       if (accepted){
@@ -214,7 +218,7 @@ module.exports = {
         //send a transfer verify email
         if (offer_result.deposited){
           console.log("F: Sending email to the buyer for transfer verification / next steps!");
-          var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
+          var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
           var price_formatted = moneyFormat.to(parseFloat(offer_result.offer));
           listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
@@ -250,7 +254,7 @@ module.exports = {
         //send accept/reject email
         else {
           console.log("F: Sending email to offerer to notify of accept/reject status...");
-          var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
+          var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
           var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
           //figure out luminance based on primary color
@@ -282,7 +286,7 @@ module.exports = {
         }
 
         //email the offerer
-        emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+        mailer.sendEJSMail(pathEJSTemplate, EJSVariables, emailDetails, false);
       }
     });
   },
@@ -310,7 +314,7 @@ module.exports = {
   checkOfferAccepted : function(req, res, next){
     console.log("F: Checking if offer has been accepted by the owner...");
 
-    Data.checkOfferAccepted(req.params.domain_name, req.params.offer_id, function(result){
+    data_model.checkOfferAccepted(req.params.domain_name, req.params.offer_id, function(result){
       if (result.state == "success" && result.info.length > 0){
         next();
       }
@@ -348,10 +352,9 @@ module.exports = {
 
       res.render("listings/listing_checkout_buy.ejs", {
         user: req.user,
-        message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
         new_buying_info: req.session.new_buying_info,
-        node_env : node_env || "dev",
+        node_env : process.env.NODE_ENV,
         compare: false
       });
     }
@@ -369,7 +372,7 @@ module.exports = {
   createBuyContactRecord : function(req, res, next){
     if (req.session.new_buying_info.id){
       console.log("F: Updating contact record with deposited...");
-      Data.depositedOffer({
+      data_model.depositedOffer({
         deposited : true,
         deadline : moment().add(2, "week")._d.getTime()
       }, req.session.listing_info.domain_name, req.session.new_buying_info.id, function(result){
@@ -396,7 +399,7 @@ module.exports = {
         bin : true
       }
 
-      Data.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
+      data_model.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
         if (result.state == "success"){
           next();
         }
@@ -412,7 +415,7 @@ module.exports = {
     console.log("F: Alerting the owner of a new BIN purchase!");
 
     //get the listing owner contact information to email
-    var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs');
+    var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs');
     var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
     var EJSVariables = {
       domain_name: req.session.listing_info.domain_name,
@@ -430,7 +433,7 @@ module.exports = {
     };
 
     //email the owner
-    emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+    mailer.sendEJSMail(pathEJSTemplate, EJSVariables, emailDetails, false);
 
     next();
   },
@@ -440,7 +443,7 @@ module.exports = {
     console.log("F: Sending email to the buyer for transfer verification / next steps!");
 
     //get the listing owner contact information to email
-    var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
+    var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
     var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
 
     //figure out luminance based on primary color
@@ -472,7 +475,7 @@ module.exports = {
     };
 
     //email the owner
-    emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+    mailer.sendEJSMail(pathEJSTemplate, EJSVariables, emailDetails, false);
 
     next();
   },
@@ -500,7 +503,7 @@ module.exports = {
   checkContactVerified : function(req, res, next){
     console.log("F: Checking if specified offer is verified...");
 
-    Data.checkContactVerified(req.params.domain_name, req.params.offer_id, function(result){
+    data_model.checkContactVerified(req.params.domain_name, req.params.offer_id, function(result){
       if (result.state == "success" && result.info.length > 0){
         next();
       }
@@ -514,7 +517,7 @@ module.exports = {
   checkContactVerificationCode : function(req, res, next){
     console.log("F: Checking if verification code for offer is not yet verified...");
 
-    Data.checkContactVerificationCode(req.params.domain_name, req.params.verification_code, function(result){
+    data_model.checkContactVerificationCode(req.params.domain_name, req.params.verification_code, function(result){
       if (result.state == "success" && result.info.length > 0){
         next();
       }
@@ -527,7 +530,7 @@ module.exports = {
 
   //function to check verification code and render the verification page
   checkListingPurchaseVerificationCode : function(req, res, next){
-    Listing.checkListingPurchaseVerificationCode(req.params.domain_name, req.params.verification_code, function(result){
+    listing_model.checkListingPurchaseVerificationCode(req.params.domain_name, req.params.verification_code, function(result){
       if (result.state == "success" && result.info.length > 0){
         next();
       }
@@ -563,7 +566,7 @@ module.exports = {
 
 //helper function to get a user's ip
 function getIP(req){
-  if (node_env == "dev"){
+  if (process.env.NODE_ENV == "dev"){
     return null;
   }
   else {
@@ -579,7 +582,7 @@ function getIP(req){
 
 //helper function to get the email address of the listing owner to contact
 function getListingOwnerContactInfo(domain_name, cb){
-  Listing.getListingOwnerContactInfo(domain_name, function(result){
+  listing_model.getListingOwnerContactInfo(domain_name, function(result){
     if (result.state == "success" && result.info.length > 0){
       cb(result.info[0]);
     }
@@ -591,7 +594,7 @@ function getListingOwnerContactInfo(domain_name, cb){
 
 //helper function to get the email address of the listing offerer to contact
 function getListingOffererContactInfoByID(domain_name, offer_id, cb){
-  Data.getListingOffererContactInfoByID(domain_name, offer_id, function(result){
+  data_model.getListingOffererContactInfoByID(domain_name, offer_id, function(result){
     if (result.state == "success" && result.info.length > 0){
       cb(result.info[0]);
     }
@@ -603,7 +606,7 @@ function getListingOffererContactInfoByID(domain_name, offer_id, cb){
 
 //helper function to get the email address of the listing offerer to contact
 function getListingOffererContactInfoByCode(domain_name, verification_code, cb){
-  Data.getListingOffererContactInfoByCode(domain_name, verification_code, function(result){
+  data_model.getListingOffererContactInfoByCode(domain_name, verification_code, function(result){
     if (result.state == "success" && result.info.length > 0){
       cb(result.info[0]);
     }
@@ -615,7 +618,7 @@ function getListingOffererContactInfoByCode(domain_name, verification_code, cb){
 
 //recursive helper function to make sure verification code for contact is unique
 function newListingContactHistory(req, res, next, contact_details){
-  Data.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
+  data_model.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
     //recursion check here
     if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
       contact_details.verification_code = randomstring.generate(10);
@@ -627,44 +630,6 @@ function newListingContactHistory(req, res, next, contact_details){
     }
     else {
       error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
-    }
-  });
-}
-
-//helper function to email someone
-function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, errorMsg){
-  console.log("F: Sending email!");
-
-  //read the file and add appropriate variables
-  ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
-    if (err){
-      console.log(err);
-    }
-
-    if (err && errorMsg){
-      error.handler(req, res, errorMsg, "json");
-    }
-    else {
-      emailDetails.html = html_str;
-
-      //send email
-      mailer.sendMail(emailDetails, function(err) {
-        if (err){
-          console.log(err);
-        }
-
-        if (errorMsg){
-          if (err) {
-            console.log(err);
-            error.handler(req, res, errorMsg, "json");
-          }
-          else {
-            res.send({
-              state: "success"
-            });
-          }
-        }
-      });
     }
   });
 }

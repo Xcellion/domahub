@@ -12,20 +12,12 @@
 
 <body>
 
-	<%- include("profile_nav.ejs"); %>
+	<%- include("profile_navbar_mobile.ejs"); %>
 
 	<section class="section is-fullscreen">
-		<div id="listing-msg-error" class="is-hidden is-danger notification is-popup">
-			<button class="delete"></button>
-      <p id="listing-msg-error-text" class='is-white'></p>
-		</div>
-		<div id="listing-msg-success" class="is-hidden is-primary notification is-popup">
-			<button class="delete"></button>
-			<p id="listing-msg-success-text" class='is-white'></p>
-		</div>
 		<div class="wrapper">
 
-			<%- include("profile_left_menu.ejs"); %>
+			<%- include("profile_navbar.ejs"); %>
 
 			<div class="right-content">
 

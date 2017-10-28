@@ -1,30 +1,28 @@
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
+//<editor-fold>------------------------------------------ENVIRONMENT SETTINGS---------------------------------------
 
-var express = require('express'),
-app = express(),
-http = require('http'),
+//http server
+var express = require('express');
+var app = express();
+var http = require('http');
 serverHTTP = function(application){
   return http.createServer(application);
 };
 
-var bodyParser = require('body-parser'),
-cookieParser = require('cookie-parser'),
-session = require('express-session'),
-db = require('./lib/database.js');
-
-db.connect();  //connect to the database
-
-/**************************************************
-** SERVER INITIALIZATION
-**************************************************/
-
-//set the view engine
+//set the view engine and directory
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+
+//cookie parsing
+var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+//</editor-fold>
+
+//<editor-fold>------------------------------------------SESSION---------------------------------------
+
 //which session store to use depending on DEV or PROD
-if (node_env == "dev"){
+var session = require('express-session');
+if (process.env.NODE_ENV == "dev"){
   console.log("Development environment! Using memory for sessions store for LE API server.");
 
   //express session in memory
@@ -63,8 +61,18 @@ else {
   }));
 }
 
+//</editor-fold>
+
+var db = require('./lib/database.js');
+
+//<editor-fold>------------------------------------------DATABASE---------------------------------------
+
+//</editor-fold>
+
+//<editor-fold>------------------------------------------ROUTES---------------------------------------
+
 //API for Lets Encrypt SSL certs for premium domains listed on domahub
-require('./lib/le_api_functions.js')(app, db);
+require('./le_api_functions.js')(app);
 
 //404 not found
 app.get('*', function(req, res){
@@ -73,7 +81,9 @@ app.get('*', function(req, res){
   res.sendStatus(404);
 });
 
-//api server on port 9090
+//</editor-fold>
+
+//lets encrypt server on port 9090
 serverHTTP(app).listen(9090, function(){
-  console.log("LE API server listening on port 9090");
+  console.log("Let's Encrypt SSL server listening on port 9090");
 });

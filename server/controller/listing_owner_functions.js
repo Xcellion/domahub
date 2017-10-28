@@ -1,9 +1,17 @@
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
 
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
-var Categories = require("../../lib/categories.js");
-var Fonts = require("../../lib/fonts.js");
-var default_descriptions = require("../../lib/default_descriptions.js");
+var listing_model = require('../models/listing_model.js');
+var account_model = require('../models/account_model.js');
+var data_model = require('../models/data_model.js');
+
+var Categories = require("../lib/categories.js");
+var Fonts = require("../lib/fonts.js");
+var Descriptions = require("../lib/descriptions.js");
+var error = require('../lib/error.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var request = require("request");
 var dns = require("dns");
@@ -14,6 +22,7 @@ var parser = require('parse-whois');
 
 var multer = require("multer");
 var parse = require("csv-parse");
+var parseDomain = require("parse-domain");
 var Q = require('q');
 var fs = require('fs');
 
@@ -26,16 +35,14 @@ module.exports = {
   //function to display the create listing choice page
   renderCreateListing : function(req, res, next){
     res.render("listings/listing_create.ejs", {
-      user: req.user,
-      message: Auth.messageReset(req)
+      user: req.user
     });
   },
 
   //function to display the create multiple listing page
   renderCreateListingMultiple : function(req, res, next){
     res.render("listings/listing_create_multiple.ejs", {
-      user: req.user,
-      message: Auth.messageReset(req)
+      user: req.user
     });
   },
 
@@ -172,7 +179,7 @@ module.exports = {
             date_now,
             (req.user.stripe_subscription_id) ? posted_domains[x].domain_name : posted_domains[x].domain_name.toLowerCase(),
             posted_domains[x].min_price,
-            default_descriptions.random()    //random default description
+            Descriptions.random()    //random default description
           ]);
 
         }
@@ -199,10 +206,37 @@ module.exports = {
 
     //<editor-fold>-------------------------------UPDATE LISTING------------------------------
 
+    //function to check if posted selected IDs are numbers
+    checkSelectedIDs : function(req, res, next){
+      console.log("F: Checking posted domain IDs...");
+      var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
+      if (!selected_ids){
+        error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+      }
+      else if (selected_ids.length <= 0){
+        error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+      }
+      else {
+        var all_good = true;
+        for (var x = 0 ; x < selected_ids.length ; x++){
+          if (!validator.isInt(selected_ids[x], { min : 1 })){
+            all_good = false;
+            break;
+          }
+        }
+        if (!all_good){
+          error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+        }
+        else {
+          next();
+        }
+      }
+    },
+
     //function to check the size of the image uploaded
     checkImageUploadSize : function(req, res, next){
       var premium = req.user.stripe_subscription_id;
-      var upload_path = (node_env == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
+      var upload_path = (process.env.NODE_ENV == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
       var storage = multer.diskStorage({
         destination: function (req, file, cb) {
           cb(null, upload_path);
@@ -422,7 +456,7 @@ module.exports = {
     //function to check that the user owns the listing
     checkListingOwnerGet : function(req, res, next){
       console.log("F: Checking if current user is listing owner...");
-      Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+      listing_model.checkListingOwner(req.user.id, req.params.domain_name, function(result){
         if (result.state == "error" || result.info.length <= 0){
           res.redirect("/listing/" + req.params.domain_name);
         }
@@ -462,7 +496,7 @@ module.exports = {
         console.log("F: Checking to see if domain(s) are currently rented...");
         var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
 
-        Listing.checkCurrentlyRented(domain_names, function(result){
+        listing_model.checkCurrentlyRented(domain_names, function(result){
           if (result.state != "success" || result.info.length > 0){
             error.handler(req, res, "This listing is currently being rented! Please wait until the rental is over before changing the status.", "json");
           }
@@ -537,7 +571,7 @@ module.exports = {
                if (not_pointing.length > 0){
                  console.log("F: Some domain(s) are not pointing to DomaHub! Reverting...");
                  //update not pointing domains
-                 Listing.updateListingsInfo(not_pointing, {
+                 listing_model.updateListingsInfo(not_pointing, {
                    verified: null,
                    status: 0
                  }, function(result){
@@ -891,7 +925,7 @@ module.exports = {
   getListingStats : function(req, res, next){
     console.log("F: Finding the all verified statistics for " + req.params.domain_name + "...");
     var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    Data.getListingStats(req.params.domain_name, function(result){
+    data_model.getListingStats(req.params.domain_name, function(result){
 
       //set server side stats
       if (result.state == "success"){
@@ -917,7 +951,7 @@ module.exports = {
     console.log("F: Creating listings to check for any existing...");
 
     var db_object = req.session.new_listings.db_object;
-    Listing.newListings(db_object, function(result){
+    listing_model.newListings(db_object, function(result){
       if (result.state=="error"){error.handler(req, res, result.info, "json");}
       else {
         var affectedRows = result.info.affectedRows;
@@ -931,7 +965,7 @@ module.exports = {
         }
         else {
           //figure out what was created
-          Account.getAccountListings(req.user.id, function(result){
+          account_model.getAccountListings(req.user.id, function(result){
             if (result.state=="error"){error.handler(req, res, result.info, "json");}
             else {
               //get the insert IDs and domain names of newly inserted listings
@@ -952,7 +986,7 @@ module.exports = {
               req.session.new_listings.inserted_domains = inserted_domains;
 
               //revert the newly made listings verified to null
-              Listing.updateListingsVerified(inserted_ids, function(result){
+              listing_model.updateListingsVerified(inserted_ids, function(result){
                 delete req.user.listings;
 
                 //done here for basic or move on to payment for premium
@@ -986,7 +1020,7 @@ module.exports = {
     else {
       console.log("F: Updating domain details...");
       var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
-      Listing.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
+      listing_model.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
         if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
         else {
           updateUserListingsObject(req, res, domain_names);
@@ -1002,7 +1036,7 @@ module.exports = {
   //function to delete a listing
   deleteListing: function(req, res, next){
     var listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    Listing.deleteListing(listing_info.id, function(result){
+    listing_model.deleteListing(listing_info.id, function(result){
       if (result.state=="error"){error.handler(req, res, result.info, "json")}
       else {
         deleteUserListingsObject(req, res, req.params.domain_name);

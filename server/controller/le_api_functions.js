@@ -1,12 +1,19 @@
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
 var listing_model = require('../models/listing_model.js');
+
+var stripe = require('./stripe_functions.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
+
 var validator = require("validator");
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
-var stripe = require('../lib/stripe.js');
+
+//</editor-fold>
 
 //Lets Encrypt server for custom SSL on demand for all domains listed at DomaHub
-module.exports = function(app, db){
-  Listing = new listing_model(db);
-
+module.exports = function(app){
   app.use("*", [
     checkHost,
     checkListed,
@@ -14,6 +21,8 @@ module.exports = function(app, db){
     sendOkayToNginx
   ]);
 }
+
+//<editor-fold>-------------------------------FUNCTIONS-------------------------------
 
 //function to check for hostname
 function checkHost(req, res, next){
@@ -49,7 +58,7 @@ function checkListed(req, res, next){
   console.log("LEF: Attempting to check premium status for " + domain_name + "!");
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
-  Listing.checkListingStripe(domain_name, function(result){
+  listing_model.checkListingStripe(domain_name, function(result){
     //premium! check stripe now to see if it's an active subscription
     if (result.state == "success" && result.info.length > 0){
       req.session.listing_info = result.info[0];
@@ -66,7 +75,7 @@ function checkListed(req, res, next){
 //stripe subscription is active! send ok to NGINX for new SSL certificate
 function sendOkayToNginx(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-  
+
   if (req.session.listing_info.premium){
     console.log("LEF: " + domain_name + " is a Premium domain! Getting new SSL certificate...");
     res.sendStatus(200);
@@ -76,3 +85,5 @@ function sendOkayToNginx(req, res, next){
     res.sendStatus(404);
   }
 }
+
+//</editor-fold>

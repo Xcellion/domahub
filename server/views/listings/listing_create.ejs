@@ -10,26 +10,12 @@
 
 <body>
 
-	<%- include("../profile/profile_nav.ejs"); %>
+	<%- include("../profile/profile_navbar_mobile.ejs"); %>
 
   <section class="section is-fullscreen">
-    <div id="domain-error" class="is-hidden notification is-danger is-popup">
-      <button class="delete"></button>
-      <div>
-        <p class="is-white" id="domain-error-text"></p>
-      </div>
-    </div>
-    <div id="domain-success-message" class="is-hidden notification is-primary is-popup">
-      <button class="delete"></button>
-      <div class="content">
-        <p class="is-white">
-          Successfully created <span id="success-total"></span>! Please go to your <a href="/profile/mylistings" class="is-underlined">My Listings page</a> to view your newly created listings!
-        </p>
-      </div>
-    </div>
     <div class="wrapper">
 
-      <%- include("../profile/profile_left_menu.ejs"); %>
+      <%- include("../profile/profile_navbar.ejs"); %>
 
       <div class="right-content">
         <div class="content">
