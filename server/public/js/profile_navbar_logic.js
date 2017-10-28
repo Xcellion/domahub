@@ -101,3 +101,41 @@ function removeURLParameter(parameter) {
 }
 
 //</editor-fold>
+
+//<editor-fold>-------------------------------NOTIFICATION--------------------------------
+
+//helper function to display/hide error messages per listing
+function errorMessage(message){
+  //hide success
+  $("#profile-msg-success").addClass('is-hidden').removeClass("is-active");
+
+  if (message){
+    $("#profile-msg-error").removeClass('is-hidden').addClass("is-active");
+    $("#profile-msg-error-text").html(message);
+  }
+  else if (!message) {
+    $("#profile-msg-error").addClass('is-hidden').removeClass("is-active");
+  }
+}
+
+//helper function to display success messages per listing
+function successMessage(message){
+  //hide error
+  $("#profile-msg-error").addClass('is-hidden').removeClass("is-active");
+
+  if (message){
+    $("#profile-msg-success").removeClass('is-hidden').addClass("is-active");
+    $("#profile-msg-success-text").html(message);
+  }
+  else if (!message){
+    $("#profile-msg-success").addClass('is-hidden').removeClass("is-active");
+  }
+}
+
+//function to refresh notifications
+function clearNotification(){
+  errorMessage(false);
+  successMessage(false);
+}
+
+//</editor-fold>

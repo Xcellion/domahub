@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Forgot your DomaHub password?</title>
+  <title>Welcome to DomaHub!</title>
   <style type="text/css" >
   #bodyTable {
     font-family: Verdana, sans-serif;
@@ -22,7 +22,7 @@
   </style>
 </head>
 <body>
-  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="font-family:Verdana,sans-serif;background-color:#FFF;">
+  <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="font-family:Verdana,sans-serif;">
     <tr>
       <td align="center" valign="top">
         <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
@@ -38,7 +38,8 @@
                 </tr>
                 <tr>
                   <td align="center" style="color:#FFFFFF;border:0;margin:0;padding-bottom:25px;font-size:24px;font-weight:700;line-height:2;">
-                    Forgot your password?
+                    Welcome to DomaHub!
+                    <img height="24" width="24" src="https://domahub.com/images/lib/smile.png" />
                   </td>
                 </tr>
               </table>
@@ -46,25 +47,38 @@
           </tr>
           <tr>
             <td align="center" valign="top">
-              <table border="0" cellpadding="0" cellspacing="0" id="emailBody">
+              <table border="0" cellpadding="0" cellspacing="0" id="emailBody" style="padding:20px;">
                 <tr>
-                  <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                    You are receiving this because you (or someone else) requested the reset of the password for your account.
+                  <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
+                    Hello <%= username %>!
                   </td>
                 </tr>
                 <tr>
                   <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                    Please click on the button below to complete the process.
+                    Thank you for verifying your email address. We're excited to have you on board!
                   </td>
                 </tr>
                 <tr>
-                  <td align="center" valign="top" colspan="5" style="padding:10px 0 30px;">
-                    <a href="https://domahub.com/reset/<%= token %>" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color:#3cbc8d;color:#fff;">Click here to reset your password</a>
+                  <td align="left" valign="top" style="border:0;margin:0;padding-bottom:20px;">
+                    Below are some links to help you get started on using DomaHub:
                   </td>
                 </tr>
                 <tr>
-                  <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                    If you did not request this, please ignore this email and your password will remain unchanged. The above link will expire in 1 hour.
+                  <td style="padding-bottom:20px;">
+                    <li>
+                      <a href="https://medium.com/domahub/how-to-verify-domains-on-domahub-7d526c4ce6d">How to verify your domains.</a>
+                    </li>
+                    <li>
+                      <a href="https://domahub.com/features">Read about our features.</a>
+                    </li>
+                    <li>
+                      <a href="https://domahub.com/premium">Upgrade to Premium.</a>
+                    </li>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="5" align="center" style="padding-top:30px;border-top:1px solid #ddd;">
+                    <a class="button" href="https://domahub.com/login" style="background-color:#3cbc8d;color:#fff;padding:10px 20px;box-sizing:border-box;border-radius:5px;">Get Started</a>
                   </td>
                 </tr>
               </table>
@@ -75,7 +89,7 @@
               <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter" style="background-color:#eee;padding:20px 30px;">
                 <tr>
                   <td align="center" valign="top">
-                    If the link has expired, please go to the <a href="https://www.domahub.com/forgot">forgot password</a> page to resend the email.
+                    You may respond to this email to leave comments or ask any additional questions.
                   </td>
                 </tr>
                 <tr>

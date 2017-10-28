@@ -101,7 +101,7 @@ $(document).ready(function() {
           <h3 class='popover-title'></h3> \
           <div class='popover-content content'></div> \
           <div> \
-          <div class='button-wrapper'> \
+          <div class='button-wrapper has-text-centered'> \
             <button class='button is-small is-primary' data-role='next'> \
               <span class='icon is-small'> \
                 <i class='fa fa-thumbs-up'></i> \
