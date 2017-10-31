@@ -59,52 +59,52 @@
                             <td align="center" valign="top">
                                 <table border="0" cellpadding="0" cellspacing="0" id="emailBody">
                                     <tr>
-                                      <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
+                                      <td align="center" valign="top" colspan="5" style="line-height:1.5;font-size:18px;padding-bottom:20px;">
                                         Hello <%= offerer_name %>!
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
+                                      <td align="left" valign="top" colspan="5" style="line-height:1.5;padding-bottom:20px;">
                                         This email validates your purchase of <%= domain_name %>! Please see below for details on your purchase:
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" colspan="1" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" class="list-item" colspan="1" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Name
                                       </td>
-                                      <td aling="right" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td aling="right" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= offerer_name %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Email
                                       </td>
-                                      <td align="left" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td align="left" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= offerer_email %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Phone
                                       </td>
-                                      <td align="left" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td align="left" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= offerer_phone %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Offer
                                       </td>
-                                      <td align="left" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td align="left" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= price %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" valign="top" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" valign="top" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Message
                                       </td>
-                                      <td align="left" valign="top" class="list-item" style="border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0;white-space:pre-wrap;">
+                                      <td align="left" valign="top" class="list-item" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0;white-space:pre-wrap;">
                                         <%= message %>
                                       </td>
                                     </tr>
@@ -114,7 +114,7 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" align="center" style="padding-top:30px;">
+                                      <td colspan="5" align="center" style="line-height:1.5;padding-top:30px;">
                                         <a class="button" href="https://domahub.com/listing/<%= domain_name %>/bin/<%= verification_code %>"style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>;color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">
                                           I verify that the domain has been transferred successfully.
                                         </a>
@@ -127,7 +127,7 @@
                             <td align="center" valign="top">
                                 <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter" style="background-color:#eee;padding:20px 30px;">
                                       <tr>
-                                        <td align="center" valign="top">
+                                        <td align="center" valign="top" style="line-height:1.5;">
                                           <% if (premium) { %>
                                             Thank you for your business! :)
                                           <% } else { %>
