@@ -112,6 +112,8 @@ $(document).ready(function() {
 
     //</editor-fold>
 
+    //<editor-fold>-----------------------------------------------------------------------------------RENTAL
+
     if (listing_info.rentable){
 
       //click rent now or unavailable description
@@ -238,6 +240,7 @@ $(document).ready(function() {
 
     //</editor-fold>
 
+    //</editor-fold>
   }
 });
 

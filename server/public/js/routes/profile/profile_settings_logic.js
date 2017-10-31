@@ -101,7 +101,7 @@ $(document).ready(function() {
       })
     }
     else {
-      errorMessage("Invalid email address!");
+      errorMessage("Please enter a valid email address!");
     }
   });
 
@@ -232,30 +232,6 @@ function createReferralsTable(){
 //</editor-fold>
 
 //<editor-fold>-------------------------------HELPERS-------------------------------
-
-//helper function to display/hide error messages per listing
-function errorMessage(message){
-  if (message){
-    successMessage(false);
-    $("#settings-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#settings-msg-error-text").text(message);
-  }
-  else {
-    $("#settings-msg-error").addClass('is-hidden').removeClass("is-active");
-  }
-}
-
-//helper function to display success messages per listing
-function successMessage(message){
-  if (message){
-    errorMessage(false);
-    $("#settings-msg-success").removeClass('is-hidden').addClass("is-active");
-    $("#settings-msg-success-text").text(message);
-  }
-  else {
-    $("#settings-msg-success").addClass('is-hidden').removeClass("is-active");
-  }
-}
 
 //function to cancel edit mode
 function cancelEdits(){

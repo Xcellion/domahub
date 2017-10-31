@@ -1,20 +1,21 @@
-//<editor-fold>-------------------------------NODE REQUIREMENTS-------------------------------
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
+var listing_model = require('../models/listing_model.js');
+var account_model = require('../models/account_model.js');
+var data_model = require('../models/data_model.js');
+
+var Descriptions = require("../lib/descriptions.js");
+var Categories = require("../lib/categories.js");
+var Fonts = require("../lib/fonts.js");
+var error = require('../lib/error.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var validator = require("validator");
 var whois = require("whois");
 var dns = require("dns");
-var default_descriptions = require("../../lib/default_descriptions.js");
-var Categories = require("../../lib/categories.js");
-var Fonts = require("../../lib/fonts.js");
-
-var nodemailer = require('nodemailer');
-var sgTransport = require('nodemailer-sendgrid-transport');
-var mailOptions = {
-  auth: {
-    api_key: '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'
-  }
-}
-var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 
 var alexaData = require('alexa-traffic-rank');
 var parser = require('parse-whois');
@@ -23,19 +24,12 @@ var moment = require('moment');
 var request = require('request');
 var fs = require('fs');
 var path = require("path");
-var parseDomain = require("parse-domain");
 var safe_browse_key = "AIzaSyDjjsGtrO_4QwFDBA1cq9rCweeO4v3YLfs";
-
-var webshot = require("webshot");
-var url = require("url");
-
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 
 //contact for buy now requirements
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 var randomstring = require("randomstring");
-var ejs = require('ejs');
 var wNumb = require("wnumb");
 var moneyFormat = wNumb({
   thousand: ',',
@@ -46,6 +40,8 @@ var moneyFormat = wNumb({
 //</editor-fold>
 
 module.exports = {
+
+  //<editor-fold>-------------------------------DELETE-------------------------------
 
   //delete session rental info if it exists
   deleteRentalInfo : function(req, res, next){
@@ -68,6 +64,8 @@ module.exports = {
     }
     next();
   },
+
+  //</editor-fold>
 
   //<editor-fold>-------------------------------CREATE A NEW RENTAL-------------------------------
 
@@ -193,7 +191,7 @@ module.exports = {
 
       else {
         //check against the DB
-        Listing.crossCheckRentalTime(req.params.domain_name, path, starttime, endtime, function(result){
+        listing_model.crossCheckRentalTime(req.params.domain_name, path, starttime, endtime, function(result){
           if (result.state=="error"){error.handler(req, res, result.info, "json");}
           else {
             if (result.info.length > 0){
@@ -240,7 +238,7 @@ module.exports = {
       console.log("F: Getting all Stripe info for a listing...");
 
       //get the stripe id of the listing owner
-      Account.getStripeAndType(req.params.domain_name, function(result){
+      account_model.getStripeAndType(req.params.domain_name, function(result){
         if (result.state == "error"){error.handler(req, res, result.info, "json")}
         else {
           if (result.info[0].stripe_account){
@@ -276,10 +274,9 @@ module.exports = {
 
       res.render("listings/listing_checkout_rent.ejs", {
         user: req.user,
-        message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
         new_rental_info : req.session.new_rental_info,
-        node_env : node_env || "dev",
+        node_env : process.env.NODE_ENV || "dev",
         compare: false
       });
     }
@@ -309,36 +306,6 @@ module.exports = {
     });
   },
 
-  //email the link to the posted email
-  emailToRegister : function(req, res, next){
-    var owner_hash_id = req.session.new_rental_info.rental_db_info.owner_hash_id;
-    var new_user_email = req.session.new_rental_info.new_user_email || req.body.new_user_email;
-
-    if (!req.user && owner_hash_id && new_user_email){
-      console.log("F: Emailing registration link to new rental owner...");
-
-      var email = {
-        to: req.session.new_rental_info.new_user_email,
-        from: 'noreply@domahub.com',
-        subject: "Your DomaHub Rental Link",
-        text: 'Here is a link to your recent rental of a DomaHub Domain.\n\n' +
-        'You may use the following link to create a account that will be associated with this rental.\n\n' +
-        'https://domahub.com/listing' + req.params.domain_name + "/" + req.session.new_rental_info.rental_id + "/" + owner_hash_id + '\n\n'
-      };
-
-      //send email of edit link
-      mailer.sendMail(email, function(err) {
-        if (err) {
-          console.log(err)
-        }
-        next();
-      });
-    }
-    else {
-      next();
-    }
-  },
-
   //activate the rental once its good
   toggleActivateRental : function(req, res, next){
     console.log("F: Toggling rental activation...");
@@ -347,7 +314,7 @@ module.exports = {
     var domain_name = req.params.domain_name;
     var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
 
-    Listing.toggleActivateRental(rental_id, function(result){
+    listing_model.toggleActivateRental(rental_id, function(result){
       if (result.state != "success"){
         delete req.session.new_rental_info;
         error.handler(req, res, result.info);
@@ -397,7 +364,7 @@ module.exports = {
     }
     //get it otherwise
     else {
-      Listing.getRentalInfo(rental_id, function(result){
+      listing_model.getRentalInfo(rental_id, function(result){
         if (result.state != "success"){error.handler(req, res, result.info);}
         //no rental exists
         else if (result.info.length == 0){
@@ -417,7 +384,7 @@ module.exports = {
 
     var rental_id = req.params.rental_id;
 
-    Listing.getRentalRentalTimes(rental_id, function(result){
+    listing_model.getRentalRentalTimes(rental_id, function(result){
       if (result.state != "success"){error.handler(req, res, result.info);}
       else {
         req.session.rental_info.times = joinRentalTimes(result.info);
@@ -481,7 +448,7 @@ module.exports = {
   checkDomainOwner : function(req, res, next){
     console.log("F: Checking domain owner...");
 
-    Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+    listing_model.checkListingOwner(req.user.id, req.params.domain_name, function(result){
       //incorrect owner!
       if (result.state == "error" || result.info.length == 0){
         error.handler(req, res, "Invalid domain owner!");
@@ -696,7 +663,7 @@ module.exports = {
     if (req.session.rental_object && req.session.rental_object.db_object){
       console.log("F: Updating rental...");
 
-      Listing.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
+      listing_model.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
         if (result.state != "success"){error.handler(req, res, result.info, "json");}
         else {
           next();
@@ -758,7 +725,7 @@ module.exports = {
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
               req.session.listing_info.status = 0;
 
-              Listing.updateListingsInfo(domain_name, {
+              listing_model.updateListingsInfo(domain_name, {
                 verified: null,
                 status: 0
               }, function(result){
@@ -790,7 +757,7 @@ module.exports = {
   //add to search database
   addToSearchHistory : function(req, res, next){
     //add to search only if not development
-    if (node_env != "dev"){
+    if (process.env.NODE_ENV != "dev"){
       var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
       var account_id = (typeof req.user == "undefined") ? null : req.user.id;
       var now = new Date().getTime();
@@ -814,7 +781,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
       delete req.session.from_api;
     }
     next();
@@ -823,7 +790,7 @@ module.exports = {
   //clicked on check availability button
   addToAvailCheckHistory : function(req, res, next){
     //add to search only if not dev
-    if (node_env != "dev"){
+    if (process.env.NODE_ENV != "dev"){
       var history_info = {
         account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
         domain_name: req.params.domain_name.toLowerCase(),                     //what they searched for
@@ -834,7 +801,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      Data.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
     }
     next();
   },
@@ -842,7 +809,7 @@ module.exports = {
   //rendered checkout page, track it!!!
   addToRentalCheckoutHistory : function(req, res, next){
     //add to search only if not dev
-    if (node_env != "dev"){
+    if (process.env.NODE_ENV != "dev"){
       var history_info = {
         account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
         domain_name: req.params.domain_name.toLowerCase(),                    //what they searched for
@@ -856,7 +823,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      Data.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
     }
     next();
   },
@@ -923,7 +890,7 @@ module.exports = {
         elem_id: req.body.elem_id
       }
 
-      Data.newCheckoutAction(history_data, function(result){
+      data_model.newCheckoutAction(history_data, function(result){
         res.sendStatus(200);
       });
     }
@@ -996,7 +963,7 @@ module.exports = {
     }
     else {
       var one_year_later = moment().add(1, "year").add(1, "millisecond")._d.getTime();
-      Listing.getListingTimes(req.params.domain_name, req.body.path, one_year_later, function(result){
+      listing_model.getListingTimes(req.params.domain_name, req.body.path, one_year_later, function(result){
         if (result.state=="error"){error.handler(req, res, "Something went wrong with getting times!");}
         else {
           res.json({
@@ -1012,7 +979,7 @@ module.exports = {
   getListingFreeTimes : function(req, res, next){
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
-    Listing.getListingFreeTimes(domain_name, function(result){
+    listing_model.getListingFreeTimes(domain_name, function(result){
       if (result.state =="success"){
         req.session.listing_info.freetimes = result.info;
       }
@@ -1028,7 +995,7 @@ module.exports = {
 
     //make sure owner and domain exclude are legit
     if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id)){
-      Listing.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
+      listing_model.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
         if (!result.info.length || result.state == "error"){
           res.send({
             state: "error"
@@ -1064,7 +1031,7 @@ module.exports = {
       var max_count = parseFloat(req.body.max_count);
 
       //get all listing rentals from the DB
-      Listing.getListingRentals(req.params.domain_name, req.body.oldest_rental_date, max_count, function(result){
+      listing_model.getListingRentals(req.params.domain_name, req.body.oldest_rental_date, max_count, function(result){
         if (result.state=="error"){error.handler(req, res, "Something went wrong getting rentals!", "json");}
         else if (result.info.length <= 0){
           res.send({
@@ -1085,7 +1052,7 @@ module.exports = {
   getListingTraffic : function(req, res, next){
     console.log("F: Getting all traffic information for domain: " + req.params.domain_name + "...");
 
-    Data.getListingStats(req.params.domain_name, function(result){
+    data_model.getListingStats(req.params.domain_name, function(result){
       if (result.state=="error"){error.handler(req, res, "Invalid traffic!", 'json');}
       else {
         res.json({
@@ -1113,7 +1080,7 @@ module.exports = {
 
   //redirect to the root domain if premium (prevent domain/listing/domain)
   redirectPremium : function(req, res, next){
-    if (node_env != "dev" && req.session.listing_info.premium && req.path != "/"){
+    if (process.env.NODE_ENV != "dev" && req.session.listing_info.premium && req.path != "/"){
       console.log("F: Redirecting premium domain to root domain...");
       res.redirect('https://' + req.session.listing_info.domain_name);
     }
@@ -1136,13 +1103,34 @@ module.exports = {
 
   //</editor-fold>
 
+  //<editor-fold-------------------------------RENTAL FORWARDING-------------------------------
+
+  //catch future requests if rented (for dev environment and for rental preview)
+  rentalForward : function(req, res, next){
+    if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1 && req.session.rented_info){
+      var domain_url = parseDomain(req.session.rented_info.address);
+      var protocol = url.parse(req.session.rented_info.address).protocol;
+
+      console.log("F: Proxying future request for " + req.originalUrl + " along to " + protocol + "//www." + domain_url.domain + "." + domain_url.tld);
+      req.pipe(request({
+        url: protocol + "//www." + domain_url.domain + "." + domain_url.tld + req.originalUrl
+      })).pipe(res);
+    }
+    //go next to 404
+    else {
+      next();
+    }
+  }
+
+  //</editor-fold>
+
 }
 
 //<editor-fold>-------------------------------RENTAL TIME HELPERS-------------------------------
 
 //helper function to create new rental times
 function newRentalTimes(req, res, rental_id, times, callback){
-  Listing.newRentalTimes(rental_id, times, function(result){
+  listing_model.newRentalTimes(rental_id, times, function(result){
     if (result.state != "success"){error.handler(req, res, result.info, "json");}
     else {
       callback();
@@ -1181,7 +1169,7 @@ function joinRentalTimes(rental_times){
 
 //function to get a verified listing's details
 function getVerifiedListing(req, res, domain_name, callback_error, callback_success){
-  Listing.getVerifiedListing(domain_name, function(result){
+  listing_model.getVerifiedListing(domain_name, function(result){
     if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
     else if (result.state=="success" && result.info.length <= 0){
       console.log("F: " + domain_name + " is NOT listed on DomaHub...");
@@ -1207,7 +1195,7 @@ function getIP(req){
 
 //helper function to create a new rental
 function newListingRental(req, res, raw_info, callback){
-  Listing.newListingRental(req.session.listing_info.id, raw_info, function(result){
+  listing_model.newListingRental(req.session.listing_info.id, raw_info, function(result){
     if (result.state != "success"){error.handler(req, res, result.info, "json");}
     else {
       callback(result.info.insertId);
@@ -1274,7 +1262,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       }
 
       //development troubleshooting for whoisobj
-      if (node_env == "dev"){
+      if (process.env.NODE_ENV == "dev"){
         listing_info.dev_whois = whoisObj;
       }
 
@@ -1287,7 +1275,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.owner_id = "compare";
         listing_info.categories = Categories.randomFrontAsString();
         listing_info.date_created = new Date().getTime();
-        listing_info.description = default_descriptions.random();
+        listing_info.description = Descriptions.random();
         listing_info.description_footer = "The greatest domains in the industry.";
         listing_info.status = 1;
         listing_info.price_rate = Math.round(Math.random() * 250);
@@ -1334,7 +1322,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
     //domain is listed on DomaHub, we just need to get the registrar creation and last updated date
     else {
       //development troubleshooting for whoisobj
-      if (node_env == "dev"){
+      if (process.env.NODE_ENV == "dev"){
         req.session.listing_info.dev_whois = whoisObj;
       }
 

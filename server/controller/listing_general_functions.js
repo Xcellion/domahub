@@ -1,10 +1,72 @@
-var Categories = require("../../lib/categories.js");
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
+var listing_model = require('../models/listing_model.js');
+var data_model = require('../models/data_model.js');
+
+var Categories = require("../lib/categories.js");
 var price_rate_list = ["hour_price", "day_price", "week_price", "month_price", "none"];
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
+var error = require('../lib/error.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var validator = require("validator");
 
+//</editor-fold>
+
 module.exports = {
+
+  //function to check validity of domain name
+  checkDomainValid : function(req, res, next){
+    console.log("F: Checking domain FQDN validity...");
+    var domain_name = req.params.domain_name || req.body["domain-name"];
+    if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
+      error.handler(req, res, "Invalid domain name!");
+    }
+
+    //redirect to lowercase URL of listing
+    else if (req.params.domain_name != req.params.domain_name.toLowerCase()){
+      res.redirect(req.originalUrl.replace(req.params.domain_name, req.params.domain_name.toLowerCase()));
+    }
+
+    //redirect www. inside of a domain name
+    else if (req.params.domain_name.indexOf("www.") != -1){
+      res.redirect(req.originalUrl.replace("www.", ""));
+    }
+
+    else {
+      next();
+    }
+  },
+
+  //function to check if listing is listed on domahub
+  checkDomainListed : function(req, res, next){
+    console.log("F: Checking if domain is listed...");
+    var domain_name = req.params.domain_name || req.body["domain-name"];
+    listing_model.checkListing(domain_name, function(result){
+      if (!result.info.length || result.state == "error"){
+        error.handler(req, res, "Invalid domain name!");
+      }
+      else {
+        next();
+      }
+    });
+  },
+
+  //function to check if listing is NOT listed on domahub
+  checkDomainNotListed : function(req, res, next){
+    console.log("F: Checking if domain is NOT listed...");
+    var domain_name = req.params.domain_name || req.body["domain-name"];
+    listing_model.checkListing(domain_name, function(result){
+      if (!result.info.length || result.state == "error"){
+        next();
+      }
+      else {
+        error.handler(req, res, "Invalid domain name!");
+      }
+    });
+  },
 
   //render the listing hub with 10 random active listings
   renderListingHub : function(req, res, next){
@@ -22,7 +84,7 @@ module.exports = {
     }
     else {
       var search_term = "%" + req.body.search_term + "%";
-      Listing.getRandomListings(search_term, parseFloat(req.body.listing_count), function(result){
+      listing_model.getRandomListings(search_term, parseFloat(req.body.listing_count), function(result){
         res.send({
           state: result.state,
           listings: result.info,
@@ -40,7 +102,7 @@ module.exports = {
     //make sure the category is legit
     if (Categories.existsBack(category)){
       category = "%" + category + "%";
-      Listing.getRandomListingByCategory(category, function(result){
+      listing_model.getRandomListingByCategory(category, function(result){
         if (!result.info.length || result.state == "error"){
           res.redirect("/");
         }
@@ -72,7 +134,7 @@ module.exports = {
     if (validator.isFQDN(domain_name_exclude)){
 
       if (categories_clean.length == 0){
-        Listing.getThreeRandomListings(domain_name_exclude, function(result){
+        listing_model.getThreeRandomListings(domain_name_exclude, function(result){
           if (!result.info.length || result.state == "error"){
             res.send({
               state: "error"
@@ -88,7 +150,7 @@ module.exports = {
       }
       else {
         categories_clean = categories_clean.join("|");
-        Listing.getRelatedListings(categories_clean, domain_name_exclude, function(result){
+        listing_model.getRelatedListings(categories_clean, domain_name_exclude, function(result){
           if (!result.info.length || result.state == "error"){
             res.send({
               state: "error"
@@ -151,7 +213,7 @@ module.exports = {
     }
 
     //get all domains with domain_name, price_rate
-    Listing.getListingByFilter(filter_name, filter_price, filter_date, function(result){
+    listing_model.getListingByFilter(filter_name, filter_price, filter_date, function(result){
       if (result.state == "success" && result.info.length > 0){
 
         //concatenate all adjacent times
@@ -198,8 +260,8 @@ module.exports = {
       user_ip = req.headers["x-real-ip"];
     }
 
-    //add to search history if its not localhost
-    if (node_env != "dev"){
+    //add to search history if its not development
+    if (process.env.NODE_ENV != "dev"){
       var history_info = {
         rental_id: rental_id,                          //what rental they went to
         account_id: (typeof req.user == "undefined") ? null : req.user.id,    //who searched if who exists
@@ -209,10 +271,13 @@ module.exports = {
       }
       console.log("F: Adding to rental view stats...");
 
-      Data.newRentalHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});          //async
+      data_model.newRentalHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});          //async
     }
   }
+
 }
+
+//<editor-fold>-------------------------------HELPER-------------------------------
 
 //function to join all rental times
 function joinRentalTimes(rental_times){
@@ -323,3 +388,5 @@ function checkAllListingCategories(listings, posted_categories){
 
   return temp_listings;
 }
+
+//</editor-fold>

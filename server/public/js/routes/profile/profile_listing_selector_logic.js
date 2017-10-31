@@ -127,6 +127,7 @@ $(document).ready(function(){
     $("#refresh-listings-button").addClass('is-loading');
     $(".table-row:not(.clone-row), #no-listings-row").addClass('is-hidden');
     $("#loading-listings-row").removeClass('is-hidden');
+    clearNotification();
     $.ajax({
       url: "/profile/mylistings/refresh",
       method : "POST"
@@ -210,8 +211,8 @@ function showEditor(url_tab, selected_domain_ids){
   if (selected_domain_ids.length > 0){
     updateQueryStringParam("listings", selected_domain_ids);
   }
-  errorMessage(false);
-  successMessage(false);
+  //clear any messages
+  clearNotification();
   $("#domain-selector").addClass('is-hidden');
   $("#domain-editor").removeClass('is-hidden');
 

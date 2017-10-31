@@ -1,14 +1,18 @@
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var account_model = require('../models/account_model.js');
-var listing_model = require('../models/listing_model.js');
+
+var error = require('../lib/error.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var Q = require('q');
 var qs = require('qs');
 var request = require('request');
 
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
-var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
+var stripe_key = (process.env.NODE_ENV == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
 var stripe = require("stripe")(stripe_key);
 var randomstring = require("randomstring");
 var validator = require('validator');
@@ -21,20 +25,9 @@ var moneyFormat = wNumb({
   decimals: 2
 });
 
-var database, error;
-
 //</editor-fold>
 
 module.exports = {
-
-  //constructor
-  init: function(db, e){
-    database = db;
-    error = e;
-
-    Account = new account_model(db);
-    Listing = new listing_model(db);
-  },
 
   //<editor-fold>-------------------------------PROMO CODES-------------------------------
 
@@ -103,7 +96,7 @@ module.exports = {
       stripe.accounts.retrieve(req.user.stripe_account, function(err, account) {
         if (!err){
           updateUserStripeInfo(req.user, account);
-          if (node_env == "dev"){
+          if (process.env.NODE_ENV == "dev"){
             req.user.dev_stripe_info = account;
           }
 
@@ -145,7 +138,7 @@ module.exports = {
         expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
       }, function(err, charges) {
         if (err) { console.log(err.message); }
-        if (node_env == "dev"){
+        if (process.env.NODE_ENV == "dev"){
           req.user.dev_charges = charges;
         }
         updateUserStripeCharges(req.user, charges.data);
@@ -603,7 +596,7 @@ module.exports = {
           console.log("SF: Premium is still active!");
           listing_info.premium = true;
         }
-        else if (node_env != "dev"){
+        else if (process.env.NODE_ENV != "dev"){
           //delete it from our database if it's wrong
           console.log("SF: Premium is NOT active!");
           req.session.new_account_info = {
@@ -612,7 +605,7 @@ module.exports = {
           listing_info.premium = false;
         }
         //TEST ONLY -- CHANGE AS NEEDED
-        else if (node_env == "dev") {
+        else if (process.env.NODE_ENV == "dev") {
           console.log("SF: Using live Stripe key in test mode!");
           listing_info.premium = true;
         }
@@ -638,7 +631,7 @@ module.exports = {
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
         if (err || !subscription){
           //delete it from our database if it's wrong
-          if (node_env != "dev"){
+          if (process.env.NODE_ENV != "dev"){
             console.log("SF: Premium is NOT active!");
             req.session.new_account_info = {
               stripe_subscription_id : null
@@ -661,7 +654,7 @@ module.exports = {
 
       //check it against stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
-        if ((customer && customer.deleted) || (err && !customer) && node_env != "dev"){
+        if ((customer && customer.deleted) || (err && !customer) && process.env.NODE_ENV != "dev"){
           console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
 
           //update our DH database to remove stripe_customer_id
@@ -683,7 +676,7 @@ module.exports = {
           next();
         }
         //TEST ONLY -- CHANGE AS NEEDED
-        else if (node_env == "dev"){
+        else if (process.env.NODE_ENV == "dev"){
           console.log("SF: Using live Stripe key in test mode!");
           next();
         }
@@ -703,7 +696,7 @@ module.exports = {
 
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
-        if (err && !subscription && node_env != "dev"){
+        if (err && !subscription && process.env.NODE_ENV != "dev"){
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
 
           //update our DH database to remove stripe_subscription_id
@@ -722,7 +715,7 @@ module.exports = {
         }
 
         //using live mode subscription key in test mode
-        else if (node_env == "dev"){
+        else if (process.env.NODE_ENV == "dev"){
           console.log("SF: Using live Stripe key in test mode!");
           req.user.premium_exp_date = (new Date().getTime() + 2592000000) / 1000;
           req.user.premium_expiring = false;
@@ -848,7 +841,48 @@ module.exports = {
     else {
       error.handler(req, res, "You don't have a Premium account to cancel!", "json")
     }
-  }
+  },
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------STRIPE WEBHOOK-------------------------------
+
+  //to catch all stripe web hook events
+  stripeWebhookEventCatcher : function(req, res){
+    if (process.env.NODE_ENV == "dev"){
+      switchEvents(req.body, res)
+    }
+    else {
+      //Verify the event by fetching it from Stripe
+      stripe.events.retrieve(req.body.id, function(err, event) {
+        switchEvents(event, res)
+      });
+    }
+  },
+
+  //helper function to switch between event types
+  switchEvents : function(event, res){
+    if (event){
+      res.sendStatus(200);
+      console.log("Event from Stripe: " + event.type);
+      switch (event.type){
+        // case "customer.deleted":
+        //   handleCustomerDelete(event);
+        //   break;
+        // case "customer.subscription.deleted":
+        //   handleSubscriptionCancel(event);
+        //   break;
+        case "account.application.deauthorized":
+          handleAccountDeauthorized(event);
+          break;
+        default:
+          break;
+      }
+    }
+    else {
+      res.sendStatus(404);
+    }
+  },
 
   //</editor-fold>
 
@@ -872,7 +906,7 @@ function createPromoCode(number, referrer, duration_in_months, callback){
   }
 
   var insertCoupons = function(codes, n, r, m, cb){
-    Account.createCouponCodes(codes, function(result){
+    account_model.createCouponCodes(codes, function(result){
       if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
         console.log("Duplicate coupon!");
         insertCoupons(createUniqueCoupons(n, r, m), n, r, m, cb);
@@ -953,7 +987,7 @@ function applyPromoCodeStripe(stripe_subscription_id, promo_code, account_id, cb
     coupon : promo_code
   }, function(err, subscription){
     if (!err){
-      Account.updatePromoCode(promo_code, {
+      account_model.updatePromoCode(promo_code, {
         account_id : account_id,
         date_accessed : new Date()
       }, function(result){
@@ -970,7 +1004,7 @@ function applyPromoCodeStripe(stripe_subscription_id, promo_code, account_id, cb
 //function to delete old code and create new
 function deleteExistingAddNew(referer_id, referrer_referrer, existing_coupon_code, existing_duration_in_months, stripe_subscription_id){
   console.log("SF: Deleting old existing coupon and adding new coupon...");
-  Account.deletePromoCode(existing_coupon_code, function(result){
+  account_model.deletePromoCode(existing_coupon_code, function(result){
     stripe.coupons.del(existing_coupon_code);
 
     //create 1 promo code, with no referer_id, and 1 duration_in_months
@@ -981,7 +1015,7 @@ function deleteExistingAddNew(referer_id, referrer_referrer, existing_coupon_cod
       }
       else {
         //update just DH DB
-        Account.updatePromoCode(result[0], {
+        account_model.updatePromoCode(result[0], {
           account_id : referer_id,
           date_accessed : new Date()
         }, function(result){ });
@@ -995,7 +1029,7 @@ function addMonthReferral(referer_id){
   console.log("SF: Looking up any existing referrer coupons to add 1 month...");
 
   //check if referrer has any existing coupons
-  Account.getExistingPromoCodeByUser(referer_id, function(result){
+  account_model.getExistingPromoCodeByUser(referer_id, function(result){
     var referrer_stripe_subscription_id = result.info[0].stripe_subscription_id;
 
     if (result.state == "success" && result.info.length > 0 && result.info[0].code){
@@ -1029,7 +1063,7 @@ function addMonthReferral(referer_id){
           applyPromoCodeStripe(referrer_stripe_subscription_id, result[0], referer_id, function(){});
         }
         else {
-          Account.updatePromoCode(result[0], {
+          account_model.updatePromoCode(result[0], {
             account_id : referer_id,
             date_accessed : new Date()
           }, function(result){ });
@@ -1108,7 +1142,7 @@ function newStripeSubscription(req, res, next){
 
       //update date accessed in the promo code in our DB
       if (req.user.existing_promo_code){
-        Account.updatePromoCode(req.user.existing_promo_code, { date_accessed : new Date() }, function(){});
+        account_model.updatePromoCode(req.user.existing_promo_code, { date_accessed : new Date() }, function(){});
         delete req.user.existing_promo_code;
       }
 
