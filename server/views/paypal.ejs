@@ -1,0 +1,49 @@
+<%# <div id="paypal" class="is-hidden card is-fullwidth">
+  <div class="card-header is-justified-start">
+    <h3 class="card-header-title">
+      PayPal Settings
+    </h3>
+    <button class='edit-section-button is-primary card-header-icon button is-small'>
+      <span class="icon is-small"><i class="fa fa-cog"></i></span>
+      <span>Edit</span>
+    </button>
+  </div>
+  <div class="card-content">
+    <form id="paypal-form" class="account-form form">
+      <div id="paypal-wrapper" class="control">
+        <div class="label-icon">
+          <label id="paypal-text" class="label" for="paypal_email">PayPal Account Email Address</label>
+          <span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+            <i class="fa fa-lock"></i>
+          </span>
+        </div>
+        <input id="paypal_email-input" class="input has-shadow is-disabled account-input" type="text" value="<%= user.paypal_email %>" name="paypal_email" />
+        <small class="tip">Please enter the email address of your PayPal account.</small>
+      </div>
+      <div class="control hidden-edit is-hidden">
+        <button tabindex="0" id="paypal-submit" class="button is-stylish is-small is-primary is-disabled">
+          <span>Save Changes</span>
+        </button>
+        <button tabindex="0" id="paypal-cancel" class="button is-stylish is-small is-danger is-hidden is-inverted">
+          <span>Cancel Changes</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="registrar" class="is-hidden card is-fullwidth">
+  <header class="card-header is-justified-start">
+    <h3 class="card-header-title">
+      Registrar Settings
+    </h3>
+    <button class='edit-section-button is-primary card-header-icon button is-small'>
+      <span class="icon is-small"><i class="fa fa-cog"></i></span>
+      <span>Edit</span>
+    </button>
+  </header>
+  <div class="card-content">
+    <div class="control">
+      <button tabindex="0" id="godaddy-connect-button" class="button is-stylish is-small">Connect GoDaddy Account</button>
+    </div>
+  </div>
+</div> %>
