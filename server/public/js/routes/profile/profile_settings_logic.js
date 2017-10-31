@@ -7,12 +7,12 @@ $(document).ready(function() {
   //function to show section depending on url
   showSectionByURL();
 
-  //add to history object depending on which link i clicked
-  $(".setting-link").click(function(e){
+  //add to history object depending on which table i clicked
+  $(".tab").click(function(e){
     e.preventDefault();
 
     var temp_id = $(this).attr("id");
-    temp_id = temp_id.substr(0, temp_id.length - 5);
+    temp_id = temp_id.substr(0, temp_id.length - 4);
     if(history.pushState) {
       history.pushState(null, null, '#' + temp_id);
     }
@@ -162,10 +162,10 @@ window.onpopstate = function(event) {
 function showSection(section_id){
   resetErrorSuccess();
   cancelEdits();
-  $(".setting-link").removeClass("is-active");
-  $("#" + section_id + "-link").addClass("is-active");
+  $(".tab").removeClass("is-active");
+  $("#" + section_id + "-tab").addClass("is-active");
   temp_section = $("#" + section_id);
-  $(".card").not(temp_section).addClass("is-hidden");
+  $(".drop-tab").not(temp_section).addClass("is-hidden");
   temp_section.removeClass("is-hidden");
 
   //get AJAX for promo codes if we havent yet
@@ -191,12 +191,12 @@ function showSection(section_id){
 function showSectionByURL(){
   temp_hash = location.hash.split("#")[1];
   array_of_ids = [];
-  $(".card").each(function(index) {
+  $(".drop-tab").each(function(index) {
     array_of_ids.push($(this).attr("id"));
   });
 
   if (array_of_ids.indexOf(temp_hash) == -1){
-    showSection("basic");
+    showSection("profile");
   }
   else {
     showSection(temp_hash);
