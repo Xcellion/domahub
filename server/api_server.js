@@ -22,21 +22,7 @@ app.use(cookieParser());
 
 //which session store to use depending on DEV or PROD
 var session = require('express-session');
-if (process.env.NODE_ENV == "dev"){
-  console.log("Development environment! Using memory for sessions store for LE API server.");
-
-  //express session in memory
-  app.use(session({
-    secret: 'domahub_lets_encrypt_api_dev',
-    cookie: {
-      secure: false
-    },
-    saveUninitialized: true,
-    resave: true,
-    rolling: true
-  }));
-}
-else {
+if (process.env.NODE_ENV == "prod"){
   console.log("Production environment! Using redis for sessions store for LE API server.");
   var redisStore = require('connect-redis')(session);
 
@@ -60,19 +46,33 @@ else {
     rolling: true
   }));
 }
+else {
+  console.log("Development environment! Using memory for sessions store for LE API server.");
+
+  //express session in memory
+  app.use(session({
+    secret: 'domahub_lets_encrypt_api_dev',
+    cookie: {
+      secure: false
+    },
+    saveUninitialized: true,
+    resave: true,
+    rolling: true
+  }));
+}
 
 //</editor-fold>
 
-var db = require('./lib/database.js');
-
 //<editor-fold>------------------------------------------DATABASE---------------------------------------
+
+var db = require('./lib/database.js');
 
 //</editor-fold>
 
 //<editor-fold>------------------------------------------ROUTES---------------------------------------
 
 //API for Lets Encrypt SSL certs for premium domains listed on domahub
-require('./le_api_functions.js')(app);
+require('./controller/le_api_functions.js')(app);
 
 //404 not found
 app.get('*', function(req, res){

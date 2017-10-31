@@ -5,7 +5,7 @@ var pool = mysql.createPool({
   host: 'p3plcpnl0172.prod.phx3.secureserver.net',
   //host: 'localhost',
   user: 'administrator',
-  password: 'Password01',
+  password: 'k#h8$.Kg.TWQ',
   database: 'domahub',
   multipleStatements: true,
   dateStrings: true,

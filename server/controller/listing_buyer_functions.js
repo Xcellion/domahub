@@ -118,6 +118,11 @@ module.exports = {
       if (state == "error"){
         error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
       }
+      else {
+        res.send({
+          state: "success"
+        });
+      }
     });
   },
 
@@ -135,6 +140,7 @@ module.exports = {
             if (offer_result){
               console.log("F: Emailing owner about new verified offer...");
               var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs');
+              var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
 
               var EJSVariables = {
                 domain_name: req.params.domain_name,
@@ -143,7 +149,7 @@ module.exports = {
                 offerer_email: offer_result.email,
                 offerer_phone: phoneUtil.format(phoneUtil.parse(offer_result.phone), PNF.INTERNATIONAL),
                 verification_code: req.params.verification_code,
-                offer: moneyFormat.to(parseFloat(offer_result.offer)),
+                offer: offer_formatted,
                 message: offer_result.message
               }
 
