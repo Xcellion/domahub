@@ -1,4 +1,7 @@
 {
-	"ignore": ["server/public/*", "uploads/*"],
-	"exec" : "node server/server.js"
+  "ignore": ["server/public/*", "uploads/*"],
+  "exec" : "node server/server.js",
+  "env" : {
+    "NODE_ENV": "dev"
+  }
 }

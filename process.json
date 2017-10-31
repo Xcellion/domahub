@@ -12,7 +12,7 @@
 	}
   },
   {
-    name        : "DomaHub Server (LE API Prod)",
+    name        : "DomaHub Server (LE Prod)",
     script      : "./server/api_server.js",
     env: {
       "NODE_ENV": "prod",

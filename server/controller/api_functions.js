@@ -1,34 +1,37 @@
-var listing_model = require('../models/listing_model.js');
-var account_model = require('../models/account_model.js');
-var data_model = require('../models/data_model.js');
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
 
-var search_functions = require("../routes/listings/listings_search_functions.js");
-var renter_functions = require("../routes/listings/listings_renter_functions.js");
-var stripe = require("../lib/stripe.js");
+var listing_model = require('../models/listing_model.js');
+
+var search_functions = require("./listing_general_functions.js");
+var renter_functions = require("./listing_renter_functions.js");
+var stripe_functions = require("./stripe_functions.js");
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var validator = require("validator");
 var request = require('request');
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 
-module.exports = function(app, db, e){
-  error = e;
-  Listing = new listing_model(db);
-  Account = new account_model(db);
-  Data = new data_model(db);
+//</editor-fold>
 
+//route
+module.exports = function(app){
   app.all("*", [
     checkHost,
     renter_functions.getListingInfo,
-    stripe.checkStripeSubscription,
+    stripe_functions.checkStripeSubscription,
     checkForBasicRedirect,
     renter_functions.addToSearchHistory,
     renter_functions.checkStillVerified,
     renter_functions.renderListing
   ]);
 }
+
+//<editor-fold>------------------------------------------FUNCTIONS---------------------------------------
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
@@ -83,7 +86,7 @@ function getCurrentRental(req, res, domain_name, path, next){
   }
   else {
     console.log("AF: Attempting to check current rental status for " + domain_name + "!");
-    Listing.getCurrentRental(domain_name, path, function(result){
+    listing_model.getCurrentRental(domain_name, path, function(result){
 
       //not rented! check if it's premium to see if we should use domahub URL or custom URL
       if (result.state != "success" || result.info.length == 0){
@@ -199,6 +202,10 @@ function requestProxy(req, res, rental_info){
   });
 }
 
+//</editor-fold>
+
+//<editor-fold>------------------------------------------HELPERS---------------------------------------
+
 //function to add http or https
 function addProtocol(address){
   if (!validator.isURL(address, {
@@ -209,3 +216,5 @@ function addProtocol(address){
   }
   return address;
 }
+
+//</editor-fold>
