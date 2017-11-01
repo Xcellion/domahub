@@ -25,10 +25,15 @@ module.exports = {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-      delete user.password;
-      delete user.stripe_secret;
-      delete user.stripe_public;
-      done(null, user);
+      if (user){
+        delete user.password;
+        delete user.stripe_secret;
+        delete user.stripe_public;
+        done(null, user);
+      }
+      else {
+        done(null, null);
+      }
     });
 
     // called every subsequent request.
