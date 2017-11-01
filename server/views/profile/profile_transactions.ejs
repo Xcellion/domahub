@@ -9,9 +9,9 @@
       <thead>
         <tr>
           <th>Date</th>
-          <th>Type</th>
+          <th class="is-hidden-laptop">Type</th>
           <th>Domain</th>
-          <th>Date Available</th>
+          <th class="is-hidden-laptop">Date Available</th>
           <th class="has-text-right">Total Earned</th>
           <th class="has-text-right">
             <a href="/faq#pricing" class="is-primary">
@@ -27,7 +27,8 @@
       </thead>
       <tfoot>
         <tr>
-          <td colspan="3"></td>
+          <td colspan="3" class="is-hidden-laptop"></td>
+          <td class="is-hidden-widescreen"></td>
           <td class='has-text-right is-bold'>Total</td>
           <td id="total-earnings" class='has-text-right is-bold'>$0.00</td>
           <td id="total-fees" class='has-text-right is-bold'>$0.00</td>
@@ -38,9 +39,9 @@
       <tbody class="earnings-table">
         <tr id="earnings-row-clone" class="earning-row is-hidden">
           <td class="earnings-row-date"></td>
-          <td class="earnings-row-type"></td>
+          <td class="earnings-row-type is-hidden-laptop"></td>
           <td class="earnings-row-domain"></td>
-          <td class="earnings-row-available"></td>
+          <td class="earnings-row-available is-hidden-laptop"></td>
           <td class="earnings-row-amount has-text-right"></td>
           <td class="earnings-row-fees has-text-right"></td>
           <td class="earnings-row-profit has-text-right"></td>
