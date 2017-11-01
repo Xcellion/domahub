@@ -14,13 +14,15 @@
       </h2>
     </div>
     <div class="content has-text-centered">
-      <p id="message">
-        <% if (typeof message != "undefined") {%>
+      <% if (typeof message != "undefined") {%>
+        <p id="message" class="is-danger">
           <%= message %>
-        <% } else { %>
+        <p>
+      <% } else { %>
+        <p id="message">
           Please log in below.
-        <% } %>
-      </p>
+        </p>
+      <% } %>
     </div>
     <div class="account-form">
       <form id="login-form" action="/login" method="post">

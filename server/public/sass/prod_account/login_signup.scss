@@ -8,6 +8,10 @@
 @import '../bulma/elements/icon.sass';
 @import '../checkbox';
 
+html {
+  background-color: #f9f9f9;
+}
+
 .clear-nav {
   padding-top: 60px;
 }
@@ -48,9 +52,6 @@
   left: 0;
   margin: 0 auto;
   padding: 20px;
-  position: absolute;
-  right: 0;
-  top: 150px;
   width: 400px;
   @include mobile {
     width: 90%;
@@ -66,4 +67,11 @@
 
 #accept, #resend, #home {
     display:none;
+}
+
+#message {
+  padding: 10px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
