@@ -27,9 +27,9 @@ var mysql_options = {
 //find and uncomment out (using a # at the front) include sites-enabled/mysql
 //restart openresty with sudo openresty -s reload
 
-if (process.env.NODE_ENV == "dev"){
-  mysql_options.host = "domahub.com";
-}
+// if (process.env.NODE_ENV == "dev"){
+//   mysql_options.host = "domahub.com";
+// }
 
 var pool = mysql.createPool(mysql_options);
 
