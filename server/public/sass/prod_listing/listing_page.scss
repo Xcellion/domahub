@@ -489,6 +489,14 @@
   vertical-align: baseline !important;
 }
 
+#traffic-module {
+  .columns {
+    @include tablet-only {
+      flex-direction: column;
+    }
+  }
+}
+
 #traffic-overlay {
   position:absolute;
   background-color:rgba(255,255,255,0.5);
