@@ -110,18 +110,6 @@ $(document).ready(function(){
     deleteListings($(this));
   });
 
-  //nevermind delete listings
-  $("#delete-nevermind, .modal-close, .modal-background").on("click", function(e){
-    $("#delete-modal").removeClass('is-active');
-  });
-
-  //ESC key to close modal
-  $(document).keyup(function(e) {
-    if (e.which == 27) {
-      $('.modal').removeClass('is-active');
-    }
-  });
-
   //refresh listings
   $("#refresh-listings-button").on("click", function(){
     $("#refresh-listings-button").addClass('is-loading');

@@ -138,22 +138,13 @@ module.exports = {
         expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
       }, function(err, charges) {
         if (err) { console.log(err.message); }
-        if (process.env.NODE_ENV == "dev"){
-          req.user.dev_charges = charges;
-        }
-        updateUserStripeCharges(req.user, charges.data);
 
-        // for test data on pagination
-        // req.user.stripe_charges = [];
-        // for (var x = 0; x < 100; x++){
-        //   req.user.stripe_charges.push({
-        //     amount: Math.round(Math.random()* 100),
-        //     created: new Date().getTime(),
-        //     currency: "usd",
-        //     amount_refunded : 0,
-        //     domain_name : "fuckyoutest.com"
-        //   })
-        // }
+        if (charges){
+          if (process.env.NODE_ENV == "dev"){
+            req.user.dev_charges = charges;
+          }
+          updateUserStripeCharges(req.user, charges.data);
+        }
 
         next();
       });

@@ -1,5 +1,10 @@
 module.exports = function(app){
 
+  //development routes
+  if (process.env.NODE_ENV == "dev"){
+    require('./dev_routes.js')(app);
+  }
+
   //all main page (domahub) links
   require('./main_routes.js')(app);
 
@@ -14,11 +19,6 @@ module.exports = function(app){
 
   //stripe web hooks
   // require('./stripe_routes.js')(app);
-
-  //development routes
-  if (process.env.NODE_ENV == "dev"){
-    require('./dev_routes.js')(app);
-  }
 
   //ico, rental, 404
   require('./final_routes.js')(app);

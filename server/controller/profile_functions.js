@@ -5,6 +5,7 @@ var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
 
 var stripe = require('./stripe_functions.js');
+var passport = require('../lib/passport.js').passport;
 
 var Categories = require("../lib/categories.js");
 var Fonts = require("../lib/fonts.js");
@@ -19,6 +20,7 @@ var bcrypt = require("bcrypt-nodejs");
 var whois = require("whois");
 var parser = require('parse-whois');
 var dns = require("dns");
+var validator = require("validator");
 
 //</editor-fold>
 
@@ -327,36 +329,28 @@ module.exports = {
   checkAccountSettings: function(req, res, next){
     console.log('F: Checking posted account settings...');
 
-    new_email = req.body.new_email;
-    username = req.body.username;
-    password = req.body.new_password;
-
     //not a valid email
-    if (req.body.new_email && !validator.isEmail(new_email)){
-      error.handler(req, res, "Invalid email!", "json");
+    if (req.body.new_email && !validator.isEmail(req.body.new_email)){
+      error.handler(req, res, "Please provide a valid email address for your account!", "json");
     }
     //username too long
-    else if (req.body.username && username.length > 70){
-      error.handler(req, res, "Username is too long!", "json");
+    else if (req.body.username && req.body.username.length > 70){
+      error.handler(req, res, "The new username is too long!", "json");
     }
     //username too short
-    else if (req.body.username && username.length < 3){
-      error.handler(req, res, "Username is too short!", "json");
-    }
-    //username is invalid
-    else if (req.body.username && /\s/.test(username)){
-      error.handler(req, res, "Invalid name!", "json");
+    else if (req.body.username && req.body.username.length < 3){
+      error.handler(req, res, "The new username is too short!", "json");
     }
     //password is too long
-    else if (req.body.new_password && password && 70 < password.length){
+    else if (req.body.new_password && 70 < req.body.password.length){
       error.handler(req, res, "The new password is too long!", "json");
     }
     //password is too short
-    else if (req.body.new_password && password && password.length < 6){
+    else if (req.body.new_password && req.body.password.length < 6){
       error.handler(req, res, "The new password is too short!", "json");
     }
     //check the pw
-    else if (req.body.new_password || req.body.username || req.body.new_email){
+    else if (req.body.new_password){
       req.body.email = req.body.email || req.user.email;
       passport.authenticate('local-login', function(err, user, info){
         if (!user && info){
@@ -367,12 +361,12 @@ module.exports = {
         }
       })(req, res, next);
     }
-    //paypal
-    else if (validator.isEmail(req.body.paypal_email)){
-      next();
+    //paypal email
+    else if (req.body.paypal_email && !validator.isEmail(req.body.paypal_email)){
+      error.handler(req, res, "Please provide a valid PayPal email address!", "json");
     }
     else {
-      error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+      next();
     }
   },
 
@@ -419,7 +413,7 @@ module.exports = {
       new_account_info.email = req.body.new_email;
     }
     if (req.body.username){
-      new_account_info.username = req.body.username;
+      new_account_info.username = req.body.username.replace(/\s/g, '');
     }
     if (req.body.new_password){
       new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
