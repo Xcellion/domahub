@@ -54,6 +54,10 @@
   margin: 5px 0;
   color: $text-light;
   line-height: 1.5;
+
+  &.is-inline{
+    display:inline-block !important;
+  }
 }
 
 .sub-tabs {
