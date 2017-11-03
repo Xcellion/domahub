@@ -116,7 +116,7 @@ module.exports = {
       error.handler(req, res, "Usernames cannot have a space!");
     }
     //username is too long
-    else if (username.length > 70){
+    else if (username.length > 50){
       error.handler(req, res, "Your username is too long!");
     }
     //username is too short

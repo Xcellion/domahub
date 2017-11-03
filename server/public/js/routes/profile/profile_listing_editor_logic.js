@@ -864,11 +864,6 @@ function setupOfferButtons(selected_domain_ids){
 
     });
 
-    //close offer modal
-    $(".modal-close, .modal-background, #delete-nevermind").off().on("click", function(){
-      $(this).closest(".modal").removeClass('is-active');
-    });
-
     //search offers input
     $("#offer-search").off().on('input', function(){
       refreshOfferRows($(this).val(), $("#show-rejected-offers").hasClass('is-primary'));

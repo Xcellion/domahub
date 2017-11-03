@@ -21,10 +21,15 @@ $(document).ready(function() {
     $(".user-dropdown-menu").toggleClass("is-hidden");
   });
 
-  $(document).keyup(function(e) {
+  $(document).on("keyup", function(e) {
     if (e.which == 27) {
-      $('#modal-login').removeClass('is-active');
+      $('.modal').removeClass('is-active');
     }
+  });
+
+  //close modal
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    $('.modal').removeClass('is-active');
   });
 
   leftMenuActive();
