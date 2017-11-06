@@ -51,6 +51,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
+  padding:20px 0px;
   @include mobile {
     flex-direction: column;
     flex-grow: 1;
@@ -89,7 +90,8 @@
 }
 
 .header {
-  padding-bottom: 10px;
+  padding-bottom:20px;
+  padding-top:20px;
   cursor: pointer;
   &.is-disabled {
     border-bottom: 3px solid $border;

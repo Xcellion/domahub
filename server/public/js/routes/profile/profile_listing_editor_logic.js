@@ -43,8 +43,7 @@ function showSelector(keep_message){
   multiSelectButtons();
   leftMenuActive();
   if (!keep_message){
-    errorMessage(false);
-    successMessage(false);
+    clearNotification();
   }
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
@@ -93,7 +92,6 @@ function updateEditorEditing(selected_domain_ids){
 
   //editing view specific things
   $(".editor-title").text("Editing - ");
-  $("#example-domain-name").text("Editing" + selected_domain_ids.length + "DomainNames.com");
   $(".non-edit-elem").addClass('is-hidden');
   $(".edit-elem").removeClass('is-hidden');
 
@@ -107,6 +105,9 @@ function updateEditorEditing(selected_domain_ids){
     //hide domain capitalization
     $("#domain-name-cap-missing").removeClass('is-hidden');
     $("#domain-name-input").addClass('is-hidden');
+
+    //change preview name
+    $("#example-domain-name").text("Editing" + selected_domain_ids.length + "DomainNames.com");
 
     //tooltip to view individual listings
     $("#view-listings-button").removeAttr("href").off().on('click', function(){
@@ -165,8 +166,7 @@ function setupEditingButtons(){
 
     if (current_tab != new_tab){
       //clear any existing messages
-      errorMessage(false);
-      successMessage(false);
+      clearNotification();
 
       //update tab URL
       updateQueryStringParam("tab", new_tab);
@@ -249,7 +249,7 @@ function checkBox(module_value, elem, child){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------RENTAL TAB EDITS-------------------------------
+  //<editor-fold>-------------------------------RENTAL EDITS-------------------------------
 
   function updateRentalTab(listing_info){
     checkBox(listing_info.rentable, $("#rentable-input"));
@@ -617,8 +617,7 @@ function checkBox(module_value, elem, child){
     }
 
     //clear any existing messages
-    errorMessage(false);
-    successMessage(false);
+    clearNotification();
 
     //only change if the value changed from existing (and if premium elem, has premium)
     if (input_elem.val() != listing_info_comparison &&
@@ -666,16 +665,14 @@ function checkBox(module_value, elem, child){
     updateEditorEditing(getSelectedDomains("id", true, true));
 
     if (!keep_message){
-      errorMessage(false);
-      successMessage(false);
+      clearNotification();
     }
   }
 
   //function to submit status change
   function submitListingChanges(submit_button, status_only){
     //clear any existing messages
-    errorMessage(false);
-    successMessage(false);
+    clearNotification();
     submit_button.addClass('is-loading');
 
     //append data for editing
@@ -786,35 +783,6 @@ function checkBox(module_value, elem, child){
     });
   }
 
-  //helper function to display/hide error messages per listing
-  function errorMessage(message){
-    //hide success
-    $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-    $("#error-upgrade-button").addClass('is-hidden');
-
-    if (message){
-      $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
-      $("#listing-msg-error-text").html(message);
-    }
-    else if (!message) {
-      $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-    }
-  }
-
-  //helper function to display success messages per listing
-  function successMessage(message){
-    //hide error
-    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-
-    if (message){
-      $("#listing-msg-success").removeClass('is-hidden').addClass("is-active");
-      $("#listing-msg-success-text").text(message);
-    }
-    else if (!message){
-      $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-    }
-  }
-
   //</editor-fold>
 
 //</editor-fold>
@@ -894,11 +862,6 @@ function setupOfferButtons(selected_domain_ids){
         }
       }).appendTo("#offers-wrapper");
 
-    });
-
-    //close offer modal
-    $(".modal-close, .modal-background, #delete-nevermind").off().on("click", function(){
-      $(this).closest(".modal").removeClass('is-active');
     });
 
     //search offers input
@@ -1245,7 +1208,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
   var offer = false;
   for (var x = 0 ; x < listing_info.offers.length ; x++){
     if (listing_info.offers[x].accepted == 1){
-      offer = listing_info.offers[x].id;
+      offer = listing_info.offers[x];
       break;
     }
   }

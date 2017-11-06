@@ -1,50 +1,23 @@
 $(document).ready(function() {
 
+  //<editor-fold>-------------------------------STRIPE SET UP-------------------------------
+
+  setUpUpgradeTab();
+
   if (window.location.hostname == "localhost"){
     Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
   }
   else {
     Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
   }
-  //<editor-fold>------------------------------------------------------------------------------------PROMO CODE
-
-  $("#promo-form").on('submit', function(e){
-    e.preventDefault();
-    $("#promo-submit").addClass('is-loading');
-    $.ajax({
-      url: "/profile/promocode",
-      method: "POST",
-      data: {
-        code : $("#promo-input").val()
-      }
-    }).done(function(data){
-      $("#promo-submit").removeClass('is-loading');
-      $("#promo-input").val("");
-      if (data.state == "success"){
-        var subscription_exists_text = (user.stripe_subscription_id) ? "Your free month will be applied on the next pay cycle." : "Please upgrade to Premium to receive your free month.";
-        successMessage("Successfully applied promo code! " + subscription_exists_text);
-      }
-      else {
-        errorMessage(data.message);
-      }
-    });
-  });
 
   //</editor-fold>
 
-  //<editor-fold>------------------------------------------------------------------------------------PREMIUM
+  //<editor-fold>-------------------------------CREDIT CARD CHANGE-------------------------------
 
   //format stripe cc icons
   $("#stripe-form").find(".stripe-input").on("change keyup paste", function(){
     errorMessage(false);
-
-    //as long as it's not empty
-    if ($(".stripe-input").filter(function(){ if ($(this).val()) { return true } }).length != 0){
-      $("#checkout-button").removeClass('is-disabled');
-    }
-    else {
-      $("#checkout-button").addClass('is-disabled');
-    }
 
     var card_type = $.payment.cardType($("#cc-num").val());
     if (card_type == "dinersclub") { card_type = "diners-club"}
@@ -60,64 +33,30 @@ $(document).ready(function() {
     }
   });
 
-  //click checkout button to submit and get stripe token
-  $("#checkout-button").on("click", function(e){
-    e.preventDefault();
-    if (checkCC()){
-      $(this).addClass('is-loading');
-      $("#stripe-form").submit();
-    }
-  });
-
   //click to show CC form if they want to change card (or add a new card)
   $("#change-card-button").on("click", function(){
-    $(this).addClass('is-hidden');
-    $("#checkout-button-wrapper").removeClass('is-hidden');
-    $("#stripe-form").removeClass('is-hidden').find(".stripe-input").removeClass('is-disabled');
-    $(".promo-input").removeClass('is-disabled');
+    $("#credit-card-modal").addClass('is-active');
     $('#cc-num').focus();
   });
 
-  //upgrade to premium with existing credit card
-  $("#upgrade-button").off().on("click", function(){
-    //make sure they are sure
-    if ($(this).data("youSure") == true){
-      //just upgrade to premium with existing card
-      submitPremium(false, $(this));
-    }
-    else {
-      $(this).data("youSure", true);
-      $(this).find(".button-text").text("Are you sure?");
-    }
-  }).find(".button-text").text("Upgrade").data("youSure", false);
-
-  //get stripe token
-  $("#stripe-form").on("submit", function(e){
-    e.preventDefault();
-    Stripe.card.createToken($(this), function(status, response){
-      if (response.error){
-        $("#checkout-button").removeClass('is-loading');
-        errorMessage(response.error.message);
-      }
-      else {
-        //all good, submit stripetoken and listing id to dh server
-        submitPremium(response.id, $("#checkout-button"));
-      }
-    });
+  //click checkout button to submit and get stripe token
+  $("#submit-card-button").on("click", function(e){
+    submitForToken();
   });
 
-  //button to renew subscription
-  $("#renew-premium-button").off().on("click", function(){
-    //no stripe token because we're just renewing with existing CC on file
-    submitPremium(false, $(this));
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------UPGRADE TO PREMIUM-------------------------------
+
+  //upgrade to premium with existing credit card (or renew subscription)
+  $("#upgrade-button, #renew-premium-button").on("click", function(){
+    submitPremium($(this));
   });
 
   //button to cancel subscription
   $("#cancel-premium-button").off().on("click", function(){
     submitCancelPremium($(this));
   });
-
-  setUpUpgradeTab();
 
   //</editor-fold>
 
@@ -267,11 +206,68 @@ $(document).ready(function() {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------PAYPAL-------------------------------
+
+  //submit paypal form
+  $("#paypal-form").submit(function(e){
+    e.preventDefault();
+
+    if (validateEmail($("#paypal_email-input").val())){
+      $.ajax({
+        url: "/profile/settings",
+        method: "POST",
+        data: {
+          paypal_email: $("#paypal_email-input").val()
+        }
+      }).done(function(data){
+        if (data.state == "success"){
+          successMessage("Successfully updated settings!");
+          user = data.user;
+        }
+        else {
+          errorMessage(data.message);
+        }
+        resetInputs($("#paypal-form"));
+      })
+    }
+    else {
+      errorMessage("Please enter a valid email address!");
+    }
+  });
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------PROMO CODE-------------------------------
+
+  $("#promo-form").on('submit', function(e){
+    e.preventDefault();
+    $("#promo-submit").addClass('is-loading');
+    $.ajax({
+      url: "/profile/promocode",
+      method: "POST",
+      data: {
+        code : $("#promo-input").val()
+      }
+    }).done(function(data){
+      $("#promo-submit").removeClass('is-loading');
+      $("#promo-input").val("");
+      if (data.state == "success"){
+        var subscription_exists_text = (user.stripe_subscription_id) ? "Your free month will be applied on the next pay cycle." : "Please upgrade to Premium to receive your free month.";
+        successMessage("Successfully applied promo code! " + subscription_exists_text);
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
+  });
+
+  //</editor-fold>
+
 });
 
-//<editor-fold>------------------------------------------------------------------------------------ UPGRADE TO PREMIUM
+//<editor-fold>-------------------------------SET UP PREMIUM TAB CARD-------------------------------
 
-//function to set up upgrade tab
+//function to set up upgrade card appearance
 function setUpUpgradeTab(){
   //format all stripe inputs
   $('#cc-num').val("").payment('formatCardNumber');
@@ -279,9 +275,8 @@ function setUpUpgradeTab(){
   $('#cc-cvc').val("").payment('formatCardCVC');
   $('#cc-zip').val("").payment('restrictNumeric');
 
-  //hide CC form until user wants to see it
-  $("#stripe-form").addClass('is-hidden');
-  $("#checkout-button-wrapper").addClass('is-hidden');
+  //hide modal
+  $(".modal").removeClass('is-active');
 
   //is already premium
   if (user.stripe_subscription_id){
@@ -327,55 +322,90 @@ function setUpUpgradeTab(){
 
   //user has a credit card on file!
   if (user.premium_cc_last4 || user.premium_cc_brand){
-    $("#change-card-button").removeClass('is-hidden');
     $("#change-card-button span:nth-child(2)").text("Change Card");
 
     //last 4 digits
     var premium_cc_last4 = (user.premium_cc_last4) ? user.premium_cc_last4 : "****";
     var premium_cc_brand = (user.premium_cc_brand) ? user.premium_cc_brand : "Credit"
     $("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
-
-    //change checkout button text
-    $("#checkout-button-text").text("Change Default Card");
   }
 
 }
 
+//</editor-fold>
+
+//<editor-fold>-------------------------------CREDIT CARD CHANGE-------------------------------
+
 //check the CC info
 function checkCC(){
   if (!$("#cc-num").val()){
-    errorMessage("Please provide a credit card to charge.");
+    errorMessage("Please provide a credit card to charge!");
   }
   else if (!$("#cc-exp").val()){
-    errorMessage("Please provide your credit card expiration date.");
+    errorMessage("Please provide your credit card expiration date!");
   }
   else if (!$("#cc-cvc").val()){
-    errorMessage("Please provide your credit card CVC number.");
+    errorMessage("Please provide your credit card CVC number!");
   }
   else if (!$("#cc-zip").val()){
-    errorMessage("Please provide a ZIP code.");
+    errorMessage("Please provide a ZIP code!");
   }
   else {
     return true;
   }
 }
 
-//function to submit a new premium or to renew the premium again
-function submitPremium(stripeToken, button_elem){
-  //new premium listing or renewing
-  var data = {};
-  var url = "/profile/upgrade";
-  if (stripeToken){
-    data.stripeToken = stripeToken;
-    url = "/profile/newcard";
-    var changing_card = true;
+//function to submit to Stripe for a new token
+function submitForToken(){
+  if (checkCC()){
+    $("#submit-card-button").addClass('is-loading');
+    Stripe.card.createToken($("#stripe-form"), function(status, response){
+      if (response.error){
+        $("#submit-card-button").removeClass('is-loading');
+        errorMessage(response.error.message);
+      }
+      else {
+        //all good, submit stripetoken and listing id to dh server
+        submitCC(response.id);
+      }
+    });
   }
+}
 
+//function to submit for a new CC card (or change existing)
+function submitCC(stripeToken){
+  $.ajax({
+    url: "/profile/newcard",
+    method: "POST",
+    data: {
+      stripeToken : stripeToken
+    }
+  }).done(function(data){
+    $("#submit-card-button").removeClass('is-loading');
+
+    if (data.state == "success"){
+      user = data.user;
+      successMessage("Successfully changed the default payment method!");
+    }
+    else {
+      errorMessage(data.message);
+    }
+
+    setUpUpgradeTab();
+  });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPGRADE TO PREMIUM-------------------------------
+
+//function to submit a new premium or to renew the premium again
+function submitPremium(button_elem){
   button_elem.addClass('is-loading');
   $.ajax({
-    url: url,
+    url: "/profile/upgrade",
     method: "POST",
-    data: data
+    data: {}
   }).done(function(data){
     //if user is returning premium user or a new premium user
     var new_premium = (user.stripe_customer_id) ? false : true;
@@ -388,16 +418,11 @@ function submitPremium(stripeToken, button_elem){
 
     button_elem.removeClass('is-loading');
     if (data.state == "success"){
-      if (changing_card){
-        successMessage("Successfully changed the default payment method!");
+      if (!new_premium && was_expiring == true){
+        successMessage("Successfully renewed Premium! Welcome back!");
       }
       else {
-        if (!new_premium && was_expiring == true){
-          successMessage("Successfully renewed Premium! Welcome back!");
-        }
-        else {
-          successMessage("Successfully upgraded to Premium!");
-        }
+        successMessage("Successfully upgraded to Premium!");
       }
     }
     else {

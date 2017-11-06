@@ -65,26 +65,26 @@
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
+                                  <td align="left" valign="top" colspan="5" style="line-height:1.5;padding-bottom:20px;">
                                     <%= (accepted) ? "Great news" : "Unfortunately" %>, your offer for <%= domain_name %> was <%= (accepted) ? "accepted!" : "rejected." %> Please see below for details on your offer:
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td align="left" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                  <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                     Your offer
                                   </td>
-                                  <td align="left" class="list-item" style="border:0;margin:0;border-bottom:1px solid #ddd;padding-left:20px;">
+                                  <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;padding-left:20px;">
                                     <%= offer %>
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td align="left" valign="top" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                  <td align="left" valign="top" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                     Message from Owner
                                   </td>
-                                  <td align="left" class="list-item message" style="border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0;white-space:pre-wrap;"><% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %></td>
+                                  <td align="left" class="list-item message" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0;white-space:pre-wrap;"><% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %></td>
                                 </tr>
                                 <tr>
-                                  <td colspan="5" align="center" style="padding-top:20px;">
+                                  <td colspan="5" align="center" style="line-height:1.5;padding-top:20px;">
                                     <% if (accepted) { %>
                                       Next Steps: Click the below button to complete the payment.
                                     <% } else { %>
@@ -93,7 +93,7 @@
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td colspan="5" align="center" style="padding-top:30px;">
+                                  <td colspan="5" align="center" style="line-height:1.5;padding-top:30px;">
                                     <% if (!accepted) { %>
                                       <a id="accept_button" class="button" href="https://domahub.com/listing/<%= domain_name %>" style="background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;padding:10px 20px;box-sizing:border-box;border-radius:5px;">Send another offer</a>
                                     <% } else { %>
@@ -109,7 +109,7 @@
                         <td align="center" valign="top">
                             <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter" style="background-color:#eee;padding:20px 30px;">
                                 <tr>
-                                    <td align="center" valign="top">
+                                    <td align="center" valign="top" style="line-height:1.5;">
                                         <% if (accepted) { %>
                                           Once paid, if the domain is not transferred to you within 14 days, this transaction will be cancelled and you will
                                           receive your money back in full.
@@ -120,7 +120,7 @@
                                 </tr>
                                 <% if (!premium) { %>
                                   <tr>
-                                    <td align="center" valign="top">
+                                    <td align="center" valign="top" style="line-height:1.5;">
                                       Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
                                     </td>
                                   </tr>

@@ -4,6 +4,9 @@ var listing_description_tour = false;
 $(document).ready(function() {
   if (compare){
 
+    //overflow x-hidden to prevent scroll appearing when hiding menu
+    $("body").css("overflow-x", "hidden");
+
     //hide bottom right notification button
     $("#compare-msg .delete").on("click", function(e){
       $("#compare-msg").addClass('is-hidden');
@@ -98,18 +101,18 @@ $(document).ready(function() {
           <h3 class='popover-title'></h3> \
           <div class='popover-content content'></div> \
           <div> \
-          <div class='button-wrapper'> \
+          <div class='button-wrapper has-text-centered'> \
             <button class='button is-small is-primary' data-role='next'> \
               <span class='icon is-small'> \
                 <i class='fa fa-thumbs-up'></i> \
               </span> \
-              <span>Yes! Teach me how it works.</span> \
+              <span>Yes! Show me how it works.</span> \
             </button> \
             <button class='button is-small is-danger is-outlined' data-role='end'> \
               <span class='icon is-small'> \
                 <i class='fa fa-frown-o'></i> \
               </span> \
-              <span>Nah, I'll figure it out myself.</span> \
+              <span>No, I'll figure it out.</span> \
             </button> \
             </div> \
           </div> \
@@ -451,6 +454,11 @@ $(document).ready(function() {
       }
     });
 
+    //click backdrop to end tour
+    $(".tour-backdrop").on("click", function(){
+      tutorial_tour.end();
+    });
+
     //</editor-fold>
 
   }
@@ -486,12 +494,14 @@ function toggleMenu(show){
   if (show){
     $("#compare-menu").addClass("is-active");
     $("#page-contents").addClass("is-active");
+    $("#modules-wrapper").addClass("is-active");
     $("#dh-footer").addClass("is-active");
     $("#show-menu-button").fadeIn(100).addClass("is-hidden");
   }
   else {
     $("#compare-menu").removeClass("is-active");
     $("#page-contents").removeClass("is-active");
+    $("#modules-wrapper").removeClass("is-active");
     $("#dh-footer").removeClass("is-active");
     $("#show-menu-button").fadeIn(100).removeClass("is-hidden");
   }
@@ -787,15 +797,15 @@ function updateFooter(premium){
     }
 
     //change text
-    $("#dh-footer-right-text").text(listing_info.domain_name);
+    $("#dh-footer-right-text").replaceWith("<p id='dh-footer-right-text' class='footer-item'>" + listing_info.domain_name + "</p>");
     $("#dh-footer-right-smile").addClass("is-hidden");
-    $("#doma_logo").text(listing_info.description_footer).removeAttr("href");
+    $("#doma_logo").replaceWith("<p id='doma_logo'>" + listing_info.description_footer + "</p>");
   }
   //revert to basic
   else {
-    $("#dh-footer-right-text").text("Simple, clean sales pages for your domains.");
+    $("#dh-footer-right-text").replaceWith("<p id='dh-footer-right-text' class='footer-item'>Simple, clean sales pages for your domains.</p>");
     $("#dh-footer-right-smile").removeClass("is-hidden");
-    $("#doma_logo").html('<i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.');
+    $("#doma_logo").replaceWith('<a id="doma_logo" href="https://domahub.com"><i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.</a>');
     $("#custom_logo").removeClass('is-hidden').removeAttr("style").attr("href", "/");
   }
 }
@@ -883,11 +893,15 @@ function updateFontName(font_name){
 
 //function to update modules
 function updateModules(){
+  checkBox(listing_info.info_module, $("#info-module-input"));
+  checkBox(listing_info.domain_owner, $("#domain-owner-input"));
   checkBox(listing_info.domain_age, $("#domain-age-input"));
+  checkBox(listing_info.domain_list, $("#domain-list-input"));
   checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
   checkBox(listing_info.social_sharing, $("#social-sharing-input"));
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
-  checkBox(listing_info.info_module, $("#info-module-input"));
+  checkBox(listing_info.alexa_stats, $("#alexa-stats-input"));
+  checkBox(listing_info.traffic_graph, $("#traffic-graph-input"));
   checkBox(listing_info.history_module, $("#ticker-module-input"));
 
   //toggleable things (domain age, appraisal sites, social media)
@@ -996,7 +1010,7 @@ function createTestOtherDomains(){
     "week",
     "month"
   ];
-  var max_listings = Math.round(Math.random()*(5) + 8);
+  var max_listings = Math.round(Math.random()*(5) + 5);
 
   //create a random amount of test listings
   for (var x = 0; x < max_listings; x++){
