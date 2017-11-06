@@ -20,7 +20,8 @@ var mysql_options = {
 
 //remove leftover ufw rules
 //sudo ufw status
-//sudo ufw delete RULE_NUM
+//sudo ufw delete 4
+//sudo ufw delete 7
 
 //access to phpmyadmin (prod)
 //sudo nano /usr/local/openresty/nginx/conf/sites-enabled/default
