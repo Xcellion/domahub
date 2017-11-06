@@ -79,17 +79,10 @@ $(document).ready(function() {
   });
 
   //upgrade to premium with existing credit card
-  $("#upgrade-button").off().on("click", function(){
-    //make sure they are sure
-    if ($(this).data("youSure") == true){
-      //just upgrade to premium with existing card
-      submitPremium(false, $(this));
-    }
-    else {
-      $(this).data("youSure", true);
-      $(this).find(".button-text").text("Are you sure?");
-    }
-  }).find(".button-text").text("Upgrade").data("youSure", false);
+  $("#upgrade-button").on("click", function(){
+    //upgrade to premium with existing card
+    submitPremium(false, $(this));
+  });
 
   //get stripe token
   $("#stripe-form").on("submit", function(e){
@@ -112,10 +105,17 @@ $(document).ready(function() {
     submitPremium(false, $(this));
   });
 
-  //button to cancel subscription
   $("#cancel-premium-button").off().on("click", function(){
-    submitCancelPremium($(this));
-  });
+    //ask for confirmation
+    if ($(this).data("youSure") == true){
+      //just upgrade to premium with existing card
+      submitCancelPremium($(this));
+    }
+    else {
+      $(this).data("youSure", true);
+      $(this).find(".button-text").text("Are you sure?");
+    }
+  }).find(".button-text").text("Upgrade").data("youSure", false);
 
   setUpUpgradeTab();
 
