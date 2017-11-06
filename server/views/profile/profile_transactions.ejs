@@ -1,99 +1,107 @@
-<div id="history" class="card is-fullwidth is-hidden">
-  <div class="card-header">
-    <h3 class="card-header-title">
-      <span>Sales History</span>
-    </h3>
-  </div>
-  <div class="card-content">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Domain</th>
-          <th>Date Available</th>
-          <th class="has-text-right">Total Earned</th>
-          <th class="has-text-right">
-            <a href="/faq#pricing" class="is-primary">
-              <span>Fees Paid</span>
-              <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Click to learn more about DomaHub fees." data-balloon-pos="up">
-                <i class="fa fa-question-circle"></i>
-              </span>
-            </a>
-          </th>
-          <th class="has-text-right">Profit</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tfoot>
-        <tr>
-          <td colspan="3"></td>
-          <td class='has-text-right is-bold'>Total</td>
-          <td id="total-earnings" class='has-text-right is-bold'>$0.00</td>
-          <td id="total-fees" class='has-text-right is-bold'>$0.00</td>
-          <td id="total-profit" class='has-text-right is-bold'>$0.00</td>
-          <td></td>
-        </tr>
-      </tfoot>
-      <tbody class="earnings-table">
-        <tr id="earnings-row-clone" class="earning-row is-hidden">
-          <td class="earnings-row-date"></td>
-          <td class="earnings-row-type"></td>
-          <td class="earnings-row-domain"></td>
-          <td class="earnings-row-available"></td>
-          <td class="earnings-row-amount has-text-right"></td>
-          <td class="earnings-row-fees has-text-right"></td>
-          <td class="earnings-row-profit has-text-right"></td>
-          <td class="earnings-row-buttons">
-            <button class="button earnings-row-refund-button no-shadow" tabindex="0">
-              <span class="icon is-small">
-                <i class="fa fa-undo"></i>
-              </span>
-              <span>Refund</span>
-            </button>
-          </td>
-        </tr>
-        <tr id="no-earnings-row">
-          <td colspan="7">
-            There are no transactions!
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div id="withdrawal" class="card is-fullwidth is-hidden">
-  <div class="card-header">
-    <h3 class="card-header-title">
-      <span>Withdraw Money</span>
-    </h3>
-  </div>
-  <div class="card-content">
-    <div class="content">
-      <p>
-        You currently have <span class="withdrawal-available">$0</span> available for withdrawal.
-      </p>
-    </div>
-    <div class="content">
-      <p>
-        You currently have <span id="withdrawal-pending">$0</span> in pending funds.
-        <a class="is-primary" target="_blank" href="/faq#payments">What is this?</a>
-      </p>
-    </div>
-    <div class="content">
-      <p>
-        You currently have <span id="withdrawal-unavailable">$0</span> in unavailable funds.
-        <a class="is-primary" target="_blank" href="/faq#payments">What is this?</a>
-      </p>
-    </div>
-    <div class="control">
-      <a id="transfer-button" class="is-disabled is-stylish is-primary button">
-        <span class="icon is-small"><i class="fa fa-exchange"></i></span>
-        <span>Transfer <span class="withdrawal-available"></span> to Bank</span>
-      </a>
+<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+<script src="/js/lib/wNumb.js" type="text/javascript"></script>
+<script src="/js/routes/profile/profile_transactions_logic.js" type="text/javascript"></script>
+<div id="transactions" class="columns is-hidden drop-tab">
+  <div class="column">
+    <div id="history" class="card is-fullwidth">
+      <div class="card-header">
+        <h3 class="card-header-title">
+          <span>Sales and Rental History</span>
+        </h3>
+      </div>
+      <div class="card-content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th class="is-hidden-laptop">Type</th>
+              <th>Domain</th>
+              <th class="is-hidden-laptop">Date Available</th>
+              <th class="has-text-right">Total Earned</th>
+              <th class="has-text-right">
+                <a href="/faq#pricing" class="is-primary">
+                  <span>Fees Paid</span>
+                  <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Click to learn more about DomaHub fees." data-balloon-pos="up">
+                    <i class="fa fa-question-circle"></i>
+                  </span>
+                </a>
+              </th>
+              <th class="has-text-right">Profit</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="is-hidden-laptop"></td>
+              <td class="is-hidden-widescreen"></td>
+              <td class='has-text-right is-bold'>Total</td>
+              <td id="total-earnings" class='has-text-right is-bold'>$0.00</td>
+              <td id="total-fees" class='has-text-right is-bold'>$0.00</td>
+              <td id="total-profit" class='has-text-right is-bold'>$0.00</td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody class="earnings-table">
+            <tr id="earnings-row-clone" class="earning-row is-hidden">
+              <td class="earnings-row-date"></td>
+              <td class="earnings-row-type is-hidden-laptop"></td>
+              <td class="earnings-row-domain"></td>
+              <td class="earnings-row-available is-hidden-laptop"></td>
+              <td class="earnings-row-amount has-text-right"></td>
+              <td class="earnings-row-fees has-text-right"></td>
+              <td class="earnings-row-profit has-text-right"></td>
+              <td class="earnings-row-buttons">
+                <button class="button earnings-row-refund-button no-shadow" tabindex="0">
+                  <span class="icon is-small">
+                    <i class="fa fa-undo"></i>
+                  </span>
+                  <span>Refund</span>
+                </button>
+              </td>
+            </tr>
+            <tr id="no-earnings-row">
+              <td colspan="7">
+                There are no transactions!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <small>Most banks only process transfers on business days. Money withdrawn on holidays or weekends may only be available when your bank opens. Your withdrawal could be delayed or blocked if we identify an issue with either your DomaHub account or bank account. If we do detect any issues we will be sure to let you know via email!</small>
+    <div id="withdrawal" class="card is-fullwidth">
+      <div class="card-header">
+        <h3 class="card-header-title">
+          <span>Withdraw Money</span>
+        </h3>
+      </div>
+      <div class="card-content">
+        <div class="content">
+          <p>
+            You currently have <span class="withdrawal-available">$0</span> available for withdrawal.
+          </p>
+        </div>
+        <div class="content">
+          <p>
+            You currently have <span id="withdrawal-pending">$0</span> in pending funds.
+            <a class="is-primary" target="_blank" href="/faq#payments">What is this?</a>
+          </p>
+        </div>
+        <div class="content">
+          <p>
+            You currently have <span id="withdrawal-unavailable">$0</span> in unavailable funds.
+            <a class="is-primary" target="_blank" href="/faq#payments">What is this?</a>
+          </p>
+        </div>
+        <div class="control">
+          <a id="transfer-button" class="is-disabled is-stylish is-primary button">
+            <span class="icon is-small"><i class="fa fa-exchange"></i></span>
+            <span>Transfer <span class="withdrawal-available"></span> to Bank</span>
+          </a>
+        </div>
+
+        <small>Most banks only process transfers on business days. Money withdrawn on holidays or weekends may only be available when your bank opens. Your withdrawal could be delayed or blocked if we identify an issue with either your DomaHub account or bank account. If we do detect any issues we will be sure to let you know via email!</small>
+      </div>
+    </div>
   </div>
 </div>

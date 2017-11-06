@@ -1,103 +1,115 @@
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
 
-module.exports = function(app, auth){
-  app.get('/login', [
-    auth.checkLoggedIn,
-    function(req, res){
-      res.redirect("/profile/dashboard");
-    }
-  ]);
-  app.get('/logout', auth.logout);
+var general_functions = require('../controller/general_functions.js');
+var auth_functions = require('../controller/auth_functions.js');
 
-  //cant access these routes if they are logged in
-  app.get([
-    '/signup',
-    '/forgot'
-  ], [
-    auth.isNotLoggedIn,
-    function(req, res, next){
-      var path_name = req.path.slice(1, req.path.length);
-      auth[path_name](req, res, next);
-    }
+//</editor-fold>>
+
+module.exports = function(app){
+
+  //<editor-fold>-------------------------------SIGNUP / REFERRAL-------------------------------
+
+  //signup normal (no referral)
+  app.get('/signup', [
+    auth_functions.isNotLoggedIn,
+    auth_functions.renderSignup
   ]);
 
   //signup referrals
   app.get("/signup/:promo_code", [
-    auth.isNotLoggedIn,
-    auth.checkReferralCode
+    auth_functions.isNotLoggedIn,
+    auth_functions.checkReferralCode
   ]);
 
-  //to render reset/verify page
-  app.get("/reset/:token", [
-    auth.isNotLoggedIn,
-    auth.checkToken,
-    auth.renderReset
+  //post for a new signup
+  app.post("/signup", [
+    general_functions.urlencodedParser,
+    auth_functions.isNotLoggedIn,
+    auth_functions.signupPost
   ]);
 
-  //verify email
-  app.get("/verify/:token", [
-    auth.checkToken,
-    auth.renderVerify
-  ]);
+  //</editor-fold>
 
-  //post routes for authentication
-  app.post([
-    "/signup",
-    "/login"
-  ], [
-    urlencodedParser,
-    auth.isNotLoggedIn,
-    function(req, res, next){
-      var path_name = req.path.slice(1, req.path.length) + "Post";
-      auth[path_name](req, res, next);
+  //<editor-fold>-------------------------------LOGIN / LOGOUT-------------------------------
+
+  //render login page
+  app.get('/login', [
+    auth_functions.checkLoggedIn,
+    function(req, res){
+      res.redirect("/profile/dashboard");
     }
   ]);
 
-  //send forgot password email
-  app.post("/forgot", [
-    urlencodedParser,
-    auth.isNotLoggedIn,
-    checkAccountExists,
-    auth.forgotPost
-  ])
+  //logout
+  app.get('/logout', auth_functions.logout);
 
-  //to reset password
-  app.post("/reset/:token", [
-    urlencodedParser,
-    auth.isNotLoggedIn,
-    auth.checkToken,
-    auth.resetPost
+  //login post
+  app.post("/login", [
+    general_functions.urlencodedParser,
+    auth_functions.isNotLoggedIn,
+    auth_functions.loginPost
+  ]);
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------VERIFY EMAIL-------------------------------
+
+  //verify email
+  app.get("/verify/:token", [
+    auth_functions.checkToken,
+    auth_functions.renderVerify
   ]);
 
   //to resend verification email
   app.post("/verify", [
-    urlencodedParser,
-    auth.requestVerify
+    general_functions.urlencodedParser,
+    auth_functions.requestVerify
   ]);
 
   //to verify email
   app.post("/verify/:token", [
-    urlencodedParser,
-    auth.checkToken,
-    auth.verifyPost
+    general_functions.urlencodedParser,
+    auth_functions.checkToken,
+    auth_functions.verifyPost
   ]);
-}
 
+  //</editor-fold>
 
-//function to check if account exists on domahub
-function checkAccountExists(req, res, next){
-  console.log("F: Checking if account exists...");
+  //<editor-fold>-------------------------------FORGOT PASSWORD-------------------------------
 
-  var email = req.body["email"];
+  //render forgot PW page
+  app.get('/forgot', [
+    auth_functions.isNotLoggedIn,
+    auth_functions.renderForgotPW
+  ]);
 
-  Account.checkAccountEmail(email, function(result){
-    if (!result.info.length || result.state == "error"){
-      error.handler(req, res, "No account exists with that email!", "json");
-    }
-    else {
-      next();
-    }
-  });
+  //send forgot password email
+  app.post("/forgot", [
+    general_functions.urlencodedParser,
+    auth_functions.isNotLoggedIn,
+    auth_functions.checkAccountExists,
+    auth_functions.forgotPost
+  ]);
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------RESET PASSWORD-------------------------------
+
+  //to render reset pw page
+  app.get("/reset/:token", [
+    auth_functions.isNotLoggedIn,
+    auth_functions.checkToken,
+    auth_functions.renderResetPW
+  ]);
+
+  //to reset password
+  app.post("/reset/:token", [
+    general_functions.urlencodedParser,
+    auth_functions.isNotLoggedIn,
+    auth_functions.checkToken,
+    auth_functions.resetPost
+  ]);
+
+  //</editor-fold>
+
 }

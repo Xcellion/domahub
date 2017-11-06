@@ -25,6 +25,14 @@
   min-height: calc(100vh - 110px) !important;
 }
 
+.child-module {
+  border-left: 1px solid $grey;
+  padding-left: 20px;
+  &.is-disabled {
+    opacity:0.25;
+  }
+}
+
 // tutorial
 #step-1 {
   left: 20px !important;
@@ -137,7 +145,6 @@
   width: 500px;
   z-index: 200;
   &.is-active {
-    height: 100vh;
     @include translate(0,0);
   }
   @include mobile-456px {
@@ -199,6 +206,7 @@
 
 #compare-content {
   overflow-y: auto;
+  overflow-x: hidden;
   height: calc(100vh - 74px);
   .footer {
     background-color: $white;
@@ -207,7 +215,7 @@
     padding: 20px 0 !important;
   }
   @include mobile-456px {
-    height: calc(100vh - 114px);
+    height: calc(100vh - 95px);
   }
   @media screen and (min-width: 456px) and (max-width: 1305px) {
     height: calc(100vh - 116px);
@@ -272,7 +280,14 @@
 }
 
 #modules-wrapper {
-  margin-top: 75px;
+  margin-top: 125px;
+  &.is-active {
+    @include tablet-only {
+      .columns {
+        flex-direction: column;
+      }
+    }
+  }
 }
 
 #desc-avail-module {
@@ -406,30 +421,23 @@
   }
 }
 
-.button-wrapper {
+.control-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  &.is-aligned-left {
-    justify-content: flex-start;
-    @media screen and (max-width: 425px) {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
+  flex-wrap: wrap;
+  .tag,
   .button {
+    margin-bottom: 5px;
     &:first-child {
       margin-right: 10px;
     }
   }
-  @media screen and (max-width: 425px) {
+  @include mobile-456px {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    .tag,
     .button {
+      flex-grow: 1;
       &:first-child {
         margin-right: 0;
-        margin-bottom: 10px;
       }
     }
   }
@@ -438,7 +446,6 @@
 #ticker-module {
   padding:0;
   background:#FFF;
-  height:410px;
 }
 
 #ticker-wrapper {
@@ -480,6 +487,14 @@
 .ticker-icon {
   margin-top: 4px;
   vertical-align: baseline !important;
+}
+
+#traffic-module {
+  .columns {
+    @include tablet-only {
+      flex-direction: column;
+    }
+  }
 }
 
 #traffic-overlay {

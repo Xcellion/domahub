@@ -12,97 +12,103 @@
 
 <%- include("../templates/navbar", {user: user}); %>
 
-<section id="landing" class="section is-large">
+<section id="landing" class="section">
   <div class="container">
     <div class="content has-text-centered">
-      <h1 class="title is-2 is-bold">
-        We Help Domainers Profit
+      <h1 class="title is-2 is-white is-bold">
+        We Help Domainers Profit.
       </h1>
-      <p class="subtitle is-4">
+      <p class="subtitle is-4 is-whitelight">
         Build secure and user-friendly sales pages for your entire portfolio.
       </p>
     </div>
     <div class="content">
       <form id="tryit-form" action="/compare?domain_name=">
         <div class="button-wrapper">
-          <a href="/demo" tabindex="0" class="button is-stylish is-primary is-large" for="domain-name-input">
+          <a href="/demo" tabindex="0" class="button is-stylish is-accent is-large" for="domain-name-input">
             <span class="icon">
               <i class="fa fa-thumbs-up"></i>
             </span>
             <span>Try the Demo</span>
           </a>
-          <a href="/signup" tabindex="0" class="button is-stylish is-primary is-outlined is-large" for="domain-name-input">
+          <a href="/signup" tabindex="0" class="button is-stylish is-primary is-inverted is-large" for="domain-name-input">
             <span class="icon">
               <i class="fa fa-user-circle"></i>
             </span>
-            <span>Create Free Account</span>
+            <span>Sign Up Free</span>
           </a>
         </div>
       </form>
     </div>
-    <div class="content">
-      <p class="is-blacklight has-text-centered">
+    <div id="foo" class="content has-text-centered">
+      <p class="is-whitelight">
         It only takes minutes to set up!
       </p>
+      <figure class="image is-24x24">
+        <img src="/images/lib/smile_blush.png" />
+      </figure>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <div id="features" class="box">
-      <div class="content has-text-centered">
-        <h2 class="is-bold">Selling Domains the Easy Way</h2>
-        <p>
-          Learn how DomaHub can simplify your selling process.
-        </p>
-      </div>
-      <div class="columns">
-        <div class="column is-4">
-          <div class="content is-mobile has-text-centered">
-            <span class="icon is-danger is-circle is-medium margin-bottom-25">
-              <i class="fa fa-clone"></i>
-            </span>
-            <h2>Offer Forms</h2>
-            <p>
-              Verified human offers - no bots! Never receive offers below your minimum asking price.
-            </p>
-          </div>
-        </div>
-        <div class="column is-4">
-          <div class="content is-mobile has-text-centered">
-            <span class="icon is-primary is-circle is-medium margin-bottom-25">
-              <i class="fa fa-credit-card-alt"></i>
-            </span>
-            <h2>Managed Payments</h2>
-            <p>
-              Secure payment processing directly from your sales page. Never worry about getting paid.
-            </p>
-          </div>
-        </div>
-        <div class="column is-4">
-          <div class="content is-mobile has-text-centered">
-            <span class="icon is-info is-circle is-medium margin-bottom-25">
-              <i class="fa fa-magic"></i>
-            </span>
-            <h2>Custom Design</h2>
-            <p>
-              Fully customize your store's design. You don't have to know how to code at all!
-            </p>
-          </div>
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <div class="content has-text-centered">
+          <p class="subtitle is-4 is-blacklight">
+            Landing pages are a great way to engage your customers and drive sales, but they can also
+            be a hassle to set up the right way. We built DomaHub to simplify the process: everything from
+            the initial contact to the final transaction.
+          </p>
         </div>
       </div>
-      <div class="content has-text-centered">
-        <a tabindex="0" href="/features" class="is-primary is-bold">
-          <span>Learn More</span>
-          <span id="learn-more-arrow" class="icon is-small"><i class="fa fa-arrow-right"></i></span>
-        </a>
+    </div>
+    <div class="columns">
+      <div class="column is-4">
+        <div class="content has-text-centered">
+          <span class="icon is-primary is-circle is-medium margin-bottom-25">
+            <i class="fa fa-clone"></i>
+          </span>
+          <h2>Offer Forms</h2>
+          <p>
+            Verified human offers - no bots! Never receive offers below your minimum asking price.
+          </p>
+        </div>
       </div>
+      <div class="column is-4">
+        <div class="content has-text-centered">
+          <span class="icon is-primary is-circle is-medium margin-bottom-25">
+            <i class="fa fa-credit-card-alt"></i>
+          </span>
+          <h2>Managed Payments</h2>
+          <p>
+            Secure payment processing directly from your sales page. Never worry about getting paid.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="content has-text-centered">
+          <span class="icon is-primary is-circle is-medium margin-bottom-25">
+            <i class="fa fa-magic"></i>
+          </span>
+          <h2>Custom Design</h2>
+          <p>
+            Fully customize your store's design. You don't have to know how to code at all!
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="content has-text-centered">
+      <a tabindex="0" href="/features" class="button is-outlined is-primary is-bold">
+        <span>Learn More</span>
+        <span id="learn-more-arrow" class="icon is-small"><i class="fa fa-arrow-right"></i></span>
+      </a>
     </div>
   </div>
 </section>
 
-<section class="section">
+<section class="section is-medium">
   <div class="container">
     <div id="attention" class="content">
       <h2 class="is-white">Try it now for free. No risks involved!</h2>

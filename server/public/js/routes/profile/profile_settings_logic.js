@@ -2,17 +2,15 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------SHOW SECTION-------------------------------
 
-  window.scrollTo(0,0);
-
   //function to show section depending on url
   showSectionByURL();
 
-  //add to history object depending on which link i clicked
-  $(".setting-link").click(function(e){
+  //add to history object depending on which table i clicked
+  $(".tab").click(function(e){
     e.preventDefault();
 
     var temp_id = $(this).attr("id");
-    temp_id = temp_id.substr(0, temp_id.length - 5);
+    temp_id = temp_id.substr(0, temp_id.length - 4);
     if(history.pushState) {
       history.pushState(null, null, '#' + temp_id);
     }
@@ -20,130 +18,56 @@ $(document).ready(function() {
       location.hash = '#' + temp_id;
     }
     showSection(temp_id);
-
-    //hide CC form until user wants to see it
-    $("#stripe-form").addClass('is-hidden');
-    $("#checkout-button-wrapper").addClass('is-hidden');
-    $("#change-card-button").removeClass('is-hidden');
-    $('#cc-num').val("");
-    $('#cc-exp').val("");
-    $('#cc-cvc').val("");
-    $('#cc-zip').val("");
   });
 
   //</editor-fold>
 
   //<editor-fold>-------------------------------ACCOUNT INFO-------------------------------
 
-  //submit any account changes
-  $("#account-form").submit(function(e){
-    e.preventDefault();
-    submit_data = checkAccountSubmit();
-
-    if (submit_data){
-      $.ajax({
-        url: "/profile/settings",
-        method: "POST",
-        data: submit_data
-      }).done(function(data){
-        if (data.state == "success"){
-          successMessage("Successfully updated settings!");
-          user = data.user;
-        }
-        else {
-          errorMessage(data.message);
-        }
-        resetInputs($("#account-form"));
-      });
+  //to show submit/cancel when data changes for account inputs
+  $(".account-input").on("input", function(e){
+    if ($(this).val() != user[$(this).data("uservar")] && user[$(this).data("uservar")]){
+      $("#account-submit, #account-cancel").removeClass("is-hidden");
+      $(".tab").last().addClass("sub-tabs");
     }
+    else {
+      $("#account-submit, #account-cancel").addClass("is-hidden");
+      $(".tab").last().removeClass("sub-tabs");
+    }
+  });
+
+  //to submit any changes
+  $("#account-submit").on("click", function(e){
+    submitChanges(checkAccountSettings());
   });
 
   //to cancel any changes
-  $("#change-account-cancel").on("click", function(e){
-    e.preventDefault();
-    $("#change-account-submit").addClass("is-disabled");
-    $("#change-account-cancel").addClass("is-hidden");
-    $("#account-form").find("input").val("").removeClass("is-danger");
-    $("#email-input").val(user.email);
-    $("#username-input").val(user.username);
-  });
-
-  //to toggle account changes
-  $("#change-account-submit").on("click", function(e){
-    e.preventDefault();
-    $("#account-form").submit();
+  $("#account-cancel").on("click", function(e){
+    cancelChanges();
   });
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------PAYPAL INFO-------------------------------
+  //<editor-fold>-------------------------------PASSWORD CHANGE-------------------------------
 
-  //submit paypal form
-  $("#paypal-form").submit(function(e){
-    e.preventDefault();
-
-    if (validateEmail($("#paypal_email-input").val())){
-      $.ajax({
-        url: "/profile/settings",
-        method: "POST",
-        data: {
-          paypal_email: $("#paypal_email-input").val()
-        }
-      }).done(function(data){
-        if (data.state == "success"){
-          successMessage("Successfully updated settings!");
-          user = data.user;
-        }
-        else {
-          errorMessage(data.message);
-        }
-        resetInputs($("#paypal-form"));
-      })
-    }
-    else {
-      errorMessage("Invalid email address!");
-    }
+  //change password modal
+  $("#change-password-button").on("click", function(){
+    $("#change-password-modal").addClass('is-active');
+    $("#old-pw-input").focus();
   });
 
-  //to cancel paypal changes
-  $("#paypal-cancel").on("click", function(e){
-    e.preventDefault();
-    $("#paypal-submit").addClass("is-disabled");
-    $("#paypal-cancel").addClass("is-hidden");
-    $("#paypal_email-input").val(user.paypal_email).removeClass("is-danger");
+  //submit password change
+  $("#password-submit").on("click", function(e){
+    submitChanges(checkAccountPassword());
   });
 
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------EDIT INFO-------------------------------
-
-  //to highlight submit when data changes for account form
-  $(".account-form .account-input").on("input", function(e){
-    var account_form = $(this).closest(".account-form");
-    var success_button = account_form.find(".button.is-primary");
-    var cancel_button = account_form.find(".button.is-danger");
-
-    if ($(this).val() != user[$(this).attr("id").replace("-input", "")]){
-      success_button.removeClass("is-disabled");
-      cancel_button.removeClass("is-hidden");
-    }
-    else {
-      success_button.addClass("is-disabled");
-      cancel_button.addClass("is-hidden");
-    }
+  //reset password inputs on modal close
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    cancelChanges();
   });
-
-  //to edit the current section
-  $(".edit-section-button").on("click", function(e){
-    var current_section = $(this).closest(".card");
-
-    current_section.find(".input, .select").toggleClass('is-disabled');
-    current_section.find(".hidden-edit").toggleClass('is-hidden');
-    if (current_section.attr("id") == "payout-bank"){
-      $("#account_number-last4").toggleClass("is-hidden")
-    }
-    if (user.stripe_account){
-      prefillStripeInfo();
+  $(document).on("keyup", function(e) {
+    if (e.which == 27) {
+      cancelChanges();
     }
   });
 
@@ -160,16 +84,14 @@ window.onpopstate = function(event) {
 
 //function to show a specific section
 function showSection(section_id){
-  resetErrorSuccess();
-  cancelEdits();
-  $(".setting-link").removeClass("is-active");
-  $("#" + section_id + "-link").addClass("is-active");
-  temp_section = $("#" + section_id);
-  $(".card").not(temp_section).addClass("is-hidden");
+  $(".tab").removeClass("is-active");
+  $("#" + section_id + "-tab").addClass("is-active");
+  var temp_section = $("#" + section_id);
+  $(".drop-tab").not(temp_section).addClass("is-hidden");
   temp_section.removeClass("is-hidden");
 
   //get AJAX for promo codes if we havent yet
-  if (section_id == "promo") {
+  if (section_id == "premium") {
     if (!user.referrals){
       $.ajax({
         url: "/profile/getreferrals",
@@ -188,15 +110,16 @@ function showSection(section_id){
   }
 }
 
+//function to show a specific section when loading the page;
 function showSectionByURL(){
-  temp_hash = location.hash.split("#")[1];
-  array_of_ids = [];
-  $(".card").each(function(index) {
-    array_of_ids.push($(this).attr("id"));
-  });
+  var temp_hash = location.hash.split("#")[1];
+  var array_of_ids = $(".drop-tab").map(function(index) {
+    return $(this).attr("id");
+  }).toArray();
 
   if (array_of_ids.indexOf(temp_hash) == -1){
-    showSection("basic");
+    showSection("account");
+    window.history.replaceState({}, "", "/profile/settings#account");
   }
   else {
     showSection(temp_hash);
@@ -231,90 +154,88 @@ function createReferralsTable(){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//<editor-fold>-------------------------------SUBMIT ACCOUNT CHANGES-------------------------------
 
-//helper function to display/hide error messages per listing
-function errorMessage(message){
-  if (message){
-    successMessage(false);
-    $("#settings-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#settings-msg-error-text").text(message);
+//function to submit account changes AJAX
+function submitChanges(submit_data){
+  if (submit_data){
+    $("#account-submit").addClass('is-loading');
+    $.ajax({
+      url: "/profile/settings",
+      method: "POST",
+      data: submit_data
+    }).done(function(data){
+      $("#account-submit").removeClass('is-loading');
+      if (data.state == "success"){
+        successMessage("Successfully updated account settings!");
+        user = data.user;
+      }
+      else {
+        errorMessage(data.message);
+      }
+      cancelChanges();
+    });
   }
-  else {
-    $("#settings-msg-error").addClass('is-hidden').removeClass("is-active");
-  }
-}
-
-//helper function to display success messages per listing
-function successMessage(message){
-  if (message){
-    errorMessage(false);
-    $("#settings-msg-success").removeClass('is-hidden').addClass("is-active");
-    $("#settings-msg-success-text").text(message);
-  }
-  else {
-    $("#settings-msg-success").addClass('is-hidden').removeClass("is-active");
-  }
-}
-
-//function to cancel edit mode
-function cancelEdits(){
-  $(".card").find(".input, .select").not(".promo-input").addClass('is-disabled');
-  $(".card").find(".hidden-edit").addClass('is-hidden');
-}
-
-//function to reset account inputs upon cancel
-function resetInputs(form_elem){
-  form_elem.find(".input.is-danger").removeClass("is-danger");
-  form_elem.find(".button.is-primary").addClass("is-disabled");
-  form_elem.find(".button.is-danger").addClass("is-hidden");
-  form_elem.find(".hidden-edit").addClass("is-hidden");
-  form_elem.find(".account-input").addClass("is-disabled");
-  form_elem.find(".account-input").each(function(){
-    $(this).val(user[$(this).attr("id").replace("-input", "")]);
-  })
 }
 
 //function to check new account settings
-function checkAccountSubmit(){
+function checkAccountSettings(){
   //if no email is entered
   if (!validateEmail($("#email-input").val())) {
     errorMessage("Please enter a valid email address!");
-    return false;
   }
-
   //if username is not legit
-  else if (!$("#username-input").val() || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
-    errorMessage("Please enter a valid email username!");
-    return false;
-  }
-
-  //if the old password is not entered
-  else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
-    errorMessage("Please enter your password to make any changes!");
-    return false;
-  }
-
-  //if new password is too short or long
-  else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
-    errorMessage("Please enter a password at least 6 characters long!");
-    return false;
-  }
-
-  //if new passwords do not match
-  else if ($("#new-pw-input").val() && $("#new-pw-input").val() != $("#verify-pw-input").val()){
-    errorMessage("New passwords do not match!");
-    return false;
+  else if (!$("#username-input").val() || $("#username-input").val().length < 3 || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
+    errorMessage("Please enter a valid username!");
   }
   else {
     return {
       new_email: $("#email-input").val(),
-      username: $("#username-input").val(),
+      username: $("#username-input").val()
+    };
+  }
+}
+
+//function to check new account passwords
+function checkAccountPassword(){
+  //no passwords entered
+  if (!$("#old-pw-input").val()){
+    errorMessage("Please enter your old password!");
+  }
+  else if (!$("#new-pw-input").val() || !$("#verify-pw-input").val()){
+    errorMessage("Please enter a new password to change to!");
+  }
+  //if new password is too short or long
+  else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
+    errorMessage("Please enter a password at least 6 characters long!");
+  }
+  //if new passwords do not match
+  else if ($("#new-pw-input").val() && $("#new-pw-input").val() != $("#verify-pw-input").val()){
+    errorMessage("Your new passwords do not match!");
+  }
+  else {
+    return {
       password: $("#old-pw-input").val(),
       new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
     };
   }
 }
+
+//function to cancel changes
+function cancelChanges(){
+  clearNotification();
+  $("#account-submit, #account-cancel").addClass("is-hidden");
+  $(".account-input").each(function(){
+    $(this).val(user[$(this).data("uservar")]);
+  });
+
+  //clear modal inputs
+  $(".modal-input").val("");
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPERS-------------------------------
 
 //helper function to validate email address
 function validateEmail(email) {

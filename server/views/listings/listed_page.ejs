@@ -7,28 +7,28 @@
   <div class="container">
     <div class="columns master right">
       <div class="column">
+        <div class="control-wrapper">
+          <%# BUYABLE TAG %>
+          <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
+            <span id="price-tag" class="tag is-primary is-hidden is-medium"></span>
+          <% } else if (listing_info.status == 1){ %>
+            <span id="price-tag" class="tag is-primary is-medium">Now available!</span>
+          <% } else { %>
+            <span class="tag is-primary is-medium">Currently unavailable</span>
+          <% } %>
 
-        <%# BUYABLE TAG %>
-        <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
-          <span id="price-tag" class="tag is-bold is-primary is-hidden is-medium"></span>
-        <% } else if (listing_info.status == 1){ %>
-          <span id="price-tag" class="tag is-bold is-primary is-medium">Now available!</span>
-        <% } else { %>
-          <span class="tag is-primary is-medium">Currently unavailable</span>
-        <% } %>
-
-        <%# RENTABLE TAG %>
-        <% if (listing_info.status == 1 && listing_info.rentable) { %>
-          <span id="rent-price-tag" class="tag is-bold is-primary is-medium">
-            <% if (listing_info.price_rate > 0){ %>
-              For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
-            <% } else { %>
-              For rent - Free
-            <% } %>
-          </span>
-        <% } %>
-        <span id="free-until" class='is-hidden tag is-primary is-medium'></span>
-
+          <%# RENTABLE TAG %>
+          <% if (listing_info.status == 1 && listing_info.rentable) { %>
+            <span id="rent-price-tag" class="tag is-primary is-medium">
+              <% if (listing_info.price_rate > 0){ %>
+                For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
+              <% } else { %>
+                For rent - Free
+              <% } %>
+            </span>
+          <% } %>
+          <span id="free-until" class='is-hidden tag is-primary is-medium'></span>
+        </div>
         <div id="domain-display" class="content">
           <% if (listing_info.rentable) { %>
             <h1 id="domain-title" class="is-primary is-inline-block"><%= listing_info.domain_name %></h1>

@@ -1,7 +1,9 @@
-var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
-
 module.exports = {
-  handler: handler
+  handler: handler,
+
+  log : function(message){
+    console.log("\x1b[31m", "ERROR: " + message, '\x1b[0m');
+  }
 }
 
 //handle errors, either send them back json, or redirect the page
@@ -13,60 +15,53 @@ function handler(req, res, message, type) {
   }
 
   switch (type){
-    case "api":
-      console.log("API ERROR: " + message);
-      res.sendStatus(404);
-      break;
     //send direct message or redirect page
     case "json":
-      console.log("JSON ERROR: " + message);
+      console.log("\x1b[31m", "JSON ERROR: " + message, '\x1b[0m');
       res.send({
         state: "error",
         message: message
       });
       break;
+
     //redirect page
     default:
       var redirectTo = req.header("Referer") || "/login";
       req.session.message = message;
 
       switch (message){
+
+        //login errors
         case "Invalid user!":
         case "Invalid password!":
         case "Missing credentials!":
           req.session.message = "Invalid username / password!";
           break;
-        case "Invalid user / rental!":
-          req.session.message = "Invalid rental!";
-        case "Invalid rental!":
-          var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-        case "No rental information!":
-        case "Invalid rental / listing!":
-        case "Invalid rental owner!":
-        case "Invalid domain name for rental!":
+
+        //expired token
+        case "This token has expired!":
+          req.session.message = "This link has expired! Please login again to verify your email address.";
+          break;
+
+        //redirect to listing
+        case "Invalid rental!":                   //not a number
+        case "Invalid domain name for rental!":   //wrong domain for rental
           redirectTo = RemoveLastDirectoryPartOf(req.path);
           break;
-        case "Cannot activate through URL!":
-        case "Invalid stripe token!":
-          redirectTo = "/profile";
-          break;
-        case "Invalid rental data!":
-          redirectTo = req.path;
-          break;
-        case "Invalid listing!":
-        case "Invalid domain name!":
-        case "Invalid listing activation!":
-        case "DNS error!":
+
+        //redirect to nothing
+        case "Invalid listing!":                //db error
+        case "Invalid domain name!":            //not ascii
           delete req.session.message;
           redirectTo = "/nothinghere";
           break;
-        case "Signup error!":
-        case "Invalid price!":
+
+
         default:
           break;
       }
 
-      console.log("ERROR: " + message + " Sending back to " + redirectTo + " | Requested " + req.originalUrl);
+      console.log("\x1b[31m", "ERROR: " + message + " Sending back to " + redirectTo + " | Requested " + req.originalUrl , '\x1b[0m');
       res.redirect(redirectTo);
       break;
   }
