@@ -61,9 +61,12 @@
     +box-shadow(0,0,0,$black,0)
   &.is-icon
     border: none
+    .icon
+      margin-left: 0 !important
+      margin-right: 0 !important
     &:hover,
     &:focus
-      background-color: $border
+      background-color: $lighter
 
   // Colors
   @each $name, $pair in $colors

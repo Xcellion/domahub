@@ -110,7 +110,7 @@
   justify-content: space-between
   .nav
     background: none
-    box-shadow: 0 1px 0 rgba($border, 0.3)
+    position: relative
   .tabs
     ul
       border-bottom: none
@@ -127,12 +127,10 @@
         strong
           color: inherit
       .subtitle
-        color: rgba($color-invert, 0.9)
+        color: rgba($color-invert, 0.75)
         a,
         strong
           color: $color-invert
-      .nav
-        box-shadow: 0 1px 0 rgba($color-invert, 0.2)
       .nav-menu
         +mobile
           background-color: $color
@@ -144,25 +142,21 @@
           color: $color-invert
       .tabs
         a
+          border-bottom: none
           color: $color-invert
-          opacity: 0.5
+          opacity: 0.75
           &:hover
             opacity: 1
         li
+          border-bottom: none
+          padding: 10px 0
+          &:hover
+            background-color: $color-invert
+            border-color: $color-invert
+            color: $color
           &.is-active a
+            border-bottom: none
             opacity: 1
-        &.is-boxed,
-        &.is-toggle
-          a
-            color: $color-invert
-            &:hover
-              background-color: $border
-          li.is-active a
-            &,
-            &:hover
-              background-color: $color-invert
-              border-color: $color-invert
-              color: $color
       // Modifiers
       &.gradient-left-right
         $gradient-top-left: darken(saturate(adjust-hue($color, -10deg), 10%), 10%)
@@ -190,16 +184,6 @@
           .nav-item
             border-top-color: rgba($color-invert, 0.2)
   // Sizes
-  &.is-header
-    +tablet
-      .hero-body
-        padding-bottom: 0px
-        padding-top: 80px
-  &.is-carousel
-    +tablet
-      .hero-body
-        padding-bottom: 25px
-        padding-top: 60px
   &.is-small
     +tablet
       .hero-body

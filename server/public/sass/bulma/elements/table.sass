@@ -5,7 +5,6 @@
   border-spacing: 0px
   border: 1px solid $border
   box-shadow: none
-  color: $text
   margin-bottom: 20px
   width: 100%
   &.is-fixed
@@ -16,6 +15,15 @@
     td,
     th
       border-bottom: none
+  &.is-transparent-head
+    background-color: transparent
+    border: none
+    thead
+      background-color: transparent
+      th
+        border-bottom: none
+    tbody
+      background-color: #fff
   td,
   th
     text-align: left
