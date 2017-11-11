@@ -1,4 +1,7 @@
 $(document).ready(function() {
+
+  //<editor-fold>-------------------------------PROFILE DROPDOWNS--------------------------------
+
   //mobile view nav menu
   $(".nav-toggle").on("click", function() {
     $(this).toggleClass("is-active");
@@ -14,6 +17,10 @@ $(document).ready(function() {
       }
     }
   });
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------MODAL--------------------------------
 
   //toggle user drop down menu on icon button click
   $("#user-dropdown-button").on("click", function() {
@@ -32,7 +39,19 @@ $(document).ready(function() {
     $('.modal').removeClass('is-active');
   });
 
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------LEFT MENU VISUAL--------------------------------
+
   leftMenuActive();
+
+  //hide upgrade link on left nav if already premium
+  if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+    $("#nav-premium-link").removeClass('is-hidden');
+  }
+
+  //</editor-fold>
+
 });
 
 //<editor-fold>-------------------------------URL HELPER FUNCTIONS--------------------------------

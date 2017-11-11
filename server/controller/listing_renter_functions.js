@@ -99,7 +99,7 @@ module.exports = {
     }
     else {
 
-      //function to create the new rental info db object
+      //create the new rental info db object
       var create_new_rental_info = function(){
         req.session.new_rental_info.rental_db_info = {
           date_created: new Date().getTime(),
@@ -476,7 +476,7 @@ module.exports = {
     }
     else {
 
-      //function to edit the rental info db object
+      //edit the rental info db object
       var edit_rental_info_db = function(){
         //if type exists
         if (req.body.type){
@@ -514,7 +514,7 @@ module.exports = {
     }
   },
 
-  //function to deactivate a rental
+  //deactivate a rental
   deactivateRental : function(req, res, next){
     console.log("F: Deactivating rental...");
     req.session.rental_object.db_object.status = 0;
@@ -828,7 +828,7 @@ module.exports = {
     next();
   },
 
-  //function to checkout track
+  //checkout track
   addToCheckoutAction : function(req, res, next){
     var valid_ids = [
       'login-navbar',
@@ -896,7 +896,7 @@ module.exports = {
     }
   },
 
-  //function to check if session listing_info exists and get listing info if it doesnt match with current domain_name
+  //check if session listing_info exists and get listing info if it doesnt match with current domain_name
   checkSessionListingInfoPost : function(req, res, next){
     console.log("F: Checking if session listing info domain is same as posted domain...");
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
@@ -1167,7 +1167,7 @@ function joinRentalTimes(rental_times){
 
 //<editor-fold>-------------------------------HELPER FUNCTIONS-------------------------------
 
-//function to get a verified listing's details
+//get a verified listing's details
 function getVerifiedListing(req, res, domain_name, callback_error, callback_success){
   listing_model.getVerifiedListing(domain_name, function(result){
     if (result.state=="error"){error.handler(req, res, "Invalid listing!");}

@@ -217,7 +217,7 @@ function getTableListingInfo(){
     if (temp_row.find(".domain-name-input").val() && !temp_row.find(".domain-name-input").hasClass('is-disabled')){
       var row_obj = {
         domain_name : temp_row.find(".domain-name-input").val().replace(/\s/g, ''),
-        min_price : temp_row.find(".min-price-input").val()
+        min_price : (temp_row.find(".min-price-input").val() == "") ? 0 : temp_row.find(".min-price-input").val()
       };
       temp_array.push(row_obj);
     }
