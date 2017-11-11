@@ -109,7 +109,7 @@ module.exports = function(app){
     }
 
     var insertCoupons = function(codes, number, cb){
-      Account.createCouponCodes(codes, function(result){
+      account_model.createCouponCodes(codes, function(result){
         if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
           console.log("Duplicate coupon!");
           insertCoupons(createUniqueCoupons(number), number);

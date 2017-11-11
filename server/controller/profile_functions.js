@@ -26,7 +26,7 @@ var validator = require("validator");
 
 module.exports = {
 
-  //<editor-fold>----------------------------------------------------------------------GET ACCOUNT INFO
+  //<editor-fold>-------------------------------------GET ACCOUNT INFO-------------------------------
 
   //gets all listings for a user
   getAccountListings : function(req, res, next){
@@ -52,7 +52,7 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>----------------------------------------------------------------------MULTI
+  //<editor-fold>-------------------------------------MULTI-------------------------------
 
   //check that the requesting user owns the domain to be deleted
   checkPostedDeletionRows : function(req, res, next){
@@ -323,9 +323,9 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>----------------------------------------------------------------------UPDATE ACCOUNT
+  //<editor-fold>-------------------------------------UPDATE ACCOUNT-------------------------------
 
-  //function to check account settings posted
+  //check account settings posted
   checkAccountSettings: function(req, res, next){
     console.log('F: Checking posted account settings...');
 
@@ -370,12 +370,12 @@ module.exports = {
     }
   },
 
-  //function to update account settings on a get
+  //update account settings on a get
   updateAccountSettingsGet : function(req, res, next){
 
     //any changes from other routes (stripe upgrade)
     if (req.session.new_account_info){
-      console.log('F: Updating account settings...');
+      console.log('F: Updating account settings (GET)...');
 
       var new_account_info = {};
       for (var x in req.session.new_account_info){
@@ -402,15 +402,15 @@ module.exports = {
 
   },
 
-  //function to update account settings on a post
+  //update account settings on a post
   updateAccountSettingsPost : function(req, res, next){
-    console.log('F: Updating account settings...');
+    console.log('F: Updating account settings (POST)...');
 
     var new_account_info = {};
 
     //any posted changes
     if (req.body.new_email){
-      new_account_info.email = req.body.new_email;
+      new_account_info.email = req.body.new_email.toLowerCase();
     }
     if (req.body.username){
       new_account_info.username = req.body.username.replace(/\s/g, '');
@@ -419,7 +419,10 @@ module.exports = {
       new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
     }
     if (req.body.paypal_email){
-      new_account_info.paypal_email = req.body.paypal_email;
+      new_account_info.paypal_email = req.body.paypal_email.toLowerCase();
+    }
+    if (req.body.payoneer_email){
+      new_account_info.payoneer_email = req.body.payoneer_email.toLowerCase();
     }
 
     //any changes from other routes (stripe upgrade)
@@ -460,35 +463,12 @@ module.exports = {
 
   },
 
-  //function to update for managed stripe
-  updateAccountStripe : function(req, res, next){
-    console.log('F: Updating account Stripe settings...');
-
-    account_model.updateAccount({
-      stripe_account : req.session.stripe_results.id,
-      stripe_secret : req.session.stripe_results.keys.secret,
-      stripe_public : req.session.stripe_results.keys.publishable,
-      type: 2
-    }, req.user.email, function(result){
-      if (result.state=="error"){
-        error.handler(req, res, result.info, "json");
-      }
-      else {
-        req.user.stripe_account = req.session.stripe_results.id;
-        delete req.session.stripe_results;
-        res.json({
-          state: "success",
-          user: req.user
-        });
-      }
-    });
-  },
-
   //</editor-fold>
 
-  //<editor-fold>----------------------------------------------------------------------RENDERS
+  //<editor-fold>-------------------------------------RENDERS-------------------------------
 
   renderDashboard : function(req, res, next){
+    console.log("F: Rendering profile dashboard...");
     res.render("profile/profile_dashboard.ejs", {
       user: req.user,
       listings: req.user.listings
@@ -496,6 +476,7 @@ module.exports = {
   },
 
   renderMyListings: function(req, res){
+    console.log("F: Rendering profile my listings...");
     res.render("profile/profile_mylistings.ejs", {
       user: req.user,
       listings: req.user.listings,
@@ -505,13 +486,14 @@ module.exports = {
   },
 
   renderSettings: function(req, res){
+    console.log("F: Rendering profile settings...");
     res.render("profile/profile_settings.ejs", {
       user: req.user,
       listings: req.user.listings
     });
   },
 
-  //function to redirect to appropriate profile page
+  //redirect to appropriate profile page
   redirectProfile : function(req, res, next){
     console.log("F: Redirecting to appropriate profile page...");
     if (req.path.indexOf("mylistings") != -1){
@@ -527,12 +509,12 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>----------------------------------------------------------------------PROMO CODE
+  //<editor-fold>-------------------------------------PROMO CODE-------------------------------
 
-  //function to get all referrals for a user
-  getReferralsFromUser : function(req, res, next){
+  //get all referrals for a user
+  getCouponsAndReferralsForUser : function(req, res, next){
     console.log("F: Getting all referrals made by user...");
-    account_model.getReferralsFromUser(req.user.id, function(result){
+    account_model.getCouponsAndReferralsForUser(req.user.id, function(result){
       if (result.state == "success"){
         req.user.referrals = result.info;
       }
@@ -704,7 +686,7 @@ module.exports = {
 
 }
 
-//<editor-fold>----------------------------------------------------------------------HELPERS
+//<editor-fold>-------------------------------------HELPERS-------------------------------
 
 //helper function to update req.user.listings after deleting
 function updateUserListingsObjectDelete(user_listings, to_delete_formatted){

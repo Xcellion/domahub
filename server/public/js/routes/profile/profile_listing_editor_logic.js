@@ -70,12 +70,7 @@ function updateEditorDomains(selected_domain_ids){
       for (var x = 0 ; x < selected_domain_names.length ; x++){
         domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
       }
-      $(".title-wrapper").append(' \
-      <span class="current-domain-list icon is-tooltip" \
-      data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" \
-      data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
-      </span> \
-      ');
+      $(".title-wrapper").append('<span class="current-domain-list icon is-tooltip" data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" data-balloon-pos="down"> <i class="fa fa-question-circle"></i> </span> ');
     }
   }
 }
