@@ -20,6 +20,8 @@
       var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
     </script>
 
+		<%- include("../templates/notifications.ejs");%>
+
 		<div id="contact-success" class="is-hidden notification is-popup is-primary">
 	    <button class="delete"></button>
 	    Success! Please check your email for further instructions.

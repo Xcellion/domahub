@@ -87,7 +87,8 @@ $(document).ready(function() {
 
             if (data.state == "success"){
               if (type_of_submit == "offer"){
-                $("#contact-success").removeClass('is-hidden').addClass('is-active');
+                clearNotification();
+                successMessage("Success! Please check your email for further instructions.");
                 $("#buy-now-form").off();
               }
               else {
@@ -95,9 +96,9 @@ $(document).ready(function() {
               }
             }
             else {
+              clearNotification();
               $(".contact-input").removeClass('is-disabled');
-              $("#contact-error").removeClass('is-hidden').addClass('is-active');
-              $("#contact-error-message").text(data.message);
+              errorMessage(data.message);
             }
           });
         }
@@ -343,8 +344,8 @@ function checkPhone(){
     return true;
   }
   else {
-    $("#contact-error-message").text("Please enter a real phone number! Did you select the correct country for your phone number?");
-    $("#contact-error").removeClass('is-hidden').addClass('is-active');
+    clearNotification();
+    errorMessage("Please enter a real phone number! Did you select the correct country for your phone number?")
   }
 }
 

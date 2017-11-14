@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  //submit form
   $('#forgot-form').submit(function(event){
     event.preventDefault();
     $("#forgot-button").addClass('is-loading');
@@ -13,13 +14,13 @@ $(document).ready(function() {
       $("#email").val("");
 
       if (data.state == "success"){
-        $("#message").text("Success! Please check your email for further instructions.");
+        successMessage(data.message);
         $("#form_to_hide").hide();
         $("#accept").show();
       }
       else {
         $("#forgot-button").removeClass('is-loading');
-        $("#message").text("That was an invalid email address! Please enter a correct email address.");
+        errorMessage(data.message);
       }
     });
   });

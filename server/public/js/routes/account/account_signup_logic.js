@@ -1,11 +1,10 @@
 $(document).ready(function() {
 
+  //display any message from the server
+  loadNotification();
+
   //reset message, prevent space
   $("input").keydown(function(e) {
-    if ($("#message").hasClass('is-danger')){
-      $("#message").text("Create a new account below.").removeAttr("style");
-    }
-
     if (e.keyCode == 32){
       e.preventDefault();
       return false;
@@ -85,16 +84,12 @@ $(document).ready(function() {
   $('#target').on("submit", function(event){
     //passwords dont match
     if ($("#pw-input").val() != $("#verify-pw").val()){
-      $("#message").stop().fadeOut(100, function(){
-        $("#message").addClass('is-danger').html("Your passwords do not match!").fadeIn(100);
-      });
+      errorMessage("Your passwords do not match!");
       return false;
     }
     //if recaptcha is not done
     else if (!validateCaptcha()){
-      $("#message").stop().fadeOut(100, function(){
-        $("#message").addClass('is-danger').html("Please prove that you are not a robot!").fadeIn(100);
-      });
+      errorMessage("Please prove that you are not a robot!");
       return false;
     }
     //successful submission!
@@ -102,6 +97,7 @@ $(document).ready(function() {
       $("#signup-login-button").addClass('is-loading');
     }
   });
+
 });
 
 //to validate recaptcha client side
