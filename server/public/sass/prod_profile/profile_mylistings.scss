@@ -22,6 +22,10 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.remove-margin-bottom-content {
+  margin-bottom:0 !important;
+}
+
 .company-logo {
   margin-bottom: 30px;
 }

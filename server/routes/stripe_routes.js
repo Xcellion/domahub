@@ -5,7 +5,10 @@ var stripe_functions = require('../controller/stripe_functions.js');
 
 //</editor-fold>
 
-module.exports = function(app, db){
+//command to use ultrahook
+//ultrahook stripe 8080/stripe/webhook
+
+module.exports = function(app){
 
   //<editor-fold>----------------------------------------------------------------------STRIPE ROUTES
 

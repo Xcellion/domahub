@@ -3,6 +3,7 @@
 var general_functions = require('../controller/general_functions.js');
 var auth_functions = require('../controller/auth_functions.js');
 var profile_functions = require('../controller/profile_functions.js');
+var owner_functions = require('../controller/listing_owner_functions.js');
 var stripe_functions = require('../controller/stripe_functions.js');
 
 //</editor-fold>
@@ -14,7 +15,7 @@ module.exports = function(app){
   //dashboard
   app.get("/profile/dashboard", [
     auth_functions.checkLoggedIn,
-    stripe_functions.getAccountInfo,
+    stripe_functions.getStripeAccount,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     profile_functions.updateAccountSettingsGet,
@@ -30,6 +31,7 @@ module.exports = function(app){
   app.get("/profile/mylistings", [
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
+    stripe_functions.getStripeSubscription,
     profile_functions.renderMyListings
   ]);
 
@@ -91,9 +93,10 @@ module.exports = function(app){
   app.get("/profile/settings", [
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
-    stripe_functions.getAccountInfo,
-    stripe_functions.getTransfers,
+    stripe_functions.getStripeAccount,
     stripe_functions.getStripeCustomer,
+    stripe_functions.getStripeCustomerCharges,
+    stripe_functions.getStripeCustomerNextInvoice,
     stripe_functions.getStripeSubscription,
     profile_functions.updateAccountSettingsGet,
     profile_functions.renderSettings
@@ -107,6 +110,13 @@ module.exports = function(app){
     profile_functions.updateAccountSettingsPost
   ]);
 
+  //get all existing transactions for user (sales / rentals)
+  app.post("/profile/gettransactions", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    stripe_functions.getTransactions
+  ]);
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------PROMO CODES-------------------------------
@@ -115,7 +125,7 @@ module.exports = function(app){
   app.post("/profile/getreferrals", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    profile_functions.getReferralsFromUser,
+    profile_functions.getCouponsAndReferralsForUser,
   ]);
 
   //posting a new promo code
@@ -148,66 +158,52 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.getExistingCoupon,
     stripe_functions.createStripeSubscription,
+    stripe_functions.getStripeCustomerCharges,
+    stripe_functions.getStripeCustomerNextInvoice,
     profile_functions.updateAccountSettingsPost
   ]);
 
-  //cancel renewal of premium
+  //cancel premium
   app.post("/profile/downgrade", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    stripe_functions.cancelStripeSubscription
+    stripe_functions.cancelStripeSubscription,
+    profile_functions.getAccountListings
   ]);
 
   //</editor-fold>
 
   //<editor-fold>-------------------------------STRIPE TRANSFER-------------------------------
 
+  //post to create new stripe managed account or update stripe managed account
+  app.post("/profile/settings/payout", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    stripe_functions.getStripeAccount,
+    stripe_functions.checkPayoutPersonal,
+    stripe_functions.checkPayoutAddress,
+    stripe_functions.createStripeAccount,
+    profile_functions.updateAccountSettingsPost
+  ]);
+
+  //post to create new stripe managed account or update stripe managed account
+  app.post("/profile/settings/bank", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    stripe_functions.getStripeAccount,
+    stripe_functions.checkPayoutBank,
+    stripe_functions.createStripeBank
+  ]);
+
   //transfer to bank
   app.post("/profile/transfer", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    stripe_functions.getAccountInfo,
-    stripe_functions.getTransfers,
+    stripe_functions.getStripeAccount,
+    stripe_functions.getTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     stripe_functions.transferMoney
-  ]);
-
-  //post to create new stripe managed account or update address of old
-  app.post("/profile/settings/payout/address", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.checkPayoutAddress,
-    stripe_functions.createManagedAccount,
-    profile_functions.updateAccountStripe
-  ]);
-
-  //post to update personal info of old stripe managed account
-  app.post("/profile/settings/payout/personal", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.checkManagedAccount,
-    stripe_functions.checkPayoutPersonal,
-    stripe_functions.updateStripePersonal,
-    profile_functions.updateAccountStripe
-  ]);
-
-  //post to update personal info of existing stripe managed account
-  app.post("/profile/settings/payout/personal", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.checkManagedAccount,
-    stripe_functions.checkPayoutPersonal,
-    stripe_functions.updateStripePersonal
-  ]);
-
-  //post to update bank info of existing stripe managed account
-  app.post("/profile/settings/payout/bank", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.checkManagedAccount,
-    stripe_functions.checkPayoutBank,
-    stripe_functions.updateStripeBank
   ]);
 
   //</editor-fold>

@@ -22,6 +22,16 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+#settings-toolbar .tabs {
+  overflow:visible;
+  overflow-x:visible;
+}
+
+.earnings-divider {
+  padding-top:10px;
+  border-top:1px solid $border;
+}
+
 .company-logo {
   margin-bottom: 30px;
 }
@@ -54,6 +64,10 @@
   margin: 5px 0;
   color: $text-light;
   line-height: 1.5;
+
+  &.is-inline{
+    display:inline-block !important;
+  }
 }
 
 .sub-tabs {
@@ -75,4 +89,43 @@
 
 .card-header.is-block {
   display:block;
+}
+
+.nothing-exists-row {
+  padding:25px;
+  img {
+    width:100px;
+  }
+  p {
+    margin-top:25px;
+  }
+}
+
+.no-border-bottom {
+  border-bottom-width: 0px !important;
+  margin-bottom:0;
+}
+
+.remove-margin-bottom-content {
+  margin-bottom:0 !important;
+}
+
+#transactions-info {
+  li {
+    .icon {
+      margin-right: 10px;
+    }
+    &:last-child {
+      display: flex;
+    }
+  }
+}
+
+.modal-content {
+  background-color: $white;
+  border-radius: $radius-large;
+  padding: 20px;
+  &.is-small {
+    max-width: 300px !important;
+  }
 }

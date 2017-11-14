@@ -49,15 +49,18 @@
           <span class="icon is-white"><i class="fa fa-cogs"></i></span>
           <p class="is-white is-hidden-tablet-only">Account Settings</p>
         </a>
-        <% if (!user.stripe_subscription_id) { %>
-          <ul class="is-hidden-tablet-only">
-            <li>
-              <a tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme">
-                <small class="is-white">Upgrade to Premium</small>
-              </a>
-            </li>
-          </ul>
-        <% } %>
+        <ul class="is-hidden-tablet-only">
+          <li>
+            <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-hidden">
+              <small class="is-white">
+                Upgrade to Premium
+                <span class="icon is-small">
+                  <i class="fa fa-diamond"></i>
+                </span>
+              </small>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </aside>
