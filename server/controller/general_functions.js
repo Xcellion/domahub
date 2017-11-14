@@ -15,6 +15,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true });
 module.exports = {
 
   urlencodedParser : urlencodedParser,
+  jsonParser : jsonParser,
 
   //send json success
   sendSuccess : function(req, res, next){

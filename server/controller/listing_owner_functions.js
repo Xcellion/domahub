@@ -32,14 +32,14 @@ module.exports = {
 
   //<editor-fold>-------------------------------RENDERS-------------------------------
 
-  //function to display the create listing choice page
+  //display the create listing choice page
   renderCreateListing : function(req, res, next){
     res.render("listings/listing_create.ejs", {
       user: req.user
     });
   },
 
-  //function to display the create multiple listing page
+  //display the create multiple listing page
   renderCreateListingMultiple : function(req, res, next){
     res.render("listings/listing_create_multiple.ejs", {
       user: req.user
@@ -52,7 +52,7 @@ module.exports = {
 
     //<editor-fold>-------------------------------CREATE LISTING------------------------------
 
-    //function to check all posted domain names
+    //check all posted domain names
     checkPostedDomainNames : function(req, res, next){
       console.log("F: Checking all posted domain names...");
       var domain_names = req.body.domain_names;
@@ -114,7 +114,7 @@ module.exports = {
       }
     },
 
-    //function to check all posted listing info
+    //check all posted listing info
     checkPostedListingInfoForCreate : function(req, res, next){
       console.log("F: Checking all posted listing info...");
 
@@ -138,19 +138,21 @@ module.exports = {
         var parsed_domain = parseDomain(posted_domains[x].domain_name);
 
         //check domain
-        if (!validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
+        if (parsed_domain == null || !validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
           bad_reasons.push("Invalid domain name!");
         }
         //subdomains are not allowed
-        if (parsed_domain != null && parsed_domain.subdomain != ""){
-          bad_reasons.push("No sub-domains!");
+        if (parsed_domain != null){
+          if (parsed_domain.subdomain != ""){
+            bad_reasons.push("No sub-domains!");
+          }
         }
         //check for duplicates among valid FQDN domains
         if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
           bad_reasons.push("Duplicate domain name!");
         }
         //check price rate
-        if (!validator.isInt(posted_domains[x].min_price, {min: 0}) && posted_domains[x].min_price != ""){
+        if (!validator.isInt(posted_domains[x].min_price, {min: 0})){
           bad_reasons.push("Invalid price!");
         }
         //domain is too long
@@ -178,7 +180,7 @@ module.exports = {
             req.user.id,
             date_now,
             (req.user.stripe_subscription_id) ? posted_domains[x].domain_name : posted_domains[x].domain_name.toLowerCase(),
-            posted_domains[x].min_price,
+            parseFloat(posted_domains[x].min_price),
             Descriptions.random()    //random default description
           ]);
 
@@ -206,14 +208,11 @@ module.exports = {
 
     //<editor-fold>-------------------------------UPDATE LISTING------------------------------
 
-    //function to check if posted selected IDs are numbers
+    //check if posted selected IDs are numbers
     checkSelectedIDs : function(req, res, next){
       console.log("F: Checking posted domain IDs...");
       var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
-      if (!selected_ids){
-        error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
-      }
-      else if (selected_ids.length <= 0){
+      if (!selected_ids || selected_ids.length <= 0){
         error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
       }
       else {
@@ -233,7 +232,7 @@ module.exports = {
       }
     },
 
-    //function to check the size of the image uploaded
+    //check the size of the image uploaded
     checkImageUploadSize : function(req, res, next){
       var premium = req.user.stripe_subscription_id;
       var upload_path = (process.env.NODE_ENV == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
@@ -276,6 +275,7 @@ module.exports = {
 
       upload_img(req, res, function(err){
         if (err){
+          error.log(err);
           if (err.code == "LIMIT_FILE_SIZE"){
             error.handler(req, res, 'File is bigger than 1 MB!', "json");
           }
@@ -286,7 +286,6 @@ module.exports = {
             error.handler(req, res, "not-premium", "json");
           }
           else {
-            console.log(err);
             error.handler(req, res, 'Something went wrong with the upload!', "json");
           }
         }
@@ -296,7 +295,7 @@ module.exports = {
       });
     },
 
-    //function to check the user image and upload to imgur
+    //check the user image and upload to imgur
     checkListingImage : function(req, res, next){
       if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
 
@@ -372,6 +371,8 @@ module.exports = {
 
     //check for verified, ownership, and purchased for multi listing edit
     checkPostedListingInfoMulti : function(req, res, next){
+      console.log("F: Checking listings for ownership, verification, or sold...");
+
       var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
       var owned_domains = 0;
       var verified_domains = 0;
@@ -406,7 +407,6 @@ module.exports = {
           }
         }
       }
-      console.log(verified_domains, accepted_domains, deposited_domains)
 
       //all good!
       var error_message_plural = (req.body.selected_ids.length == 1) ? "this domain" : "some or all of these domains";
@@ -431,7 +431,7 @@ module.exports = {
       }
     },
 
-    //function to check that the listing is verified
+    //check that the listing is verified
     checkListingVerified : function(req, res, next){
       console.log("F: Checking if listing is a verified listing...");
       if (getUserListingObjByName(req.user.listings, req.params.domain_name).verified != 1){
@@ -442,7 +442,7 @@ module.exports = {
       }
     },
 
-    //function to check that the user owns the listing
+    //check that the user owns the listing
     checkListingOwnerPost : function(req, res, next){
       console.log("F: Checking if current user is the owner...");
       if (getUserListingObjByName(req.user.listings, req.params.domain_name).owner_id != req.user.id){
@@ -453,7 +453,7 @@ module.exports = {
       }
     },
 
-    //function to check that the user owns the listing
+    //check that the user owns the listing
     checkListingOwnerGet : function(req, res, next){
       console.log("F: Checking if current user is listing owner...");
       listing_model.checkListingOwner(req.user.id, req.params.domain_name, function(result){
@@ -466,7 +466,7 @@ module.exports = {
       });
     },
 
-    //function to check if listing has been purchased
+    //check if listing has been purchased
     checkListingPurchased : function(req, res, next){
       console.log("F: Checking if the listing was already purchased or accepted...");
       var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
@@ -481,7 +481,7 @@ module.exports = {
       }
     },
 
-    //function to check the posted status change of a listing
+    //check the posted status change of a listing
     checkListingStatus : function(req, res, next){
       console.log("F: Checking posted listing status...");
 
@@ -516,13 +516,15 @@ module.exports = {
               if (err) {
                 reject({
                   err: err,
-                  domain_name : listing_obj.domain_name
+                  domain_name : listing_obj.domain_name,
+                  listing_id : listing_obj.id
                 });
               }
               else {
                 resolve({
+                  address : address,
                   domain_name : listing_obj.domain_name,
-                  address : address
+                  listing_id : listing_obj.id
                 });
               }
             });
@@ -559,11 +561,11 @@ module.exports = {
                      still_pointing.push(x);
                    }
                    else {
-                     not_pointing.push(results[x].value.domain_name);
+                     not_pointing.push(results[x].value.listing_id.toString());
                    }
                  }
                  else {
-                   not_pointing.push(results[x].reason.domain_name);
+                   not_pointing.push(results[x].reason.listing_id.toString());
                  }
                }
 
@@ -577,6 +579,7 @@ module.exports = {
                  }, function(result){
                    if (result.state == "error") { error.handler(req, res, result.info, "json"); }
                    else {
+                     //for the next function
                      req.session.new_listing_info = {
                        verified: null,
                        status: 0
@@ -610,7 +613,7 @@ module.exports = {
       }
     },
 
-    //function to check and reformat new listings details excluding image
+    //check and reformat new listings details excluding image
     checkListingPremiumDetails : function(req, res, next){
       //premium design checks
       if (req.user.stripe_subscription_id){
@@ -790,7 +793,7 @@ module.exports = {
       }
     },
 
-    //function to check and reformat new listings details excluding image
+    //check and reformat new listings details excluding image
     checkListingDetails : function(req, res, next){
       console.log("F: Checking posted listing details...");
 
@@ -883,7 +886,7 @@ module.exports = {
       }
     },
 
-    //function to turn off specific modules if it's contents are all hidden (and vice versa)
+    //turn off specific modules if it's contents are all hidden (and vice versa)
     checkListingModules : function(req, res, next){
       console.log("F: Checking if we should turn off specific modules if contents are empty...");
       var current_listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
@@ -946,7 +949,7 @@ module.exports = {
 
   //<editor-fold>-------------------------------CREATES/UPDATES------------------------------
 
-  //function to create the batch listings once done
+  //create listings
   createListings : function(req, res, next){
     console.log("F: Creating listings to check for any existing...");
 
@@ -1007,7 +1010,7 @@ module.exports = {
     });
   },
 
-  //function to update a listing
+  //update a listing
   updateListingsInfo: function(req, res, next){
 
     //check if we're changing anything
@@ -1020,6 +1023,7 @@ module.exports = {
     else {
       console.log("F: Updating domain details...");
       var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
+
       listing_model.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
         if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
         else {
@@ -1033,7 +1037,7 @@ module.exports = {
     }
   },
 
-  //function to delete a listing
+  //delete a listing
   deleteListing: function(req, res, next){
     var listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
     listing_model.deleteListing(listing_info.id, function(result){
@@ -1048,7 +1052,7 @@ module.exports = {
     });
   },
 
-  //function to verify ownership of a listing
+  //verify ownership of a listing
   verifyListing: function(req, res, next){
     console.log("F: Attempting to verify this listing...");
 

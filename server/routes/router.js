@@ -18,7 +18,7 @@ module.exports = function(app){
   require('./listing_routes.js')(app);
 
   //stripe web hooks
-  // require('./stripe_routes.js')(app);
+  require('./stripe_routes.js')(app);
 
   //ico, rental, 404
   require('./final_routes.js')(app);
