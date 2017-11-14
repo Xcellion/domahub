@@ -140,12 +140,12 @@ function showNotifications() {
 
   //if stripe payout settings are not set
   if (!user.stripe_account) {
-    appendNotification("<a tabindex='0' href='/profile/settings#payout-address'>Complete payout settings</a>");
+    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Complete payout settings</a>");
   }
 
   //if bank account is not connected
   if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
-    appendNotification("<a tabindex='0' href='/profile/settings#payout-bank'>Connect a bank account</a>");
+    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Connect a bank account</a>");
   }
 
   //if not premium
@@ -166,9 +166,14 @@ function showNotifications() {
 
 //when notifications tray is empty
 function calcNotificationCounter() {
-  if ($("#notification-tray li").length > 0) {
+  var notification_length = $("#notification-tray li").length;
+  if (notification_length > 0) {
     $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications</p>");
-    $("#notification-counter").removeClass("is-hidden").text($("#notification-tray li").length);
+    $("#notification-counter").removeClass("is-hidden").text(notification_length);
+    var page_title = document.title.split(" - ");
+    if (page_title){
+      document.title = page_title[0] + " (" + notification_length + ") - " + page_title[1];
+    }
   }
   else {
     $("#notification-tray").append(

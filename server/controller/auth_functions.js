@@ -309,12 +309,15 @@ module.exports = {
   loginPost: function(req, res, next){
     var referer = req.header("Referer").split("/");
     var redirectTo = "";
-    //redirect to profile unless coming from a listing
+    //redirect to profile unless coming from a listing (or listings create)
     if (referer.indexOf('rentalpreview') != -1 || referer.indexOf("profile") != -1){
       redirectTo = req.header("Referer");
     }
     else if (referer.indexOf("upgrade") != -1 || referer.indexOf("premium") != -1){
       redirectTo = "/profile/settings#premium";
+    }
+    else if (referer.indexOf("create") != -1 && referer.indexOf("listings") != -1 ){
+      redirectTo = "/listings/create";
     }
     else {
       redirectTo = "/profile/dashboard";

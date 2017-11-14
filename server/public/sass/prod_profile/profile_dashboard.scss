@@ -18,6 +18,11 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
+}
+
 .heading {
   display: block;
   letter-spacing: 1px;
