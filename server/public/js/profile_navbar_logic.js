@@ -56,7 +56,7 @@ $(document).ready(function() {
 
 });
 
-//<editor-fold>-------------------------------URL HELPER FUNCTIONS--------------------------------
+//<editor-fold>----------------------------------URL HELPER FUNCTIONS-------------------------
 
 //add active to left menu
 function leftMenuActive(){
@@ -128,7 +128,7 @@ function removeURLParameter(parameter) {
 
 //</editor-fold>
 
-//<editor-fold>----------------------------------DROPDOWN MENUS-------------------------
+//<editor-fold>----------------------------------NOTIFICATIONS-------------------------
 
 //populate the notifications tray
 function showNotifications() {
@@ -144,12 +144,12 @@ function showNotifications() {
   }
 
   //if bank account is not connected
-  if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
+  if (!user.stripe_bank) {
     appendNotification("<a tabindex='0' href='/profile/settings#payment'>Connect a bank account</a>");
   }
 
   //if not premium
-  if (!user.stripe_subscription_id){
+  if (!user.stripe_subscription){
     appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
   }
 
