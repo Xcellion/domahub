@@ -6,6 +6,8 @@
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/icon.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/notification.sass';
 @import '../checkbox';
 
 html {
@@ -14,6 +16,7 @@ html {
 
 .clear-nav {
   padding-top: 60px;
+  margin-bottom: 40px !important;
 }
 
 .flat-logo {
@@ -50,7 +53,7 @@ html {
   background-color: #fff;
   border-radius: $radius;
   left: 0;
-  margin: 0 auto;
+  margin: 0 auto 40px;
   padding: 20px;
   width: 400px;
   @include mobile {
@@ -67,11 +70,4 @@ html {
 
 #accept, #resend, #home {
     display:none;
-}
-
-#message {
-  padding: 10px;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
 }
