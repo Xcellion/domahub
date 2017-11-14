@@ -7,7 +7,7 @@ $(document).ready(function() {
 
   //hide any existing error messages
   $("input, textarea").on("keyup", function(e){
-    $("#error_message").addClass("is-hidden");
+    clearNotification();
   });
 
   //random contact characters
@@ -30,16 +30,15 @@ function submitContact(){
     method: "POST"
   }).done(function(data){
     $("#submit-button").removeClass('is-loading');
-    $(".notification").addClass('is-hidden');
+    clearNotification();
     if (data.state == "error"){
-      $("#message-error-text").text(data.message);
-      $("#message-error").removeClass("is-hidden").addClass("is-active");
+      errorMessage(data.message);
     }
     else {
       $("#contact-form").off();
       $("input, textarea").not("#submit-button").val("").addClass('is-disabled');
       $("#submit-button").addClass('is-disabled');
-      $("#message-success").removeClass("is-hidden").addClass("is-active");
+      successMessage("Message sent! We will get back to you as soon as possible. Thank you for your patience.");
     }
   });
 }

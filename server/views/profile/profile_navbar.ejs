@@ -71,37 +71,39 @@
     </p>
   </div>
   <div class="user-panel">
-    <div>
-      <button tabindex="0" id="user-dropdown-button" class="button is-large is-primary is-inverted">
+    <div class="user-button">
+      <button tabindex="0" id="notification-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="notification-dropdown-menu">
+        <span id="notification-counter" class="is-hidden"></span>
+        <i class="fa fa-bell"></i>
+      </button>
+      <aside id="notification-dropdown-menu" class="nav-drop is-hidden">
+        <ul id="notification-tray" class="menu-list"></ul>
+      </aside>
+    </div>
+    <div class="user-button">
+      <button tabindex="0" id="user-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="user-dropdown-menu">
         <i class="fa fa-user-circle"></i>
       </button>
+      <aside id="user-dropdown-menu" class="nav-drop is-hidden">
+        <p class="menu-label">Support</p>
+        <ul class="menu-list">
+          <li><a tabindex="0" href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
+          <li><a tabindex="0" href="/faq" title="FAQ">FAQ</a></li>
+          <li><a tabindex="0" href="/features#pricing" title="Pricing">Pricing</a></li>
+        </ul>
+        <p class="menu-label">Company</p>
+        <ul class="menu-list">
+          <li><a tabindex="0" href="/contact" title="Contact Us">Contact Us</a></li>
+          <li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
+          <li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
+        </ul>
+        <p class="menu-label">Account</p>
+        <ul class="menu-list">
+          <li><a tabindex="0" href="/logout" title="Log Out">Log Out</a></li>
+        </ul>
+      </aside>
     </div>
-    <aside class="user-dropdown-menu is-hidden">
-      <p class="menu-label">Support</p>
-      <ul class="menu-list">
-        <li><a tabindex="0" href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
-        <li><a tabindex="0" href="/faq" title="FAQ">FAQ</a></li>
-        <li><a tabindex="0" href="/features#pricing" title="Pricing">Pricing</a></li>
-      </ul>
-      <p class="menu-label">Company</p>
-      <ul class="menu-list">
-        <li><a tabindex="0" href="/contact" title="Contact Us">Contact Us</a></li>
-        <li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
-        <li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
-      </ul>
-      <p class="menu-label">Account</p>
-      <ul class="menu-list">
-        <li><a tabindex="0" href="/logout" title="Log Out">Log Out</a></li>
-      </ul>
-    </aside>
   </div>
 </div>
 
-<div id="profile-msg-error" class="is-hidden is-danger notification is-popup">
-  <button class="delete"></button>
-  <p id="profile-msg-error-text" class='is-white'></p>
-</div>
-<div id="profile-msg-success" class="is-hidden is-primary notification is-popup">
-  <button class="delete"></button>
-  <p id="profile-msg-success-text" class='is-white'></p>
-</div>
+<%- include("../templates/notifications.ejs"); %>

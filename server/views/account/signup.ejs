@@ -6,6 +6,8 @@
 		<%- include("../templates/head_links.ejs"); %>
 	</head>
   <body>
+		<%- include("../templates/notifications.ejs"); %>
+
   	<div class="content has-text-centered clear-nav">
 			<h2>
         <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
@@ -13,40 +15,29 @@
         </a>
       </h2>
     </div>
-    <div class="content has-text-centered">
-  		<% if (typeof message != "undefined") {%>
-				<p id="message" class="is-danger">
-  				<%= message %>
-				</p>
-  		<% } else { %>
-				<p id="message">
-					Create a new account below.
-				</p>
-      <% } %>
-  	</div>
 	  <div id="signup-form" class="account-form">
   		<form id="target" method="post" autocomplete="off">
-  			<label class="label">Email</label>
+  			<label class="label" for="email-input">Email</label>
 				<div class="control has-icon has-icon-right">
-					<input required class="input is-medium" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+					<input required class="input is-medium no-shadow" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-  			<label class="label">Username (at least 3 characters)</label>
+  			<label class="label" for="username-input">Username (at least 3 characters)</label>
 				<div class="control has-icon has-icon-right">
-					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium" name="username" type="text" id="username-input" spellcheck="false" value="" />
+					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium no-shadow" name="username" type="text" id="username-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-  			<label class="label">Password (at least 6 characters)</label>
+  			<label class="label" for="pw-input">Password (at least 6 characters)</label>
 				<div class="control has-icon has-icon-right">
-					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-  			<label class="label">Confirm Password</label>
+  			<label class="label" for="verify-pw">Confirm Password</label>
 				<div class="control has-icon has-icon-right">
-					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium" name="verify-pw" type="password" id="verify-pw" value="" />
+					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="verify-pw" type="password" id="verify-pw" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
@@ -59,8 +50,8 @@
   			</div>
 				<div class="content has-text-centered">
 					<small>By signing up, you agree to our
-						<a tabindex="0"  href="/terms" class="is-primary">Terms of Service</a> and
-						<a tabindex="0"  href="/privacy" class="is-primary">Privacy Policy</a>.
+						<a tabindex="0"  href="/terms" class="is-primary"><small>Terms of Service</small></a> and
+						<a tabindex="0"  href="/privacy" class="is-primary"><small>Privacy Policy</small></a>.
 					</small>
 				</div>
   			<div class="content has-text-centered">
@@ -68,7 +59,7 @@
   					Already have an account?
   				</small>
   				<small class="is-block">
-  					<a tabindex="0" class="is-primary" href="/login">Log In</a>
+  					<a tabindex="0" class="is-primary" href="/login"><small>Log In</small></a>
   				</small>
   			</div>
   		</form>

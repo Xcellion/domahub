@@ -803,6 +803,14 @@ function showSectionByURL(){
 
       //show referral table + total months free
       $("#total-months-redeemed").text(total_months_redeemed);
+
+      //change upgrade text
+      if (total_months_redeemed > 0){
+        $("#upgrade-button .button-text").text("Upgrade - Free");
+      }
+      else {
+        $("#upgrade-button .button-text").text("Upgrade - $5.00");
+      }
       $("#referral-table").removeClass('is-hidden');
     }
 
