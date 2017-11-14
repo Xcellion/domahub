@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  showNotifications();
   //mobile view nav menu
   $(".nav-toggle").on("click", function() {
     $(this).toggleClass("is-active");
@@ -7,18 +8,18 @@ $(document).ready(function() {
 
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
-    if (!$(event.target).closest("#user-dropdown-button").length) {
-      if ($(".user-dropdown-menu").is(":visible")) {
-        $(".user-dropdown-menu").addClass("is-hidden");
-        $("#user-dropdown-button").toggleClass("is-active").blur();
+    if (!$(event.target).closest(".nav-button").length) {
+      if ($(".nav-drop").is(":visible")) {
+        $(".nav-drop").addClass("is-hidden");
+        $(this).toggleClass("is-active").blur();
       }
     }
   });
 
   //toggle user drop down menu on icon button click
-  $("#user-dropdown-button").on("click", function() {
-    $(this).toggleClass("is-active");
-    $(".user-dropdown-menu").toggleClass("is-hidden");
+  $(".nav-button").on("click", function() {
+    $(".nav-drop").addClass("is-hidden");
+    $("#" + $(this).data("menu")).removeClass("is-hidden");
   });
 
   $(document).keyup(function(e) {
@@ -102,40 +103,57 @@ function removeURLParameter(parameter) {
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------NOTIFICATION--------------------------------
+//<editor-fold>----------------------------------DROPDOWN MENUS-------------------------
 
-//helper function to display/hide error messages per listing
-function errorMessage(message){
-  //hide success
-  $("#profile-msg-success").addClass('is-hidden').removeClass("is-active");
+//populate the notifications tray
+function showNotifications() {
 
-  if (message){
-    $("#profile-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#profile-msg-error-text").html(message);
+  //if no listings
+  if (!user.listings || user.listings.length == 0){
+    appendNotification("<a tabindex='0' class='is-primary' href='/listings/create'>Create DomaHub listings</a>");
   }
-  else if (!message) {
-    $("#profile-msg-error").addClass('is-hidden').removeClass("is-active");
+
+  //if stripe payout settings are not set
+  if (!user.stripe_account) {
+    appendNotification("<a tabindex='0' href='/profile/settings#payout-address'>Complete payout settings</a>");
+  }
+
+  //if bank account is not connected
+  if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
+    appendNotification("<a tabindex='0' href='/profile/settings#payout-bank'>Connect a bank account</a>");
+  }
+
+  //if not premium
+  if (!user.stripe_subscription_id){
+    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
+  }
+
+  //if unverified domains exist
+  var unverified_listings = user.listings.filter(function(listing) {
+    return !listing.verified;
+  });
+  if (unverified_listings.length > 0){
+    appendNotification("<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
+  }
+
+  calcNotificationCounter();
+}
+
+//when notifications tray is empty
+function calcNotificationCounter() {
+  if ($("#notification-tray li").length > 0) {
+    $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications</p>");
+    $("#notification-counter").removeClass("is-hidden").text($("#notification-tray li").length);
+  }
+  else {
+    $("#notification-tray").append(
+      "<div class='smile-text'><figure class='smile'><img src='/images/lib/smile.png'></img></figure><p>No notifications - you're all set!</p></div>");
   }
 }
 
-//helper function to display success messages per listing
-function successMessage(message){
-  //hide error
-  $("#profile-msg-error").addClass('is-hidden').removeClass("is-active");
-
-  if (message){
-    $("#profile-msg-success").removeClass('is-hidden').addClass("is-active");
-    $("#profile-msg-success-text").html(message);
-  }
-  else if (!message){
-    $("#profile-msg-success").addClass('is-hidden').removeClass("is-active");
-  }
-}
-
-//function to refresh notifications
-function clearNotification(){
-  errorMessage(false);
-  successMessage(false);
+function appendNotification(msg) {
+  var tray = $("#notification-tray");
+  return tray.append("<li>" + msg + "</li>");
 }
 
 //</editor-fold>

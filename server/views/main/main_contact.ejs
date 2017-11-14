@@ -7,19 +7,10 @@
 </head>
 <body>
   <%- include("../templates/navbar", {user: user}); %>
+  <%- include("../templates/notifications.ejs"); %>
 
   <section class="section is-medium min-height">
     <div class="container">
-      <div id="message-success" class="notification is-primary is-hidden is-popup">
-        <span class="delete"></span>
-        <p class="is-white">
-          Message sent! We will get back to you as soon as possible. Thank you for your patience.
-        </p>
-      </div>
-      <div id="message-error" class="notification is-danger is-hidden is-popup">
-        <span class="delete"></span>
-        <span id="message-error-text"></span>
-      </div>
       <div class="columns">
         <div class="column is-6">
           <div class="content">
@@ -31,36 +22,28 @@
             </p>
           </div>
           <form id="contact-form" autocomplete="off">
-            <label class="error_message label is-medium">Name</label>
+            <label class="error_message label is-medium" for="contact_name">Name</label>
             <p class="control has-icon">
               <input id="contact_name" required class="input is-medium" name="contact_name" type="text">
               <i class="fa fa-user-o"></i>
             </p>
-            <label class="error_message label is-medium">Email Address</label>
+            <label class="error_message label is-medium" for="contact_email">Email Address</label>
             <p class="control has-icon">
               <input id="contact_email" required class="input is-medium" name="contact_email" type="email">
               <i class="fa fa-envelope-o"></i>
             </p>
-            <label class="error_message label is-medium">Message</label>
+            <label class="error_message label is-medium" for="contact_message">Message</label>
             <p class="control">
               <textarea id="contact_message" required class="textarea" name="contact_message"></textarea>
             </p>
-            <nav class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <div class='control is-grouped'>
-                    <div class='control'>
-                      <button id="submit-button" type="submit" class="button has-icon is-primary is-stylish">
-                        <span class="icon is-small">
-                          <i class="fa fa-comment"></i>
-                        </span>
-                        <span>Send Message</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </nav>
+            <div class='control'>
+              <button id="submit-button" type="submit" class="button has-icon is-primary is-stylish is-fullwidth-mobile">
+                <span class="icon is-small">
+                  <i class="fa fa-comment"></i>
+                </span>
+                <span>Send Message</span>
+              </button>
+            </div>
           </form>
         </div>
       </div>

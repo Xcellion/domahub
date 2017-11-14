@@ -96,11 +96,15 @@
   bottom: 20px;
 }
 
-#user-dropdown-button {
+.nav-button {
   @include box-shadow(0,3px,5px,$border,5px);
   border-radius: 100%;
+  font-size: 22px;
   padding: 5px;
   height: auto;
+  &:hover {
+    @include box-shadow(0,3px,3px,$border,3px);
+  }
   &:focus {
     @include box-shadow(0,0,4px,#5E9ED6,0);
     outline: none;
@@ -111,15 +115,66 @@
     background-color: $primary-dark;
     color: $white;
   }
+  &.is-mobile {
+    @include box-shadow(0,2px,4px,$border,0);
+  }
 }
 
-.user-dropdown-menu {
+.user-button {
+  &:first-child {
+    margin-bottom: 10px;
+  }
+}
+
+.nav-drop {
   @include box-shadow(0,3px,15px,$border,2px);
   background-color: $white;
   border-radius: 5px 5px 5px 0;
   padding: 5px 8px;
   position: absolute;
+}
+
+#notification-counter {
+  background-color: $danger;
+  border-radius: 100%;
+  color: $white;
+  font-size: 12px;
+  height: 18px;
+  line-height: 18px;
+  position: absolute;
+  right: -8px;
+  top: -6px;
+  width: 18px;
+}
+
+#notification-dropdown-menu {
   left: 45px;
-  top: -300px;
+  bottom: 55px;
+  width: 200px;
+}
+
+#user-dropdown-menu {
+  left: 45px;
+  bottom: 10px;
   width: 160px;
+}
+
+.smile-text {
+  padding: 5px;
+  p {
+    line-height: 1.5;
+    margin-right: 2px;
+  }
+  img {
+    height: 36px;
+    vertical-align: top;
+    width: 36px;
+  }
+}
+
+.smile {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  width: 36px;
 }

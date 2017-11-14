@@ -6,6 +6,8 @@
     <%- include("../templates/head_links.ejs"); %>
   </head>
   <body>
+    <%- include("../templates/notifications.ejs"); %>
+
     <div class="content has-text-centered clear-nav">
       <h2>
         <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
@@ -13,25 +15,14 @@
         </a>
       </h2>
     </div>
-    <div class="content has-text-centered">
-      <% if (typeof message != "undefined") {%>
-        <p id="message" class="is-danger">
-          <%= message %>
-        </p>
-      <% } else { %>
-        <p id="message">
-          Please log in below.
-        </p>
-      <% } %>
-    </div>
     <div class="account-form">
       <form id="login-form" action="/login" method="post">
-        <label class="label">Email</label>
+        <label class="label" for="email">Email</label>
         <p class="control has-icon">
           <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
           <i class="fa fa-envelope-o"></i>
         </p>
-        <label class="label">Password</label>
+        <label class="label" for="password">Password</label>
         <p class="control has-icon">
           <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password">
           <i class="fa fa-lock"></i>
@@ -58,7 +49,7 @@
             Don't have an account?
           </small>
           <small class="is-block">
-            <a tabindex="0" class="is-primary" href="/signup">Sign Up</a>
+            <a tabindex="0" class="is-primary" href="/signup"><small>Sign Up</small></a>
           </small>
         </div>
       </form>
