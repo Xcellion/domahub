@@ -329,8 +329,6 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------TRANSACTIONS TAB-------------------------------
 
-  createEarningsRows();
-
   //transfer to bank button
   $("#transfer-button").on('click', function(){
     $("#transfer-button").addClass('is-loading').off();
@@ -339,7 +337,6 @@ $(document).ready(function() {
       method: "POST"
     }).done(function(data){
       $("#transfer-button").removeClass('is-loading');
-      console.log(data);
 
       if (data.state == "success"){
         $("#transfer-button").addClass("is-disabled");
@@ -359,6 +356,21 @@ $(document).ready(function() {
         }
       }
     });
+  });
+
+  //refresh transactions
+  $("#refresh-transactions-button").on('click', function(){
+    getTransactions();
+  });
+
+  //show specific transactions only (search)
+  $("#transactions-search").on("input", function(){
+    showTransactionRows();
+  });
+
+  //show specific transactions only (filter)
+  $("#transactions-filter-select").on("change", function(){
+    showTransactionRows();
   });
 
   //</editor-fold>
@@ -395,6 +407,14 @@ function showSection(section_id){
     if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
       $(".left-tab").removeClass('is-active');
       $("#nav-premium-link").addClass('is-active');
+    }
+  }
+  else if (section_id == "transactions"){
+    if (!user.transactions){
+      getTransactions();
+    }
+    else {
+      createTransactionsTable();
     }
   }
   else {
@@ -508,7 +528,7 @@ function showSectionByURL(){
         $("#upgrade-to-premium-text, #upgrade-tab-header").text("Upgrade to Premium");
         $("#nav-premium-link").removeClass('is-hidden');
 
-        var expiration_date = "Premium will expire on " + moment(user.stripe_subscription.current_period_end * 1000).format("MMMM DD, YYYY") + ".";
+        var expiration_date = "Premium will expire on " + moment(user.stripe_subscription.current_period_end).format("MMMM DD, YYYY") + ".";
         $("#renew-status").text(expiration_date);
         $("#next-charge-tip").text(expiration_date + " You will not be charged further for this account.");
 
@@ -531,10 +551,10 @@ function showSectionByURL(){
         //next charge (invoice)
         if (user.stripe_customer.upcoming_invoice){
           if (user.stripe_customer.upcoming_invoice.amount_due != 0){
-            var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.amount_due / 100) + " will be posted on " + moment(user.stripe_subscription.current_period_end * 1000).format("MMMM DD, YYYY") + " to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."
+            var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.amount_due / 100) + " will be posted on " + moment(user.stripe_subscription.current_period_end).format("MMMM DD, YYYY") + " to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."
           }
           else {
-            var next_charge_text = "Your upcoming charge of $5.00 on " + moment(user.stripe_customer.upcoming_invoice.date * 1000).format("MMMM DD, YYYY") + " has been waived thanks to a promotional code or referral!";
+            var next_charge_text = "Your upcoming charge of $5.00 on " + moment(user.stripe_customer.upcoming_invoice.date).format("MMMM DD, YYYY") + " has been waived thanks to a promotional code or referral!";
           }
         }
         $("#next-charge-tip").text(next_charge_text);
@@ -581,7 +601,7 @@ function showSectionByURL(){
     if (user.stripe_customer.charges.length){
       for (var x = 0 ; x < user.stripe_customer.charges.length ; x++){
         var payment_row = $("#payment-history-clone").clone().removeAttr("id").removeClass('is-hidden');
-        payment_row.find(".payment-history-date").text(moment(user.stripe_customer.charges[x].created * 1000).format("MMMM DD, YYYY")).attr("title", moment(user.stripe_customer.charges[x].created * 1000).format("MMMM DD, YYYY - hh:mmA"));
+        payment_row.find(".payment-history-date").text(moment(user.stripe_customer.charges[x].created).format("MMMM DD, YYYY")).attr("title", moment(user.stripe_customer.charges[x].created).format("MMMM DD, YYYY - hh:mmA"));
         payment_row.find(".payment-history-amount").text(moneyFormat.to(user.stripe_customer.charges[x].amount / 100));
         payment_row.find(".payment-history-cc").text(user.stripe_customer.charges[x].brand + " ending in " + user.stripe_customer.charges[x].last4);
 
@@ -590,7 +610,7 @@ function showSectionByURL(){
     }
     else {
       var payment_row = $("#payment-history-clone").clone().removeAttr("id").removeClass('is-hidden');
-      payment_row.find(".payment-history-date").text(moment(user.stripe_subscription.created * 1000).format("MMMM DD, YYYY")).attr("title", moment(user.stripe_subscription.created * 1000).format("MMMM DD, YYYY - hh:mmA"));
+      payment_row.find(".payment-history-date").text(moment(user.stripe_subscription.created).format("MMMM DD, YYYY")).attr("title", moment(user.stripe_subscription.created).format("MMMM DD, YYYY - hh:mmA"));
       payment_row.find(".payment-history-amount").text("Free!");
       payment_row.find(".payment-history-cc").text(user.stripe_customer.brand + " ending in " + user.stripe_customer.last4);
 
@@ -958,75 +978,98 @@ function showSectionByURL(){
 
 //<editor-fold>-------------------------------TRANSACTIONS TAB-------------------------------
 
-var number_format = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 2,
-  postfix: " " + ((user.stripe_info) ? user.stripe_info.currency.toUpperCase() : " ")
-});
+//get transactions from stripe
+function getTransactions(){
+  $("#loading-transactions-table").removeClass('is-hidden');
+  $("#no-transactions-table, #transactions-table, #transactions-toolbar").addClass('is-hidden');
 
-//create all earnings rows
-function createEarningsRows(){
+  $.ajax({
+    url: "/profile/gettransactions",
+    method: "POST"
+  }).done(function(data){
+    if (data.state == "success"){
+      user = data.user;
+    }
+    createTransactionsTable();
+  });
+}
 
-  //earnings rows
-  if (user.earnings){
+//create all transactions rows
+function createTransactionsTable(){
 
-    //stripe earnings
-    if (user.earnings.stripe_earnings){
-      for (var x = 0; x < user.earnings.stripe_earnings.length; x++){
-        $("#sales-table-body").append(createEarningsRow(user.earnings.stripe_earnings[x]));
+  //hide modal
+  $("#transactions-details-modal").removeClass('is-active');
+  $("#loading-transactions-table").addClass('is-hidden');
+  $("#transactions-toolbar").removeClass('is-hidden');
+
+  $(".transactions-row:not(#transactions-row-clone)").remove();
+
+  //transactions rows
+  if (user.transactions){
+
+    //stripe transactions
+    if (user.transactions.stripe_transactions){
+      for (var x = 0; x < user.transactions.stripe_transactions.length; x++){
+        $("#transactions-table-body").append(createTransactionsRow(user.transactions.stripe_transactions[x]));
       }
     }
 
-    //paypal earnings
-    if (user.earnings.paypal_earnings){
+    //paypal transactions
+    if (user.transactions.paypal_transactions){
     }
 
-    //show earnings table and total earnings
+    //show transactions table and total transactions
     calculateTotals();
-    $("#sales-table").removeClass("is-hidden");
+    $("#transactions-table").removeClass("is-hidden");
   }
   else {
-    $("#no-sales-table").removeClass("is-hidden");
+    $("#no-transactions-table").removeClass("is-hidden");
   }
 }
 
-//create a single earnings row
-function createEarningsRow(stripe_charge){
-  var temp_row = $("#earnings-row-clone").clone();
+//create a single transactions row
+function createTransactionsRow(stripe_charge){
+  var temp_row = $("#transactions-row-clone").clone();
   temp_row.removeAttr('id').removeClass('is-hidden');
 
-  //earnings details modal
+  //transactions details modal
   temp_row.on("click", function(){
-    $("#earnings-details-modal").addClass('is-active');
-    // var refund_button = $(this);
-    // refund_button.off().addClass("is-loading");
-    // $.ajax({
-    //   url: "/listing/" + stripe_charge.domain_name + "/" + stripe_charge.rental_id + "/refund",
-    //   method: "POST",
-    //   data: {
-    //     stripe_id : stripe_charge.charge_id
-    //   }
-    // }).done(function(data){
-    //   refund_button.removeClass("is-loading");
-    //   if (data.state == "success"){
-    //     refundedRow(temp_row, true, profit, doma_fees, stripe_fees, stripe_charge.amount, stripe_charge.available_on)
-    //   }
-    //   else {
-    //     errorMessage(data.message);
-    //   }
-    // });
+    setupTransactionsModal(temp_row, stripe_charge);
   });
 
+  //temp row data for search and filter
+  temp_row.data("domain_name", stripe_charge.domain_name);
+  temp_row.data("sale", (stripe_charge.rental_id) ? false : true);
+  temp_row.data("rental", (stripe_charge.rental_id) ? true : false);
+  temp_row.data("available", stripe_charge.available_on < new Date().getTime());
+  temp_row.data("notavailable", stripe_charge.available_on > new Date().getTime());
+  temp_row.data("actionable", stripe_charge.pending_transfer == "true");
+  temp_row.data("exists", true);
+
   //all other row info
-  temp_row.find(".earnings-row-date").text(moment(stripe_charge.created * 1000).format("MMMM DD, YYYY")).attr("title", moment(stripe_charge.created * 1000).format("MMMM DD, YYYY - hh:mmA"));
-  temp_row.find(".earnings-row-type").text((stripe_charge.rental_id) ? "Rental" : "Sale");
+  temp_row.find(".transactions-row-date").text(moment(stripe_charge.created).format("MMMM DD, YYYY")).attr("title", moment(stripe_charge.created).format("MMMM DD, YYYY - hh:mmA"));
+  temp_row.find(".transactions-row-type").text((stripe_charge.rental_id) ? "Rental" : "Sale");
   var listing_href = (user.stripe_subscription_id) ? "https://" + stripe_charge.domain_name.toLowerCase() : "/listing/" + stripe_charge.domain_name;
-  temp_row.find(".earnings-row-domain").html("<a class='is-underlined' href='" + listing_href + "'>" + stripe_charge.domain_name + "</a>");
+  temp_row.find(".transactions-row-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + stripe_charge.domain_name + "</a>");
+
+  //balance available
+  if (stripe_charge.available_on < new Date().getTime()){
+    temp_row.find(".transactions-row-available").text("Available");
+  }
+  //balance not yet available
+  else {
+    //actionable
+    if (stripe_charge.pending_transfer == "true"){
+      temp_row.find(".transactions-row-available").text("Requires Action").append('<span class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="fa fa-exclamation-circle"></i></span>');
+    }
+    else {
+      temp_row.find(".transactions-row-available").text("Not yet available").append('<span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM DD, YYYY") + '" data-balloon-pos="up"><i class="fa fa-question-circle"></i></span>');
+    }
+  }
 
   //was refunded completely
   if (stripe_charge.amount == stripe_charge.amount_refunded){
-    row.find(".earnings-row-amount .row-text").text("Refunded");
+    row.find(".transactions-row-amount .row-text").text("Refunded");
   }
   else {
     //calculate fees and profit
@@ -1036,32 +1079,139 @@ function createEarningsRow(stripe_charge){
     //profit + fees in money format
     var total_fees = (doma_fees + stripe_fees) / 100;
     var total_profit = (stripe_charge.amount - doma_fees - stripe_fees) / 100;
-    temp_row.data("total_earned", stripe_charge.amount / 100);
+    var total_earned = stripe_charge.amount / 100;
+    temp_row.data("total_earned", total_earned);
     temp_row.data("total_fees", total_fees);
     temp_row.data("total_profit", total_profit);
 
     //tooltip
-    var tooltip_text = "Total fees - " + moneyFormat.to(total_fees) + "&#10;" + "Total profit - " + moneyFormat.to(total_profit);
-    var tooltip_icon = $('<span class="icon is-small is-tooltip" data-balloon-break data-balloon-length="medium" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="fa fa-question-circle"></i></span>');
+    var tooltip_size = (moneyFormat.to(total_earned).length > 6) ? "large" : "medium";
+    var tooltip_text = "Total earned - " + moneyFormat.to(total_earned) + "&#10;" + "Total fees - " + moneyFormat.to(total_fees);
+    var tooltip_icon = $('<span class="icon is-small is-tooltip" data-balloon-break data-balloon-length="' + tooltip_size + '" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="fa fa-question-circle"></i></span>');
 
-    //balance available
-    if (stripe_charge.available_on * 1000 < new Date().getTime()){
-      var available_tooltip_text = "Available for withdrawal!";
-      var available_icon_color = "is-primary";
-      var available_icon_type = "fa-check-circle-o";
-    }
-    //balance not yet available
-    else {
-      var available_tooltip_text = "Available for withdrawal on " + moment(stripe_charge.available_on * 1000).format("MMMM DD, YYYY");
-      var available_icon_color = "is-danger";
-      var available_icon_type = "fa-clock-o";
-    }
-    var available_tooltip_icon = $('<span class="icon is-small ' + available_icon_color + '" data-balloon-length="medium" data-balloon="' + available_tooltip_text + '" data-balloon-pos="up"><i class="fa ' + available_icon_type + '"></i></span>');
-
-    temp_row.find(".earnings-row-amount").text(moneyFormat.to(stripe_charge.amount / 100)).append(tooltip_icon).append(available_tooltip_icon);
+    temp_row.find(".transactions-row-amount").text(moneyFormat.to(total_profit)).append(tooltip_icon);
   }
 
   return temp_row;
+}
+
+//filter / search for specific transactions
+function showTransactionRows(){
+  $(".transactions-row:not(#transactions-row-clone)").addClass('is-hidden');
+
+  var filter_val = $("#transactions-filter-select").val();
+  var search_term = $("#transactions-search").val();
+  $(".transactions-row:not(#transactions-row-clone)").filter(function(){
+    if ($(this).data(filter_val) && $(this).data('domain_name').indexOf(search_term) != -1){
+      return true;
+    }
+  }).removeClass('is-hidden');
+
+  if (user.transactions){
+    //something matches
+    if ($(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").length > 0){
+      $("#no-matching-transactions-table").addClass('is-hidden');
+      $("#transactions-table").removeClass('is-hidden');
+    }
+    //nothing matches
+    else {
+      $("#no-matching-transactions-table").removeClass('is-hidden');
+      $("#transactions-table").addClass('is-hidden');
+    }
+  }
+}
+
+//set up the transactions modal
+function setupTransactionsModal(temp_row, stripe_charge){
+  $("#transactions-details-modal").addClass('is-active');
+
+  //format the modal
+  $("#transactions-modal-timestamp").text("Received on " + moment(stripe_charge.created).format("MMMM DD, YYYY")).attr('title', moment(stripe_charge.created).format("MMMM DD, YYYY - hh:mmA"));
+  $("#transactions-modal-domain").text(((stripe_charge.rental_id) ? "Domain rental" : "Domain sale") + " for " + stripe_charge.domain_name);
+  $("#transactions-modal-price").text(moneyFormat.to((stripe_charge.amount - stripe_charge.doma_fees - stripe_charge.stripe_fees) / 100) + " " + stripe_charge.currency.toUpperCase());
+
+  //available for withdrawal
+  if (stripe_charge.available_on < new Date().getTime()){
+    $("#transactions-modal-available").text("Available for withdrawal!");
+  }
+  else {
+    $("#transactions-modal-available").text("Available for withdrawal on " + moment(stripe_charge.available_on).format("MMMM DD, YYYY"));
+  }
+
+  //hide premium or basic
+  if (user.stripe_subscription){
+    $(".premium-hidden").addClass('is-hidden');
+    $(".basic-hidden").removeClass('is-hidden');
+  }
+  else {
+    $(".basic-hidden").addClass('is-hidden');
+    $(".premium-hidden").removeClass('is-hidden');
+  }
+
+  //calculate fees and profit
+  var doma_fees = (stripe_charge.doma_fees) ? parseFloat(stripe_charge.doma_fees) : Math.round(stripe_charge.amount * 0.10);
+  var stripe_fees = (stripe_charge.stripe_fees) ? parseFloat(stripe_charge.stripe_fees) : Math.round(stripe_charge.amount * 0.029) + 30;
+  $("#transactions-modal-domafees").text(moneyFormat.to(doma_fees / 100) + " paid in DomaHub fees*");
+  $("#transactions-modal-processfees").text(moneyFormat.to(stripe_fees / 100) + " paid in payments processing fees");
+
+  //domain rental related stuff
+  if (stripe_charge.rental_id){
+    //preview rental
+    $("#view-rental-button").attr('href', "/listing/" + stripe_charge.domain_name + "/" + stripe_charge.rental_id);
+    $("#rental-buttons-wrapper").removeClass("is-hidden");
+
+    //submit for refund
+    $("#refund-rental-submit").off().on("click", function(){
+      submitRefundRental(temp_row, stripe_charge);
+    })
+
+    //hide sales stuff
+    $("#pending-transfer-wrapper").addClass('is-hidden');
+    $("#available-on-wrapper").removeClass('is-hidden');
+  }
+  //domain sales related stuff
+  else {
+    $("#refund-rental-submit").off()
+    $("#rental-buttons-wrapper").addClass("is-hidden");
+
+    //show pending transfer warning
+    if (stripe_charge.pending_transfer == "true"){
+      $("#pending-transfer-wrapper").removeClass('is-hidden');
+      $("#available-on-wrapper").addClass('is-hidden');
+
+      //transfer ownership link
+      if (stripe_charge.listing_id){
+        $("#transfer-ownership-href").attr("href", "/profile/mylistings?listings=" + stripe_charge.listing_id + "&tab=offers");
+      }
+      else {
+        $("#transfer-ownership-href").attr("href", "/profile/mylistings?tab=offers");
+      }
+    }
+    else {
+      $("#pending-transfer-wrapper").addClass('is-hidden');
+      $("#available-on-wrapper").removeClass('is-hidden');
+    }
+  }
+}
+
+//to submit a refund
+function submitRefundRental(temp_row, stripe_charge){
+  $("#refund-rental-submit").addClass("is-loading");
+  $.ajax({
+    url: "/listing/" + stripe_charge.domain_name + "/" + stripe_charge.rental_id + "/refund",
+    method: "POST",
+    data: {
+      stripe_id : stripe_charge.charge_id
+    }
+  }).done(function(data){
+    $("#refund-rental-submit").removeClass("is-loading");
+    if (data.state == "success"){
+      createTransactionsTable();
+    }
+    else {
+      errorMessage(data.message);
+    }
+  });
 }
 
 //re-calculate totals
@@ -1072,7 +1222,7 @@ function calculateTotals(){
   var total_available = 0;
 
   //loop through and figure it out
-  $(".earnings-row:not(#earnings-row-clone)").each(function(){
+  $(".transactions-row:not(#transactions-row-clone)").each(function(){
     total_earned += $(this).data("total_earned");
     total_fees += $(this).data("total_fees");
     total_profit += $(this).data("total_profit");

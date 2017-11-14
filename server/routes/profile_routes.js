@@ -94,7 +94,6 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
     stripe_functions.getStripeAccount,
-    stripe_functions.getEarnings,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeCustomerCharges,
     stripe_functions.getStripeCustomerNextInvoice,
@@ -109,6 +108,13 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.checkAccountSettings,
     profile_functions.updateAccountSettingsPost
+  ]);
+
+  //get all existing transactions for user (sales / rentals)
+  app.post("/profile/gettransactions", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    stripe_functions.getTransactions
   ]);
 
   //</editor-fold>
@@ -194,7 +200,7 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
-    stripe_functions.getEarnings,
+    stripe_functions.getTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     stripe_functions.transferMoney

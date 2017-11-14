@@ -105,3 +105,27 @@
   border-bottom-width: 0px !important;
   margin-bottom:0;
 }
+
+.remove-margin-bottom-content {
+  margin-bottom:0 !important;
+}
+
+#transactions-info {
+  li {
+    .icon {
+      margin-right: 10px;
+    }
+    &:last-child {
+      display: flex;
+    }
+  }
+}
+
+.modal-content {
+  background-color: $white;
+  border-radius: $radius-large;
+  padding: 20px;
+  &.is-small {
+    max-width: 300px !important;
+  }
+}
