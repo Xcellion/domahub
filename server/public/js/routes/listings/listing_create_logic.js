@@ -187,25 +187,12 @@ function handleSubmitDisabled(){
 
 //function to submit table domains (NOT TEXTAREA)
 function submitDomains(submit_elem){
-
-  //only if there are no error messages currently
-  if ($("#profile-msg-error").hasClass("is-hidden") && $("td .is-danger").length == 0){
-    deleteEmptyTableRows();
-
-    var domains = getTableListingInfo(".domain-name-input");
-
-    if (domains.length > 0){
-      submit_elem.off().addClass('is-loading');
-      submitDomainsAjax(domains, submit_elem);
-    }
+  deleteEmptyTableRows();
+  var domains = getTableListingInfo(".domain-name-input");
+  if (domains.length > 0){
+    submit_elem.off().addClass('is-loading');
+    submitDomainsAjax(domains, submit_elem);
   }
-
-  //show warning that something needs fixed
-  else {
-    errorMessage("Some domain names were invalid! See below for more details.");
-    $("#domains-submit").addClass('is-hidden');
-  }
-
 }
 
 //helper function to get the table row values for ajax submission
@@ -237,6 +224,7 @@ function submitDomainsAjax(domains, submit_elem){
     }
   }).done(function(data){
     clearNotification();
+    console.log(data);
 
     //handle any good or bad listings
     refreshRows(data.bad_listings, data.good_listings);

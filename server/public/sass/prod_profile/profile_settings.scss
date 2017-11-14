@@ -22,6 +22,16 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.tabs a:not(.button) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
+}
+
 #settings-toolbar .tabs {
   overflow:visible;
   overflow-x:visible;

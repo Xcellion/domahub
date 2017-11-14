@@ -61,7 +61,7 @@ module.exports = {
         error.handler(req, res, "max-domains-reached", "json");
       }
       else if (!domain_names || domain_names.length <= 0){
-        error.handler(req, res, "You can't create listigns without any domain names!", "json");
+        error.handler(req, res, "You can't create listings without any domain names!", "json");
       }
       else if (domain_names.length > 500){
         error.handler(req, res, "You can only create up to 500 domains at a time!", "json");
@@ -124,13 +124,6 @@ module.exports = {
       var domains_sofar = [];
       var date_now = new Date().getTime();
       var db_object = [];
-
-      //object to keep track of premium domains
-      var premium_obj = {
-        count : 0,
-        indexes : [],
-        domain_names : []
-      };
 
       for (var x = 0; x < posted_domains.length; x++){
         var bad_reasons = [];
@@ -195,7 +188,6 @@ module.exports = {
       else {
         //create an object for the session
         req.session.new_listings = {
-          premium_obj : premium_obj,
           db_object : db_object,
           good_listings : [],
           bad_listings : bad_listings
@@ -957,9 +949,8 @@ module.exports = {
     listing_model.newListings(db_object, function(result){
       if (result.state=="error"){error.handler(req, res, result.info, "json");}
       else {
-        var affectedRows = result.info.affectedRows;
         //nothing created
-        if (affectedRows == 0){
+        if (result.info.affectedRows == 0){
           sortListings(req.session.new_listings, db_object, []);
           res.send({
             bad_listings: req.session.new_listings.bad_listings,
@@ -981,28 +972,32 @@ module.exports = {
                 req.session.new_listings,                  //session listing object
                 db_object,                          //db object used to insert
                 inserted_domains,                      //domain names of all inserted domains
-                req.session.new_listings.premium_obj.domain_names,      //domain names of premium listings
                 inserted_ids
               );
 
               req.session.new_listings.inserted_ids = inserted_ids;
               req.session.new_listings.inserted_domains = inserted_domains;
 
+              //nothing inserted
+              if (inserted_ids.length == 0){
+                sortListings(req.session.new_listings, db_object, []);
+                res.send({
+                  bad_listings: req.session.new_listings.bad_listings,
+                  good_listings: false
+                });
+              }
               //revert the newly made listings verified to null
-              listing_model.updateListingsVerified(inserted_ids, function(result){
-                delete req.user.listings;
+              else {
+                listing_model.updateListingsVerified(inserted_ids, function(result){
+                  delete req.user.listings;
 
-                //done here for basic or move on to payment for premium
-                if (req.session.new_listings.premium_obj.count > 0){
-                  next();
-                }
-                else {
+                  //done
                   res.send({
                     bad_listings: req.session.new_listings.bad_listings,
                     good_listings: req.session.new_listings.good_listings
                   });
-                }
-              });
+                });
+              }
             }
           });
         }
@@ -1199,12 +1194,10 @@ function findUncreatedListings(posted_listings, new_listings, existing_bad_listi
   };
 }
 
-//helper function to see if any listings failed, figure out any premium domains
-function sortListings(new_listings, formatted_listings, inserted_domains, premium_domains, inserted_ids){
+//helper function to see if any listings failed
+function sortListings(new_listings, formatted_listings, inserted_domains, inserted_ids){
   var bad_listings = new_listings.bad_listings;
   var good_listings = [];
-  var premium_inserted_ids = [];
-  var premium_indexes = [];
 
   //loop through all formatted listings
   for (var x = 0; x < formatted_listings.length; x++){
@@ -1216,35 +1209,9 @@ function sortListings(new_listings, formatted_listings, inserted_domains, premiu
       if (formatted_listings[x][2] == inserted_domains[y]){
         //was created!
         was_created = true;
-
-        //find the insert ids of the inserted premium domains
-        if (premium_domains.length > 0){
-          var not_premium = true;
-          for (var z = 0; z < premium_domains.length; z++){
-
-            //if premium domain name is same as inserted domain name
-            if (premium_domains[z] == inserted_domains[y]){
-              premium_inserted_ids.push(inserted_ids[y][0]);
-              premium_indexes.push(x);
-              not_premium = false;
-              break;
-            }
-          }
-
-          //this was a basic listing (premium and basic submitted)
-          if (not_premium){
-            good_listings.push({
-              index: x
-            });
-          }
-        }
-
-        //this was a basic listing (no premium submitted)
-        else {
-          good_listings.push({
-            index: x
-          });
-        }
+        good_listings.push({
+          index: x
+        });
 
         break;
       }
@@ -1260,8 +1227,6 @@ function sortListings(new_listings, formatted_listings, inserted_domains, premiu
   }
 
   new_listings.good_listings = good_listings;
-  new_listings.premium_obj.inserted_ids = premium_inserted_ids;
-  new_listings.premium_obj.indexes = premium_indexes;
 }
 
 //</editor-fold>
