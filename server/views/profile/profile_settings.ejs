@@ -162,7 +162,7 @@
           			<div class="control-right">
           				<a id="upgrade-button" class="is-primary basic-elem button">
           					<span class="icon is-small">
-          						<i class="fa fa-trophy"></i>
+          						<i class="fa fa-diamond"></i>
           					</span>
           					<span class="button-text">Upgrade</span>
           				</a>
@@ -703,43 +703,101 @@
             </div>
           </div>
           <div class="column is-9">
-              <table id="sales-table" class="is-hidden table no-border-bottom">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Domain</th>
-                    <th class="has-text-right">
-                      Earnings
-                    </th>
-                  </tr>
-                </thead>
-                <tbody id="sales-table-body">
-                  <tr id="earnings-row-clone" class="earnings-row is-hidden">
-                    <td class="earnings-row-date"></td>
-                    <td class="earnings-row-type"></td>
-                    <td class="earnings-row-domain"></td>
-                    <td class="earnings-row-amount has-text-right"></td>
-                  </tr>
-                </tbody>
-              </table>
-              <table id="no-sales-table" class="table is-hidden no-border-bottom">
-                <tbody>
-                  <tr class="no-hover-effect">
-                    <td>
-                      <div class="nothing-exists-row content has-text-centered">
-                        <figure class="image is-64x64">
-                          <img src="/images/lib/ggface.png" />
-                        </figure>
-                        <p>
-                          You haven't made any sales or rentals yet!
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div id="transactions-toolbar" class="control">
+              <div class="control">
+                <a id="refresh-transactions-button" class="button" title="Refresh Transactions">
+                  <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+                  <span>Refresh Transactions</span>
+                </a>
+              </div>
+              <div class="control is-grouped">
+                <div class="control has-icon">
+                  <span class="select no-borders">
+                    <select id="transactions-filter-select" tabindex="0">
+                      <option selected value="exists">View All</option>
+                      <option value="sale">Domain Sales</option>
+                      <option value="rental">Domain Rentals</option>
+                      <option value="available">Available For Withdrawal</option>
+                      <option value="notavailable">Not Available For Withdrawal</option>
+                      <option value="actionable">Requires Action</option>
+                    </select>
+                  </span>
+                  <i class="fa fa-filter"></i>
+                </div>
+                <div class="control has-icon">
+                  <i class="fa fa-search"></i>
+                  <input id="transactions-search" tabindex="0" class="input is-expanded no-border" type="text" placeholder="Search Transactions" />
+                </div>
+              </div>
             </div>
+            <table id="transactions-table" class="is-hidden table no-border-bottom">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Domain</th>
+                  <th class="has-text-right">
+                    Earnings
+                  </th>
+                  <th>Available</th>
+                </tr>
+              </thead>
+              <tbody id="transactions-table-body">
+                <tr id="transactions-row-clone" class="transactions-row is-hidden">
+                  <td class="transactions-row-date"></td>
+                  <td class="transactions-row-type"></td>
+                  <td class="transactions-row-domain"></td>
+                  <td class="transactions-row-amount has-text-right"></td>
+                  <td class="transactions-row-available has-text-right"></td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="loading-transactions-table" class="table no-border-bottom">
+              <tbody>
+                <tr class="no-hover-effect">
+                  <td>
+                    <div class="nothing-exists-row has-text-centered">
+                      <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
+                      <p>Now loading your transactions.</p>
+                      <p>This may take some time.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="no-transactions-table" class="table is-hidden no-border-bottom">
+              <tbody>
+                <tr class="no-hover-effect">
+                  <td>
+                    <div class="nothing-exists-row content has-text-centered">
+                      <figure class="image is-64x64">
+                        <img src="/images/lib/ggface.png" />
+                      </figure>
+                      <p>
+                        You haven't made a sale or a rental yet!
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="no-matching-transactions-table" class="table is-hidden no-border-bottom">
+              <tbody>
+                <tr class="no-hover-effect">
+                  <td>
+                    <div class="nothing-exists-row content has-text-centered">
+                      <figure class="image is-64x64">
+                        <img src="/images/lib/ggface.png" />
+                      </figure>
+                      <p>
+                        There are no matching sales or rentals!
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>
@@ -750,41 +808,39 @@
   <div id="change-password-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content offer-popup">
-        <div class="box">
-          <form id="password-form" class="control">
-            <div class="control">
-              <label class="label" for="old-pw-input">Current Password</label>
-              <input required id="old-pw-input" maxlength="70" minlength="6" autocomplete="current-password" class="input modal-input account-input" name="old-pw-input" type="password">
-            </div>
-            <div class="control">
-              <label id="pw-label" class="label" for="new-pw-input">
-                New Password
-                <span data-balloon="Must be at least 6 characters long." data-balloon-pos="up" data-balloon-length="medium" class="icon is-tooltip is-small">
-                  <i class="fa fa-question-circle"></i>
-                </span>
-              </label>
-              <input required id="new-pw-input" maxlength="70" minlength="6" name="new-pw-input" autocomplete="new-password" class="input modal-input account-input" type="password">
-            </div>
-            <div class="control">
-              <label class="label" for="verify-pw-input">Confirm Password</label>
-              <input required id="verify-pw-input" maxlength="70" minlength="6" name="verify-pw-input" autocomplete="new-password" class="input modal-input account-input" type="password">
-            </div>
-          </form>
-          <div class="control is-grouped is-grouped-center">
-            <p class="control">
-              <button form="password-form" type="submit" id="password-submit" tabindex="0" class='button is-primary'>
-                <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-                <span>Save</span>
-              </button>
-            </p>
-            <p class="control">
-              <a tabindex="0" class='button is-outlined is-danger cancel-modal'>
-                <span class="icon is-small"><i class="fa fa-ban"></i></span>
-                <span>Cancel</span>
-              </a>
-            </p>
+      <div class="modal-content">
+        <form id="password-form" class="control">
+          <div class="control">
+            <label class="label" for="old-pw-input">Current Password</label>
+            <input required id="old-pw-input" maxlength="70" minlength="6" autocomplete="current-password" class="input modal-input account-input" name="old-pw-input" type="password">
           </div>
+          <div class="control">
+            <label id="pw-label" class="label" for="new-pw-input">
+              New Password
+              <span data-balloon="Must be at least 6 characters long." data-balloon-pos="up" data-balloon-length="medium" class="icon is-tooltip is-small">
+                <i class="fa fa-question-circle"></i>
+              </span>
+            </label>
+            <input required id="new-pw-input" maxlength="70" minlength="6" name="new-pw-input" autocomplete="new-password" class="input modal-input account-input" type="password">
+          </div>
+          <div class="control">
+            <label class="label" for="verify-pw-input">Confirm Password</label>
+            <input required id="verify-pw-input" maxlength="70" minlength="6" name="verify-pw-input" autocomplete="new-password" class="input modal-input account-input" type="password">
+          </div>
+        </form>
+        <div class="control is-grouped is-grouped-center">
+          <p class="control">
+            <button form="password-form" type="submit" id="password-submit" tabindex="0" class='button is-primary'>
+              <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+              <span>Save</span>
+            </button>
+          </p>
+          <p class="control">
+            <a tabindex="0" class='button is-outlined is-danger cancel-modal'>
+              <span class="icon is-small"><i class="fa fa-ban"></i></span>
+              <span>Cancel</span>
+            </a>
+          </p>
         </div>
       </div>
     </div>
@@ -795,9 +851,8 @@
   <div id="credit-card-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content offer-popup">
-        <div class="box is-small">
-          <form id="credit-card-form" class="content" autocomplete="on">
+      <div class="modal-content is-small">
+        <form id="credit-card-form" class="content" autocomplete="on">
             <p class="control existing-cc is-hidden"></p>
             <div class="control">
               <label class="label">
@@ -861,7 +916,6 @@
               </p>
             </div>
           </form>
-        </div>
       </div>
     </div>
     <button class="modal-close"></button>
@@ -871,39 +925,38 @@
   <div id="cancel-premium-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content offer-popup">
-        <div class="box">
-          <div class="control">
-            <p class="control">
-              Are you sure you want to cancel your Premium account?
+      <div class="modal-content">
+        <div class="control">
+          <p class="control">
+            Are you sure you want to cancel your Premium account?
+          </p>
+          <div>
+            <p class="control has-text-centered">
+              <span class="icon is-danger"><i class="fa fa-exclamation-triangle"></i></span>
+              The following <strong>will be disabled</strong> for your account.
+              <span class="icon is-danger"><i class="fa fa-exclamation-triangle"></i></span>
             </p>
-            <div>
-              <p class="control has-text-centered">
-                <span class="icon is-danger"><i class="fa fa-exclamation-triangle"></i></span>
-                The following <strong>will be disabled</strong> for your account.
-                <span class="icon is-danger"><i class="fa fa-exclamation-triangle"></i></span>
-              </p>
-              <div id="premium-cancel-disable-wrapper">
-                <li>
-                  0% commission on sales and rentals
-                </li>
-                <li>
-                  Customization on your listings
-                </li>
-                <li>
-                  Custom HTTPS URLs on your listings
-                </li>
-                <li>
-                  Customized email communications from your listings
-                </li>
-              </div>
+            <div id="premium-cancel-disable-wrapper">
+              <li>
+                0% commission on sales and rentals
+              </li>
+              <li>
+                Customization on your listings
+              </li>
+              <li>
+                Custom HTTPS URLs on your listings
+              </li>
+              <li>
+                Customized email communications from your listings
+              </li>
             </div>
           </div>
-          <div class="control">
-            <label class="label" for="cancel-confirmation-input">Please type <strong>CANCEL</strong> to confirm cancellation.</label>
-            <input id="cancel-confirmation-input" type="text" name="cancel-confirmation-input" class="modal-input input"/>
-          </div>
-          <div class="control is-grouped is-grouped-center">
+        </div>
+        <div class="control">
+          <label class="label" for="cancel-confirmation-input">Please type <strong>CANCEL</strong> to confirm cancellation.</label>
+          <input id="cancel-confirmation-input" type="text" name="cancel-confirmation-input" class="modal-input input"/>
+        </div>
+        <div class="control is-grouped is-grouped-center">
             <div class="control">
               <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-danger is-outlined'>
                 <span class="icon is-small"><i class="fa fa-frown-o"></i></span>
@@ -917,7 +970,6 @@
               </a>
             </div>
           </div>
-        </div>
       </div>
     </div>
     <button class="modal-close"></button>
@@ -927,9 +979,8 @@
   <div id="change-bank-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content offer-popup">
-        <div class="box">
-          <form id="stripe-bank-form" autocomplete="off" class="content">
+      <div class="modal-content">
+        <form id="stripe-bank-form" autocomplete="off" class="content">
             <p class="control existing-bank is-hidden"></p>
             <div class="control">
               <label class="label" for="country-input">Country</label>
@@ -1016,42 +1067,59 @@
               </p>
             </div>
           </form>
-        </div>
       </div>
     </div>
     <button class="modal-close"></button>
   </div>
 
-  <!-- EARNINGS DETAILS MODAL -->
-  <div id="earnings-details-modal" class="modal">
+  <!-- TRANSACTIONS DETAILS MODAL -->
+  <div id="transactions-details-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content offer-popup">
-        <div class="box">
-          <div class="content has-text-centered">
-            <h3 class="is-bold" id="earnings-modal-domain"></h3>
-            <p>Date - <span id="earnings-modal-timestamp"></span></p>
-          </div>
-          <div class="content">
-            <h1 id="earnings-modal-price" class="has-text-centered"></h1>
-          </div>
-          <div class="content remove-margin-bottom-content">
-            <ul id="earnings-info" class="offer-info">
-              <li>
-                <span class="icon is-small" title="Type"><i class="fa fa-user-o"></i></span><span id="offer-modal-name"></span>
-              </li>
-              <li>
-                <span class="icon is-small" title="Email"><i class="fa fa-envelope-o"></i></span><span id="offer-modal-email"></span>
-              </li>
-              <li>
-                <span class="icon is-small" title="Phone"><i class="fa fa-phone"></i></span><span id="offer-modal-phone"></span>
-              </li>
-              <li class="">
-                <span class="icon is-small" title="Message"><i class="fa fa-comment-o"></i></span>
-                <p id="offer-modal-message" class="offer-msg"></p>
-              </li>
-            </ul>
-          </div>
+      <div class="modal-content">
+        <div class="content has-text-centered">
+          <h3 class="is-bold" id="transactions-modal-domain"></h3>
+          <p><span id="transactions-modal-timestamp"></span></p>
+        </div>
+        <div class="content">
+          <h1 id="transactions-modal-price" class="has-text-centered"></h1>
+        </div>
+        <div class="content">
+          <ul id="transactions-info">
+            <li id="pending-transfer-wrapper" class="is-hidden">
+              <span class="icon is-small is-danger" title="Pending Transfer of Ownership"><i class="fa fa-exclamation-circle"></i></span><span>Please <a id="transfer-ownership-href" class="is-underlined is-primary">transfer ownership</a> of this domain to access these funds!</span>
+            </li>
+            <li id="available-on-wrapper">
+              <span class="icon is-small" title="Type"><i class="fa fa-clock-o"></i></span><span id="transactions-modal-available"></span>
+            </li>
+            <li>
+              <span class="icon is-small" title="DomaHub Fees"><i class="fa fa-diamond"></i></span>
+              </span><span id="transactions-modal-domafees"></span>
+            </li>
+            <li>
+              <span class="icon is-small" title="Payment Processing Fees"><i class="fa fa-money"></i></span><span id="transactions-modal-processfees"></span>
+            </li>
+          </ul>
+        </div>
+        <div id="rental-buttons-wrapper" class="is-hidden control is-grouped is-grouped-center">
+          <p class="control">
+            <a target="_blank" id="view-rental-button" type="submit" class="button">
+              <span class="icon is-small"><i class="fa fa-search"></i></span>
+              <span>Preview rental</span>
+            </a>
+          </p>
+          <p class="control">
+            <a id="refund-rental-submit" type="submit" class="button is-danger is-outlined">
+              <span class="icon is-small"><i class="fa fa-repeat"></i></span>
+              <span>Refund rental</span>
+            </a>
+          </p>
+        </div>
+        <div class="control basic-hidden">
+          <small class="tip remove-margin-bottom-content">* Hurray! You paid 0% commission on this transaction!</small>
+        </div>
+        <div class="control premium-hidden">
+          <small class="tip remove-margin-bottom-content">* Upgrade to <a href="/profile/settings#premium" class="is-underlined is-primary">Premium</a> and pay 0% commission on future sales/rentals!</small>
         </div>
       </div>
     </div>

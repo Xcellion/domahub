@@ -212,10 +212,7 @@ module.exports = {
     checkSelectedIDs : function(req, res, next){
       console.log("F: Checking posted domain IDs...");
       var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
-      if (!selected_ids){
-        error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
-      }
-      else if (selected_ids.length <= 0){
+      if (!selected_ids || selected_ids.length <= 0){
         error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
       }
       else {
@@ -374,6 +371,8 @@ module.exports = {
 
     //check for verified, ownership, and purchased for multi listing edit
     checkPostedListingInfoMulti : function(req, res, next){
+      console.log("F: Checking listings for ownership, verification, or sold...");
+
       var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
       var owned_domains = 0;
       var verified_domains = 0;
@@ -408,7 +407,6 @@ module.exports = {
           }
         }
       }
-      console.log(verified_domains, accepted_domains, deposited_domains)
 
       //all good!
       var error_message_plural = (req.body.selected_ids.length == 1) ? "this domain" : "some or all of these domains";
@@ -518,13 +516,15 @@ module.exports = {
               if (err) {
                 reject({
                   err: err,
-                  domain_name : listing_obj.domain_name
+                  domain_name : listing_obj.domain_name,
+                  listing_id : listing_obj.id
                 });
               }
               else {
                 resolve({
+                  address : address,
                   domain_name : listing_obj.domain_name,
-                  address : address
+                  listing_id : listing_obj.id
                 });
               }
             });
@@ -561,11 +561,11 @@ module.exports = {
                      still_pointing.push(x);
                    }
                    else {
-                     not_pointing.push(results[x].value.domain_name);
+                     not_pointing.push(results[x].value.listing_id.toString());
                    }
                  }
                  else {
-                   not_pointing.push(results[x].reason.domain_name);
+                   not_pointing.push(results[x].reason.listing_id.toString());
                  }
                }
 
@@ -579,6 +579,7 @@ module.exports = {
                  }, function(result){
                    if (result.state == "error") { error.handler(req, res, result.info, "json"); }
                    else {
+                     //for the next function
                      req.session.new_listing_info = {
                        verified: null,
                        status: 0
@@ -1022,6 +1023,7 @@ module.exports = {
     else {
       console.log("F: Updating domain details...");
       var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
+
       listing_model.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
         if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
         else {

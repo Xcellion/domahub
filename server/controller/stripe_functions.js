@@ -575,8 +575,8 @@ module.exports = {
     });
   },
 
-  //get all charges made to account (earnings of rentals + sales)
-  getEarnings : function(req, res, next){
+  //get all charges made to account (transactions of rentals + sales)
+  getTransactions : function(req, res, next){
     if (req.user.stripe_account_id){
       console.log('SF: Retrieving all Stripe transactions...');
 
@@ -585,12 +585,18 @@ module.exports = {
         expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
       }, function(err, charges) {
         if (err) { error.log(err); }
-        updateUserEarnings(req.user, charges.data, "stripe");
-        next();
+        updateUserTransactions(req.user, charges.data, "stripe");
+        res.send({
+          state : "success",
+          user : req.user
+        });
       });
     }
     else {
-      next();
+      res.send({
+        state : "success",
+        user : req.user
+      });
     }
   },
 
@@ -1155,7 +1161,7 @@ function updateUserStripeCustomerCharges(user, charges){
       temp_charges.push({
         amount : charges.data[x].amount,
         amount_refunded : charges.data[x].amount_refunded,
-        created : charges.data[x].created,
+        created : charges.data[x].created * 1000,
         brand : charges.data[x].source.brand,
         last4 : charges.data[x].source.last4
       });
@@ -1174,7 +1180,7 @@ function updateUserStripeCustomerInvoice(user, upcoming){
 
     user.stripe_customer.upcoming_invoice = {
       amount_due : upcoming.amount_due,
-      date : upcoming.date
+      date : upcoming.date * 1000
     };
   }
 }
@@ -1187,26 +1193,26 @@ function updateUserStripeSubscription(user, subscription){
     }
 
     user.stripe_subscription = {
-      created : subscription.created,
-      current_period_end : subscription.current_period_end,
+      created : subscription.created  * 1000,
+      current_period_end : subscription.current_period_end * 1000,
       cancel_at_period_end : subscription.cancel_at_period_end
     }
   }
 }
 
 //update req.user with stripe charges (or paypal)
-function updateUserEarnings(user, charges, type){
-  if (!user.dev_earnings){
-    user.dev_earnings = {};
+function updateUserTransactions(user, charges, type){
+  if (!user.dev_transactions){
+    user.dev_transactions = {};
   }
-  if (!user.earnings){
-    user.earnings = {}
+  if (!user.transactions){
+    user.transactions = {}
   }
 
-  //stripe earnings
+  //stripe transactions
   if (charges && type == "stripe"){
     if (process.env.NODE_ENV == "dev"){
-      user.dev_earnings.stripe_earnings = charges;
+      user.dev_transactions.stripe_transactions = charges;
     }
 
     var temp_charges = [];
@@ -1214,14 +1220,15 @@ function updateUserEarnings(user, charges, type){
       var temp_transfer = {
         charge_id : charges[x].id,
         amount : charges[x].amount,
-        created : charges[x].created,
+        created : charges[x].created * 1000,
         currency : charges[x].currency,
         amount_refunded : charges[x].amount_refunded,
         domain_name : (charges[x].metadata) ? charges[x].metadata.domain_name : "",
+        listing_id : (charges[x].metadata) ? charges[x].metadata.listing_id : "",
         stripe_fees : (charges[x].metadata) ? charges[x].metadata.stripe_fees : "",
         doma_fees : (charges[x].metadata) ? charges[x].metadata.doma_fees : "",
         pending_transfer : (charges[x].metadata) ? charges[x].metadata.pending_transfer : "",
-        available_on : (charges[x].balance_transaction && charges[x].balance_transaction.available_on) ? charges[x].balance_transaction.available_on : false,
+        available_on : (charges[x].balance_transaction && charges[x].balance_transaction.available_on) ? charges[x].balance_transaction.available_on * 1000 : false,
       }
 
       //if the charge is a rental
@@ -1231,11 +1238,12 @@ function updateUserEarnings(user, charges, type){
       }
       temp_charges.push(temp_transfer);
     }
-    user.earnings.stripe_earnings = temp_charges;
+    user.transactions.stripe_transactions = temp_charges;
   }
 
-  //paypal earnings
+  //paypal transactions
   if (charges && type == "paypal"){
+
   }
 }
 
