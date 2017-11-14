@@ -56,7 +56,7 @@ module.exports = function(app){
 
 //<editor-fold>-------------------------------DEV FUNCTIONS-------------------------------
 
-  //<editor-fold>-------------------------------MONKEY-------------------------------------
+  //<editor-fold>-------------------------------ALEXA-------------------------------------
 
   //testing alexa get
   function alexa(req, res, next){
@@ -201,11 +201,15 @@ module.exports = function(app){
   //show a specific view
   function showView(req, res, next){
     var view_vars = {
+      user: "Wonkyu",
       listing_info : {
         domain_name : "testdomain.com",
         primary_color : "#e86666",
         premium: true,
+        logo: "",
+        compare: false
       },
+      compare: false,
       offer_info : {
         name : "WOFJ",
         verification_code : "fdjasks"

@@ -39,9 +39,25 @@ $(document).ready(function() {
     $('#cc-num').focus();
   });
 
-  //click checkout button to submit and get stripe token
-  $("#submit-card-button").on("click", function(e){
-    submitForToken();
+  //upgrade to premium with existing credit card
+  $("#upgrade-button").on("click", function(){
+    //upgrade to premium with existing card
+    submitPremium(false, $(this));
+  });
+
+  //get stripe token
+  $("#stripe-form").on("submit", function(e){
+    e.preventDefault();
+    Stripe.card.createToken($(this), function(status, response){
+      if (response.error){
+        $("#checkout-button").removeClass('is-loading');
+        errorMessage(response.error.message);
+      }
+      else {
+        //all good, submit stripetoken and listing id to dh server
+        submitPremium(response.id, $("#checkout-button"));
+      }
+    });
   });
 
   //</editor-fold>
@@ -53,10 +69,17 @@ $(document).ready(function() {
     submitPremium($(this));
   });
 
-  //button to cancel subscription
   $("#cancel-premium-button").off().on("click", function(){
-    submitCancelPremium($(this));
-  });
+    //ask for confirmation
+    if ($(this).data("youSure") == true){
+      //just upgrade to premium with existing card
+      submitCancelPremium($(this));
+    }
+    else {
+      $(this).data("youSure", true);
+      $(this).find(".button-text").text("Are you sure?");
+    }
+  }).find(".button-text").text("Upgrade").data("youSure", false);
 
   //</editor-fold>
 
