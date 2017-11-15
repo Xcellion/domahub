@@ -168,7 +168,7 @@ function showNotifications() {
 function calcNotificationCounter() {
   var notification_length = $("#notification-tray li").length;
   if (notification_length > 0) {
-    $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications</p>");
+    $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications<span class='is-pulled-right'>" + notification_length + "</span></p>");
     $("#notification-counter").removeClass("is-hidden").text(notification_length);
     var page_title = document.title.split(" - ");
     if (page_title){
