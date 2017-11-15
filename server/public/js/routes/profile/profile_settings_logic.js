@@ -1013,7 +1013,7 @@ function createTransactionsTable(){
   $(".transactions-row:not(#transactions-row-clone)").remove();
 
   //transactions rows
-  if (user.transactions){
+  if (user.transactions && user.transactions.total > 0){
 
     //stripe transactions
     if (user.transactions.stripe_transactions){

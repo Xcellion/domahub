@@ -1202,11 +1202,13 @@ function updateUserStripeSubscription(user, subscription){
 
 //update req.user with stripe charges (or paypal)
 function updateUserTransactions(user, charges, type){
-  if (!user.dev_transactions){
+  if (!user.dev_transactions && process.env.NODE_ENV == "dev"){
     user.dev_transactions = {};
   }
   if (!user.transactions){
-    user.transactions = {}
+    user.transactions = {
+      total : 0
+    }
   }
 
   //stripe transactions
@@ -1238,6 +1240,7 @@ function updateUserTransactions(user, charges, type){
       }
       temp_charges.push(temp_transfer);
     }
+    user.transactions.total += charges.length;
     user.transactions.stripe_transactions = temp_charges;
   }
 
