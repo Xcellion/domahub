@@ -1,4 +1,4 @@
-//<editor-fold>------------------------------------------VARIABLES---------------------------------------
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');

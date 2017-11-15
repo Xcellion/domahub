@@ -22,6 +22,20 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.tabs a:not(.button) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
+}
+
+.remove-margin-bottom-content {
+  margin-bottom:0 !important;
+}
+
 .company-logo {
   margin-bottom: 30px;
 }
@@ -309,7 +323,6 @@
   .button,
   .select {
     margin-right: 10px;
-    margin-bottom: 8px;
   }
   &.is-mobile {
     @include mobile {

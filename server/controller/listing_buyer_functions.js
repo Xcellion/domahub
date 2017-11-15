@@ -32,7 +32,7 @@ module.exports = {
 
   //<editor-fold>-------------------------------------OFFER FOR PURCHASE-------------------------------
 
-  //function to check buy-now contact details
+  //check buy-now contact details
   checkContactInfo : function(req, res, next){
     console.log("F: Checking posted contact details for offer...");
 
@@ -174,7 +174,7 @@ module.exports = {
     });
   },
 
-  //function to check if already accepted an offer for a listing
+  //check if already accepted an offer for a listing
   checkAlreadyAccepted : function(req, res, next){
     console.log("F: Checking if listing has an existing accepted offer...");
     var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
@@ -187,7 +187,7 @@ module.exports = {
     }
   },
 
-  //function to accept or reject an offer
+  //accept or reject an offer
   acceptOrRejectOffer : function(req, res, next){
     console.log("F: Accepting or rejecting an offer...");
     var accepted = req.path.indexOf("/accept") != -1;
@@ -534,7 +534,7 @@ module.exports = {
     });
   },
 
-  //function to check verification code and render the verification page
+  //check verification code and render the verification page
   checkListingPurchaseVerificationCode : function(req, res, next){
     listing_model.checkListingPurchaseVerificationCode(req.params.domain_name, req.params.verification_code, function(result){
       if (result.state == "success" && result.info.length > 0){
@@ -546,7 +546,7 @@ module.exports = {
     });
   },
 
-  //function to render the transfer ownership verifcation page
+  //render the transfer ownership verifcation page
   renderVerificationPage : function(req, res, next){
     getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
       res.render("listings/transfer_verify.ejs", {
@@ -557,7 +557,7 @@ module.exports = {
     });
   },
 
-  //function to verify that ownership transferred
+  //verify that ownership transferred
   verifyTransferOwnership : function(req, res, next){
     res.send({
       state: "success"

@@ -6,6 +6,61 @@
 
 <%- include("notifications.ejs"); %>
 
+<% if (!user) { %>
+  <div id="modal-login" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      <div class="modal-content login-box pop-in">
+        <div id="login-dropdown">
+          <div class="content has-text-centered">
+            <h2>
+              <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+                <div class='is-inline-block flat-logo is-primary'></div>
+              </a>
+            </h2>
+          </div>
+          <form id="login-form" action="/login" method="post">
+            <p class="control has-icon">
+              <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
+              <i class="fa fa-envelope-o"></i>
+            </p>
+            <p class="control has-icon">
+              <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password">
+              <i class="fa fa-lock"></i>
+            </p>
+            <p class="control">
+              <button id="login-button" class="button is-primary is-stylish is-fullwidth">
+                <span class="icon is-small">
+                  <i class="fa fa-sign-in"></i>
+                </span>
+                <span>Log In</span>
+              </button>
+            </p>
+            <div class="control is-spaced">
+              <div class="checkbox-form">
+                <input id="remember-checkbox" type="checkbox" tabindex="0" title="Remember Me" />
+                <label for="remember-checkbox" tabindex="0">Remember Me</label>
+              </div>
+              <p class="control-right">
+                  <a class="forgot is-primary" href="/forgot">Forgot password?</a>
+              </p>
+            </div>
+          <%# <p class="control">
+            <p class="has-text-centered">
+              Don&#146;t have an account?
+            </p>
+            <div class="has-text-centered">
+              <a class="signup is-primary" href="/signup">Sign Up Now</a>
+            </div>
+          </p> %>
+          </form>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+<% } %>
+
 <nav id="navbar" class="nav is-white">
   <div class="nav-left">
     <div class="nav-item">
@@ -34,7 +89,7 @@
         <a tabindex="0" class="nav-link" title="Pricing" href="/features#pricing">Pricing</a>
       </div>
       <div class="nav-item">
-        <a id="signup" tabindex="0" class="nav-link has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
+        <a id="signup" tabindex="0" class="has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
           <span class="icon is-small">
             <i class="fa fa-user-circle"></i>
           </span>
@@ -52,58 +107,6 @@
             Log In
           </span>
         </a>
-      </div>
-      <div id="modal-login" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-container">
-          <div class="modal-content login-box pop-in">
-            <div id="login-dropdown">
-              <div class="content has-text-centered">
-                <h2>
-                  <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-                    <div class='is-inline-block flat-logo is-primary'></div>
-                  </a>
-                </h2>
-              </div>
-              <form id="login-form" action="/login" method="post">
-                <p class="control has-icon">
-                  <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
-                  <i class="fa fa-envelope-o"></i>
-                </p>
-                <p class="control has-icon">
-                  <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password">
-                  <i class="fa fa-lock"></i>
-                </p>
-                <p class="control">
-                  <button id="login-button" class="button is-primary is-stylish is-fullwidth">
-                    <span class="icon is-small">
-                      <i class="fa fa-sign-in"></i>
-                    </span>
-                    <span>Log In</span>
-                  </button>
-                </p>
-                <div class="control is-spaced">
-                  <div class="checkbox-form">
-    								<input id="remember-checkbox" type="checkbox" tabindex="0" title="Remember Me" />
-    								<label for="remember-checkbox" tabindex="0">Remember Me</label>
-    							</div>
-                  <p class="control-right">
-                      <a class="forgot is-primary" href="/forgot">Forgot password?</a>
-                  </p>
-                </div>
-              <%# <p class="control">
-                <p class="has-text-centered">
-                  Don&#146;t have an account?
-                </p>
-                <div class="has-text-centered">
-                  <a class="signup is-primary" href="/signup">Sign Up Now</a>
-                </div>
-              </p> %>
-              </form>
-            </div>
-          </div>
-        </div>
-        <button class="modal-close"></button>
       </div>
 
     <!-- or else display the user profile as logged in -->

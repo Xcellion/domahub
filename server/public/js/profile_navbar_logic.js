@@ -1,5 +1,15 @@
 $(document).ready(function() {
+
+  //<editor-fold>-------------------------------PROFILE NAVBAR--------------------------------
+
   showNotifications();
+
+  //toggle user drop down menu on icon button click
+  $(".nav-button").on("click", function() {
+    $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
+    $("#" + $(this).data("menu")).toggleClass("is-hidden");
+  });
+
   //mobile view nav menu
   $(".nav-toggle").on("click", function() {
     $(this).toggleClass("is-active");
@@ -8,7 +18,7 @@ $(document).ready(function() {
 
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
-    if (!$(event.target).closest(".nav-button").length) {
+    if (!$(event.target).closest(".user-button").length) {
       if ($(".nav-drop").is(":visible")) {
         $(".nav-drop").addClass("is-hidden");
         $(this).toggleClass("is-active").blur();
@@ -16,22 +26,62 @@ $(document).ready(function() {
     }
   });
 
-  //toggle user drop down menu on icon button click
-  $(".nav-button").on("click", function() {
-    $(".nav-drop").addClass("is-hidden");
-    $("#" + $(this).data("menu")).removeClass("is-hidden");
-  });
+  //</editor-fold>
 
-  $(document).keyup(function(e) {
+  //<editor-fold>-------------------------------MODAL--------------------------------
+
+  $(document).on("keyup", function(e) {
     if (e.which == 27) {
-      $('#modal-login').removeClass('is-active');
+      $('.modal').removeClass('is-active');
     }
   });
 
+  //close modal
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    $('.modal').removeClass('is-active');
+  });
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------LEFT MENU VISUAL--------------------------------
+
   leftMenuActive();
+
+  //hide upgrade link on left nav if already premium
+  if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+    $("#nav-premium-link").removeClass('is-hidden');
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------CONTACT US--------------------------------
+
+  //contact us form
+  $("#contact-form").on("submit", function(e){
+    e.preventDefault();
+    $("#contact-submit-button").addClass('is-loading');
+    $.ajax({
+      url: "/contact",
+      data: {
+        contact_email: user.email,
+        contact_name: user.username,
+        contact_message: $("#contact_message").val()
+      },
+      method: "POST"
+    }).done(function(){
+      clearNotification();
+      $("#contact-submit-button").removeClass('is-loading');
+      $("#contact_message").val("");
+      $("#contact-dropdown-menu").addClass('is-hidden');
+      successMessage("Message sent! We will get back to you as soon as possible. Thank you for your patience.");
+    });
+  });
+
+  //</editor-fold>
+
 });
 
-//<editor-fold>-------------------------------URL HELPER FUNCTIONS--------------------------------
+//<editor-fold>----------------------------------URL HELPER FUNCTIONS-------------------------
 
 //add active to left menu
 function leftMenuActive(){
@@ -103,7 +153,7 @@ function removeURLParameter(parameter) {
 
 //</editor-fold>
 
-//<editor-fold>----------------------------------DROPDOWN MENUS-------------------------
+//<editor-fold>----------------------------------NOTIFICATIONS-------------------------
 
 //populate the notifications tray
 function showNotifications() {
@@ -111,21 +161,6 @@ function showNotifications() {
   //if no listings
   if (!user.listings || user.listings.length == 0){
     appendNotification("<a tabindex='0' class='is-primary' href='/listings/create'>Create DomaHub listings</a>");
-  }
-
-  //if stripe payout settings are not set
-  if (!user.stripe_account) {
-    appendNotification("<a tabindex='0' href='/profile/settings#payout-address'>Complete payout settings</a>");
-  }
-
-  //if bank account is not connected
-  if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
-    appendNotification("<a tabindex='0' href='/profile/settings#payout-bank'>Connect a bank account</a>");
-  }
-
-  //if not premium
-  if (!user.stripe_subscription_id){
-    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
   }
 
   //if unverified domains exist
@@ -136,14 +171,34 @@ function showNotifications() {
     appendNotification("<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
   }
 
+  //if stripe payout settings are not set
+  if (!user.stripe_account) {
+    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Complete payout settings</a>");
+  }
+
+  //if bank account is not connected
+  if (!user.stripe_bank) {
+    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Connect a bank account</a>");
+  }
+
+  //if not premium
+  if (!user.stripe_subscription){
+    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
+  }
+
   calcNotificationCounter();
 }
 
 //when notifications tray is empty
 function calcNotificationCounter() {
-  if ($("#notification-tray li").length > 0) {
-    $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications</p>");
-    $("#notification-counter").removeClass("is-hidden").text($("#notification-tray li").length);
+  var notification_length = $("#notification-tray li").length;
+  if (notification_length > 0) {
+    $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications<span class='is-pulled-right'>" + notification_length + "</span></p>");
+    $("#notification-counter").removeClass("is-hidden").text(notification_length);
+    var page_title = document.title.split(" - ");
+    if (page_title){
+      document.title = page_title[0] + " (" + notification_length + ") - " + page_title[1];
+    }
   }
   else {
     $("#notification-tray").append(

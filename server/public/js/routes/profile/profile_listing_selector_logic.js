@@ -110,18 +110,6 @@ $(document).ready(function(){
     deleteListings($(this));
   });
 
-  //nevermind delete listings
-  $("#delete-nevermind, .modal-close, .modal-background").on("click", function(e){
-    $("#delete-modal").removeClass('is-active');
-  });
-
-  //ESC key to close modal
-  $(document).keyup(function(e) {
-    if (e.which == 27) {
-      $('.modal').removeClass('is-active');
-    }
-  });
-
   //refresh listings
   $("#refresh-listings-button").on("click", function(){
     $("#refresh-listings-button").addClass('is-loading');
@@ -299,7 +287,7 @@ function createRows(selected_ids){
   }
   //there are no listings to show!
   else {
-    $("#no-listings-row").removeClass('is-hidden');
+    $("#no-domains-row").removeClass('is-hidden');
     $(".yes-listings-elem").addClass('is-hidden');
   }
 }
@@ -352,7 +340,7 @@ function updateDomainRow(tempRow, listing_info){
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
 
   tempRow.find(".td-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
-  tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mm:A"));
+  tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mmA"));
 
   //status text
   if (listing_info.transferred){
