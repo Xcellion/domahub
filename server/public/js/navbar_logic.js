@@ -40,6 +40,7 @@ $(document).ready(function() {
 
     //profile dropdown logic
     $(document).on("click", function(event) {
+      console.log(event.target);
       //clicked off profile dropdown
       if (!$(event.target).closest("#profile-button").length && !$("#profile-dropdown").hasClass("is-hidden")) {
         if (!$(".nav").hasClass("is-white")){
