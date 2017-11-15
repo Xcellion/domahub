@@ -4,6 +4,12 @@ $(document).ready(function() {
 
   showNotifications();
 
+  //toggle user drop down menu on icon button click
+  $(".nav-button").on("click", function() {
+    $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
+    $("#" + $(this).data("menu")).toggleClass("is-hidden");
+  });
+
   //mobile view nav menu
   $(".nav-toggle").on("click", function() {
     $(this).toggleClass("is-active");
@@ -12,7 +18,7 @@ $(document).ready(function() {
 
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
-    if (!$(event.target).closest(".nav-button").length) {
+    if (!$(event.target).closest(".user-button").length) {
       if ($(".nav-drop").is(":visible")) {
         $(".nav-drop").addClass("is-hidden");
         $(this).toggleClass("is-active").blur();
@@ -23,12 +29,6 @@ $(document).ready(function() {
   //</editor-fold>
 
   //<editor-fold>-------------------------------MODAL--------------------------------
-
-  //toggle user drop down menu on icon button click
-  $(".nav-button").on("click", function() {
-    $(".nav-drop").addClass("is-hidden");
-    $("#" + $(this).data("menu")).removeClass("is-hidden");
-  });
 
   $(document).on("keyup", function(e) {
     if (e.which == 27) {
@@ -51,6 +51,31 @@ $(document).ready(function() {
   if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
     $("#nav-premium-link").removeClass('is-hidden');
   }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------CONTACT US--------------------------------
+
+  //contact us form
+  $("#contact-form").on("submit", function(e){
+    e.preventDefault();
+    $("#contact-submit-button").addClass('is-loading');
+    $.ajax({
+      url: "/contact",
+      data: {
+        contact_email: user.email,
+        contact_name: user.username,
+        contact_message: $("#contact_message").val()
+      },
+      method: "POST"
+    }).done(function(){
+      clearNotification();
+      $("#contact-submit-button").removeClass('is-loading');
+      $("#contact_message").val("");
+      $("#contact-dropdown-menu").addClass('is-hidden');
+      successMessage("Message sent! We will get back to you as soon as possible. Thank you for your patience.");
+    });
+  });
 
   //</editor-fold>
 
@@ -138,6 +163,14 @@ function showNotifications() {
     appendNotification("<a tabindex='0' class='is-primary' href='/listings/create'>Create DomaHub listings</a>");
   }
 
+  //if unverified domains exist
+  var unverified_listings = user.listings.filter(function(listing) {
+    return !listing.verified;
+  });
+  if (unverified_listings.length > 0){
+    appendNotification("<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
+  }
+
   //if stripe payout settings are not set
   if (!user.stripe_account) {
     appendNotification("<a tabindex='0' href='/profile/settings#payment'>Complete payout settings</a>");
@@ -151,14 +184,6 @@ function showNotifications() {
   //if not premium
   if (!user.stripe_subscription){
     appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
-  }
-
-  //if unverified domains exist
-  var unverified_listings = user.listings.filter(function(listing) {
-    return !listing.verified;
-  });
-  if (unverified_listings.length > 0){
-    appendNotification("<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
   }
 
   calcNotificationCounter();

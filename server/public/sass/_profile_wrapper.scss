@@ -121,7 +121,8 @@
 }
 
 .user-button {
-  &:first-child {
+  &:not(:last-child) {
+    position:relative;
     margin-bottom: 10px;
   }
 }
@@ -132,6 +133,8 @@
   border-radius: 5px 5px 5px 0;
   padding: 5px 8px;
   position: absolute;
+  left: 45px;
+  bottom: 16px;
 }
 
 #notification-counter {
@@ -147,16 +150,24 @@
   width: 18px;
 }
 
+#contact-dropdown-menu {
+  width: 250px;
+  textarea {
+    margin-bottom: 5px;
+  }
+}
+
 #notification-dropdown-menu {
-  left: 45px;
-  bottom: 55px;
   width: 250px;
 }
 
 #user-dropdown-menu {
-  left: 45px;
-  bottom: 10px;
   width: 150px;
+}
+
+.menu-label {
+  margin-top:0;
+  margin-bottom:0;
 }
 
 .smile-text {
