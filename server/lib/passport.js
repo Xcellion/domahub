@@ -50,7 +50,7 @@ module.exports = {
         account_model.checkAccountEmail(email, function(result){
           //email exists
           if (result.state=="error" || result.info.length){
-            return done(false, {message: 'User with that email exists!'});
+            return done(false, {message: 'A user with that email exists already!'});
           }
 
           else {
@@ -58,27 +58,23 @@ module.exports = {
             account_model.checkAccountUsername(req.body.username, function(result){
               //username exists
               if (result.state=="error" || result.info.length){
-                return done(false, {message: 'User with that username exists!'});
+                return done(false, {message: 'A user with that username exists already!'});
               }
-
               else {
-                var now = new Date();
-                var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-
                 var account_info = {
                   email: email,
                   username: req.body.username,
-                  password: bcrypt.hashSync(password, null, null),
-                  date_created: now_utc,
-                  date_accessed: now_utc
+                  password: bcrypt.hashSync(password, null, null)
                 }
-
                 //create the new account
                 account_model.newAccount(account_info, function(result){
                   if (result.state=="error"){ done(false, { message: result.info}); }
                   else {
+
+                    //set ID of inserted and type
                     account_info.id = result.info.insertId;
                     account_info.type = 0;
+
                     return done(account_info);
                   }
                 });
@@ -103,12 +99,12 @@ module.exports = {
 
           //account doesnt exist
           else if (!result.info.length){
-            return done(null, false, {message: 'Invalid user!'});
+            return done(null, false, {message: 'No user exists with that combination of email and password!'});
           }
 
           //if the user is found but the password is wrong
           else if (!bcrypt.compareSync(password, result.info[0].password)){
-            return done(null, false, {message: 'Invalid password!'});
+            return done(null, false, {message: 'Invalid password! Please try again.'});
           }
 
           else {

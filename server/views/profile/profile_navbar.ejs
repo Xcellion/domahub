@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
+  var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
 </script>
 <script src="/js/profile_navbar_logic.js" type="text/javascript"></script>
 <div class="left-menu">
@@ -49,15 +49,18 @@
           <span class="icon is-white"><i class="fa fa-cogs"></i></span>
           <p class="is-white is-hidden-tablet-only">Account Settings</p>
         </a>
-        <% if (!user.stripe_subscription_id) { %>
-          <ul class="is-hidden-tablet-only">
-            <li>
-              <a tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme">
-                <small class="is-white">Upgrade to Premium</small>
-              </a>
-            </li>
-          </ul>
-        <% } %>
+        <ul class="is-hidden-tablet-only">
+          <li>
+            <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-hidden">
+              <small class="is-white">
+                Upgrade to Premium
+                <span class="icon is-small">
+                  <i class="fa fa-diamond"></i>
+                </span>
+              </small>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </aside>
@@ -68,7 +71,24 @@
     </p>
   </div>
   <div class="user-panel">
-    <div class="user-button">
+    <div class="user-button" title="Send us a Message">
+      <button tabindex="0" id="contact-button" class="button is-primary is-inverted nav-button" data-menu="contact-dropdown-menu">
+        <i class="fa fa-comments"></i>
+      </button>
+      <aside id="contact-dropdown-menu" class="nav-drop is-hidden">
+        <p class="menu-label">Contact Us</p>
+        <form id="contact-form">
+          <textarea id="contact_message" required class="textarea no-shadow" placeholder="Comments? Questions? Let us know!"></textarea>
+          <button id="contact-submit-button" class="button is-fullwidth is-primary" type="submit" form="contact-form">
+            <span class="icon is-small">
+              <i class="fa fa-comment-o"></i>
+            </span>
+            <span id="contact-submit-text">Send Message</span>
+          </button>
+        </form>
+      </aside>
+    </div>
+    <div class="user-button" title="Check Your Notifications">
       <button tabindex="0" id="notification-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="notification-dropdown-menu">
         <span id="notification-counter" class="is-hidden"></span>
         <i class="fa fa-bell"></i>
@@ -77,7 +97,7 @@
         <ul id="notification-tray" class="menu-list"></ul>
       </aside>
     </div>
-    <div class="user-button">
+    <div class="user-button" title="Other Links">
       <button tabindex="0" id="user-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="user-dropdown-menu">
         <i class="fa fa-user-circle"></i>
       </button>

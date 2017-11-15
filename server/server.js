@@ -25,13 +25,14 @@ app.use(autoReap);
 
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
-// app.use(function(req, res, next) {
-//   res.header('Access-Control-Allow-Credentials', true);
-//   res.header('Access-Control-Allow-Origin', req.headers.host);
-//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-//   next();
-// });
+
+//to refresh EJS variables on back button
+app.use(function(req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Expires', '-1');
+  res.header('Pragma', 'no-cache');
+  next();
+});
 
 //</editor-fold>
 
