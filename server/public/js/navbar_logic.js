@@ -29,16 +29,24 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------NAVBAR-------------------------------
 
-  //hamburger toggle button
+  //hamburger toggle button (not logged in)
   $(".nav-toggle").on("click", function() {
     $(this).toggleClass("is-active");
     $(".nav-menu").toggleClass("is-active");
+  });
+
+  //profile dropdown
+  $("#profile-button").on("click", function() {
+    $("#profile-dropdown").toggleClass("is-hidden");
   });
 
   //clicked off navbar dropdown
   $(document).on("click", function(event) {
     if (!$(event.target).closest(".nav-toggle").length && $(".nav-menu").hasClass('is-active')) {
       $(".nav-toggle, .nav-menu").removeClass("is-active");
+    }
+    if (!$(event.target).closest("#profile-button").length && !$("#profile-button").hasClass('is-hidden')) {
+      $("#profile-dropdown").addClass("is-hidden");
     }
   });
 
