@@ -593,6 +593,7 @@ module.exports = {
       });
     }
     else {
+      updateUserTransactions(req.user, [], "stripe");
       res.send({
         state : "success",
         user : req.user
