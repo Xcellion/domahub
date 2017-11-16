@@ -199,7 +199,7 @@ module.exports = {
                 }, function(err, response, body){
                   if (err || body.errors || body.status == 400){
                     //send email to notify
-                    error.log("Failed to add to Mailchimp list! Notifying...");
+                    console.log("F: Failed to add to Mailchimp list! Notifying...");
                     mailer.sendBasicMail({
                       to: "general@domahub.com",
                       from: 'general@domahub.com',
