@@ -66,9 +66,9 @@
       </div>
     </div>
     <div id="info-tab-drop" data-title="Edit Information Details" class="tab-drop is-hidden">
-      <div class="columns">
-        <div class="column is-5-widescreen">
-          <div class="card is-fullwidth">
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-parent is-6">
+          <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Pricing</h3>
             </div>
@@ -89,7 +89,7 @@
               </div>
             </div>
           </div>
-          <div class="card is-fullwidth">
+          <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Descriptions</h3>
             </div>
@@ -132,11 +132,11 @@
             </div>
           </div>
         </div>
-        <div class="column is-5-widescreen">
-          <div class="card is-fullwidth">
+        <div class="tile is-vertical is-parent is-6">
+          <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Categories</h3>
-              <span class="icon is-tooltip" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
+              <span class="icon is-tooltip" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="left">
                 <i class="fa fa-question-circle"></i>
               </span>
             </div>
@@ -156,7 +156,7 @@
               </div>
             </div>
           </div>
-          <div class="card is-fullwidth">
+          <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Domain Rentals</h3>
             </div>
@@ -261,9 +261,9 @@
           <a id="example-link-info" class="is-underlined preview-elem">This is a link on your listing page.</a>
         </div>
       </div>
-      <div class="columns">
-        <div class="column is-5-widescreen">
-          <div class="card is-fullwidth">
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-parent is-6">
+          <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Fonts and Colors</h3>
             </div>
@@ -341,77 +341,7 @@
                 </div>
             </div>
           </div>
-        </div>
-        <div class="column is-5-widescreen">
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Images</h3>
-            </div>
-            <div class="card-content">
-              <div class="control">
-                <label class="label">
-                  <span>Background Image URL</span>
-                  <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Dimensions can be whatever you wish, but keep in mind your customers will have different resolutions. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="fa fa-question-circle"></i>
-                  </span>
-                </label>
-                <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
-                <div class="control">
-                  <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <button id="background-link-refresh" class='button is-disabled is-outlined'>
-                    <span class="icon is-small">
-                      <i class="fa fa-refresh"></i>
-                    </span>
-                    <span>Refresh Preview</span>
-                  </button>
-                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
-                    <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-                  </form>
-                  <label for="background-image-input" class="premium-input button has-cursor">
-                    <span class="icon is-small">
-                      <i class="fa fa-upload" aria-hidden="true"></i>
-                    </span>
-                    <p data-default-name="Upload Background Image" id="background-image-label" class="file-label">Upload Image</p>
-                  </label>
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Logo Image URL</span>
-                  <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="fa fa-question-circle"></i>
-                  </span>
-                </label>
-                <div class="control">
-                  <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <button id="logo-link-refresh" class='is-disabled is-outlined button'>
-                    <span class="icon is-small">
-                      <i class="fa fa-refresh"></i>
-                    </span>
-                    <span>Refresh Preview</span>
-                  </button>
-                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
-                    <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-                  </form>
-                  <label for="logo-image-input" class="premium-input button has-cursor">
-                    <span class="icon is-small">
-                      <i class="fa fa-upload" aria-hidden="true"></i>
-                    </span>
-                    <p data-default-name="Upload Logo" id="logo-image-label" class="file-label">Upload Logo</p>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-5-widescreen">
-          <div class="card is-fullwidth">
+          <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Information Tab</h3>
               <form class="checkbox-form">
@@ -508,8 +438,72 @@
             </div>
           </div>
         </div>
-        <div class="column is-5-widescreen">
-          <div class="card is-fullwidth">
+        <div class="tile is-vertical is-parent is-6">
+          <div class="card is-fullwidth tile is-child">
+            <div class="card-header">
+              <h3 class="card-header-title">Images</h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label">
+                  <span>Background Image URL</span>
+                  <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Dimensions can be whatever you wish, but keep in mind your customers will have different resolutions. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
+                    <i class="fa fa-question-circle"></i>
+                  </span>
+                </label>
+                <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
+                <div class="control">
+                  <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
+                </div>
+                <div class="control">
+                  <button id="background-link-refresh" class='button is-disabled is-outlined'>
+                    <span class="icon is-small">
+                      <i class="fa fa-refresh"></i>
+                    </span>
+                    <span>Refresh Preview</span>
+                  </button>
+                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                    <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                  </form>
+                  <label for="background-image-input" class="premium-input button has-cursor">
+                    <span class="icon is-small">
+                      <i class="fa fa-upload" aria-hidden="true"></i>
+                    </span>
+                    <p data-default-name="Upload Background Image" id="background-image-label" class="file-label">Upload Image</p>
+                  </label>
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Logo Image URL</span>
+                  <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
+                    <i class="fa fa-question-circle"></i>
+                  </span>
+                </label>
+                <div class="control">
+                  <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
+                </div>
+                <div class="control">
+                  <button id="logo-link-refresh" class='is-disabled is-outlined button'>
+                    <span class="icon is-small">
+                      <i class="fa fa-refresh"></i>
+                    </span>
+                    <span>Refresh Preview</span>
+                  </button>
+                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                    <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                  </form>
+                  <label for="logo-image-input" class="premium-input button has-cursor">
+                    <span class="icon is-small">
+                      <i class="fa fa-upload" aria-hidden="true"></i>
+                    </span>
+                    <p data-default-name="Upload Logo" id="logo-image-label" class="file-label">Upload Logo</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Traffic and History Tabs</h3>
             </div>
