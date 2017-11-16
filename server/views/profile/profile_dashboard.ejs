@@ -24,19 +24,19 @@
             Welcome <%= user.username %>!
           </p>
         </div>
-        <div class="columns">
-					<div class="column is-7">
-						<div class="card is-fullwidth">
-							<div class="card-header">
-								<h3 class="card-header-title">Portfolio Overview</h3>
-							</div>
-							<div class="card-content">
-								<div class="level is-mobile">
-									<div class="level-item has-text-centered">
-										<div class="content">
-											<small class="heading">
-												Total
-											</small>
+        <div class="tile is-ancestor">
+          <div class="tile is-vertical is-parent is-6">
+            <div class="card is-fullwidth tile is-child">
+              <div class="card-header">
+                <h3 class="card-header-title">Portfolio Overview</h3>
+              </div>
+              <div class="card-content">
+                <div class="level is-mobile">
+                  <div class="level-item has-text-centered">
+                    <div class="content">
+                      <small class="heading">
+                        Total
+                      </small>
                       <h1 class="counter">
                         <% if (user.listings.length > 0){ %>
                           <div>
@@ -46,20 +46,20 @@
                           <a tabindex="0" href="/listings/create" class="counter-link" title="View Domains"><%= user.listings.length %></a>
                         <% } %>
                       </h1>
-										</div>
-									</div>
-									<div class="level-item has-text-centered">
-										<div class="content">
-											<small class="heading">
-												Offers
-											</small>
-											<h1 class="counter">
+                    </div>
+                  </div>
+                  <div class="level-item has-text-centered">
+                    <div class="content">
+                      <small class="heading">
+                        Offers
+                      </small>
+                      <h1 class="counter">
                         <div>
                           <a id="offers-counter" tabindex="0" href="/profile/mylistings?tab=offers" class="counter-link" title="View Offers"></a>
                         </div>
                       </h1>
                     </div>
-									</div>
+                  </div>
                   <div class="level-item has-text-centered">
                     <div class="content">
                       <small class="heading">
@@ -70,39 +70,39 @@
                       </h1>
                     </div>
                   </div>
-								</div>
-							</div>
-						</div>
-						<div class="card is-fullwidth">
-							<div class="card-header">
-								<h3 class="card-header-title is-bold">Get Free Months of Premium</h3>
-								<a tabindex="0" href="/features#pricing" class="button is-small no-shadow">
-									<span class="icon is-small"><i class="fa fa-question-circle"></i></span>
-									<span>What is Premium?</span>
-								</a>
-							</div>
-              <div class="card-content">
-								<div class="content">
-	                <p>
-	                  Invite your friends to try DomaHub using your unique promo code and get a free month of premium
-	                  for each friend that signs up for a Premium account!
-	                </p>
-	                <p>
-	                  Check the status of your existing referrals <a class="is-primary is-underlined" href="/profile/settings#premium" tabindex="0">here</a>.
-	                </p>
-	                <div class="control has-addons">
-	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input no-shadow" placeholder="Invite your friends!"/>
-	                  <a id="referral-link-copy" class="button is-primary is-stylish is-small no-shadow" tabindex="0">
-	                    <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
-	                    <span id="referral-link-text">Copy Link</span>
-	                  </a>
-	                </div>
-	              </div>
-							</div>
+                </div>
+              </div>
             </div>
-					</div>
-          <div class="column is-5">
-            <div class="card is-fullwidth">
+            <div class="card is-fullwidth tile is-child">
+              <div class="card-header">
+                <h3 class="card-header-title">Get Free Months of Premium</h3>
+                <a tabindex="0" href="/features#pricing" class="button is-small no-shadow">
+                  <span class="icon is-small"><i class="fa fa-question-circle"></i></span>
+                  <span>What is Premium?</span>
+                </a>
+              </div>
+              <div class="card-content">
+                <div class="content">
+                  <p>
+                    Invite your friends to try DomaHub using your unique promo code and get a free month of premium
+                    for each friend that signs up for a Premium account!
+                  </p>
+                  <p>
+                    Check the status of your existing referrals <a class="is-primary is-underlined" href="/profile/settings#premium" tabindex="0">here</a>.
+                  </p>
+                  <div class="control has-addons">
+                    <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input no-shadow" placeholder="Invite your friends!"/>
+                    <a id="referral-link-copy" class="button is-primary is-stylish is-small no-shadow" tabindex="0">
+                      <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
+                      <span id="referral-link-text">Copy Link</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-vertical is-parent">
+            <div class="card is-fullwidth tile is-child">
               <div class="card-header">
                 <h3 class="card-header-title">Account Status</h3>
               </div>
@@ -113,12 +113,12 @@
                       Email Address
                     </p>
                   </div>
-									<p class="tag is-primary control-right has-text-right">
+                  <p class="tag is-primary control-right has-text-right">
                     <span class="icon is-small"><i class="fa fa-check"></i></span>
                     <span>Verified</span>
                   </p>
                 </div>
-								<div class="control is-spaced">
+                <div class="control is-spaced">
                   <div class="content control-left">
                     <p>
                       Payout Settings
@@ -130,17 +130,17 @@
                       <% } %>
                     </p>
                   </div>
-									<% if (user.stripe_account) { %>
+                  <% if (user.stripe_account) { %>
                     <p class="tag is-primary control-right has-text-right">
                       <span class="icon is-small"><i class="fa fa-check"></i></span>
                       <span>Connected</span>
                     </p>
-									<% } else { %>
+                  <% } else { %>
                     <p class="tag is-danger control-right has-text-right">
                       <span class="icon is-small"><i class="fa fa-times"></i></span>
                       <span>None</span>
                     </p>
-									<% } %>
+                  <% } %>
                 </div>
                 <div class="control is-spaced">
                   <div class="content control-left">
@@ -154,7 +154,7 @@
                       <% } %>
                     </p>
                   </div>
-									<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
+                  <% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
                     <p class="tag is-primary control-right has-text-right">
                       <span class="icon is-small"><i class="fa fa-check"></i></span>
                       <span>Connected</span>
@@ -186,26 +186,27 @@
                 </div>
               </div>
             </div>
-						<div class="card is-fullwidth">
-							<div class="card-header">
-								<h3 class="card-header-title">Traffic Overview</h3>
-								<%# <a tabindex="0" class="is-stylish is-small card-header-icon button">
-									<span class="icon"><i class="fa fa-calendar"></i></span>
-									<span>Change Date</span>
-								</a>%>
-							</div>
-							<div class="card-content">
+            <div class="card is-fullwidth tile is-child">
+              <div class="card-header">
+                <h3 class="card-header-title">Traffic Overview</h3>
+                <%# <a tabindex="0" class="is-stylish is-small card-header-icon button">
+                  <span class="icon"><i class="fa fa-calendar"></i></span>
+                  <span>Change Date</span>
+                </a>%>
+              </div>
+              <div class="card-content">
                 <div class="content">
                   <p>
-										Statistics and traffic data are currently being developed.
-										Please <a class="is-underlined is-primary" href="/contact">let us know</a>
-										what kind of traffic tools you'd like to see on your DomaHub dashboard!
-									</p>
-								</div>
-							</div>
-						</div>
+                    Statistics and traffic data are currently being developed.
+                    Please <a class="is-underlined is-primary" href="/contact">let us know</a>
+                    what kind of traffic tools you'd like to see on your DomaHub dashboard!
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
