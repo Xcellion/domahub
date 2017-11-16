@@ -465,6 +465,50 @@ module.exports = {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------------UPDATE REGISTRAR-------------------------------
+
+  //check if registrar info is properly formatted
+  checkRegistrarInfo : function(req, res, next){
+    var valid_registrars = ["godaddy", "namecheap"];
+
+    //not a valid registrar
+    if (!req.body.registrar_name || valid_registrars.indexOf(req.body.registrar_name) == -1){
+      error.handler(req, res, "You have selected an invalid registrar! Please select from the given choices.", "json");
+    }
+    else {
+      switch (req.body.registrar_name){
+
+        case "godaddy":
+          if (!req.body.api_key){
+            error.handler(req, res, "That's an invalid production API key! Please input a valid GoDaddy production API key.", "json");
+          }
+          else if (!validator.isInt(req.body.username)){
+            error.handler(req, res, "That's an invalid customer number! Please input a valid GoDaddy customer number.", "json");
+          }
+          else if (!req.body.password){
+            error.handler(req, res, "That's an invalid API key secret! Please input a valid GoDaddy product API key secret.", "json");
+          }
+          else {
+            next();
+          }
+          break;
+
+        case "namecheap":
+          break;
+      }
+    }
+  },
+
+  //update an accounts registrar information
+  updateAccountRegistrar : function(req, res, next){
+    res.send({
+      state: "success",
+      user: req.user
+    });
+  },
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------------RENDERS-------------------------------
 
   renderDashboard : function(req, res, next){

@@ -25,6 +25,16 @@ $(document).ready(function() {
     showSection(temp_id);
   });
 
+  //reset password inputs on modals close
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    cancelChanges();
+  });
+  $(document).on("keyup", function(e) {
+    if (e.which == 27) {
+      cancelChanges();
+    }
+  });
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------ACCOUNT TAB-------------------------------
@@ -61,6 +71,7 @@ $(document).ready(function() {
 
     //change password modal
     $("#change-password-button").on("click", function(){
+      clearNotification();
       $("#change-password-modal").addClass('is-active');
       $("#old-pw-input").focus();
     });
@@ -71,14 +82,19 @@ $(document).ready(function() {
       submitChanges(checkAccountPassword());
     });
 
-    //reset password inputs on modal close
-    $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
-      cancelChanges();
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------SUBMIT REGISTRAR-------------------------------
+
+    //button to show registrar modal
+    $(".add-registrar-button").on("click", function(){
+      setupRegistrarModal($(this).data("registrar_name"));
     });
-    $(document).on("keyup", function(e) {
-      if (e.which == 27) {
-        cancelChanges();
-      }
+
+    //submit registrar form
+    $("#registrar-form").on("submit", function(e){
+      e.preventDefault();
+      submitRegistrar();
     });
 
     //</editor-fold>
@@ -233,8 +249,8 @@ $(document).ready(function() {
       clearNotification();
       $.ajax({
         url: "/profile/settings/payout",
-        data: $(this).serialize(),
-        method: "POST"
+        method: "POST",
+        data: $(this).serialize()
       }).done(function(data){
         hideSaveCancelButtons();
         if (data.state == "success"){
@@ -455,6 +471,7 @@ function showSectionByURL(){
         data: submit_data
       }).done(function(data){
         hideSaveCancelButtons();
+        closeModals();
         if (data.state == "success"){
           successMessage("Successfully updated account settings!");
           user = data.user;
@@ -488,11 +505,63 @@ function showSectionByURL(){
       $(this).val(user[$(this).data("uservar")]);
     });
 
-    //clear modal inputs
-    $(".modal-input").val("");
+    closeModals();
 
     //prefill stripe account info
     prefillStripeInfo();
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------SUBMIT REGISTRAR-------------------------------
+
+  //show the registrar modal and set it up for different registrars
+  function setupRegistrarModal(registrar_name){
+    clearNotification();
+    $("#registrar-name-input").val(registrar_name);
+
+    //set up the registrar modal depending on the registrar name
+    switch(registrar_name){
+      case "godaddy":
+        $("#api-key-link").removeClass('is-hidden').attr('href', "https://developer.godaddy.com/keys/");
+        $("#registrar-api-key-label").text("Production API Key").closest(".registrar-wrapper").removeClass("is-hidden");
+        $("#registrar-username-label").text("Customer Number").closest(".registrar-wrapper").removeClass("is-hidden");
+        $("#registrar-password-label").text("Production Key Secret").closest(".registrar-wrapper").removeClass("is-hidden").find("input").attr("required", true);
+        break;
+      case "namecheap":
+        $("#api-key-link").removeClass('is-hidden').attr('href', "https://ap.www.namecheap.com/Profile/Tools/ApiAccess");
+        $("#registrar-api-key-label").text("API Key").closest(".registrar-wrapper").removeClass("is-hidden");
+        $("#registrar-username-label").text("Username").closest(".registrar-wrapper").removeClass("is-hidden");
+        $("#registrar-password-label").closest(".registrar-wrapper").addClass("is-hidden").find("input").attr("required", false);
+        break;
+    }
+
+    //show registrar modal
+    if (registrar_name){
+      $("#registrar-modal").addClass('is-active');
+      $("#registrar-form").find("input").first().focus()
+    }
+  }
+
+  //submit registrar AJAX
+  function submitRegistrar(){
+    $("#registrar-submit").addClass('is-loading');
+    clearNotification();
+    $.ajax({
+      url: "/profile/registrar",
+      method: "POST",
+      data: $("#registrar-form").serialize()
+    }).done(function(data){
+      hideSaveCancelButtons();
+      closeModals();
+      if (data.state == "success"){
+        successMessage("Successfully updated registrar information!");
+        user = data.user;
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
   }
 
   //</editor-fold>
@@ -1262,7 +1331,14 @@ function calculateTotals(){
 
 function hideSaveCancelButtons(){
   $("#settings-toolbar .tab").last().removeClass("sub-tabs");
-  $(".toolbar-button").addClass('is-hidden').removeClass('is-loading');
+  $(".toolbar-submit-button").removeClass('is-loading');
+  $(".toolbar-button").addClass('is-hidden');
+}
+
+//close modals
+function closeModals(){
+  $(".modal-input").val("");
+  $(".modal").removeClass('is-active');
 }
 
 //to format a number for $$$$

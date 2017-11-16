@@ -119,6 +119,18 @@ module.exports = function(app){
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------UPDATE REGISTRAR-------------------------------
+
+  //post to update registrar
+  app.post("/profile/registrar", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.checkRegistrarInfo,
+    profile_functions.updateAccountRegistrar
+  ]);
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------PROMO CODES-------------------------------
 
   //get all existing referral promo codes for user
