@@ -86,6 +86,8 @@ $(document).ready(function() {
 
     //<editor-fold>-------------------------------SUBMIT REGISTRAR-------------------------------
 
+    updateRegistrarButtons();
+
     //button to show registrar modal
     $(".add-registrar-button").on("click", function(){
       setupRegistrarModal($(this).data("registrar_name"));
@@ -523,12 +525,14 @@ function showSectionByURL(){
     //set up the registrar modal depending on the registrar name
     switch(registrar_name){
       case "godaddy":
+        $("#registrar-guide-link").attr("href", "https://medium.com/@domahub/how-to-connect-your-godaddy-account-to-domahub-ab8e6741347");
         $("#api-key-link").removeClass('is-hidden').attr('href', "https://developer.godaddy.com/keys/");
         $("#registrar-api-key-label").text("Production API Key").closest(".registrar-wrapper").removeClass("is-hidden");
         $("#registrar-username-label").text("Customer Number").closest(".registrar-wrapper").removeClass("is-hidden");
         $("#registrar-password-label").text("Production Key Secret").closest(".registrar-wrapper").removeClass("is-hidden").find("input").attr("required", true);
         break;
       case "namecheap":
+        $("#registrar-guide-link").attr("href", "");
         $("#api-key-link").removeClass('is-hidden').attr('href', "https://ap.www.namecheap.com/Profile/Tools/ApiAccess");
         $("#registrar-api-key-label").text("API Key").closest(".registrar-wrapper").removeClass("is-hidden");
         $("#registrar-username-label").text("Username").closest(".registrar-wrapper").removeClass("is-hidden");
@@ -553,15 +557,31 @@ function showSectionByURL(){
       data: $("#registrar-form").serialize()
     }).done(function(data){
       hideSaveCancelButtons();
-      closeModals();
       if (data.state == "success"){
+        closeModals();
         successMessage("Successfully updated registrar information!");
         user = data.user;
+        updateRegistrarButtons();
       }
       else {
         errorMessage(data.message);
       }
     });
+  }
+
+  //change connect registrar button visual
+  function updateRegistrarButtons(){
+    if (user.registrar){
+      for (var x in user.registrar){
+        var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + x + "]").find(".registrar-button-text");
+        registrar_connect_text.text("Update " + registrar_connect_text.data("registrar"));
+      }
+    }
+    else {
+      $(".registrar-button-text").each(function(){
+        $(this).text("Connect " + $(this).data("registrar"));
+      });
+    }
   }
 
   //</editor-fold>

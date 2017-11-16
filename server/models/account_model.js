@@ -238,6 +238,24 @@ module.exports = {
     database.query(query, "Failed to create coupon codes!", callback, [codes]);
   },
 
+  //creates a new registrar
+  newRegistrar : function(registrar_array, callback){
+    console.log("DB: Attempting to create or update registrar information for user...");
+    var query = "INSERT INTO registrars ( \
+          account_id, \
+          registrar_name, \
+          api_key, \
+          username, \
+          password \
+        )\
+         VALUES ? \
+         ON DUPLICATE KEY UPDATE \
+         api_key = VALUES(api_key), \
+         username = VALUES(username), \
+         password = VALUES(password)"
+    database.query(query, "Failed to create or update registrar information!", callback, [registrar_array]);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------UPDATES-------------------------------
