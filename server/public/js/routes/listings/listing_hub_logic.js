@@ -86,7 +86,7 @@ function getListings(load_more_elem, type){
   });
 }
 
-//function to add new rows after search
+//add new rows after search
 function createListingRow(listing){
   var temp_clone = $("#clone-listing-row").clone().removeClass('is-hidden').attr("id", "");
 
@@ -152,7 +152,7 @@ function sortListings(){
   });
 }
 
-//function to search for domains
+//search for domains
 function refreshListings(){
   $("#domain-table").find(".domain-listing").not('#clone-listing-row').not("#none-listing-row").remove();
   sortListings();

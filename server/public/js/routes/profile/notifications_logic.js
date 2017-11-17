@@ -26,7 +26,7 @@ function successMessage(message){
   }
 }
 
-//function to refresh notifications
+//refresh notifications
 function clearNotification(){
   errorMessage(false);
   successMessage(false);

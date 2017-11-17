@@ -111,7 +111,7 @@ var listing_themes = [
   }
 ]
 
-//function to populate theme dropdown
+//populate theme dropdown
 function populateThemeDropdown(){
   $("#theme-input").empty();
   for (var x = 0; x < listing_themes.length; x++){
@@ -121,7 +121,7 @@ function populateThemeDropdown(){
   $("#theme-input").prepend($("<option value='Custom'>Custom</option>"));
 }
 
-//function to find specific theme
+//find specific theme
 function findTheme(theme_name){
   //random theme that isnt domahub
   if (theme_name.toLowerCase() == "random"){

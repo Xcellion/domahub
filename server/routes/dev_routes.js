@@ -97,7 +97,7 @@ function alexa(req, res, next){
 
 //<editor-fold>-------------------------------COUPON-------------------------------------
 
-//function to create X sign up codes
+//create X sign up codes
 function createCouponCodes(req, res, next){
   console.log("F: Creating " + req.params.number + " coupon codes...");
 
@@ -268,7 +268,7 @@ function emailViews(req, res, next){
 
 //<editor-fold>-----------------------------ANALYSIS---------------------------------
 
-//function to analyze traffic funnel
+//analyze traffic funnel
 function analysisDomainTraffic(req, res, next){
   var domain_name = req.params.domain_name;
 
@@ -309,7 +309,7 @@ function analysisDomainTraffic(req, res, next){
   });
 }
 
-//function to analyze traffic
+//analyze traffic
 function analysisSearchHistory(req, res, next){
   data_model.getDemoDomains(function(demo_domains){
     data_model.getReferers(function(referers){
@@ -325,7 +325,7 @@ function analysisSearchHistory(req, res, next){
 
 //<editor-fold>-----------------------------COLD EMAIL---------------------------------
 
-  //function to parse all xlsx files in a folder
+  //parse all xlsx files in a folder
   function parseFolder(req, res, next){
     var verbose = (req.params.verbose == "true") ? true : false;
     var date = req.params.date;
@@ -372,7 +372,7 @@ function analysisSearchHistory(req, res, next){
     res.sendStatus(200);
   }
 
-  //function to parse all JSONs in a folder and combine them
+  //parse all JSONs in a folder and combine them
   function parseJSON(req, res, next){
     console.log("Reading folder for JSON files...");
 
@@ -520,7 +520,7 @@ function analysisSearchHistory(req, res, next){
     "webmaster",
   ]
 
-  //function to build cold contacts from excel sheet
+  //build cold contacts from excel sheet
   function parseCSV(date, file, verbose, cb){
     console.log("\x1b[0m", "Initializing workbook parsing...");
     var workbook = XLSX.readFile(file);
@@ -738,7 +738,7 @@ function analysisSearchHistory(req, res, next){
     return deferred.promise;
   }
 
-  //function to make proper nouns titlecase
+  //make proper nouns titlecase
   function toTitleCase(str){
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }

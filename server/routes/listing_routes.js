@@ -21,7 +21,11 @@ module.exports = function(app){
     app.get('/listings/create', [
       auth_functions.checkLoggedIn,
       profile_functions.getAccountListings,
+      profile_functions.getAccountRegistrars,
       stripe_functions.getStripeAccount,
+      stripe_functions.getStripeCustomer,
+      stripe_functions.getStripeSubscription,
+      profile_functions.updateAccountSettingsGet,
       owner_functions.renderCreateListing
     ]);
 

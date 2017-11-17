@@ -466,7 +466,7 @@ $(document).ready(function() {
 
 //<editor-fold>-----------------------------------------------------------------------------------MENU
 
-//function to hide and show menu
+//hide and show menu
 function menuButtonHandlers() {
   //click to hide the compare tool
   $("#hide-menu-button").on("click", function() {
@@ -489,7 +489,7 @@ function menuButtonHandlers() {
   });
 }
 
-//function to show or hide menu
+//show or hide menu
 function toggleMenu(show){
   if (show){
     $("#compare-menu").addClass("is-active");
@@ -511,7 +511,7 @@ function toggleMenu(show){
 
 //<editor-fold>-----------------------------------------------------------------------------------THEMES
 
-//function to switch theme
+//switch theme
 function switchTheme(theme_name){
   var theme_to_load = findTheme(theme_name);
 
@@ -560,7 +560,7 @@ function switchTheme(theme_name){
 
 //<editor-fold>-----------------------------------------------------------------------------------INFO TAB
 
-//function to update the description / description footer
+//update the description / description footer
 function updateDescription(){
   $("#description").val(listing_info.description).on("input", function(){
     $("#description-text").text($(this).val());
@@ -617,7 +617,7 @@ function updateDescription(){
   });
 }
 
-//function to update pricing
+//update pricing
 function updatePricing(){
   var buy_price = getParameterByName("buy_price") || listing_info.buy_price;
   $("#buy-price-input").val(buy_price).on("input", function(){
@@ -667,7 +667,7 @@ function updatePricing(){
   });
 }
 
-//function to update BIN
+//update BIN
 function updateBIN(){
   checkBox(listing_info.buyable, $("#buyable-input"));
 
@@ -683,7 +683,7 @@ function updateBIN(){
   });
 }
 
-//function to update rentable
+//update rentable
 function updateRentable(){
   checkBox(listing_info.rentable, $("#rentable-input"));
 
@@ -711,7 +711,7 @@ function updateRentable(){
 
 //<editor-fold>-----------------------------------------------------------------------------------DESIGN TAB
 
-//function to change URL to custom for premium v basic
+//change URL to custom for premium v basic
 function loadPremiumAndBasicHandler(){
   //change to custom theme if anything is changed
   $(".theme-changeable-input").on("change", function(){
@@ -721,7 +721,7 @@ function loadPremiumAndBasicHandler(){
   });
 }
 
-//function to load background handlers
+//load background handlers
 function loadBackgroundHandlers(){
 
   //highlight refresh button
@@ -784,7 +784,7 @@ function updateLogoImage(logo){
   updateFooter(true);
 }
 
-//function to update the footer if it's premium
+//update the footer if it's premium
 function updateFooter(premium){
   if (premium){
 
@@ -877,21 +877,21 @@ function loadFontStyleHandlers(){
   });
 }
 
-//function to update font color
+//update font color
 function updateFontColor(font_color){
   listing_info.font_color = font_color;
   $("#font-color-input").val(font_color);
   setupCustomColors();
 }
 
-//function to update font name
+//update font name
 function updateFontName(font_name){
   listing_info.font_name = font_name;
   $("#font-name-input").val(font_name)
   setupCustomColors();
 }
 
-//function to update modules
+//update modules
 function updateModules(){
   checkBox(listing_info.info_module, $("#info-module-input"));
   checkBox(listing_info.domain_owner, $("#domain-owner-input"));
@@ -940,7 +940,7 @@ function updateModules(){
   });
 }
 
-//function to handle showing modules
+//handle showing modules
 function hideShowModules(which_module, checked, tabOnly){
   if (checked){
     if (!tabOnly){
@@ -956,7 +956,7 @@ function hideShowModules(which_module, checked, tabOnly){
   }
 }
 
-//function to check the module boxes according to value
+//check the module boxes according to value
 function checkBox(module_value, elem){
   if (module_value){
     elem.val(module_value).prop("checked", true);
@@ -971,7 +971,7 @@ function checkBox(module_value, elem){
 
 //<editor-fold>-----------------------------------------------------------------------------------MODULES
 
-//function to create a test chart
+//create a test chart
 function createTestChart(){
 
   if (traffic_chart){
@@ -982,7 +982,7 @@ function createTestChart(){
   createTrafficChart(true);   //compare module so use custom color
 }
 
-//function to create test domains
+//create test domains
 function createTestOtherDomains(){
   var test_listings = [];
   var test_domain_names = [
@@ -1048,7 +1048,7 @@ function createTestOtherDomains(){
   createOtherDomains(test_listings);
 }
 
-//function to create test rentals
+//create test rentals
 function createTestRentals(){
   var temp_rentals = [];
   var one_year_ago = moment().subtract(1, "year")._d.getTime();
@@ -1116,7 +1116,7 @@ function createTestRentals(){
 
 //<editor-fold>-----------------------------------------------------------------------------------UPDATE HANDLERS
 
-//function to do submit buy handler
+//do submit buy handler
 function testSubmitBuyHandler(){
   setTimeout(function(){
     $("button[type=submit][clicked=true]").removeClass('is-loading');
@@ -1124,7 +1124,7 @@ function testSubmitBuyHandler(){
   }, 500);
 }
 
-//function to do submit rent handler
+//do submit rent handler
 function testSubmitRentHandler(checkout_button){
   setTimeout(function(){
     checkout_button.removeClass('is-loading').addClass('is-disabled').on('click', function(){
@@ -1134,7 +1134,7 @@ function testSubmitRentHandler(checkout_button){
   }, 500);
 }
 
-//function to handle submit calendar handler
+//handle submit calendar handler
 function testCalendarHandler(){
   setTimeout(function(){
     $("#calendar").removeClass('is-disabled');

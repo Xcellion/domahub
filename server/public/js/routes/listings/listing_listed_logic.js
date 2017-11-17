@@ -247,7 +247,7 @@ $(document).ready(function() {
 
 //<editor-fold>-------------------------------BUY NOW-------------------------------
 
-//function to show buy now module
+//show buy now module
 function showBuyStuff(buy_now_button){
 
   //hide the slash input
@@ -284,7 +284,7 @@ function showBuyStuff(buy_now_button){
 
 }
 
-//function to show rental module
+//show rental module
 function showRentalStuff(rent_now_button){
 
   //fade out rent button
@@ -338,7 +338,7 @@ function showRentalStuff(rent_now_button){
   }
 }
 
-//function to check phone number
+//check phone number
 function checkPhone(){
   if ($("#contact_phone").intlTelInput("isValidNumber")){
     return true;
@@ -445,7 +445,7 @@ function errorHandler(message){
 
 //<editor-fold>-------------------------------CALENDAR SET UP>-------------------------------
 
-//function to get times from the server
+//get times from the server
 function getTimes(calendar_elem){
   //now loading messages
   $("#calendar").addClass('is-disabled');
@@ -500,7 +500,7 @@ function getTimes(calendar_elem){
   }
 }
 
-//function to setup the calendar
+//setup the calendar
 function setUpCalendar(listing_info){
   //create a new range picker based on new path rental availability
   var start_date = moment();
@@ -651,7 +651,7 @@ function updatePrices(){
   }
 }
 
-//function to count number for price
+//count number for price
 function countPrice(elem, price){
   elem.prop('Counter', $("#price").prop('Counter')).stop().animate({
     Counter: price

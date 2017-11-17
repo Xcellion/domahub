@@ -24,7 +24,7 @@ module.exports = function(app){
 
 //<editor-fold>-------------------------------FUNCTIONS-------------------------------
 
-//function to check for hostname
+//check for hostname
 function checkHost(req, res, next){
   if (req.headers.host){
     var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
