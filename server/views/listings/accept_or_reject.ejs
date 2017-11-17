@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= listing_info.domain_name %> - <%= (accepted) ? "Accept Offer" : "Reject Offer" %></title>
+  <%- include("../templates/head_links.ejs"); %>
+  <script type="text/javascript">
+  var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+  var offer_info = <% if(typeof offer_info != "undefined"){ %><%-JSON.stringify(offer_info)%><% }else{ %>""<% } %>;
+  var accepted = <% if(typeof accepted != "undefined"){ %><%-JSON.stringify(accepted)%><% }else{ %>""<% } %>;
+  </script>
+</head>
+
+<body>
+  <%- include("../templates/navbar", {user: user}); %>
+  <div class="container">
+    <div id="error-message" class="is-hidden notification is-danger no-shadow is-popup">
+      <button class="delete"></button>
+      <span class="icon is-small">
+        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+      </span>
+      Something went wrong with this offer! Please refresh the page and try again.
+    </div>
+
+    <div id="success-message" class="is-hidden notification is-primary no-shadow is-popup">
+      <button class="delete"></button>
+      <span class="icon is-small">
+        <i class="fa fa-check" aria-hidden="true"></i>
+      </span>
+      <span id="success-message-text"></span>
+    </div>
+    <div class="content">
+      <h3 class="is-bold"><%= listing_info.domain_name %></h3>
+      <small>Received on June 05, 2017 - 4:27PM</small>
+    </div>
+    <div class="content">
+      <ul>
+        <li>
+          <span class="icon is-small margin-right-10" title="From"><i class="fa fa-user"></i></span> <%= offer_info.name %>
+        </li>
+        <li>
+          <span class="icon is-small margin-right-10" title="Email"><i class="fa fa-envelope"></i></span> <%= offer_info.email %>
+        </li>
+        <li>
+          <span class="icon is-small margin-right-10" title="Phone"><i class="fa fa-phone"></i></span> <%= offer_info.phone %>
+        </li>
+        <li>
+          <span class="icon is-small margin-right-10" title="Offer"><i class="fa fa-money"></i></span> <%= offer_info.offer %>
+        </li>
+        <li>
+          <span class="icon is-small margin-right-10" title="Message"><i class="fa fa-comment"></i></span> <%= offer_info.message %>
+        </li>
+      </ul>
+    </div>
+    <div class="control is-grouped">
+      <p class="control">
+        <a id="accept_button" class='button is-primary is-stylish is-small'>Accept offer</a>
+      </p>
+      <p class="control">
+        <a id="reject_button" class='button is-danger is-outlined is-stylish is-small'>Reject offer</a>
+      </p>
+    </div>
+    <small>Once you accept an offer, it is legally binding. Read more about this in our <a class='is-accent' href="/terms">terms</a>.</small>
+  </div>
+
+  <%- include("../templates/footer"); %>
+  <script src="/js/routes/listings/accept_or_reject_logic.js" type="text/javascript"></script>
+
+</body>
+
+</html>

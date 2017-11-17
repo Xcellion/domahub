@@ -1,0 +1,76 @@
+.min-height {
+  min-height: calc(100vh - 110px);
+}
+
+//prevents scroll jump when scrollbar appears, but prevents horizontal scroll as well
+.prevent-scroll-jump {
+  width: 100vw;
+  overflow-x : hidden;
+}
+
+.clear-nav {
+  padding-top: 60px;
+}
+
+// margins list contains 0-100 (mults of 5), 150, and 200
+@each $margin in $margins {
+  .margin-#{$margin} {
+    margin: #{$margin}px !important;
+  }
+  .margin-top-#{$margin} {
+    margin-top: #{$margin}px !important;
+  }
+  .margin-bottom-#{$margin}{
+    margin-bottom: #{$margin}px !important;
+  }
+  .margin-left-#{$margin}{
+    margin-left: #{$margin}px !important;
+  }
+  .margin-right-#{$margin}{
+    margin-right: #{$margin}px !important;
+  }
+}
+
+@each $margin in $margins {
+  .padding-#{$margin} {
+    padding: #{$margin}px !important;
+  }
+  .padding-top-#{$margin} {
+    padding-top: #{$margin}px !important;
+  }
+  .padding-bottom-#{$margin}{
+    padding-bottom: #{$margin}px !important;
+  }
+  .padding-left-#{$margin} {
+    padding-left: #{$margin}px !important;
+  }
+  .padding-right-#{$margin}{
+    padding-right: #{$margin}px !important;
+  }
+}
+
+.low-opacity {
+  opacity: 0.5;
+}
+
+.v-align-top {
+  vertical-align: top !important;
+}
+
+.v-align-bottom {
+  vertical-align: bottom !important;
+}
+
+.v-align-middle {
+  vertical-align: middle !important;
+}
+
+.has-border-bottom {
+  border-bottom: 1px solid $border;
+}
+
+.flex-column-center {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}

@@ -1,0 +1,54 @@
+=control
+  -moz-appearance: none
+  -webkit-appearance: none
+  align-items: center
+  background-color: $control-background
+  border: 1px solid $border
+  border-radius: $radius
+  color: $control
+  display: inline-flex
+  font-size: $size-normal
+  height: 32px
+  justify-content: flex-start
+  line-height: 24px
+  padding-left: 8px
+  padding-right: 8px
+  position: relative
+  vertical-align: top
+  +mobile-456px
+    font-size: $size-small
+  &:hover
+    border-color: $black-disabled
+  &:focus,
+  &.is-active
+    border-color: $black-secondary
+  &[disabled],
+  &.is-disabled
+    background-color: $grey-light !important
+    border-color: $grey-light
+    color: $text-disabled
+    cursor: not-allowed
+    pointer-events: none
+    opacity: 0.7
+    +placeholder
+      color: rgba($control, 0.3)
+
+=control-small
+  border-radius: $radius-small
+  font-size: 12px
+  height: 26px
+  line-height: 16px
+  padding-left: 6px
+  padding-right: 6px
+=control-medium
+  font-size: $size-normal
+  height: 40px
+  line-height: 32px
+  padding-left: 10px
+  padding-right: 10px
+=control-large
+  font-size: $size-normal
+  height: 48px
+  line-height: 40px
+  padding-left: 12px
+  padding-right: 12px

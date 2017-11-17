@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>FAQ - DomaHub</title>
+  <link rel="stylesheet" type="text/css" href="/css/min/main_faq.min.css" />
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+  <%- include("../templates/navbar", {user: user}); %>
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-3 is-hidden-mobile">
+          <aside class="menu is-fixed">
+            <p class="menu-label">
+              Categories
+            </p>
+            <ul class="menu-list">
+              <li><a id="about-menu" class="menu-link is-active" tabindex="0" href="#about">About Us</a></li>
+              <li><a id="pricing-menu" class="menu-link" href="#pricing" tabindex="0">Pricing</a></li>
+              <li><a id="creating-menu" class="menu-link" href="#creating" tabindex="0">Landing Pages</a></li>
+              <li><a id="selling-menu" class="menu-link" href="#selling" tabindex="0">Selling Domains</a></li>
+              <li><a id="renting-menu" class="menu-link" href="#renting" tabindex="0">Renting Domains</a></li>
+              <li><a id="payments-menu" class="menu-link" href="#payments" tabindex="0">Payments</a></li>
+            </ul>
+          </aside>
+        </div>
+        <div class="column">
+          <h1>Frequently Asked Questions</h1>
+          <div id="about" class="faq-section">
+            <h2 class="faq-header is-active">About Us</h3>
+            <div class="content">
+              <h3 class="faq-question" title="What exactly does DomaHub do?">
+                What exactly does DomaHub do?</h3>
+              <p>
+                DomaHub is a domain name marketplace that allows you to create simple and beautiful
+                landing pages for your domains.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How does DomaHub make money?">
+                Why should I use DomaHub?</h3>
+              <p>
+                Landing pages help you sell your domain. DomaHub provides the quickest solution to setting
+                up landing pages for all of your domains. We also provide management tools as well as secure
+                payment processing.
+              </p>
+            </div>
+          </div>
+          <div id="pricing" class="faq-section">
+            <h2 class="faq-header is-active">Pricing</h2>
+            <div class="content">
+              <h3 class="faq-question" title="What do I get with the Basic package?">
+                What do I get with the Basic package?</h3>
+              <p>
+                Users on our free Basic package will have access to our standard themed landing page. They will
+                be able to use the secure offer/purchase form, however all sales will be charged 10% commission.
+                Landing pages will also have a DomaHub branded footer to show affiliation with our brand.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What do I get with the Premium package?">
+                What do I get with the Premium package?</h3>
+              <p>
+                Users on our Premium subscription package will have access to our full line of features including
+                HTTPS connection, no commission fees, complete design and text customization, unlimited domains, etc.
+                Please refer to our <a class="is-primary"  href="/features#pricing" tabindex="0">Pricing Table</a> for more information.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How much does the Premium package cost?">
+                How much does the Premium package cost?</h3>
+              <p>
+                The Premium package costs 5 USD per month.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Are there any processing fees?">
+                Are there any processing fees?</h3>
+              <p>
+                The seller must pay a 2.9% + $0.30 processing fee regardless of whether the account is on the Basic or Premium package.
+                This fee is paid directly to our payments processor.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Can I cancel my Premium subscription?">
+                Can I cancel my Premium subscription?</h3>
+              <p>
+                Yes, you may cancel your Premium subscription at any time through your <a class="is-primary" href="/profile/settings" tabindex="0">Account Settings</a>.
+                Your subscription will end on the last day of the current payment cycle and will not be renewed.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What happens to my landing pages if I cancel Premium?">
+                What happens to my landing pages if I cancel Premium?</h3>
+              <p>
+                They will automatically revert to the basic theme, styling, and texts.
+              </p>
+            </div>
+          </div>
+          <div id="creating" class="faq-section">
+            <h2 class="faq-header is-active">Landing Pages</h3>
+            <div class="content">
+              <h3 class="faq-question" title="How do I upload my domains?">
+                How do I upload my domains?</h3>
+              <p>
+                First <a class="is-primary" href="/signup" tabindex="0"  >create an account</a> and then navigate to our
+                <a class="is-primary" href="/listings/create" tabindex="0"  >create listings page</a>. Upload as many
+                domains as you want and they will be added to your account.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How do I verify my domains?">
+                How do I verify my domains?</h3>
+              <p>
+                Verify your domains from your
+                <a class="is-primary" href="/profile" tabindex="0">account dashboard</a>.
+                You must create the listed A Record for each domain name in order for us to verify them.
+                You may have to delete existing A Records as well.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How do I start creating landing pages?">
+                How do I start creating landing pages?</h3>
+              <p>
+                In your account dashboard, you can
+                access design and styling options for each individual domain name. If you choose not to edit these options, the domain
+                will display our default theme.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Why can't I change my themes or designs?">
+                Why can't I change my themes or designs?</h3>
+              <p>
+                You must be a Premium account member to have access to theme and design customization. You
+                can upgrade your account to Premium at any time through your <a class="is-primary" href="/profile/settings" tabindex="0">Account Settings</a>.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Can I hide my landing page temporarily?">
+                Can I hide my landing page temporarily?</h3>
+              <p>
+                Yes, you can set a domain to inactive by going to your account dashboard and accessing the respective domain's settings.
+                An inactive domain will not be visible to visitors.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Can I delete a landing page?">
+                Can I delete a landing page?</h3>
+              <p>
+                You may delete a domain name landing page at any time.
+              </p>
+            </div>
+          </div>
+          <div id="selling" class="faq-section">
+            <h2 class="faq-header is-active">Selling Domains</h3>
+            <div class="content">
+              <h3 class="faq-question" title="Does DomaHub facilitate transactions?">
+                Does DomaHub facilitate transactions and sales?</h3>
+              <p>
+                Yes, we provide a secure and speedy system to handle transactions.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What selling options are available?">
+                What selling options are available?</h3>
+              <p>
+                We have full transactional support for selling domains through our website. We also support domain leasing options
+                and short-term rental options.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Why should I enable Buy-It-Now?">
+                Why should I enable Buy-It-Now?</h3>
+              <p>
+                Simply put, nobody likes going back and forth on offers and counter-offers. By enabling Buy-It-Now,
+                users can decide then and there to buy the domain!
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="I received an offer that I like, what do I do now?">
+                I received an offer that I like, what do I do now?</h3>
+              <p>
+                Congratulations! You should have received an email with the option to either accept or reject the offer.
+                Simply click Accept and you and the buyer will both be notified with the next steps for transferring the domain.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How do I transfer the domain to the buyer?">
+                How do I transfer the domain to the buyer?</h3>
+              <p>
+                For general instructions, please read our <a tabindex="0" href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-primary">guide</a>.
+              </p>
+              <p>
+                For registrar-specific instructions, please refer to our <a tabindex="0" href="https://medium.com/@domahub/links-to-registrar-specific-transfer-guides-eea8ebc14cfd" class="is-primary">guide</a>.
+                If your registrar is not listed here, please visit their website for more instructions.
+              </p>
+            </div>
+          </div>
+          <div id="renting" class="faq-section">
+            <h2 class="faq-header is-active">Renting Domains</h2>
+            <div class="content">
+              <h3 class="faq-question" title="What does it mean to rent a domain on a DomaHub domain?">
+                What does it mean to rent a domain on DomaHub?</h3>
+              <p>
+                Renting a domain means paying for the ability to temporarily use a subpage on a specific domain or the root domain itself. For example,
+                a user can rent the URL <a class="is-primary" href="http://imsorryimdumb.com/lisa">imsorryimdumb.com/lisa</a>
+                for a fraction of the price the domain is being sold for. This allows users to benefit from a great domain
+                name at an economically feasible price point.
+              </p>
+              <p>
+                The ability to use a domain before purchasing it can have an impact on the likelihood of a sale. We believe
+                in the age old saying, "try it before you buy it."
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What does it mean to rent a domain on a DomaHub domain?">
+                Are sub-domains rentable on DomaHub?</h3>
+              <p>
+                Sub-domains such as blog.awesomedomain.com or great.partnerships.com cannot be rented through DomaHub at this time.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What kind of domains are considered 'rentable?'">
+                What kind of domains are considered "rentable?"</h3>
+              <p>
+                Not all domains fit into the renting business model.
+              </p>
+              <p>
+                Look at a domain name and ask yourself this--"can this domain name be used by multiple people in a given year?"
+                 If the answer is yes, then it is a potential candidate for renting.
+              </p>
+              <p>
+                  Example domains that <span class="is-bold is-danger">MAY NOT</span> be a good fit for rentals:
+              </p>
+              <ul>
+                  <p>
+                      <span class="icon is-danger"><i class="fa fa-times" aria-hidden="true"></i></span>
+                      Brandable domain names that can be a company name (hotu.com, vovu.com, doto.com, etc.)
+                  </p>
+                  <p>
+                      <span class="icon is-danger"><i class="fa fa-times" aria-hidden="true"></i></span>
+                      Domains without clear definition / meaning (ethmini.com, sousforce.com, emugg.com, etc.)
+                  </p>
+              </ul>
+              <p>
+                  Example domains that <span class="is-bold is-primary">CAN BE</span> a good fit for rentals:
+              </p>
+              <ul>
+                  <p>
+                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      Holiday / event related (happybirthday.com, congratulations.com, marryme.com, etc.)
+                  </p>
+                  <p>
+                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      Slogans / hashtags / marketable phrases (greatestboxer.com, itsfinallyhere.com, thenextbigthing.com, etc.)
+                  </p>
+                  <p>
+                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      Common phrases / words (youredumb.com, imsorry.com, iloveyou.com, etc.)
+                  </p>
+              </ul>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Who owns the domain during the rental?">
+                Who owns the domain during the rental?</h3>
+              <p>
+                The domain never leaves the ownership of its original owner. The renter simply borrows use of the domain.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How does the rental work?">
+                How does the rental work?</h3>
+              <p>
+                Through DNS and proxying, we can point the domain to whatever content the user wishes to display.
+                The user may choose to display content on the domain or to forward the domain to an existing URL.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What if I don't like what the user is doing with my domain?">
+                What if I don't like what the user is doing with my domain?</h3>
+              <p>
+                All rentals can be subject to approval before going live to the public.
+              </p>
+              <p>
+                All domain rentals can be refunded by the domain owner. If you discover a specific rental
+                that you believe is malicious, spam, or illegal in any way, you reserve the right to cancel
+                the rental and refund the renter their money.
+              </p>
+              <p>
+                In addition, all domain rentals are screened using the official <a href="https://developers.google.com/safe-browsing/" class="is-primary">
+                Google Safe Browsing API</a>. This way, we ensure that all content being
+                displayed on your website has been deemed safe to browse by Google.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How do I set up rentals on my listing?">
+                How do I set up rentals on my listing?</h3>
+              <p>
+                Simply go into your <a href="/profile/mylistings" class="is-primary">My Listings</a> page and enable the option for rentals on any listing.
+              </p>
+            </div>
+          </div>
+          <div id="payments" class="faq-section">
+            <h2 class="faq-header is-active">Payments</h3>
+            <div class="content">
+              <h3 class="faq-question" title="What types of payments are supported?">
+                What types of payments are supported?</h3>
+              <p>
+                We accept all major credit and debit cards in more than 130 currencies directly through our application.
+                We also support payments through PayPal.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How do I get paid?">
+                How do I get paid?</h3>
+              <p>
+                Simply go to your <a tabindex="0" class="is-primary" href="/profile/settings" title="Account Settings">settings page</a>
+                and add your bank account information. We will directly deposit all payments into your bank account.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What happens if my bank account is not linked?">
+                What happens if my bank account is not linked?</h3>
+              <p>
+                We will hold all payments in escrow until your bank account is linked. If you fail to link your bank account
+                within X days after a payment has been made, we will be forced to refund the transaction.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What are pending funds?">
+                What are pending funds?</h3>
+              <p>
+                Pending funds represent payments that have yet to be processed and thus are not available for withdrawal.
+                The money will be available within a few days barring any drawbacks.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What are unavailable funds?">
+                What are unavailable funds?</h3>
+              <p>
+                Unavailable funds represent payments that are not yet available for withdrawal because the buyer
+                of your domain(s) has yet to confirm that you have completed the domain transfer.
+              </p>
+            </div>
+            <div class="content">
+              <p>
+                Still have questions? Feel free to <a tabindex="0" href="/contact" class="is-primary" title="Contact Us">Contact Us</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include("../templates/footer"); %>
+  <script type="text/javascript" src="/js/routes/main/main_faq_logic.js"></script>
+</body>
+
+</html>

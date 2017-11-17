@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Forgot Password - DomaHub</title>
+    <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
+    <%- include("../templates/head_links"); %>
+  </head>
+  <body>
+    <%- include("../templates/notifications.ejs"); %>
+
+    <div class="content has-text-centered clear-nav">
+      <h2>
+        <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+          <div class='is-inline-block flat-logo is-primary'></div>
+        </a>
+      </h2>
+    </div>
+    <div class="account-form">
+      <form id="forgot-form" action="/forgot" method="post">
+        <div id="form_to_hide">
+          <label class="label" for="email">Enter Your Email</label>
+          <p class="control has-icon">
+            <input id="email" required autofocus class="input is-medium no-shadow" name="email" type="email" placeholder="Email" spellcheck="false">
+            <i class="fa fa-envelope-o"></i>
+          </p>
+          <p class="control">
+            <button type="submit" id="forgot-button" class="is-stylish login-button button is-primary is-medium is-fullwidth">
+              <span class="icon"><i class="fa fa-unlock-alt"></i></span>
+              <span>Send reset password email</span>
+            </button>
+          </p>
+
+          <div class="control has-text-centered">
+            <small>
+              Remember your password?
+            </small>
+            <small class="is-block">
+              <a class="signup is-primary" href="/login">Log in now</a>
+            </small>
+          </div>
+        </div>
+
+        <div id="accept">
+          <a class="is-stylish button is-primary is-medium is-fullwidth" href="/login">
+            <span class="icon"><i class="fa fa-sign-in"></i></span>
+            <span>Go To Login</span>
+          </a>
+        </div>
+
+      </form>
+    </div>
+
+    <script src="/js/routes/account/account_pw_forgot_logic.js" type="text/javascript"></script>
+  </body>
+
+</html>

@@ -1,0 +1,123 @@
+@import '../bulma/utilities/utilities.sass';
+@import '../bulma/base/base.sass';
+@import '../bulma/components/grid.sass';
+@import '../bulma/components/modal.sass';
+@import '../bulma/components/nav.sass';
+@import '../bulma/elements/form.sass';
+@import '../bulma/elements/box.sass';
+@import '../bulma/elements/button.sass';
+@import '../bulma/elements/content.sass';
+@import '../bulma/elements/hamburger.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/notification.sass';
+@import '../bulma/elements/title.sass';
+@import '../bulma/elements/image.sass';
+@import '../bulma/elements/icon.sass';
+@import '../bulma/layout/footer.sass';
+@import '../bulma/layout/section.sass';
+
+#landing {
+  @include transition(all 0.2s ease);
+  align-items: center;
+  display: flex;
+  height: 800px;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  .subtitle {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &:before {
+    @include skew(0,-6);
+    content:"";
+    background-image: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
+    position: absolute;
+    top: -300px;
+    left: -100%;
+    width: 300%;
+    height: 120%;
+  }
+  @include mobile {
+    padding: 40px 20px;
+    &:before {
+      left: -500px;
+    }
+  }
+  @media screen and (max-height: 715px) {
+    padding: 80px 20px 40px;
+    height: 450px;
+    &:before {
+      @include skew(0,0);
+      left: -20px;
+      top: 0;
+    }
+  }
+}
+
+#attention {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-image: linear-gradient($primary, $primary-light);
+  border-radius: $radius-large;
+  padding: 20px;
+  @include mobile {
+    flex-direction: column;
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  }
+}
+
+#tryit-form {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#learn-more-arrow {
+  @include keyframes(bob 750ms linear alternate infinite);
+}
+
+@keyframes bob {
+  0% {@include translate(0,0);}
+  100% {@include translate(3px,0);}
+}
+
+#foo {
+  display: flex;
+  justify-content: center;
+  .image {
+    margin-left: 5px;
+    margin-right: 0;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  &.is-aligned-left {
+    justify-content: flex-start;
+  }
+  .button {
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+  @media screen and (max-width: 527px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .button {
+      &:first-child {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

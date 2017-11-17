@@ -1,0 +1,21 @@
+<% if (listing_info.available) { %>
+  <div class="column">
+    <div class="content">
+      <h2>This domain is also available for purchase!</h2>
+      <p>
+        Purchase this domain at one of the sites listed below and start investing in domain names today!
+      </p>
+    </div>
+    <div class="control">
+      <li>
+        <a id="google_link" class="is-info" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
+      </li>
+      <li>
+        <a id="namecheap_link" class="is-info" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
+      </li>
+      <li>
+        <a id="godaddy_link" class="is-info" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
+      </li>
+    </div>
+  </div>
+<% } %>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sign Up - DomaHub</title>
+		<link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
+		<%- include("../templates/head_links.ejs"); %>
+	</head>
+  <body>
+		<%- include("../templates/notifications.ejs"); %>
+
+  	<div class="content has-text-centered clear-nav">
+			<h2>
+        <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+          <div class='is-inline-block flat-logo is-primary'></div>
+        </a>
+      </h2>
+    </div>
+	  <div id="signup-form" class="account-form">
+  		<form id="target" method="post" autocomplete="off">
+  			<label class="label" for="email-input">Email</label>
+				<div class="control has-icon has-icon-right">
+					<input required class="input is-medium no-shadow" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+					<i class="fa fa-check is-hidden is-success"></i>
+					<i class="fa fa-warning is-hidden is-danger"></i>
+				</div>
+  			<label class="label" for="username-input">Username (at least 3 characters)</label>
+				<div class="control has-icon has-icon-right">
+					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium no-shadow" name="username" type="text" id="username-input" spellcheck="false" value="" />
+					<i class="fa fa-check is-hidden is-success"></i>
+					<i class="fa fa-warning is-hidden is-danger"></i>
+				</div>
+  			<label class="label" for="pw-input">Password (at least 6 characters)</label>
+				<div class="control has-icon has-icon-right">
+					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+					<i class="fa fa-check is-hidden is-success"></i>
+					<i class="fa fa-warning is-hidden is-danger"></i>
+				</div>
+  			<label class="label" for="verify-pw">Confirm Password</label>
+				<div class="control has-icon has-icon-right">
+					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="verify-pw" type="password" id="verify-pw" value="" />
+					<i class="fa fa-check is-hidden is-success"></i>
+					<i class="fa fa-warning is-hidden is-danger"></i>
+				</div>
+  			<div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
+  			<div class="control">
+  				<button id="signup-login-button" class="login-button button has-icon is-primary is-stylish is-fullwidth margin-bottom-10">
+            <span class="icon is-small"><i class="fa fa-user-circle"></i></span>
+            <span>Create Account</span>
+  				</button>
+  			</div>
+				<div class="content has-text-centered">
+					<small>By signing up, you agree to our
+						<a tabindex="0"  href="/terms" class="is-primary"><small>Terms of Service</small></a> and
+						<a tabindex="0"  href="/privacy" class="is-primary"><small>Privacy Policy</small></a>.
+					</small>
+				</div>
+  			<div class="content has-text-centered">
+  				<small>
+  					Already have an account?
+  				</small>
+  				<small class="is-block">
+  					<a tabindex="0" class="is-primary" href="/login"><small>Log In</small></a>
+  				</small>
+  			</div>
+  		</form>
+    </div>
+
+	  <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="/js/routes/account/account_signup_logic.js" type="text/javascript"></script>
+  </body>
+
+</html>

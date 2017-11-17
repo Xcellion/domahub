@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="/css/login_signup.css" type="text/css" />
+
+  <div class="content has-text-centered">
+    <h3 id="message" class="is-bold">
+      <% if (typeof message != "undefined") {%>
+        <%= message %>
+      <% } else {%>
+          Create an account to continue.
+      <% } %>
+    </p>
+  </div>
+
+  <div id="signup-form" class="form no-shadow include">
+    <form id="target" action="/signup" method="post" autocomplete="off">
+      <label class="label">Email</label>
+        <p class="control has-icon has-icon-right">
+          <input required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+          <i class="fa fa-check is-hidden is-primary"></i>
+          <i class="fa fa-warning is-hidden is-danger"></i>
+        </p>
+      <label class="label">Username</label>
+        <p class="control has-icon has-icon-right">
+          <input required class="input" name="username" type="text" id="username-input" spellcheck="false" value="" />
+          <i class="fa fa-check is-hidden is-primary"></i>
+          <i class="fa fa-warning is-hidden is-danger"></i>
+        </p>
+      <label class="label">Password (at least 6 characters)</label>
+        <p class="control has-icon has-icon-right">
+          <input required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+          <i class="fa fa-check is-hidden is-primary"></i>
+          <i class="fa fa-warning is-hidden is-danger"></i>
+        </p>
+      <label class="label">Confirm Password</label>
+        <p class="control has-icon has-icon-right">
+          <input required class="input" name="verify-pw" type="password" id="verify-pw" value="" />
+          <i class="fa fa-check is-hidden is-primary"></i>
+          <i class="fa fa-warning is-hidden is-danger"></i>
+        </p>
+
+      <div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
+
+      <p class="control">
+        <button id="signup-login-button" class="login-button button is-primary is-fullwidth">
+          Create Account
+        </button>
+      </p>
+      <p class="control">
+        <p class="has-text-centered">
+          Already have an account?
+        </p>
+        <p class="has-text-centered">
+          <a class="is-accent" href="/login">Sign In Now</a>
+        </p>
+      </p>
+    </form>
+  </div>
