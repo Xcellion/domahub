@@ -60,9 +60,7 @@ module.exports = {
       account_model.getAccountRegistrars(req.user.id, function(result){
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
-          for (var x = 0 ; x < result.info.length ; x++){
-            updateUserRegistrar(req.user, result.info[x].registrar_name)
-          }
+          updateUserRegistrar(req.user, result.info);
           next();
         }
       });
@@ -582,17 +580,84 @@ module.exports = {
 
   //update an accounts registrar information
   updateAccountRegistrar : function(req, res, next){
+    console.log("F: Creating new or updating registrar API keys...");
+
     account_model.newRegistrar(req.session.registrar_array, function(result){
       delete req.session.registrar_array;
       if (result.state == "error") { error.handler(req, res, result.info, "json"); }
       else {
-        updateUserRegistrar(req.user, req.body.registrar_name);
+        updateUserRegistrar(req.user, [{ registrar_name : req.body.registrar_name } ]);
         res.send({
           state: "success",
           user: req.user
         });
       }
     });
+  },
+
+  //gets and decrypts all registrar API keys
+  getRegistrarAPI : function(req, res, next){
+    if (!req.user.registrars || req.user.registrars.length == 0){
+      error.handler(req, res, "You don't have any registrars to sync with! Please click a connect button to add specific registrars.", "json");
+    }
+    else {
+      console.log("F: Getting all connected registrar API keys...");
+
+      //get the registrar API keys
+      account_model.getAccountRegistrars(req.user.id, function(result){
+        if (result.state=="error"){ error.handler(req, res, result.info); }
+        else {
+          req.session.registrar_apis = result.info;
+          next();
+        }
+      });
+    }
+  },
+
+  //get domain names via registrar api
+  getRegistrarDomains : function(req, res, next){
+    if (!req.session.registrar_apis){
+      error.handler(req, res, "You don't have any registrars to sync with! Please click a connect button to add specific registrars.", "json");
+    }
+    else {
+      console.log("F: Retrieving domain names list via registrar API keys...");
+
+      //loop through and get domain names for each registrar
+      var registrar_domain_promises = [];
+      for (var x = 0 ; x < req.session.registrar_apis.length ; x++){
+        switch (req.session.registrar_apis[x].registrar_name){
+          case "godaddy":
+            registrar_domain_promises.push(getDomainsGoDaddy(req.session.registrar_apis[x]));
+            break;
+          case "namecheap":
+            registrar_domain_promises.push(getDomainsNameCheap(req.session.registrar_apis[x]));
+            break;
+        }
+      }
+
+      //get all domains via promises
+      if (registrar_domain_promises.length > 0){
+        //wait for all promises to finish
+        Q.allSettled(registrar_domain_promises)
+         .then(function(results) {
+           var total_good_domains = [];
+           for (var y = 0; y < results.length ; y++){
+             if (results[y].state == "fulfilled"){
+               total_good_domains.concat(results[y].value.domains);
+             }
+           }
+           console.log(total_good_domains);
+           res.send({
+             state : "success",
+             bad_listings : [],
+             good_listings : total_good_domains
+           });
+         });
+      }
+      else {
+        error.handler(req, res, "Something went wrong with retrieving your registrar domain names! Please refresh the page and try again.", "json");
+      }
+    }
   },
 
   //</editor-fold>
@@ -818,6 +883,57 @@ module.exports = {
 
 }
 
+//<editor-fold>-------------------------------------REGISTRAR HELPERS-------------------------------
+
+//get godaddy list of domains
+function getDomainsGoDaddy(registrar_info){
+  //custom promise creation, get list of domains from registrar
+  return Q.Promise(function(resolve, reject, notify){
+    request({
+      url: "https://api.godaddy.com/v1/domains",
+      method: "GET",
+      headers: {
+        "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
+        Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
+      }
+    }, function(err, response, body){
+      var body_json = JSON.parse(body);
+      if (body_json["code"] == "INVALID_SHOPPER_ID" || body_json["code"] == "ERROR_INTERNAL"){
+        reject("Invalid customer number.");
+      }
+      else if (body_json["code"] == "UNABLE_TO_AUTHENTICATE"){
+        reject("Invalid production API key or secret.");
+      }
+      else if (err){
+        reject(err);
+      }
+      else if (response.statusCode != 200){
+        reject("Something went wrong in verifying your GoDaddy account.");
+      }
+
+      //domain list exists! check them
+      else {
+        var good_domains = [];
+        for (var x = 0 ; x < body_json.length ; x++){
+          if (body_json[x].status == "ACTIVE"){
+            good_domains.push(body_json[x].domain)
+          }
+        }
+        resolve({
+          domains : good_domains
+        });
+      }
+    });
+  });
+}
+
+//get namecheap list of domains
+function getDomainsNameCheap(registrar_info){
+
+}
+
+//</editor-fold>
+
 //<editor-fold>-------------------------------------HELPERS-------------------------------
 
 //helper function to update req.user.listings after deleting
@@ -860,11 +976,13 @@ function isEmptyObject(obj) {
 }
 
 //update the user object with registrar details
-function updateUserRegistrar(user, registrar_name){
+function updateUserRegistrar(user, registrars){
   if (!user.registrars){
-    user.registrars = {}
+    user.registrars = [];
   }
-  user.registrars[registrar_name] = true;
+  for (var x = 0 ; x < registrars.length ; x++){
+    user.registrars.push(registrars[x].registrar_name);
+  }
 }
 
 //</editor-fold>

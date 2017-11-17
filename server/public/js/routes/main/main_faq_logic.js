@@ -27,7 +27,7 @@ $(document).ready(function() {
     }
 });
 
-//function to run as you scroll down to change the panel active
+//run as you scroll down to change the panel active
 function changePanelActive(scrolltop){
     var menu_id;
 

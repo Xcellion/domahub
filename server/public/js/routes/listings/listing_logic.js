@@ -178,7 +178,7 @@ function editTickerModule(loaded_rentals, max_count){
   }
 }
 
-//function to create ticker row
+//create ticker row
 function createTickerRow(rental, now){
   var start_moment = moment(rental.date);
   var end_moment = moment(rental.date + rental.duration);
@@ -321,7 +321,7 @@ function pastViewsTickerRow(){
 
 //<editor-fold>-----------------------------------------------------------------------------------TRAFFIC MODULE
 
-//function to get traffic data if we havent yet
+//get traffic data if we havent yet
 function getTrafficData(){
   if (compare && listing_info.unlisted){
     createTestChart();
@@ -363,7 +363,7 @@ function createCharts(traffic){
   }
 }
 
-//function to create an empty chart
+//create an empty chart
 function createEmptyChart(){
 
   //create the monthly x-axis labels array
@@ -407,7 +407,7 @@ function createEmptyChart(){
   }).removeClass('is-hidden');
 }
 
-//function to format the stats to the required format
+//format the stats to the required format
 function formatDataset(stats) {
 
   //compare tool (not listed)
@@ -470,7 +470,7 @@ function formatDataset(stats) {
   }
 }
 
-//function to initiate chart only if uninitiated
+//initiate chart only if uninitiated
 function createTrafficChart(compare){
   formatted_dataset = formatDataset(listing_info.traffic);
 
@@ -555,7 +555,7 @@ function createTrafficChart(compare){
 
 //<editor-fold>-----------------------------------------------------------------------------------ALEXA MODULE
 
-//function to get alexa data
+//get alexa data
 function getAlexaData(){
   $.ajax({
     url: "/listing/" + listing_info.domain_name.toLowerCase() + "/alexa",
@@ -565,7 +565,7 @@ function getAlexaData(){
   });
 }
 
-//function to edit alexa information
+//edit alexa information
 function createAlexa(alexa){
   if (alexa){
     listing_info.alexa = alexa;
@@ -609,7 +609,7 @@ function findOtherDomains(){
   }
 }
 
-//function to create the other domain
+//create the other domain
 function createOtherDomains(other_listings){
   $("#otherowner-domains").removeClass('is-hidden');
   $("#otherowner-domains-title").text("More From This Owner");
@@ -682,7 +682,7 @@ function getHost(href) {
   return l.hostname.replace("www.", "");
 };
 
-//function to get query string
+//get query string
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");

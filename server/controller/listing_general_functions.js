@@ -17,7 +17,7 @@ var validator = require("validator");
 
 module.exports = {
 
-  //function to check validity of domain name
+  //check validity of domain name
   checkDomainValid : function(req, res, next){
     console.log("F: Checking domain FQDN validity...");
     var domain_name = req.params.domain_name || req.body["domain-name"];
@@ -40,7 +40,7 @@ module.exports = {
     }
   },
 
-  //function to check if listing is listed on domahub
+  //check if listing is listed on domahub
   checkDomainListed : function(req, res, next){
     console.log("F: Checking if domain is listed...");
     var domain_name = req.params.domain_name || req.body["domain-name"];
@@ -54,7 +54,7 @@ module.exports = {
     });
   },
 
-  //function to check if listing is NOT listed on domahub
+  //check if listing is NOT listed on domahub
   checkDomainNotListed : function(req, res, next){
     console.log("F: Checking if domain is NOT listed...");
     var domain_name = req.params.domain_name || req.body["domain-name"];
@@ -279,7 +279,7 @@ module.exports = {
 
 //<editor-fold>-------------------------------HELPER-------------------------------
 
-//function to join all rental times
+//join all rental times
 function joinRentalTimes(rental_times){
   var temp_times = rental_times.slice(0);
 
@@ -304,7 +304,7 @@ function joinRentalTimes(rental_times){
   return temp_times;
 }
 
-//function to create rental properties inside listing info
+//create rental properties inside listing info
 function createRentalProp(listings){
   //iterate once across all results
   for (var x = 0; x < listings.length; x++){
@@ -338,7 +338,7 @@ function createRentalProp(listings){
   return listings;
 }
 
-//function to check date availability
+//check date availability
 function checkDateAvailability(min_date, max_date, listings){
   //first loop through all listings
   for (var x = 0; x < listings.length; x++){
@@ -366,7 +366,7 @@ function checkDateAvailability(min_date, max_date, listings){
   return listings;
 }
 
-//function to check for posted categories
+//check for posted categories
 function checkListingCategories(listing_categories, posted_categories){
   for (var i = 0; i < posted_categories.length; i++){
     if (listing_categories.indexOf(posted_categories[i]) === -1){
@@ -376,7 +376,7 @@ function checkListingCategories(listing_categories, posted_categories){
   return true;
 }
 
-//function to loop through all listings and check if the categories are good
+//loop through all listings and check if the categories are good
 function checkAllListingCategories(listings, posted_categories){
   var temp_listings = [];
   for (var x = 0; x < listings.length; x++){

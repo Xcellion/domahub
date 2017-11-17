@@ -439,7 +439,7 @@ function trackCheckoutBehavior(id){
   });
 }
 
-//function to show a specific message, hide all others
+//show a specific message, hide all others
 function showMessage(message_id, text){
   $(".regular-message").addClass('is-hidden');
   $(".error-message").addClass('is-hidden');
@@ -452,7 +452,7 @@ function showMessage(message_id, text){
   }
 }
 
-//function to show step
+//show step
 function showStep(step_id){
   $(".step-header").addClass('is-disabled');
   $(".step-content").addClass('is-hidden');

@@ -24,7 +24,7 @@ function calcOffers(){
   $("#offers-counter").text(num_total_offers);
 }
 
-//function to figure out sold domains
+//figure out sold domains
 function calcSold(){
   $("#sold-counter").text(user.listings.filter(function(listing) {
     return listing.deposited || listing.transferred;

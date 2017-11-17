@@ -316,7 +316,7 @@ module.exports = {
     else if (referer.indexOf("upgrade") != -1 || referer.indexOf("premium") != -1){
       redirectTo = "/profile/settings#premium";
     }
-    else if (referer.indexOf("create") != -1 && referer.indexOf("listings") != -1 ){
+    else if (referer.indexOf("create") != -1 && referer.indexOf("listings") != -1){
       redirectTo = "/listings/create";
     }
     else {

@@ -170,7 +170,7 @@ module.exports = {
   getAccountRegistrars : function(account_id, callback){
     console.log("DB: Attempting to get all registrars connected to account " + account_id + "...");
     var query = "SELECT \
-          registrars.registrar_name \
+          registrars.* \
             FROM registrars \
           WHERE registrars.account_id = ? ";
     database.query(query, "Failed to get all registrars connected to account " + account_id + "!", callback, account_id);

@@ -32,13 +32,13 @@ $(document).ready(function() {
 
   $(document).on("keyup", function(e) {
     if (e.which == 27) {
-      $('.modal').removeClass('is-active');
+      closeModals();
     }
   });
 
   //close modal
   $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
-    $('.modal').removeClass('is-active');
+    closeModals();
   });
 
   //</editor-fold>
@@ -81,6 +81,17 @@ $(document).ready(function() {
 
 });
 
+//<editor-fold>----------------------------------MODAL HELPERS-------------------------
+
+//close modals
+function closeModals(){
+  clearNotification();
+  $(".modal").find("input, textarea, select").val("");
+  $(".modal").removeClass('is-active');
+}
+
+//</editor-fold>
+
 //<editor-fold>----------------------------------URL HELPER FUNCTIONS-------------------------
 
 //add active to left menu
@@ -98,7 +109,7 @@ function leftMenuActive(){
   }
 }
 
-//function to get a URL query param by name
+//get a URL query param by name
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");
