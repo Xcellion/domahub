@@ -17,6 +17,7 @@
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
+@import '../bulma/elements/switch.sass';
 @import '../bulma/elements/hamburger.sass';
 @import '../bulma/elements/icon.sass';
 @import '../bulma/layout/section.sass';
@@ -34,10 +35,6 @@
 
 .remove-margin-bottom-content {
   margin-bottom:0 !important;
-}
-
-.company-logo {
-  margin-bottom: 30px;
 }
 
 .delete-modal-cloned-domain {
@@ -153,14 +150,6 @@
   z-index: 5;
 }
 
-#filter-menu {
-  @include mobile {
-    select {
-      width: 68px;
-    }
-  }
-}
-
 // edit listing tabs
 #edit-toolbar {
   margin-bottom: 20px;
@@ -174,7 +163,7 @@
     @include mobile {
       li {
         &:not(:last-child) {
-          margin-right: 5px;
+          margin-right: 10px;
         }
       }
     }
@@ -290,7 +279,7 @@
     }
   }
   &.is-selected {
-    background-color:#ffc;
+    background-color:rgba(60,188,141,0.12);
   }
 }
 
@@ -321,7 +310,8 @@
   flex-wrap: wrap;
   align-items: stretch;
   .button,
-  .select {
+  .select,
+  .field {
     margin-right: 10px;
   }
   &.is-mobile {
@@ -388,6 +378,14 @@
     padding: 6px 10px;
     &:hover {
       background-color: $lighter;
+    }
+  }
+}
+
+.select {
+  &.is-narrow {
+    select {
+      width: 105px;
     }
   }
 }

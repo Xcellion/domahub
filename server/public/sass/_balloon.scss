@@ -10,21 +10,24 @@ button[data-balloon] {
   filter: alpha(opacity=0);
   -khtml-opacity: 0;
   -moz-opacity: 0;
+  -ms-transform-origin: top;
+  -ms-transform: translate(-50%, 10px);
+  -webkit-transform-origin: top;
+  -webkit-transform: translate(-50%, 10px);
+  -webkit-transition: all 0.18s ease-out 0.18s;
+  bottom: 100%;
+  font-weight: 400;
+  left: 50%;
+  letter-spacing: normal;
   opacity: 0;
   pointer-events: none;
-  -webkit-transition: all 0.18s ease-out 0.18s;
-  transition: all 0.18s ease-out 0.18s;
-  bottom: 100%;
-  left: 50%;
   position: absolute;
+  text-transform: none;
+  transform-origin: top;
+  transform: translate(-50%, 10px);
+  transition: all 0.18s ease-out 0.18s;
   word-break: normal;
   z-index: 10;
-  -webkit-transform: translate(-50%, 10px);
-  -ms-transform: translate(-50%, 10px);
-  transform: translate(-50%, 10px);
-  -webkit-transform-origin: top;
-  -ms-transform-origin: top;
-  transform-origin: top;
 }
 [data-balloon]:after {
   background: rgba(17, 17, 17, 0.9);

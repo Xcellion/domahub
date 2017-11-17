@@ -36,12 +36,12 @@
       font-size: 14px
   th
     font-weight: 500
-    padding: 10px
+    padding: 15px 12px
     &.is-400
       font-weight: 400
   td
     border-bottom: 1px solid $border
-    padding: 10px
+    padding: 15px 12px
     a
       word-break: break-all
     &.is-danger
@@ -66,6 +66,17 @@
         &:hover
           cursor: auto
   // Modifiers
+  &.has-shadow
+    border: none
+    tbody
+      +box-shadow(1px,1px,1px,rgba(0,0,0,0.07),0)
+    thead
+      background-color: #e5ecf1
+      th
+        border-bottom: none
+        font-size: $size-8
+        letter-spacing: 1px
+        text-transform: uppercase
   &.is-bordered
     td,
     th

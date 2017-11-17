@@ -45,11 +45,12 @@
               </li>
               <li id="payment-tab" class="tab">
                 <a tabindex="0">
-                  <span class="icon is-hidden-tablet"><i class="fa fa-university"></i></span>
-                  <span class="is-hidden-mobile">Payment</span>
-                  <span class="required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
-                    <i class="fa fa-question-circle"></i>
-                  </span>
+                  <span class="icon is-relative is-hidden-tablet"><i class="fa fa-university"></i></span>
+                  <span class="is-relative is-hidden-mobile">Payment
+										<span class="required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
+	                    <i class="fa fa-exclamation-circle"></i>
+	                  </span>
+									</span>
                 </a>
               </li>
               <li id="transactions-tab" class="tab">
@@ -61,15 +62,15 @@
               <li>
                 <div class="control is-grouped">
                   <div class="control">
-                    <button id="account-submit" type="submit" form="stripe-account-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary">
+                    <button id="account-submit" type="submit" form="stripe-account-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
                       <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
                       <span>Save</span>
                     </button>
-                    <button id="stripe-account-submit" type="submit" form="stripe-personal-form" class="toolbar-button is-hidden button is-primary">
+                    <button id="stripe-account-submit" type="submit" form="stripe-personal-form" class="toolbar-button is-hidden button is-primary is-stylish is-small">
                       <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
                       <span>Save</span>
                     </button>
-                    <button id="paypal-submit" type="submit" form="paypal-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary">
+                    <button id="paypal-submit" type="submit" form="paypal-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
                       <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
                       <span>Save</span>
                     </button>
@@ -79,7 +80,7 @@
                     </button>%>
                   </div>
                   <div class="control">
-                    <a id="cancel-button" class="toolbar-button is-hidden button is-danger">
+                    <a id="cancel-button" class="toolbar-button is-hidden button is-danger is-stylish is-small">
                       <span class="icon is-small"><i class="fa fa-ban"></i></span>
                       <span>Cancel</span>
                     </a>
@@ -146,7 +147,7 @@
           		<h3 id="upgrade-tab-header" class="card-header-title">
           			<span>Premium Status</span>
           		</h3>
-          		<a tabindex="0" class="button is-small card-header-icon" href="/features#pricing">
+          		<a tabindex="0" class="button is-small no-shadow is-transparent is-black card-header-icon" href="/features#pricing">
           			<span class="icon is-small"><i class="fa fa-question-circle"></i></span>
           			<span>What is Premium?</span>
           		</a>
@@ -219,7 +220,7 @@
           		<h3 class="card-header-title">
           			<span>Premium Payments History</span>
           		</h3>
-              <small id="next-charge-tip" class="tip is-inline"></small>
+              <small id="next-charge-tip" class="tip is-inline-block"></small>
           	</div>
           	<div class="card-content">
               <table id="payment-history-table" class="table no-border-bottom">
@@ -359,13 +360,14 @@
               <!-- PERSONAL INFO -->
               <div class="card is-fullwidth">
                 <div class="card-header is-block">
-                  <h3 class="card-header-title">Personal Information</h3>
-                  <small class="tip is-inline">
+                  <h3 class="card-header-title">
+										<span>Personal Information</span>
+										<span class="required-info warning-msg is-danger">Incomplete</span>
+									</h3>
+                  <small class="tip">
                     This information is legally required for payments processing.
+										DomaHub does not share this information with anyone except our payments processors.
                   </small>
-                  <span class="icon is-small is-tooltip" data-balloon="We do not share this information with anyone except our payments processors. It is important that you fill everything out correctly, otherwise payouts may be delayed or adversely impacted." data-balloon-pos="up" data-balloon-length="large">
-                    <i class="fa fa-question-circle"></i>
-                  </span>
                 </div>
                 <div class="card-content">
                   <div class="control">
@@ -373,7 +375,7 @@
                     <input required data-uservar="first_name" id="first_name-input" class="input stripe-account-input" type="text" name="first_name" />
                   </div>
                   <div class="control">
-                    <label class="label">Last Name</label>
+                    <label class="label" for="last_name-input">Last Name</label>
                     <input required data-uservar="last_name" id="last_name-input" class="input stripe-account-input" type="text" name="last_name" />
                   </div>
                   <div class="control">
@@ -532,13 +534,14 @@
               <!-- ADDRESS INFO -->
               <div class="card is-fullwidth">
                 <div class="card-header is-block">
-                  <h3 class="card-header-title">Address Information</h3>
-                  <small class="tip is-inline">
-                    This information is legally required for payments processing.
+                  <h3 class="card-header-title">
+										<span>Address Information</span>
+										<span class="required-info warning-msg is-danger">Incomplete</span>
+									</h3>
+                  <small class="tip">
+										This information is legally required for payments processing.
+										DomaHub does not share this information with anyone except our payments processors.
                   </small>
-                  <span class="icon is-small is-tooltip" data-balloon="We do not share this information with anyone except our payments processors. It is important that you fill everything out correctly, otherwise payouts may be delayed or adversely impacted." data-balloon-pos="up" data-balloon-length="large">
-                    <i class="fa fa-question-circle"></i>
-                  </span>
                 </div>
                 <div class="card-content">
                   <div class="control">
@@ -588,7 +591,7 @@
                     <input required data-uservar="state" id="state-input" class="input stripe-account-input" type="text" name="state" autocomplete=""/>
                   </div>
                   <div class="control">
-                    <label class="label" for="zip-input">Zip / Postal Code</label>
+                    <label class="label" for="postal_code-input">Zip / Postal Code</label>
                     <input required data-uservar="zip" id="postal_code-input" class="input stripe-account-input" type="text" name="zip" autocomplete=""/>
                   </div>
                 </div>
@@ -680,7 +683,7 @@
                 <h3 class="card-header-title">
                   Earnings Report
                 </h3>
-                <div>
+                <div class="card-header-icon">
                   <span class="icon is-tooltip" data-balloon="Most banks only process transfers on business days. Money withdrawn on holidays or weekends may only be available when your bank opens. Your withdrawal could be delayed or blocked if we identify an issue with either your DomaHub account or bank account." data-balloon-pos="up" data-balloon-length="large">
                     <i class="fa fa-question-circle"></i>
                   </span>
@@ -718,28 +721,27 @@
           <div class="column is-9">
             <div id="transactions-toolbar" class="control">
               <div class="control">
-                <a id="refresh-transactions-button" class="button is-transparent is-black" title="Refresh Transactions">
+                <a id="refresh-transactions-button" class="button is-inverted is-black" title="Refresh Transactions">
                   <span class="icon is-small"><i class="fa fa-refresh"></i></span>
                   <span>Refresh Transactions</span>
                 </a>
               </div>
               <div class="control is-grouped">
-                <div class="control has-icon">
-                  <span class="select no-borders has-shadow">
+                <div class="control">
+                  <span class="select no-borders is-transparent is-narrow">
                     <select id="transactions-filter-select" tabindex="0">
                       <option selected value="exists">View All</option>
                       <option value="sale">Domain Sales</option>
                       <option value="rental">Domain Rentals</option>
                       <option value="available">Available For Withdrawal</option>
-                      <option value="notavailable">Not Available For Withdrawal</option>
+                      <option value="notavailable">Unavailable For Withdrawal</option>
                       <option value="actionable">Requires Action</option>
                     </select>
                   </span>
-                  <i class="fa fa-filter"></i>
                 </div>
                 <div class="control has-icon">
                   <i class="fa fa-search"></i>
-                  <input id="transactions-search" tabindex="0" class="input is-expanded has-shadow no-border" type="text" placeholder="Search Transactions" />
+                  <input id="transactions-search" tabindex="0" class="input is-expanded is-transparent no-border" type="text" placeholder="Search Transactions" />
                 </div>
               </div>
             </div>
@@ -843,13 +845,13 @@
         </form>
         <div class="control is-grouped is-grouped-center">
           <p class="control">
-            <button form="password-form" type="submit" id="password-submit" tabindex="0" class='button is-primary'>
+            <button form="password-form" type="submit" id="password-submit" tabindex="0" class='button is-primary is-stylish is-small'>
               <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
               <span>Save</span>
             </button>
           </p>
           <p class="control">
-            <a tabindex="0" class='button is-outlined is-danger cancel-modal'>
+            <a tabindex="0" class='button is-outlined is-danger is-stylish is-small cancel-modal'>
               <span class="icon is-small"><i class="fa fa-ban"></i></span>
               <span>Cancel</span>
             </a>
@@ -916,13 +918,13 @@
             </div>
             <div class="control is-grouped is-grouped-center">
               <p class="control">
-                <button id="submit-card-button" tabindex="0" type="submit" form="credit-card-form" class='button is-primary'>
+                <button id="submit-card-button" tabindex="0" type="submit" form="credit-card-form" class='button is-primary is-stylish is-small'>
                   <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
                   <span>Save</span>
                 </button>
               </p>
               <p class="control">
-                <a tabindex="0" class='button is-outlined is-danger cancel-modal'>
+                <a tabindex="0" class='button is-outlined is-danger is-stylish is-small cancel-modal'>
                   <span class="icon is-small"><i class="fa fa-ban"></i></span>
                   <span>Cancel</span>
                 </a>
@@ -1067,13 +1069,13 @@
             </div>
             <div class="control is-grouped is-grouped-center">
               <p class="control">
-                <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-primary">
+                <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-primary is-stylish is-small">
                   <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
                   <span>Save</span>
                 </button>
               </p>
               <p class="control">
-                <a tabindex="0" class='button is-outlined is-danger cancel-modal'>
+                <a tabindex="0" class='button is-outlined is-danger is-stylish is-small cancel-modal'>
                   <span class="icon is-small"><i class="fa fa-ban"></i></span>
                   <span>Cancel</span>
                 </a>
