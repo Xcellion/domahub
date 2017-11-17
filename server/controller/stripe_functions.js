@@ -1314,7 +1314,7 @@ function updateUserStripeBank(user, account){
 //switch between event types for stripe webhooks
 function switchStripeEvents(event, res){
   if (event){
-    console.log("Event from Stripe: " + event.type);
+    console.log("SF: Event from Stripe: " + event.type);
     res.sendStatus(200);
     switch (event.type){
       case "customer.subscription.deleted":
