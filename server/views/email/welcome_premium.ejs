@@ -16,16 +16,16 @@
                 <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
                     <tr>
                         <td align="center" valign="top">
-                            <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
+                            <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:#3cbc8d">
                                 <tr>
                                     <td align="center" valign="top">
                                       <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
-                                        <img alt height="72" width="72" alt="Logo" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                        <img alt height="72" width="72" alt="Logo" style="border:0;margin:0;padding:0" src="https://domahub.com/images/lib/smile.png" />
                                       </a>
                                     </td>
                                 </tr>
                                 <tr>
-                                  <td align="center" style="color:<%= (premium) ? listing_info.font_luminance : '#fff' %>;border:0;margin:0;padding-bottom:25px;;font-size:24px;font-weight:700;line-height:2;">
+                                  <td align="center" style="color:#fff;border:0;margin:0;padding-bottom:25px;;font-size:24px;font-weight:700;line-height:2;">
                                     Congratulations on signing up for Premium!
                                   </td>
                                 </tr>
@@ -37,25 +37,39 @@
                             <table border="0" cellpadding="0" cellspacing="0" id="emailBody" style="padding:20px;">
                                 <tr>
                                   <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
-                                    Hello <%= offerer_name %>!
+                                    Hello <%= username %>!
                                   </td>
                                 </tr>
                                 <tr>
                                   <td align="left" valign="top" colspan="5" style="line-height:1.5;padding-bottom:20px;">
-                                    Your account has been upgraded to Premium status. You now have access to features like
-                                    custom branding, emailing, unique domain URL, etc.
+                                    Your account has been upgraded to Premium status! You now have access to the following Premium features:
                                   </td>
                                 </tr>
+                                <td>
+                                  <td align="left" valign="top" colspan="5" style="line-height:1.5;padding-bottom:20px;">
+                                    <li>
+                                      0% commission on all domain sales and rentals.
+                                    </li>
+                                    <li>
+                                      HTTPS on all domain landing pages.
+                                    </li>
+                                    <li>
+                                      Customizable landing pages.
+                                    </li>
+                                    <li>
+                                      <a href="https://domahub.com/features#offers">and much much more!</a>
+                                    </li>
+                                  </td>
+                                </td>
                                 <tr>
                                   <td align="left" valign="top" colspan="5" style="line-height:1.5;padding-bottom:20px;">
-                                    For a full list of features, you can check out our <a href="https://domahub.com/features#offers">
-                                    features page</a>.
+                                    Let's go sell some domains!
                                   </td>
                                 </tr>
                                 <tr>
                                   <td colspan="5" align="center" style="line-height:1.5;padding-top:30px;">
                                     <a class="button" href="https://domahub.com/login" style="text-decoration:none;padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color:#3cbc8d;color:#fff">
-                                      Go to DomaHub</a>
+                                      Log in to DomaHub</a>
                                   </td>
                                 </tr>
                             </table>
@@ -69,13 +83,9 @@
                                         You can cancel your Premium subscription at any time; it will stay active until the end of the current payment cycle.
                                     </td>
                                 </tr>
-                                <% if (!premium) { %>
-                                  <tr>
-                                    <td align="center" valign="top" style="line-height:1.5;">
-                                      Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
-                                    </td>
-                                  </tr>
-                                <% } %>
+                                <td align="center" valign="top" style="line-height:1.5;">
+                                  Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
+                                </td>
                             </table>
                         </td>
                     </tr>
