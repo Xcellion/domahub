@@ -8,6 +8,7 @@ $(document).ready(function() {
   //show red notification indication next to tab
   if (!user.stripe_account){
     $("#payment-tab .required-info").removeClass('is-hidden');
+    $("#stripe-personal-form").children(".card").removeClass('is-danger');
   }
 
   //add to history object depending on which table i clicked
@@ -851,11 +852,13 @@ function showSectionByURL(){
       }
       $("#change-bank-button").removeClass('is-hidden');
       $("#payment-tab .required-info").addClass('is-hidden');
+      $("#stripe-personal-form").children(".card").removeClass('is-danger');
       $("#bank-tooltip").removeClass('is-hidden');
       $(".existing-bank").text("Click the button to add a default bank account!");
     }
     else {
       $("#payment-tab .required-info").removeClass('is-hidden');
+      $("#stripe-personal-form").children(".card").addClass('is-danger');
       $("#bank-tooltip").addClass('is-hidden');
       $(".stripe-account-input").val("");
       $(".existing-bank").text("Please enter your legal information before you can add a bank account!");

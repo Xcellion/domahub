@@ -42,10 +42,6 @@
   border-top:1px solid $border;
 }
 
-.company-logo {
-  margin-bottom: 30px;
-}
-
 .has-border-right {
   border-right: 1px solid $border;
 }
@@ -74,10 +70,6 @@
   margin: 5px 0;
   color: $text-light;
   line-height: 1.5;
-
-  &.is-inline{
-    display:inline-block !important;
-  }
 }
 
 .sub-tabs {
@@ -137,5 +129,30 @@
   padding: 20px;
   &.is-small {
     max-width: 300px !important;
+  }
+}
+
+.select {
+  &.is-narrow {
+    select {
+      width: 105px;
+    }
+  }
+}
+
+.warning-msg {
+  font-size: $size-7;
+  color: $danger;
+  margin-left: 10px;
+  margin-top: 2px;
+}
+
+.required-info {
+  &.icon {
+    position: absolute;
+    right: -13px;
+    top: -6px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }

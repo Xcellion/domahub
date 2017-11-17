@@ -25,7 +25,7 @@
         <ul id="collapse-submenu">
           <% if (user.listings.length > 0 ){ %>
             <li class="menu-item has-icon">
-              <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme">
+              <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme is-sublink">
                 <span class="icon is-white is-hidden-desktop"><i class="fa fa-money"></i></span>
                 <small class="is-white is-hidden-tablet-only">My Listing Offers</small>
               </a>
@@ -37,7 +37,7 @@
             </a>
           </li>%>
           <li class="menu-item has-icon">
-            <a id="create-left-tab"  tabindex="0" title="Create New Listings" href="/listings/create" class="left-tab primary-theme">
+            <a id="create-left-tab"  tabindex="0" title="Create New Listings" href="/listings/create" class="left-tab primary-theme is-sublink">
               <span class="icon is-white is-hidden-desktop"><i class="fa fa-plus"></i></span>
               <small class="is-white is-hidden-tablet-only">Create Listings</small>
             </a>
@@ -51,7 +51,7 @@
         </a>
         <ul class="is-hidden-tablet-only">
           <li>
-            <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-hidden">
+            <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-sublink is-hidden">
               <small class="is-white">
                 Upgrade to Premium
                 <span class="icon is-small">
@@ -64,12 +64,6 @@
       </li>
     </ul>
   </aside>
-  <hr class="is-hidden-tablet-only"/>
-  <div class="content is-hidden-tablet-only">
-    <p class="is-white">
-      You are currently logged in as <%= user.username %>.
-    </p>
-  </div>
   <div class="user-panel">
     <div class="user-button" title="Send us a Message">
       <button tabindex="0" id="contact-button" class="button is-primary is-inverted nav-button" data-menu="contact-dropdown-menu">
@@ -79,7 +73,7 @@
         <p class="menu-label">Contact Us</p>
         <form id="contact-form">
           <textarea id="contact_message" required class="textarea no-shadow" placeholder="Comments? Questions? Let us know!"></textarea>
-          <button id="contact-submit-button" class="button is-fullwidth is-primary" type="submit" form="contact-form">
+          <button id="contact-submit-button" class="button is-fullwidth is-primary is-stylish is-small" type="submit" form="contact-form">
             <span class="icon is-small">
               <i class="fa fa-comment-o"></i>
             </span>
@@ -110,7 +104,6 @@
         </ul>
         <p class="menu-label">Company</p>
         <ul class="menu-list">
-          <li><a tabindex="0" href="/contact" title="Contact Us">Contact Us</a></li>
           <li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
           <li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
         </ul>
