@@ -1,0 +1,46 @@
+.menu-nav
+  a
+    display: block
+    padding: 5px 10px
+
+.menu-list
+  a
+    color: $text
+    display: block
+    padding: 5px
+    &:hover
+      background-color: $grey-lighter
+    // Modifiers
+    &.is-active
+      background-color: $primary
+      color: $primary-invert
+      p
+        color: $white
+        font-weight: 500
+  li
+    ul
+      border-left: 1px solid $border
+      margin: 10px 10px 10px 40px
+      padding-left: 10px
+
+.menu-item
+  &.has-icon
+    a
+      display: flex
+      align-items: center
+      .icon
+        margin-right: 15px
+
+.menu-label
+  color: $text
+  font-size: $size-small
+  font-weight: 500
+  letter-spacing: 1px
+  margin-bottom: 5px
+  text-transform: uppercase
+  margin-top: 10px
+  padding: 5px
+
+.menu
+  &.is-fixed
+    position: fixed

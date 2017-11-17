@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html class="prevent-scroll-jump">
+
+<head>
+  <title>Checkout - DomaHub</title>
+  <link rel="stylesheet" type="text/css" href="/css/min/listing_checkout.min.css" />
+  <link rel="stylesheet" href="/css/min/listing_page.min.css" type="text/css" />
+  <script type="text/javascript">
+    var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+    var new_rental_info = <% if(typeof new_rental_info != "undefined"){ %><%-JSON.stringify(new_rental_info)%><% }else{ %>""<% } %>;
+    var node_env = <% if(typeof node_env != "undefined"){ %><%-JSON.stringify(node_env)%><% }else{ %>""<% } %>;
+    var compare = false;
+  </script>
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+  <section id="page-contents" class="no-background section is-hidden is-medium min-height">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-7">
+
+          <!--BUILD SITE STEP-->
+          <header id="step-header-site" class="checkout-track step-header header margin-top-15">
+            <h2>Customize Your Website</h2>
+          </header>
+          <div id="step-content-site" class="step-content">
+            <div class="notification is-lighter no-shadow has-border">
+              <p id="site-regular-message" class="regular-message">
+                There are many different ways to create content for your new domain name.
+                See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
+              </p>
+              <p id="address-forward-message" class="is-hidden regular-message">
+                Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
+              </p>
+              <p id="address-link-message" class="is-hidden regular-message">
+                Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
+              </p>
+              <p id="address-build-message" class="is-hidden regular-message">
+                Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
+              </p>
+              <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please choose a different website link.</p>
+            </div>
+
+            <div id="site-choices-block" class="choices-block">
+              <div id="forward-choice" class="checkout-track box hover-effect choice-block forward-choice">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-primary">
+                      <i class="fa fa-share-square"></i>
+                    </span>
+                    <h2>Forward elsewhere
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </h2>
+                  </div>
+                  <p>
+                    Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
+                  </p>
+                </div>
+              </div>
+              <div id="link-choice" class="checkout-track content box hover-effect choice-block link-choice">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-info">
+                      <i class="fa fa-external-link-square"></i>
+                    </span>
+                    <h2>Display web content
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </h2>
+                  </div>
+                  <p>
+                    Display an existing website or content (e.g. a gif, image, meme, etc.).
+                    We will show that content on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>.
+                  </p>
+                </div>
+              </div>
+              <div id="build-choice" class="checkout-track content box hover-effect choice-block build-choice">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-accent">
+                      <i class="fa fa-pencil-square"></i>
+                    </span>
+                    <h2>Build a website
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </h2>
+                  </div>
+                  <p>
+                    Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> in minutes.
+                    You don&#39;t even have to know how to code!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="choices-selected" style="display:none;">
+
+              <div class="control is-hidden forward-choice-column choice-column">
+                <div class="control is-grouped">
+                  <p class="control is-expanded has-icon">
+                    <input tabindex="0" id="address-forward-input" class="checkout-track address-input input is-large" type="url" placeholder="Your company website, your friend's Instagram, or a product page..."/>
+                    <i class="fa fa-link"></i>
+                  </p>
+                  <p class="control">
+                    <button id="forward-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                      <span class="icon"><i class="fa fa-check-circle"></i></span>
+                      <span>Submit</span>
+                    </button>
+                  </p>
+                </div>
+                <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
+                <div class='is-flex-wrap'>
+                  <div class="provider-card">
+                    <a id="linkedin-example"   href="https://linkedin.com" title="LinkedIn" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
+                      <img src="/images/companies/linkedin-logo.png" alt="LinkedIn"/>
+                    </a>
+                    <div class="content">
+                      <p>
+                        Forward to your company page or job posting.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="facebook-example"   href="https://facebook.com" title="Facebook" class="checkout-track provider-img" style="border-color: #4867aa; background-color: #4867aa;">
+                      <img src="/images/companies/facebook-logo.png" alt="Facebook" height="50px"/>
+                    </a>
+                    <div class="content">
+                      <p>
+                        Forward to a personal, business, or promotional page.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="instagram-example"   href="https://instagram.com" title="Instagram" class="checkout-track provider-img" style="border-color: #efefef; background-color: #FFF;">
+                      <img src="/images/companies/instagram-logo.png" alt="Instagram" height="50px"/>
+                    </a>
+                    <div class="content">
+                      <p>
+                        Forward to a specific picture, post, or an account.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+              </div>
+
+              <div class="control is-hidden link-choice-column choice-column">
+                <div class="control is-grouped">
+                  <p class="control is-expanded has-icon">
+                    <input tabindex="0" id="address-link-input" class="checkout-track address-input input is-large" type="url" placeholder="A funny picture, a viral meme, or a cat GIF..."/>
+                    <i class="fa fa-link"></i>
+                  </p>
+                  <p class="control">
+                    <button id="link-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                      <span class="icon"><i class="fa fa-check-circle"></i></span>
+                      <span>Submit</span>
+                    </button>
+                  </p>
+                </div>
+                <p class='margin-bottom-10 margin-top-30'>These websites provide great content for your domain rental.</p>
+                <div class='is-flex-wrap'>
+                  <div class="provider-card">
+                    <a id="imgur-example"   href="https://imgur.com" title="Imgur" class="checkout-track provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
+                      <img src="/images/companies/imgur-logo.png" alt="Imgur" height="40px"/>
+                    </a>
+                    <div class="content">
+                      <p>
+                        Display GIFs, funny memes, or other viral images.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="googleimages-example"   href="https://images.google.com" title="Google Images" class="checkout-track provider-img" style="border-color: #efefef; background-color: #FFF;">
+                      <img src="/images/companies/googleimages-logo.png" alt="Google Images" height="45px"/>
+                    </a>
+                    <div class="content">
+                      <p>
+                        Display images, wallpapers, comics, etc.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="reddit-example"   href="https://reddit.com" title="Reddit" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
+                      <img src="/images/companies/reddit-logo.png" alt="Reddit" height="40px"/>
+                    </a>
+                    <div class="content">
+                      <p>
+                        Display trending subreddits, threads, or comments.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+              </div>
+
+              <div class="control is-hidden build-choice-column choice-column">
+                <div class="control is-grouped">
+                  <p class="control is-expanded has-icon">
+                    <input tabindex="0" id="address-build-input" class="checkout-track address-input input is-large" type="url" placeholder="Your personal portfolio, an eCommerce store, or a new website..."/>
+                    <i class="fa fa-link"></i>
+                  </p>
+                  <p class="control">
+                    <button id="build-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                      <span class="icon"><i class="fa fa-check-circle"></i></span>
+                      <span>Submit</span>
+                    </button>
+                  </p>
+                </div>
+                <p class='margin-bottom-10 margin-top-30'>Here are some premium website creation services!</p>
+                <div class='is-flex-wrap'>
+                  <div class="provider-card">
+                    <a id="googlesites-example"   href="https://gsuite.google.com/products/sites/" title="Google Sites" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
+                      <img src="/images/companies/google-logo.png" alt="Google" height="50px"/>
+                    </a>
+                    <div class="content">
+                      <ul class="has-disc">
+                        <li>
+                          Free option
+                        </li>
+                        <li>
+                          Collaborative
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="weebly-example"   href="https://www.weebly.com/themes" title="Weebly" class="checkout-track provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
+                      <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px"/>
+                    </a>
+                    <div class="content">
+                      <ul class="has-disc">
+                        <li>
+                          Free option
+                        </li>
+                        <li>
+                          eCommerce
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="squarespace-example"   href="https://www.squarespace.com/templates" title="Squarespace" class="checkout-track provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
+                      <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px"/>
+                    </a>
+                    <div class="content">
+                      <ul class="has-disc">
+                        <li>
+                          Free option
+                        </li>
+                        <li>
+                          eCommerce
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="wix-example"   href="http://www.wix.com/website/templates" title="Wix" class="checkout-track provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
+                      <img src="/images/companies/wix-logo.png" alt="Wix" height="35px"/>
+                    </a>
+                    <div class="content">
+                      <ul class="has-disc">
+                        <li>
+                          Free option
+                        </li>
+                        <li>
+                          eCommerce
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="provider-card">
+                    <a id="shopify-example"   href="https://www.shopify.com/online" title="Shopify" class="checkout-track provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
+                      <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px"/>
+                    </a>
+                    <div class="content">
+                      <ul class="has-disc">
+                        <li>
+                          Paid only
+                        </li>
+                        <li>
+                          eCommerce
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+              </div>
+
+              <div class="control">
+                <button id="site-cancel" class="checkout-track button is-stylish back-button">
+                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                  <span>Back to Rental Types</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!--PAYMENT STEP-->
+          <header id="step-header-payment" class="checkout-track step-header header is-disabled margin-top-15">
+            <% if (new_rental_info.price != 0) { %>
+              <h2>Payment</h2>
+            <% } else { %>
+              <h2>Confirmation</h2>
+            <% } %>
+          </header>
+          <div id="step-content-payment" class='step-content is-hidden'>
+            <div class="notification is-lighter no-shadow has-border">
+              <p id="payment-regular-message" class="regular-message">
+                Please choose your preferred method of payment.</a>
+              </p>
+              <p id="stripe-regular-message" class="is-hidden regular-message">
+                Please enter your payment information. By clicking the Confirm & Pay button,
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+              </p>
+              <p id="bitcoin-regular-message" class="is-hidden regular-message">
+                Please enter your Bitcoin wallet address. By clicking the Confirm & Pay button,
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+              </p>
+              <p id="paypal-regular-message" class="is-hidden regular-message">
+                Please log in to your PayPal account. By clicking the Confirm & Pay button,
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+              </p>
+              <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
+              <p id="stripe-success-message" class="regular-message is-hidden"></p>
+            </div>
+
+            <div id="payment-choices-block" class="choices-block">
+              <div id="stripe-choice" class="stripe-choice checkout-track box hover-effect choice-block">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-primary">
+                      <i class="fa fa-credit-card"></i>
+                    </span>
+                    <h2>Pay with a card</h2>
+                  </div>
+                  <p>
+                    Pay with any major credit or debit card.
+                  </p>
+                </div>
+              </div>
+
+              <%# <div id="bitcoin-choice" class="bitcoin-choice checkout-track box hover-effect choice-block">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-accent">
+                        <i class="fa fa-bitcoin"></i>
+                    </span>
+                    <h2>Pay with Bitcoin</h2>
+                  </div>
+                  <p>
+                    Pay securely using your Bitcoin wallet.
+                  </p>
+                </div>
+              </div>%>
+
+              <div class="control">
+                <button id="back-to-address-button" class="checkout-track button is-stylish">
+                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                  <span>Back to Edit Address</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="choices-selected" style="display:none;">
+              <div class="control is-hidden stripe-choice-column choice-column">
+                <form id="stripe-form" autocomplete="off" class="control">
+                  <label class="label">Card Number</label>
+                  <div class="control has-icon">
+                    <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                    <i id="cc-icon" class="fa fa-credit-card"></i>
+                  </div>
+                  <div class="control is-grouped">
+                    <div class="control is-expanded has-icon">
+                      <label class="label">Expiration Date</label>
+                      <div class="control has-icon">
+                        <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                        <i class="fa fa-calendar-o"></i>
+                      </div>
+                    </div>
+                    <div class="control">
+                      <label class="label">Security Code</label>
+                      <div class="control has-icon">
+                        <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                        <i class="fa fa-lock"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <label class="label">Zip Code</label>
+                  <div class="control has-icon">
+                    <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                    <i class="fa fa-map-marker"></i>
+                  </div>
+                </form>
+              </div>
+              <div class="control is-hidden bitcoin-choice-column choice-column">
+                 BITCOIN
+              </div>
+              <div class="control">
+                <button id="payment-cancel" class="checkout-track button is-stylish back-button">
+                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                  <span>Back to Payment Choices</span>
+                </button>
+                <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
+                  <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
+                  <span>Confirm & Pay</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="checkout-success-content" class="success-hide is-hidden">
+              <div class="content">
+                <p>
+                  Below is the link to edit your rental.
+                  Anyone with this link can edit your rental
+                  so please be cautious and do not misplace it.
+                </p>
+                <div class="control has-addons">
+                  <input id="rental-link-input" class='checkout-track is-large input is-expanded' placeholder="Save me for later!"/>
+                  <a id="rental-link-copy" class="checkout-track button is-large is-primary no-shadow">
+                    <i class="fa fa-clipboard"></i>
+                  </a>
+                </div>
+              </div>
+              <a id="rental-preview-button" class="checkout-track button is-stylish is-primary no-shadow">
+                <span class="icon is-small"><i class="fa fa-search"></i></span>
+                <span>Preview Rental</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="column is-5">
+          <div class="card is-checkout">
+            <figure class="card-image img-wrapper" style="background-image:url('<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : 'https://domahub.com/images/lib/money.png'%>')"></figure>
+            <div class="card-content">
+              <div class="content">
+                <h1 class="is-primary is-breakword"><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></h1>
+              </div>
+              <p id="rental-will-wrapper" class="content is-hidden">
+                <span id="rental-will-msg"></span>
+                <a target="_blank" id="rental-will-link" class="is-underlined is-info content"></a>
+              </p>
+              <p id="rental-will-duration-msg" class="content is-hidden">
+                For the duration of the rental below:
+              </p>
+              <div class="columns has-border-bottom">
+                <div class="column is-5">
+                  <p id="preview-start-dates">
+                    Rental Start
+                  </p>
+                  <p id="rental-start"></p>
+                </div>
+                <div class="column is-2 is-hidden-mobile">
+                  <span class="icon is-medium is-blacklight">
+                    <i class="fa fa-long-arrow-right"></i>
+                  </span>
+                </div>
+                <div class="column is-5">
+                  <p id="preview-end-dates">
+                    Rental End
+                  </p>
+                  <p id="rental-end"></p>
+                </div>
+              </div>
+              <div class="control-flex">
+                <p id="preview-rates">
+                  <span id="listing-price-rate"></span> x <span id="total-duration"></span>
+                </p>
+                <p id="sub-total-price" class="is-bold"></p>
+              </div>
+              <div class="control-flex discount-hidden is-hidden">
+                <p>
+                  <span>Discount </span> x <span id="discount-duration"></span>
+                </p>
+                <p id="discount-price" class="is-bold"></p>
+              </div>
+              <div class="control-flex">
+                <h3>Total Price</h3>
+                <h3 id="total-price" class="is-bold"></h3>
+              </div>
+            </div>
+            <footer id="edit-dates-button" class="card-footer">
+              <% if (listing_info.premium){ %>
+                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
+                  <span class="icon is-small">
+                    <i id="edit-dates-icon" class="fa fa-pencil"></i>
+                  </span>
+                  <span id="edit-dates-text">Edit Dates or Path</span>
+                </a>
+              <% } else { %>
+                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
+                  <span class="icon is-small">
+                    <i id="edit-dates-icon" class="fa fa-pencil"></i>
+                  </span>
+                  <span id="edit-dates-text">Edit Dates or Path</span>
+                </a>
+              <% } %>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# LISTING FOOTER %>
+  <%- include("listing_footer.ejs") %>
+
+  <script src="/js/lib/moment.min.js" type="text/javascript"></script>
+  <script src="/js/lib/wNumb.js" type="text/javascript"></script>
+  <script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
+  <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
+  <script src="/js/routes/listings/listing_checkout_logic_rent.js" type="text/javascript"></script>
+  <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+
+user www-data;
+worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    lua_shared_dict auto_ssl 1m;
+    lua_shared_dict auto_ssl_settings 64k;
+
+    access_log /usr/local/openresty/nginx/logs/access_openresty.log;
+    error_log /usr/local/openresty/nginx/logs/error_openresty.log debug;
+
+    resolver 8.8.8.8 ipv6=off;
+
+    ##
+    #  DOMA API REQUEST
+    ##
+
+    init_by_lua_block {
+        auto_ssl = (require "resty.auto-ssl").new()
+
+        auto_ssl:set("allow_domain", function(domain)
+
+	    local http = require("resty.http")
+	    local httpc = http.new()
+
+	    httpc:set_timeout(5000)
+
+	    local res, err = httpc:request_uri("http://127.0.0.1:9090",{
+		method = "GET",
+		headers = {
+		    ["DomaApi"] = true,
+		    ["Host"] = domain,
+		},
+	    })
+
+	    if not res then
+		print("Failed to request: ", err)
+		return false;
+	    end
+
+	    if res.status == 200 then
+		print("Premium listing! Getting SSL certificate...")
+		return true
+	    end
+
+	    if res.status == 404 then
+		print("Not Premium! No need for SSL...")
+		ngx.ctx.no_ssl = true
+		return false
+	    end
+
+	    print("Unexpected response from Doma API")
+	    return false
+
+	end)
+
+	auto_ssl:init()
+    }
+
+    init_worker_by_lua_block {
+	auto_ssl:init_worker()
+    }
+
+    server {
+	listen 80;
+	
+	location / {
+	    return 301 https://$host$request_uri;
+	}
+
+	location /.well-known/acme-challenge {
+	    content_by_lua_block {
+		auto_ssl:challenge_server()
+	    }
+	}
+    }
+
+    server {
+	listen 443 ssl;
+
+#	ssl_certificate_by_lua_block {
+#	    auto_ssl:ssl_certificate()
+#	}
+	
+	ssl_certificate /etc/letsencrypt/live/w3bbi.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/w3bbi.com/privkey.pem;
+
+	location / {
+	
+	    access_by_lua_block {
+		if ngx.ctx.no_ssl then
+		    return ngx.redirect("https://domahub.com/listing/"..ngx.var.host)
+		end
+	    }
+
+	    root /var/www/w3bbi;
+	    proxy_pass http://localhost:8080;
+	    proxy_set_header X-Real-IP $remote_addr;
+	    proxy_set_header X-NginX-Proxy true;
+	    proxy_ssl_session_reuse off;
+	    proxy_set_header Host $http_host;
+	    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	    proxy_set_header X-Forwarded-proto https;
+	    proxy_cache_bypass $http_upgrade;
+	    proxy_redirect off;
+	}
+    }
+
+    server {
+	listen 127.0.0.1:8999;
+	client_body_buffer_size 128k;
+	client_max_body_size 128k;
+	
+	location / {
+	    content_by_lua_block {
+		auto_ssl:hook_server()
+	    }
+	}
+    }
+
+}

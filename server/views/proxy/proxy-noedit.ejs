@@ -1,0 +1,87 @@
+<style>
+    #dh-overlay {
+        position:fixed !important;
+        z-index:9999999999999 !important;
+        top:15px !important;
+        left:50% !important;
+        transform:translateX(-50%) !important;
+        margin-right:-50% !important;
+        padding:15px;
+    }
+    #dh-button {
+        padding:15px 30px 15px 20px !important;
+        box-sizing:border-box !important;
+        border-radius:5px !important;
+        border:1px solid rgba(0,0,0,0.1) !important;
+        box-shadow:0 10px 30px rgba(0,0,0,0.18) !important;
+        color:#fff !important;
+        background-color:rgb(60,189,141) !important;
+        font-family:"roboto",Helvetica,sans-serif !important;
+        font-size:14px !important;
+        text-decoration:underline !important;
+        cursor:pointer !important;
+        transition:all 0.25s !important;
+        position:relative !important;
+        display: block !important;
+        max-width: 200px !important;
+    }
+    #dh-button:hover{
+        text-decoration:underline !important;
+    }
+    #dh-delete {
+        position:absolute !important;
+        border-radius:100% !important;
+        cursor:pointer !important;
+        vertical-align:top !important;
+        display:block !important;
+        border:none !important;
+        height:20px !important;
+        width:20px !important;
+        top:20px !important;
+        right:20px !important;
+    }
+    #dh-delete:hover::before,
+    #dh-delete:hover::after {
+        background:white !important;
+    }
+    #dh-delete::before,
+    #dh-delete::after {
+        background:rgba(0,0,0,0.5) !important;
+        content:"" !important;
+        display:block !important;
+        height:2px !important;
+        left:50% !important;
+        margin-left:-25% !important;
+        margin-top:-1px !important;
+        position:absolute !important;
+        top:50% !important;
+        width:50% !important;
+        transition:background 0.25s ease !important;
+    }
+    #dh-delete::before {
+        transform:rotate(45deg) !important;
+    }
+    #dh-delete::after {
+        transform:rotate(-45deg) !important;
+    }
+</style>
+<div id="dh-overlay" style="display:none !important;">
+    <a id="dh-button"  ></a>
+    <span id="dh-delete"></span>
+</div>
+<script>
+    console.log("DomaHub info message loaded!");
+    $(document).ready(function(){
+
+        var description_hook = doma_rental_info.description_hook || "What is this website?";
+        $("#dh-button").text(description_hook);
+
+        //fade in after 5 seconds
+        setTimeout(function(){ $("#dh-overlay").slideDown("fast"); }, 500);
+        $("#dh-delete").on("click", function(){
+            $("#dh-overlay").hide();
+        });
+
+        $("#dh-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name + "?camefrom=" + doma_rental_info.rental_id);
+    });
+</script>

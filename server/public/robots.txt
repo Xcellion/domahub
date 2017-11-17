@@ -1,0 +1,6 @@
+# DomaHub Robots txt
+
+User-agent: *
+Disallow: /profile/
+Disallow: /*checkout$
+Disallow: /checkout/

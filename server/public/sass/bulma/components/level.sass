@@ -1,0 +1,75 @@
+.level-item
+  .title,
+  .subtitle
+    margin-bottom: 0
+  // Responsiveness
+  +mobile
+    &:not(:last-child)
+      margin-bottom: 10px
+
+.level-left,
+.level-right
+  .level-item
+    &:not(:last-child)
+      margin-right: 10px
+    // Modifiers
+    &.is-flexible
+      flex-grow: 1
+
+.level-left
+  // Responsiveness
+  & + .level-right
+    margin-left: 10px
+    +mobile
+      margin-top: 10px
+      margin-left: 0
+  +tablet
+    align-items: center
+    display: flex
+
+.level-right
+  text-align: right
+  // Responsiveness
+  +tablet
+    align-items: center
+    display: flex
+    justify-content: flex-end
+
+.level
+  align-items: center
+  justify-content: space-between
+  &:not(:last-child)
+    margin-bottom: 10px
+  &.has-border
+    &:not(:last-child)
+      border-bottom: 1px solid $border
+    // responsiveness
+    +tablet
+      & > .level-item
+        &:not(.is-narrow)
+          flex-grow: 0
+  code
+    border-radius: $radius
+  img
+    display: inline-block
+    vertical-align: top
+  // Modifiers
+  &.is-mobile
+    align-items: flex-start
+    display: flex
+    justify-content: space-between
+    & > .level-left
+      & + .level-right
+        margin-top: 0
+    & > .level-item
+      &:not(:last-child)
+        margin-bottom: 0
+    .level-item
+      &:not(.is-narrow)
+        flex-grow: 1
+  // Responsiveness
+  +tablet
+    display: flex
+    & > .level-item
+      &:not(.is-narrow)
+        flex-grow: 1

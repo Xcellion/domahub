@@ -1,0 +1,11 @@
+<% if (!listing_info.premium || (listing_info.premium && listing_info.domain_owner)) { %>
+  <div class="content">
+  <p>
+    <% if (listing_info.owner_id){ %>
+      This website was created by <span class="is-bold"><%= listing_info.username %></span> on <span id="date_created"></span>.
+    <% } else { %>
+      This domain is owned by <%= listing_info.username %>.
+    <% } %>
+  </p>
+  </div>
+<% } %>

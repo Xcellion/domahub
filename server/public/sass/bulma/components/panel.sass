@@ -1,0 +1,85 @@
+.panel-icon
+  +fa(14px, 16px)
+  color: $black-disabled
+  float: left
+  margin: 0 8px 0 -2px
+  .fa
+    font-size: $size-6
+    line-height: inherit
+
+.panel-heading
+  background-color: $white
+  border-bottom: 1px solid $border
+  border-radius: $radius-large $radius-large 0 0
+  color: $primary
+  font-size: $size-medium
+  padding: 10px
+
+.panel-list
+  a
+    +transition(all 0s)
+
+.panel-tabs
+  display: flex
+  font-size: $size-normal
+  padding: 5px 10px 0
+  justify-content: center
+  a
+    border-bottom: 1px solid $border
+    margin-bottom: -1px
+    padding: 5px
+    // Modifiers
+    &.is-active
+      border-bottom-color: $primary-dark
+      color: $primary-dark
+    &:hover,
+    &:active
+      border-bottom-color: $primary-lighter
+      color: $primary-lighter
+  &:not(:last-child)
+    border-bottom: 1px solid $border
+
+.panel-search
+  border-bottom: 1px solid $border
+  display: block
+  line-height: 16px
+  padding: 10px
+
+.panel-msg
+  margin-top: 5px
+  padding-left: 18px
+
+.panel-block
+  display: block
+  line-height: 16px
+  padding: 10px
+  &.is-active
+    background-color: $primary
+    color: $white-primary
+    & > p
+      color: $white-secondary
+    & > .panel-icon
+      color: $white
+    &:hover,
+    &:active
+      background-color: $primary
+  &.has-button
+    &:hover,
+    &:active
+      background-color: transparent
+  &:hover,
+  &:active
+    background-color: $grey-lighter
+  &:not(:last-child)
+    border-bottom: 1px solid $border
+
+.panel
+  border: 1px solid $border
+  border-radius: $radius-large
+  +box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12))
+  &.no-shadow
+    +box-shadow(0,0,0,$black,0)
+  &.no-border-right
+    border-right: none
+  &:not(:last-child)
+    margin-bottom: 20px

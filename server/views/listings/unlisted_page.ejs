@@ -1,0 +1,49 @@
+<section id="page-contents" class="min-height">
+  <div class="container">
+    <div class="columns master right">
+      <div class="column is-6">
+
+        <% if (listing_info.available){ %>
+          <span class="tag is-primary is-medium">
+            Available for purchase
+        <% } else { %>
+          <span class="tag is-danger is-medium">
+            Unavailable
+        <% } %>
+          </span>
+
+        <div id="domain-display" class="content">
+          <h1 class="is-primary is-inline-block"><%= listing_info.domain_name %></h1>
+        </div>
+
+        <%# UNAVAILABLE MODULE %>
+        <%- include("modules/unavailable_module.ejs"); %>
+
+      </div>
+
+    </div>
+
+    <div id="modules-wrapper">
+      <%# TABS FOR THE BELOW MODULES %>
+      <%- include("modules/tabs_module.ejs", {
+          listing_info : listing_info
+      }); %>
+
+      <%# INFO MODULE %>
+      <%- include("modules/info_module.ejs", {
+        listing_info : listing_info
+      }); %>
+
+      <%# TRAFFIC MODULE %>
+      <%- include("modules/traffic_module.ejs", {
+        listing_info : listing_info
+      }); %>
+
+      <%# TICKER MODULE %>
+      <%- include("modules/ticker_module.ejs", {
+          listing_info : listing_info
+      }); %>
+    </div>
+
+  </div>
+</section>

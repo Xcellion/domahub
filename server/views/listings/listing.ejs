@@ -1,0 +1,54 @@
+<!-- page to display listing information and calendar for rentals -->
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title><%= listing_info.domain_name %> - DomaHub</title>
+		<link rel="stylesheet" href="/css/lib/daterangepicker.css" type="text/css" />
+		<link rel="stylesheet" href="/css/min/listing_page.min.css" type="text/css" />
+		<%- include("../templates/head_links", {user: user});%>
+	</head>
+
+	<body>
+
+    <script src="/js/lib/moment.min.js" type="text/javascript"></script>
+    <script src="/js/lib/wNumb.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+      var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
+    </script>
+
+		<%- include("../templates/notifications.ejs");%>
+
+		<div id="contact-success" class="is-hidden notification is-popup is-primary">
+	    <button class="delete"></button>
+	    Success! Please check your email for further instructions.
+		</div>
+		<div id="contact-error" class="is-hidden notification is-popup is-danger">
+	    <button class="delete"></button>
+	    <span id="contact-error-message">Something went wrong! Please refresh the page and try again.</span>
+		</div>
+
+		<%# TOOL TO COMPARE %>
+		<% if (compare) { %>
+			<%- include("modules/compare_module.ejs") %>
+		<% } %>
+
+		<%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
+		<% if (listing_info.unlisted && !compare) { %>
+			<%- include("unlisted_page.ejs") %>
+		<% } else { %>
+			<%- include("listed_page.ejs") %>
+		<% } %>
+
+		<%# LISTING FOOTER %>
+    <%- include("listing_footer.ejs") %>
+
+    <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
+		<script src="/js/routes/listings/listing_logic.js" type="text/javascript"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,44 @@
+<html>
+
+<head>
+	<title>Page Not Found - DomaHub</title>
+	<link rel="stylesheet" type="text/css" href="/css/min/main_general.min.css" />
+	<%- include("../templates/head_links"); %>
+</head>
+
+<body>
+	<%- include("../templates/navbar", {user: user}); %>
+
+	<section class="section is-medium min-height">
+		<div class="container">
+			<div class="columns">
+				<div class="column has-text-centered is-6 is-offset-3">
+					<div class="content">
+						<h1 class="is-bold is-danger">
+							Woops! There's nothing here!
+						</h1>
+						<p>You tried to visit a page that doesn't exist.</p>
+					</div>
+					<div class="content">
+						<figure class="image is-96x96">
+							<img src="/images/lib/ggface.png" />
+						</figure>
+					</div>
+					<div class="content">
+						<p>
+							We're sad about that, too.
+						</p>
+						<p>
+							<a tabindex="0" class="is-primary" href="/contact">Let us know</a> if you think something went wrong!
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<%- include("../templates/footer"); %>
+
+</body>
+
+</html>

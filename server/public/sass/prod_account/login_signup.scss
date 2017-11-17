@@ -1,0 +1,73 @@
+@import '../bulma/utilities/utilities.sass';
+@import '../bulma/base/base.sass';
+@import '../bulma/components/grid.sass';
+@import '../bulma/elements/table.sass';
+@import '../bulma/elements/form.sass';
+@import '../bulma/elements/button.sass';
+@import '../bulma/elements/content.sass';
+@import '../bulma/elements/icon.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/notification.sass';
+@import '../checkbox';
+
+html {
+  background-color: #f9f9f9;
+}
+
+.clear-nav {
+  padding-top: 60px;
+  margin-bottom: 40px !important;
+}
+
+.flat-logo {
+  background-image: url("/images/dh-assets/flat-logo/dh-flat-logo-sprite.png");
+  background-repeat: no-repeat;
+  width: 131px !important;
+  height: 32px !important;
+  &.is-primary {
+    background-position: 0 0;
+  }
+}
+
+// signing up user, makes checks for good inputs
+.control {
+  &.has-icon {
+    .input {
+      &:focus + .fa-check {
+        color: $primary !important;
+      }
+    }
+  }
+}
+
+// fixes position of error icon for bad inputs
+.control {
+  &.has-icon > .fa-warning {
+    font-size: 21px !important;
+    @include translate(-4px, 4px);
+  }
+}
+
+.account-form {
+  @include box-shadow(0,3px,15px,$border,1px);
+  background-color: #fff;
+  border-radius: $radius;
+  left: 0;
+  margin: 0 auto 40px;
+  padding: 20px;
+  width: 400px;
+  @include mobile {
+    width: 90%;
+    form {
+      width: 100%;
+    }
+  }
+}
+
+.g-recaptcha > div {
+  margin: 15px auto;
+}
+
+#accept, #resend, #home {
+    display:none;
+}

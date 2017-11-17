@@ -1,0 +1,60 @@
+.delete
+  @extend .unselectable
+  +transition(all 0.2s ease)
+  -moz-appearance: none
+  -webkit-appearance: none
+  background-color: $black-disabled
+  border: none
+  border-radius: 290486px
+  cursor: pointer
+  display: inline-block
+  font-size: $size-normal
+  height: 24px
+  outline: none
+  position: relative
+  vertical-align: top
+  width: 24px
+  &:before,
+  &:after
+    background-color: $white
+    content: ""
+    display: block
+    left: 50%
+    position: absolute
+    top: 50%
+    transform: translateX(-50%) translateY(-50%) rotate(45deg)
+    transform-origin: center center
+  &:before
+    height: 2px
+    width: 50%
+  &:after
+    height: 50%
+    width: 2px
+  &:hover,
+  &:focus,
+  &:active
+    background-color: $black-secondary
+  // Sizes
+  &.is-transparent
+    background-color: transparent
+    &.is-fc
+      margin-right: 10px
+    &.is-lc
+      margin-left: 10px
+    &:before,
+    &:after
+      background-color: $black-secondary
+    &:hover,
+    &:focus,
+    &:active
+      +scale(1.4)
+      background-color: transparent
+  &.is-small
+    height: 18px
+    width: 18px
+  &.is-medium
+    height: 32px
+    width: 32px
+  &.is-large
+    height: 40px
+    width: 40px

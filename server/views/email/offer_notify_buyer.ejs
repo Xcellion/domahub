@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Verify your offer on DomaHub!</title>
+    <style type="text/css" >
+      #bodyTable {
+        font-family: Verdana, sans-serif;
+      }
+      #emailBody {
+        padding: 20px;
+      }
+      #emailFooter {
+        background-color:#eee;padding:20px 30px;
+      }
+      a {
+        cursor:pointer;text-decoration:none;
+      }
+      a:hover {
+        opacity:0.8;
+      }
+    </style>
+</head>
+<body>
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="font-family:Verdana,sans-serif;">
+        <tr>
+            <td align="center" valign="top">
+                <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
+                    <tr>
+                        <td align="center" valign="top">
+                            <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
+                                <tr>
+                                    <td align="center" valign="top">
+                                      <% if (premium == true && listing_info.logo) { %>
+                                        <a href="http://www.<%= domain_name %>" rel="noreferrer" target="_blank" style="border:0;margin:0;padding:0">
+                                           <img height="72" width="72" src="<%= listing_info.logo %>" alt="Logo" style="border:0;margin:0;padding:0" />
+                                        </a>
+                                      <% } else if (premium == true && !listing_info.logo) { %>
+                                        <% if (accepted) { %>
+                                          <img height="72" width="72" src="https://domahub.com/images/lib/smile.png" alt="Logo"/>
+                                        <% } else { %>
+                                          <img height="72" width="72" src="https://domahub.com/images/lib/cry.png" alt="Logo"/>
+                                        <% } %>
+                                      <% } else { %>
+                                        <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
+                                          <img alt height="72" width="72" alt="Logo" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                        </a>
+                                      <% } %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td align="center" style="color:<%= (premium) ? listing_info.font_luminance : '#fff' %>;border:0;margin:0;padding-bottom:25px;font-size:24px;font-weight:700;line-height:2;">
+                                    Your offer for <a href="<%= domain_name %>" style="color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;"><%= domain_name %></a> was <%= (accepted) ? "accepted!" : "rejected." %>
+                                  </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">
+                            <table border="0" cellpadding="0" cellspacing="0" id="emailBody" style="padding:20px;">
+                                <tr>
+                                  <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
+                                    <%= (accepted) ? "Congratulations" : "Hello" %> <%= offerer_name %>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="left" valign="top" colspan="5" style="line-height:1.5;padding-bottom:20px;">
+                                    <%= (accepted) ? "Great news" : "Unfortunately" %>, your offer for <%= domain_name %> was <%= (accepted) ? "accepted!" : "rejected." %> Please see below for details on your offer:
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                    Your offer
+                                  </td>
+                                  <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;padding-left:20px;">
+                                    <%= offer %>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="left" valign="top" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                    Message from Owner
+                                  </td>
+                                  <td align="left" class="list-item message" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0;white-space:pre-wrap;"><% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="5" align="center" style="line-height:1.5;padding-top:20px;">
+                                    <% if (accepted) { %>
+                                      Next Steps: Click the below button to complete the payment.
+                                    <% } else { %>
+                                      You may send another offer by clicking the button below.
+                                    <% } %>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="5" align="center" style="line-height:1.5;padding-top:30px;">
+                                    <% if (!accepted) { %>
+                                      <a id="accept_button" class="button" href="https://domahub.com/listing/<%= domain_name %>" style="background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;padding:10px 20px;box-sizing:border-box;border-radius:5px;">Send another offer</a>
+                                    <% } else { %>
+                                      <a id="accept_button" class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= offer_id %>/bin" style="background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;padding:10px 20px;box-sizing:border-box;border-radius:5px;">Complete payment</a>
+                                    <% } %>
+                                  </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">
+                            <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter" style="background-color:#eee;padding:20px 30px;">
+                                <tr>
+                                    <td align="center" valign="top" style="line-height:1.5;">
+                                        <% if (accepted) { %>
+                                          Once paid, if the domain is not transferred to you within 14 days, this transaction will be cancelled and you will
+                                          receive your money back in full.
+                                        <% } else { %>
+                                          You may respond to this email to leave comments or ask any additional questions.
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% if (!premium) { %>
+                                  <tr>
+                                    <td align="center" valign="top" style="line-height:1.5;">
+                                      Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
+                                    </td>
+                                  </tr>
+                                <% } %>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

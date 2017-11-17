@@ -1,0 +1,26 @@
+<%# compare tool or not %>
+<% if (typeof compare == undefined || compare == false ) { %>
+  <% if (listing_info.premium) { %>
+    <meta name="theme-color" content="<%= listing_info.primary_color || '#3cbc8d' %>"/>
+    <meta property="og:title" content="<%= listing_info.domain_name %> - Buy Now!" />
+    <meta name="description" content="<%= (listing_info.description) ? listing_info.description : 'Click here to buy this domain name! Make an offer or rent the domain for variable lengths of time.' %>" />
+    <meta property="og:description" content="<%= (listing_info.description) ? listing_info.description : 'Click here to buy this domain name! Make an offer or rent the domain for variable lengths of time.' %>" />
+    <meta property="og:image" content="<%= (listing_info.logo) ? listing_info.logo : 'https://domahub.com/images/dh-assets/dh-listing-splash-premium.png' %>" />
+    <meta property="og:url" content="https://<%= listing_info.domain_name %>" />
+  <% } else { %>
+    <meta name="theme-color" content="#3cbc8d"/>
+    <meta property="og:title" content="<%= listing_info.domain_name %> - Buy On DomaHub Domains" />
+    <meta name="description" content="<%= (listing_info.description) ? listing_info.description : 'Click here to buy this domain name on DomaHub! Make an offer or rent the domain for variable lengths of time.' %>" />
+    <meta property="og:description" content="<%= (listing_info.description) ? listing_info.description : 'Click here to buy this domain name on DomaHub! Make an offer or rent the domain for variable lengths of time.' %>" />
+    <meta property="og:image" content="https://domahub.com/images/dh-assets/dh-listing-splash.png" />
+    <meta property="og:url" content="https://www.domahub.com/listing/<%= listing_info.domain_name %>" />
+  <% } %>
+<% } else { %>
+  <meta name="theme-color" content="#3cbc8d"/>
+  <meta name="description" content="Create simple, clean landing pages for your domain names! Click here to try out the demo and see how your domain name could look like!" />
+  <meta property="og:description" content="Create simple, clean landing pages for your domain names! Click here to try out the demo and see how your domain name could look like!" />
+  <meta property="og:title" content="Simple, clean landing Pages For Your Domains" />
+  <meta property="og:image" content="https://domahub.com/images/dh-assets/dh-features.png" />
+  <meta property="og:url" content="https://www.domahub.com/listing/<%= listing_info.domain_name %>?compare=true" />
+<% } %>
+<meta property="og:type" content="website" />
