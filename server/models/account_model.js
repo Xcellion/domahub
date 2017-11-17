@@ -166,6 +166,16 @@ module.exports = {
     database.query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
   },
 
+  //gets all registrars connected to specific account
+  getAccountRegistrars : function(account_id, callback){
+    console.log("DB: Attempting to get all registrars connected to account " + account_id + "...");
+    var query = "SELECT \
+          registrars.registrar_name \
+            FROM registrars \
+          WHERE registrars.account_id = ? ";
+    database.query(query, "Failed to get all registrars connected to account " + account_id + "!", callback, account_id);
+  },
+
   //gets the stripe ID and listing type of a listing owner
   getStripeAndType : function(domain_name, callback){
     console.log("DB: Attempting to get the Stripe ID of the owner of: " + domain_name + "...");
@@ -238,6 +248,24 @@ module.exports = {
     database.query(query, "Failed to create coupon codes!", callback, [codes]);
   },
 
+  //creates a new registrar
+  newRegistrar : function(registrar_array, callback){
+    console.log("DB: Attempting to create or update registrar information for user...");
+    var query = "INSERT INTO registrars ( \
+          account_id, \
+          registrar_name, \
+          api_key, \
+          username, \
+          password \
+        )\
+         VALUES ? \
+         ON DUPLICATE KEY UPDATE \
+         api_key = VALUES(api_key), \
+         username = VALUES(username), \
+         password = VALUES(password)"
+    database.query(query, "Failed to create or update registrar information!", callback, [registrar_array]);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------UPDATES-------------------------------
@@ -260,6 +288,15 @@ module.exports = {
           SET ? \
         WHERE code = ? "
     database.query(query, "Failed to apply coupon code!", callback, [account_info, code]);
+  },
+
+  //cancels a user's premium subscription
+  cancelStripeSubscription : function(stripe_subscription_id, callback){
+    console.log("DB: Cancelling Stripe subscription...");
+    var query = "UPDATE accounts \
+          SET stripe_subscription_id = null \
+        WHERE stripe_subscription_id = ? "
+    database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_subscription_id);
   },
 
   //</editor-fold>

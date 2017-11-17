@@ -40,7 +40,7 @@ var mysql_options = {
 
 //sudo nano /usr/local/openresty/nginx/conf/sites-enabled/default
 //CTRL + SHIFT + _
-//line 32
+//line 41
 //sudo openresty -s reload
 
 // if (process.env.NODE_ENV == "dev"){

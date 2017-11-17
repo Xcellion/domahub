@@ -4,6 +4,7 @@ var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 
 var error = require('../lib/error.js');
+var mailer = require('../lib/mailer.js');
 
 //</editor-fold>
 
@@ -18,6 +19,7 @@ var stripe = require("stripe")(stripe_key);
 var randomstring = require("randomstring");
 var validator = require('validator');
 var moment = require("moment");
+var path = require("path");
 
 var wNumb = require("wnumb");
 var moneyFormat = wNumb({
@@ -800,12 +802,12 @@ module.exports = {
   //to catch all stripe web hook events
   stripeWebhookEventCatcher : function(req, res){
     if (process.env.NODE_ENV == "dev"){
-      switchEvents(req.body, res);
+      switchStripeEvents(req.body, res);
     }
     else {
       //Verify the event by fetching it from Stripe
       stripe.events.retrieve(req.body.id, function(err, event) {
-        switchEvents(event, res);
+        switchStripeEvents(event, res);
       });
     }
   },
@@ -1077,6 +1079,19 @@ function newStripeSubscription(req, res, next){
         addMonthReferral(req.user.existing_referer_id);
       }
 
+      //email congrats
+      mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'welcome_premium.ejs'), {
+        username : req.user.username,
+      }, {
+        to: req.user.email,
+        from: 'general@domahub.com',
+        subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
+      }, function(state){
+        if (state == "success"){
+          console.log("F: Successfully sent email!");
+        }
+      });
+
       next();
     }
   });
@@ -1120,15 +1135,11 @@ function newStripeAccount(req, res, next, legal_entity){
 
 //delete an expired stripe info (our DB was outdated)
 function deleteDHStripeDetails(req, stripe_col){
-  //update our DH database to remove stripe_customer_id
-  if (req.session.new_account_info){
-    req.session.new_account_info[stripe_col] = null;
+  if (!req.session.new_account_info){
+    req.session.new_account_info = {}
   }
-  else {
-    req.session.new_account_info = {
-      stripe_col : null
-    }
-  }
+  //update our DH database to remove specific stripe info
+  req.session.new_account_info[stripe_col] = null;
 }
 
 //update req.user with stripe customer object
@@ -1301,9 +1312,9 @@ function updateUserStripeBank(user, account){
 //<editor-fold>-------------------------------STRIPE WEBHOOK-------------------------------
 
 //switch between event types for stripe webhooks
-function switchEvents(event, res){
+function switchStripeEvents(event, res){
   if (event){
-    console.log("Event from Stripe: " + event.type);
+    console.log("SF: Event from Stripe: " + event.type);
     res.sendStatus(200);
     switch (event.type){
       case "customer.subscription.deleted":
@@ -1330,6 +1341,11 @@ function handleSubscriptionCancel(event){
         //done!
       });
     }
+  });
+
+  console.log('F: Removing Premium DomaHub subscription...');
+  account_model.cancelStripeSubscription(event.data.object.id, function(result){
+    //done!
   });
 };
 

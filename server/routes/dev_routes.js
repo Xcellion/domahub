@@ -28,6 +28,11 @@ var glob = require("glob");
 var json2csv = require('json2csv');
 var whois = require("whois");
 
+//godaddy production
+var godaddy_api_prod = "9uBcCfxCjPd_FiwFzPXoaj9ubPzzPpsQVW";
+var godaddy_secret_prod = "FiwHuAgZ13PpiVDvDVpEB2";
+var godaddy_customer_num = "55666970";
+
 //</editor-fold>
 
 module.exports = function(app){
@@ -50,274 +55,275 @@ module.exports = function(app){
 
   app.get("/monkey", monkey);
 
+  //godaddy
+  app.get("/godaddy", godaddy);
+
   //</editor-fold>
 
 }
 
-//<editor-fold>-------------------------------DEV FUNCTIONS-------------------------------
+//<editor-fold>-------------------------------ALEXA-------------------------------------
 
-  //<editor-fold>-------------------------------ALEXA-------------------------------------
+//testing alexa get
+function alexa(req, res, next){
+  if (req.params.domain_name){
+    console.log("F: Getting Alexa traffic information for " + req.params.domain_name);
+    var client = awis({
+      key: "AKIAJVS3NZJHFWJ7QKKA",
+      secret: "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"
+    });
 
-  //testing alexa get
-  function alexa(req, res, next){
-    if (req.params.domain_name){
-      console.log("F: Getting Alexa traffic information for " + req.params.domain_name);
-      var client = awis({
-        key: "AKIAJVS3NZJHFWJ7QKKA",
-        secret: "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"
-      });
+    // UrlInfo - get information about pages and sites on the web - their traffic, content, and related sites
+    // TrafficHistory - get a history of traffic rank
+    // CategoryBrowse, CategoryListings - get lists of sites within a specific category ordered by traffic rank, or create a browseable directory of websites
+    // SitesLinkingIn - get a list of sites linking in to a specified site
 
-      // UrlInfo - get information about pages and sites on the web - their traffic, content, and related sites
-      // TrafficHistory - get a history of traffic rank
-      // CategoryBrowse, CategoryListings - get lists of sites within a specific category ordered by traffic rank, or create a browseable directory of websites
-      // SitesLinkingIn - get a list of sites linking in to a specified site
+    client({
+      'Action': 'TrafficHistory',
+      'Url': req.params.domain_name,
+      'ResponseGroup': 'History'
+      // 'ResponseGroup': 'RelatedLinks,Categories,Rank,RankByCountry,UsageStats,AdultContent,Speed,Language,OwnedDomains,LinksInCount,SiteData'
+    }, function (err, data) {
+      if(err) { console.log(err); return; }
+      res.send(data);
+    });
+  }
+  else {
+    res.send("you need a domain name");
+  }
+}
 
-      client({
-        'Action': 'TrafficHistory',
-        'Url': req.params.domain_name,
-        'ResponseGroup': 'History'
-        // 'ResponseGroup': 'RelatedLinks,Categories,Rank,RankByCountry,UsageStats,AdultContent,Speed,Language,OwnedDomains,LinksInCount,SiteData'
-      }, function (err, data) {
-        if(err) { console.log(err); return; }
-        res.send(data);
-      });
+//</editor-fold>
+
+//<editor-fold>-------------------------------COUPON-------------------------------------
+
+//function to create X sign up codes
+function createCouponCodes(req, res, next){
+  console.log("F: Creating " + req.params.number + " coupon codes...");
+
+  var createUniqueCoupons = function(number, referrer){
+    var codes = [];
+
+    if (validator.isInt(number)){
+      for (var x = 0; x < number; x++){
+        var random_string = randomstring.generate(10);
+        codes.push([random_string, null, 1]);
+      }
     }
-    else {
-      res.send("you need a domain name");
-    }
+
+    return codes;
   }
 
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------COUPON-------------------------------------
-
-  //function to create X sign up codes
-  function createCouponCodes(req, res, next){
-    console.log("F: Creating " + req.params.number + " coupon codes...");
-
-    var createUniqueCoupons = function(number, referrer){
-      var codes = [];
-
-      if (validator.isInt(number)){
-        for (var x = 0; x < number; x++){
-          var random_string = randomstring.generate(10);
-          codes.push([random_string, null, 1]);
-        }
+  var insertCoupons = function(codes, number, cb){
+    account_model.createCouponCodes(codes, function(result){
+      if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
+        console.log("Duplicate coupon!");
+        insertCoupons(createUniqueCoupons(number), number);
       }
-
-      return codes;
-    }
-
-    var insertCoupons = function(codes, number, cb){
-      account_model.createCouponCodes(codes, function(result){
-        if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
-          console.log("Duplicate coupon!");
-          insertCoupons(createUniqueCoupons(number), number);
-        }
-        else if (result.state != "error"){
-          cb(codes);
-        }
-      });
-    }
-
-    insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
-      var stripe_promises = [];
-      for (var x = 0 ; x < codes.length ; x++){
-        var promise = (function(code){
-          var deferred = Q.defer();
-          stripe.coupons.create({
-            id: code,
-            duration: "repeating",
-            percent_off: 100,
-            duration_in_months: 1,
-            max_redemptions : 1
-          }, function(err, coupon) {
-            if (err){
-              deferred.reject(err);
-            }
-            else {
-              deferred.resolve(coupon);
-            }
-          });
-          return deferred.promise;
-        })(codes[x][0]);
-        stripe_promises.push(promise);
+      else if (result.state != "error"){
+        cb(codes);
       }
+    });
+  }
 
-      Q.allSettled(stripe_promises).then(function(results) {
-        var success_codes = []
-        for (var x = 0 ; x < results.length; x++){
-          if (results[x].state == "fulfilled"){
-            success_codes.push(results[x].value.id);
+  insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
+    var stripe_promises = [];
+    for (var x = 0 ; x < codes.length ; x++){
+      var promise = (function(code){
+        var deferred = Q.defer();
+        stripe.coupons.create({
+          id: code,
+          duration: "repeating",
+          percent_off: 100,
+          duration_in_months: 1,
+          max_redemptions : 1
+        }, function(err, coupon) {
+          if (err){
+            deferred.reject(err);
           }
           else {
-            console.log(results[x]);
+            deferred.resolve(coupon);
           }
-        }
+        });
+        return deferred.promise;
+      })(codes[x][0]);
+      stripe_promises.push(promise);
+    }
 
-        //all successful!
-        if (success_codes.length == parseFloat(req.params.number)){
-          res.send(success_codes.join("</br>"));
+    Q.allSettled(stripe_promises).then(function(results) {
+      var success_codes = []
+      for (var x = 0 ; x < results.length; x++){
+        if (results[x].state == "fulfilled"){
+          success_codes.push(results[x].value.id);
         }
         else {
-          res.send("Something went wrong with Stripe coupons!");
-        }
-      });
-
-    });
-
-  }
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------MONKEY-------------------------------------
-
-  function monkey(req, res, next){
-    request({
-      url : "https://us15.api.mailchimp.com/3.0/lists/9bcbd932cd/members",
-      method : "POST",
-      headers : {
-        "Authorization" : "Basic " + new Buffer('any:' + "8255be227b33934b7822c777f2cbb11e-us15" ).toString('base64')
-      },
-      json : {
-        email_address : "test@test.com",
-        status : "subscribed",
-        merge_fields : {
-          "USERNAME" : "testfuck"
+          console.log(results[x]);
         }
       }
-    }, function(err, response, body){
-      if (err){console.log(err)}
+
+      //all successful!
+      if (success_codes.length == parseFloat(req.params.number)){
+        res.send(success_codes.join("</br>"));
+      }
       else {
-        res.send(body);
+        res.send("Something went wrong with Stripe coupons!");
       }
     });
-  }
 
-  //</editor-fold>
+  });
 
-  //<editor-fold>-------------------------------EMAIL-------------------------------------
+}
 
-  //show a specific view
-  function showView(req, res, next){
-    var view_vars = {
-      user: "Wonkyu",
-      listing_info : {
-        domain_name : "testdomain.com",
-        primary_color : "#e86666",
-        premium: true,
-        logo: "",
-        compare: false
-      },
-      compare: false,
-      offer_info : {
-        name : "WOFJ",
-        verification_code : "fdjasks"
+//</editor-fold>
+
+//<editor-fold>-------------------------------MONKEY-------------------------------------
+
+function monkey(req, res, next){
+  request({
+    url : "https://us15.api.mailchimp.com/3.0/lists/9bcbd932cd/members",
+    method : "POST",
+    headers : {
+      "Authorization" : "Basic " + new Buffer('any:' + "8255be227b33934b7822c777f2cbb11e-us15" ).toString('base64')
+    },
+    json : {
+      email_address : "test@test.com",
+      status : "subscribed",
+      merge_fields : {
+        "USERNAME" : "testfuck"
       }
     }
-    res.render(req.params.path + "/" + req.params.view_name, view_vars);
-  }
-
-  //to read email templates
-  function emailViews(req, res, next){
-    var wNumb = require("wnumb");
-    var moneyFormat = wNumb({
-      thousand: ',',
-      prefix: '$',
-      decimals: 0
-    });
-
-    var phoneNumber = phoneUtil.parse("+17183097773");
-
-    var data = {
-      domain_name: "fuck.com",
-      premium: false,
-      response: "Hey fuck yourself",
-      listing_info: {
-        primary_color: "#000"
-      },
-      user: {
-        username: "Blake Griffin"
-      },
-      token: "",
-      name : "offerer",
-      owner_name : "OWNERFUCK",
-      offerer_name: "BUYERTWAT",
-      offerer_email: "test@email.com",
-      offer_id: 1,
-      username: "fuck",
-      email: "test@email.com",
-      accepted: false,
-      offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
-      phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
-      offer: moneyFormat.to(parseFloat("1231324")),
-      verification_code: randomstring.generate(10),
-      message: "djkljakljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
+  }, function(err, response, body){
+    if (err){console.log(err)}
+    else {
+      res.send(body);
     }
+  });
+}
 
-    res.render("email/" + req.params.email_template + ".ejs", data);
+//</editor-fold>
+
+//<editor-fold>-------------------------------EMAIL-------------------------------------
+
+//show a specific view
+function showView(req, res, next){
+  var view_vars = {
+    user: "Wonkyu",
+    listing_info : {
+      domain_name : "testdomain.com",
+      primary_color : "#e86666",
+      premium: true,
+      logo: "",
+      compare: false
+    },
+    compare: false,
+    offer_info : {
+      name : "WOFJ",
+      verification_code : "fdjasks"
+    }
+  }
+  res.render(req.params.path + "/" + req.params.view_name, view_vars);
+}
+
+//to read email templates
+function emailViews(req, res, next){
+  var wNumb = require("wnumb");
+  var moneyFormat = wNumb({
+    thousand: ',',
+    prefix: '$',
+    decimals: 0
+  });
+
+  var phoneNumber = phoneUtil.parse("+17183097773");
+
+  var data = {
+    domain_name: "fuck.com",
+    premium: false,
+    response: "Hey fuck yourself",
+    listing_info: {
+      primary_color: "#000"
+    },
+    user: {
+      username: "Blake Griffin"
+    },
+    token: "",
+    name : "offerer",
+    owner_name : "OWNERFUCK",
+    offerer_name: "BUYERTWAT",
+    offerer_email: "test@email.com",
+    offer_id: 1,
+    username: "fuck",
+    email: "test@email.com",
+    accepted: false,
+    offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
+    phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
+    offer: moneyFormat.to(parseFloat("1231324")),
+    verification_code: randomstring.generate(10),
+    message: "djkljakljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
   }
 
-  //</editor-fold>
+  res.render("email/" + req.params.email_template + ".ejs", data);
+}
 
-  //<editor-fold>-----------------------------ANALYSIS---------------------------------
+//</editor-fold>
 
-  //function to analyze traffic funnel
-  function analysisDomainTraffic(req, res, next){
-    var domain_name = req.params.domain_name;
+//<editor-fold>-----------------------------ANALYSIS---------------------------------
 
-    var traffic = {
-      domain_name : domain_name
-    };
+//function to analyze traffic funnel
+function analysisDomainTraffic(req, res, next){
+  var domain_name = req.params.domain_name;
 
-    data_model.getRentalTraffic(domain_name, function(result){
-      traffic.rental_views = result.info;
+  var traffic = {
+    domain_name : domain_name
+  };
 
-      data_model.getListingRentalTraffic(domain_name, function(result){
-        traffic.listing_rental_views = result.info;
+  data_model.getRentalTraffic(domain_name, function(result){
+    traffic.rental_views = result.info;
 
-        data_model.getAvailCheckHistory(domain_name, function(result){
-          traffic.avail_check_history = {
+    data_model.getListingRentalTraffic(domain_name, function(result){
+      traffic.listing_rental_views = result.info;
+
+      data_model.getAvailCheckHistory(domain_name, function(result){
+        traffic.avail_check_history = {
+          length: result.info.length,
+          data: result.info
+        }
+
+        data_model.getCheckoutHistory(domain_name, function(result){
+          traffic.checkout_history = {
             length: result.info.length,
             data: result.info
           }
 
-          data_model.getCheckoutHistory(domain_name, function(result){
-            traffic.checkout_history = {
+          data_model.getCheckoutActions(domain_name, function(result){
+            traffic.checkout_actions = {
               length: result.info.length,
               data: result.info
             }
-
-            data_model.getCheckoutActions(domain_name, function(result){
-              traffic.checkout_actions = {
-                length: result.info.length,
-                data: result.info
-              }
-              res.render("dev/domainAnalysis.ejs", {
-                traffic: traffic
-              });
+            res.render("dev/domainAnalysis.ejs", {
+              traffic: traffic
             });
           });
         });
       });
     });
-  }
+  });
+}
 
-  //function to analyze traffic
-  function analysisSearchHistory(req, res, next){
-    data_model.getDemoDomains(function(demo_domains){
-      data_model.getReferers(function(referers){
-        res.render("dev/searchHistory.ejs", {
-          demo_domains: demo_domains.info,
-          referers: referers.info
-        });
-      })
-    });
-  }
+//function to analyze traffic
+function analysisSearchHistory(req, res, next){
+  data_model.getDemoDomains(function(demo_domains){
+    data_model.getReferers(function(referers){
+      res.render("dev/searchHistory.ejs", {
+        demo_domains: demo_domains.info,
+        referers: referers.info
+      });
+    })
+  });
+}
 
-  //</editor-fold>
+//</editor-fold>
 
-  //<editor-fold>-----------------------------COLD EMAIL---------------------------------
+//<editor-fold>-----------------------------COLD EMAIL---------------------------------
 
   //function to parse all xlsx files in a folder
   function parseFolder(req, res, next){
@@ -738,5 +744,23 @@ module.exports = function(app){
   }
 
   //</editor-fold>
+
+//<editor-fold>-------------------------------GODADDY-------------------------------
+
+function godaddy(req, res, next){
+  request({
+    url: "https://api.godaddy.com/v1/domains",
+    method: "GET",
+    headers: {
+      "X-Shopper-Id" : 123123,
+      // "X-Shopper-Id" : godaddy_customer_num,
+      Authorization : "sso-key " + godaddy_api_prod + ":" + godaddy_secret_prod
+      // Authorization: "sso-key " + godaddy_api_test + ":" + godaddy_secret_test
+    }
+  }, function(err, response, body){
+    console.log(err, response.statusCode);
+    res.json(JSON.parse(body));
+  });
+}
 
 //</editor-fold>
