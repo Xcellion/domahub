@@ -28,14 +28,10 @@ var glob = require("glob");
 var json2csv = require('json2csv');
 var whois = require("whois");
 
-var godaddy_customer_num = "55666970";
-//godaddy test
-var godaddy_api_test = "VUxKSUdS_EBYoaKuS55TyPbjiGKeYKN";
-var godaddy_secret_test = "EBYqbmXkC6vVyiajwXHHtY";
-
 //godaddy production
 var godaddy_api_prod = "9uBcCfxCjPd_FiwFzPXoaj9ubPzzPpsQVW";
 var godaddy_secret_prod = "FiwHuAgZ13PpiVDvDVpEB2";
+var godaddy_customer_num = "55666970";
 
 //</editor-fold>
 

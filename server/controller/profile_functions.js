@@ -52,6 +52,26 @@ module.exports = {
     }
   },
 
+  //gets all registrars for a user
+  getAccountRegistrars : function(req, res, next){
+
+    //if we dont already have the list of registrars
+    if (!req.user.registrars){
+      account_model.getAccountRegistrars(req.user.id, function(result){
+        if (result.state=="error"){error.handler(req, res, result.info);}
+        else {
+          for (var x = 0 ; x < result.info.length ; x++){
+            updateUserRegistrar(req.user, result.info[x].registrar_name)
+          }
+          next();
+        }
+      });
+    }
+    else {
+      next();
+    }
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------------MULTI-------------------------------
@@ -841,10 +861,10 @@ function isEmptyObject(obj) {
 
 //update the user object with registrar details
 function updateUserRegistrar(user, registrar_name){
-  if (!user.registrar){
-    user.registrar = {}
+  if (!user.registrars){
+    user.registrars = {}
   }
-  user.registrar[registrar_name] = true;
+  user.registrars[registrar_name] = true;
 }
 
 //</editor-fold>

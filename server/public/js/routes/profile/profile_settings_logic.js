@@ -571,8 +571,8 @@ function showSectionByURL(){
 
   //change connect registrar button visual
   function updateRegistrarButtons(){
-    if (user.registrar){
-      for (var x in user.registrar){
+    if (user.registrars){
+      for (var x in user.registrars){
         var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + x + "]").find(".registrar-button-text");
         registrar_connect_text.text("Update " + registrar_connect_text.data("registrar"));
       }
