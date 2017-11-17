@@ -166,6 +166,16 @@ module.exports = {
     database.query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
   },
 
+  //gets all registrars connected to specific account
+  getAccountRegistrars : function(account_id, callback){
+    console.log("DB: Attempting to get all registrars connected to account " + account_id + "...");
+    var query = "SELECT \
+          registrars.registrar_name \
+            FROM registrars \
+          WHERE registrars.account_id = ? ";
+    database.query(query, "Failed to get all registrars connected to account " + account_id + "!", callback, account_id);
+  },
+
   //gets the stripe ID and listing type of a listing owner
   getStripeAndType : function(domain_name, callback){
     console.log("DB: Attempting to get the Stripe ID of the owner of: " + domain_name + "...");
