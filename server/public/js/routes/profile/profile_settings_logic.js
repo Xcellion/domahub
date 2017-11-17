@@ -86,7 +86,7 @@ $(document).ready(function() {
 
     //<editor-fold>-------------------------------SUBMIT REGISTRAR-------------------------------
 
-    updateRegistrarButtons();
+    updateRegistrars();
 
     //button to show registrar modal
     $(".add-registrar-button").on("click", function(){
@@ -517,6 +517,26 @@ function showSectionByURL(){
 
   //<editor-fold>-------------------------------SUBMIT REGISTRAR-------------------------------
 
+  //update registrar card depending on if we have existing registrars
+  function updateRegistrars(){
+    if (user.registrars){
+      for (var x in user.registrars){
+        var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + x + "]").find(".registrar-button-text");
+        registrar_connect_text.text("Update " + registrar_connect_text.data("registrar"));
+        var registrar_connect_tip = $(".registrar-tip[data-registrar_name=" + x + "]");
+        registrar_connect_tip.text("Click the button to update your " + registrar_connect_tip.data("registrar") + " account.");
+      }
+    }
+    else {
+      $(".registrar-button-text").each(function(){
+        $(this).text("Connect " + $(this).data("registrar"));
+      });
+      $(".registrar-tip").each(function(){
+        $(this).text("Click the button to update your " + $(this).data("registrar") + " account.");
+      });
+    }
+  }
+
   //show the registrar modal and set it up for different registrars
   function setupRegistrarModal(registrar_name){
     clearNotification();
@@ -561,27 +581,12 @@ function showSectionByURL(){
         closeModals();
         successMessage("Successfully updated registrar information!");
         user = data.user;
-        updateRegistrarButtons();
+        updateRegistrars();
       }
       else {
         errorMessage(data.message);
       }
     });
-  }
-
-  //change connect registrar button visual
-  function updateRegistrarButtons(){
-    if (user.registrars){
-      for (var x in user.registrars){
-        var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + x + "]").find(".registrar-button-text");
-        registrar_connect_text.text("Update " + registrar_connect_text.data("registrar"));
-      }
-    }
-    else {
-      $(".registrar-button-text").each(function(){
-        $(this).text("Connect " + $(this).data("registrar"));
-      });
-    }
   }
 
   //</editor-fold>
