@@ -382,12 +382,10 @@ module.exports = {
         }, email, function(result){
           if (result.state=="error"){error.handler(req, res, result.info);}
           else {
-            //use helper function to email someone
+            //email welcome to domahub email
             mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'welcome_domahub.ejs'), {
-              //ESJ Variables
               username : username,
             }, {
-              //email variables
               to: email,
               from: 'general@domahub.com',
               subject: "Hi, " + username + '. Welcome to DomaHub!',
@@ -423,13 +421,11 @@ module.exports = {
     if (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp).getTime())){
       console.log("F: Sending existing token!");
 
-      //use helper function to email someone
+      //email verify email
       mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
-        //ESJ Variables
         username : req.user.username,
         token : req.user.token
       }, {
-        //email variables
         to: user.email,
         from: 'support@domahub.com',
         subject: "Hi, " + user.username + '! Please verify your email address for DomaHub!',
@@ -501,12 +497,10 @@ module.exports = {
           if (result.state=="error"){error.handler(req, res, result.info);}
           else {
 
-            //use helper function to email someone
+            //email forgot password
             mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'forgot_password.ejs'), {
-              //ESJ Variables
               token : token
             }, {
-              //email variables
               to: req.body.email,
               from: 'support@domahub.com',
               subject: 'Forgot your password for domahub?',
@@ -609,13 +603,11 @@ function generateVerify(req, res, email, username, cb){
     account_model.updateAccount(account_info, email, function(result){
       if (result.state=="error"){error.handler(req, res, result.info);}
       else {
-        //use helper function to email someone
+        //email verify email
         mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
-          //ESJ Variables
           username : username,
           token : verify_token
         }, {
-          //email variables
           to: email,
           from: 'support@domahub.com',
           subject: "Hi, " + username + '! Please verify your email address for DomaHub!',
@@ -625,4 +617,4 @@ function generateVerify(req, res, email, username, cb){
   });
 }
 
-//</editor-fold>
+//</editor-fold>//email variables

@@ -290,6 +290,15 @@ module.exports = {
     database.query(query, "Failed to apply coupon code!", callback, [account_info, code]);
   },
 
+  //cancels a user's premium subscription
+  cancelStripeSubscription : function(stripe_subscription_id, callback){
+    console.log("DB: Cancelling Stripe subscription...");
+    var query = "UPDATE accounts \
+          SET stripe_subscription_id = null \
+        WHERE stripe_subscription_id = ? "
+    database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_subscription_id);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------DELETES-------------------------------
