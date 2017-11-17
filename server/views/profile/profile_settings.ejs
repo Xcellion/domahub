@@ -93,6 +93,8 @@
 
         <!-- ACCOUNT SETTINGS TAB -->
 				<div id="account" class="columns is-hidden drop-tab">
+
+          <!-- ACCOUNT INFORMATION (EMAIL, USERNAME, PW) -->
 					<div class="column is-5-widescreen">
 						<div class="card is-fullwidth">
 							<div class="card-header">
@@ -137,6 +139,50 @@
 							</div>
 						</div>
 					</div>
+
+          <!-- REGISTRAR INFORMATION -->
+          <div class="column is-5-widescreen">
+            <div class="card is-fullwidth">
+              <div class="card-header">
+                <h3 class="card-header-title">
+                  <span>My Registrars</span>
+                </h3>
+              </div>
+              <div class="card-content">
+                <div class="control is-spaced is-mobile">
+                  <div class="control-left">
+                    <p>
+                      GoDaddy
+                    </p>
+                    <small data-registrar_name="godaddy" data-registrar="GoDaddy" class="tip registrar-tip">Click the button to connect to a GoDaddy account.</small>
+                  </div>
+                  <div class="control-right">
+                    <a data-registrar_name="godaddy" class="add-registrar-button button">
+                      <span class="icon is-small"><i class="fa fa-link"></i></span>
+                      <span class="registrar-button-text" data-registrar="GoDaddy"></span>
+                    </a>
+                  </div>
+                </div>
+                <%# <div class="control is-spaced is-mobile">
+                  <div class="control-left">
+                    <p>
+                      NameCheap
+                    </p>
+                    <small class="tip">Click the button to connect to a NameCheap account.</small>
+                  </div>
+                  <div class="control-right">
+                    <a data-registrar_name="namecheap" class="add-registrar-button button">
+                      <span class="icon is-small"><i class="fa fa-link"></i></span>
+                      <span class="registrar-button-text" data-registrar="NameCheap"></span>
+                    </a>
+                  </div>
+                </div>%>
+                <div class="tip">
+                  Need help or you don't see your registrar listed? <a target="_blank" class="is-underlined is-primary" href="/contact">Let us know!</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- PREMIUM / REFERRAL / PROMO CODE TAB -->
@@ -845,9 +891,54 @@
         </form>
         <div class="control is-grouped is-grouped-center">
           <p class="control">
-            <button form="password-form" type="submit" id="password-submit" tabindex="0" class='button is-primary is-stylish is-small'>
+            <button form="password-form" type="submit" id="password-submit" tabindex="0" class='toolbar-submit-button button is-primary'>
               <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-              <span>Save</span>
+              <span>Save Password</span>
+            </button>
+          </p>
+          <p class="control">
+            <a tabindex="0" class='button is-outlined is-danger cancel-modal'>
+              <span class="icon is-small"><i class="fa fa-ban"></i></span>
+              <span>Cancel</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+
+  <!-- ADD REGISTRAR MODAL -->
+  <div id="registrar-modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      <div class="modal-content is-small">
+        <div class="content">
+          Read our <a id="registrar-guide-link" href="" target="_blank" class="is-primary is-underlined">step-by-step guide</a> on how to get the below information.
+        </div>
+        <form id="registrar-form" autocomplete="off" class="control">
+          <input id="registrar-name-input" type="hidden" name="registrar_name" />
+          <div class="control registrar-wrapper">
+            <label class="label" for="api_key-input">
+              <span id="registrar-api-key-label">API Key</span>
+              <a id="api-key-link" target="_blank" class="is-underlined is-primary is-pulled-right">Get your key</a>
+            </label>
+            <input required id="registrar-api-key-input" name="api_key" class="input modal-input" name="api-key-input" type="text">
+          </div>
+          <div class="control registrar-wrapper">
+            <label id="registrar-password-label" class="label" for="password-input">Password</label>
+            <input required id="registrar-password-input" name="password" class="input modal-input" name="password-input" type="text">
+          </div>
+          <div class="control registrar-wrapper">
+            <label id="registrar-username-label" class="label" for="username-input">Username</label>
+            <input required id="registrar-username-input" name="username" class="input modal-input" name="username-input" type="text">
+          </div>
+        </form>
+        <div class="control is-grouped is-grouped-center">
+          <p class="control">
+            <button form="registrar-form" type="submit" id="registrar-submit" tabindex="0" class='toolbar-submit-button button is-primary'>
+              <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+              <span>Save Registrar</span>
             </button>
           </p>
           <p class="control">
@@ -920,7 +1011,7 @@
               <p class="control">
                 <button id="submit-card-button" tabindex="0" type="submit" form="credit-card-form" class='button is-primary is-stylish is-small'>
                   <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-                  <span>Save</span>
+                  <span>Save Card</span>
                 </button>
               </p>
               <p class="control">
@@ -1071,7 +1162,7 @@
               <p class="control">
                 <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-primary is-stylish is-small">
                   <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-                  <span>Save</span>
+                  <span>Save Bank</span>
                 </button>
               </p>
               <p class="control">

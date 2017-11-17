@@ -10,6 +10,7 @@ var passport = require('../lib/passport.js').passport;
 var Categories = require("../lib/categories.js");
 var Fonts = require("../lib/fonts.js");
 var error = require('../lib/error.js');
+var encryptor = require('../lib/encryptor.js');
 
 //</editor-fold>
 
@@ -21,6 +22,7 @@ var whois = require("whois");
 var parser = require('parse-whois');
 var dns = require("dns");
 var validator = require("validator");
+var request = require("request");
 
 //</editor-fold>
 
@@ -41,6 +43,26 @@ module.exports = {
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
           req.user.listings = result.info;
+          next();
+        }
+      });
+    }
+    else {
+      next();
+    }
+  },
+
+  //gets all registrars for a user
+  getAccountRegistrars : function(req, res, next){
+
+    //if we dont already have the list of registrars
+    if (!req.user.registrars){
+      account_model.getAccountRegistrars(req.user.id, function(result){
+        if (result.state=="error"){error.handler(req, res, result.info);}
+        else {
+          for (var x = 0 ; x < result.info.length ; x++){
+            updateUserRegistrar(req.user, result.info[x].registrar_name)
+          }
           next();
         }
       });
@@ -465,6 +487,116 @@ module.exports = {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------------UPDATE REGISTRAR-------------------------------
+
+  //check if registrar info is properly formatted
+  checkRegistrarInfo : function(req, res, next){
+    console.log("F: Checking posted registrar information...");
+    var valid_registrars = ["godaddy"];
+
+    //not a valid registrar
+    if (!req.body.registrar_name || valid_registrars.indexOf(req.body.registrar_name) == -1){
+      error.handler(req, res, "You have selected an invalid registrar! Please select from the given choices.", "json");
+    }
+    else {
+      switch (req.body.registrar_name){
+
+        case "godaddy":
+          if (!req.body.api_key){
+            error.handler(req, res, "That's an invalid production API key! Please input a valid GoDaddy production API key.", "json");
+          }
+          else if (!validator.isInt(req.body.username)){
+            error.handler(req, res, "That's an invalid customer number! Please input a valid GoDaddy customer number.", "json");
+          }
+          else if (!req.body.password){
+            error.handler(req, res, "That's an invalid API key secret! Please input a valid GoDaddy product API key secret.", "json");
+          }
+          else {
+            console.log("F: Validating posted registrar information with GoDaddy...");
+            request({
+              url: "https://api.godaddy.com/v1/domains",
+              method: "GET",
+              headers: {
+                "X-Shopper-Id" : req.body.username,
+                Authorization: "sso-key " + req.body.api_key + ":" + req.body.password
+              }
+            }, function(err, response, body){
+              var body_json = JSON.parse(body);
+              if (body_json["code"] == "INVALID_SHOPPER_ID" || body_json["code"] == "ERROR_INTERNAL"){
+                error.handler(req, res, "That's an invalid customer number! Please input a valid GoDaddy customer number.", "json");
+              }
+              else if (body_json["code"] == "UNABLE_TO_AUTHENTICATE"){
+                error.handler(req, res, "That's an invalid production API key and secret! Please input a valid GoDaddy production API key and secret.", "json");
+              }
+              else if (err || response.statusCode != 200){
+                if (err) { error.log(err); }
+                error.handler(req, res, "Something went wrong in verifying your GoDaddy account. Please refresh the page and try again.", "json");
+              }
+              else {
+                //format for database insert
+                req.session.registrar_array = [
+                  [
+                    req.user.id,
+                    req.body.registrar_name,
+                    encryptor.encryptText(req.body.api_key),
+                    encryptor.encryptText(req.body.username),
+                    encryptor.encryptText(req.body.password)
+                  ]
+                ];
+                next();
+              }
+            });
+          }
+          break;
+
+        case "namecheap":
+          if (!req.body.api_key){
+            error.handler(req, res, "That's an invalid API key! Please input a valid NameCheap API key.", "json");
+          }
+          else if (!validator.isInt(req.body.username)){
+            error.handler(req, res, "That's an invalid username! Please input a valid NameCheap username.", "json");
+          }
+          else {
+            console.log("F: Validating posted registrar information with NameCheap...");
+            if (err){
+
+            }
+            else {
+              //format for database insert
+              req.session.registrar_array = [
+                [
+                  req.user.id,
+                  req.body.registrar_name,
+                  encryptor.encryptText(req.body.api_key),
+                  encryptor.encryptText(req.body.username),
+                  null
+                ]
+              ];
+              next();
+            }
+          }
+          break;
+      }
+    }
+  },
+
+  //update an accounts registrar information
+  updateAccountRegistrar : function(req, res, next){
+    account_model.newRegistrar(req.session.registrar_array, function(result){
+      delete req.session.registrar_array;
+      if (result.state == "error") { error.handler(req, res, result.info, "json"); }
+      else {
+        updateUserRegistrar(req.user, req.body.registrar_name);
+        res.send({
+          state: "success",
+          user: req.user
+        });
+      }
+    });
+  },
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------------RENDERS-------------------------------
 
   renderDashboard : function(req, res, next){
@@ -725,6 +857,14 @@ function getListingByID(listings, id){
 //helper to check for empty object
 function isEmptyObject(obj) {
   return !Object.keys(obj).length;
+}
+
+//update the user object with registrar details
+function updateUserRegistrar(user, registrar_name){
+  if (!user.registrars){
+    user.registrars = {}
+  }
+  user.registrars[registrar_name] = true;
 }
 
 //</editor-fold>

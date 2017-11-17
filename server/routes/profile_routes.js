@@ -93,6 +93,7 @@ module.exports = function(app){
   app.get("/profile/settings", [
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
+    profile_functions.getAccountRegistrars,
     stripe_functions.getStripeAccount,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeCustomerCharges,
@@ -115,6 +116,18 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.getTransactions
+  ]);
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------UPDATE REGISTRAR-------------------------------
+
+  //post to update registrar
+  app.post("/profile/registrar", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.checkRegistrarInfo,
+    profile_functions.updateAccountRegistrar
   ]);
 
   //</editor-fold>
