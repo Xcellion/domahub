@@ -598,7 +598,7 @@ module.exports = {
   //gets and decrypts all registrar API keys
   getRegistrarAPI : function(req, res, next){
     if (!req.user.registrars || req.user.registrars.length == 0){
-      error.handler(req, res, "You don't have any registrars to sync with! Please click a connect button to add specific registrars.", "json");
+      error.handler(req, res, "You don't have any registrars to look up! Please click a connect button to add specific registrars.", "json");
     }
     else {
       console.log("F: Getting all connected registrar API keys...");
@@ -607,7 +607,7 @@ module.exports = {
       account_model.getAccountRegistrars(req.user.id, function(result){
         if (result.state=="error"){ error.handler(req, res, result.info); }
         else {
-          req.session.registrar_apis = result.info;
+          req.session.registrar_info = result.info;
           next();
         }
       });
@@ -616,21 +616,21 @@ module.exports = {
 
   //get domain names via registrar api
   getRegistrarDomains : function(req, res, next){
-    if (!req.session.registrar_apis){
-      error.handler(req, res, "You don't have any registrars to sync with! Please click a connect button to add specific registrars.", "json");
+    if (!req.session.registrar_info){
+      error.handler(req, res, "You don't have any registrars to look up! Please click a connect button to add specific registrars.", "json");
     }
     else {
       console.log("F: Retrieving domain names list via registrar API keys...");
 
       //loop through and get domain names for each registrar
       var registrar_domain_promises = [];
-      for (var x = 0 ; x < req.session.registrar_apis.length ; x++){
-        switch (req.session.registrar_apis[x].registrar_name){
+      for (var x = 0 ; x < req.session.registrar_info.length ; x++){
+        switch (req.session.registrar_info[x].registrar_name){
           case "godaddy":
-            registrar_domain_promises.push(getDomainsGoDaddy(req.session.registrar_apis[x]));
+            registrar_domain_promises.push(getDomainsGoDaddy(req.session.registrar_info[x]));
             break;
           case "namecheap":
-            registrar_domain_promises.push(getDomainsNameCheap(req.session.registrar_apis[x]));
+            registrar_domain_promises.push(getDomainsNameCheap(req.session.registrar_info[x]));
             break;
         }
       }
@@ -640,13 +640,20 @@ module.exports = {
         //wait for all promises to finish
         Q.allSettled(registrar_domain_promises)
          .then(function(results) {
+           console.log("F: Finished querying all registrars for domains!");
            var total_good_domains = [];
            for (var y = 0; y < results.length ; y++){
              if (results[y].state == "fulfilled"){
-               total_good_domains.concat(results[y].value.domains);
+               total_good_domains = total_good_domains.concat(results[y].value.domains);
+
+               //add to the registrar info variable (for listing create)
+               for (var z = 0 ; z < req.session.registrar_info.length ; z++){
+                 if (req.session.registrar_info[z].registrar_name == results[y].value.registrar_name){
+                   req.session.registrar_info[z].domains = results[y].value.domains;
+                 }
+               }
              }
            }
-           console.log(total_good_domains);
            res.send({
              state : "success",
              bad_listings : [],
@@ -889,6 +896,7 @@ module.exports = {
 function getDomainsGoDaddy(registrar_info){
   //custom promise creation, get list of domains from registrar
   return Q.Promise(function(resolve, reject, notify){
+    console.log("F: Getting list of GoDaddy domains...");
     request({
       url: "https://api.godaddy.com/v1/domains",
       method: "GET",
@@ -916,11 +924,14 @@ function getDomainsGoDaddy(registrar_info){
         var good_domains = [];
         for (var x = 0 ; x < body_json.length ; x++){
           if (body_json[x].status == "ACTIVE"){
-            good_domains.push(body_json[x].domain)
+            good_domains.push({
+              domain_name : body_json[x].domain
+            });
           }
         }
         resolve({
-          domains : good_domains
+          domains : good_domains,
+          registrar_name : registrar_info.registrar_name
         });
       }
     });

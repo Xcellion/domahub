@@ -85,7 +85,7 @@
                     <textarea tabindex="0" required autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org" spellcheck="false"></textarea>
                   </div>
                   <div class="content">
-                    <button form="domain-input-form" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Submit Domains">
+                    <button form="domain-input-form" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Submit Domain Names Manually">
                       <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
                       <span>Submit Domain Names</span>
                     </button>
@@ -95,7 +95,7 @@
             </div>
           </div>
 
-          <!-- MANUAL TABLE -->
+          <!-- DOMAIN TABLE -->
           <div id="table-columns" class="manual-listing-table-elem is-hidden column">
             <table id="domain-input-table" class="table has-shadow">
               <thead>
@@ -110,7 +110,7 @@
                 </tr>
               </thead>
               <tbody id="domain-input-body" data-rows="0">
-                <tr id="clone-row" class="table-row no-hover-effect">
+                <tr id="clone-row" class="is-hidden table-row no-hover-effect">
                   <td class="td-domain aligned">
                     <div class='control has-addons is-marginless'>
                       <button class="button delete-icon no-shadow">
@@ -118,30 +118,36 @@
                           <i class='fa fa-trash-o'></i>
                         </span>
                       </button>
-                      <input class="domain-name-input input is-expanded no-shadow" type="text" value=""/>
+                      <input class="domain-name-input table-input input is-expanded no-shadow" type="text" value=""/>
                     </div>
                   </td>
                   <td class="td-min-price aligned is-hidden-mobile">
-                    <input class="min-price-input input no-shadow" type="number" tabindex="-1" min="0" />
+                    <input class="min-price-input table-input input no-shadow" type="number" tabindex="-1" min="0" />
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- CONNECT REGISTRAR -->
+          <%# <!-- CONNECT REGISTRAR -->
           <div class="create-type-selector column is-5-widescreen">
             <div class="card is-fullwidth">
               <div class="card-header">
                 <h3 class="card-header-title">
                   <span>Connect A Registrar</span>
+                  <span class="icon is-tooltip is-small" data-balloon="We are working on adding support for other registrars very soon!" data-balloon-length="large" data-balloon-pos="up">
+                    <i class="fa fa-question-circle"></i>
+                  </span>
                 </h3>
               </div>
               <div class="card-content">
                 <div class="content">
                   <label>
-                    Connect a registrar and automatically create listings for all of your domain names! <a target="_blank" class="is-underlined is-primary" href="/contact">Let us know</a> if you need any assistance or you don't see your registrar listed below!
+                    Connect a registrar and automatically create listings for all of your domain names! <a target="_blank" class="is-underlined is-primary" href="/contact">Let us know</a> if you need any assistance.
                   </label>
+                  <small class="tip">
+
+                  </small>
                 </div>
                 <div class="control is-spaced">
                   <div class="control-left">
@@ -157,7 +163,7 @@
                     </a>
                   </div>
                 </div>
-                <%# <div class="control is-spaced">
+                <div class="control is-spaced">
                   <div class="control-left">
                     <p>
                       NameCheap
@@ -170,16 +176,16 @@
                       <span class="registrar-button-text" data-registrar="NameCheap"></span>
                     </a>
                   </div>
-                </div>%>
+                </div>
                 <div class="content">
-                  <button id="sync-domains-button" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Sync Domains From Registrars">
-                    <span class="icon is-small"><i class="fa fa-plug"></i></span>
-                    <span>Sync Domain Names</span>
+                  <button id="lookup-domains-button" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Lookup Domains From Your Connected Registrars">
+                    <span class="icon is-small"><i class="fa fa-search"></i></span>
+                    <span>Lookup Domain Names</span>
                   </button>
                 </div>
               </div>
             </div>
-          </div>
+          </div>%>
 
         </div>
       </div>

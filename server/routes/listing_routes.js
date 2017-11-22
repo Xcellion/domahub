@@ -43,6 +43,7 @@ module.exports = function(app){
       auth_functions.checkLoggedIn,
       profile_functions.getAccountListings,    //to find out which listings were not created in multi-create
       owner_functions.checkPostedListingInfoForCreate,
+      owner_functions.setDNSViaRegistrar,
       owner_functions.createListings
     ]);
 

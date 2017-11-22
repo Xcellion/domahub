@@ -1,5 +1,10 @@
 $(document).ready(function() {
 
+  //function that runs when back button is pressed
+  window.onpopstate = function(event) {
+    showListingCreateSelector();
+  }
+
   //<editor-fold>-------------------------------MANUAL CREATE-------------------------------
 
     //<editor-fold>-------------------------------TEXTAREA BINDINGS-------------------------------
@@ -24,7 +29,7 @@ $(document).ready(function() {
 
     //go back to
     $("#back-to-listing-create-selector").on("click", function(e){
-      showListingCreateSelector();
+      history.back();
     });
 
     //add row to table
@@ -51,20 +56,20 @@ $(document).ready(function() {
     //submit to create listings
     $("#domains-submit").on("click", function(e){
       e.preventDefault();
-      submitDomains($(this));
+      submitDomains();
     });
 
     //</editor-fold>
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------SYNC REGISTAR-------------------------------
+  //<editor-fold>-------------------------------LOOK UP REGISTAR-------------------------------
 
   updateRegistrars();
 
-  //button to sync domains
-  $("#sync-domains-button").on("click", function(){
-    syncRegistrars();
+  //button to lookup domains
+  $("#lookup-domains-button").on("click", function(){
+    lookupRegistrars();
   });
 
   //</editor-fold>
@@ -99,7 +104,7 @@ $(document).ready(function() {
 
       //successfully checked domain names, create the table
       if (data.state == "success"){
-        createManualTable(data.bad_listings, data.good_listings);
+        createDomainsTable(data.bad_listings, data.good_listings);
       }
       else {
         errorMessage(data.message);
@@ -120,7 +125,9 @@ $(document).ready(function() {
   }
 
   //create the listing table from server info after initial textarea
-  function createManualTable(bad_listings, good_listings){
+  function createDomainsTable(bad_listings, good_listings){
+    window.history.pushState({}, "", "/listings/create#table");
+
     $(".table-row:not(#clone-row)").remove();
 
     if (bad_listings.length > 0){
@@ -142,14 +149,17 @@ $(document).ready(function() {
 
   //create table row
   function createTableRow(data){
-    var temp_table_row = $("#clone-row").removeClass('is-hidden').clone();    //clone row
+    var temp_table_row = $("#clone-row").clone();
+    temp_table_row.removeAttr('id').removeClass('is-hidden');    //clone row
 
-    temp_table_row.removeAttr('id');
+    //set row domain data
+    if (data){
+      temp_table_row.attr("data-domain_name", data.domain_name.toLowerCase())
+    }
+
     temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
       handleSubmitDisabled();
     });
-
-    temp_table_row.find()
 
     //click handler for row delete
     temp_table_row.find(".delete-icon").on("click", function(){
@@ -162,11 +172,63 @@ $(document).ready(function() {
     });
 
     //reasons for why it was a bad listing
-    handleBadReasons(data.reasons, temp_table_row);
+    createBadReasons(data.reasons, temp_table_row);
 
-    $("#clone-row").addClass("is-hidden");
     temp_table_row.appendTo("#domain-input-body");
-    temp_table_row.find(".domain-name-input").focus();
+  }
+
+  //clear any reasons from a row
+  function clearRowReasons(row){
+    row.removeClass('errored-row').removeClass("success-row");
+    row.find("small").remove();
+    row.find('.is-danger').removeClass("is-danger");
+    row.find('.is-primary').removeClass("is-primary");
+  }
+
+  //edit the rows to append any bad reasons
+  function createBadReasons(reasons, row){
+    if (reasons){
+      $("#clear-errored-button").removeClass('is-hidden');
+      row.addClass('errored-row');
+
+      //append latest one
+      for (var x = 0; x < reasons.length; x++){
+        var explanation = $("<small class='is-danger tip is-inline no-margin'>" + reasons[x] + "</small>")
+        if (reasons[x] == "Invalid price!"){
+          var reason_input = ".min-price-input";
+        }
+        else {
+          var reason_input = ".domain-name-input";
+        }
+
+        //handler to clear reasons and append the reason
+        row.find(reason_input).addClass('is-danger').off().on("input change", function(){
+          if ($(this).val().indexOf(".") != -1){
+            row.removeClass('errored-row');
+            $(this).removeClass('is-danger');
+            $(this).closest("td").find("small").remove();
+            clearNotification();
+
+            //set domain name data
+            row.attr("data-domain_name", $(this).val());
+            handleSubmitDisabled();
+          }
+        }).closest('td').append(explanation);
+      }
+    }
+  }
+
+  //edit the rows to append any good reasons
+  function createGoodReasons(reasons, row){
+    if (reasons){
+
+      //append latest one
+      for (var x = 0 ; x < reasons.length ; x++){
+        var explanation = $("<small class='is-primary tip is-inline no-margin'>" + reasons[x] + "</small>")
+        row.find('.domain-name-input').closest("td").append(explanation);
+      }
+      row.addClass('success-row').find(".table-input").removeClass('is-danger').addClass('is-primary').addClass('is-disabled');
+    }
   }
 
   //</editor-fold>
@@ -186,17 +248,7 @@ $(document).ready(function() {
     }
   }
 
-  //submit table domains (NOT TEXTAREA)
-  function submitDomains(submit_elem){
-    deleteEmptyTableRows();
-    var domains = getTableListingInfo(".domain-name-input");
-    if (domains.length > 0){
-      submit_elem.off().addClass('is-loading');
-      submitDomainsAjax(domains, submit_elem);
-    }
-  }
-
-  //helper function to get the table row values for ajax submission
+  //get the table row values for ajax submission
   function getTableListingInfo(){
     var temp_array = [];
     $(".table-row").not("#clone-row").each(function(idx, elem) {
@@ -213,48 +265,54 @@ $(document).ready(function() {
     return temp_array;
   }
 
-  //send ajax to server for domain creation
-  function submitDomainsAjax(domains, submit_elem){
-    deleteGoodTableRows();
-    clearNotification();
-    $.ajax({
-      url: "/listings/create",
-      method: "POST",
-      data: {
-        domains: domains
-      }
-    }).done(function(data){
+  //submit table domains (NOT TEXTAREA)
+  function submitDomains(submit_elem){
+    deleteEmptyTableRows();
+    var domains = getTableListingInfo(".domain-name-input");
+    if (domains.length > 0){
+      $("#domains-submit").addClass('is-loading');
+      deleteGoodTableRows();
       clearNotification();
-
-      //handle any good or bad listings
-      refreshRows(data.bad_listings, data.good_listings);
-      if (data.state == "error"){
-        //some unhandled error
-        if (!data.bad_listings && !data.good_listings){
-          showManualTable();
+      $.ajax({
+        url: "/listings/create",
+        method: "POST",
+        data: {
+          domains: domains
         }
+      }).done(function(data){
+        $("#domains-submit").removeClass('is-loading');
+        clearNotification();
 
-        if (data.message == "max-domains-reached"){
-          errorMessage("You have reached the maximum 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
+        if (data.state == "error"){
+          if (data.message == "max-domains-reached"){
+            errorMessage("You have reached the maximum 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
+          }
+          else {
+            errorMessage(data.message);
+          }
         }
         else {
-          errorMessage(data.message);
+          //handle any good or bad listings
+          updateRows(data.bad_listings, data.good_listings);
         }
 
-      }
-
-      //click handler for resubmitting newly added domains
-      submit_elem.removeClass('is-loading').off().on("click", function(e){
-        submitDomains(submit_elem);
+        handleSubmitDisabled();
       });
+    }
+  }
 
-      handleSubmitDisabled();
-    });
+  //delete table rows that are already successful (so we dont create duplicates)
+  function deleteGoodTableRows(){
+    var good_domain_inputs = $(".domain-name-input").filter(function() { return $(this).hasClass("is-disabled");});
+    good_domain_inputs.closest("tr").not("#clone-row").remove();
+    if ($(".table-row").length == 1){
+      createTableRow("");
+    }
   }
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------TABLE UPDATE-------------------------------
+  //<editor-fold>-------------------------------TABLE BUTTONS-------------------------------
 
   //delete empty table rows
   function deleteEmptyTableRows(){
@@ -281,106 +339,60 @@ $(document).ready(function() {
     }
   }
 
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------TABLE UPDATE-------------------------------
+
   //clear all successful rows
   function clearSuccessRows(){
     $(".domain-name-input.is-disabled").closest(".table-row").not("#clone-row").remove();
+    clearNotification();
   }
 
   //refresh rows on ajax return
-  function refreshRows(bad_listings, good_listings){
-    clearDangerSuccess();
-    window.scrollTo(0, 0);    //scroll to top so we can see the notification
-
-    //show which rows were bad
-    if (bad_listings && bad_listings.length > 0){
-      showManualTable();
-      badTableRows(bad_listings);
-    }
-
-    //show which rows were good
-    if (good_listings && good_listings.length > 0){
-      showManualTable();
-      goodTableRows(good_listings);
-
-      //how many were created successfully
-      var success_amount = (good_listings.length == 1) ? "a listing" : good_listings.length + " listings"
-      successMessage("Successfully created " + success_amount + "! Please go to your <a href='/profile/mylistings' class='is-underlined'>My Listings page</a> to view your newly created listings!")
-    }
-
-    //disable submit and unclick terms
-    $("#domains-submit").addClass('is-hidden');
-  }
-
-  //remove all success/error messages
-  function clearDangerSuccess(){
-    clearNotification();
-
+  function updateRows(bad_listings, good_listings){
     //remove small error reasons
     $("td small").remove();
     $("td .is-danger").removeClass("is-danger");
 
-    //remove disabled success rows
-    $("td .is-primary").closest("tr").remove();
-  }
+    //hide submit now
+    $("#domains-submit").addClass('is-hidden');
 
-  //label the incorrect table rows
-  function badTableRows(bad_listings){
-    errorMessage("Some domain names were invalid! See below for more details.");
-    for (var x = 0; x < bad_listings.length; x++){
-      var table_row = $($(".table-row").not("#clone-row")[bad_listings[x].index]);
-      handleBadReasons(bad_listings[x].reasons, table_row);
-    }
-  }
-
-  //edit the rows to append any bad reasons
-  function handleBadReasons(reasons, row){
-    if (reasons){
-      $("#clear-errored-button").removeClass('is-hidden');
-
-      //refresh the row
-      row.addClass('errored-row');
-      row.find("small").remove();
-      row.find('.is-danger').removeClass("is-danger");
-
-      //append latest one
-      for (var x = 0; x < reasons.length; x++){
-        var explanation = $("<small class='is-danger tip no-margin'>" + reasons[x] + "</small>")
-        if (reasons[x] == "Invalid price!"){
-          var reason_input = ".min-price-input";
-        }
-        else {
-          var reason_input = ".domain-name-input";
-        }
-
-        //handler to clear reasons and append the reason
-        row.find(reason_input).addClass('is-danger').on("input change", function(){
-          if ($(this).val().indexOf(".") != -1){
-            row.removeClass('errored-row');
-            $(this).removeClass('is-danger');
-            $(this).closest("td").find("small").remove();
-            clearNotification();
-          }
-        }).closest('td').append(explanation);
+    //append bad reasons
+    if (bad_listings && bad_listings.length > 0){
+      for (var x = 0; x < bad_listings.length; x++){
+        createBadReasons(
+          bad_listings[x].reasons,
+          $(".table-row:not(#clone-row)[data-domain_name='" + bad_listings[x].domain_name + "']")
+        );
       }
     }
-  }
 
-  //label the correct table rows
-  function goodTableRows(good_listings){
-    for (var x = 0; x < good_listings.length; x++){
-      var table_row = $($(".table-row").not("#clone-row")[good_listings[x].index]);
-      var explanation = $("<small class='is-primary tip'>Successfully added!</small>")
-      table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
-      table_row.find(".domain-name-input, .min-price-input").addClass('is-disabled');
+    console.log(bad_listings, good_listings);
+
+    //append success message to inputs
+    if (good_listings && good_listings.length > 0){
+      for (var x = 0; x < good_listings.length; x++){
+        createGoodReasons(
+          good_listings[x].reasons,
+          $(".table-row:not(#clone-row)[data-domain_name='" + good_listings[x].domain_name + "']")
+        );
+      }
     }
-  }
 
-  //delete empty table rows
-  function deleteGoodTableRows(){
-    var good_domain_inputs = $(".domain-name-input").filter(function() { return $(this).hasClass("is-disabled");});
-    good_domain_inputs.closest("tr").not("#clone-row").remove();
-    if ($(".table-row").length == 1){
-      createTableRow("");
+    //notify the user
+    if (!good_listings){
+      var error_amount = (bad_listings.length == 1) ? "a domain name" : bad_listings.length + " domains"
+      errorMessage("There was something wrong with " + error_amount + "! See below for more details.");
+    }
+    else if (!bad_listings){
+      var success_amount = (good_listings.length == 1) ? "a listing" : good_listings.length + " listings"
+      successMessage("Successfully created " + success_amount + "! Please go to your <a href='/profile/mylistings' class='is-underlined'>My Listings page</a> to view your newly created listings!")
+    }
+    else if (good_listings.length > 0 && bad_listings.length > 0){
+      var success_amount = (good_listings.length == 1) ? "a listing" : good_listings.length + " listings"
+      var error_amount = (bad_listings.length == 1) ? "a domain name" : bad_listings.length + " domains"
+      successMessage("Successfully created " + success_amount + "! Please go to your <a href='/profile/mylistings' class='is-underlined'>My Listings page</a> to view your newly created listings!</br></br>There was an issue with " + error_amount + ". Please see below for more details.");
     }
   }
 
@@ -388,21 +400,22 @@ $(document).ready(function() {
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------SYNC REGISTAR-------------------------------
+//<editor-fold>-------------------------------LOOKUP REGISTAR-------------------------------
 
 //initialize the registrar domain name look ups
-function syncRegistrars(){
+function lookupRegistrars(){
   if (user.registrars.length > 0){
     clearNotification();
-    $("#sync-domains-button").addClass('is-loading');
+    $("#lookup-domains-button").addClass('is-loading');
     $.ajax({
-      url: "/profile/registrar/sync",
+      url: "/profile/registrar/lookup",
       method: "POST"
     }).done(function(data){
-      $("#sync-domains-button").removeClass('is-loading');
+      $("#lookup-domains-button").removeClass('is-loading');
       if (data.state == "success"){
         if (data.good_listings.length > 0){
-
+          successMessage("Successfully found " + data.good_listings.length + " domains from your connected registrars!");
+          createDomainsTable(data.bad_listings, data.good_listings);
         }
         else {
           errorMessage("You don't have any domains in your connected registrars! If there is something wrong, please contact us for assistance!");
@@ -414,7 +427,7 @@ function syncRegistrars(){
     });
   }
   else {
-    errorMessage("You don't have any registrars to sync with! Please click a connect button to add specific registrars.");
+    errorMessage("You don't have any registrars to look up! Please click a connect button to add specific registrars.");
   }
 }
 
