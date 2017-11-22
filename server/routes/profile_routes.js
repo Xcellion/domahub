@@ -130,14 +130,12 @@ module.exports = function(app){
     profile_functions.updateAccountRegistrar
   ]);
 
-  //sync registrar and pull domain names
-  app.post("/profile/registrar/sync", [
+  //lookup registrars and pull domain names
+  app.post("/profile/registrar/lookup", [
     auth_functions.checkLoggedIn,
     profile_functions.getRegistrarAPI,
     profile_functions.getRegistrarDomains
   ]);
-
-  //</editor-fold>
 
   //</editor-fold>
 

@@ -2,7 +2,8 @@
 
 var listing_model = require('../models/listing_model.js');
 
-var stripe = require('./stripe_functions.js');
+var stripe_functions = require("../controller/stripe_functions.js");
+
 
 //</editor-fold>
 
@@ -17,7 +18,7 @@ module.exports = function(app){
   app.use("*", [
     checkHost,
     checkListed,
-    stripe.checkStripeSubscription,
+    stripe_functions.checkStripeSubscriptionForUser,
     sendOkayToNginx
   ]);
 }

@@ -2,6 +2,11 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------SHOW TAB-------------------------------
 
+  //function that runs when back button is pressed
+  window.onpopstate = function(event) {
+    showSectionByURL();
+  }
+
   //show section depending on url
   showSectionByURL();
 
@@ -386,11 +391,6 @@ $(document).ready(function() {
 });
 
 //<editor-fold>-------------------------------SHOW TAB-------------------------------
-
-//function that runs when back button is pressed
-window.onpopstate = function(event) {
-  showSectionByURL();
-}
 
 //show a specific section
 function showSection(section_id){

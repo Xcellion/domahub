@@ -28,10 +28,15 @@ var glob = require("glob");
 var json2csv = require('json2csv');
 var whois = require("whois");
 
-//godaddy production
-var godaddy_api_prod = "9uBcCfxCjPd_FiwFzPXoaj9ubPzzPpsQVW";
-var godaddy_secret_prod = "FiwHuAgZ13PpiVDvDVpEB2";
-var godaddy_customer_num = "55666970";
+//godaddy production (1min)
+// var godaddy_api_prod = "9uBcCfxCjPd_FiwFzPXoaj9ubPzzPpsQVW";
+// var godaddy_secret_prod = "FiwHuAgZ13PpiVDvDVpEB2";
+// var godaddy_customer_num = "55666970";
+
+//godaddy production (robert)
+var godaddy_api_prod = "31uUbY5CvU_2fiCvta5X7kJdqTJtA52CU";
+var godaddy_secret_prod = "2fiF9zXdNPLQHke1oXueaY";
+var godaddy_customer_num = "5067889";
 
 //</editor-fold>
 
@@ -749,17 +754,22 @@ function analysisSearchHistory(req, res, next){
 
 function godaddy(req, res, next){
   request({
-    url: "https://api.godaddy.com/v1/domains",
-    method: "GET",
+    url: "https://api.godaddy.com/v1/domains/cALEntopia.com/records/A",
+    method: "PUT",
+    json : true,
+    body : [
+      {
+        name : "@",
+        data : "208.68.37.82"
+      }
+    ],
     headers: {
-      "X-Shopper-Id" : 123123,
-      // "X-Shopper-Id" : godaddy_customer_num,
+      "X-Shopper-Id" : godaddy_customer_num,
       Authorization : "sso-key " + godaddy_api_prod + ":" + godaddy_secret_prod
-      // Authorization: "sso-key " + godaddy_api_test + ":" + godaddy_secret_test
     }
   }, function(err, response, body){
-    console.log(err, response.statusCode);
-    res.json(JSON.parse(body));
+    console.log(response.statusCode);
+    res.json(body);
   });
 }
 
