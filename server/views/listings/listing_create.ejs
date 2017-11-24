@@ -40,25 +40,25 @@
 
         <!-- MANUAL TABLE BUTTONS -->
         <div class="manual-listing-table-elem is-hidden button-wrapper">
-          <button tabindex="0" class="add-domain-button button is-stylish is-small is-primary is-inverted">
+          <button title="Add A New Row" tabindex="0" class="add-domain-button button is-stylish is-small is-primary is-inverted">
             <span class="icon is-small"><i class="fa fa-plus"></i></span>
-            <span>Add Row</span>
+            <span class="is-hidden-mobile">Add Row</span>
           </button>
-          <button tabindex="0" class="delete-domains-button button is-stylish is-small is-danger is-inverted">
+          <button title="Remove All Rows" tabindex="0" class="delete-domains-button button is-stylish is-small is-danger is-inverted">
             <span class='icon is-small is-danger'>
               <i class='fa fa-trash-o'></i>
             </span>
-            <span>Remove All</span>
+            <span class="is-hidden-mobile">Remove All</span>
           </button>
-          <button id='clear-errored-button' tabindex="0" class="is-hidden delete-errors-button button is-stylish is-small is-black is-inverted">
+          <button title="Remove All Errored Rows" id='clear-errored-button' tabindex="0" class="is-hidden delete-errors-button button is-stylish is-small is-black is-inverted">
             <span class='icon is-small'>
               <i class='fa fa-ban'></i>
             </span>
-            <span>Clear Errored Rows</span>
+            <span class="is-hidden-mobile">Clear Errored Rows</span>
           </button>
           <button id='domains-submit' class="is-hidden is-stylish is-small button is-primary">
             <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
-            <span>Submit</span>
+            <span id="domains-submit-text">Submit</span>
           </button>
         </div>
 
@@ -149,7 +149,7 @@
 
                   </small>
                 </div>
-                <div class="control is-spaced">
+                <div class="control is-spaced is-mobile">
                   <div class="control-left">
                     <p>
                       GoDaddy
@@ -163,7 +163,7 @@
                     </a>
                   </div>
                 </div>
-                <div class="control is-spaced">
+                <div class="control is-spaced is-mobile">
                   <div class="control-left">
                     <p>
                       NameCheap
@@ -171,7 +171,7 @@
                     <small class="tip">Click the button to connect to a NameCheap account.</small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar_name="namecheap" class="add-registrar-button button is-stylish is-small">
+                    <a data-registrar_name="namecheap" data-registrar="NameCheap" class="add-registrar-button button is-stylish is-small">
                       <span class="icon is-small"><i class="fa fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar="NameCheap"></span>
                     </a>
@@ -180,7 +180,7 @@
                 <div class="content">
                   <button id="lookup-domains-button" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Lookup Domains From Your Connected Registrars">
                     <span class="icon is-small"><i class="fa fa-search"></i></span>
-                    <span>Lookup Domain Names</span>
+                    <span id="lookup-domain-button-text">Lookup Domain Names</span>
                   </button>
                 </div>
               </div>

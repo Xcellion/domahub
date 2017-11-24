@@ -205,7 +205,7 @@ module.exports = {
         });
       }
       else {
-        res.send({state: "error"});
+        error.handler(req, res, "Failed to delete listings! Please refresh the page and try again.", "json");
       }
     });
   },
@@ -227,7 +227,7 @@ module.exports = {
         });
       }
       else {
-        res.send({state: "error"});
+        error.handler(req, res, "Failed to verify listings! Please check your DNS details and try again.", "json");
       }
     });
   },
@@ -527,7 +527,7 @@ module.exports = {
                 error.handler(req, res, "That's an invalid production API key and secret! Please input a valid GoDaddy production API key and secret.", "json");
               }
               else if (err || response.statusCode != 200){
-                if (err) { error.log(err); }
+                if (err) { error.log(err, "something went wrong in verifying godaddy api details"); }
                 error.handler(req, res, "Something went wrong in verifying your GoDaddy account. Please refresh the page and try again.", "json");
               }
               else {
@@ -643,17 +643,35 @@ module.exports = {
            console.log("F: Finished querying all registrars for domains!");
            var total_good_domains = [];
            for (var y = 0; y < results.length ; y++){
+
+             var non_existent_registrar_domains = [];
              if (results[y].state == "fulfilled"){
-               total_good_domains = total_good_domains.concat(results[y].value.domains);
+               var registrar_domains = results[y].value.domains;
+
+               //check if we already have it listed
+               for (var t = 0 ; t < registrar_domains.length ; t++){
+                 var already_exists = false;
+                 for (var s = 0 ; s < req.user.listings.length ; s++){
+                   if (registrar_domains[t].domain_name.toLowerCase() == req.user.listings[s].domain_name.toLowerCase()){
+                     already_exists = true;
+                     break;
+                   }
+                 }
+                 if (!already_exists){
+                   non_existent_registrar_domains.push(registrar_domains[t]);
+                 }
+               }
 
                //add to the registrar info variable (for listing create)
                for (var z = 0 ; z < req.session.registrar_info.length ; z++){
                  if (req.session.registrar_info[z].registrar_name == results[y].value.registrar_name){
-                   req.session.registrar_info[z].domains = results[y].value.domains;
+                   req.session.registrar_info[z].domains = non_existent_registrar_domains;
                  }
                }
+               total_good_domains = total_good_domains.concat(non_existent_registrar_domains);
              }
            }
+
            res.send({
              state : "success",
              bad_listings : [],

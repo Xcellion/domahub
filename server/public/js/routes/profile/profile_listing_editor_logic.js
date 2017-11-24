@@ -1764,6 +1764,9 @@ function multiVerify(verify_button){
       errorMessage("Failed to verify listings! Did you make the necessary DNS changes? If you think something is wrong, <a class='is-underlined' href='/contact'>contact us</a> and let us know!");
       createDNSRecordRows(data.unverified_listings, true);
     }
+    else {
+      errorMessage(data.message);
+    }
   });
 }
 
@@ -1785,7 +1788,7 @@ function updateVerificationButton(listing_info, cb_when_verified){
         cb_when_verified();
       }
       else {
-        errorMessage("Failed to verify! Please check your DNS details and try again.");
+        errorMessage(data.message);
       }
     });
   });

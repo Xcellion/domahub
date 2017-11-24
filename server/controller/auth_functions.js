@@ -296,6 +296,7 @@ module.exports = {
 
   //log out of the session
   logout: function(req, res) {
+    console.log("F: " + req.user.username + " is logging out...");
     if (req.isAuthenticated()){
       req.logout();
       req.session.destroy();

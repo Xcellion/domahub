@@ -203,14 +203,15 @@ $(document).ready(function() {
 
         //handler to clear reasons and append the reason
         row.find(reason_input).addClass('is-danger').off().on("input change", function(){
+          //set domain name data
+          row.attr("data-domain_name", $(this).val());
+
+          //check to see if it's legit domain name
           if ($(this).val().indexOf(".") != -1){
             row.removeClass('errored-row');
             $(this).removeClass('is-danger');
             $(this).closest("td").find("small").remove();
             clearNotification();
-
-            //set domain name data
-            row.attr("data-domain_name", $(this).val());
             handleSubmitDisabled();
           }
         }).closest('td').append(explanation);
@@ -368,8 +369,6 @@ $(document).ready(function() {
       }
     }
 
-    console.log(bad_listings, good_listings);
-
     //append success message to inputs
     if (good_listings && good_listings.length > 0){
       for (var x = 0; x < good_listings.length; x++){
@@ -381,11 +380,11 @@ $(document).ready(function() {
     }
 
     //notify the user
-    if (!good_listings){
+    if (!good_listings || (good_listings.length == 0 && bad_listings.length > 0)){
       var error_amount = (bad_listings.length == 1) ? "a domain name" : bad_listings.length + " domains"
       errorMessage("There was something wrong with " + error_amount + "! See below for more details.");
     }
-    else if (!bad_listings){
+    else if (!bad_listings || (bad_listings.length == 0 && good_listings.length > 0)){
       var success_amount = (good_listings.length == 1) ? "a listing" : good_listings.length + " listings"
       successMessage("Successfully created " + success_amount + "! Please go to your <a href='/profile/mylistings' class='is-underlined'>My Listings page</a> to view your newly created listings!")
     }
@@ -414,7 +413,8 @@ function lookupRegistrars(){
       $("#lookup-domains-button").removeClass('is-loading');
       if (data.state == "success"){
         if (data.good_listings.length > 0){
-          successMessage("Successfully found " + data.good_listings.length + " domains from your connected registrars!");
+          var total_good_domains = (data.good_listings.length == 1) ? "an unlisted domain" : data.good_listings.length + " unlisted domains"
+          successMessage("Successfully found " + total_good_domains + " from your connected registrars!");
           createDomainsTable(data.bad_listings, data.good_listings);
         }
         else {

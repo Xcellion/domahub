@@ -126,6 +126,9 @@ $(document).ready(function(){
         createRows();
         showRows();
       }
+      else {
+        errorMessage(data.message);
+      }
     });
   });
 
@@ -575,6 +578,9 @@ function viewDomainDNS(){
       if (data.state == "success"){
         deletionHandler(data.rows, $(".table-row:not(.clone-row).is-selected"));
         successMessage("Successfully deleted " + deletion_ids.length + " listings!");
+      }
+      else {
+        errorMessage(data.message);
       }
 
       //deselect all rows
