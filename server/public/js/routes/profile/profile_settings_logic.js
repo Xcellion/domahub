@@ -12,7 +12,7 @@ $(document).ready(function() {
 
   //show red notification indication next to tab
   if (!user.stripe_account){
-    $("#payment-tab .required-info").removeClass('is-hidden');
+    $("#payment-tab .stripe-required-info").removeClass('is-hidden');
     $("#stripe-personal-form").children(".card").removeClass('is-danger');
   }
 
@@ -858,13 +858,13 @@ function showSectionByURL(){
         $("#" + x + "-input").val(user.stripe_account[x]);
       }
       $("#change-bank-button").removeClass('is-hidden');
-      $("#payment-tab .required-info").addClass('is-hidden');
+      $(".stripe-required-info").addClass('is-hidden');
       $("#stripe-personal-form").children(".card").removeClass('is-danger');
       $("#bank-tooltip").removeClass('is-hidden');
       $(".existing-bank").text("Click the button to add a default bank account!");
     }
     else {
-      $("#payment-tab .required-info").removeClass('is-hidden');
+      $(".stripe-required-info").removeClass('is-hidden');
       $("#stripe-personal-form").children(".card").addClass('is-danger');
       $("#bank-tooltip").addClass('is-hidden');
       $(".stripe-account-input").val("");
