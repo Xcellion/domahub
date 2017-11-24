@@ -1,5 +1,3 @@
-//<editor-fold>-------------------------------SUBMIT REGISTRAR FUNCTIONS-------------------------------
-
 //update registrar card depending on if we have existing registrars
 function updateRegistrars(){
 
@@ -14,6 +12,17 @@ function updateRegistrars(){
     submitRegistrar();
   });
 
+  //update the text on the buttons and the label
+  $(".registrar-button-text").each(function(){
+    $(this).text("Connect " + $(this).data("registrar"));
+  });
+  $(".registrar-tip").each(function(){
+    $(this).text("Click the button to update your " + $(this).data("registrar") + " account.");
+  });
+
+  //disable lookup button
+  $("#lookup-domains-button").addClass('is-disabled');
+
   //if user has any registrars connected
   if (user.registrars){
     for (var x = 0 ; x < user.registrars.length ; x++){
@@ -23,23 +32,8 @@ function updateRegistrars(){
       registrar_connect_tip.text("Click the button to update your " + registrar_connect_tip.data("registrar") + " account.");
     }
 
-    //enable sync button
-    $("#sync-domains-button").removeClass('is-disabled');
-  }
-
-  //no registrars
-  else {
-
-    //update the text on the buttons and the label
-    $(".registrar-button-text").each(function(){
-      $(this).text("Connect " + $(this).data("registrar"));
-    });
-    $(".registrar-tip").each(function(){
-      $(this).text("Click the button to update your " + $(this).data("registrar") + " account.");
-    });
-
-    //disable sync button
-    $("#sync-domains-button").addClass('is-disabled');
+    //enable lookup button
+    $("#lookup-domains-button").removeClass('is-disabled');
   }
 }
 
@@ -94,5 +88,3 @@ function submitRegistrar(){
     }
   });
 }
-
-//</editor-fold>

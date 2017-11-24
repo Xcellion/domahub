@@ -10,6 +10,7 @@ var data_model = require('../models/data_model.js');
 
 var validator = require('validator');
 var request = require('request');
+var dns = require('dns');
 
 var awis = require('awis');
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
@@ -44,24 +45,25 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------ROUTES-------------------------------
 
+  //test views
   app.get("/emailviews/:email_template", emailViews);
+  app.get("/viewstest/:path/:view_name", showView);
+
+  //create coupon codes
   app.get("/createcodes/:number", [
     createCouponCodes
   ]);
-  app.get("/viewstest/:path/:view_name", showView);
 
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
   app.get("/parsejsons/:date/", parseJSON);
 
-  //analysis
-  app.get("/analysis/searchhistory", analysisSearchHistory);
-  app.get("/analysis/:domain_name", analysisDomainTraffic);
-
   app.get("/monkey", monkey);
 
-  //godaddy
+  //registrar tests
   app.get("/godaddy", godaddy);
+
+  app.get("/dns/:domain_name", dnsCheck);
 
   //</editor-fold>
 
@@ -267,63 +269,6 @@ function emailViews(req, res, next){
   }
 
   res.render("email/" + req.params.email_template + ".ejs", data);
-}
-
-//</editor-fold>
-
-//<editor-fold>-----------------------------ANALYSIS---------------------------------
-
-//analyze traffic funnel
-function analysisDomainTraffic(req, res, next){
-  var domain_name = req.params.domain_name;
-
-  var traffic = {
-    domain_name : domain_name
-  };
-
-  data_model.getRentalTraffic(domain_name, function(result){
-    traffic.rental_views = result.info;
-
-    data_model.getListingRentalTraffic(domain_name, function(result){
-      traffic.listing_rental_views = result.info;
-
-      data_model.getAvailCheckHistory(domain_name, function(result){
-        traffic.avail_check_history = {
-          length: result.info.length,
-          data: result.info
-        }
-
-        data_model.getCheckoutHistory(domain_name, function(result){
-          traffic.checkout_history = {
-            length: result.info.length,
-            data: result.info
-          }
-
-          data_model.getCheckoutActions(domain_name, function(result){
-            traffic.checkout_actions = {
-              length: result.info.length,
-              data: result.info
-            }
-            res.render("dev/domainAnalysis.ejs", {
-              traffic: traffic
-            });
-          });
-        });
-      });
-    });
-  });
-}
-
-//analyze traffic
-function analysisSearchHistory(req, res, next){
-  data_model.getDemoDomains(function(demo_domains){
-    data_model.getReferers(function(referers){
-      res.render("dev/searchHistory.ejs", {
-        demo_domains: demo_domains.info,
-        referers: referers.info
-      });
-    })
-  });
 }
 
 //</editor-fold>
@@ -770,6 +715,26 @@ function godaddy(req, res, next){
   }, function(err, response, body){
     console.log(response.statusCode);
     res.json(body);
+  });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------GODADDY-------------------------------
+
+function dnsCheck(req, res, next){
+  var domain_name = req.params.domain_name;
+  dns.resolve(domain_name, "A", function (err, address, family) {
+    var domain_ip = address;
+    dns.resolve("domahub.com", "A", function (err, address, family) {
+      var doma_ip = address;
+      if (err || !domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
+        res.send("<h1>oh no</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
+      }
+      else {
+        res.send("<h1>oh yeah</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
+      }
+    });
   });
 }
 

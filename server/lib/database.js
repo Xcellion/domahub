@@ -10,6 +10,7 @@ var error = require('./error.js');
 
 var mysql = require('mysql');
 var mysql_options = {
+  port: 3306,
   host: "localhost",
   user: 'domadministrator',
   password: 'k#h8$.Kg.TWQ',
@@ -17,7 +18,8 @@ var mysql_options = {
   multipleStatements: true,
   dateStrings: true,
   timezone: '+0:00',
-  charset: "utf8_unicode_ci"
+  charset: "utf8_unicode_ci",
+  connectionLimit: 100
 }
 
 //</editor-fold>
@@ -63,7 +65,7 @@ module.exports = {
         con.query(custom_query, post, function(err, result, fields){
           con.release();
           if (err){
-            error.log(err);
+            error.log(err, custom_query);
             callback({
               state : "error",
               info : error_description
@@ -79,7 +81,7 @@ module.exports = {
       }
       //something went wrong with the mysql query!
       else {
-        error.log(err);
+        error.log(err, custom_query);
         callback({
           state : "error",
           info : error_description
