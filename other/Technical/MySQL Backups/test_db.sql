@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 16, 2017 at 11:09 PM
+-- Generation Time: Nov 26, 2017 at 01:16 AM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -47,21 +47,20 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `accounts`
 --
 
 INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `date_created`, `date_accessed`, `type`, `token`, `token_exp`, `stripe_account_id`, `stripe_customer_id`, `stripe_subscription_id`, `paypal_email`) VALUES
-(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2017-11-15 04:53:04', 2, NULL, NULL, 'acct_1BMX8eLa9wes0Toj', 'cus_Bk1UnVsezBS6Rc', NULL, 'won2blee@gmail.com'),
+(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2017-11-25 01:59:28', 2, NULL, NULL, 'acct_1BMX8eLa9wes0Toj', 'cus_Bk1UnVsezBS6Rc', 'sub_BmYO59YS2xKhYr', 'won2blee@gmail.com'),
 (2, 'DomaHub', 'domahub@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2017-11-14 11:31:57', 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(5, '322', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2017-11-14 07:56:45', 2, NULL, NULL, NULL, NULL, NULL, 'wonq33@gmail.com'),
-(35, 'Test-kun-sama', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2016-09-13 06:04:17', '2017-11-16 03:58:03', 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2017-11-07 23:30:55', 0, 'e187015906', '2017-11-08 10:30:55', NULL, NULL, NULL, NULL),
-(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2017-11-08 01:21:07', '2017-11-17 02:15:54', 1, NULL, NULL, 'acct_1BMJrmJxsQnPoPrG', 'cus_BjSGpQ0LNzdws7', 'sub_BjSK8LETRWURUg', NULL),
-(43, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2017-11-08 23:54:33', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(44, 'test1', 'test1@test.com', '$2a$10$NJ47nI9REJxnnfNghUJNceMnEYV/UBvb49BC7QaPGjndX6BEhXPze', '2017-11-08 14:44:28', '2017-11-09 00:59:27', 1, NULL, NULL, NULL, 'cus_BjSl27eTWcyar1', 'sub_BjSlfWnqAPZSU9', NULL);
+(5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2017-11-25 02:07:56', 2, NULL, NULL, NULL, 'cus_BmYQ5liqD7lTMZ', 'sub_BmYcUKuWAOPFzW', 'wonq33@gmail.com'),
+(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2016-09-13 06:04:17', '2017-11-17 07:09:27', 2, NULL, NULL, NULL, NULL, NULL, NULL),
+(37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2017-11-07 23:30:55', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(41, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2017-11-08 23:54:33', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2017-11-08 01:21:07', '2017-11-25 02:07:20', 1, NULL, NULL, 'acct_1BMJrmJxsQnPoPrG', 'cus_BjSGpQ0LNzdws7', 'sub_BjSK8LETRWURUg', NULL);
 
 -- --------------------------------------------------------
 
@@ -110,7 +109,6 @@ CREATE TABLE IF NOT EXISTS `coupon_codes` (
 
 INSERT INTO `coupon_codes` (`code`, `account_id`, `referer_id`, `date_created`, `date_accessed`, `duration_in_months`) VALUES
 ('SI0Ydr5E2b', 1, NULL, '2017-11-08 19:40:24', '2017-11-09 00:40:24', 1),
-('63w21UvbjB', 44, 42, '2017-11-08 20:07:40', '2017-11-09 01:07:40', 1),
 ('zGz899C5j5', 42, 1, '2017-11-08 20:07:42', '2017-11-09 01:07:42', 2);
 
 -- --------------------------------------------------------
@@ -161,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `listings` (
   UNIQUE KEY `listings_unique_owner` (`owner_id`,`domain_name`),
   UNIQUE KEY `listings_unique_domain` (`domain_name`,`verified`),
   KEY `listings_owner_fk_idx` (`owner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1525 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1596 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `listings`
@@ -176,199 +174,12 @@ INSERT INTO `listings` (`id`, `date_created`, `domain_name`, `owner_id`, `status
 (51, 1508882908519, 'greatestdomain.com', 2, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (52, 1508882908519, 'unverifieddomain.com', 2, 0, NULL, NULL, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (53, 1508882908519, 'myawesomedomain.com', 2, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1147, 1507322558685, 'jfhdljaskhdfsjahfsjdkhfjalhfahfjahdlsjjalhfahfjahdlsjkfhasjkfhlasjkfhljasfasf.com', 5, NULL, 1, NULL, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1165, 1507751446668, 'google.com', 5, NULL, 1, NULL, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1322, 1508296128430, 'test26.com', 35, 0, NULL, NULL, 0, 'week', 500012, 231315, 2501, 'Great listings dude!!!!!', NULL, NULL, 'other', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1323, 1508296128430, 'test27.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1324, 1508296128430, 'test28.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1325, 1508296128430, 'test29.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1326, 1508296128430, 'test30.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1327, 1508296128430, 'test31.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1328, 1508296128430, 'test32.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1329, 1508296128430, 'test33.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1330, 1508296128430, 'test34.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1331, 1508296128430, 'test35.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1332, 1508296128430, 'test36.com', 35, 0, NULL, NULL, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1333, 1508296128430, 'test37.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1334, 1508296128430, 'test38.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1335, 1508296128430, 'test39.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1336, 1508296128430, 'test40.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1337, 1508296128430, 'test41.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1338, 1508296128430, 'test42.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1339, 1508296128430, 'test43.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1340, 1508296128430, 'test44.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1341, 1508296128430, 'test45.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1342, 1508296128430, 'test46.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1343, 1508296128430, 'test47.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1344, 1508296128430, 'test48.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1345, 1508296128430, 'test49.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1346, 1508296128430, 'test50.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1347, 1508296128430, 'test51.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1348, 1508296128430, 'test52.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1349, 1508296128430, 'test53.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1350, 1508296128430, 'test54.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1351, 1508296128430, 'test55.com', 35, 0, NULL, 1, 1, 'week', 500012, 2151051, 250, 'Great listings dude', NULL, NULL, 'adult animals apps currency dating holiday keywords legal lifestyle movies news niche personal politics religion robot science shopping short', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1352, 1508296128430, 'test56.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1353, 1508296128430, 'test57.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1354, 1508296128430, 'test58.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1355, 1508296128430, 'test59.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1356, 1508296128430, 'test60.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1357, 1508296128430, 'test61.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1358, 1508296128430, 'test62.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1359, 1508296128430, 'test63.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1360, 1508296128430, 'test64.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1361, 1508296128430, 'test65.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1362, 1508296128430, 'test66.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1363, 1508296128430, 'test67.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1364, 1508296128430, 'test68.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1365, 1508296128430, 'test69.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1366, 1508296128430, 'test70.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1367, 1508296128430, 'test71.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1368, 1508296128430, 'test72.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1369, 1508296128430, 'test73.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1370, 1508296128430, 'test74.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1371, 1508296128430, 'test75.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1372, 1508296128430, 'test76.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1373, 1508296128430, 'test77.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1374, 1508296128430, 'test78.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1375, 1508296128430, 'test79.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1376, 1508296128430, 'test80.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1377, 1508296128430, 'test81.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1378, 1508296128430, 'test82.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1379, 1508296128430, 'test83.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1380, 1508296128430, 'test84.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1381, 1508296128430, 'test85.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1382, 1508296128430, 'test86.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1383, 1508296128430, 'test87.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1384, 1508296128430, 'test88.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1385, 1508296128430, 'test89.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1386, 1508296128430, 'test90.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1387, 1508296128430, 'test91.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1388, 1508296128430, 'test92.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1389, 1508296128430, 'test93.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1390, 1508296128430, 'test94.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1391, 1508296128430, 'test95.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1392, 1508296128430, 'test96.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1396, 1508451820110, 'gadfg.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1400, 1508779794991, 'test.com', 1, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1401, 1508789080084, 'test2.com', 1, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1402, 1508789320302, 'aikjsdfghikuasdhfgioasuwerhgiouswehrgiouashergiousheriogusherioguhseiorhuged.com', 35, 0, NULL, 1, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1403, 1510252782489, '1.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1404, 1510252782489, '2.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1405, 1510252782489, '3.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1406, 1510252782489, '4.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1407, 1510252782489, '5.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1408, 1510252782489, '6.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1409, 1510252782489, '7.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1410, 1510252782489, '8.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1411, 1510252782489, '9.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1412, 1510252782489, '10.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1413, 1510252782489, '11.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1414, 1510252782489, '12.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1415, 1510252782489, '13.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1416, 1510252782489, '14.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1417, 1510252782489, '15.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1418, 1510252782489, '16.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1419, 1510252782489, '17.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1420, 1510252782489, '18.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1421, 1510252782489, '19.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1422, 1510252782489, '20.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1423, 1510252782489, '21.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1424, 1510252782489, '22.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1425, 1510252782489, '23.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1426, 1510252782489, '24.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1427, 1510252782489, '25.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1428, 1510252782489, '26.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1429, 1510252782489, '27.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1430, 1510252782489, '28.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1431, 1510252782489, '29.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1432, 1510252782489, '30.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1433, 1510252782489, '31.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1434, 1510252782489, '32.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1435, 1510252782489, '33.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1436, 1510252782489, '34.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1437, 1510252782489, '35.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1438, 1510252782489, '36.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1439, 1510252782489, '37.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1440, 1510252782489, '38.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1441, 1510252782489, '39.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1442, 1510252782489, '40.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1443, 1510252782489, '41.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1444, 1510252782489, '42.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1445, 1510252782489, '43.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1446, 1510252782489, '44.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1447, 1510252782489, '45.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1448, 1510252782489, '46.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1449, 1510252782489, '47.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1450, 1510252782489, '48.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1451, 1510252782489, '49.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1452, 1510252782489, '50.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1453, 1510252782489, '51.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1454, 1510252782489, '52.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1455, 1510252782489, '53.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1456, 1510252782489, '54.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1457, 1510252782489, '55.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1458, 1510252782489, '56.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1459, 1510252782489, '57.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1460, 1510252782489, '58.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1461, 1510252782489, '59.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1462, 1510252782489, '60.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1463, 1510252782489, '61.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1464, 1510252782489, '62.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1465, 1510252782489, '63.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1466, 1510252782489, '64.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1467, 1510252782489, '65.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1468, 1510252782489, '66.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1469, 1510252782489, '67.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1470, 1510252782489, '68.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1471, 1510252782489, '69.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1472, 1510252782489, '70.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1473, 1510252782489, '71.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1474, 1510252782489, '72.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1475, 1510252782489, '73.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1476, 1510252782489, '74.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1477, 1510252782489, '75.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1478, 1510252782489, '76.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1479, 1510252782489, '77.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1480, 1510252782489, '78.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1481, 1510252782489, '79.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1482, 1510252782489, '80.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1483, 1510252782489, '81.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1484, 1510252782489, '82.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1485, 1510252782489, '83.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1486, 1510252782489, '84.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1487, 1510252782489, '85.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1488, 1510252782489, '86.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1489, 1510252782489, '87.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1490, 1510252782489, '88.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1491, 1510252782489, '89.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1492, 1510252782489, '90.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1493, 1510252782489, '91.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1494, 1510252782489, '92.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1495, 1510252782489, '93.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1496, 1510252782489, '94.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1497, 1510252782489, '95.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1498, 1510252782489, '96.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1499, 1510252782489, '97.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1500, 1510252782489, '98.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1501, 1510252782489, '99.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1502, 1510252782489, '100.com', 42, 1, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-INSERT INTO `listings` (`id`, `date_created`, `domain_name`, `owner_id`, `status`, `deleted`, `verified`, `rentable`, `price_type`, `price_rate`, `buy_price`, `min_price`, `description`, `description_hook`, `description_footer`, `categories`, `paths`, `background_image`, `background_color`, `logo`, `primary_color`, `secondary_color`, `tertiary_color`, `font_name`, `font_color`, `info_module`, `domain_owner`, `domain_age`, `domain_list`, `domain_appraisal`, `social_sharing`, `traffic_module`, `traffic_graph`, `alexa_stats`, `history_module`) VALUES
-(1503, 1510252782489, '101.com', 42, 0, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1504, 1510252782489, '102.com', 42, 0, NULL, 1, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1505, 1510252782489, '103.com', 42, 0, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1506, 1510252782489, '104.com', 42, 0, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1507, 1510252782489, '105.com', 42, 0, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1508, 1510622729641, 'unverifieddomain.com', 1, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1509, 1510622948309, 'unverifieddomain2.com', 1, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1510, 1510623398697, 'unverifieddomain3.com', 1, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1513, 1510698577431, 'test3.com', 1, 0, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1514, 1510698577431, 'test4.com', 1, 0, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1516, 1510699468440, 'test5.com', 1, 0, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1517, 1510699546771, 'test6.com', 1, 0, NULL, 1, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1521, 1510703005665, 'test7.com', 1, 0, NULL, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1523, 1510703593787, 'test8.com', 1, 0, NULL, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1524, 1510703638096, 'test9.com', 1, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+(1402, 1508789320302, 'aikjsdfghikuasdhfgioasuwerhgiouswehrgiouashergiousheriogusherioguhseiorhuged.com', 35, 0, NULL, NULL, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1581, 1511428202372, 'calentopia.com', 42, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1592, 1511556550613, 'test.com', 42, 0, NULL, NULL, 0, 'month', 25, 0, 123, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1593, 1511556550613, 'test1.com', 42, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1594, 1511556734935, 'test2.com', 42, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1595, 1511556845907, 'test3.com', 42, 0, NULL, NULL, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -409,6 +220,13 @@ CREATE TABLE IF NOT EXISTS `registrars` (
   UNIQUE KEY `registrars_account_id_unique` (`registrar_name`,`account_id`),
   KEY `registrars_account_id_fk` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `registrars`
+--
+
+INSERT INTO `registrars` (`account_id`, `registrar_name`, `api_key`, `username`, `password`) VALUES
+(42, 'godaddy', 'c3361fc4117811409cbb1ecd391ccdae576a3d282f67109f897e364bd530fc275d', 'c5375ca64b191d', 'c26103d74a5b7c67a4be0dae171eebe94c537d157955');
 
 -- --------------------------------------------------------
 
@@ -1056,14 +874,15 @@ CREATE TABLE IF NOT EXISTS `stats_contact_history` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `verification_code` (`verification_code`),
   KEY `listing_id_contact_idx` (`listing_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stats_contact_history`
 --
 
 INSERT INTO `stats_contact_history` (`id`, `listing_id`, `timestamp`, `deadline`, `user_ip`, `name`, `email`, `phone`, `offer`, `bin`, `message`, `response`, `verification_code`, `verified`, `accepted`, `deposited`, `transferred`) VALUES
-(1, 5, 1510386308942, 1511821279394, NULL, 'hello', 'hello@test.com', '+1 718-309-7771', 2600, NULL, 'Test!', NULL, 'NSlfjZjxCt', 1, 1, 1, NULL);
+(1, 5, 1510386308942, 1511821279394, NULL, 'hello', 'hello@test.com', '+1 718-309-7771', 2600, NULL, 'Test!', NULL, 'NSlfjZjxCt', 1, 1, 1, NULL),
+(2, 7, 1511295539533, NULL, NULL, 'test', 'won2blee@gmail.com', '+1 718-309-7773', 1, NULL, 'fuck you', NULL, 'c7JMw4Z5Ur', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4598,7 +4417,7 @@ CREATE TABLE IF NOT EXISTS `stats_search_history` (
   `compare` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `search_history_account_id_fk_idx` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=252587 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=252544 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stats_search_history`
