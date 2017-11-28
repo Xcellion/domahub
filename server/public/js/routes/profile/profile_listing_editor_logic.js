@@ -1083,7 +1083,7 @@ function editOfferModal(offer, listing_info){
 
   //this offer was accepted or rejected! hide the buttons
   if (offer.accepted == 1 || offer.accepted == 0){
-    $("#offer-modal-button-wrapper").addClass('is-hidden');
+    $("#offer-modal-button-wrapper").removeClass("remove-margin-bottom-content").addClass('is-hidden');
     $("#offer-response-label").removeClass('is-hidden');
     $("#offer-response").val((offer.response) ? offer.response : "You did not include a response.").addClass('is-disabled');
     var accept_or_reject_text = (offer.accepted == 1) ? "Accepted" : "Rejected";
@@ -1098,7 +1098,7 @@ function editOfferModal(offer, listing_info){
   }
   //not yet accepted
   else {
-    $("#offer-modal-button-wrapper").removeClass('is-hidden');
+    $("#offer-modal-button-wrapper").addClass("remove-margin-bottom-content").removeClass('is-hidden');
     $("#offer-modal-domain").text("Offer for " + listing_info.domain_name);
     $("#offer-response-label").addClass('is-hidden');
     $("#offer-response").val("").removeClass('is-disabled');
