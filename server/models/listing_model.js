@@ -424,12 +424,15 @@ module.exports = {
           date_created, \
           domain_name, \
           min_price, \
+          buy_price, \
           description \
         )\
          VALUES ? \
          ON DUPLICATE KEY UPDATE \
          deleted = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
            THEN NULL ELSE deleted END \
+         ,min_price = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
+           THEN VALUES(min_price) ELSE min_price END \
          ,buy_price = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
            THEN VALUES(buy_price) ELSE buy_price END \
          ,description = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
@@ -567,7 +570,8 @@ module.exports = {
   deleteListing : function(listing_id, callback){
     console.log("DB: Attempting to delete listing #" + listing_id + "...");
     var query = "UPDATE listings \
-        SET deleted = 1 \
+        SET deleted = 1, \
+            status = 0 \
         WHERE id = ? "
     database.query(query, "Failed to delete listing #" + listing_id + "!", callback, listing_id);
   },

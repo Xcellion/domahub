@@ -746,7 +746,24 @@ module.exports = {
               next();
             }
             else {
-              next();
+              //if pending DNS changes, mark it active
+              if (req.session.listing_info.status == 3){
+                console.log("F: Listing is now pointed to DomaHub! Marking as active...");
+                req.session.listing_info.status = 1;
+                listing_model.updateListingsInfo(domain_name, {
+                  status: 1
+                }, function(result){
+                  //change req.user.listings if req.user exists and is the owner of this domain
+                  if (req.user && req.user.listings && req.user.id == req.session.listing_info.owner_id){
+                    getUserListingObj(req.user.listings, domain_name).status = 1;
+                  }
+                  next();
+                });
+              }
+              else {
+                next();
+              }
+
             }
           });
         }

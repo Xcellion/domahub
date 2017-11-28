@@ -1678,7 +1678,7 @@ function createDNSTable(listing_info, total_unverified, row_index){
   }
 
   //incomplete
-  if (cloned_table.find(".is-danger").length > 0){
+  if (cloned_table.find(".is-danger").length > 1){
     table_header_text = "<span class='is-incomplete dns-status'>Incomplete</span>" + table_header_text;
   }
   //complete

@@ -24,6 +24,9 @@ var dns = require("dns");
 var validator = require("validator");
 var request = require("request");
 
+//registrar info
+var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
+
 //</editor-fold>
 
 module.exports = {
@@ -490,7 +493,7 @@ module.exports = {
   //check if registrar info is properly formatted
   checkRegistrarInfo : function(req, res, next){
     console.log("F: Checking posted registrar information...");
-    var valid_registrars = ["godaddy"];
+    var valid_registrars = ["godaddy", "namecheap"];
 
     //not a valid registrar
     if (!req.body.registrar_name || valid_registrars.indexOf(req.body.registrar_name) == -1){
@@ -498,7 +501,6 @@ module.exports = {
     }
     else {
       switch (req.body.registrar_name){
-
         case "godaddy":
           if (!req.body.api_key){
             error.handler(req, res, "That's an invalid production API key! Please input a valid GoDaddy production API key.", "json");
@@ -546,7 +548,6 @@ module.exports = {
             });
           }
           break;
-
         case "namecheap":
           if (!req.body.api_key){
             error.handler(req, res, "That's an invalid API key! Please input a valid NameCheap API key.", "json");
@@ -556,22 +557,34 @@ module.exports = {
           }
           else {
             console.log("F: Validating posted registrar information with NameCheap...");
-            if (err){
-
-            }
-            else {
-              //format for database insert
-              req.session.registrar_array = [
-                [
-                  req.user.id,
-                  req.body.registrar_name,
-                  encryptor.encryptText(req.body.api_key),
-                  encryptor.encryptText(req.body.username),
-                  null
-                ]
-              ];
-              next();
-            }
+            request({
+              url: namecheap_url,
+              method: "GET",
+              qs : {
+                ApiKey : req.body.api_key,
+                ApiUser : req.body.username,
+                UserName : req.body.username,
+                ClientIp : req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress,
+                Command : "namecheap.domains.getList",
+              }
+            }, function(err, response, body){
+              if (err){
+                error.handler(req, res, "Something went wrong in verifying your NameCheap account. Please refresh the page and try again.", "json");
+              }
+              else {
+                //format for database insert
+                req.session.registrar_array = [
+                  [
+                    req.user.id,
+                    req.body.registrar_name,
+                    encryptor.encryptText(req.body.api_key),
+                    encryptor.encryptText(req.body.username),
+                    null
+                  ]
+                ];
+                next();
+              }
+            });
           }
           break;
       }
@@ -1010,7 +1023,9 @@ function updateUserRegistrar(user, registrars){
     user.registrars = [];
   }
   for (var x = 0 ; x < registrars.length ; x++){
-    user.registrars.push(registrars[x].registrar_name);
+    user.registrars.push({
+      name : registrars[x].registrar_name
+    });
   }
 }
 
