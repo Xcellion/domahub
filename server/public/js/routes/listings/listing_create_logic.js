@@ -171,6 +171,21 @@ $(document).ready(function() {
       handleSubmitDisabled();
     });
 
+    //handler to clear reasons and append the reason
+    temp_table_row.find("input").on("input change", function(){
+      //set domain name data
+      temp_table_row.attr("data-domain_name", $(this).val());
+
+      //check to see if it's legit domain name
+      if ($(this).val().indexOf(".") != -1){
+        temp_table_row.removeClass('errored-row');
+        $(this).removeClass('is-danger');
+        $(this).closest("td").find("small").remove();
+        clearNotification();
+        handleSubmitDisabled();
+      }
+    });
+
     //reasons for why it was a bad listing
     createBadReasons(data.reasons, temp_table_row);
 
@@ -194,28 +209,18 @@ $(document).ready(function() {
       //append latest one
       for (var x = 0; x < reasons.length; x++){
         var explanation = $("<small class='is-danger tip is-inline no-margin'>" + reasons[x] + "</small>")
-        if (reasons[x] == "Invalid price!"){
+        if (reasons[x] == "Invalid min. price!"){
           var reason_input = ".min-price-input";
+        }
+        else if (reasons[x] == "Invalid BIN price!"){
+          var reason_input = ".buy-price-input";
         }
         else {
           var reason_input = ".domain-name-input";
         }
-
-        //handler to clear reasons and append the reason
-        row.find(reason_input).addClass('is-danger').off().on("input change", function(){
-          //set domain name data
-          row.attr("data-domain_name", $(this).val());
-
-          //check to see if it's legit domain name
-          if ($(this).val().indexOf(".") != -1){
-            row.removeClass('errored-row');
-            $(this).removeClass('is-danger');
-            $(this).closest("td").find("small").remove();
-            clearNotification();
-            handleSubmitDisabled();
-          }
-        }).closest('td').append(explanation);
       }
+
+      row.find(reason_input).addClass('is-danger').closest('td').append(explanation);
     }
   }
 
@@ -258,7 +263,8 @@ $(document).ready(function() {
       if (temp_row.find(".domain-name-input").val() && !temp_row.find(".domain-name-input").hasClass('is-disabled')){
         var row_obj = {
           domain_name : temp_row.find(".domain-name-input").val().replace(/\s/g, ''),
-          min_price : (temp_row.find(".min-price-input").val() == "") ? 0 : temp_row.find(".min-price-input").val()
+          min_price : (temp_row.find(".min-price-input").val() == "") ? 0 : temp_row.find(".min-price-input").val(),
+          buy_price : (temp_row.find(".buy-price-input").val() == "") ? 0 : temp_row.find(".buy-price-input").val()
         };
         temp_array.push(row_obj);
       }

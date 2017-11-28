@@ -356,11 +356,15 @@ function updateDomainRow(tempRow, listing_info){
   else if (listing_info.accepted){
     var status_text = "Accepted An Offer";
   }
-  else if (listing_info.verified && listing_info.status){
+  else if (listing_info.verified && listing_info.status == 1){
     var status_text = "Active";
   }
-  else if (listing_info.verified && !listing_info.status){
+  else if (listing_info.verified && listing_info.status == 0){
     var status_text = "Inactive";
+  }
+  else if (listing_info.status == 3){
+    var status_text = "Pending";
+    tempRow.find(".pending-status-icon").removeClass('is-hidden');
   }
   else {
     var status_text = "Unverified";

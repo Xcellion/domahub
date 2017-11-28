@@ -39,6 +39,9 @@ var godaddy_api_prod = "31uUbY5CvU_2fiCvta5X7kJdqTJtA52CU";
 var godaddy_secret_prod = "2fiF9zXdNPLQHke1oXueaY";
 var godaddy_customer_num = "5067889";
 
+var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
+var parseString = require('xml2js').parseString;
+
 //</editor-fold>
 
 module.exports = function(app){
@@ -62,6 +65,7 @@ module.exports = function(app){
 
   //registrar tests
   app.get("/godaddy", godaddy);
+  app.get("/namecheap", namecheap);
 
   app.get("/dns/:domain_name", dnsCheck);
 
@@ -695,7 +699,7 @@ function emailViews(req, res, next){
 
   //</editor-fold>
 
-//<editor-fold>-------------------------------GODADDY-------------------------------
+//<editor-fold>-------------------------------REGISTRARS-------------------------------
 
 function godaddy(req, res, next){
   request({
@@ -715,6 +719,24 @@ function godaddy(req, res, next){
   }, function(err, response, body){
     console.log(response.statusCode);
     res.json(body);
+  });
+}
+
+function namecheap(req, res, next){
+  request({
+    url: namecheap_url,
+    method: "GET",
+    qs : {
+      ApiKey : "wea",
+      ApiUser : "wea",
+      UserName : "wea",
+      ClientIp : "208.68.37.82",
+      Command : "namecheap.domains.getList",
+    }
+  }, function(err, response, body){
+    parseString(body, {trim: true}, function (err, result) {
+      res.json(body);
+    });
   });
 }
 

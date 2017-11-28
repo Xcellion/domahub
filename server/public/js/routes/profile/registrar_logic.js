@@ -26,9 +26,9 @@ function updateRegistrars(){
   //if user has any registrars connected
   if (user.registrars){
     for (var x = 0 ; x < user.registrars.length ; x++){
-      var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + user.registrars[x] + "]").find(".registrar-button-text");
+      var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + user.registrars[x].name + "]").find(".registrar-button-text");
       registrar_connect_text.text("Update " + registrar_connect_text.data("registrar"));
-      var registrar_connect_tip = $(".registrar-tip[data-registrar_name=" + user.registrars[x] + "]");
+      var registrar_connect_tip = $(".registrar-tip[data-registrar_name=" + user.registrars[x].name + "]");
       registrar_connect_tip.text("Click the button to update your " + registrar_connect_tip.data("registrar") + " account.");
     }
 

@@ -62,7 +62,6 @@
           </button>
         </div>
 
-
         <div class="columns">
 
           <!-- MANUAL TEXTAREA -->
@@ -101,9 +100,15 @@
               <thead>
                 <tr>
                   <th class='td-domain'>Domain Name</th>
-                  <th class="td-min-price is-hidden-mobile">
-                    <span>Min. Price</span>
-                    <span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+                  <th class="td-price is-hidden-mobile">
+                    <span>Minimum Price</span>
+                    <span class="icon is-tooltip is-small" data-balloon="The minimum offer you will consider selling this domain for. Leave blank for no minimum price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+                      <i class="fa fa-question-circle"></i>
+                    </span>
+                  </th>
+                  <th class="td-price is-hidden-mobile">
+                    <span>Buy it now Price</span>
+                    <span class="icon is-tooltip is-small" data-balloon="The price you are willing to sell this domain for immediately. Leave blank to disable the buy it now option. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
                       <i class="fa fa-question-circle"></i>
                     </span>
                   </th>
@@ -121,15 +126,21 @@
                       <input class="domain-name-input table-input input is-expanded no-shadow" type="text" value=""/>
                     </div>
                   </td>
-                  <td class="td-min-price aligned is-hidden-mobile">
+                  <td class="td-price aligned is-hidden-mobile">
                     <input class="min-price-input table-input input no-shadow" type="number" tabindex="-1" min="0" />
+                  </td>
+                  <td class="td-price aligned is-hidden-mobile">
+                    <input class="buy-price-input table-input input no-shadow" type="number" tabindex="-1" min="0" />
+                  </td>
+                  <td class="is-hidden">
+                    <input class="input registrar-input" data-name="registrar" type="hidden" value="0">
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <%# <!-- CONNECT REGISTRAR -->
+          <!-- CONNECT REGISTRAR -->
           <div class="create-type-selector column is-5-widescreen">
             <div class="card is-fullwidth">
               <div class="card-header">
@@ -143,11 +154,8 @@
               <div class="card-content">
                 <div class="content">
                   <label>
-                    Connect a registrar and automatically create listings for all of your domain names! <a target="_blank" class="is-underlined is-primary" href="/contact">Let us know</a> if you need any assistance.
+                    Connect a registrar and automatically create listings for all of your domain names! <a target="_blank" class="is-primary is-underlined" href="/contact">Let us know</a> if you need any assistance.
                   </label>
-                  <small class="tip">
-
-                  </small>
                 </div>
                 <div class="control is-spaced is-mobile">
                   <div class="control-left">
@@ -163,6 +171,7 @@
                     </a>
                   </div>
                 </div>
+                <%#
                 <div class="control is-spaced is-mobile">
                   <div class="control-left">
                     <p>
@@ -176,7 +185,8 @@
                       <span class="registrar-button-text" data-registrar="NameCheap"></span>
                     </a>
                   </div>
-                </div>
+                </div>%>
+
                 <div class="content">
                   <button id="lookup-domains-button" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Lookup Domains From Your Connected Registrars">
                     <span class="icon is-small"><i class="fa fa-search"></i></span>
@@ -185,7 +195,7 @@
                 </div>
               </div>
             </div>
-          </div>%>
+          </div>
 
         </div>
       </div>
