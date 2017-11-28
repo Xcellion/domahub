@@ -432,6 +432,7 @@ function showSection(section_id){
 
 //show a specific section when loading the page;
 function showSectionByURL(){
+  $('.nav-drop').addClass('is-hidden');   //for hiding the notification bubble when already on this page
   var temp_hash = location.hash.split("#")[1];
   var array_of_ids = $(".drop-tab").map(function(index) {
     return $(this).attr("id");

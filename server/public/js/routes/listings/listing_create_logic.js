@@ -424,7 +424,7 @@ function lookupRegistrars(){
           createDomainsTable(data.bad_listings, data.good_listings);
         }
         else {
-          errorMessage("You don't have any domains in your connected registrars! If there is something wrong, please contact us for assistance!");
+          errorMessage("You don't have any domains in your connected registrars! If there is something wrong, please <a class='is-underlined' href='/contact'>contact us</a> for assistance!");
         }
       }
       else {
