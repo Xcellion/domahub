@@ -262,7 +262,7 @@
           </a>
         </div>
         <div class="control">
-          <a id="example-link-info" class="preview-elem">This is a link on your listing page.</a>
+          <a id="example-link-info" class="is-underlined preview-elem">This is a link on your listing page.</a>
         </div>
       </div>
       <div class="tile is-ancestor">
@@ -595,17 +595,19 @@
         </h2>
       </div>
       <div id="offers-toolbar" class="hidden-while-loading-offers">
-        <div class="offer-button control button-wrapper is-mobile">
-          <a id="refresh-offers-button" class="is-hidden button is-black is-stylish is-small is-inverted" title="Refresh Offers">
-            <span class="icon is-small"><i class="fa fa-refresh"></i></span>
-            <span>Refresh Offers</span>
-          </a>
-          <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-black is-stylish is-small is-inverted">
-            <span class="icon"><i class="fa fa-toggle-off"></i></span>
-            <span>Show Rejected</span>
-          </a>
-        </div>
         <div class="offer-button control is-grouped">
+          <div class="control">
+            <a id="refresh-offers-button" class="is-hidden button is-black is-transparent no-shadow" title="Refresh Offers">
+              <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+              <span>Refresh</span>
+            </a>
+          </div>
+          <div class="control">
+            <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-black is-transparent no-shadow">
+              <span class="icon"><i class="fa fa-toggle-off"></i></span>
+              <span>Show Rejected</span>
+            </a>
+          </div>
           <div class="control has-icon">
             <i class="fa fa-search"></i>
             <input id="offer-search" tabindex="0" class="input is-expanded is-transparent no-border" type="text" placeholder="Search Offers" />
@@ -707,20 +709,20 @@
           </div>
           <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
             <p class="control">
-              <a id="accept_button" tabindex="0" class='button is-primary '>
+              <a id="accept_button" tabindex="0" class='button is-stylish is-small is-primary '>
                 <span class="icon is-small"><i class="fa fa-check"></i></span>
                 <span>Accept offer</span>
               </a>
             </p>
             <p class="control">
-              <a id="reject_button" tabindex="0" class='button is-outlined is-danger'>
+              <a id="reject_button" tabindex="0" class='button is-stylish is-small is-outlined is-danger'>
                 <span class="icon is-small"><i class="fa fa-times"></i></span>
                 <span>Reject offer</span>
               </a>
             </p>
           </div>
           <div class="content">
-            <a id="offer-modal-whats-next" tabindex="0" class='is-primary'>
+            <a id="offer-modal-whats-next" tabindex="0" class='is-underlined is-primary'>
               <span>What do I need to do next?</span>
             </a>
           </div>
@@ -820,7 +822,7 @@
         <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
           <td>
             <span class="td-offer-domain"></span>
-            <span class="icon is-inline is-small" data-balloon-length="medium" data-balloon="You can click on this offer to view more details or respond to it." data-balloon-pos="right">
+            <span class="icon is-inline is-small" data-balloon-length="medium" data-balloon="You can click on this offer to respond or view more details." data-balloon-pos="right">
               <i class="fa fa-question-circle"></i>
             </span>
           </td>
