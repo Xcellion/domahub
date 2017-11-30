@@ -1080,6 +1080,7 @@ function updateUserRegistrar(user, registrars){
   }
   for (var x = 0 ; x < registrars.length ; x++){
     user.registrars.push({
+      id : registrars[x].id,
       name : registrars[x].registrar_name
     });
   }
