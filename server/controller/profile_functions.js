@@ -26,6 +26,7 @@ var request = require("request");
 
 //registrar info
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
+var parseString = require('xml2js').parseString;
 
 //</editor-fold>
 
@@ -140,7 +141,7 @@ module.exports = {
       console.log("F: Checking domain name IP addresses...");
       dns.resolve("domahub.com", "A", function (err, address, family) {
         if (err){
-          error.log(err);
+          error.log(err, "Failed to check DomaHub IP address.");
           res.send({
             state: "error",
             unverified_listings : req.body.ids
@@ -497,7 +498,7 @@ module.exports = {
               }
             }, function(err, response, body){
               if (err) {
-                error.log(err, "Something went wrong with verifying GoDaddy registrar info.");
+                error.log(err, "Failed to verify GoDaddy API via request.");
                 error.handler(req, res, "Something went wrong in verifying your GoDaddy account. Please refresh the page and try again.", "json");
               }
               else {
@@ -531,7 +532,7 @@ module.exports = {
           if (!req.body.api_key){
             error.handler(req, res, "That's an invalid API key! Please input a valid NameCheap API key.", "json");
           }
-          else if (!validator.isInt(req.body.username)){
+          else if (!req.body.username){
             error.handler(req, res, "That's an invalid username! Please input a valid NameCheap username.", "json");
           }
           else {
@@ -548,21 +549,35 @@ module.exports = {
               }
             }, function(err, response, body){
               if (err){
-                error.log(err, "Something went wrong with verifying NameCheap registrar info.");
+                error.log(err, "Failed to verify NameCheap API via request.");
                 error.handler(req, res, "Something went wrong in verifying your NameCheap account. Please refresh the page and try again.", "json");
               }
               else {
-                //format for database insert
-                req.session.registrar_array = [
-                  [
-                    req.user.id,
-                    req.body.registrar_name,
-                    encryptor.encryptText(req.body.api_key),
-                    encryptor.encryptText(req.body.username),
-                    null
-                  ]
-                ];
-                next();
+                //parse the XML response from namecheap
+                parseString(body, {trim: true}, function (err, result) {
+                  if (err){
+                    error.log(err, "Failed to parse XML response from NameCheap.");
+                    error.handler(req, res, "Something went wrong in verifying your NameCheap account. Please refresh the page and try again.", "json");
+                  }
+                  else {
+                    if (result.ApiResponse["$"].Status == "ERROR"){
+                      error.handler(req, res, "That's an invalid API key or username! Please input a valid NameCheap API key or username.", "json");
+                    }
+                    else {
+                      //format for database insert
+                      req.session.registrar_array = [
+                        [
+                          req.user.id,
+                          req.body.registrar_name,
+                          encryptor.encryptText(req.body.api_key),
+                          encryptor.encryptText(req.body.username),
+                          null
+                        ]
+                      ];
+                      next();
+                    }
+                  }
+                });
               }
             });
           }
@@ -908,7 +923,7 @@ function getDomainDNSPromise(listing_obj){
     console.log("F: Now looking up DNS records for " + listing_obj.domain_name + "...");
     whois.lookup(listing_obj.domain_name, function(err, data){
       if (err){
-        error.log(err);
+        error.log(err, "Failed to look up DNS records.");
         reject({
           info : err,
           listing_obj : listing_obj
@@ -925,7 +940,7 @@ function getDomainDNSPromise(listing_obj){
         //look up any existing DNS A Records
         dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
           if (err){
-            error.log(err);
+            error.log(err, "Failed to look up DNS records");
             reject({
               info : err,
               listing_obj : listing_obj
@@ -946,7 +961,7 @@ function getDomainIPPromise(listing_obj){
   return Q.Promise(function(resolve, reject, notify){
     dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
       if (err) {
-        error.log(err);
+        error.log(err, "Failed to look up DNS records");
         reject(err);
       }
       else {
@@ -979,7 +994,7 @@ function getDomainsGoDaddy(registrar_info){
       }
     }, function(err, response, body){
       if (err){
-        error.log(err);
+        error.log(err, "Failed to verify GoDaddy account via request.");
         reject("Something went wrong in verifying your GoDaddy account.");
       }
       else if (body["code"] == "INVALID_SHOPPER_ID" || body["code"] == "ERROR_INTERNAL"){
