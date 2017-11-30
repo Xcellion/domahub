@@ -414,7 +414,7 @@ function showSection(section_id){
     }
 
     //if not premium, highlight upgrade left nav
-    if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+    if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
       $(".left-tab").removeClass('is-active');
       $("#nav-premium-link").addClass('is-active');
     }

@@ -42,17 +42,19 @@ module.exports = {
 
       //check it against stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+        if (err){
+          error.log(err);
+        }
         //update our DH database to remove stripe_customer_id
-        if (err || (customer && customer.deleted) || !customer){
+        else if ((customer && customer.deleted) || !customer){
           console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_customer_id");
-          next();
         }
         //legit customer
         else {
           updateUserStripeCustomer(req.user, customer);
-          next();
         }
+        next();
       });
     }
     else {
@@ -228,17 +230,19 @@ module.exports = {
 
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
+        if (err){
+          error.log(err);
+        }
         //update our DH database to remove stripe_subscription_id
-        if (err || !subscription){
+        else if (!subscription){
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_subscription_id");
-          next();
         }
         //legit subscription!
         else {
           updateUserStripeSubscription(req.user, subscription);
-          next();
         }
+        next();
       });
     }
     else {
@@ -385,17 +389,19 @@ module.exports = {
     if (req.user.stripe_account_id && !req.user.stripe_account){
       console.log('SF: Getting existing Stripe managed account information for an account...');
       stripe.accounts.retrieve(req.user.stripe_account_id, function(err, account) {
+        if (err){
+          error.log(err);
+        }
         //update our DH database to remove stripe_account_id
-        if (err || !account){
+        else if (!account){
           console.log("SF: Not a real Stripe account! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_account_id");
-          next();
         }
         else {
           updateUserStripeAccount(req.user, account);
           updateUserStripeBank(req.user, account);
-          next();
         }
+        next();
       });
     }
     else {
