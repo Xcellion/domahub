@@ -43,7 +43,7 @@ module.exports = {
       //check it against stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
         if (err){
-          error.log(err);
+          error.log(err, "Failed to retrieve Stripe customer.");
         }
         //update our DH database to remove stripe_customer_id
         else if ((customer && customer.deleted) || !customer){
@@ -231,7 +231,7 @@ module.exports = {
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
         if (err){
-          error.log(err);
+          error.log(err, "Failed to retrieve Stripe subscription.");
         }
         //update our DH database to remove stripe_subscription_id
         else if (!subscription){
@@ -390,7 +390,7 @@ module.exports = {
       console.log('SF: Getting existing Stripe managed account information for an account...');
       stripe.accounts.retrieve(req.user.stripe_account_id, function(err, account) {
         if (err){
-          error.log(err);
+          error.log(err, "Failed to retrieve Stripe account.");
         }
         //update our DH database to remove stripe_account_id
         else if (!account){

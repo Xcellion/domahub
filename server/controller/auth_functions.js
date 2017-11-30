@@ -331,7 +331,7 @@ module.exports = {
       else {
         req.logIn(user, function(err) {
           if (err) {
-            error.log(err);
+            error.log(err, "Failed to login via passport.");
             error.handler(req, res, "Something went wrong while logging in! Please refresh the page and try again!</br></br>If this continues, please <a class='is-underlined' href='/contact'>contact us</a> for assistance.");
           }
           else {

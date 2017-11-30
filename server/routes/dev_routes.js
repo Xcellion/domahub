@@ -736,7 +736,7 @@ function namecheap(req, res, next){
     }
   }, function(err, response, body){
     parseString(body, {trim: true}, function (err, result) {
-      res.json(body);
+      res.json(result.ApiResponse);
     });
   });
 }

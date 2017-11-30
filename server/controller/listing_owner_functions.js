@@ -153,6 +153,7 @@ module.exports = {
             req.user.id,
             date_now,
             (req.user.stripe_subscription_id) ? posted_domain_names[x].domain_name : posted_domain_names[x].domain_name.toLowerCase(),
+            null,    //registrar_id, changes later if we're using a registrar to auto update DNS
             parseFloat(posted_domain_names[x].min_price) || 0,
             parseFloat(posted_domain_names[x].buy_price) || 0,
             Descriptions.random()    //random default description
@@ -1403,6 +1404,9 @@ function setDNSGoDaddy(registrar_info, new_listings){
     //if domain name is being created on domahub (not all domains in registrar)
     for (var y = 0 ; y < new_listings.db_object.length ; y++){
       if (new_listings.db_object[y][2].toLowerCase() == registrar_info.domains[x].domain_name.toLowerCase()){
+
+        //change registrar_id to registrar_id in DB object
+        new_listings.db_object[y][3] = registrar_info.id;
         var temp_promise = Q.Promise(function(resolve, reject, notify){
           console.log("F: Setting DNS for GoDaddy domain - " + registrar_info.domains[x].domain_name + "...");
           var domain_name = registrar_info.domains[x].domain_name.toLowerCase();
@@ -1424,13 +1428,15 @@ function setDNSGoDaddy(registrar_info, new_listings){
             }
           }, function(err, response, body){
             if (err || response.statusCode != 200){
+              if (err){
+                error.log(err, "Failed to set DNS A record via GoDaddy.");
+              }
               reject({
                 domain_name : domain_name,
                 reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
               });
             }
             else {
-
               //CNAME record change
               request({
                 url: "https://api.godaddy.com/v1/domains/" + domain_name + "/records/CNAME",
@@ -1448,6 +1454,9 @@ function setDNSGoDaddy(registrar_info, new_listings){
                 }
               }, function(err, response, body){
                 if (err || response.statusCode != 200){
+                  if (err){
+                    error.log(err, "Failed to set DNS CNAME record via GoDaddy.");
+                  }
                   reject({
                     domain_name : domain_name,
                     reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
@@ -1464,7 +1473,6 @@ function setDNSGoDaddy(registrar_info, new_listings){
           });
 
         });
-
         temp_promises.push(temp_promise);
         break;
       }

@@ -20,7 +20,7 @@ module.exports = {
     console.log("F: Sending basic email...");
     mailer.sendMail(mailOptions, function(err){
       if (err){
-        error.log(err);
+        error.log(err, "Failed to send basic email.");
       }
       if (cb){
         cb();
@@ -35,7 +35,7 @@ module.exports = {
     //read the file and add appropriate variables
     ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
       if (err){
-        error.log(err);
+        error.log(err, "Failed to render EJS template for HTML email.");
         if (cb){
           cb("error");
         }
@@ -47,7 +47,7 @@ module.exports = {
         //send email
         mailer.sendMail(emailDetails, function(err) {
           if (err){
-            error.log(err);
+            error.log(err, "Failed to send HTML email.");
             if (cb){
               cb("error");
             }
