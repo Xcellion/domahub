@@ -223,9 +223,9 @@ function showRows(){
   $(".table-row:not(.clone-row)").addClass('is-hidden');
 
   var filter_val = $("#filter-select").val();
-  var search_term = $("#domain-search").val();
+  var search_term = $("#domain-search").val().toLowerCase();
   $(".table-row:not(.clone-row)").filter(function(){
-    if ($(this).data(filter_val) && $(this).data('domain_name').indexOf(search_term) != -1){
+    if ($(this).data(filter_val) && $(this).data('domain_name').toLowerCase().indexOf(search_term) != -1){
       return true;
     }
   }).removeClass('is-hidden');
@@ -335,7 +335,7 @@ function updateRowData(row, listing_info){
   row.data("transferred", (listing_info.transferred) ? true : false);
   row.data("rented", listing_info.rented);
   row.data("status", (listing_info.status == 1) ? true : false);
-  row.data("inactive", (listing_info.status == 0 && listing_info.verified) ? true : false);
+  row.data("inactive", ((listing_info.status == 0 || listing_info.status == 3) && listing_info.verified) ? true : false);
 }
 
 //update the clone row with row specifics
@@ -343,7 +343,7 @@ function updateDomainRow(tempRow, listing_info){
   var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
 
-  tempRow.find(".td-domain").html("<a target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
+  tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mmA"));
 
   //status text
@@ -454,6 +454,7 @@ function multiSelectButtons(clicked_row){
   if (selected_rows.length > 0){
     $(".selector-button, #total-selected-text").removeClass("is-hidden");
     $("#total-selected-text").text(" - " + selected_rows.length + " Selected");
+    $("#selector-delete-button").attr("title", "Delete " + ((selected_rows.length == 1) ? "Listing" : "Listings"));
 
     //verified selections (show edit)
     if (editable_selected_rows.length == selected_rows.length){

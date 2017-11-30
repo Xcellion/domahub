@@ -1733,7 +1733,7 @@ function checkDNSAllDone(total_unverified){
     else {
       $("#verify-button").addClass('is-hidden');
       $("#refresh-dns-button").removeClass('is-hidden');
-      $("#verification-left").addClass('is-danger').removeClass('is-primary is-hidden').text("You have " + $(".cloned-dns-table .needs-action-row").length + " DNS settings left to modify.");
+      $("#verification-left").addClass('is-danger').removeClass('is-primary is-hidden').text("You have " + $(".cloned-dns-table .needs-action-row").length + " entries left to modify.");
     }
   }
 }
@@ -1761,8 +1761,8 @@ function multiVerify(verify_button){
     }
     //unverified listings error
     else if (data.unverified_listings){
-      errorMessage("Failed to verify listings! Did you make the necessary DNS changes? If you think something is wrong, <a class='is-underlined' href='/contact'>contact us</a> and let us know!");
-      createDNSRecordRows(data.unverified_listings, true);
+      errorMessage("Failed to verify listings! Were you able to make the necessary changes? Sometimes DNS changes can take up to 72 hours. Please try again at a later time.");
+      createDNSRecordRows(data.unverified_listings, true);    //refresh the domain DNS tables
     }
     else {
       errorMessage(data.message);

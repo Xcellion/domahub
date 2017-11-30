@@ -1,9 +1,3 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
-
-var mailer = require("./mailer.js");
-
-//</editor-fold>
-
 module.exports = {
 
   //<editor-fold>-------------------------------ERROR FUNCTIONS-------------------------------
@@ -95,5 +89,11 @@ function RemoveLastDirectoryPartOf(the_url){
     the_arr.pop();
     return( the_arr.join('/') );
 }
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
+var mailer = require("./mailer.js");
 
 //</editor-fold>

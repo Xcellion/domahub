@@ -24,7 +24,7 @@ function updateRegistrars(){
   $("#lookup-domains-button").addClass('is-disabled');
 
   //if user has any registrars connected
-  if (user.registrars){
+  if (user.registrars && user.registrars.length > 0){
     for (var x = 0 ; x < user.registrars.length ; x++){
       var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + user.registrars[x].name + "]").find(".registrar-button-text");
       registrar_connect_text.text("Update " + registrar_connect_text.data("registrar"));
@@ -34,6 +34,9 @@ function updateRegistrars(){
 
     //enable lookup button
     $("#lookup-domains-button").removeClass('is-disabled');
+  }
+  else {
+    $("#lookup-domains-button").addClass('is-disabled');
   }
 }
 
