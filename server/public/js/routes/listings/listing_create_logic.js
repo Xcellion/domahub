@@ -177,13 +177,13 @@ $(document).ready(function() {
       temp_table_row.attr("data-domain_name", $(this).val());
 
       //check to see if it's legit domain name
-      if ($(this).val().indexOf(".") != -1){
+      if ($(this).val().indexOf(".") != -1 || $(this).val() == ""){
         temp_table_row.removeClass('errored-row');
         $(this).removeClass('is-danger');
         $(this).closest("td").find("small").remove();
         clearNotification();
-        handleSubmitDisabled();
       }
+      handleSubmitDisabled();
     });
 
     //reasons for why it was a bad listing
@@ -227,7 +227,6 @@ $(document).ready(function() {
   //edit the rows to append any good reasons
   function createGoodReasons(reasons, row){
     if (reasons){
-
       //append latest one
       for (var x = 0 ; x < reasons.length ; x++){
         var explanation = $("<small class='is-primary tip is-inline no-margin'>" + reasons[x] + "</small>")
@@ -423,8 +422,11 @@ function lookupRegistrars(){
           successMessage("Successfully found " + total_good_domains + " from your connected registrars!");
           createDomainsTable(data.bad_listings, data.good_listings);
         }
+        else if (data.bad_listings.length == 0){
+          errorMessage("You don't have any domains in your connected registrars! If there is something wrong, please <a class='is-underlined contact-link' href='/contact'>contact us</a> for assistance!");
+        }
         else {
-          errorMessage("You don't have any domains in your connected registrars! If there is something wrong, please <a class='is-underlined' href='/contact'>contact us</a> for assistance!");
+          errorMessage("Something went wrong in looking up your domains! Please refresh the page and try again. If this continues, please create your listings manually.");
         }
       }
       else {

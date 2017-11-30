@@ -102,11 +102,13 @@ $(document).ready(function() {
 
     //<editor-fold>-------------------------------STRIPE SET UP-------------------------------
 
-    if (window.location.hostname == "localhost"){
-      Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
-    }
-    else {
-      Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+    if (typeof Stripe != "undefined"){
+      if (window.location.hostname == "localhost"){
+        Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+      }
+      else {
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+      }
     }
 
     setupUpgradeTab();
@@ -646,16 +648,22 @@ function showSectionByURL(){
   //submit to Stripe for a new token
   function submitForToken(){
     $("#submit-card-button").addClass('is-loading');
-    Stripe.card.createToken($("#credit-card-form"), function(status, response){
-      if (response.error){
-        $("#submit-card-button").removeClass('is-loading');
-        errorMessage(response.error.message);
-      }
-      else {
-        //all good, submit stripetoken and listing id to dh server
-        submitToDomaHub(response.id);
-      }
-    });
+    if (typeof Stripe == "undefined"){
+      $("#submit-card-button").removeClass('is-loading');
+      errorMessage("Something went wrong with your payment details. Please refresh the page and try again.");
+    }
+    else {
+      Stripe.card.createToken($("#credit-card-form"), function(status, response){
+        if (response.error){
+          $("#submit-card-button").removeClass('is-loading');
+          errorMessage(response.error.message);
+        }
+        else {
+          //all good, submit stripetoken and listing id to dh server
+          submitToDomaHub(response.id);
+        }
+      });
+    }
   }
 
   //submit for a new CC card (or change existing)

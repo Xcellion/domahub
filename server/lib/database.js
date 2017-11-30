@@ -11,7 +11,7 @@ var error = require('./error.js');
 var mysql = require('mysql');
 var mysql_options = {
   port: 3306,
-  host: "localhost",
+  host: "127.0.0.1",
   user: 'domadministrator',
   password: 'k#h8$.Kg.TWQ',
   database: 'domahub',

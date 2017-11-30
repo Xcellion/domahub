@@ -331,8 +331,8 @@ module.exports = {
       else {
         req.logIn(user, function(err) {
           if (err) {
-            console.log(err);
-            error.handler(req, res, "Login error!");
+            error.log(err);
+            error.handler(req, res, "Something went wrong while logging in! Please refresh the page and try again!</br></br>If this continues, please <a class='is-underlined' href='/contact'>contact us</a> for assistance.");
           }
           else {
             var now = new Date();

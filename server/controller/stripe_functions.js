@@ -639,7 +639,7 @@ module.exports = {
             });
           }
           else {
-            console.log(err);
+            error.log(err, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
             error.handler(req, res, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
           }
         });
@@ -919,7 +919,7 @@ function applyPromoCodeStripe(stripe_subscription_id, promo_code, account_id, cb
       });
     }
     else {
-      console.log(err);
+      error.log(err, "Something went wrong applying a promo to a Stripe subscription.");
       cb(false);
     }
   });

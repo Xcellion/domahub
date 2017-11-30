@@ -119,30 +119,14 @@ module.exports = {
     var unverified_listings = [];
     var verified_listings = [];
 
-    //custom promise creation, get ip address of domain
-    var q_function = function(listing_obj){
-      return Q.Promise(function(resolve, reject, notify){
-        dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
-          if (err) {reject(err)}
-          else {
-            resolve({
-              domain_name : listing_obj.domain_name,
-              listing_id : listing_obj.listing_id,
-              address : address
-            });
-          }
-        });
-      })
-    }
-
+    //create the array of promises to lookup the IPs for all posted domains
     if (req.body.ids){
       for (var x = 0; x < req.body.ids.length; x++){
         for (var y = 0; y < req.user.listings.length; y++){
           //user object has the same listing id as the listing being verified
           if (req.user.listings[y].id == req.body.ids[x]){
             if (req.user.listings[y].verified != 1){
-              //add to list of promises
-              to_verify_promises.push(q_function({
+              to_verify_promises.push(getDomainIPPromise({
                 domain_name : req.user.listings[y].domain_name,
                 listing_id : req.user.listings[y].id
               }));
@@ -154,44 +138,52 @@ module.exports = {
     }
     if (to_verify_promises.length > 0){
       console.log("F: Checking domain name IP addresses...");
-
       dns.resolve("domahub.com", "A", function (err, address, family) {
-        var doma_ip = address[0];
+        if (err){
+          error.log(err);
+          res.send({
+            state: "error",
+            unverified_listings : req.body.ids
+          });
+        }
+        else {
+          var doma_ip = address[0];
 
-        //wait for all promises to finish
-        Q.allSettled(to_verify_promises)
-         .then(function(results) {
-           for (var x = 0; x < results.length; x++){
-             if (results[x].state == "fulfilled"){
-               if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
-                 to_verify_formatted.push([results[x].value.listing_id, 1, 1]);
-                 verified_listings.push(results[x].value.listing_id);
-               }
-               else {
-                 unverified_listings.push(results[x].value.listing_id);
-               }
-             }
-           }
+          //wait for all promises to finish
+          Q.allSettled(to_verify_promises)
+          .then(function(results) {
+            for (var x = 0; x < results.length; x++){
+              if (results[x].state == "fulfilled"){
+                if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
+                  to_verify_formatted.push([results[x].value.listing_id, 1, 1]);
+                  verified_listings.push(results[x].value.listing_id);
+                }
+                else {
+                  unverified_listings.push(results[x].value.listing_id);
+                }
+              }
+            }
 
-           if (to_verify_formatted.length > 0){
-             req.session.verification_object = {
-               to_verify_formatted : to_verify_formatted,
-               unverified_listings : unverified_listings,
-               verified_listings : verified_listings
-             }
-             next();
-           }
-           else {
-             res.send({
-               state: "error",
-               unverified_listings : unverified_listings
-             });
-           }
-         });
+            if (to_verify_formatted.length > 0){
+              req.session.verification_object = {
+                to_verify_formatted : to_verify_formatted,
+                unverified_listings : unverified_listings,
+                verified_listings : verified_listings
+              }
+              next();
+            }
+            else {
+              res.send({
+                state: "error",
+                unverified_listings : unverified_listings
+              });
+            }
+          });
+        }
       });
     }
     else {
-      res.send({state: "error"});
+      error.handler(req, res, "Something went wrong in verifying your domains. Please refresh the page and try again!", "json");
     }
   },
 
@@ -240,31 +232,6 @@ module.exports = {
     console.log("F: Finding the existing DNS records for the posted domains...");
 
     var dns_record_promises = [];
-
-    //custom promise creation
-    var q_function = function(listing_obj){
-      return Q.Promise(function(resolve, reject, notify){
-        // console.log("Now looking up " + listing_obj.domain_name);
-        whois.lookup(listing_obj.domain_name, function(err, data){
-          var whoisObj = {};
-          if (data){
-            var array = parser.parseWhoIsData(data);
-            for (var x = 0; x < array.length; x++){
-              whoisObj[array[x].attribute.trim()] = array[x].value;
-            }
-          }
-          listing_obj.whois = whoisObj;
-
-          //look up any existing DNS A Records
-          dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
-            listing_obj.a_records = addresses || false;
-            // console.log("Finished looking up " + listing_obj.domain_name);
-            resolve(listing_obj);
-          });
-        });
-      });
-    }
-
     if (req.body.selected_listings){
       for (var x = 0; x < req.body.selected_listings.length; x++){
         for (var y = 0; y < req.user.listings.length; y++){
@@ -273,7 +240,7 @@ module.exports = {
           && req.user.listings[y].id == req.body.selected_listings[x].id){
             if (req.user.listings[y].verified != 1){
               //add to list of promises
-              dns_record_promises.push(q_function({
+              dns_record_promises.push(getDomainDNSPromise({
                 domain_name : req.user.listings[y].domain_name,
                 id : req.user.listings[y].id
               }));
@@ -295,9 +262,16 @@ module.exports = {
 
         //update req.user.listings
         for (var x = 0; x < results.length; x++){
-          var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
-          temp_listing_obj.whois = results[x].value.whois;
-          temp_listing_obj.a_records = results[x].value.a_records;
+          if (results.state == "fulfilled"){
+            var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
+            temp_listing_obj.whois = results[x].value.whois;
+            temp_listing_obj.a_records = results[x].value.a_records;
+          }
+          else {
+            var temp_listing_obj = getListingByID(req.user.listings, results[x].reason.listing_obj.id);
+            temp_listing_obj.whois = false;
+            temp_listing_obj.a_records = false;
+          }
         }
 
         res.send({
@@ -516,34 +490,39 @@ module.exports = {
             request({
               url: "https://api.godaddy.com/v1/domains",
               method: "GET",
+              json: true,
               headers: {
                 "X-Shopper-Id" : req.body.username,
                 Authorization: "sso-key " + req.body.api_key + ":" + req.body.password
               }
             }, function(err, response, body){
-              var body_json = JSON.parse(body);
-              if (body_json["code"] == "INVALID_SHOPPER_ID" || body_json["code"] == "ERROR_INTERNAL"){
-                error.handler(req, res, "That's an invalid customer number! Please input a valid GoDaddy customer number.", "json");
-              }
-              else if (body_json["code"] == "UNABLE_TO_AUTHENTICATE"){
-                error.handler(req, res, "That's an invalid production API key and secret! Please input a valid GoDaddy production API key and secret.", "json");
-              }
-              else if (err || response.statusCode != 200){
-                if (err) { error.log(err, "something went wrong in verifying godaddy api details"); }
+              if (err) {
+                error.log(err, "Something went wrong with verifying GoDaddy registrar info.");
                 error.handler(req, res, "Something went wrong in verifying your GoDaddy account. Please refresh the page and try again.", "json");
               }
               else {
-                //format for database insert
-                req.session.registrar_array = [
-                  [
-                    req.user.id,
-                    req.body.registrar_name,
-                    encryptor.encryptText(req.body.api_key),
-                    encryptor.encryptText(req.body.username),
-                    encryptor.encryptText(req.body.password)
-                  ]
-                ];
-                next();
+                if (body["code"] == "INVALID_SHOPPER_ID" || body["code"] == "ERROR_INTERNAL"){
+                  error.handler(req, res, "That's an invalid customer number! Please input a valid GoDaddy customer number.", "json");
+                }
+                else if (body["code"] == "UNABLE_TO_AUTHENTICATE"){
+                  error.handler(req, res, "That's an invalid production API key and secret! Please input a valid GoDaddy production API key and secret.", "json");
+                }
+                else if (response.statusCode != 200){
+                  error.handler(req, res, "Something went wrong in verifying your GoDaddy account. Please refresh the page and try again.", "json");
+                }
+                else {
+                  //format for database insert
+                  req.session.registrar_array = [
+                    [
+                      req.user.id,
+                      req.body.registrar_name,
+                      encryptor.encryptText(req.body.api_key),
+                      encryptor.encryptText(req.body.username),
+                      encryptor.encryptText(req.body.password)
+                    ]
+                  ];
+                  next();
+                }
               }
             });
           }
@@ -569,6 +548,7 @@ module.exports = {
               }
             }, function(err, response, body){
               if (err){
+                error.log(err, "Something went wrong with verifying NameCheap registrar info.");
                 error.handler(req, res, "Something went wrong in verifying your NameCheap account. Please refresh the page and try again.", "json");
               }
               else {
@@ -648,53 +628,52 @@ module.exports = {
         }
       }
 
-      //get all domains via promises
-      if (registrar_domain_promises.length > 0){
-        //wait for all promises to finish
-        Q.allSettled(registrar_domain_promises)
-         .then(function(results) {
-           console.log("F: Finished querying all registrars for domains!");
-           var total_good_domains = [];
-           for (var y = 0; y < results.length ; y++){
+      //wait for all promises to finish
+      Q.allSettled(registrar_domain_promises)
+        .then(function(results){
+          console.log("F: Finished querying all registrars for domains!");
+          var total_good_domains = [];
+          var total_bad_domains = [];
+          for (var y = 0; y < results.length ; y++){
+            var non_existent_registrar_domains = [];
+            if (results[y].state == "fulfilled"){
+              var registrar_domains = results[y].value.domains;
 
-             var non_existent_registrar_domains = [];
-             if (results[y].state == "fulfilled"){
-               var registrar_domains = results[y].value.domains;
+              //check if we already have it listed
+              for (var t = 0 ; t < registrar_domains.length ; t++){
+                var already_exists = false;
+                for (var s = 0 ; s < req.user.listings.length ; s++){
+                  if (registrar_domains[t].domain_name.toLowerCase() == req.user.listings[s].domain_name.toLowerCase()){
+                    already_exists = true;
+                    break;
+                  }
+                }
+                if (!already_exists){
+                  non_existent_registrar_domains.push(registrar_domains[t]);
+                }
+              }
 
-               //check if we already have it listed
-               for (var t = 0 ; t < registrar_domains.length ; t++){
-                 var already_exists = false;
-                 for (var s = 0 ; s < req.user.listings.length ; s++){
-                   if (registrar_domains[t].domain_name.toLowerCase() == req.user.listings[s].domain_name.toLowerCase()){
-                     already_exists = true;
-                     break;
-                   }
-                 }
-                 if (!already_exists){
-                   non_existent_registrar_domains.push(registrar_domains[t]);
-                 }
-               }
+              //add to the registrar info variable (for listing create)
+              for (var z = 0 ; z < req.session.registrar_info.length ; z++){
+                if (req.session.registrar_info[z].registrar_name == results[y].value.registrar_name){
+                  req.session.registrar_info[z].domains = non_existent_registrar_domains;
+                }
+              }
+              total_good_domains = total_good_domains.concat(non_existent_registrar_domains);
+            }
+            else {
+              total_bad_domains.push({
+                reason : results[y].reason
+              });
+            }
+          }
 
-               //add to the registrar info variable (for listing create)
-               for (var z = 0 ; z < req.session.registrar_info.length ; z++){
-                 if (req.session.registrar_info[z].registrar_name == results[y].value.registrar_name){
-                   req.session.registrar_info[z].domains = non_existent_registrar_domains;
-                 }
-               }
-               total_good_domains = total_good_domains.concat(non_existent_registrar_domains);
-             }
-           }
-
-           res.send({
-             state : "success",
-             bad_listings : [],
-             good_listings : total_good_domains
-           });
-         });
-      }
-      else {
-        error.handler(req, res, "Something went wrong with retrieving your registrar domain names! Please refresh the page and try again.", "json");
-      }
+          res.send({
+            state : "success",
+            bad_listings : total_bad_domains,
+            good_listings : total_good_domains
+          });
+        });
     }
   },
 
@@ -782,7 +761,7 @@ module.exports = {
     console.log("F: Checking coupon code validity...");
 
     if (!req.body.code){
-      error.handler(req, res, "Invalid promo code!", "json");
+      error.handler(req, res, "That's an invalid promo code!", "json");
     }
     else {
 
@@ -805,14 +784,14 @@ module.exports = {
 
               //cant refer yourself
               if (referer_id == req.user.id){
-                error.handler(req, res, "Invalid promo code!", "json");
+                error.handler(req, res, "That's an invalid promo code!", "json");
               }
               else {
                 //check if current user has an existing promo code referral (if not, create a coupon)
                 account_model.checkExistingReferral(req.user.id, referer_id, function(result){
                   req.user.new_referer_id = referer_id;
                   if (result.state == "success" && result.info.length > 0){
-                    error.handler(req, res, "Invalid promo code!", "json");
+                    error.handler(req, res, "That's an invalid promo code!", "json");
                   }
                   else {
                     console.log("F: User doesn't have any existing referrals! Creating coupon...");
@@ -829,7 +808,7 @@ module.exports = {
 
             //no username ID exists by that code
             else {
-              error.handler(req, res, "Invalid promo code!", "json");
+              error.handler(req, res, "That's an invalid promo code!", "json");
             }
           });
 
@@ -837,7 +816,7 @@ module.exports = {
 
         //already premium, no referrals allowed
         else {
-          error.handler(req, res, "Invalid promo code!", "json");
+          error.handler(req, res, "That's an invalid promo code!", "json");
         }
       });
     }
@@ -921,7 +900,69 @@ module.exports = {
 
 }
 
-//<editor-fold>-------------------------------------REGISTRAR HELPERS-------------------------------
+//<editor-fold>-------------------------------------VERIFICATION HELPERS (promises)-------------------------------
+
+//promise function to look up the existing DNS records for a domain name
+function getDomainDNSPromise(listing_obj){
+  return Q.Promise(function(resolve, reject, notify){
+    console.log("F: Now looking up DNS records for " + listing_obj.domain_name + "...");
+    whois.lookup(listing_obj.domain_name, function(err, data){
+      if (err){
+        error.log(err);
+        reject({
+          info : err,
+          listing_obj : listing_obj
+        });
+      }
+      else {
+        var whoisObj = {};
+        var array = parser.parseWhoIsData(data);
+        for (var x = 0; x < array.length; x++){
+          whoisObj[array[x].attribute.trim()] = array[x].value;
+        }
+        listing_obj.whois = whoisObj;
+
+        //look up any existing DNS A Records
+        dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
+          if (err){
+            error.log(err);
+            reject({
+              info : err,
+              listing_obj : listing_obj
+            });
+          }
+          else {
+            listing_obj.a_records = addresses || false;
+            resolve(listing_obj);
+          }
+        });
+      }
+    });
+  });
+}
+
+//custom promise creation, get ip address of domain
+function getDomainIPPromise(listing_obj){
+  return Q.Promise(function(resolve, reject, notify){
+    dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
+      if (err) {
+        error.log(err);
+        reject(err);
+      }
+      else {
+        resolve({
+          domain_name : listing_obj.domain_name,
+          listing_id : listing_obj.listing_id,
+          address : address
+        });
+      }
+    });
+  })
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------------REGISTRAR HELPERS (promises)-------------------------------
 
 //get godaddy list of domains
 function getDomainsGoDaddy(registrar_info){
@@ -931,32 +972,32 @@ function getDomainsGoDaddy(registrar_info){
     request({
       url: "https://api.godaddy.com/v1/domains",
       method: "GET",
+      json : true,
       headers: {
         "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
         Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
       }
     }, function(err, response, body){
-      var body_json = JSON.parse(body);
-      if (body_json["code"] == "INVALID_SHOPPER_ID" || body_json["code"] == "ERROR_INTERNAL"){
+      if (err){
+        error.log(err);
+        reject("Something went wrong in verifying your GoDaddy account.");
+      }
+      else if (body["code"] == "INVALID_SHOPPER_ID" || body["code"] == "ERROR_INTERNAL"){
         reject("Invalid customer number.");
       }
-      else if (body_json["code"] == "UNABLE_TO_AUTHENTICATE"){
+      else if (body["code"] == "UNABLE_TO_AUTHENTICATE"){
         reject("Invalid production API key or secret.");
-      }
-      else if (err){
-        reject(err);
       }
       else if (response.statusCode != 200){
         reject("Something went wrong in verifying your GoDaddy account.");
       }
-
       //domain list exists! check them
       else {
         var good_domains = [];
-        for (var x = 0 ; x < body_json.length ; x++){
-          if (body_json[x].status == "ACTIVE"){
+        for (var x = 0 ; x < body.length ; x++){
+          if (body[x].status == "ACTIVE"){
             good_domains.push({
-              domain_name : body_json[x].domain
+              domain_name : body[x].domain
             });
           }
         }

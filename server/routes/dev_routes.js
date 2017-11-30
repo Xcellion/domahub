@@ -62,6 +62,7 @@ module.exports = function(app){
   app.get("/parsejsons/:date/", parseJSON);
 
   app.get("/monkey", monkey);
+  app.get("/request", requeststuff);
 
   //registrar tests
   app.get("/godaddy", godaddy);
@@ -761,3 +762,21 @@ function dnsCheck(req, res, next){
 }
 
 //</editor-fold>
+
+
+function requeststuff(req, res){
+  request({
+    url: "https://api.godaddy.com/v1/domains",
+    method: "GET",
+    json: true,
+    headers: {
+      "X-Shopper-Id" : "awesome",
+      Authorization: "sso-key "
+    }
+  }, function(err, response, body){
+    console.log(err)
+    if (err){
+      res.send(err);
+    }
+  })
+}

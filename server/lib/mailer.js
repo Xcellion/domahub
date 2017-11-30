@@ -18,7 +18,14 @@ module.exports = {
   //send basic email
   sendBasicMail : function(mailOptions, cb){
     console.log("F: Sending basic email...");
-    mailer.sendMail(mailOptions, cb);
+    mailer.sendMail(mailOptions, function(err){
+      if (err){
+        error.log(err);
+      }
+      if (cb){
+        cb();
+      }
+    });
   },
 
   //helper function to email someone with a EJS template
@@ -28,7 +35,7 @@ module.exports = {
     //read the file and add appropriate variables
     ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
       if (err){
-        console.log(err);
+        error.log(err);
         if (cb){
           cb("error");
         }
@@ -40,7 +47,7 @@ module.exports = {
         //send email
         mailer.sendMail(emailDetails, function(err) {
           if (err){
-            console.log(err);
+            error.log(err);
             if (cb){
               cb("error");
             }
@@ -54,3 +61,9 @@ module.exports = {
   }
 
 };
+
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
+var error = require("./error.js");
+
+//</editor-fold>

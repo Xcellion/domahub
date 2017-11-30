@@ -1,18 +1,34 @@
-//helper function to display/hide error messages per listing
+//<editor-fold>----------------------------------NOTIFICATION FUNCTIONS--------------------------------
+
+var times_errored = 0;
+
+//display/hide error messages per listing
 function errorMessage(message){
   //hide success
   $("#error-notification").addClass('is-hidden').removeClass("is-active");
 
   if (message){
+
+    //display contact us message if keeps erroring
+    if (times_errored >= 2){
+      if (message.indexOf("</a>") == -1){
+        message = message + "</br></br>If you are having any issues, please <a class='contact-link is-underlined' href='/contact'>contact us</a> for assistance."
+      }
+    }
+    else {
+      times_errored++;
+    }
+
     $("#error-notification").removeClass('is-hidden').addClass("is-active");
     $("#error-message").html(message);
+    contactLinkHandler();
   }
   else if (!message) {
     $("#error-notification").addClass('is-hidden').removeClass("is-active");
   }
 }
 
-//helper function to display success messages per listing
+//display success messages per listing
 function successMessage(message){
   //hide any error
   $("#error-notification").addClass('is-hidden').removeClass("is-active");
@@ -32,6 +48,7 @@ function clearNotification(){
   successMessage(false);
 }
 
+//check if we should display a success or error msg (for login)
 function loadNotification() {
   if (message.substring(0,5) == "Promo") {
     successMessage(message);
@@ -43,3 +60,20 @@ function loadNotification() {
     clearNotification();
   }
 }
+
+//</editor-fold>
+
+//<editor-fold>----------------------------------CONTACT US--------------------------------
+
+//any link that says to contact us
+function contactLinkHandler(){
+  $(".contact-link").off().on("click", function(e){
+    if ($("#contact-button").is(":visible")){
+      e.preventDefault();
+      $("#contact-dropdown-menu").toggleClass('is-hidden');
+      $("#contact_message").focus();
+    }
+  });
+}
+
+//</editor-fold>

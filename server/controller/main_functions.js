@@ -70,8 +70,7 @@ module.exports = {
         to: 'general@domahub.com',
         subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
         text: req.body.contact_message
-      }, function(err) {
-        if (err) {console.log(err)}
+      }, function() {
         res.send({
           state: "success"
         });

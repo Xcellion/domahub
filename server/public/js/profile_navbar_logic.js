@@ -7,7 +7,7 @@ $(document).ready(function() {
   //toggle user drop down menu on icon button click
   $(".nav-button").on("click", function() {
     $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
-    $("#" + $(this).data("menu")).toggleClass("is-hidden");
+    $("#" + $(this).data("menu")).toggleClass("is-hidden").find("textarea").focus();
   });
 
   //mobile view nav menu
@@ -18,7 +18,7 @@ $(document).ready(function() {
 
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
-    if (!$(event.target).closest(".user-button").length) {
+    if (!$(event.target).closest(".user-button").length && !$(event.target).closest(".contact-link").length) {
       if ($(".nav-drop").is(":visible")) {
         $(".nav-drop").addClass("is-hidden");
         $(this).toggleClass("is-active").blur();
@@ -55,6 +55,8 @@ $(document).ready(function() {
   //</editor-fold>
 
   //<editor-fold>-------------------------------CONTACT US--------------------------------
+
+  contactLinkHandler();
 
   //contact us form
   $("#contact-form").on("submit", function(e){
