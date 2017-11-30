@@ -48,7 +48,7 @@ $(document).ready(function() {
   leftMenuActive();
 
   //hide upgrade link on left nav if already premium
-  if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+  if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
     $("#nav-premium-link").removeClass('is-hidden');
   }
 
