@@ -402,9 +402,7 @@ module.exports = {
         )\
          VALUES ? \
          ON DUPLICATE KEY UPDATE \
-         deleted = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
-           THEN NULL ELSE deleted END \
-         ,registrar_id = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
+         registrar_id = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
           THEN VALUES(registrar_id) ELSE registrar_id END \
          ,min_price = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
            THEN VALUES(min_price) ELSE min_price END \
@@ -413,7 +411,9 @@ module.exports = {
          ,description = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
            THEN VALUES(description) ELSE description END \
          ,date_created = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
-           THEN VALUES(date_created) ELSE date_created END "
+           THEN VALUES(date_created) ELSE date_created END \
+         ,deleted = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
+           THEN NULL ELSE deleted END "
     database.query(query, "Failed to create " + listing_info_array.length + " new listings! Please refresh the page and try again.", callback, [listing_info_array]);
   },
 
