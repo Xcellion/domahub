@@ -682,15 +682,15 @@ module.exports = {
                  console.log("F: Some domain(s) are not pointing to DomaHub! Reverting...");
                  //update not pointing domains
                  listing_model.updateListingsInfo(not_pointing, {
-                   verified: null,
-                   status: 0
+                   verified : null,
+                   status : 0
                  }, function(result){
                    if (result.state == "error") { error.handler(req, res, result.info, "json"); }
                    else {
                      //for the next function
                      req.session.new_listing_info = {
-                       verified: null,
-                       status: 0
+                       verified : null,
+                       status : 0
                      }
                      updateUserListingsObject(req, res, domain_names);
                      res.send({
@@ -1340,7 +1340,7 @@ function verified_dns_function(various_ids){
   if (various_ids.verified_ids.length > 0){
     console.log("F: Now setting status for successful DNS changes...");
     listing_model.updateListingsInfo(various_ids.verified_ids, {
-      status : 0,
+      status : 1,
       verified : 1
     }, function(result){
       if (result.state == "error"){

@@ -172,7 +172,7 @@ $(document).ready(function() {
     });
 
     //handler to clear reasons and append the reason
-    temp_table_row.find("input").on("input change", function(){
+    temp_table_row.find(".domain-name-input").on("input change", function(){
       //set domain name data
       temp_table_row.attr("data-domain_name", $(this).val());
 
