@@ -40,6 +40,7 @@ var godaddy_secret_prod = "2fiF9zXdNPLQHke1oXueaY";
 var godaddy_customer_num = "5067889";
 
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
+var namecheap_api_key = "9bfc50c4ab934968a94584b40e449d0e";
 var parseString = require('xml2js').parseString;
 
 //</editor-fold>
@@ -62,7 +63,6 @@ module.exports = function(app){
   app.get("/parsejsons/:date/", parseJSON);
 
   app.get("/monkey", monkey);
-  app.get("/request", requeststuff);
 
   //registrar tests
   app.get("/godaddy", godaddy);
@@ -728,9 +728,9 @@ function namecheap(req, res, next){
     url: namecheap_url,
     method: "GET",
     qs : {
-      ApiKey : "wea",
-      ApiUser : "wea",
-      UserName : "wea",
+      ApiKey : namecheap_api_key,
+      ApiUser : "domahub",
+      UserName : "domahub",
       ClientIp : "208.68.37.82",
       Command : "namecheap.domains.getList",
     }
@@ -743,7 +743,7 @@ function namecheap(req, res, next){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------GODADDY-------------------------------
+//<editor-fold>-------------------------------DNS CHECK-------------------------------
 
 function dnsCheck(req, res, next){
   var domain_name = req.params.domain_name;
@@ -762,21 +762,3 @@ function dnsCheck(req, res, next){
 }
 
 //</editor-fold>
-
-
-function requeststuff(req, res){
-  request({
-    url: "https://api.godaddy.com/v1/domains",
-    method: "GET",
-    json: true,
-    headers: {
-      "X-Shopper-Id" : "awesome",
-      Authorization: "sso-key "
-    }
-  }, function(err, response, body){
-    console.log(err)
-    if (err){
-      res.send(err);
-    }
-  })
-}

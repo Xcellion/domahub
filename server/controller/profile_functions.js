@@ -560,7 +560,7 @@ module.exports = {
                     error.handler(req, res, "Something went wrong in verifying your NameCheap account. Please refresh the page and try again.", "json");
                   }
                   else {
-                    if (result.ApiResponse["$"].Status == "ERROR"){
+                    if (result.ApiResponse["$"].Status != "OK"){
                       error.handler(req, res, "That's an invalid API key or username! Please input a valid NameCheap API key or username.", "json");
                     }
                     else {
