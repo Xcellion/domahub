@@ -4,6 +4,9 @@
     $color: nth($pair, 1)
     &.is-#{$name}
       border-color: $color
+      &:hover,
+      &:focus
+        border-color: darken($color, 12%)
 
 input:-webkit-autofill
     -webkit-box-shadow: 0 0 0px 1000px white inset
@@ -48,9 +51,9 @@ input:-webkit-autofill
   border-radius: $radius
   border: 1px solid $border
   display: block
-  line-height: 1.2
+  line-height: 1.5
   max-height: 600px
-  min-height: 100px
+  min-height: 120px
   padding: 10px
   width: 100%
   resize: none
@@ -145,8 +148,6 @@ input:-webkit-autofill
 .label
   color: $text
   display: block
-  +mobile-456px
-    font-size: $size-7 !important
   &:not(:last-child)
     margin-bottom: 5px
   &.is-small

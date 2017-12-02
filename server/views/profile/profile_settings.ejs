@@ -309,7 +309,10 @@
                     <p class="control has-icon has-addons">
                       <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
                       <i class="fa fa-tags"></i>
-                      <button id="promo-submit" class="promo-input button no-shadow is-primary is-stylish is-small" text="Submit" type="submit" form="promo-form">Submit</button>
+                      <button id="promo-submit" class="promo-input button no-shadow is-primary is-stylish is-small" text="Submit" type="submit" form="promo-form">
+												<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+												<span>Submit</span>
+											</button>
                     </p>
                   </form>
                 </div>
@@ -332,7 +335,7 @@
                   </a>
                 </div>
           		</div>
-              <table id="loading-referral-table" class="table no-border-bottom">
+              <table id="loading-referral-table" class="table has-shadow no-border-bottom">
           			<tbody>
                   <tr class="no-hover-effect">
                     <td>
@@ -723,8 +726,8 @@
 
         <!-- TRANSACTIONS TAB -->
         <div id="transactions" class="columns is-hidden drop-tab">
-          <div class="column is-3-widescreen">
-            <div class="card is-fullwidth">
+          <div class="column is-narrow">
+            <div class="card is-fullwidth-mobile">
               <div class="card-header">
                 <h3 class="card-header-title">
                   Earnings Report
@@ -764,7 +767,7 @@
             </div>
             </div>
           </div>
-          <div class="column is-9">
+          <div class="column">
             <div id="transactions-toolbar" class="control">
               <div class="control">
                 <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" title="Refresh Transactions">
@@ -826,7 +829,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="no-transactions-table" class="table is-hidden no-border-bottom">
+            <table id="no-transactions-table" class="table has-shadow is-hidden no-border-bottom">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>

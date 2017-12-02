@@ -23,13 +23,21 @@
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-  			<label class="label" for="username-input">Username (at least 3 characters)</label>
+  			<label class="label" for="username-input">Username
+					<span class="icon is-small is-tooltip" data-balloon="At least 3 characters." data-balloon-pos="up">
+						<i class="fa fa-question-circle"></i>
+					</span>
+				</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium no-shadow" name="username" type="text" id="username-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-  			<label class="label" for="pw-input">Password (at least 6 characters)</label>
+  			<label class="label" for="pw-input">Password
+					<span class="icon is-small is-tooltip" data-balloon="At least 6 characters." data-balloon-pos="up">
+						<i class="fa fa-question-circle"></i>
+					</span>
+				</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>

@@ -3,10 +3,7 @@
     <div class="footer-bar">
       <div class="bar-left">
         <% if (!listing_info.premium) { %>
-          <a id="custom_logo" tabindex="0" class="circle-logo footer-item" href="/" title="Home"></a>
-          <a id="doma_logo" tabindex="0" href="/" title="Go to DomaHub" class="footer-item">
-            <i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.
-          </a>
+          <a id="custom_logo" tabindex="0" class="circle-logo footer-item" href="/" title="Go to DomaHub"></a>
         <% } else { %>
           <% if (listing_info.logo) { %>
             <img id="custom_logo" class="footer-item" />
@@ -16,7 +13,7 @@
       </div>
       <div class="bar-right">
         <% if (!listing_info.premium) { %>
-        <p id="dh-footer-right-text" class="footer-item">
+        <p id="dh-footer-right-text" class="footer-item has-text-centered">
           Sell your domains faster and easier with DomaHub Landing Pages.
         </p>
         <a id="dh-footer-right-smile" class="footer-item" href="https://www.emojione.com" rel="noopener" target="_blank" title="Icons from Emojione">

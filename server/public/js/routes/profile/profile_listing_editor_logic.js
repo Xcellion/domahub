@@ -116,7 +116,7 @@ function updateEditorEditing(selected_domain_ids){
     for (var x = 0 ; x < domain_names_list.length ; x++){
       var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
       var clipped_domain_name = (domain_names_list[x].length > 25) ? domain_names_list[x].substr(0, 15) + "..." + domain_names_list[x].substr(domain_names_list[x].length - 7, domain_names_list[x].length - 1) : domain_names_list[x];
-      $("#view-listings-button-drop").append("<a target='_blank' href='" + listing_href + "' class='is-underlined'>" + clipped_domain_name + "</a>");
+      $("#view-listings-button-drop").append("<a target='_blank' href='" + listing_href + "' class='is-underlined'>" + clipped_domain_name + "</a>" + " ");
     }
   }
   else {

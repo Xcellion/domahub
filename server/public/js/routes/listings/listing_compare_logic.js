@@ -70,19 +70,19 @@ $(document).ready(function() {
       template: "<div class='popover tour'> \
                   <div class='popover-content margin-top-0 content'></div> \
                   <div class='popover-navigation'> \
-                    <button class='button is-small' data-role='prev'> \
+                    <button class='button is-stylish is-small' data-role='prev'> \
                       <span class='icon is-small'> \
                         <i class='fa fa-angle-double-left'></i> \
                       </span> \
                       <span>Prev</span> \
                     </button> \
-                    <button class='button is-small is-primary' data-role='next'> \
+                    <button class='button is-stylish is-small is-primary' data-role='next'> \
                       <span>Next</span> \
                       <span class='icon is-small'> \
                         <i class='fa fa-angle-double-right'></i> \
                       </span> \
                     </button> \
-                    <button class='button is-small' data-role='end'> \
+                    <button class='button is-stylish is-small' data-role='end'> \
                       <span class='icon is-small'> \
                         <i class='fa fa-sign-out'></i> \
                       </span> \
@@ -101,14 +101,14 @@ $(document).ready(function() {
           <h3 class='popover-title'></h3> \
           <div class='popover-content content'></div> \
           <div> \
-          <div class='button-wrapper has-text-centered'> \
-            <button class='button is-small is-primary' data-role='next'> \
+          <div class='is-flex-wrap is-centered'> \
+            <button class='button is-stylish is-small is-primary' data-role='next'> \
               <span class='icon is-small'> \
                 <i class='fa fa-thumbs-up'></i> \
               </span> \
               <span>Yes! Show me how it works.</span> \
             </button> \
-            <button class='button is-small is-danger is-outlined' data-role='end'> \
+            <button class='button is-stylish is-small is-danger is-outlined' data-role='end'> \
               <span class='icon is-small'> \
                 <i class='fa fa-frown-o'></i> \
               </span> \
@@ -117,8 +117,8 @@ $(document).ready(function() {
             </div> \
           </div> \
           </div>",
-          title: "Welcome to the DomaHub demo!",
-          content: "This tutorial will guide you on how your domains can look as a DomaHub listing.",
+          title: "Welcome to the DomaHub demo",
+          content: "This demo will guide you through creating and customizing a DomaHub landing page.",
         },
 
         //show menu button step - 1
@@ -138,13 +138,13 @@ $(document).ready(function() {
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
                         <div> \
-                          <button class='button is-small' data-role='prev'> \
+                          <button class='button is-stylish is-small' data-role='prev'> \
                             <span class='icon is-small'> \
                               <i class='fa fa-angle-double-left'></i> \
                             </span> \
                             <span>Prev</span> \
                           </button> \
-                          <button class='button is-small' data-role='end'> \
+                          <button class='button is-stylish is-small' data-role='end'> \
                             <span class='icon is-small'> \
                               <i class='fa fa-sign-out'></i> \
                             </span> \
@@ -167,19 +167,19 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-left'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
+                        <button class='button is-stylish is-small is-primary' data-role='next'> \
                           <span>Next</span> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-right'></i> \
                           </span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-sign-out'></i> \
                           </span> \
@@ -212,19 +212,19 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
+                        <button class='button is-stylish is-small is-primary' data-role='next'> \
                           <span>Next</span> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-right'></i> \
                           </span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-sign-out'></i> \
                           </span> \
@@ -252,13 +252,13 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-sign-out'></i> \
                           </span> \
@@ -286,19 +286,19 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
+                        <button class='button is-stylish is-small is-primary' data-role='next'> \
                           <span>Next</span> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-right'></i> \
                           </span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-sign-out'></i> \
                           </span> \
@@ -311,7 +311,7 @@ $(document).ready(function() {
 
         //contact offer form - 6
         {
-          element: "#buy-rent-column",
+          element: "#buy-now-module",
           backdropContainer: "#page-contents",
           placement: (window.mobilecheck()) ? "top" : "left",
           onShow: function(){
@@ -323,7 +323,7 @@ $(document).ready(function() {
 
         //click rentable tab - 7
         {
-          element: "#rent-now-button",
+          element: "#calendar-tab",
           backdropContainer: "#page-contents",
           placement: "bottom",
           onShow: function(){
@@ -336,13 +336,13 @@ $(document).ready(function() {
           template: "<div class='popover tour'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-sign-out'></i> \
                           </span> \
@@ -355,7 +355,7 @@ $(document).ready(function() {
 
         //rental tab - 8
         {
-          element: "#buy-rent-column",
+          element: "#calendar-module",
           backdropContainer: "#page-contents",
           placement: (window.mobilecheck()) ? "top" : "left",
           onShow: function(){
@@ -368,33 +368,27 @@ $(document).ready(function() {
           content: 'Customers use this calendar to rent the domain for variable lengths of time and forward the domain to their desired URL. All rentals are cross-checked against the <a href="https://developers.google.com/safe-browsing/" class="is-primary">Google Safe Browsing API.</a>'
         },
 
-        //modules - 9
+        //click traffic tab - 9
         {
-          element: "#modules-wrapper",
+          element: "#traffic-tab",
           backdropContainer: "#page-contents",
-          placement: "top",
+          placement: "bottom",
           onShow: function(){
             $("#compare-menu").append("<div class='tour-backdrop'></div>");
           },
           onHide: function(){
             $("#compare-menu").find(".tour-backdrop").remove();
           },
-          template: "<div class='popover tour arrow-bottom'> \
+          template: "<div class='popover tour'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
-                          <span>Next</span> \
-                          <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-right'></i> \
-                          </span> \
-                        </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
                             <i class='fa fa-sign-out'></i> \
                           </span> \
@@ -402,10 +396,24 @@ $(document).ready(function() {
                         </button> \
                       </div> \
                     </div>",
-          content: 'Additional information is displayed here--including links to other listings, domain traffic, and recent events.'
+          content: "We also provide traffic information about your domain in this tab."
         },
 
-        //final step - 10
+        //traffic module - 10
+        {
+          element: "#traffic-module",
+          backdropContainer: "#page-contents",
+          placement: "left",
+          onShow: function(){
+            $("#compare-menu").append("<div class='tour-backdrop'></div>");
+          },
+          onHide: function(){
+            $("#compare-menu").find(".tour-backdrop").remove();
+          },
+          content: 'This tab shows traffic information about your domain including number of visits, and Alexa rankings.'
+        },
+
+        //final step - 11
         {
           autoScroll: true,
           title: "Thats the end of the DomaHub demo!",
@@ -417,14 +425,14 @@ $(document).ready(function() {
             <h3 class='popover-title'></h3> \
             <div class='popover-content content'></div> \
             <div> \
-              <div class='button-wrapper'> \
-                <a href='/signup' class='button is-small is-primary'> \
+              <div class='is-flex-wrap'> \
+                <a href='/signup' class='button is-stylish is-small is-primary'> \
                   <span class='icon is-small'> \
                     <i class='fa fa-thumbs-up'></i> \
                   </span> \
                   <span>That was awesome! Sign me up.</span> \
                 </a> \
-                <button class='button is-small is-danger is-outlined' data-role='end'> \
+                <button class='button is-stylish is-small is-danger is-outlined' data-role='end'> \
                   <span class='icon is-small'> \
                     <i class='fa fa-sign-out'></i> \
                   </span> \
