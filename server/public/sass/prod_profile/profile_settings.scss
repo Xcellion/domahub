@@ -22,11 +22,6 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
-.tabs a:not(.button) {
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .columns {
   margin-left:-20px;
   margin-right:-20px;
@@ -61,30 +56,6 @@
     }
     .icon {
       margin-left: 2px;
-    }
-  }
-}
-
-.tip {
-  display: block;
-  margin: 5px 0;
-  color: $text-light;
-  line-height: 1.5;
-}
-
-.sub-tabs {
-  position: relative;
-  padding-right: 20px;
-  &:after {
-    content: "";
-    position: absolute;
-    right: 0;
-    height: 50%;
-    top: 25%;
-    width: 2px;
-    background: $border;
-    @include mobile {
-      right: 15px;
     }
   }
 }

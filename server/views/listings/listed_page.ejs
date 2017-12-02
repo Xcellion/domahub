@@ -3,23 +3,23 @@
 <script src="/js/lib/daterangepicker.js" type="text/javascript"></script>
 <script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
 
-<div id="page-contents" class="is-hidden">
-  <div class="container">
-    <div class="columns master right">
-      <div class="column">
+<div id="page-contents" class="min-height is-hidden">
+  <div class="listing-page">
+    <div class="listing-left">
+      <div class="listing-left-content">
         <div class="control-wrapper">
           <%# BUYABLE TAG %>
           <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
-            <span id="price-tag" class="tag is-primary is-hidden is-medium"></span>
+            <span id="price-tag" class="tag is-primary is-stylish has-shadow is-medium is-hidden"></span>
           <% } else if (listing_info.status == 1){ %>
-            <span id="price-tag" class="tag is-primary is-medium">Now available!</span>
+            <span id="price-tag" class="tag is-primary is-stylish has-shadow is-medium">Now available!</span>
           <% } else { %>
-            <span class="tag is-primary is-medium">Currently unavailable</span>
+            <span class="tag is-danger is-stylish has-shadow is-medium">Unavailable</span>
           <% } %>
 
           <%# RENTABLE TAG %>
           <% if (listing_info.status == 1 && listing_info.rentable) { %>
-            <span id="rent-price-tag" class="tag is-primary is-medium">
+            <span id="rent-price-tag" class="tag is-primary is-stylish has-shadow is-medium">
               <% if (listing_info.price_rate > 0){ %>
                 For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
               <% } else { %>
@@ -27,11 +27,11 @@
               <% } %>
             </span>
           <% } %>
-          <span id="free-until" class='is-hidden tag is-primary is-medium'></span>
+          <span id="free-until" class='is-hidden tag is-stylish has-shadow is-medium'></span>
         </div>
         <div id="domain-display" class="content">
           <% if (listing_info.rentable) { %>
-            <h1 id="domain-title" class="is-primary is-inline-block"><%= listing_info.domain_name %></h1>
+            <h1 id="domain-title" class="title is-primary is-bold is-inline-block"><%= listing_info.domain_name %></h1>
             <form id="path-input" class="is-hidden is-inline-block">
               <div class="control">
                 <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off">
@@ -40,82 +40,86 @@
               </div>
             </form>
           <% } else { %>
-            <h1 class="is-primary is-inline-block"><%= listing_info.domain_name %></h1>
+            <h1 class="title is-primary is-inline-block"><%= listing_info.domain_name %></h1>
           <% } %>
+            <h2 class="subtitle is-4 is-blacklight">is available for purchase.</h2>
         </div>
 
-        <%# DESCRIPTION AND CHECK AVAILABILITY MODULE %>
-        <%- include("modules/desc_avail_module.ejs", {
-            listing_info : listing_info
+        <%# INFO MODULE %>
+        <%- include("modules/info_module.ejs", {
+          listing_info : listing_info
         }); %>
-      </div>
 
-      <div id="buy-rent-column" class="column">
-        <%# SOLD MODULE %>
-        <% if (listing_info.deposited) { %>
-          <%- include("modules/sold_module.ejs"); %>
-        <% } else { %>
+        <%# SOCIAL SHARING MODULE %>
+        <%- include("modules/info/social_share_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
-          <% if (listing_info.rentable && listing_info.status == 1){ %>
-            <div id="buy-rent-tabs" class="tabs has-shadow is-medium">
-              <ul>
-                <li id="buy-now-button" class="top-tab is-active">
-                  <a>
-                    <span>Purchase</span>
-                  </a>
-                </li>
-
-                <li id="rent-now-button" class="top-tab">
-                  <a>
-                    <span>Rent</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          <% } %>
-
-          <% if (listing_info.rentable && listing_info.status == 1){ %>
-            <div class='box has-tabs'>
-          <% } else { %>
-            <div class='box'>
-          <% } %>
-
-            <% if (listing_info.status == 1) { %>
-              <%# BUY NOW MODULE %>
-              <%- include("modules/buy_now_module.ejs"); %>
-
-            <% if (listing_info.rentable) { %>
-              <%# CALENDAR MODULE %>
-              <%- include("modules/calendar_module.ejs"); %>
-            <% } %>
-
-            <% } else { %>
-              <%# UNAVAILABLE MODULE %>
-              <%- include("modules/unavailable_module.ejs"); %>
-            <% } %>
-          </div>
-        <% } %>
       </div>
     </div>
+    <div class="listing-right">
+      <div id="buy-rent-tabs" class="tabs is-boxed is-medium is-centered">
+        <ul>
+          <% if (listing_info.rentable && listing_info.status == 1){ %>
+            <li id="buy-now-tab" class="tab is-active">
+              <a tabindex="0">Purchase</a>
+            </li>
+            <li id="calendar-tab" class="tab">
+              <a tabindex="0">Rent</a>
+            </li>
+          <% } %>
 
-    <div id="modules-wrapper">
+          <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium || listing_info.unlisted){ %>
+            <li id="traffic-tab" data-position="1" class='tab'>
+              <a tabindex="0">Traffic</a>
+            </li>
+          <% } %>
 
-      <%# TABS FOR THE BELOW MODULES %>
-      <%- include("modules/tabs_module.ejs", {
-        listing_info : listing_info
-      }); %>
+          <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium || listing_info.unlisted){ %>
+            <li id="ticker-tab" data-position="2" class="tab">
+              <a tabindex="0">History</a>
+            </li>
+          <% } %>
 
-      <%# INFO MODULE %>
-      <%- include("modules/info_module.ejs", {
-        listing_info : listing_info
-      }); %>
+        </ul>
+      </div>
+
+      <%# SOLD MODULE %>
+      <% if (listing_info.deposited) { %>
+        <%- include("modules/sold_module.ejs"); %>
+      <% } else { %>
+
+        <% if (listing_info.status == 1) { %>
+          <%# BUY NOW MODULE %>
+          <%- include("modules/buy_now_module.ejs"); %>
+
+        <% if (listing_info.rentable) { %>
+          <%# CALENDAR MODULE %>
+          <%- include("modules/calendar_module.ejs"); %>
+        <% } %>
+
+        <% } else { %>
+          <%# UNAVAILABLE MODULE %>
+          <%- include("modules/unavailable_module.ejs"); %>
+        <% } %>
+
+      <% } %>
 
       <%# TRAFFIC MODULE %>
+      <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
       <%- include("modules/traffic_module.ejs", {
         listing_info : listing_info
       }); %>
+      <% } %>
 
-      <%# EXAMPLES MODULE %>
+      <%# OTHER DOMAINS MODULE %>
+      <% if ((listing_info.premium && listing_info.domain_list) || !listing_info.premium){ %>
+      <%- include("modules/domain_list_module.ejs", {
+        listing_info : listing_info
+      }); %>
+      <% } %>
+
+      <%# HISTORY MODULE %>
       <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
         <%- include("modules/ticker_module.ejs", {
           listing_info : listing_info
@@ -123,5 +127,6 @@
       <% } %>
 
     </div>
+
   </div>
 </div>

@@ -19,8 +19,6 @@
         line-height: 48px
     +mobile-456px
       font-size: $size-7
-    & + li
-      margin-top: 10px
 
   blockquote,
   p,
@@ -39,12 +37,22 @@
     margin: 5px 15px
   ul
     list-style: none
+    &.is-spaced
+      display: flex
+      flex-wrap: wrap
+      +touch
+        justify-content: center
+      li
+        &:not(:last-child)
+          margin-right: 10px
+        & + li
+          margin-top: 0
     &.has-disc
       list-style-type: disc
       padding-left: 20px
       li
         line-height: 1.5
-        margin: 10px 0
+        margin: 5px 0
     ul
       list-style-type: circle
       margin-top: 0.5em

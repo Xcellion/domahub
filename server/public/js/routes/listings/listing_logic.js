@@ -14,15 +14,15 @@ $(document).ready(function() {
   //<editor-fold>-----------------------------------------------------------------------------------TABS
 
   //switch tabs
-  $(".tab").not(".top-tab").on("click", function(){
+  $(".tab").on("click", function(){
     var which_tab = $(this).attr("id").replace("-tab", "");
 
     //show the tab
-    $(".tab").not(".top-tab").removeClass('is-active');
+    $(".tab").removeClass('is-active');
     $(this).addClass('is-active');
 
     //show the module
-    $(".module").not(".top-module").addClass('is-hidden');
+    $(".module").addClass('is-hidden');
     $("#" + which_tab + "-module").removeClass('is-hidden');
   });
 
@@ -48,10 +48,23 @@ $(document).ready(function() {
     }
     else {
       $("#traffic-tab").on("click", function(){
+        //hide the slash input
+        $("#path-input").addClass("is-hidden");
+        //if tutorial, go to the traffic module step
+        if (compare && tutorial_tour && !tutorial_tour.ended()){
+          tutorial_tour.goTo(10);
+        }
+
         getTrafficData();
       });
     }
   }
+
+  $("#ticker-tab").on("click", function() {
+    //hide the slash input
+    $("#path-input").addClass("is-hidden");
+
+  });
 
   //</editor-fold>
 

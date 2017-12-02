@@ -1,45 +1,40 @@
 <% if (!listing_info.premium || (listing_info.premium && listing_info.social_sharing)) { %>
-  <div id="social-sharing-module" class="content">
-    <p>
-      <span>Share This Page</span>
-    </p>
-    <div>
+  <div id="social-sharing-module" class="is-flex-wrap">
       <% if (listing_info.premium) { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share on Facebook!" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
       <% } else { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share on Facebook!" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
       <% } %>
-        <span class="icon">
+        <span class="icon is-small">
           <i class="fa fa-facebook"></i>
         </span>
       </a>
       <% if (listing_info.premium) { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://<%= listing_info.domain_name %>">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share on Twitter!" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://<%= listing_info.domain_name %>">
       <% } else { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://domahub.com/listing/<%= listing_info.domain_name %>">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share on Twitter!" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://domahub.com/listing/<%= listing_info.domain_name %>">
       <% } %>
-        <span class="icon">
+        <span class="icon is-small">
           <i class="fa fa-twitter"></i>
         </span>
       </a>
       <% if (listing_info.premium) { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share on LinkedIn!" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
       <% } else { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share on LinkedIn!" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
       <% } %>
-        <span class="icon">
+        <span class="icon is-small">
           <i class="fa fa-linkedin"></i>
         </span>
       </a>
       <% if (listing_info.premium) { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="mailto:?body=https://<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share via email!" target="_blank" href="mailto:?body=https://<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
       <% } else { %>
-        <a class="button no-shadow is-transparent is-black" target="_blank" href="mailto:?body=https://domahub.com/listing/<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
+        <a class="button is-icon is-circle is-primary is-small"" title="Share via email!" target="_blank" href="mailto:?body=https://domahub.com/listing/<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
       <% } %>
-        <span class="icon">
+        <span class="icon is-small">
           <i class="fa fa-envelope"></i>
         </span>
       </a>
-    </div>
   </div>
 <% } %>

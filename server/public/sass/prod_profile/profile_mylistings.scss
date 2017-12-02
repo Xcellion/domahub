@@ -23,11 +23,6 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
-.tabs a:not(.button) {
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .columns {
   margin-left:-20px;
   margin-right:-20px;
@@ -344,13 +339,6 @@
   }
 }
 
-.tip {
-  color: $text-light;
-  display: block;
-  line-height: 1.5;
-  margin: 5px 0;
-}
-
 // listing image
 .on-img {
   top: 0;
@@ -374,7 +362,10 @@
   border-radius: 0 $radius-small $radius-small $radius-small;
   display: flex;
   flex-direction: column;
+  position: absolute;
+  left: 0;
   top: 32px;
+  width: 185px;
   a {
     padding: 6px 10px;
     &:hover {

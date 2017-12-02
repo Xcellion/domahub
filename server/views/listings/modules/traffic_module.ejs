@@ -2,11 +2,10 @@
 
   <script src="/js/lib/chart.min.js" type="text/javascript"></script>
   <script src="/js/lib/randomColor.js" type="text/javascript"></script>
-  <div id="traffic-module" class="box has-tabs is-hidden module">
-    <div class="columns">
+  <div id="traffic-module" class="box is-medium is-centered is-hidden module">
 
       <% if (!listing_info.premium || (listing_info.premium && listing_info.traffic_graph)) { %>
-        <div class="column is-8-desktop is-12-tablet-only is-relative">
+        <div class="content is-relative">
           <canvas id="traffic-chart"></canvas>
           <div id="traffic-overlay" class="content">
             <p id="traffic-overlay-text" class='traffic-overlay-text is-hidden is-bold'>
@@ -20,31 +19,23 @@
         </div>
       <% } %>
 
+      <%# ALEXA MODULE %>
+      <%- include("traffic/alexa_module.ejs", {
+        listing_info : listing_info
+      }); %>
+
       <% if (!listing_info.premium || (listing_info.premium && listing_info.traffic_graph)) { %>
-        <div class="column is-4-desktop is-12-tablet-only">
-      <% } else { %>
-        <div class="column">
+        <div class="content">
+          <p>
+            <% if (listing_info.unlisted) { %>
+              These are people who have searched for this domain name on DomaHub. You can capture this traffic in addition to any natural traffic your domain is currently receiving the moment you sign up with DomaHub!
+            <% } else { %>
+              These are people who are typing the address directly into their browser. You can capture this traffic instantly the moment you start utilizing this domain!
+            <% } %>
+          </p>
+        </div>
       <% } %>
 
-        <%# ALEXA MODULE %>
-        <%- include("traffic/alexa_module.ejs", {
-          listing_info : listing_info
-        }); %>
-
-        <% if (!listing_info.premium || (listing_info.premium && listing_info.traffic_graph)) { %>
-          <div class="content">
-            <p>
-              <% if (listing_info.unlisted) { %>
-                These are people who have searched for this domain name on DomaHub. You can capture this traffic in addition to any natural traffic your domain is currently receiving the moment you sign up with DomaHub!
-              <% } else { %>
-                These are people who are typing the address directly into their browser. You can capture this traffic instantly the moment you start utilizing this domain!
-              <% } %>
-            </p>
-          </div>
-        <% } %>
-
-      </div>
-    </div>
   </div>
 
 <% } %>

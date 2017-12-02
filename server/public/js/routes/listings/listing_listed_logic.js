@@ -28,7 +28,7 @@ $(document).ready(function() {
         var buy_text = "Buy now - " + moneyFormat.to(listing_info.buy_price);
         $("#price-tag").text(buy_text).removeClass('is-hidden');
 
-        $("#buy-button").on('click', function(){
+        $("#buy-now-button").on('click', function(){
           //dont need the min offer input if you're just buying now
           $("#contact_offer").removeAttr("required");
         }).find("#buy-button-text").text(buy_text);
@@ -49,7 +49,7 @@ $(document).ready(function() {
     }
 
     //click buy now button or unavailable description
-    $("#buy-now-button").on("click", function(e){
+    $("#buy-now-tab").on("click", function(e){
       //doing the tutorial!
       if (compare && tutorial_tour && !tutorial_tour.ended()){
         tutorial_tour.goTo(6);
@@ -118,7 +118,7 @@ $(document).ready(function() {
     if (listing_info.rentable){
 
       //click rent now or unavailable description
-      $("#rent-now-button").on("click", function(e) {
+      $("#calendar-tab").on("click", function(e) {
         //doing the tutorial!
         if (compare && tutorial_tour && !tutorial_tour.ended()){
           tutorial_tour.goTo(8);
@@ -261,10 +261,6 @@ function showBuyStuff(buy_now_button){
   if (listing_info.status == 1){
     $("#unavailable-module").addClass('is-hidden');
 
-    //fade out buy button
-    buy_now_button.addClass('is-disabled is-active');
-    $("#rent-now-button").removeClass('is-disabled is-active');
-
     //show buy related stuff
     $(".post-buy-module").removeClass('is-hidden');
     $(".post-rent-module").addClass('is-hidden');
@@ -286,10 +282,6 @@ function showBuyStuff(buy_now_button){
 
 //function to show rental module
 function showRentalStuff(rent_now_button){
-
-  //fade out rent button
-  rent_now_button.addClass('is-disabled is-active');
-  $("#buy-now-button").removeClass('is-disabled is-active');
 
   //show rental related stuff
   $(".post-rent-module").removeClass('is-hidden');

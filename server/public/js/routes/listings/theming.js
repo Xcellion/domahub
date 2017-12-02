@@ -70,12 +70,15 @@ function setupCustomColors(){
   stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color", true);
   stylize(listing_info.primary_color, "#page-contents .is-primary.button", "background-color", true);
   stylize(listing_info.primary_color, ".tag:not(.category-tag)", "background-color", true);
+  stylize(listing_info.font_color, ".subtitle", "color");
   stylize(listing_info.font_color, ".regular-font", "color");
-  stylize(listing_info.tertiary_color, ".is-info", "color");
+  stylize(listing_info.font_color, "#page-contents .tabs li a", "color");
   stylize(listing_info.secondary_color, ".category-tag", "background-color", true);
   stylize(listing_info.secondary_color, ".is-accent:not(.tag)", "color");
   stylize(listing_info.secondary_color, ".is-accent.button", "background-color", true);
   stylize(listing_info.secondary_color, "#typed-slash", "color");
+  stylize(listing_info.secondary_color, "small.heading", "color");
+  stylize(listing_info.tertiary_color, ".is-info", "color");
   stylize(listing_info.background_color, "#page-contents:not(.no-background)", "background-color");
   stylize(listing_info.font_name, "#domain-title", "font-family");
   stylize(listing_info.font_name, "#typed-slash", "font-family");
