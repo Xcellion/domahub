@@ -120,7 +120,7 @@ module.exports = function(app){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------UPDATE REGISTRAR-------------------------------
+  //<editor-fold>-------------------------------REGISTRAR-------------------------------
 
   //post to update registrar
   app.post("/profile/registrar", [
@@ -128,6 +128,13 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.checkRegistrarInfo,
     profile_functions.updateAccountRegistrar
+  ]);
+
+  //lookup registrars and pull domain names
+  app.post("/profile/registrar/lookup", [
+    auth_functions.checkLoggedIn,
+    profile_functions.getRegistrarAPI,
+    profile_functions.getRegistrarDomains
   ]);
 
   //</editor-fold>

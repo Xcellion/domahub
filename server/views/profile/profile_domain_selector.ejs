@@ -93,7 +93,7 @@
         </div>
         <div class="control has-icon">
           <i class="fa fa-search"></i>
-          <input id="domain-search" tabindex="0" class="input is-expanded is-transparent no-border" type="text" placeholder="Search" />
+          <input id="domain-search" tabindex="0" class="input is-expanded is-transparent no-border" type="text" placeholder="Search Listings" />
         </div>
       </div>
     </div>
@@ -117,11 +117,11 @@
           <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
         <th data-value="min_price" class="is-hidden-456px listing-header-sort">
-          <span>Min. Offer</span>
+          <span>Minimum Price</span>
           <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
         <th data-value="buy_price" class="is-hidden-456px listing-header-sort">
-          <span>BIN</span>
+          <span>Buy it now Price</span>
           <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
         </th>
       </tr>
@@ -131,7 +131,8 @@
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
             <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
-            <p>Now loading your DomaHub listings...</p>
+            <p>Now loading your DomaHub listings.</p>
+            <p>This may take some time.</p>
           </div>
         </td>
       </tr>
@@ -167,7 +168,13 @@
           </form>
         </td>
         <td class="td-domain domain_name-sort-value"></td>
-        <td class="td-status status-sort-value"></td>
+        <td class="status-sort-value">
+          <span class="td-status"></span>
+          <span class="is-hidden pending-status-icon icon is-tooltip is-small" data-balloon-length="large"
+          data-balloon="There are some pending DNS changes to this domain, please wait a few hours before marking it as an active listing." data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </td>
         <td class="td-date is-hidden-mobile"></td>
         <td class="td-min is-hidden-456px"></td>
         <td class="td-bin is-hidden-456px"></td>
@@ -181,7 +188,7 @@
         </td>
         <td class="td-domain domain_name-sort-value"></td>
         <td>
-          <span class="td-status status-sort-value"></span>
+          <span class="td-status status-sort-value is-danger"></span>
           <span class="icon is-danger is-inline is-small" data-balloon-length="large"
           data-balloon="You must prove that you own this domain. Please verify ownership by selecting it and clicking the 'Verify Ownership' button above."
           data-balloon-pos="up">
@@ -210,13 +217,13 @@
       </div>
       <div class="control is-grouped is-grouped-center">
         <p class="control">
-          <a id="delete-confirmed" tabindex="0" class='button is-danger is-outlined '>
+          <a id="delete-confirmed" tabindex="0" class='button is-stylish is-small is-danger is-outlined '>
             <span class="icon is-small"><i class="fa fa-trash"></i></span>
             <span>Delete</span>
           </a>
         </p>
         <p class="control">
-          <a tabindex="0" class='button cancel-modal'>
+          <a tabindex="0" class='button is-stylish is-small cancel-modal'>
             <span class="icon is-small"><i class="fa fa-times"></i></span>
             <span>Nevermind</span>
           </a>

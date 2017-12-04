@@ -2,12 +2,17 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------SHOW TAB-------------------------------
 
+  //function that runs when back button is pressed
+  window.onpopstate = function(event) {
+    showSectionByURL();
+  }
+
   //show section depending on url
   showSectionByURL();
 
   //show red notification indication next to tab
   if (!user.stripe_account){
-    $("#payment-tab .required-info").removeClass('is-hidden');
+    $("#payment-tab .stripe-required-info").removeClass('is-hidden');
     $("#stripe-personal-form").children(".card").removeClass('is-danger');
   }
 
@@ -89,17 +94,6 @@ $(document).ready(function() {
 
     updateRegistrars();
 
-    //button to show registrar modal
-    $(".add-registrar-button").on("click", function(){
-      setupRegistrarModal($(this).data("registrar_name"));
-    });
-
-    //submit registrar form
-    $("#registrar-form").on("submit", function(e){
-      e.preventDefault();
-      submitRegistrar();
-    });
-
     //</editor-fold>
 
   //</editor-fold>
@@ -108,11 +102,13 @@ $(document).ready(function() {
 
     //<editor-fold>-------------------------------STRIPE SET UP-------------------------------
 
-    if (window.location.hostname == "localhost"){
-      Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
-    }
-    else {
-      Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+    if (typeof Stripe != "undefined"){
+      if (window.location.hostname == "localhost"){
+        Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+      }
+      else {
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+      }
     }
 
     setupUpgradeTab();
@@ -398,11 +394,6 @@ $(document).ready(function() {
 
 //<editor-fold>-------------------------------SHOW TAB-------------------------------
 
-//function that runs when back button is pressed
-window.onpopstate = function(event) {
-  showSectionByURL();
-}
-
 //show a specific section
 function showSection(section_id){
   clearNotification();
@@ -423,7 +414,7 @@ function showSection(section_id){
     }
 
     //if not premium, highlight upgrade left nav
-    if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+    if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
       $(".left-tab").removeClass('is-active');
       $("#nav-premium-link").addClass('is-active');
     }
@@ -443,6 +434,7 @@ function showSection(section_id){
 
 //show a specific section when loading the page;
 function showSectionByURL(){
+  $('.nav-drop').addClass('is-hidden');   //for hiding the notification bubble when already on this page
   var temp_hash = location.hash.split("#")[1];
   var array_of_ids = $(".drop-tab").map(function(index) {
     return $(this).attr("id");
@@ -512,82 +504,6 @@ function showSectionByURL(){
 
     //prefill stripe account info
     prefillStripeInfo();
-  }
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------SUBMIT REGISTRAR-------------------------------
-
-  //update registrar card depending on if we have existing registrars
-  function updateRegistrars(){
-    if (user.registrars){
-      for (var x in user.registrars){
-        var registrar_connect_text = $(".add-registrar-button[data-registrar_name=" + x + "]").find(".registrar-button-text");
-        registrar_connect_text.text("Update " + registrar_connect_text.data("registrar"));
-        var registrar_connect_tip = $(".registrar-tip[data-registrar_name=" + x + "]");
-        registrar_connect_tip.text("Click the button to update your " + registrar_connect_tip.data("registrar") + " account.");
-      }
-    }
-    else {
-      $(".registrar-button-text").each(function(){
-        $(this).text("Connect " + $(this).data("registrar"));
-      });
-      $(".registrar-tip").each(function(){
-        $(this).text("Click the button to update your " + $(this).data("registrar") + " account.");
-      });
-    }
-  }
-
-  //show the registrar modal and set it up for different registrars
-  function setupRegistrarModal(registrar_name){
-    clearNotification();
-    $("#registrar-name-input").val(registrar_name);
-
-    //set up the registrar modal depending on the registrar name
-    switch(registrar_name){
-      case "godaddy":
-        $("#registrar-guide-link").attr("href", "https://medium.com/@domahub/how-to-connect-your-godaddy-account-to-domahub-ab8e6741347");
-        $("#api-key-link").removeClass('is-hidden').attr('href', "https://developer.godaddy.com/keys/");
-        $("#registrar-api-key-label").text("Production API Key").closest(".registrar-wrapper").removeClass("is-hidden");
-        $("#registrar-username-label").text("Customer Number").closest(".registrar-wrapper").removeClass("is-hidden");
-        $("#registrar-password-label").text("Production Key Secret").closest(".registrar-wrapper").removeClass("is-hidden").find("input").attr("required", true);
-        break;
-      case "namecheap":
-        $("#registrar-guide-link").attr("href", "");
-        $("#api-key-link").removeClass('is-hidden').attr('href', "https://ap.www.namecheap.com/Profile/Tools/ApiAccess");
-        $("#registrar-api-key-label").text("API Key").closest(".registrar-wrapper").removeClass("is-hidden");
-        $("#registrar-username-label").text("Username").closest(".registrar-wrapper").removeClass("is-hidden");
-        $("#registrar-password-label").closest(".registrar-wrapper").addClass("is-hidden").find("input").attr("required", false);
-        break;
-    }
-
-    //show registrar modal
-    if (registrar_name){
-      $("#registrar-modal").addClass('is-active');
-      $("#registrar-form").find("input").first().focus()
-    }
-  }
-
-  //submit registrar AJAX
-  function submitRegistrar(){
-    $("#registrar-submit").addClass('is-loading');
-    clearNotification();
-    $.ajax({
-      url: "/profile/registrar",
-      method: "POST",
-      data: $("#registrar-form").serialize()
-    }).done(function(data){
-      hideSaveCancelButtons();
-      if (data.state == "success"){
-        closeModals();
-        successMessage("Successfully updated registrar information!");
-        user = data.user;
-        updateRegistrars();
-      }
-      else {
-        errorMessage(data.message);
-      }
-    });
   }
 
   //</editor-fold>
@@ -732,16 +648,22 @@ function showSectionByURL(){
   //submit to Stripe for a new token
   function submitForToken(){
     $("#submit-card-button").addClass('is-loading');
-    Stripe.card.createToken($("#credit-card-form"), function(status, response){
-      if (response.error){
-        $("#submit-card-button").removeClass('is-loading');
-        errorMessage(response.error.message);
-      }
-      else {
-        //all good, submit stripetoken and listing id to dh server
-        submitToDomaHub(response.id);
-      }
-    });
+    if (typeof Stripe == "undefined"){
+      $("#submit-card-button").removeClass('is-loading');
+      errorMessage("Something went wrong with your payment details. Please refresh the page and try again.");
+    }
+    else {
+      Stripe.card.createToken($("#credit-card-form"), function(status, response){
+        if (response.error){
+          $("#submit-card-button").removeClass('is-loading');
+          errorMessage(response.error.message);
+        }
+        else {
+          //all good, submit stripetoken and listing id to dh server
+          submitToDomaHub(response.id);
+        }
+      });
+    }
   }
 
   //submit for a new CC card (or change existing)
@@ -945,13 +867,13 @@ function showSectionByURL(){
         $("#" + x + "-input").val(user.stripe_account[x]);
       }
       $("#change-bank-button").removeClass('is-hidden');
-      $("#payment-tab .required-info").addClass('is-hidden');
+      $(".stripe-required-info").addClass('is-hidden');
       $("#stripe-personal-form").children(".card").removeClass('is-danger');
       $("#bank-tooltip").removeClass('is-hidden');
       $(".existing-bank").text("Click the button to add a default bank account!");
     }
     else {
-      $("#payment-tab .required-info").removeClass('is-hidden');
+      $(".stripe-required-info").removeClass('is-hidden');
       $("#stripe-personal-form").children(".card").addClass('is-danger');
       $("#bank-tooltip").addClass('is-hidden');
       $(".stripe-account-input").val("");
@@ -1361,12 +1283,6 @@ function hideSaveCancelButtons(){
   $("#settings-toolbar .tab").last().removeClass("sub-tabs");
   $(".toolbar-submit-button").removeClass('is-loading');
   $(".toolbar-button").addClass('is-hidden');
-}
-
-//close modals
-function closeModals(){
-  $(".modal-input").val("");
-  $(".modal").removeClass('is-active');
 }
 
 //to format a number for $$$$

@@ -47,7 +47,7 @@
                 <a tabindex="0">
                   <span class="icon is-relative is-hidden-tablet"><i class="fa fa-university"></i></span>
                   <span class="is-relative is-hidden-mobile">Payment
-										<span class="required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
+										<span class="stripe-required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
 	                    <i class="fa fa-exclamation-circle"></i>
 	                  </span>
 									</span>
@@ -178,7 +178,7 @@
                   </div>
                 </div>%>
                 <div class="tip">
-                  Need help or you don't see your registrar listed? <a target="_blank" class="is-primary" href="/contact">Let us know!</a>
+                  Need help or you don't see your registrar listed? <a target="_blank" class="is-primary is-underlined contact-link" href="/contact">Let us know!</a>
                 </div>
               </div>
             </div>
@@ -237,7 +237,7 @@
           				<small class="tip existing-cc">Click the button to add a default credit card!</small>
           			</div>
           			<div class="control-right">
-          				<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-inverted is-stylish is-small">
+          				<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-stylish is-small">
           					<span class="icon is-small">
           						<i class="fa fa-credit-card"></i>
           					</span>
@@ -408,7 +408,7 @@
                 <div class="card-header is-block">
                   <h3 class="card-header-title">
 										<span>Personal Information</span>
-										<span class="required-info warning-msg is-danger">Incomplete</span>
+										<span class="stripe-required-info warning-msg is-danger">Incomplete</span>
 									</h3>
                   <small class="tip">
                     This information is legally required for payments processing.
@@ -582,7 +582,7 @@
                 <div class="card-header is-block">
                   <h3 class="card-header-title">
 										<span>Address Information</span>
-										<span class="required-info warning-msg is-danger">Incomplete</span>
+										<span class="stripe-required-info warning-msg is-danger">Incomplete</span>
 									</h3>
                   <small class="tip">
 										This information is legally required for payments processing.
@@ -692,7 +692,7 @@
                 </span>
               </div>
               <div class="card-content">
-                <form id="paypal-form" class="form">
+                <form id="paypal-form">
                   <div class="control">
                     <label class="label" for="paypal_email-input">PayPal Email Address</label>
                     <input required id="paypal_email-input" data-uservar="paypal_email" class="account-input input" type="email" name="paypal_email-input" />
@@ -709,7 +709,7 @@
                 </h3>
               </div>
               <div class="card-content">
-                <form id="payoneer-form" class="form">
+                <form id="payoneer-form">
                   <div class="control">
                     <label class="label" for="payoneer_email-input">Payoneer Email Address</label>
                     <input required id="payoneer_email-input" class="account-input input" type="email" name="payoneer_email-input" />
@@ -723,7 +723,7 @@
 
         <!-- TRANSACTIONS TAB -->
         <div id="transactions" class="columns is-hidden drop-tab">
-          <div class="column is-3-widescreen">
+          <div class="column is-4-widescreen">
             <div class="card is-fullwidth">
               <div class="card-header">
                 <h3 class="card-header-title">
@@ -764,14 +764,8 @@
             </div>
             </div>
           </div>
-          <div class="column is-9">
+          <div class="column is-8">
             <div id="transactions-toolbar" class="control">
-              <div class="control">
-                <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" title="Refresh Transactions">
-                  <span class="icon is-small"><i class="fa fa-refresh"></i></span>
-                  <span>Refresh Transactions</span>
-                </a>
-              </div>
               <div class="control is-grouped">
                 <div class="control">
                   <span class="select no-borders is-transparent is-narrow">
@@ -784,6 +778,12 @@
                       <option value="actionable">Requires Action</option>
                     </select>
                   </span>
+                </div>
+                <div class="control">
+                  <a id="refresh-transactions-button" class="button is-transparent is-black no-shadow is-stylish is-small" title="Refresh Transactions">
+                    <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+                    <span>Refresh</span>
+                  </a>
                 </div>
                 <div class="control has-icon">
                   <i class="fa fa-search"></i>
@@ -908,52 +908,8 @@
     <button class="modal-close"></button>
   </div>
 
-  <!-- ADD REGISTRAR MODAL -->
-  <div id="registrar-modal" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-container">
-      <div class="modal-content is-small">
-        <div class="content">
-					<p>
-						Read our <a id="registrar-guide-link" href="" target="_blank" class="is-primary is-underlined">step-by-step guide</a> on how to get the below information.
-					</p>
-        </div>
-        <form id="registrar-form" autocomplete="off" class="control">
-          <input id="registrar-name-input" type="hidden" name="registrar_name" />
-          <div class="control registrar-wrapper">
-            <label class="label" for="api_key-input">
-              <span id="registrar-api-key-label">API Key</span>
-              <a id="api-key-link" target="_blank" class="is-underlined is-primary is-pulled-right">Get your key</a>
-            </label>
-            <input required id="registrar-api-key-input" name="api_key" class="input modal-input" name="api-key-input" type="text">
-          </div>
-          <div class="control registrar-wrapper">
-            <label id="registrar-password-label" class="label" for="password-input">Password</label>
-            <input required id="registrar-password-input" name="password" class="input modal-input" name="password-input" type="text">
-          </div>
-          <div class="control registrar-wrapper">
-            <label id="registrar-username-label" class="label" for="username-input">Username</label>
-            <input required id="registrar-username-input" name="username" class="input modal-input" name="username-input" type="text">
-          </div>
-        </form>
-        <div class="control is-grouped is-grouped-center">
-          <p class="control">
-            <button form="registrar-form" type="submit" id="registrar-submit" tabindex="0" class='toolbar-submit-button button is-primary is-stylish is-small'>
-              <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-              <span>Save Registrar</span>
-            </button>
-          </p>
-          <p class="control">
-            <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
-              <span class="icon is-small"><i class="fa fa-ban"></i></span>
-              <span>Cancel</span>
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
-    <button class="modal-close"></button>
-  </div>
+  <!-- REGISTRAR MODAL -->
+  <%- include("../templates/registrar_modal.ejs"); %>
 
   <!-- CREDIT CARD MODAL -->
   <div id="credit-card-modal" class="modal">
@@ -1211,13 +1167,13 @@
         </div>
         <div id="rental-buttons-wrapper" class="is-hidden control is-grouped is-grouped-center">
           <p class="control">
-            <a target="_blank" id="view-rental-button" type="submit" class="button">
+            <a target="_blank" id="view-rental-button" type="submit" class="button is-stylish is-small">
               <span class="icon is-small"><i class="fa fa-search"></i></span>
               <span>Preview rental</span>
             </a>
           </p>
           <p class="control">
-            <a id="refund-rental-submit" type="submit" class="button is-danger is-inverted">
+            <a id="refund-rental-submit" type="submit" class="button is-stylish is-small is-danger is-inverted">
               <span class="icon is-small"><i class="fa fa-repeat"></i></span>
               <span>Refund rental</span>
             </a>

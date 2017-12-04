@@ -2,8 +2,10 @@
 @import '../bulma/utilities/utilities.sass';
 @import '../bulma/base/base.sass';
 @import '../bulma/components/grid.sass';
+@import '../bulma/components/modal.sass';
 @import '../bulma/components/nav.sass';
 @import '../bulma/components/menu.sass';
+@import '../bulma/components/card.sass';
 @import '../bulma/elements/delete.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/table.sass';
@@ -14,6 +16,11 @@
 @import '../bulma/elements/icon.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
+
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
+}
 
 .button-wrapper {
   display: flex;
@@ -46,18 +53,34 @@
   }
 }
 
-.td-min-price {
-  width: 25%;
+.td-price {
+  width: 15%;
   @include mobile-456px {
     width: 35%;
   }
 }
 
-// MISC
 .tip {
-  margin-top: 5px;
-  margin-left: 5px;
-  float: right;
+  display: block;
+  margin: 5px 0;
+  color: $text-light;
+  line-height: 1.5;
+  &.no-margin{
+    margin:0;
+  }
+  &.is-inline{
+    display:inline;
+    margin-right:5px;
+  }
+}
+
+.modal-content {
+  background-color: $white;
+  border-radius: $radius-large;
+  padding: 20px;
+  &.is-small {
+    max-width: 300px !important;
+  }
 }
 
 .aligned {
