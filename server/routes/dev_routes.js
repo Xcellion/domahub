@@ -10,6 +10,7 @@ var data_model = require('../models/data_model.js');
 
 var validator = require('validator');
 var request = require('request');
+var dns = require('dns');
 
 var awis = require('awis');
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
@@ -28,10 +29,19 @@ var glob = require("glob");
 var json2csv = require('json2csv');
 var whois = require("whois");
 
-//godaddy production
-var godaddy_api_prod = "9uBcCfxCjPd_FiwFzPXoaj9ubPzzPpsQVW";
-var godaddy_secret_prod = "FiwHuAgZ13PpiVDvDVpEB2";
-var godaddy_customer_num = "55666970";
+//godaddy production (1min)
+// var godaddy_api_prod = "9uBcCfxCjPd_FiwFzPXoaj9ubPzzPpsQVW";
+// var godaddy_secret_prod = "FiwHuAgZ13PpiVDvDVpEB2";
+// var godaddy_customer_num = "55666970";
+
+//godaddy production (robert)
+var godaddy_api_prod = "31uUbY5CvU_2fiCvta5X7kJdqTJtA52CU";
+var godaddy_secret_prod = "2fiF9zXdNPLQHke1oXueaY";
+var godaddy_customer_num = "5067889";
+
+var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
+var namecheap_api_key = "9bfc50c4ab934968a94584b40e449d0e";
+var parseString = require('xml2js').parseString;
 
 //</editor-fold>
 
@@ -39,24 +49,26 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------ROUTES-------------------------------
 
+  //test views
   app.get("/emailviews/:email_template", emailViews);
+  app.get("/viewstest/:path/:view_name", showView);
+
+  //create coupon codes
   app.get("/createcodes/:number", [
     createCouponCodes
   ]);
-  app.get("/viewstest/:path/:view_name", showView);
 
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
   app.get("/parsejsons/:date/", parseJSON);
 
-  //analysis
-  app.get("/analysis/searchhistory", analysisSearchHistory);
-  app.get("/analysis/:domain_name", analysisDomainTraffic);
-
   app.get("/monkey", monkey);
 
-  //godaddy
+  //registrar tests
   app.get("/godaddy", godaddy);
+  app.get("/namecheap", namecheap);
+
+  app.get("/dns/:domain_name", dnsCheck);
 
   //</editor-fold>
 
@@ -97,7 +109,7 @@ function alexa(req, res, next){
 
 //<editor-fold>-------------------------------COUPON-------------------------------------
 
-//function to create X sign up codes
+//create X sign up codes
 function createCouponCodes(req, res, next){
   console.log("F: Creating " + req.params.number + " coupon codes...");
 
@@ -266,66 +278,9 @@ function emailViews(req, res, next){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------ANALYSIS---------------------------------
-
-//function to analyze traffic funnel
-function analysisDomainTraffic(req, res, next){
-  var domain_name = req.params.domain_name;
-
-  var traffic = {
-    domain_name : domain_name
-  };
-
-  data_model.getRentalTraffic(domain_name, function(result){
-    traffic.rental_views = result.info;
-
-    data_model.getListingRentalTraffic(domain_name, function(result){
-      traffic.listing_rental_views = result.info;
-
-      data_model.getAvailCheckHistory(domain_name, function(result){
-        traffic.avail_check_history = {
-          length: result.info.length,
-          data: result.info
-        }
-
-        data_model.getCheckoutHistory(domain_name, function(result){
-          traffic.checkout_history = {
-            length: result.info.length,
-            data: result.info
-          }
-
-          data_model.getCheckoutActions(domain_name, function(result){
-            traffic.checkout_actions = {
-              length: result.info.length,
-              data: result.info
-            }
-            res.render("dev/domainAnalysis.ejs", {
-              traffic: traffic
-            });
-          });
-        });
-      });
-    });
-  });
-}
-
-//function to analyze traffic
-function analysisSearchHistory(req, res, next){
-  data_model.getDemoDomains(function(demo_domains){
-    data_model.getReferers(function(referers){
-      res.render("dev/searchHistory.ejs", {
-        demo_domains: demo_domains.info,
-        referers: referers.info
-      });
-    })
-  });
-}
-
-//</editor-fold>
-
 //<editor-fold>-----------------------------COLD EMAIL---------------------------------
 
-  //function to parse all xlsx files in a folder
+  //parse all xlsx files in a folder
   function parseFolder(req, res, next){
     var verbose = (req.params.verbose == "true") ? true : false;
     var date = req.params.date;
@@ -372,7 +327,7 @@ function analysisSearchHistory(req, res, next){
     res.sendStatus(200);
   }
 
-  //function to parse all JSONs in a folder and combine them
+  //parse all JSONs in a folder and combine them
   function parseJSON(req, res, next){
     console.log("Reading folder for JSON files...");
 
@@ -520,7 +475,7 @@ function analysisSearchHistory(req, res, next){
     "webmaster",
   ]
 
-  //function to build cold contacts from excel sheet
+  //build cold contacts from excel sheet
   function parseCSV(date, file, verbose, cb){
     console.log("\x1b[0m", "Initializing workbook parsing...");
     var workbook = XLSX.readFile(file);
@@ -738,28 +693,71 @@ function analysisSearchHistory(req, res, next){
     return deferred.promise;
   }
 
-  //function to make proper nouns titlecase
+  //make proper nouns titlecase
   function toTitleCase(str){
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }
 
   //</editor-fold>
 
-//<editor-fold>-------------------------------GODADDY-------------------------------
+//<editor-fold>-------------------------------REGISTRARS-------------------------------
 
 function godaddy(req, res, next){
   request({
-    url: "https://api.godaddy.com/v1/domains",
-    method: "GET",
+    url: "https://api.godaddy.com/v1/domains/cALEntopia.com/records/A",
+    method: "PUT",
+    json : true,
+    body : [
+      {
+        name : "@",
+        data : "208.68.37.82"
+      }
+    ],
     headers: {
-      "X-Shopper-Id" : 123123,
-      // "X-Shopper-Id" : godaddy_customer_num,
+      "X-Shopper-Id" : godaddy_customer_num,
       Authorization : "sso-key " + godaddy_api_prod + ":" + godaddy_secret_prod
-      // Authorization: "sso-key " + godaddy_api_test + ":" + godaddy_secret_test
     }
   }, function(err, response, body){
-    console.log(err, response.statusCode);
-    res.json(JSON.parse(body));
+    console.log(response.statusCode);
+    res.json(body);
+  });
+}
+
+function namecheap(req, res, next){
+  request({
+    url: namecheap_url,
+    method: "GET",
+    qs : {
+      ApiKey : namecheap_api_key,
+      ApiUser : "domahub",
+      UserName : "domahub",
+      ClientIp : "208.68.37.82",
+      Command : "namecheap.domains.getList",
+    }
+  }, function(err, response, body){
+    parseString(body, {trim: true}, function (err, result) {
+      res.json(result.ApiResponse);
+    });
+  });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------DNS CHECK-------------------------------
+
+function dnsCheck(req, res, next){
+  var domain_name = req.params.domain_name;
+  dns.resolve(domain_name, "A", function (err, address, family) {
+    var domain_ip = address;
+    dns.resolve("domahub.com", "A", function (err, address, family) {
+      var doma_ip = address;
+      if (err || !domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
+        res.send("<h1>oh no</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
+      }
+      else {
+        res.send("<h1>oh yeah</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
+      }
+    });
   });
 }
 

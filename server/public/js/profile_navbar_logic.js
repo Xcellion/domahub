@@ -7,7 +7,7 @@ $(document).ready(function() {
   //toggle user drop down menu on icon button click
   $(".nav-button").on("click", function() {
     $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
-    $("#" + $(this).data("menu")).toggleClass("is-hidden");
+    $("#" + $(this).data("menu")).toggleClass("is-hidden").find("textarea").focus();
   });
 
   //mobile view nav menu
@@ -18,7 +18,7 @@ $(document).ready(function() {
 
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
-    if (!$(event.target).closest(".user-button").length) {
+    if (!$(event.target).closest(".user-button").length && !$(event.target).closest(".contact-link").length) {
       if ($(".nav-drop").is(":visible")) {
         $(".nav-drop").addClass("is-hidden");
         $(this).toggleClass("is-active").blur();
@@ -32,13 +32,13 @@ $(document).ready(function() {
 
   $(document).on("keyup", function(e) {
     if (e.which == 27) {
-      $('.modal').removeClass('is-active');
+      closeModals();
     }
   });
 
   //close modal
   $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
-    $('.modal').removeClass('is-active');
+    closeModals();
   });
 
   //</editor-fold>
@@ -48,13 +48,15 @@ $(document).ready(function() {
   leftMenuActive();
 
   //hide upgrade link on left nav if already premium
-  if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+  if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
     $("#nav-premium-link").removeClass('is-hidden');
   }
 
   //</editor-fold>
 
   //<editor-fold>-------------------------------CONTACT US--------------------------------
+
+  contactLinkHandler();
 
   //contact us form
   $("#contact-form").on("submit", function(e){
@@ -81,6 +83,17 @@ $(document).ready(function() {
 
 });
 
+//<editor-fold>----------------------------------MODAL HELPERS-------------------------
+
+//close modals
+function closeModals(){
+  clearNotification();
+  $(".modal").find("input, textarea, select").val("");
+  $(".modal").removeClass('is-active');
+}
+
+//</editor-fold>
+
 //<editor-fold>----------------------------------URL HELPER FUNCTIONS-------------------------
 
 //add active to left menu
@@ -98,7 +111,7 @@ function leftMenuActive(){
   }
 }
 
-//function to get a URL query param by name
+//get a URL query param by name
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");

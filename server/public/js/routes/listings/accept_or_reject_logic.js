@@ -9,7 +9,7 @@ $(document).ready(function() {
   });
 });
 
-//function to submit ajax for accept or reject
+//submit ajax for accept or reject
 function acceptOrRejectOffer(accept, button_elem){
   button_elem.addClass('is-loading');
   $(".button").off();
@@ -33,7 +33,7 @@ function acceptOrRejectOffer(accept, button_elem){
   });
 }
 
-//function to run when accept or reject was successful
+//run when accept or reject was successful
 function successHandler(accept){
   $("#success-message").removeClass('is-hidden').addClass('is-active');
   var accept_text = (accept) ? "accepted" :  "rejected";
@@ -57,7 +57,7 @@ function redirectDelay(path){
   }, 1000);
 }
 
-//function to run when accept or reject was NOT successful
+//run when accept or reject was NOT successful
 function errorHandler(){
   $("#error-message").removeClass('is-hidden').addClass('is-active');
 }

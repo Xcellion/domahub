@@ -11,7 +11,7 @@
           <span class="icon is-small">
             <i class="fa fa-long-arrow-left"></i>
           </span>
-          <span>Go Back To Listings</span>
+          <span>Back To My Listings</span>
         </a>
       </div>
       <div class="control is-spaced">
@@ -81,14 +81,14 @@
                 <label class="label" for="min-price-input">
                   Minimum Price
                 </label>
-                <small class="tip">The minimum offer price you will consider. Leave blank or 0 to disable option.</small>
+                <small class="tip">The minimum offer you will consider selling this domain for. Leave blank or set to 0 for no minimum price.</small>
                 <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
               </div>
               <div class="control">
                 <label class="label" for="buy-price-input">
                   Buy It Now Price
                 </label>
-                <small class="tip">The price you are willing to immediately sell the domain for. Leave blank or 0 to disable option.</small>
+                <small class="tip">The price you are willing to sell this domain for immediately. Leave blank or set to 0 to disable.</small>
                 <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
               </div>
             </div>
@@ -131,7 +131,7 @@
                 </label>
                 <small class="tip">Say anything you want about your domain. This will appear as a paragraph below the domain name.</small>
                 <textarea id="description" class="description-input textarea changeable-input"
-                tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
+                tabindex="0" data-name="description" placeholder="A good description helps your potential customers understand the value of your domain name."></textarea>
               </div>
             </div>
           </div>
@@ -147,7 +147,7 @@
             <div class="card-content">
               <div class="control">
                 <div class="content">
-                  <small class="tip">Don't see a category that fits your domain? <a class="is-primary is-underlined" href="/contact">Let us know!</a></small>
+                  <small class="tip">Don't see a category that fits your domain? <a class="is-primary is-underlined contact-link" href="/contact">Let us know!</a></small>
                 </div>
                 <div id="categories" class="category-control">
                   <input id="categories-input" data-name="categories" onchange="" tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
@@ -221,7 +221,7 @@
       <div id="premium-blackscreen" class="blackscreen">
         <div id="premium-only-notification" class="content has-text-centered">
           <p>
-            Please upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to customize the look and feel of your landing page!
+            Please upgrade to a <a href="/features#pricing" class="is-primary is-underlined">Premium Account</a> to customize the look and feel of your landing page!
           </p>
           <div class="control has-text-centered">
             <a href="/profile/settings#premium" class="button is-primary is-stylish">
@@ -233,7 +233,7 @@
           </div>
         </div>
       </div>
-      <div id="example-wrapper" class="box no-shadow preview-elem control has-border-bottom">
+      <div id="example-wrapper" class="box preview-elem control has-border-bottom">
         <figure class="image has-shadow is-pulled-right">
           <img id="example-logo" src="" />
         </figure>
@@ -282,7 +282,7 @@
                     <i class="fa fa-picture-o"></i>
                   </div>
                   <div class="control">
-                    <a id="random-theme-button" class="premium-input button">
+                    <a id="random-theme-button" class="premium-input button is-stylish is-small">
                       <span class="icon is-small">
                         <i class="fa fa-random"></i>
                       </span>
@@ -460,7 +460,7 @@
                   <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
                 </div>
                 <div class="control">
-                  <button id="background-link-refresh" class='button is-disabled is-outlined'>
+                  <button id="background-link-refresh" class='button is-small is-stylish is-disabled is-outlined'>
                     <span class="icon is-small">
                       <i class="fa fa-refresh"></i>
                     </span>
@@ -469,7 +469,7 @@
                   <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
                     <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
                   </form>
-                  <label for="background-image-input" class="premium-input button has-cursor">
+                  <label for="background-image-input" class="premium-input button is-small is-stylish has-cursor">
                     <span class="icon is-small">
                       <i class="fa fa-upload" aria-hidden="true"></i>
                     </span>
@@ -488,7 +488,7 @@
                   <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
                 </div>
                 <div class="control">
-                  <button id="logo-link-refresh" class='is-disabled is-outlined button'>
+                  <button id="logo-link-refresh" class='is-disabled is-outlined button is-small is-stylish'>
                     <span class="icon is-small">
                       <i class="fa fa-refresh"></i>
                     </span>
@@ -497,7 +497,7 @@
                   <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
                     <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
                   </form>
-                  <label for="logo-image-input" class="premium-input button has-cursor">
+                  <label for="logo-image-input" class="premium-input button is-small is-stylish has-cursor">
                     <span class="icon is-small">
                       <i class="fa fa-upload" aria-hidden="true"></i>
                     </span>
@@ -549,7 +549,7 @@
                       <i class="fa fa-question-circle"></i>
                     </span>
                   </label>
-                  <small class="tip">Displays <a class="is-primary" id="alexa_link">Alexa</a> traffic statistics.</small>
+                  <small class="tip">Displays <a class="is-primary is-underlined" id="alexa_link">Alexa</a> traffic statistics.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -584,7 +584,7 @@
         <span class="icon is-small">
           <i class="fa fa-long-arrow-left"></i>
         </span>
-        <span>Go Back To Listings</span>
+        <span>Back To My Listings</span>
       </a>
     </div>
     <div class="control">
@@ -595,17 +595,19 @@
         </h2>
       </div>
       <div id="offers-toolbar" class="hidden-while-loading-offers">
-        <div class="offer-button control button-wrapper is-mobile">
-          <a id="refresh-offers-button" class="is-hidden button is-black is-stylish is-small is-inverted" title="Refresh Offers">
-            <span class="icon is-small"><i class="fa fa-refresh"></i></span>
-            <span>Refresh Offers</span>
-          </a>
-          <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-black is-stylish is-small is-inverted">
-            <span class="icon"><i class="fa fa-toggle-off"></i></span>
-            <span>Show Rejected</span>
-          </a>
-        </div>
         <div class="offer-button control is-grouped">
+          <div class="control">
+            <a id="refresh-offers-button" class="is-hidden button is-black is-transparent no-shadow" title="Refresh Offers">
+              <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+              <span>Refresh</span>
+            </a>
+          </div>
+          <div class="control">
+            <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-black is-transparent no-shadow">
+              <span class="icon"><i class="fa fa-toggle-off"></i></span>
+              <span>Show Rejected</span>
+            </a>
+          </div>
           <div class="control has-icon">
             <i class="fa fa-search"></i>
             <input id="offer-search" tabindex="0" class="input is-expanded is-transparent no-border" type="text" placeholder="Search Offers" />
@@ -707,20 +709,20 @@
           </div>
           <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
             <p class="control">
-              <a id="accept_button" tabindex="0" class='button is-primary '>
+              <a id="accept_button" tabindex="0" class='button is-stylish is-small is-primary '>
                 <span class="icon is-small"><i class="fa fa-check"></i></span>
                 <span>Accept offer</span>
               </a>
             </p>
             <p class="control">
-              <a id="reject_button" tabindex="0" class='button is-outlined is-danger'>
+              <a id="reject_button" tabindex="0" class='button is-stylish is-small is-outlined is-danger'>
                 <span class="icon is-small"><i class="fa fa-times"></i></span>
                 <span>Reject offer</span>
               </a>
             </p>
           </div>
           <div class="content">
-            <a id="offer-modal-whats-next" tabindex="0" class='is-primary is-underlined'>
+            <a id="offer-modal-whats-next" tabindex="0" class='is-underlined is-primary'>
               <span>What do I need to do next?</span>
             </a>
           </div>
@@ -791,7 +793,7 @@
         </tr>
       </tbody>
     </table>
-    <table id="offers-table" class="is-hidden hidden-while-loading-offers table is-fixed is-bordered">
+    <table id="offers-table" class="is-hidden has-shadow hidden-while-loading-offers table is-fixed is-bordered">
       <thead class="has-hover-effect">
         <tr>
           <th class="offer-header-sort" data-value="domain_name">
@@ -820,7 +822,7 @@
         <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
           <td>
             <span class="td-offer-domain"></span>
-            <span class="icon is-inline is-small" data-balloon-length="medium" data-balloon="You can click on this offer to view more details or respond to it." data-balloon-pos="right">
+            <span class="icon is-inline is-small" data-balloon-length="medium" data-balloon="You can click on this offer to respond or view more details." data-balloon-pos="right">
               <i class="fa fa-question-circle"></i>
             </span>
           </td>
@@ -843,7 +845,7 @@
     </div>
     <div id="no-stats" class="content is-hidden">
       <p>
-        There is no activity on this domain yet. Need some tips? Check out our <a href="/faq" class="is-primary">FAQ</a>.
+        There is no activity on this domain yet. Need some tips? Check out our <a href="/faq" class="is-primary is-underlined">FAQ</a>.
       </p>
     </div>
     <div class='stats-loading control'>
@@ -882,7 +884,7 @@
         <span class="icon is-small">
           <i class="fa fa-long-arrow-left"></i>
         </span>
-        <span>Go Back To Listings</span>
+        <span>Back To My Listings</span>
       </a>
     </div>
     <div class="content">
@@ -893,25 +895,25 @@
     </div>
     <div class="box no-shadow content">
       <p>The table below details the DNS entries that are needed to verify <span class="verification-domains-plural"></span>.</p>
-      <p id="required-assistance">If you require any assistance, please refer to our <a tabindex="0" target="_blank" class="is-underlined is-primary" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
+      <p id="required-assistance">If you require any assistance, please refer to our <a tabindex="0" target="_blank" class="is-primary is-underlined" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on how to verify ownership of your domains.</p>
       <p id="verification-left" class="is-bold"></p>
     </div>
-    <div id="verify-toolbar" class="is-hidden control">
+    <div id="verify-toolbar" class="is-hidden content">
       <div class="control is-grouped">
         <div class="control button-wrapper is-mobile">
-          <a id="refresh-dns-button" class="button is-black is-inverted" title="Refresh DNS Table">
+          <a id="refresh-dns-button" class="button is-black is-transparent no-shadow" title="Refresh DNS Table">
             <span class="icon is-small"><i class="fa fa-refresh"></i></span>
             <span>Refresh DNS Table<span class="verification-plural"></span></span>
           </a>
-          <a id="verify-button" class="is-primary button is-hidden" title="Verify domain(s)">
+          <a id="verify-button" class="is-primary is-small is-stylish button is-hidden" title="Verify domain(s)">
             <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
             <span>Verify Now</span>
           </a>
-          <a id="prev-dns-table-button" data-value="-1" class="button is-black is-inverted" title="Previous DNS Table">
+          <a id="prev-dns-table-button" data-value="-1" class="button is-black is-transparent no-shadow" title="Previous Domain Name">
             <span class="icon is-small"><i class="fa fa-angle-left"></i></span>
             <span class="is-hidden-mobile">Previous</span>
           </a>
-          <a id="next-dns-table-button" data-value="1" class="button is-black is-inverted" title="Next DNS Table">
+          <a id="next-dns-table-button" data-value="1" class="button is-black is-transparent no-shadow" title="Next Domain Name">
             <span class="is-hidden-mobile">Next</span>
             <span class="icon is-small"><i class="fa fa-angle-right"></i></span>
           </a>
@@ -932,7 +934,7 @@
           </tr>
         </tbody>
       </table>
-      <table id="current-dns-table-clone" class="is-hidden table no-border-bottom">
+      <table id="current-dns-table-clone" class="is-hidden table has-shadow no-border-bottom">
         <thead>
           <tr>
             <th class="table-header is-hidden-mobile" colspan=5></th>

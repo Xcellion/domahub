@@ -8,6 +8,7 @@ var Categories = require("../lib/categories.js");
 var Fonts = require("../lib/fonts.js");
 var Descriptions = require("../lib/descriptions.js");
 var error = require('../lib/error.js');
+var encryptor = require('../lib/encryptor.js');
 
 //</editor-fold>
 
@@ -48,22 +49,47 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------CHECKS------------------------------
+  //<editor-fold>-------------------------------GETS------------------------------
 
-    //<editor-fold>-------------------------------CREATE LISTING------------------------------
+  //gets all statistics for a specific domain
+  getListingStats : function(req, res, next){
+    console.log("F: Finding the all verified statistics for " + req.params.domain_name + "...");
+    var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
+    data_model.getListingStats(req.params.domain_name, function(result){
+
+      //set server side stats
+      if (result.state == "success"){
+        listing_obj.stats = result.info;
+      }
+      else {
+        listing_obj.stats = false;
+      }
+
+      res.send({
+        state: "success",
+        listings: req.user.listings
+      });
+    });
+  },
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------CREATE------------------------------
+
+    //<editor-fold>-------------------------------CHECKS (CREATE)------------------------------
 
     //check all posted domain names
     checkPostedDomainNames : function(req, res, next){
       console.log("F: Checking all posted domain names...");
-      var domain_names = req.body.domain_names;
+      var posted_domain_names = req.body.domain_names;
 
-      if (domain_names.length + req.user.listings.length > 100 && !req.user.stripe_subscription_id){
+      if (posted_domain_names.length + req.user.listings.length > 100 && !req.user.stripe_subscription_id){
         error.handler(req, res, "max-domains-reached", "json");
       }
-      else if (!domain_names || domain_names.length <= 0){
+      else if (!posted_domain_names || posted_domain_names.length <= 0){
         error.handler(req, res, "You can't create listings without any domain names!", "json");
       }
-      else if (domain_names.length > 500){
+      else if (posted_domain_names.length > 500){
         error.handler(req, res, "You can only create up to 500 domains at a time!", "json");
       }
       else {
@@ -71,37 +97,20 @@ module.exports = {
         var bad_listings = [];
         var good_listings = [];
         var domains_sofar = [];
-        for (var x = 0; x < domain_names.length; x++){
-          if (!validator.isFQDN(domain_names[x])){
+        for (var x = 0; x < posted_domain_names.length; x++){
+          var bad_reasons = checkPostedDomainName(req.user, domains_sofar, posted_domain_names[x], false, false);
+
+          //some were messed up
+          if (bad_reasons.length > 0){
             bad_listings.push({
-              domain_name: domain_names[x],
-              reasons: [
-                "Invalid domain name!"
-              ]
-            });
-          }
-          //subdomains are not allowed
-          else if (parseDomain(domain_names[x]).subdomain != ""){
-            bad_listings.push({
-              domain_name: domain_names[x],
-              reasons: [
-                "No sub-domains!"
-              ]
-            });
-          }
-          else if (domains_sofar.indexOf(domain_names[x]) != -1){
-            bad_listings.push({
-              domain_name: domain_names[x],
-              reasons: [
-                "Duplicate domain name!"
-              ]
+              domain_name: posted_domain_names[x],
+              reasons: bad_reasons
             });
           }
           else {
-            domains_sofar.push(domain_names[x]);
+            domains_sofar.push(posted_domain_names[x]);
             good_listings.push({
-              index: x,
-              domain_name: domain_names[x]
+              domain_name: posted_domain_names[x]
             });
           }
         }
@@ -118,65 +127,37 @@ module.exports = {
     checkPostedListingInfoForCreate : function(req, res, next){
       console.log("F: Checking all posted listing info...");
 
-      var posted_domains = req.body.domains;
-
+      var posted_domain_names = req.body.domains;
       var bad_listings = [];
       var domains_sofar = [];
       var date_now = new Date().getTime();
       var db_object = [];
 
-      for (var x = 0; x < posted_domains.length; x++){
-        var bad_reasons = [];
+      //loop through and check all posted domain names
+      for (var x = 0; x < posted_domain_names.length; x++){
+        var bad_reasons = checkPostedDomainName(req.user, domains_sofar, posted_domain_names[x].domain_name, posted_domain_names[x].min_price, posted_domain_names[x].buy_price);
 
-        var parsed_domain = parseDomain(posted_domains[x].domain_name);
-
-        //check domain
-        if (parsed_domain == null || !validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
-          bad_reasons.push("Invalid domain name!");
-        }
-        //subdomains are not allowed
-        if (parsed_domain != null){
-          if (parsed_domain.subdomain != ""){
-            bad_reasons.push("No sub-domains!");
-          }
-        }
-        //check for duplicates among valid FQDN domains
-        if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
-          bad_reasons.push("Duplicate domain name!");
-        }
-        //check price rate
-        if (!validator.isInt(posted_domains[x].min_price, {min: 0})){
-          bad_reasons.push("Invalid price!");
-        }
-        //domain is too long
-        if (posted_domains[x].domain_name.length > 100){
-          bad_reasons.push("Domain name is too long!");
-        }
-        //too many domains (domains so far has 1 less right here, so needs to be >= maximum)
-        if (!req.user.stripe_subscription_id && domains_sofar.length + req.user.listings.length >= 100){
-          bad_reasons.push("Upgrade to a Premium account to create more listings!");
-        }
-
-        //some were messed up
+        //this one is messed up for some reason(s)
         if (bad_reasons.length > 0){
           bad_listings.push({
-            index: x,
-            reasons: bad_reasons
+            reasons: bad_reasons,
+            domain_name : posted_domain_names[x].domain_name
           });
         }
         //all good! format the db array
         else {
-          domains_sofar.push(posted_domains[x].domain_name);
+          domains_sofar.push(posted_domain_names[x].domain_name);
 
           //format the object for DB insert
           db_object.push([
             req.user.id,
             date_now,
-            (req.user.stripe_subscription_id) ? posted_domains[x].domain_name : posted_domains[x].domain_name.toLowerCase(),
-            parseFloat(posted_domains[x].min_price),
+            (req.user.stripe_subscription_id) ? posted_domain_names[x].domain_name : posted_domain_names[x].domain_name.toLowerCase(),
+            null,    //registrar_id, changes later if we're using a registrar to auto update DNS
+            parseFloat(posted_domain_names[x].min_price) || 0,
+            parseFloat(posted_domain_names[x].buy_price) || 0,
             Descriptions.random()    //random default description
           ]);
-
         }
       }
 
@@ -190,7 +171,8 @@ module.exports = {
         req.session.new_listings = {
           db_object : db_object,
           good_listings : [],
-          bad_listings : bad_listings
+          bad_listings : [],
+          check_dns_promises : []
         }
         next();
       }
@@ -198,7 +180,141 @@ module.exports = {
 
     //</editor-fold>
 
-    //<editor-fold>-------------------------------UPDATE LISTING------------------------------
+    //<editor-fold>-------------------------------EXECUTE (CREATE)------------------------------
+
+    //if creating via registrar tool, set the DNS to point to domahub
+    setDNSViaRegistrar : function(req, res, next){
+      if (req.session.registrar_info){
+        console.log("F: Using registrar APIs to automatically verify listings!");
+        var registrar_domain_promises = [];
+
+        //add to the registrar info variable (for listing create)
+        for (var x = 0 ; x < req.session.registrar_info.length ; x++){
+          switch (req.session.registrar_info[x].registrar_name){
+            case "godaddy":
+              registrar_domain_promises = registrar_domain_promises.concat(setDNSGoDaddy(req.session.registrar_info[x], req.session.new_listings));
+              break;
+            case "namecheap":
+              registrar_domain_promises.push(setDNSNameCheap(req.session.registrar_info[x]));
+              break;
+          }
+        }
+
+        //wait for all promises to finish
+        Q.allSettled(registrar_domain_promises)
+         .then(function(results) {
+           console.log("F: Finished querying all registrars for domains!");
+
+           for (var y = 0; y < results.length ; y++){
+             //if there was an error, then add it to bad reasons
+             if (results[y].state != "fulfilled"){
+               req.session.new_listings.bad_listings.push({
+                 domain_name : results[y].reason.domain_name,
+                 reasons : results[y].reason.reasons
+               });
+             }
+             //successfully changed DNS!
+             else {
+               req.session.new_listings.good_listings.push({
+                 domain_name : results[y].value.domain_name,
+                 reasons : results[y].value.reasons
+               });
+             }
+           }
+
+           next();
+         });
+      }
+
+      //not using registrar tool! go next to manual creation
+      else {
+        next();
+      }
+    },
+
+    //create listings
+    createListings : function(req, res, next){
+      console.log("F: Attempting to create listings...");
+
+      listing_model.newListings(req.session.new_listings.db_object, function(result){
+        if (result.state=="error"){error.handler(req, res, result.info, "json");}
+        else {
+          //figure out what was created
+          account_model.getAccountListings(req.user.id, function(result){
+            if (result.state=="error"){error.handler(req, res, result.info, "json");}
+            else {
+              //get the insert IDs and domain names of newly inserted listings
+              var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
+              var inserted_ids = newly_inserted_listings.inserted_ids;        //insert ids of all inserted domains
+              var inserted_domains = newly_inserted_listings.inserted_domains;    //domain names of all inserted domains
+              var inserted_listings = newly_inserted_listings.inserted_listings;             //object of all inserted listings
+
+              //check what was created
+              checkForCreatedListings(
+                req.session.new_listings,
+                inserted_domains,
+                inserted_ids
+              );
+
+              //some DNS changes were made! check them now to see if we should auto-verify some listings
+              if (req.session.new_listings.check_dns_promises.length > 0){
+                Q.allSettled(req.session.new_listings.check_dns_promises)
+                 .then(function(results) {
+                   console.log("F: Finished checking DNS changes for newly created domains!");
+
+                   //remove from the inserted_ids list
+                   var pending_dns_ids = [];
+                   var verified_ids = [];
+                   for (var x = 0; x < results.length; x++){
+                     if (results[x].state == "fulfilled"){
+                       var index_of_dns_fail = inserted_ids.indexOf(results[x].value);
+                       if (index_of_dns_fail > -1) {
+                         inserted_ids.splice(index_of_dns_fail, 1);
+                       }
+                       //insert into an array of legit verified domains
+                       verified_ids.push(results[x].value.toString());
+                     }
+                     else {
+                       //insert into array of unverified domains (pending DNS propogation)
+                       pending_dns_ids.push(results[x].reason.toString());
+                     }
+                   }
+
+                   //object wrapper for the various IDs
+                   var various_ids = {
+                     verified_ids : verified_ids,
+                     pending_dns_ids : pending_dns_ids,
+                     inserted_ids : inserted_ids
+                   }
+
+                   //waterfall to make verified / pending DNS updates to the listings
+                   Q.fcall(verified_dns_function, various_ids)      //function to call, and the parameter
+                    .then(pending_dns_function, pending_dns_function)   //function on success, function on error
+                    .done(function(various_ids){
+                     //see if we inserted anything and revert to unverified if necessary
+                     checkInsertedIDs(req, res, various_ids.inserted_ids);
+                   }, function(err){
+                     error.handler(req, res, err.info, "json");
+                   });
+                 });
+              }
+              else {
+                //see if we inserted anything and revert to unverified if necessary
+                checkInsertedIDs(req, res, inserted_ids);
+              }
+            }
+          });
+        }
+      });
+    },
+
+    //</editor-fold>
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------UPDATE/DELETE------------------------------
+
+    //<editor-fold>-------------------------------CHECKS (UPDATE LISTINGS)------------------------------
 
     //check if posted selected IDs are numbers
     checkSelectedIDs : function(req, res, next){
@@ -267,7 +383,6 @@ module.exports = {
 
       upload_img(req, res, function(err){
         if (err){
-          error.log(err);
           if (err.code == "LIMIT_FILE_SIZE"){
             error.handler(req, res, 'File is bigger than 1 MB!', "json");
           }
@@ -278,6 +393,7 @@ module.exports = {
             error.handler(req, res, "not-premium", "json");
           }
           else {
+            error.log(err, "something went wrong with an image upload");
             error.handler(req, res, 'Something went wrong with the upload!', "json");
           }
         }
@@ -566,15 +682,15 @@ module.exports = {
                  console.log("F: Some domain(s) are not pointing to DomaHub! Reverting...");
                  //update not pointing domains
                  listing_model.updateListingsInfo(not_pointing, {
-                   verified: null,
-                   status: 0
+                   verified : null,
+                   status : 0
                  }, function(result){
                    if (result.state == "error") { error.handler(req, res, result.info, "json"); }
                    else {
                      //for the next function
                      req.session.new_listing_info = {
-                       verified: null,
-                       status: 0
+                       verified : null,
+                       status : 0
                      }
                      updateUserListingsObject(req, res, domain_names);
                      res.send({
@@ -912,166 +1028,77 @@ module.exports = {
 
     //</editor-fold>
 
-  //</editor-fold>
+    //<editor-fold>-------------------------------EXECUTE------------------------------
 
-  //<editor-fold>-------------------------------GETS------------------------------
+    //update a listing
+    updateListingsInfo: function(req, res, next){
 
-  //gets all statistics for a specific domain
-  getListingStats : function(req, res, next){
-    console.log("F: Finding the all verified statistics for " + req.params.domain_name + "...");
-    var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    data_model.getListingStats(req.params.domain_name, function(result){
-
-      //set server side stats
-      if (result.state == "success"){
-        listing_obj.stats = result.info;
-      }
-      else {
-        listing_obj.stats = false;
-      }
-
-      res.send({
-        state: "success",
-        listings: req.user.listings
-      });
-    });
-  },
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------CREATES/UPDATES------------------------------
-
-  //create listings
-  createListings : function(req, res, next){
-    console.log("F: Creating listings to check for any existing...");
-
-    var db_object = req.session.new_listings.db_object;
-    listing_model.newListings(db_object, function(result){
-      if (result.state=="error"){error.handler(req, res, result.info, "json");}
-      else {
-        //nothing created
-        if (result.info.affectedRows == 0){
-          sortListings(req.session.new_listings, db_object, []);
-          res.send({
-            bad_listings: req.session.new_listings.bad_listings,
-            good_listings: false
-          });
-        }
-        else {
-          //figure out what was created
-          account_model.getAccountListings(req.user.id, function(result){
-            if (result.state=="error"){error.handler(req, res, result.info, "json");}
-            else {
-              //get the insert IDs and domain names of newly inserted listings
-              var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
-              var inserted_ids = newly_inserted_listings.inserted_ids        //insert ids of all inserted domains
-              var inserted_domains = newly_inserted_listings.inserted_domains    //domain names of all inserted domains
-
-              //sort all the listings
-              sortListings(
-                req.session.new_listings,                  //session listing object
-                db_object,                          //db object used to insert
-                inserted_domains,                      //domain names of all inserted domains
-                inserted_ids
-              );
-
-              req.session.new_listings.inserted_ids = inserted_ids;
-              req.session.new_listings.inserted_domains = inserted_domains;
-
-              //nothing inserted
-              if (inserted_ids.length == 0){
-                sortListings(req.session.new_listings, db_object, []);
-                res.send({
-                  bad_listings: req.session.new_listings.bad_listings,
-                  good_listings: false
-                });
-              }
-              //revert the newly made listings verified to null
-              else {
-                listing_model.updateListingsVerified(inserted_ids, function(result){
-                  delete req.user.listings;
-
-                  //done
-                  res.send({
-                    bad_listings: req.session.new_listings.bad_listings,
-                    good_listings: req.session.new_listings.good_listings
-                  });
-                });
-              }
-            }
-          });
-        }
-      }
-    });
-  },
-
-  //update a listing
-  updateListingsInfo: function(req, res, next){
-
-    //check if we're changing anything
-    if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
-      res.json({
-        state: "success",
-        listings: (req.user) ? req.user.listings : false
-      });
-    }
-    else {
-      console.log("F: Updating domain details...");
-      var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
-
-      listing_model.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
-        if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
-        else {
-          updateUserListingsObject(req, res, domain_names);
-          res.json({
-            state: "success",
-            listings: (req.user) ? req.user.listings : false
-          });
-        }
-      });
-    }
-  },
-
-  //delete a listing
-  deleteListing: function(req, res, next){
-    var listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    listing_model.deleteListing(listing_info.id, function(result){
-      if (result.state=="error"){error.handler(req, res, result.info, "json")}
-      else {
-        deleteUserListingsObject(req, res, req.params.domain_name);
+      //check if we're changing anything
+      if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
         res.json({
           state: "success",
-          listings: req.user.listings
+          listings: (req.user) ? req.user.listings : false
         });
       }
-    });
-  },
+      else {
+        console.log("F: Updating domain details...");
+        var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
 
-  //verify ownership of a listing
-  verifyListing: function(req, res, next){
-    console.log("F: Attempting to verify this listing...");
-
-    var domain_name = req.params.domain_name;
-    dns.resolve(domain_name, "A", function (err, address, family) {
-      var domain_ip = address;
-      dns.resolve("domahub.com", "A", function (err, address, family) {
-        if (domain_ip && address && domain_ip[0] == address[0] && domain_ip.length == 1){
-          req.session.new_listing_info = {
-            domain_name: domain_name,
-            verified: 1,
-            status: 1
+        listing_model.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
+          if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
+          else {
+            updateUserListingsObject(req, res, domain_names);
+            res.json({
+              state: "success",
+              listings: (req.user) ? req.user.listings : false
+            });
           }
+        });
+      }
+    },
 
-          next();
-        }
+    //delete a listing
+    deleteListing: function(req, res, next){
+      var listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
+      listing_model.deleteListing(listing_info.id, function(result){
+        if (result.state=="error"){error.handler(req, res, result.info, "json")}
         else {
+          deleteUserListingsObject(req, res, req.params.domain_name);
           res.json({
-            state: "error"
+            state: "success",
+            listings: req.user.listings
           });
         }
       });
-    });
-  },
+    },
+
+    //verify ownership of a listing
+    verifyListing: function(req, res, next){
+      console.log("F: Attempting to verify this listing...");
+
+      var domain_name = req.params.domain_name;
+      dns.resolve(domain_name, "A", function (err, address, family) {
+        var domain_ip = address;
+        dns.resolve("domahub.com", "A", function (err, address, family) {
+          if (domain_ip && address && domain_ip[0] == address[0] && domain_ip.length == 1){
+            req.session.new_listing_info = {
+              domain_name: domain_name,
+              verified: 1,
+              status: 1
+            }
+
+            next();
+          }
+          else {
+            res.json({
+              state: "error"
+            });
+          }
+        });
+      });
+    },
+
+    //</editor-fold>
 
   //</editor-fold>
 
@@ -1132,72 +1159,87 @@ function getUserListingObjByID(listings, id){
   }
 }
 
-//helper function to check existing req.user listings and compare with any newly made ones to find the insert ID and domain name
-function findNewlyMadeListings(user_listings, inserted_listings){
+//</editor-fold>
+
+//<editor-fold>-------------------------------LISTING CREATE HELPERS------------------------------
+
+//check to see if domain name is legit
+function checkPostedDomainName(user, domains_sofar, domain_name, min_price, buy_price){
+  var bad_reasons = [];
+  var parsed_domain = parseDomain(domain_name);
+
+  //check domain
+  if (parsed_domain == null || !validator.isFQDN(domain_name) || !validator.isAscii(domain_name)){
+    bad_reasons.push("Invalid domain name!");
+  }
+  //subdomains are not allowed
+  if (parsed_domain != null){
+    if (parsed_domain.subdomain != ""){
+      bad_reasons.push("No sub-domains!");
+    }
+  }
+  //check for duplicates among valid FQDN domains
+  if (domains_sofar.indexOf(domain_name) != -1){
+    bad_reasons.push("Duplicate domain name!");
+  }
+  //check price rate
+  if (min_price && !validator.isInt(min_price, {min: 0})){
+    bad_reasons.push("Invalid min. price!");
+  }
+  //check price rate
+  if (buy_price && !validator.isInt(buy_price, {min: 0})){
+    bad_reasons.push("Invalid BIN price!");
+  }
+  //domain is too long
+  if (domain_name.length > 100){
+    bad_reasons.push("Domain name is too long!");
+  }
+  //too many domains (domains so far has 1 less right here, so needs to be >= maximum)
+  if (!user.stripe_subscription_id && domains_sofar.length + user.listings.length >= 100){
+    bad_reasons.push("Upgrade to a Premium account to create more listings!");
+  }
+
+  return bad_reasons;
+}
+
+//helper function to check existing req.user listings and compare with new user listings object
+function findNewlyMadeListings(before_user_listings, after_user_listings){
   var inserted_ids = [];
   var inserted_domains = [];
+  var inserted_listings = [];
 
   //find the insert ids of the newly inserted listings
-  for (var x = 0; x < inserted_listings.length; x++){
+  for (var x = 0; x < after_user_listings.length; x++){
     var exists = false;
-    for (var y = 0; y < user_listings.length; y++){
-      if (inserted_listings[x].id == user_listings[y].id){
+    for (var y = 0; y < before_user_listings.length; y++){
+      if (after_user_listings[x].id == before_user_listings[y].id){
         exists = true;
         break;
       }
     }
 
     if (!exists){
-      inserted_ids.push([inserted_listings[x].id]);
-      inserted_domains.push(inserted_listings[x].domain_name);
+      inserted_ids.push([after_user_listings[x].id]);
+      inserted_domains.push(after_user_listings[x].domain_name);
+      inserted_listings.push(after_user_listings[x]);
     }
   }
 
   return {
     inserted_ids : inserted_ids,
-    inserted_domains : inserted_domains
+    inserted_domains : inserted_domains,
+    inserted_listings : inserted_listings
   };
 }
 
-//helper function to see if any listings failed
-function findUncreatedListings(posted_listings, new_listings, existing_bad_listings){
-  var bad_listings = (existing_bad_listings) ? existing_bad_listings : [];
-  var good_listings = [];
+//see what domains were successfully created (to check for duplicates with other owners)
+function checkForCreatedListings(new_listings, inserted_domains, inserted_ids){
+  console.log("F: Checking successfully created listings...");
 
-  //loop through all posted listings
-  for (var x = 0; x < posted_listings.length; x++){
-
-    //figure out if this posted listing was created or not
-    var was_created = false;
-    for (var y = 0; y < new_listings.length; y++){
-      if (posted_listings[x][2] == new_listings[y]){
-        was_created = true;
-        break;
-      }
-    }
-
-    //wasnt created cuz it was a duplicate
-    if (!was_created){
-      bad_listings.push({
-        data: [posted_listings[x][2]],
-        reasons: ["Duplicate domain name!"]
-      });
-    }
-    else {
-      good_listings.push([posted_listings[x][2]]);
-    }
-  }
-
-  return {
-    bad_listings: bad_listings,
-    good_listings : good_listings
-  };
-}
-
-//helper function to see if any listings failed
-function sortListings(new_listings, formatted_listings, inserted_domains, inserted_ids){
+  var formatted_listings = new_listings.db_object;
   var bad_listings = new_listings.bad_listings;
-  var good_listings = [];
+  var good_listings = new_listings.good_listings;
+  var check_dns_promises = [];
 
   //loop through all formatted listings
   for (var x = 0; x < formatted_listings.length; x++){
@@ -1205,28 +1247,263 @@ function sortListings(new_listings, formatted_listings, inserted_domains, insert
     //figure out if this formatted listing was inserted or not
     var was_created = false;
     for (var y = 0; y < inserted_domains.length; y++){
-      //if domain name of formatted input is same as domain name of result
+      //was created! (aka didnt already exist by some other owner)
       if (formatted_listings[x][2] == inserted_domains[y]){
-        //was created!
         was_created = true;
-        good_listings.push({
-          index: x
-        });
+        var good_reasons_exist = false;
+        var inserted_id = inserted_ids[y];    //corresponding insert ID for the inserted domain
+
+        //check if good listings object exists for this domain (aka DNS settings updated via registrar)
+        for (var z = 0 ; z < good_listings.length ; z++){
+          if (good_listings[z].domain_name == formatted_listings[x][2]){
+            good_reasons_exist = true;
+            good_listings[z].reasons.unshift("Successfully created listing!");
+            check_dns_promises.push(checkDomainDNS(good_listings[z].domain_name, inserted_id));
+            break;
+          }
+        }
+
+        //good listings object doesnt already exist for this domain
+        if (!good_reasons_exist){
+          good_listings.push({
+            domain_name : formatted_listings[x][2],
+            reasons: ["Successfully created listing!"]
+          });
+        }
 
         break;
       }
     }
 
-    //wasnt created cuz it was already existing
+    //wasnt created cuz it was already existing (owned by some other user)
     if (!was_created){
-      bad_listings.push({
-        index: x,
-        reasons: ["This domain name already exists!"]
-      });
+
+      //check if bad listings object exists for this domain
+      var bad_reasons_exist = false;
+      for (var z = 0 ; z < bad_listings.length ; z++){
+        if (bad_listings[z].domain_name == formatted_listings[x][2]){
+          bad_reasons_exist = true;
+          bad_listings[z].reasons.push(["This domain name already exists!"]);
+          break;
+        }
+      }
+
+      //bad listings object doesnt already exist for this domain
+      if (!bad_reasons_exist){
+        bad_listings.push({
+          domain_name : formatted_listings[x][2],
+          reasons: ["This domain name already exists!"]
+        });
+      }
     }
   }
 
   new_listings.good_listings = good_listings;
+  new_listings.check_dns_promises = check_dns_promises;
+}
+
+//check the inserted IDs and revert verification if necessary
+function checkInsertedIDs(req, res, inserted_ids){
+  console.log("F: Checking if we should revert verification status...");
+
+  //delete user object listings so we can get a refreshed unverified version
+  delete req.user.listings;
+  var temp_new_listings = req.session.new_listings;
+  delete req.session.new_listings;
+
+  //nothing created
+  if (inserted_ids.length == 0){
+    res.send({
+      bad_listings: temp_new_listings.bad_listings,
+      good_listings: temp_new_listings.good_listings
+    });
+  }
+  //revert the newly made listings verified to null
+  else {
+    listing_model.updateListingsVerified(inserted_ids, function(result){
+      if (result.state == "success"){
+        res.send({
+          bad_listings: temp_new_listings.bad_listings,
+          good_listings: temp_new_listings.good_listings
+        });
+      }
+      else {
+        error.handler(req, res, result.info, "json");
+      }
+    });
+  }
+}
+
+//promise function for verified DNS status change
+function verified_dns_function(various_ids){
+  var verified_dns_promise = Q.defer();
+  if (various_ids.verified_ids.length > 0){
+    console.log("F: Now setting status for successful DNS changes...");
+    listing_model.updateListingsInfo(various_ids.verified_ids, {
+      status : 1,
+      verified : 1
+    }, function(result){
+      if (result.state == "error"){
+        verified_dns_promise.reject({
+          info : result.info,
+          various_ids : various_ids
+        });
+      }
+      else {
+        verified_dns_promise.resolve(various_ids);
+      }
+    });
+  }
+  else {
+    verified_dns_promise.resolve(various_ids);
+  }
+  return verified_dns_promise.promise;
+}
+
+//promise function for pending DNS status change
+function pending_dns_function(various_ids){
+  var pending_dns_promise = Q.defer();
+
+  //if we error and have to wrap this object in a error obj
+  var various_ids = (various_ids.info) ? various_ids.various_ids : various_ids;
+
+  if (various_ids.pending_dns_ids.length > 0){
+    console.log("F: Now setting status to pending DNS changes...");
+    listing_model.updateListingsInfo(various_ids.pending_dns_ids, {
+      status : 3,
+      verified : 1
+    }, function(result){
+      if (result.state == "error"){
+        pending_dns_promise.reject({
+          info : result.info,
+          various_ids : various_ids
+        });
+      }
+      else {
+        pending_dns_promise.resolve(various_ids);
+      }
+    });
+  }
+  else {
+    pending_dns_promise.resolve(various_ids);
+  }
+  return pending_dns_promise.promise;
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------REGISTRAR DNS HELPERS------------------------------
+
+//returns an array of promises to set DNS for godaddy domains
+function setDNSGoDaddy(registrar_info, new_listings){
+  var temp_promises = [];
+
+  //loop through all domains and build a custom promise function to set DNS for each
+  for (var x = 0 ; x < registrar_info.domains.length ; x++){
+
+    //if domain name is being created on domahub (not all domains in registrar)
+    for (var y = 0 ; y < new_listings.db_object.length ; y++){
+      if (new_listings.db_object[y][2].toLowerCase() == registrar_info.domains[x].domain_name.toLowerCase()){
+
+        //change registrar_id to registrar_id in DB object
+        new_listings.db_object[y][3] = registrar_info.id;
+        var temp_promise = Q.Promise(function(resolve, reject, notify){
+          console.log("F: Setting DNS for GoDaddy domain - " + registrar_info.domains[x].domain_name + "...");
+          var domain_name = registrar_info.domains[x].domain_name.toLowerCase();
+
+          //A record change
+          request({
+            url: "https://api.godaddy.com/v1/domains/" + domain_name + "/records/A",
+            method: "PUT",
+            json : true,
+            body : [
+              {
+                name : "@",
+                data : "208.68.37.82"
+              }
+            ],
+            headers: {
+              "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
+              Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
+            }
+          }, function(err, response, body){
+            if (err || response.statusCode != 200){
+              if (err){
+                error.log(err, "Failed to set DNS A record via GoDaddy.");
+              }
+              reject({
+                domain_name : domain_name,
+                reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
+              });
+            }
+            else {
+              //CNAME record change
+              request({
+                url: "https://api.godaddy.com/v1/domains/" + domain_name + "/records/CNAME",
+                method: "PUT",
+                json : true,
+                body : [
+                  {
+                    name : "www",
+                    data : "@"
+                  }
+                ],
+                headers: {
+                  "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
+                  Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
+                }
+              }, function(err, response, body){
+                if (err || response.statusCode != 200){
+                  if (err){
+                    error.log(err, "Failed to set DNS CNAME record via GoDaddy.");
+                  }
+                  reject({
+                    domain_name : domain_name,
+                    reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
+                  });
+                }
+                else {
+                  resolve({
+                    domain_name : domain_name,
+                    reasons : ["Successfully set DNS records via registrar!"]
+                  });
+                }
+              });
+            }
+          });
+
+        });
+        temp_promises.push(temp_promise);
+        break;
+      }
+    }
+  }
+
+  return temp_promises;
+}
+
+//returns an array of promises to set DNS for namecheap domains
+function setDNSNameCheap(registrar_info){
+
+}
+
+//check a domain name to see if the DNS changes are good yet
+function checkDomainDNS(domain_name, inserted_id){
+  console.log("F: Checking to see if domain is still pointed to DomaHub...");
+  return Q.Promise(function(resolve, reject, notify){
+    dns.resolve(domain_name, "A", function (err, address, family) {
+      var domain_ip = address;
+      dns.resolve("domahub.com", "A", function (err, address, family) {
+        var doma_ip = address;
+        if (err || !domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
+          reject(inserted_id);
+        }
+        else {
+          resolve(inserted_id);
+        }
+      });
+    });
+  });
 }
 
 //</editor-fold>

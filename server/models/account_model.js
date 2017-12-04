@@ -81,35 +81,7 @@ module.exports = {
   getAccountListings : function(account_id, callback){
     console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
     var query = "SELECT \
-          listings.id,\
-          listings.date_created,\
-          listings.domain_name,\
-          listings.owner_id,\
-          listings.status,\
-          listings.verified,\
-          listings.rentable,\
-          listings.price_type,\
-          listings.price_rate,\
-          listings.buy_price,\
-          listings.min_price,\
-          listings.description,\
-          listings.description_hook,\
-          listings.description_footer,\
-          listings.categories,\
-          listings.paths,\
-          listings.background_image,\
-          listings.background_color,\
-          listings.logo,\
-          listings.domain_owner,\
-          listings.domain_age,\
-          listings.domain_list,\
-          listings.domain_appraisal,\
-          listings.social_sharing,\
-          listings.traffic_module,\
-          listings.traffic_graph,\
-          listings.alexa_stats,\
-          listings.history_module,\
-          listings.info_module,\
+          listings.*, \
           IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
           IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
           IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
@@ -170,7 +142,7 @@ module.exports = {
   getAccountRegistrars : function(account_id, callback){
     console.log("DB: Attempting to get all registrars connected to account " + account_id + "...");
     var query = "SELECT \
-          registrars.registrar_name \
+          registrars.* \
             FROM registrars \
           WHERE registrars.account_id = ? ";
     database.query(query, "Failed to get all registrars connected to account " + account_id + "!", callback, account_id);

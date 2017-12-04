@@ -6,7 +6,7 @@ $(document).ready(function() {
 
 });
 
-//function to submit ajax for verifying transfer
+//submit ajax for verifying transfer
 function transferVerify(button_elem){
   button_elem.addClass('is-loading');
   $(".button").off();

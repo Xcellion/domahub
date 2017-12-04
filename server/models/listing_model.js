@@ -95,36 +95,8 @@ module.exports = {
   getVerifiedListing : function(domain_name, callback){
     console.log("DB: Attempting to get active listing information for " + domain_name + "...");
     var query = "SELECT \
-          listings.id,\
-          listings.date_created,\
-          listings.domain_name,\
-          listings.owner_id,\
-          listings.status,\
-          listings.verified,\
-          listings.rentable,\
-          listings.price_type,\
-          listings.price_rate,\
-          listings.buy_price,\
-          listings.min_price,\
-          listings.description,\
-          listings.description_hook,\
-          listings.description_footer,\
-          listings.categories,\
-          listings.paths,\
-          listings.background_image,\
-          listings.background_color,\
+          listings.*, \
           IF(listings.background_color IS NULL, '#FFFFFF', listings.background_color) as background_color, \
-          listings.logo,\
-          listings.domain_owner,\
-          listings.domain_age,\
-          listings.domain_list,\
-          listings.domain_appraisal,\
-          listings.social_sharing,\
-          listings.traffic_module,\
-          listings.traffic_graph,\
-          listings.alexa_stats,\
-          listings.history_module,\
-          listings.info_module,\
           IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
           IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
           IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
@@ -423,19 +395,25 @@ module.exports = {
           owner_id, \
           date_created, \
           domain_name, \
+          registrar_id, \
           min_price, \
+          buy_price, \
           description \
         )\
          VALUES ? \
          ON DUPLICATE KEY UPDATE \
-         deleted = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
-           THEN NULL ELSE deleted END \
+         registrar_id = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
+          THEN VALUES(registrar_id) ELSE registrar_id END \
+         ,min_price = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
+           THEN VALUES(min_price) ELSE min_price END \
          ,buy_price = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
            THEN VALUES(buy_price) ELSE buy_price END \
          ,description = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
            THEN VALUES(description) ELSE description END \
          ,date_created = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
-           THEN VALUES(date_created) ELSE date_created END "
+           THEN VALUES(date_created) ELSE date_created END \
+         ,deleted = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
+           THEN NULL ELSE deleted END "
     database.query(query, "Failed to create " + listing_info_array.length + " new listings! Please refresh the page and try again.", callback, [listing_info_array]);
   },
 
@@ -567,7 +545,8 @@ module.exports = {
   deleteListing : function(listing_id, callback){
     console.log("DB: Attempting to delete listing #" + listing_id + "...");
     var query = "UPDATE listings \
-        SET deleted = 1 \
+        SET deleted = 1, \
+            status = 0 \
         WHERE id = ? "
     database.query(query, "Failed to delete listing #" + listing_id + "!", callback, listing_id);
   },

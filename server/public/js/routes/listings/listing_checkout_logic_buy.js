@@ -127,7 +127,7 @@ function trackCheckoutBehavior(id){
   });
 }
 
-//function to show a specific message, hide all others
+//show a specific message, hide all others
 function showMessage(message_id, text){
   $(".regular-message").addClass('is-hidden');
   $(".error-message").addClass('is-hidden');

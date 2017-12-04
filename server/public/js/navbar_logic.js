@@ -60,7 +60,7 @@ $(document).ready(function() {
 
 });
 
-//function to change navbar on scroll
+//change navbar on scroll
 function navbarChange(windowelem){
   //before the top
   if (windowelem.scrollTop() <= 0) {

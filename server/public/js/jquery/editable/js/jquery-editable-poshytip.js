@@ -4289,7 +4289,7 @@ $(function(){
                 that = this,
                 values = {};
 
-            //function to find nearest value in select options
+            //find nearest value in select options
             function getNearest($select, value) {
                 var delta = {};
                 $select.children('option').each(function(i, opt){

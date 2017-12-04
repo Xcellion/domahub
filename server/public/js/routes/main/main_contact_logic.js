@@ -17,7 +17,7 @@ $(document).ready(function() {
   $("#contact_message").attr("placeholder", random_char.message);
 });
 
-//function to submit contact form
+//submit contact form
 function submitContact(){
   $("#submit-button").addClass('is-loading');
   $.ajax({

@@ -63,7 +63,7 @@ function stylize(color, element, style, calculateluminance) {
   }
 }
 
-//function to setup any custom premium colors
+//setup any custom premium colors
 function setupCustomColors(){
   console.log("Setting up custom theme...");
   stylize(listing_info.primary_color, "#page-contents .is-primary:not(.notification)", "color");
