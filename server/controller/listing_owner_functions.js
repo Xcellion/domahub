@@ -27,6 +27,10 @@ var parseDomain = require("parse-domain");
 var Q = require('q');
 var fs = require('fs');
 
+//registrar info
+var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
+var parseString = require('xml2js').parseString;
+
 //</editor-fold>
 
 module.exports = {
@@ -188,23 +192,40 @@ module.exports = {
         console.log("F: Using registrar APIs to automatically verify listings!");
         var registrar_domain_promises = [];
 
-        //add to the registrar info variable (for listing create)
+        //loop through all registrars
         for (var x = 0 ; x < req.session.registrar_info.length ; x++){
-          switch (req.session.registrar_info[x].registrar_name){
-            case "godaddy":
-              registrar_domain_promises = registrar_domain_promises.concat(setDNSGoDaddy(req.session.registrar_info[x], req.session.new_listings));
-              break;
-            case "namecheap":
-              registrar_domain_promises.push(setDNSNameCheap(req.session.registrar_info[x]));
-              break;
+
+          //loop through all domains in registrar gotten via API
+          var registrar_info = req.session.registrar_info[x];
+          for (var y = 0 ; y < registrar_info.domains.length ; y++){
+            var registrar_domain_name = registrar_info.domains[y].domain_name;
+
+            //if domain name is being created on domahub (not all domains in registrar)
+            for (var z = 0 ; z < req.session.new_listings.db_object.length ; z++){
+              if (req.session.new_listings.db_object[z][2].toLowerCase() == registrar_domain_name.toLowerCase()){
+                //change registrar_id to registrar_id in DB object
+                req.session.new_listings.db_object[z][3] = registrar_info.id;
+
+                //create promise to set DNS via API
+                switch (req.session.registrar_info[x].registrar_name){
+                  case "godaddy":
+                    registrar_domain_promises.push(setDNSGoDaddy(registrar_info, registrar_domain_name));
+                    break;
+                  case "namecheap":
+                    registrar_domain_promises.push(setDNSNamecheap(registrar_info, registrar_domain_name));
+                    break;
+                }
+
+                break;
+              }
+            }
           }
         }
 
         //wait for all promises to finish
         Q.allSettled(registrar_domain_promises)
          .then(function(results) {
-           console.log("F: Finished querying all registrars for domains!");
-
+           console.log("F: Finished querying " + registrar_domain_promises + " registrars for setting domain DNS!");
            for (var y = 0; y < results.length ; y++){
              //if there was an error, then add it to bad reasons
              if (results[y].state != "fulfilled"){
@@ -1394,97 +1415,144 @@ function pending_dns_function(various_ids){
 
 //<editor-fold>-------------------------------REGISTRAR DNS HELPERS------------------------------
 
-//returns an array of promises to set DNS for godaddy domains
-function setDNSGoDaddy(registrar_info, new_listings){
-  var temp_promises = [];
+//returns a promise to set DNS for godaddy domains
+function setDNSGoDaddy(registrar_info, registrar_domain_name){
+  return Q.Promise(function(resolve, reject, notify){
+    console.log("F: Setting DNS for GoDaddy domain - " + registrar_domain_name + "...");
 
-  //loop through all domains and build a custom promise function to set DNS for each
-  for (var x = 0 ; x < registrar_info.domains.length ; x++){
-
-    //if domain name is being created on domahub (not all domains in registrar)
-    for (var y = 0 ; y < new_listings.db_object.length ; y++){
-      if (new_listings.db_object[y][2].toLowerCase() == registrar_info.domains[x].domain_name.toLowerCase()){
-
-        //change registrar_id to registrar_id in DB object
-        new_listings.db_object[y][3] = registrar_info.id;
-        var temp_promise = Q.Promise(function(resolve, reject, notify){
-          console.log("F: Setting DNS for GoDaddy domain - " + registrar_info.domains[x].domain_name + "...");
-          var domain_name = registrar_info.domains[x].domain_name.toLowerCase();
-
-          //A record change
-          request({
-            url: "https://api.godaddy.com/v1/domains/" + domain_name + "/records/A",
-            method: "PUT",
-            json : true,
-            body : [
-              {
-                name : "@",
-                data : "208.68.37.82"
-              }
-            ],
-            headers: {
-              "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
-              Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
-            }
-          }, function(err, response, body){
-            if (err || response.statusCode != 200){
-              if (err){
-                error.log(err, "Failed to set DNS A record via GoDaddy.");
-              }
-              reject({
-                domain_name : domain_name,
-                reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
-              });
-            }
-            else {
-              //CNAME record change
-              request({
-                url: "https://api.godaddy.com/v1/domains/" + domain_name + "/records/CNAME",
-                method: "PUT",
-                json : true,
-                body : [
-                  {
-                    name : "www",
-                    data : "@"
-                  }
-                ],
-                headers: {
-                  "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
-                  Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
-                }
-              }, function(err, response, body){
-                if (err || response.statusCode != 200){
-                  if (err){
-                    error.log(err, "Failed to set DNS CNAME record via GoDaddy.");
-                  }
-                  reject({
-                    domain_name : domain_name,
-                    reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
-                  });
-                }
-                else {
-                  resolve({
-                    domain_name : domain_name,
-                    reasons : ["Successfully set DNS records via registrar!"]
-                  });
-                }
-              });
-            }
-          });
-
-        });
-        temp_promises.push(temp_promise);
-        break;
+    //A record change
+    request({
+      url: "https://api.godaddy.com/v1/domains/" + registrar_domain_name + "/records/A",
+      method: "PUT",
+      timeout: 10000,
+      json : true,
+      body : [
+        {
+          name : "@",
+          data : "208.68.37.82"
+        }
+      ],
+      headers: {
+        "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
+        Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
       }
-    }
-  }
+    }, function(err, response, body){
+      if (err || response.statusCode != 200){
+        if (err){
+          error.log(err, "Failed to set DNS A record via GoDaddy.");
+        }
+        reject({
+          domain_name : registrar_domain_name,
+          reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
+        });
+      }
+      else {
+        //CNAME record change
+        request({
+          url: "https://api.godaddy.com/v1/domains/" + registrar_domain_name + "/records/CNAME",
+          method: "PUT",
+          json : true,
+          body : [
+            {
+              name : "www",
+              data : "@"
+            }
+          ],
+          headers: {
+            "X-Shopper-Id" : encryptor.decryptText(registrar_info.username),
+            Authorization : "sso-key " + encryptor.decryptText(registrar_info.api_key) + ":" + encryptor.decryptText(registrar_info.password)
+          }
+        }, function(err, response, body){
+          if (err || response.statusCode != 200){
+            if (err){
+              error.log(err, "Failed to set DNS CNAME record via GoDaddy.");
+            }
+            reject({
+              domain_name : registrar_domain_name,
+              reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
+            });
+          }
+          else {
+            resolve({
+              domain_name : registrar_domain_name,
+              reasons : ["Successfully set DNS records via registrar!"]
+            });
+          }
+        });
+      }
+    });
 
-  return temp_promises;
+  });
 }
 
-//returns an array of promises to set DNS for namecheap domains
-function setDNSNameCheap(registrar_info){
+//returns a promise to set DNS for namecheap domains
+function setDNSNamecheap(registrar_info, registrar_domain_name){
+  return Q.Promise(function(resolve, reject, notify){
+    console.log("F: Setting DNS for Namecheap domain - " + registrar_domain_name + "...");
+    var username = encryptor.decryptText(registrar_info.username)
+    var domain_name_split = registrar_domain_name.split(".");
 
+    //A record change
+    request({
+      url: namecheap_url,
+      method: "POST",
+      timeout: 10000,
+      qs : {
+        ApiKey : encryptor.decryptText(registrar_info.api_key),
+        ApiUser : username,
+        UserName : username,
+        ClientIp : "208.68.37.82",
+        Command : "namecheap.domains.dns.setHosts",
+        SLD : domain_name_split[0],
+        TLD : domain_name_split[1],
+        HostName1 : "@",
+        RecordType1 : "A",
+        Address1 : "208.68.37.82",
+        HostName2 : "www",
+        RecordType2 : "CNAME",
+        Address2 : registrar_domain_name
+      }
+    }, function(err, response, body){
+      if (err){
+        error.log(err, "Failed to set DNS records by requesting Namecheap API.");
+        reject({
+          domain_name : registrar_domain_name,
+          reasons : ["Failed to connect to Namecheap! Please verify ownership manually."]
+        });
+      }
+      else {
+        parseString(body, {trim: true}, function (err, result) {
+          if (err){
+            error.log(err, "Failed to parse XML response from Namecheap.");
+            reject({
+              domain_name : registrar_domain_name,
+              reasons : ["Failed to connect to Namecheap! Please verify ownership manually."]
+            });
+          }
+          else if (!result || !result.ApiResponse || !result.ApiResponse.$ || !result.ApiResponse.CommandResponse || result.ApiResponse.$.Status != "OK"){
+            error.log(err, "Failed to set DNS records via Namecheap.");
+            if (result && result.ApiResponse.Errors[0]){
+              error.log(err, "Failed to set DNS records via Namecheap." + JSON.stringify(result.ApiResponse.Errors));
+            }
+            else {
+              error.log(err, "Failed to set DNS records via Namecheap.");
+            }
+            reject({
+              domain_name : registrar_domain_name,
+              reasons : ["Failed to connect to Namecheap! Please verify ownership manually."]
+            });
+          }
+          else {
+            resolve({
+              domain_name : registrar_domain_name,
+              reasons : ["Successfully set DNS records via registrar!"]
+            });
+          }
+        });
+      }
+    });
+
+  });
 }
 
 //check a domain name to see if the DNS changes are good yet

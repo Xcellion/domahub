@@ -40,7 +40,8 @@ var godaddy_secret_prod = "2fiF9zXdNPLQHke1oXueaY";
 var godaddy_customer_num = "5067889";
 
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
-var namecheap_api_key = "9bfc50c4ab934968a94584b40e449d0e";
+var namecheap_api_key = "90ecfcb1d49e4204a69af26efc6d854a";
+var namecheap_username = "domahub";
 var parseString = require('xml2js').parseString;
 
 //</editor-fold>
@@ -278,7 +279,7 @@ function emailViews(req, res, next){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------COLD EMAIL---------------------------------
+//<editor-fold>-------------------------------COLD EMAIL---------------------------------
 
   //parse all xlsx files in a folder
   function parseFolder(req, res, next){
@@ -700,6 +701,26 @@ function emailViews(req, res, next){
 
   //</editor-fold>
 
+//<editor-fold>-------------------------------DNS CHECK-------------------------------
+
+function dnsCheck(req, res, next){
+  var domain_name = req.params.domain_name;
+  dns.resolve(domain_name, "A", function (err, address, family) {
+    var domain_ip = address;
+    dns.resolve("domahub.com", "A", function (err, address, family) {
+      var doma_ip = address;
+      if (err || !domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
+        res.send("<h1>oh no</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
+      }
+      else {
+        res.send("<h1>oh yeah</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
+      }
+    });
+  });
+}
+
+//</editor-fold>
+
 //<editor-fold>-------------------------------REGISTRARS-------------------------------
 
 function godaddy(req, res, next){
@@ -724,39 +745,29 @@ function godaddy(req, res, next){
 }
 
 function namecheap(req, res, next){
+  console.log("F: namecheap..." + namecheap_url);
   request({
     url: namecheap_url,
-    method: "GET",
+    method: "POST",
     qs : {
       ApiKey : namecheap_api_key,
-      ApiUser : "domahub",
-      UserName : "domahub",
+      ApiUser : namecheap_username,
+      UserName : namecheap_username,
       ClientIp : "208.68.37.82",
-      Command : "namecheap.domains.getList",
+      Command : "namecheap.domains.dns.setHosts",
+      SLD : "domahubdomain1",
+      TLD : "com",
+      HostName1 : "@",
+      RecordType1 : "A",
+      Address1 : "208.68.37.82",
+      HostName2 : "www",
+      RecordType2 : "CNAME",
+      Address2 : "domahubdomain1.com"
     }
   }, function(err, response, body){
+    console.log(response.statusCode);
     parseString(body, {trim: true}, function (err, result) {
-      res.json(result.ApiResponse);
-    });
-  });
-}
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------DNS CHECK-------------------------------
-
-function dnsCheck(req, res, next){
-  var domain_name = req.params.domain_name;
-  dns.resolve(domain_name, "A", function (err, address, family) {
-    var domain_ip = address;
-    dns.resolve("domahub.com", "A", function (err, address, family) {
-      var doma_ip = address;
-      if (err || !domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
-        res.send("<h1>oh no</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
-      }
-      else {
-        res.send("<h1>oh yeah</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
-      }
+      res.json(result);
     });
   });
 }
