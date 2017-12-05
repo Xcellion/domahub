@@ -169,6 +169,7 @@ $(document).ready(function() {
       setupCancelPremiumDisables();
     });
 
+    //confirm cancel premium by typing cancel
     $("#cancel-confirmation-input").on('input', function(){
       if ($(this).val().toLowerCase() == "cancel"){
         $("#cancel-premium-button").removeClass('is-disabled');

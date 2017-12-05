@@ -90,6 +90,7 @@ function closeModals(){
   clearNotification();
   $(".modal").find("input, textarea, select").val("");
   $(".modal").removeClass('is-active');
+  $("#cancel-premium-button").addClass("is-disabled");
 }
 
 //</editor-fold>

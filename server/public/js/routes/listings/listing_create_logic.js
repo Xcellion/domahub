@@ -139,7 +139,7 @@ $(document).ready(function() {
 
     if (good_listings.length > 0){
       for (var y = 0; y < good_listings.length; y++){
-        createTableRow(good_listings[y]);
+        createTableRow(good_listings[y], true);
       }
     }
 
@@ -148,13 +148,13 @@ $(document).ready(function() {
   }
 
   //create table row
-  function createTableRow(data){
+  function createTableRow(data, good){
     var temp_table_row = $("#clone-row").clone();
     temp_table_row.removeAttr('id').removeClass('is-hidden');    //clone row
 
     //set row domain data
-    if (data){
-      temp_table_row.attr("data-domain_name", data.domain_name.toLowerCase())
+    if (data && data.domain_name){
+      temp_table_row.attr("data-domain_name", data.domain_name.toLowerCase());
     }
 
     temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
@@ -186,8 +186,15 @@ $(document).ready(function() {
       handleSubmitDisabled();
     });
 
+    //looked up from a specific registrar
+    if (good){
+      createGoodReasons(data.reasons, temp_table_row, true);
+    }
     //reasons for why it was a bad listing
-    createBadReasons(data.reasons, temp_table_row);
+    else {
+      createBadReasons(data.reasons, temp_table_row);
+    }
+
 
     temp_table_row.appendTo("#domain-input-body");
   }
@@ -225,14 +232,18 @@ $(document).ready(function() {
   }
 
   //edit the rows to append any good reasons
-  function createGoodReasons(reasons, row){
+  function createGoodReasons(reasons, row, registrar){
     if (reasons){
       //append latest one
       for (var x = 0 ; x < reasons.length ; x++){
         var explanation = $("<small class='is-primary tip is-inline no-margin'>" + reasons[x] + "</small>")
         row.find('.domain-name-input').closest("td").append(explanation);
       }
-      row.addClass('success-row').find(".table-input").removeClass('is-danger').addClass('is-primary').addClass('is-disabled');
+
+      //only if successfully created, and not successful lookup via registrar
+      if (!registrar){
+        row.addClass('success-row').find(".table-input").removeClass('is-danger').addClass('is-primary').addClass('is-disabled');
+      }
     }
   }
 
@@ -420,6 +431,7 @@ function lookupRegistrars(){
         if (data.good_listings.length > 0){
           var total_good_domains = (data.good_listings.length == 1) ? "an unlisted domain" : data.good_listings.length + " unlisted domains"
           successMessage("Successfully found " + total_good_domains + " from your connected registrars!");
+          console.log(data);
           createDomainsTable(data.bad_listings, data.good_listings);
         }
         else if (data.bad_listings.length == 0){
