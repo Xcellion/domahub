@@ -22,6 +22,9 @@ function updateRegistrars(){
 
   //disable lookup button
   $("#lookup-domains-button").addClass('is-disabled');
+  $(".registrar-tip").each(function(){
+    $(this).text("Click the button to connect your " + $(this).data("registrar") + " account.");
+  });
 
   //if user has any registrars connected
   if (user.registrars && user.registrars.length > 0){
@@ -34,12 +37,6 @@ function updateRegistrars(){
 
     //enable lookup button
     $("#lookup-domains-button").removeClass('is-disabled');
-  }
-  else {
-    $("#lookup-domains-button").addClass('is-disabled');
-    $(".registrar-tip").each(function(){
-      $(this).text("Click the button to connect your " + $(this).data("registrar") + " account.");
-    });
   }
 }
 
