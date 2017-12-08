@@ -1,0 +1,119 @@
+<html>
+
+<script type="text/javascript">
+  var access_token = <% if(typeof access_token != "undefined"){ %><%-JSON.stringify(access_token)%><% }else{ %>false<% } %>;
+  (function(w,d,s,g,js,fs){
+    g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+    js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+    js.src='https://apis.google.com/js/platform.js';
+    fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+  }(window,document,'script'));
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+<body>
+  <canvas id="chart-1-container"></canvas>
+
+  <script>
+    gapi.analytics.ready(function() {
+
+      //autorize user with google analytics
+      gapi.analytics.auth.authorize({
+        'serverAuth': {
+          'access_token': access_token
+        }
+      });
+
+      var now = moment();
+
+      var thisWeek = query({
+        'ids': 'ga:141565191',
+        'dimensions': 'ga:date,ga:nthDay',
+        'metrics': 'ga:sessions',
+        'filters': "ga:pagePathLevel2=~^(/5stars.com|/admiration.club|/calentopia.com)",
+        'start-date': moment(now).subtract(1, 'day').day(0).format('YYYY-MM-DD'),
+        'end-date': moment(now).format('YYYY-MM-DD')
+      });
+
+      var lastWeek = query({
+        'ids': 'ga:141565191',
+        'dimensions': 'ga:date,ga:nthDay',
+        'metrics': 'ga:sessions',
+        'filters': "ga:pagePathLevel2=~^(/5stars.com|/admiration.club|/calentopia.com)",
+        'start-date': moment(now).subtract(1, 'day').day(0).subtract(1, 'week').format('YYYY-MM-DD'),
+        'end-date': moment(now).subtract(1, 'day').day(6).subtract(1, 'week').format('YYYY-MM-DD')
+      });
+
+      Promise.all([thisWeek, lastWeek]).then(function(results) {
+        var data1 = results[0].rows.map(function(row) { return +row[2]; });
+        var data2 = results[1].rows.map(function(row) { return +row[2]; });
+        var labels = results[1].rows.map(function(row) { return +row[0]; });
+
+        labels = labels.map(function(label) {
+          return moment(label, 'YYYYMMDD').format('ddd');
+        });
+
+        var chartOptions = {
+          type : "line",
+          options: {},
+          data : {
+            labels : labels,
+            datasets : [
+              {
+                label: 'Last Week',
+                backgroundColor : 'rgba(220,220,220,0.25)',
+                borderColor : 'rgba(220,220,220,1)',
+                data : data2
+              },
+              {
+                label: 'This Week',
+                backgroundColor : 'rgba(60,188,141,0.65)',
+                borderColor : 'rgba(60,188,141,1)',
+                data : data1
+              }
+            ]
+          }
+        };
+        var ctx = document.getElementById('chart-1-container').getContext('2d');
+        new Chart(ctx, chartOptions);
+      });
+
+    });
+
+    /**
+     * Extend the Embed APIs `gapi.analytics.report.Data` component to
+     * return a promise the is fulfilled with the value returned by the API.
+     * @param {Object} params The request parameters.
+     * @return {Promise} A promise.
+     */
+    function query(params) {
+      return new Promise(function(resolve, reject) {
+        var data = new gapi.analytics.report.Data({query: params});
+        data.once('success', function(response) { resolve(response); })
+            .once('error', function(response) { reject(response); })
+            .execute();
+      });
+    }
+
+    /**
+     * Create a new canvas inside the specified element. Set it to be the width
+     * and height of its container.
+     * @param {string} id The id attribute of the element to host the canvas.
+     * @return {RenderingContext} The 2D canvas context.
+     */
+    function makeCanvas(id) {
+      var container = document.getElementById(id);
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+
+      container.innerHTML = '';
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
+      container.appendChild(canvas);
+
+      return ctx;
+    }
+  </script>
+
+</body>
+</html>
