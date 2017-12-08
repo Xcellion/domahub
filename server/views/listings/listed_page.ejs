@@ -62,10 +62,10 @@
     <div class="listing-right">
       <div id="buy-rent-tabs" class="tabs is-boxed is-medium is-centered">
         <ul>
+          <li id="buy-tab" data-position="1" class="tab module-tab is-active">
+            <a tabindex="0">Purchase</a>
+          </li>
           <% if (listing_info.rentable && listing_info.status == 1){ %>
-            <li id="buy-tab" data-position="1" class="tab module-tab is-active">
-              <a tabindex="0">Purchase</a>
-            </li>
             <li id="calendar-tab" data-position="2" class="tab module-tab">
               <a tabindex="0">Rent</a>
             </li>
