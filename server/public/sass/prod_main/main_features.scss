@@ -23,8 +23,7 @@
 }
 
 #hero-image {
-  width: 256px;
-  margin: 0 auto 25px;
+  width: 150px;
 }
 
 #product-img {
@@ -105,7 +104,7 @@
   margin: 0 auto;
   width: 35px;
   @include mobile {
-    margin: 0 0 10px;
+    margin: 0 auto 10px;
   }
 }
 

@@ -20,31 +20,53 @@
   			<label class="label" for="email-input">Email</label>
 				<div class="control has-icon has-icon-right">
 					<input required class="input is-medium no-shadow" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
-					<i class="fa fa-check is-hidden is-success"></i>
-					<i class="fa fa-warning is-hidden is-danger"></i>
+					<div class="icon is-hidden is-success">
+						<i class="far fa-check"></i>
+					</div>
+					<div class="icon is-hidden is-danger">
+						<i class="far fa-exclamation-triangle"></i>
+					</div>
 				</div>
-  			<label class="label" for="username-input">Username (at least 3 characters)</label>
+  			<label class="label" for="username-input">Username
+					<span class="icon is-small is-tooltip" data-balloon="At least 3 characters." data-balloon-pos="up">
+						<i class="far fa-question-circle"></i>
+					</span>
+				</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium no-shadow" name="username" type="text" id="username-input" spellcheck="false" value="" />
-					<i class="fa fa-check is-hidden is-success"></i>
-					<i class="fa fa-warning is-hidden is-danger"></i>
+					<div class="icon is-hidden is-success">
+						<i class="far fa-check"></i>
+					</div>
+					<div class="icon is-hidden is-danger">
+						<i class="far fa-exclamation-triangle"></i>
+					</div>
 				</div>
-  			<label class="label" for="pw-input">Password (at least 6 characters)</label>
+  			<label class="label" for="pw-input">Password
+					<span class="icon is-small is-tooltip" data-balloon="At least 6 characters." data-balloon-pos="up">
+						<i class="far fa-question-circle"></i>
+					</span>
+				</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
-					<i class="fa fa-check is-hidden is-success"></i>
-					<i class="fa fa-warning is-hidden is-danger"></i>
+					<div class="icon is-hidden is-success">
+						<i class="far fa-check"></i>
+					</div>
+					<div class="icon is-hidden is-danger">
+						<i class="far fa-exclamation-triangle"></i>
+					</div>
 				</div>
   			<label class="label" for="verify-pw">Confirm Password</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="verify-pw" type="password" id="verify-pw" value="" />
-					<i class="fa fa-check is-hidden is-success"></i>
-					<i class="fa fa-warning is-hidden is-danger"></i>
+					<i class="far fa-check is-hidden is-success"></i>
+					<i class="far fa-exclamation-triangle is-hidden is-danger"></i>
 				</div>
   			<div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
   			<div class="control">
   				<button id="signup-login-button" class="login-button button has-icon is-primary is-stylish is-fullwidth margin-bottom-10">
-            <span class="icon is-small"><i class="fa fa-user-circle"></i></span>
+            <div class="icon">
+							<i class="far fa-user-circle"></i>
+						</div>
             <span>Create Account</span>
   				</button>
   			</div>

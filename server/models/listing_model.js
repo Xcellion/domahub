@@ -298,7 +298,7 @@ module.exports = {
         AND listings.status = 1 \
         AND listings.verified = 1 \
         AND listings.deleted IS NULL \
-        AND listings.categories NOT LIKE '%adult%' \
+        AND (listings.categories NOT LIKE '%adult%' OR listings.categories IS NULL) \
         ORDER BY RAND() \
         LIMIT 10"
     database.query(query, "Failed to get 10 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);

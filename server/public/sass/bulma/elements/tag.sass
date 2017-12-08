@@ -22,10 +22,15 @@
     .delete
       @extend .delete.is-small
   // Modifiers
-  &.is-uppercase
-    text-transform: uppercase
   &.is-bordered
     border: 1px solid $black-secondary
+  &.is-stylish
+    text-transform: uppercase
+    letter-spacing: 1px
+    &.is-medium
+      font-size: 12px
+  &.has-shadow
+    +box-shadow(0,2px,6px,$border,1px)
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -41,10 +46,9 @@
     padding-left: 6px
     padding-right: 6px
   &.is-small
-    height: 18px
+    font-size: 11px
+    height: 20px
     vertical-align: middle
-    padding-left: 6px
-    padding-right: 6px
   &.is-medium
     font-size: $size-normal
     height: 32px

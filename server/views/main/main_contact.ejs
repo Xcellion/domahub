@@ -23,24 +23,28 @@
           </div>
           <form id="contact-form" autocomplete="off">
             <label class="error_message label" for="contact_name">Name</label>
-            <p class="control has-icon">
+            <div class="control has-icon">
               <input id="contact_name" required class="input" name="contact_name" type="text">
-              <i class="fa fa-user-o"></i>
-            </p>
+              <div class="icon">
+                <i class="far fa-user-alt"></i>
+              </div>
+            </div>
             <label class="error_message label" for="contact_email">Email Address</label>
-            <p class="control has-icon">
+            <div class="control has-icon">
               <input id="contact_email" required class="input" name="contact_email" type="email">
-              <i class="fa fa-envelope-o"></i>
-            </p>
+              <div class="icon">
+                <i class="far fa-envelope"></i>
+              </div>
+            </div>
             <label class="error_message label" for="contact_message">Message</label>
-            <p class="control">
+            <div class="control">
               <textarea id="contact_message" required class="textarea" name="contact_message"></textarea>
-            </p>
+            </div>
             <div class='control'>
               <button id="submit-button" type="submit" class="button has-icon is-primary is-stylish is-fullwidth-mobile">
-                <span class="icon is-small">
-                  <i class="fa fa-comment"></i>
-                </span>
+                <div class="icon is-small">
+                  <i class="far fa-check-circle"></i>
+                </div>
                 <span>Send Message</span>
               </button>
             </div>

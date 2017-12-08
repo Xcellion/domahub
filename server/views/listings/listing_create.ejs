@@ -22,13 +22,13 @@
         <div class="content">
           <a href="/profile/mylistings" class="create-type-selector button is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
             <span class="icon is-small">
-            <i class="fa fa-long-arrow-left"></i>
+            	<i class="far fa-long-arrow-left"></i>
             </span>
             <span>Back To My Listings</span>
           </a>
           <a id="back-to-listing-create-selector" class="manual-listing-table-elem is-hidden button is-black is-transparent no-shadow" tabindex="0" title="Back To Listing Create Selector">
             <span class="icon is-small">
-              <i class="fa fa-long-arrow-left"></i>
+              <i class="far fa-long-arrow-left"></i>
             </span>
             <span>Back To Listings Create Selector</span>
           </a>
@@ -41,23 +41,23 @@
         <!-- MANUAL TABLE BUTTONS -->
         <div class="manual-listing-table-elem is-hidden button-wrapper">
           <button title="Add A New Row" tabindex="0" class="add-domain-button button is-stylish is-small is-primary is-inverted">
-            <span class="icon is-small"><i class="fa fa-plus"></i></span>
+            <span class="icon is-small"><i class="far fa-plus"></i></span>
             <span class="is-hidden-mobile">Add Row</span>
           </button>
           <button title="Remove All Rows" tabindex="0" class="delete-domains-button button is-stylish is-small is-danger is-inverted">
             <span class='icon is-small is-danger'>
-              <i class='fa fa-trash-o'></i>
+              <i class='far fa-trash'></i>
             </span>
             <span class="is-hidden-mobile">Remove All</span>
           </button>
           <button title="Remove All Errored Rows" id='clear-errored-button' tabindex="0" class="is-hidden delete-errors-button button is-stylish is-small is-black is-inverted">
             <span class='icon is-small'>
-              <i class='fa fa-ban'></i>
+              <i class='far fa-ban'></i>
             </span>
             <span class="is-hidden-mobile">Clear Errored Rows</span>
           </button>
           <button id='domains-submit' class="is-hidden is-stylish is-small button is-primary">
-            <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+            <span class="icon is-small"><i class="far fa-check-circle"></i></span>
             <span id="domains-submit-text">Submit</span>
           </button>
         </div>
@@ -79,7 +79,7 @@
                       Enter up to 500 domain names in the box below <strong>separated
                       by commas</strong>.
                       <span class="icon is-tooltip is-small" data-balloon="You must include TLD extensions such as .com, .org, or .net at the end." data-balloon-length="large" data-balloon-pos="up">
-                        <i class="fa fa-question-circle"></i>
+                        <i class="far fa-question-circle"></i>
                       </span>
                     </label>
                   </div>
@@ -88,7 +88,7 @@
                   </div>
                   <div class="content">
                     <button form="domain-input-form" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Submit Domain Names Manually">
-                      <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+                      <span class="icon"><i class="far fa-check-circle"></i></span>
                       <span>Submit Domain Names</span>
                     </button>
                   </div>
@@ -106,13 +106,13 @@
                   <th class="td-price is-hidden-mobile">
                     <span>Minimum Price</span>
                     <span class="icon is-tooltip is-small" data-balloon="The minimum offer you will consider selling this domain for. Leave blank for no minimum price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-                      <i class="fa fa-question-circle"></i>
+                      <i class="far fa-question-circle"></i>
                     </span>
                   </th>
                   <th class="td-price is-hidden-mobile">
                     <span>Buy it now Price</span>
                     <span class="icon is-tooltip is-small" data-balloon="The price you are willing to sell this domain for immediately. Leave blank to disable the buy it now option. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-                      <i class="fa fa-question-circle"></i>
+                      <i class="far fa-question-circle"></i>
                     </span>
                   </th>
                 </tr>
@@ -121,9 +121,9 @@
                 <tr id="clone-row" class="is-hidden table-row no-hover-effect">
                   <td class="td-domain aligned">
                     <div class='control has-addons is-marginless'>
-                      <button class="button delete-icon no-shadow">
+                      <button class="button is-icon delete-icon no-shadow">
                         <span class='icon is-small'>
-                          <i class='fa fa-trash-o'></i>
+                          <i class='far fa-trash'></i>
                         </span>
                       </button>
                       <input class="domain-name-input table-input input is-expanded no-shadow" type="text" value=""/>
@@ -147,15 +147,15 @@
                 <h3 class="card-header-title">
                   <span>Connect A Registrar</span>
                   <span class="icon is-tooltip is-small" data-balloon="We are working on adding support for other registrars very soon!" data-balloon-length="large" data-balloon-pos="up">
-                    <i class="fa fa-question-circle"></i>
+                    <i class="far fa-question-circle"></i>
                   </span>
                 </h3>
               </div>
               <div class="card-content">
                 <div class="content">
-                  <label>
+                  <p>
                     Connect a registrar and automatically create listings for all of your domain names! <a target="_blank" class="is-primary is-underlined contact-link" href="/contact">Let us know</a> if you need any assistance.
-                  </label>
+                  </p>
                 </div>
                 <div class="control is-spaced is-mobile">
                   <div class="control-left">
@@ -165,8 +165,8 @@
                     <small data-registrar_name="godaddy" data-registrar="GoDaddy" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar_name="godaddy" class="add-registrar-button button is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-link"></i></span>
+                    <a data-registrar_name="godaddy" class="add-registrar-button button is-icon is-stylish is-small">
+                      <span class="icon is-small"><i class="far fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar="GoDaddy"></span>
                     </a>
                   </div>
@@ -180,8 +180,8 @@
                     <small data-registrar_name="namecheap" data-registrar="Namecheap" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar_name="namecheap" data-registrar="Namecheap" class="add-registrar-button button is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-link"></i></span>
+                    <a data-registrar_name="namecheap" data-registrar="Namecheap" class="add-registrar-button button is-icon is-stylish is-small">
+                      <span class="icon is-small"><i class="far fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar="Namecheap"></span>
                     </a>
                   </div>
@@ -189,7 +189,7 @@
 
                 <div class="content">
                   <button id="lookup-domains-button" tabindex="0" type="submit" class="button is-fullwidth-mobile is-primary is-stylish is-disabled" title="Lookup Domains From Your Connected Registrars">
-                    <span class="icon is-small"><i class="fa fa-search"></i></span>
+                    <span class="icon"><i class="far fa-search"></i></span>
                     <span id="lookup-domain-button-text">Lookup Domain Names</span>
                   </button>
                 </div>

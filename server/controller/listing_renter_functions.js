@@ -1013,6 +1013,7 @@ module.exports = {
     //make sure owner and domain exclude are legit
     if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id)){
       listing_model.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
+        console.log(result);
         if (!result.info.length || result.state == "error"){
           res.send({
             state: "error"
@@ -1266,7 +1267,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
     //who is for unlisted only
     if (unlisted){
       var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-      var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
+      var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Unknown";
 
       var listing_info = {
         domain_name: domain_name,
@@ -1321,7 +1322,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       }
 
       //nobody owns it!
-      else if (whoisObj["End Text"] && whoisObj["End Text"].indexOf("No match for domain ") != -1 && owner_name == "Someone out there" && data){
+      else if (whoisObj["End Text"] && whoisObj["End Text"].indexOf("No match for domain ") != -1 && owner_name == "Unknown" && data){
         listing_info.available = true;
         listing_info.username = "Nobody yet!";
       }
