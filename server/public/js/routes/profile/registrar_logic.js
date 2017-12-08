@@ -22,6 +22,9 @@ function updateRegistrars(){
 
   //disable lookup button
   $("#lookup-domains-button").addClass('is-disabled');
+  $(".registrar-tip").each(function(){
+    $(this).text("Click the button to connect your " + $(this).data("registrar") + " account.");
+  });
 
   //if user has any registrars connected
   if (user.registrars && user.registrars.length > 0){
@@ -34,9 +37,6 @@ function updateRegistrars(){
 
     //enable lookup button
     $("#lookup-domains-button").removeClass('is-disabled');
-  }
-  else {
-    $("#lookup-domains-button").addClass('is-disabled');
   }
 }
 
@@ -55,7 +55,7 @@ function setupRegistrarModal(registrar_name){
       $("#registrar-password-label").text("Production Key Secret").closest(".registrar-wrapper").removeClass("is-hidden").find("input").attr("required", true);
       break;
     case "namecheap":
-      $("#registrar-guide-link").attr("href", "");
+      $("#registrar-guide-link").attr("href", "https://medium.com/@domahub/how-to-connect-your-namecheap-account-to-domahub-509317e7bfac");
       $("#api-key-link").removeClass('is-hidden').attr('href', "https://ap.www.namecheap.com/Profile/Tools/ApiAccess");
       $("#registrar-api-key-label").text("API Key").closest(".registrar-wrapper").removeClass("is-hidden");
       $("#registrar-username-label").text("Username").closest(".registrar-wrapper").removeClass("is-hidden");
