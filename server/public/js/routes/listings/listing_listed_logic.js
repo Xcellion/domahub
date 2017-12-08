@@ -49,7 +49,7 @@ $(document).ready(function() {
     }
 
     //click buy now button or unavailable description
-    $("#buy-now-tab").on("click", function(e){
+    $("#buy-tab").on("click", function(e){
       //doing the tutorial!
       if (compare && tutorial_tour && !tutorial_tour.ended()){
         tutorial_tour.goTo(6);
@@ -271,7 +271,7 @@ function showBuyStuff(buy_now_button){
     $("#contact_name").attr("placeholder", random_char.name);
     $("#contact_email").attr("placeholder", random_char.email);
     $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
-    //add a / to end of domain
+    //revert domain title to get rid of the slash at the end
     $("#domain-title").text(listing_info.domain_name);
   }
   else {

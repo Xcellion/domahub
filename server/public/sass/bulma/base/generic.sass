@@ -105,8 +105,10 @@ a
   &:hover,
   &:focus
     text-decoration: none !important
-  &.is-generic
-    text-decoration: underline !important
+  &.is-underlined-hover
+    &:hover,
+    &:focus
+      text-decoration: underline !important
     &:active
       outline: none
   +mobile-456px

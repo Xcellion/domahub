@@ -41,12 +41,10 @@ html {
   }
 }
 
-// fixes position of error icon for bad inputs
-.control {
-  &.has-icon > .fa-warning {
-    font-size: 21px !important;
-    @include translate(-4px, 4px);
-  }
+.remember-text {
+  position: absolute;
+  left: 25px;
+  top: 1px;
 }
 
 .account-form {

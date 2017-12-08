@@ -24,6 +24,11 @@ $(document).ready(function() {
     //show the module
     $(".module").addClass('is-hidden');
     $("#" + which_tab + "-module").removeClass('is-hidden');
+
+    if (!(which_tab == "calendar")) {
+      //this will get rid of the slash
+      $("#domain-title").text(listing_info.domain_name);
+    }
   });
 
   //</editor-fold>
@@ -262,21 +267,21 @@ function createTickerRow(rental, now){
     if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>an image</a>";
       ticker_icon_color.addClass('is-info');
-      ticker_icon.addClass('fa-camera-retro');
+      ticker_icon.replaceWith("<i class='far fa-camera-retro'></i>");
     }
 
     //showing a GIF
     else if (rental.address.match(/\.(gif)$/) != null){
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a GIF</a>";
       ticker_icon_color.addClass('is-dark');
-      ticker_icon.addClass('fa-smile-o');
+      ticker_icon.replaceWith("<i class='far fa-video'></i>");
     }
 
     //showing a PDF
     else if (rental.address.match(/\.(pdf)$/) != null){
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a PDF</a>";
       ticker_icon_color.addClass('is-danger');
-      ticker_icon.addClass('fa-file-pdf-o');
+      ticker_icon.replaceWith("<i class='far fa-file-pdf'></i>");
     }
 
     //showing a website
@@ -284,14 +289,14 @@ function createTickerRow(rental, now){
       var ticker_address = getHost(rental.address);
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>" + ticker_address + "</a>";
       ticker_icon_color.addClass('is-primary');
-      ticker_icon.addClass('fa-external-link');
+      ticker_icon.replaceWith("<i class='far fa-desktop'></i>");
     }
 
     //showing nothing
     else {
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display nothing";
       ticker_icon_color.addClass('is-black');
-      ticker_icon.addClass('fa-times-circle-o');
+      ticker_icon.replaceWith("<i class='far fa-eye-slash'></i>");
     }
   }
   //forward the domain
@@ -299,7 +304,7 @@ function createTickerRow(rental, now){
     var ticker_address = getHost(rental.address);
     var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='" + rental.address + "' class='is-info is-underlined'>" + ticker_address + "</a>";
     ticker_icon_color.addClass('is-accent');
-    ticker_icon.addClass('fa-share-square');
+    ticker_icon.replaceWith("<i class='far fa-share'></i>");
   }
   ticker_clone.find(".ticker-type").html(ticker_type);
 
@@ -388,7 +393,7 @@ function createEmptyChart(){
   }
 
   //create the chart
-  myChart = new Chart($("#traffic-chart"), {
+  myChart = new Chart($("#traffic-chart-module"), {
     type: 'line',
     data: {
       labels: monthly_labels,
@@ -415,8 +420,8 @@ function createEmptyChart(){
 
   //unhide the overlay
   $("#traffic-overlay").css({
-    "height" : $("#traffic-chart").height(),
-    "width" : $("#traffic-chart").width()
+    "height" : $("#traffic-chart-module").height(),
+    "width" : $("#traffic-chart-module").width()
   }).removeClass('is-hidden');
 }
 
@@ -494,7 +499,7 @@ function createTrafficChart(compare){
     traffic_chart.destroy();
   }
 
-  traffic_chart = new Chart($("#traffic-chart"), {
+  traffic_chart = new Chart($("#traffic-chart-module"), {
     type: 'line',
     data: {
       labels: formatted_dataset.traffic_labels,
@@ -625,7 +630,6 @@ function findOtherDomains(){
 //function to create the other domain
 function createOtherDomains(other_listings){
   $("#otherowner-domains").removeClass('is-hidden');
-  $("#otherowner-domains-title").text("More From This Owner");
   for (var x = 0; x < other_listings.length; x++){
     var cloned_similar_listing = $("#otherowner-domain-clone").clone();
     cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
@@ -663,7 +667,8 @@ function createOtherDomains(other_listings){
 
     //if compare tool
     if (other_listings[x].compare && listing_info.unlisted){
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+      cloned_similar_listing.attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
     }
     else {
       //premium or basic link
@@ -673,7 +678,8 @@ function createOtherDomains(other_listings){
       else {
         var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
       }
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", link_to_domain);
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+      cloned_similar_listing.attr("href", link_to_domain);
     }
     $("#otherowner-domain-table").append(cloned_similar_listing);
   }

@@ -31,7 +31,7 @@
         </div>
         <div id="domain-display" class="content">
           <% if (listing_info.rentable) { %>
-            <h1 id="domain-title" class="title is-primary is-bold is-inline-block"><%= listing_info.domain_name %></h1>
+            <h1 id="domain-title" class="title is-primary is-inline-block"><%= listing_info.domain_name %></h1>
             <form id="path-input" class="is-hidden is-inline-block">
               <div class="control">
                 <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off">
@@ -42,16 +42,18 @@
           <% } else { %>
             <h1 class="title is-primary is-inline-block"><%= listing_info.domain_name %></h1>
           <% } %>
-            <h2 class="subtitle is-4 is-blacklight">is available for purchase.</h2>
+            <h2 class="subtitle is-4 is-blacklight">
+              <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
+                is available for purchase.
+              <% } else { %>
+                is unavailable for purchase.
+              <% } %>
+            </h2>
+
         </div>
 
         <%# INFO MODULE %>
         <%- include("modules/info_module.ejs", {
-          listing_info : listing_info
-        }); %>
-
-        <%# SOCIAL SHARING MODULE %>
-        <%- include("modules/info/social_share_module.ejs", {
           listing_info : listing_info
         }); %>
 
@@ -61,23 +63,29 @@
       <div id="buy-rent-tabs" class="tabs is-boxed is-medium is-centered">
         <ul>
           <% if (listing_info.rentable && listing_info.status == 1){ %>
-            <li id="buy-now-tab" class="tab is-active">
+            <li id="buy-tab" data-position="1" class="tab module-tab is-active">
               <a tabindex="0">Purchase</a>
             </li>
-            <li id="calendar-tab" class="tab">
+            <li id="calendar-tab" data-position="2" class="tab module-tab">
               <a tabindex="0">Rent</a>
             </li>
           <% } %>
 
           <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium || listing_info.unlisted){ %>
-            <li id="traffic-tab" data-position="1" class='tab'>
+            <li id="traffic-tab" data-position="3" class='tab module-tab'>
               <a tabindex="0">Traffic</a>
             </li>
           <% } %>
 
           <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium || listing_info.unlisted){ %>
-            <li id="ticker-tab" data-position="2" class="tab">
+            <li id="ticker-tab" data-position="4" class="tab module-tab">
               <a tabindex="0">History</a>
+            </li>
+          <% } %>
+
+          <% if (listing_info.domain_list) { %>
+            <li id="domainlist-tab" data-position="5" class="tab module-tab">
+              <a tabindex="0">More</a>
             </li>
           <% } %>
 
@@ -97,10 +105,6 @@
           <%# CALENDAR MODULE %>
           <%- include("modules/calendar_module.ejs"); %>
         <% } %>
-
-        <% } else { %>
-          <%# UNAVAILABLE MODULE %>
-          <%- include("modules/unavailable_module.ejs"); %>
         <% } %>
 
       <% } %>

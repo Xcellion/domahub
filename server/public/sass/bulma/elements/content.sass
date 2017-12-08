@@ -37,16 +37,10 @@
     margin: 5px 15px
   ul
     list-style: none
-    &.is-spaced
-      display: flex
-      flex-wrap: wrap
-      +touch
-        justify-content: center
+    &.is-vertical
       li
-        &:not(:last-child)
-          margin-right: 10px
-        & + li
-          margin-top: 0
+        line-height: 1.5
+        margin: 5px 0
     &.has-disc
       list-style-type: disc
       padding-left: 20px

@@ -5,7 +5,7 @@
   padding-right: 6px
 =button-medium
   font-size: 18px
-  height: 40px
+  height: 44px
   padding-left: 14px
   padding-right: 14px
 =button-large
@@ -22,6 +22,7 @@
   @extend .unselectable
   +box-shadow(0,2px,4px,$border,0)
   +control
+  cursor: pointer
   justify-content: center
   text-align: center
   white-space: nowrap
@@ -33,6 +34,7 @@
     line-height: 1
     margin-top: 5px
   .icon
+    margin-top: -2px
     &:first-child
       margin-left: -3px
       margin-right: 3px
@@ -47,15 +49,10 @@
   &:hover,
   &:focus
     +box-shadow(0,2px,6px,$border,1px)
-  &:hover,
-  &:focus,
-  &.is-active
+  &:hover
     border-color: $black-disabled
-  &.is-active
-    &:hover,
-    &:focus
-      border-color: $black-secondary
-      color: $black-secondary
+  &:focus
+    border-color: #007bff
   // Modifiers
   &.no-shadow
     +box-shadow(0,0,0,$black,0)
@@ -124,19 +121,19 @@
   &.is-stylish
     +button-stylish
     font-size: 12px
-    height: 38px
+    height: 44px
     padding-left: 14px
     padding-right: 14px
     +mobile-456px
       height: 32px
     &.is-small
       font-size: 10px
-      height: 32px
-      padding-left: 8px
-      padding-right: 8px
+      height: 36px
+      padding-left: 10px
+      padding-right: 10px
     &.is-large
       font-size: 14px
-      height: 44px
+      height: 48px
       padding-left: 20px
       padding-right: 20px
       +mobile-456px

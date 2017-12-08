@@ -78,7 +78,7 @@
                 <h3 class="card-header-title is-white">Get Free Months of Premium</h3>
                 <div class="card-header-icon">
                   <a tabindex="0" href="/features#pricing" class="button is-small no-shadow is-primary is-inverted">
-                    <span class="icon is-small"><i class="fa fa-question-circle"></i></span>
+                    <div class="icon is-small"><i class="far fa-question-circle"></i></div>
                     <span>What is Premium?</span>
                   </a>
                 </div>
@@ -95,7 +95,7 @@
                   <div class="control has-addons">
                     <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input no-shadow" placeholder="Invite your friends!"/>
                     <a id="referral-link-copy" class="button is-primary is-stylish is-small no-shadow" tabindex="0">
-                      <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
+                      <div class="icon is-small"><i id="referral-icon" class="far fa-clipboard" data-fa-transform="up-1"></i></div>
                       <span id="referral-link-text">Copy Link</span>
                     </a>
                   </div>
@@ -115,75 +115,75 @@
                       Email Address
                     </p>
                   </div>
-                  <p class="tag is-primary control-right has-text-right">
-                    <span class="icon is-small"><i class="fa fa-check"></i></span>
+                  <div class="tag is-primary control-right has-text-right">
+                    <div class="icon is-small"><i class="far fa-check"></i></div>
                     <span>Verified</span>
-                  </p>
+                  </div>
                 </div>
                 <div class="control is-spaced">
                   <div class="content control-left">
-                    <p>
+                    <div>
                       Payout Settings
                       <% if (!user.stripe_account) { %>
-                        <span class="icon is-tooltip is-small"
+                        <div class="icon is-tooltip is-small"
                         data-balloon-length="large" data-balloon="You must complete your payout settings first in order to add a bank account." data-balloon-pos="up">
-                        <i class="fa fa-question-circle"></i>
-                        </span>
+                        <i class="far fa-question-circle" data-fa-transform="down-2"></i>
+                        </div>
                       <% } %>
-                    </p>
+                    </div>
                   </div>
                   <% if (user.stripe_account) { %>
-                    <p class="tag is-primary control-right has-text-right">
-                      <span class="icon is-small"><i class="fa fa-check"></i></span>
+                    <div class="tag is-primary control-right has-text-right">
+                      <div class="icon is-small"><i class="far fa-check"></i></div>
                       <span>Connected</span>
-                    </p>
+                    </div>
                   <% } else { %>
-                    <p class="tag is-danger control-right has-text-right">
-                      <span class="icon is-small"><i class="fa fa-times"></i></span>
+                    <div class="tag is-danger control-right has-text-right">
+                      <div class="icon is-small"><i class="far fa-times"></i></div>
                       <span>None</span>
-                    </p>
+                    </div>
                   <% } %>
                 </div>
                 <div class="control is-spaced">
                   <div class="content control-left">
-                    <p>
+                    <div>
                       Bank Account
                       <% if (!user.stripe_info || !user.stripe_info.transfers_enabled) { %>
-                        <span class="icon is-tooltip is-small"
+                        <div class="icon is-tooltip is-small"
                         data-balloon-length="large" data-balloon="You will not be able to withdraw funds until you connect your bank account." data-balloon-pos="up">
-                        <i class="fa fa-question-circle"></i>
-                        </span>
+                        <i class="far fa-question-circle"></i>
+                        </div>
                       <% } %>
-                    </p>
+                    </div>
                   </div>
                   <% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
-                    <p class="tag is-primary control-right has-text-right">
-                      <span class="icon is-small"><i class="fa fa-check"></i></span>
+                    <div class="tag is-primary control-right has-text-right">
+                      <div class="icon is-small"><i class="far fa-check"></i></div>
                       <span>Connected</span>
-                    </p>
+                    </div>
                   <% } else { %>
-                    <p class="tag is-danger control-right has-text-right">
-                      <span class="icon is-small"><i class="fa fa-times"></i></span>
+                    <div class="tag is-danger control-right has-text-right">
+                      <div class="icon is-small"><i class="far fa-times"></i></div>
                       <span>None</span>
-                    </p>
+                    </div>
                   <% } %>
                 </div>
                 <div class="control is-spaced">
                   <div class="content control-left">
                     <p>
                       Premium
-                    </p>
+                    </divp>
                   </div>
                   <% if (user.stripe_subscription_id) { %>
-                  <p class="tag is-primary control-right has-text-right">
-                    <span class="icon is-small"><i class="fa fa-check"></i></span>
+                  <div class="tag is-primary control-right has-text-right">
+                    <div class="icon is-small"><i class="far fa-check"></i></div>
                     <span>Active</span>
-                  </p>
+                  </div>
                   <% } else { %>
-                  <p class="tag is-danger control-right has-text-right">
-                    <span class="icon is-small"><i class="fa fa-times"></i></span>
+                  <div class="tag is-danger control-right has-text-right">
+                    <div class="icon is-small"><i class="far fa-times"></i></div>
                     <span>Inactive</span>
-                  </p>
+                  </div>
                   <% } %>
                 </div>
               </div>
@@ -191,10 +191,6 @@
             <div class="card is-fullwidth tile is-child">
               <div class="card-header">
                 <h3 class="card-header-title">Traffic Overview</h3>
-                <%# <a tabindex="0" class="is-stylish is-small card-header-icon button">
-                  <span class="icon"><i class="fa fa-calendar"></i></span>
-                  <span>Change Date</span>
-                </a>%>
               </div>
               <div class="card-content">
                 <div class="content">

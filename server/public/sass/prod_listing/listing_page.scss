@@ -26,11 +26,31 @@
 }
 
 .heading {
-  color: $black-disabled;
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
   font-size: $size-8;
+}
+
+#domain-title {
+  font-weight: 500;
+}
+
+.other-domain {
+  border-radius: 3px;
+  border: 1px solid transparent;
+  display: block;
+  padding: 10px;
+  width: 100%;
+  &:hover,
+  &:focus {
+    background-color: $pastel;
+  }
+  &:active,
+  &:focus {
+    border-color: #007bff;
+    outline: 0;
+  }
 }
 
 //<editor-fold>----------------------COMPARE/TUTORIAL-----------
@@ -69,6 +89,18 @@
   right: 20px;
   z-index: 10;
   width: 400px;
+  &.is-footer {
+    border-top: 1px solid $border;
+    box-shadow: none;
+    margin-top: 20px;
+    padding: 20px 0 !important;
+    position: relative;
+    right: 0;
+    width: 100%;
+    .delete {
+      display: none;
+    }
+  }
   @include mobile {
     bottom: -20px;
     width: 100%;
@@ -91,20 +123,18 @@
 }
 
 .listing-left {
-  padding: 0 40px;
+  padding: 60px 40px;
   position: relative;
   width: 50%;
   @include touch {
     border-bottom: 1px solid $border;
-    padding: 0 20px 20px;
+    padding: 60px 20px 20px;
     width: 100%;
   }
 }
 
 .listing-left-content {
-  margin-top: 120px;
   @include touch {
-    margin-top: 60px;
     text-align: center;
   }
 }
@@ -150,10 +180,10 @@
 }
 
 .listing-right {
-  padding: 40px;
+  padding: 60px 40px;
   width: 50%;
   @include touch {
-    padding: 40px 20px 20px;
+    padding: 60px 20px 20px;
     width: 100%;
   }
 }
@@ -173,12 +203,14 @@
     border-width: 0 0 1px 0;
     border-radius: 0;
     &:focus {
-      outline: none;
+      box-shadow: none;
+      border-color: $black-secondary;
+      outline: 0;
     }
   }
   textarea {
     &:focus {
-      outline: none;
+      outline: 0;
     }
   }
   label {
@@ -193,8 +225,8 @@
   }
   .control {
     &.has-icon {
-      & > .fa {
-        top: 26px;
+      & > .icon {
+        top: 28px;
       }
     }
   }
@@ -208,23 +240,33 @@
 
 #dh-footer {
   @include transition(all 0.2s ease);
+  .social-share {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+  .bar-right {
+    @include mobile {
+      flex-wrap: nowrap;
+      flex-direction: column;
+      .footer-item {
+        &:not(:last-child) {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
   &.is-active {
     @include translate(500px,0);
     width: calc(100% - 500px);
-    @include mobile {
-      @include translate(0,0);
-      width: 100%;
-    }
-    @media screen and (min-width: 768px) and (max-width: 1305px) {
+    @media screen and (min-width: 1200px) and (max-width: 1400px) {
       @include translate(300px,0);
       width: calc(100% - 300px);
     }
-    @include tablet-only {
-      .master {
-        &.right {
-          flex-direction: column;
-        }
-      }
+    @media screen and (max-width: 1199px) {
+      @include translate(0,0);
+      width: 100%;
     }
   }
 }
@@ -304,12 +346,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   height: calc(100vh - 74px);
-  .footer {
-    background-color: $white;
-    border-top: 1px solid $border;
-    margin-top: 20px;
-    padding: 20px 0 !important;
-  }
   @include mobile-456px {
     height: calc(100vh - 95px);
   }
@@ -425,10 +461,7 @@
 }
 
 #social-sharing-module {
-  margin-top: 60px;
-  @include touch {
-    justify-content: center;
-  }
+
 }
 
 .tip {
@@ -448,6 +481,12 @@
   }
   &.is-centered {
     justify-content: center;
+  }
+  &.is-centered-touch {
+    margin-top: 5px;
+    @include touch {
+      justify-content: center;
+    }
   }
 }
 
@@ -481,15 +520,9 @@
   border-bottom: 1px solid $border;
 }
 
-.ticker-icon-color {
-  border-right: 2px solid $border;
-  margin-right: 10px;
-  min-width: 30px;
-}
 
-.ticker-icon {
-  margin-top: 4px;
-  vertical-align: baseline !important;
+.ticker-icon-color {
+  margin-right: 15px;
 }
 
 #traffic-module {

@@ -207,13 +207,11 @@ $(document).ready(function () {
 
     //show appropriate card icon
     if ($(".fa-cc-" + card_type) && card_type){
-      $("#cc-icon").removeClass();
-      $("#cc-icon").addClass("fa fa-cc-" + card_type);
+      $("#cc-icon").find("svg").replaceWith("<i class='far fa-cc-" + card_type + "'></i>");
     }
     //or show default
     else {
-      $("#cc-icon").removeClass();
-      $("#cc-icon").addClass("fa fa-credit-card");
+      $("#cc-icon").find("svg").replaceWith("<i class='far fa-credit-card'");
     }
   });
 
