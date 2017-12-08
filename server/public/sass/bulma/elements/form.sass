@@ -6,23 +6,28 @@
       border-color: $color
       &:hover,
       &:focus
-        border-color: darken($color, 12%)
+        border-color: darken($color, 6%)
 
 input:-webkit-autofill
-    -webkit-box-shadow: 0 0 0px 1000px white inset
-    box-shadow: 0 0 0px 1000px white inset
+  -webkit-box-shadow: 0 0 0px 1000px white inset
+  box-shadow: 0 0 0px 1000px white inset
 
 .form
   margin: 10px 0
 
 .input
   +form-control
+  +transition(all 0.2s ease)
   border: 1px solid $border
   border-radius: $radius
   max-width: 100%
   width: 100%
   &:hover
     border-color: $black-disabled
+  &:focus
+    +box-shadow(0,2px,4px,$border,0)
+    outline: 0
+    border-color: #007bff
   // Sizes
   &.is-small
     +control-small
@@ -78,31 +83,32 @@ input:-webkit-autofill
     margin-left: 10px
 
 .select
-  +transition(all 0.25s ease)
+  +transition(all 0.2s ease)
   border-radius: $radius-small
   display: inline-block
   height: 32px
   position: relative
   vertical-align: top
   select
+    +transition(all 0.2s ease)
     +form-control
     cursor: pointer
     display: block
     padding-right: 36px
-    border-color: $border
-    &:hover,
-    &:active,
-    &:focus
+    &:hover
       border-color: $black-disabled
+    &:focus
+      outline: 0
+      border-color: #007bff
     &::-ms-expand
       display: none
   &::-ms-expand
     display: none
   &.has-shadow
-    +box-shadow(0,2px,4px,$border,0)
+    +box-shadow(0,6px,6px,$border,0)
     &:hover,
     &:focus
-      +box-shadow(0,2px,6px,$border,1px)
+      +box-shadow(0,6px,8px,$border,1px)
   &.is-transparent
     background-color: transparent
     select
@@ -122,7 +128,7 @@ input:-webkit-autofill
       opacity: 0.7
   &:after
     +arrow($black-primary)
-    margin-top: -6px
+    margin-top: -3px
     right: 16px
     top: 50%
   &:active,
@@ -231,12 +237,12 @@ input:-webkit-autofill
     display: flex
     align-items: center
   &.has-icon
-    & > .fa
-      +fa(14px, 24px)
+    & > .icon
       color: $text-disabled
+      font-size: 16px
       pointer-events: none
       position: absolute
-      top: 4px
+      top: 6px
       z-index: 4
       &.is-danger
         color: $danger
@@ -244,36 +250,31 @@ input:-webkit-autofill
         color: $primary
     .input,
     .select
-      &:focus + .fa
-        color: $black-secondary
-      &.is-small + .fa
+      &.is-small + .icon
         font-size: 10.5px
         top: 2px
-      &.is-medium + .fa
+      &.is-medium + .icon
         font-size: 20px
-        top: 9px
-      &.is-large + .fa
+        top: 10px
+      &.is-large + .icon
         font-size: 21px
         top: 12px
-    .select
-      & + .fa
-        color: $black-secondary
     &:not(.has-icon-right)
-      & > .fa
+      & > .icon
         left: 4px
       .input
         padding-left: 32px
         &.is-small
           padding-left: 24px
-          & + .fa
+          & + .icon
             left: 0
         &.is-medium
           padding-left: 40px
-          & + .fa
+          & + .icon
             left: 8px
         &.is-large
           padding-left: 48px
-          & + .fa
+          & + .icon
             left: 12px
       .select
         select
@@ -281,34 +282,35 @@ input:-webkit-autofill
         &.is-small
           select
             padding-left: 24px
-          & + .fa
+          & + .icon
             left: 0
         &.is-medium
           select
             padding-left: 40px
-          & + .fa
+          & + .icon
             left: 8px
         &.is-large
           select
             padding-left: 48px
-          & + .fa
+          & + .icon
             left: 12px
     &.has-icon-right
-      & > .fa
-        right: 4px
+      & > .icon
+        right: 8px
+        top: 8px
       .input
         padding-right: 32px
         &.is-small
           padding-right: 24px
-          & + .fa
+          & + .icon
             right: 0
         &.is-medium
           padding-right: 40px
-          & + .fa
+          & + .icon
             right: 8px
         &.is-large
           padding-right: 48px
-          & + .fa
+          & + .icon
             right: 12px
       .select
         select
@@ -316,17 +318,17 @@ input:-webkit-autofill
         &.is-small
           select
             padding-right: 24px
-          & + .fa
+          & + .icon
             left: 0
         &.is-medium
           select
             padding-right: 40px
-          & + .fa
+          & + .icon
             left: 8px
         &.is-large
           select
             padding-right: 48px
-          & + .fa
+          & + .icon
             left: 12px
   &.is-grouped
     display: flex

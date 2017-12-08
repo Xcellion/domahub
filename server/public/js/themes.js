@@ -5,28 +5,29 @@ var listing_themes = [
     secondary_color : "#FF5722",
     tertiary_color : "#2196F3",
     font_name : "Rubik",
-    font_color : "#000000",
+    font_color : "#1b2733",
     background_color : "#FFFFFF",
-    background_image : "",
+    background_image : ""
   },
   {
     theme_name : "Aqua",
     primary_color : "#6681CC",
-    secondary_color : "#1F79FF",
+    secondary_color : "#CCB166",
     tertiary_color : "#2860B5",
     font_name : "Verdana",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
-    background_image : "https://images.unsplash.com/photo-1474518665815-99456f56c531?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    background_image : "https://images.unsplash.com/photo-1474518665815-99456f56c531?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"
   },
   {
     theme_name : "RGB",
     primary_color : "#0033FF",
-    secondary_color : "#FF4747",
+    secondary_color : "#FF2626",
     tertiary_color : "#1CC788",
     font_name : "Rubik",
     font_color : "#222222",
-    background_color : "#FFFFFF"
+    background_color : "#FFFFFF",
+    background_image : ""
   },
   {
     theme_name : "Bumblebee",
@@ -36,7 +37,7 @@ var listing_themes = [
     font_name : "Courier",
     font_color : "#FFFFFF",
     background_color : "#222222",
-    background_image : "",
+    background_image : ""
   },
   {
     theme_name : "Canyon",
@@ -46,17 +47,17 @@ var listing_themes = [
     font_name : "Verdana",
     font_color : "#FFFFFF",
     background_color : "#222222",
-    background_image : "https://images.unsplash.com/photo-1480498244787-3b777eae847c?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    background_image : "https://images.unsplash.com/photo-1480498244787-3b777eae847c?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"
   },
   {
     theme_name : "Desert",
     primary_color : "#944444",
-    secondary_color : "FF8800",
+    secondary_color : "449494",
     tertiary_color : "#FFF",
     font_name : "Verdana",
     font_color : "#FFF",
     background_color : "#FFFFFF",
-    background_image : "https://images.unsplash.com/photo-1492018706134-e84b8fafbc31?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    background_image : "https://images.unsplash.com/photo-1492018706134-e84b8fafbc31?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"
   },
   {
     theme_name : "Inverse",
@@ -66,17 +67,17 @@ var listing_themes = [
     font_name : "Bookman",
     font_color : "#FFFFFF",
     background_color : "#000000",
-    background_image : "",
+    background_image : ""
   },
   {
     theme_name : "Island",
-    primary_color : "#3A9FD1",
-    secondary_color : "#E3A468",
-    tertiary_color : "#2196F3",
+    primary_color : "#85D6FF",
+    secondary_color : "#FFAE84",
+    tertiary_color : "#85D6FF",
     font_name : "Rubik",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
-    background_image : "https://images.unsplash.com/photo-1497968021412-a86898ccbc4a?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    background_image : "https://images.unsplash.com/photo-1500111609242-145a52dcc944?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"
   },
   {
     theme_name : "Minimal",
@@ -86,7 +87,7 @@ var listing_themes = [
     font_name : "Rubik",
     font_color : "#222222",
     background_color : "#FFFFFF",
-    background_image : "",
+    background_image : ""
   },
   {
     theme_name : "Mountain",
@@ -96,17 +97,17 @@ var listing_themes = [
     font_name : "Trebuchet MS",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
-    background_image : "https://images.unsplash.com/photo-1504890231393-71b0d15a05f4?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    background_image : "https://images.unsplash.com/photo-1504890231393-71b0d15a05f4?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"
   },
   {
     theme_name : "Volcano",
-    primary_color : "#E08E57",
+    primary_color : "#D53C1B",
     secondary_color : "#211B14",
-    tertiary_color : "#944444",
+    tertiary_color : "#D53C1B",
     font_name : "Rubik",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
-    background_image : "https://images.unsplash.com/photo-1497002961800-ea7dbfe18696?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    background_image : "https://images.unsplash.com/photo-1504344977555-430929e2c4ba?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"
   }
 ]
 

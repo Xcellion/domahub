@@ -99,7 +99,7 @@ function updateEditorEditing(selected_domain_ids){
     current_listing = listing_info;
 
     //hide domain capitalization
-    $("#domain-name-cap-missing").removeClass('is-hidden');
+    $("#domain-name-cap-missing").text('You cannot edit capitalization for multiple domains. Please select one domain only.');
     $("#domain-name-input").addClass('is-hidden');
 
     //change preview name
@@ -127,7 +127,6 @@ function updateEditorEditing(selected_domain_ids){
     $("#view-listings-button").off().attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
 
     //show domain capitalization
-    $("#domain-name-cap-missing").addClass('is-hidden');
     $("#domain-name-input").removeClass('is-hidden');
   }
 
@@ -186,12 +185,12 @@ function updateStatus(listing_info){
   //turned on, turn off?
   if (listing_info.status == 1){
     $("#status-toggle-button").addClass("is-primary").removeClass('is-danger');
-    $("#status-icon").addClass("fa-toggle-on").removeClass('fa-toggle-off');
+    $("#status-icon").find("svg").replaceWith("<i class='far fa-toggle-on'></i>");
     $("#status-text").text("Active");
   }
   else {
     $("#status-toggle-button").addClass('is-danger').removeClass("is-primary");
-    $("#status-icon").addClass('fa-toggle-off').removeClass("fa-toggle-on");
+    $("#status-icon").find("svg").replaceWith("<i class='far fa-toggle-off'></i>");
     $("#status-text").text("Inactive");
   }
 }
@@ -872,9 +871,15 @@ function setupOfferButtons(selected_domain_ids){
 
     //rejected offers button
     $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
-      $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
+      $(this).toggleClass("is-primary is-black");
+      if ($(this).hasClass("is-primary")) {
+        $(this).find("svg").replaceWith("<i class='far fa-toggle-on'></i>");
+      }
+      else {
+        $(this).find("svg").replaceWith("<i class='far fa-toggle-off'></i>");
+      }
       refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
-    }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
+    });
 
   }
 

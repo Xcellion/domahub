@@ -12,13 +12,16 @@
         <% } %>
       </div>
       <div class="bar-right">
-        <% if (!listing_info.premium) { %>
+        <% if (!listing_info.premium || listing_info.social_sharing) { %>
         <p id="dh-footer-right-text" class="footer-item has-text-centered">
           Sell your domains faster and easier with DomaHub Landing Pages.
         </p>
-        <a id="dh-footer-right-smile" class="footer-item" href="https://www.emojione.com" rel="noopener" target="_blank" title="Icons from Emojione">
-          <img class="v-align-middle" height="16" width="16" alt="Icons from Emojione" src="/images/lib/smile.png" />
-        </a>
+
+        <%# SOCIAL SHARING MODULE %>
+        <%- include("modules/info/social_share_module.ejs", {
+          listing_info : listing_info
+        }); %>
+
         <% } else { %>
           <p id="dh_footer-right-text" class="footer-item"><%= listing_info.domain_name %></p>
         <% } %>

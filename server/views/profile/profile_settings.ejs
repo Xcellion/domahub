@@ -27,13 +27,17 @@
             <ul>
               <li id="account-tab" class="tab is-active">
                 <a tabindex="0">
-                  <span class="icon is-hidden-tablet"><i class="fa fa-user"></i></span>
+                  <div class="icon is-hidden-tablet">
+										<i class="far fa-user"></i>
+									</div>
                   <span class="is-hidden-mobile">Account</span>
                 </a>
               </li>
               <li id="premium-tab" class="tab">
                 <a tabindex="0">
-                  <span class="icon is-hidden-tablet"><i class="fa fa-trophy"></i></span>
+                  <div class="icon is-hidden-tablet">
+										<i class="far fa-trophy"></i>
+									</div>
                   <span class="is-hidden-mobile">
                     <% if (user.stripe_subscription_id) { %>
                       Premium Status
@@ -45,17 +49,21 @@
               </li>
               <li id="payment-tab" class="tab">
                 <a tabindex="0">
-                  <span class="icon is-relative is-hidden-tablet"><i class="fa fa-university"></i></span>
+                  <div class="icon is-relative is-hidden-tablet">
+										<i class="far fa-university"></i>
+									</div>
                   <span class="is-relative is-hidden-mobile">Payment
-										<span class="required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
-	                    <i class="fa fa-exclamation-circle"></i>
-	                  </span>
+										<div class="required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
+	                    <i class="far fa-exclamation-circle"></i>
+	                  </div>
 									</span>
                 </a>
               </li>
               <li id="transactions-tab" class="tab">
                 <a tabindex="0">
-                  <span class="icon is-hidden-tablet"><i class="fa fa-money"></i></span>
+                  <div class="icon is-hidden-tablet">
+										<i class="far fa-money"></i>
+									</div>
                   <span class="is-hidden-mobile">Transactions</span>
                 </a>
               </li>
@@ -63,25 +71,33 @@
                 <div class="control is-grouped">
                   <div class="control">
                     <button id="account-submit" type="submit" form="stripe-account-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+                      <div class="icon is-small">
+												<i class="far fa-check-circle"></i>
+											</div>
                       <span>Save</span>
                     </button>
                     <button id="stripe-account-submit" type="submit" form="stripe-personal-form" class="toolbar-button is-hidden button is-primary is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+                      <div class="icon is-small">
+												<i class="far fa-check-circle"></i>
+											</div>
                       <span>Save</span>
                     </button>
                     <button id="paypal-submit" type="submit" form="paypal-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+                      <div class="icon is-small">
+												<i class="far fa-check-circle"></i>
+											</div>
                       <span>Save</span>
                     </button>
                     <%# <button id="payoneer-submit" type="submit" form="payoneer-form" class="toolbar-submit-button toolbar-submit-button toolbar-button is-hidden button is-primary">
-                      <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+                      <span class="icon is-small"><i class="far fa-check-circle"></i></span>
                       <span>Save</span>
                     </button>%>
                   </div>
                   <div class="control">
                     <a id="cancel-button" class="toolbar-button is-hidden button is-danger is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-ban"></i></span>
+                      <div class="icon is-small">
+												<i class="far fa-ban"></i>
+											</div>
                       <span>Cancel</span>
                     </a>
                   </div>
@@ -114,9 +130,9 @@
                   <div class="control">
                     <label class="label" for="username-input">
                       Username
-                      <span class="icon is-tooltip is-small" data-balloon="Must be between 3 and 50 characters and cannot include any spaces." data-balloon-pos="up" data-balloon-length="medium">
-                        <i class="fa fa-question-circle"></i>
-                      </span>
+                      <div class="icon is-tooltip is-small" data-balloon="Must be between 3 and 50 characters and cannot include any spaces." data-balloon-pos="up" data-balloon-length="medium">
+                        <i class="far fa-question-circle"></i>
+                      </div>
                     </label>
                     <small class="tip">Other users will be able to see your username.</small>
                     <input required id="username-input" class="input account-input" data-uservar="username" type="text" value="<%= user.username %>" spellcheck="false"/>
@@ -131,7 +147,9 @@
                   </div>
                   <div class="control-right">
                     <a id="change-password-button" class="button is-primary is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-unlock-alt"></i></span>
+                      <div class="icon is-small">
+												<i class="far fa-unlock-alt"></i>
+											</div>
                       <span>Change Password</span>
                     </a>
                   </div>
@@ -158,7 +176,9 @@
                   </div>
                   <div class="control-right">
                     <a data-registrar_name="godaddy" class="add-registrar-button button is-primary is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-link"></i></span>
+                      <div class="icon is-small">
+												<i class="far fa-link"></i>
+											</div>
                       <span class="registrar-button-text" data-registrar="GoDaddy"></span>
                     </a>
                   </div>
@@ -172,7 +192,7 @@
                   </div>
                   <div class="control-right">
                     <a data-registrar_name="namecheap" class="add-registrar-button button">
-                      <span class="icon is-small"><i class="fa fa-link"></i></span>
+                      <span class="icon is-small"><i class="far fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar="NameCheap"></span>
                     </a>
                   </div>
@@ -194,7 +214,9 @@
           			<span>Premium Status</span>
           		</h3>
           		<a tabindex="0" class="button is-small no-shadow is-transparent is-black card-header-icon" href="/features#pricing">
-          			<span class="icon is-small"><i class="fa fa-question-circle"></i></span>
+          			<div class="icon is-small">
+									<i class="far fa-question-circle"></i>
+								</div>
           			<span>What is Premium?</span>
           		</a>
           	</div>
@@ -208,22 +230,22 @@
           			</div>
           			<div class="control-right">
           				<a id="upgrade-button" class="basic-elem button is-stylish is-small is-primary">
-          					<span class="icon is-small">
-          						<i class="fa fa-trophy"></i>
-          					</span>
+          					<div class="icon is-small">
+          						<i class="far fa-trophy"></i>
+          					</div>
           					<span class="button-text">Upgrade</span>
           				</a>
           				<div class="premium-elem control">
           					<a id="cancel-premium-confirm-button" class="is-hidden is-inverted button is-danger is-stylish is-small">
-          						<span class="icon is-small">
-          							<i class="fa fa-frown-o"></i>
-          						</span>
+          						<div class="icon is-small">
+          							<i class="far fa-ban"></i>
+          						</div>
           						<span>Cancel Premium</span>
           					</a>
           					<a id="renew-premium-button" class="is-hidden is-inverted button is-primary is-stylish is-small">
-          						<span class="icon is-small">
-          							<i class="fa fa-repeat"></i>
-          						</span>
+          						<div class="icon is-small">
+          							<i class="far fa-repeat"></i>
+          						</div>
           						<span>Renew Premium</span>
           					</a>
           				</div>
@@ -238,9 +260,9 @@
           			</div>
           			<div class="control-right">
           				<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-inverted is-stylish is-small">
-          					<span class="icon is-small">
-          						<i class="fa fa-credit-card"></i>
-          					</span>
+          					<div class="icon is-small">
+          						<i class="far fa-credit-card"></i>
+          					</div>
           					<span>Add A New Card</span>
           				</a>
           			</div>
@@ -306,23 +328,27 @@
                 </div>
                 <div class="control-right">
                   <form id="promo-form">
-                    <p class="control has-icon has-addons">
+                    <div class="control has-icon has-addons">
                       <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
-                      <i class="fa fa-tags"></i>
+                      <div class="icon">
+												<i class="far fa-tags"></i>
+											</div>
                       <button id="promo-submit" class="promo-input button no-shadow is-primary is-stylish is-small" text="Submit" type="submit" form="promo-form">
-												<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+												<div class="icon is-small">
+													<i class="far fa-check-circle"></i>
+												</div>
 												<span>Submit</span>
 											</button>
-                    </p>
+                    </div>
                   </form>
                 </div>
               </div>
           		<div class="control">
           			<label class="label" for="referral-link">
                   My Referrals
-                  <span class="icon is-tooltip is-small" data-balloon="Once the referred account has signed up for a Premium account, you will both be credited with a free month of Premium!" data-balloon-pos="up" data-balloon-length="large">
-                    <i class="fa fa-question-circle"></i>
-                  </span>
+                  <div class="icon is-tooltip is-small" data-balloon="Once the referred account has signed up for a Premium account, you will both be credited with a free month of Premium!" data-balloon-pos="up" data-balloon-length="large">
+                    <i class="far fa-question-circle"></i>
+                  </div>
                 </label>
           			<small class="tip">
           				These are people who have signed up using your referral link or any promotional codes you may have applied to your account.
@@ -330,7 +356,9 @@
                 <div class="control has-addons">
                   <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input" placeholder="Invite your friends!"/>
                   <a id="referral-link-copy" class="button no-shadow is-primary is-stylish is-small" tabindex="0">
-                    <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
+                    <div class="icon is-small">
+											<i class="far fa-clipboard"></i>
+										</div>
                     <span id="referral-link-text">Copy Link</span>
                   </a>
                 </div>
@@ -340,7 +368,7 @@
                   <tr class="no-hover-effect">
                     <td>
                       <div class="nothing-exists-row has-text-centered">
-                        <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
+                        <p class="icon is-medium"><i class="far fa-spin fa-sync-alt"></i></p>
                         <p>Now loading your referrals.</p>
                         <p>This may take some time.</p>
                       </div>
@@ -381,9 +409,9 @@
           					<th>Signed Up</th>
           					<th>
                       Status
-                      <span class="icon is-tooltip is-small" data-balloon="The current status of the referred account or free months earned from this coupon or referral." data-balloon-pos="up" data-balloon-length="large">
-                        <i class="fa fa-question-circle"></i>
-                      </span>
+                      <div class="icon is-tooltip is-small" data-balloon="The current status of the referred account or free months earned from this coupon or referral." data-balloon-pos="up" data-balloon-length="large">
+                        <i class="far fa-question-circle"></i>
+                      </div>
                     </th>
           				</tr>
           			</thead>
@@ -657,26 +685,26 @@
                 <h3 class="card-header-title">
                   Bank Information
                 </h3>
-                <span class="icon is-info" data-balloon="Bank information is stored and handled by our payments processor, Stripe." data-balloon-pos="up" data-balloon-length="large">
-                  <i class="fa fa-cc-stripe"></i>
-                </span>
+                <div class="icon is-info" data-balloon="Bank information is stored and handled by our payments processor, Stripe." data-balloon-pos="up" data-balloon-length="large">
+                  <i class="far fa-stripe"></i>
+                </div>
               </div>
               <div class="card-content">
                 <div class="control is-spaced is-mobile">
                   <div class="control-left">
-                    <p>
+                    <div>
                       Default Bank
-                      <span id="bank-tooltip" class="icon is-tooltip is-small" data-balloon="Please contact us if you do not see your country or currency listed in the default list of available choices." data-balloon-pos="up" data-balloon-length="large">
-                        <i class="fa fa-question-circle"></i>
-                      </span>
-                    </p>
+                      <div id="bank-tooltip" class="icon is-tooltip is-small" data-balloon="Please contact us if you do not see your country or currency listed in the default list of available choices." data-balloon-pos="up" data-balloon-length="large">
+                        <i class="far fa-question-circle"></i>
+                      </div>
+                    </div>
                     <small class="tip existing-bank">Click the button to add a default bank account!</small>
                   </div>
                   <div class="control-right">
                     <a id="change-bank-button" tabindex="0" title="Change Bank Account" class="is-hidden button is-primary is-stylish is-small">
-                      <span class="icon is-small">
-                        <i class="fa fa-university"></i>
-                      </span>
+                      <div class="icon is-small">
+                        <i class="far fa-university"></i>
+                      </div>
                       <span>Add A New Bank</span>
                     </a>
                   </div>
@@ -690,9 +718,9 @@
                 <h3 class="card-header-title">
                   PayPal Information
                 </h3>
-                <span class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="up" data-balloon-length="large">
-                  <i class="fa fa-paypal"></i>
-                </span>
+                <div class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="up" data-balloon-length="large">
+                  <i class="far fa-paypal"></i>
+                </div>
               </div>
               <div class="card-content">
                 <form id="paypal-form" class="form">
@@ -733,9 +761,9 @@
                   Earnings Report
                 </h3>
                 <div class="card-header-icon">
-                  <span class="icon is-tooltip" data-balloon="Most banks only process transfers on business days. Money withdrawn on holidays or weekends may only be available when your bank opens. Your withdrawal could be delayed or blocked if we identify an issue with either your DomaHub account or bank account." data-balloon-pos="up" data-balloon-length="large">
-                    <i class="fa fa-question-circle"></i>
-                  </span>
+                  <div class="icon is-tooltip" data-balloon="Most banks only process transfers on business days. Money withdrawn on holidays or weekends may only be available when your bank opens. Your withdrawal could be delayed or blocked if we identify an issue with either your DomaHub account or bank account." data-balloon-pos="up" data-balloon-length="large">
+                    <i class="far fa-question-circle"></i>
+                  </div>
                 </div>
               </div>
               <div class="card-content">
@@ -744,11 +772,11 @@
                     <span>Total earned</span>
                     <span id="total-earned" class="is-pulled-right">$0.00</span>
                   </p>
-                  <p>
+                  <p class="is-inline">
                     <span>Total fees paid</span>
-                    <span class="icon is-tooltip is-small" data-balloon="There is a 2.9% + $0.30 fee for payments processing. Basic accounts have an additional 10% commission fee." data-balloon-pos="up" data-balloon-length="large">
-                      <i class="fa fa-question-circle"></i>
-                    </span>
+                    <div class="icon is-tooltip is-small" data-balloon="There is a 2.9% + $0.30 fee for payments processing. Basic accounts have an additional 10% commission fee." data-balloon-pos="up" data-balloon-length="large">
+                      <i class="far fa-question-circle"></i>
+                    </div>
                     <span id="total-fees" class="is-pulled-right">$0.00</span>
                   </p>
                   <p>
@@ -760,7 +788,9 @@
                     <span id="total-available" class="is-bold is-pulled-right">$0.00</span>
                   </p>
                   <a id="transfer-button" class="is-fullwidth is-disabled is-stylish is-primary button">
-                    <span class="icon is-small"><i class="fa fa-exchange"></i></span>
+                    <div class="icon is-small">
+											<i class="far fa-exchange"></i>
+										</div>
                     <span>Withdraw <span class="withdrawal-available"></span> to Bank</span>
                   </a>
                 </div>
@@ -770,14 +800,16 @@
           <div class="column">
             <div id="transactions-toolbar" class="control">
               <div class="control">
-                <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" title="Refresh Transactions">
-                  <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+                <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" tabindex="0" title="Refresh Transactions">
+                  <div class="icon is-small">
+										<i class="far fa-sync-alt"></i>
+									</div>
                   <span>Refresh Transactions</span>
                 </a>
               </div>
               <div class="control is-grouped">
                 <div class="control">
-                  <span class="select no-borders is-transparent is-narrow">
+                  <span class="select is-narrow">
                     <select id="transactions-filter-select" tabindex="0">
                       <option selected value="exists">View All</option>
                       <option value="sale">Domain Sales</option>
@@ -789,8 +821,10 @@
                   </span>
                 </div>
                 <div class="control has-icon">
-                  <i class="fa fa-search"></i>
-                  <input id="transactions-search" tabindex="0" class="input is-expanded is-transparent no-border" type="text" placeholder="Search Transactions" />
+                  <div class="icon">
+										<i class="far fa-search"></i>
+									</div>
+                  <input id="transactions-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search Transactions" />
                 </div>
               </div>
             </div>
@@ -821,7 +855,7 @@
                 <tr class="no-hover-effect">
                   <td>
                     <div class="nothing-exists-row has-text-centered">
-                      <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
+                      <p class="icon is-medium"><i class="far fa-spin fa-sync"></i></p>
                       <p>Now loading your transactions.</p>
                       <p>This may take some time.</p>
                     </div>
@@ -882,7 +916,7 @@
             <label id="pw-label" class="label" for="new-pw-input">
               New Password
               <span data-balloon="Must be at least 6 characters long." data-balloon-pos="up" data-balloon-length="medium" class="icon is-tooltip is-small">
-                <i class="fa fa-question-circle"></i>
+                <i class="far fa-question-circle"></i>
               </span>
             </label>
             <input required id="new-pw-input" maxlength="70" minlength="6" name="new-pw-input" autocomplete="new-password" class="input modal-input account-input" type="password">
@@ -893,18 +927,22 @@
           </div>
         </form>
         <div class="control is-grouped is-grouped-center">
-          <p class="control">
+          <div class="control">
             <button form="password-form" type="submit" id="password-submit" tabindex="0" class='toolbar-submit-button button is-primary is-stylish is-small'>
-              <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-check-circle"></i>
+							</div>
               <span>Save Password</span>
             </button>
-          </p>
-          <p class="control">
+          </div>
+          <div class="control">
             <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
-              <span class="icon is-small"><i class="fa fa-ban"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-ban"></i>
+							</div>
               <span>Cancel</span>
             </a>
-          </p>
+          </div>
         </div>
       </div>
     </div>
@@ -940,18 +978,22 @@
           </div>
         </form>
         <div class="control is-grouped is-grouped-center">
-          <p class="control">
+          <div class="control">
             <button form="registrar-form" type="submit" id="registrar-submit" tabindex="0" class='toolbar-submit-button button is-primary is-stylish is-small'>
-              <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-check-circle"></i>
+							</div>
               <span>Save Registrar</span>
             </button>
-          </p>
-          <p class="control">
+          </div>
+          <div class="control">
             <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
-              <span class="icon is-small"><i class="fa fa-ban"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-ban"></i>
+							</div>
               <span>Cancel</span>
             </a>
-          </p>
+          </div>
         </div>
       </div>
     </div>
@@ -964,67 +1006,79 @@
     <div class="modal-container">
       <div class="modal-content is-small">
         <form id="credit-card-form" class="content" autocomplete="on">
-            <p class="control existing-cc is-hidden"></p>
+            <div class="control existing-cc is-hidden"></div>
             <div class="control">
               <label class="label">
-                <span class="v-align-middle">Card Number</span>
+                <span>Card Number</span>
               </label>
               <div class="control">
-                <p class="control has-icon">
+                <div class="control has-icon">
                   <input id="cc-num" required tabindex="0" data-stripe="number" class="input modal-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                  <i id="cc-icon" class="fa fa-credit-card"></i>
-                </p>
+									<div class="icon">
+										<i id="cc-icon" class="far fa-credit-card"></i>
+									</div>
+                </div>
               </div>
             </div>
             <div class="control">
               <label class="label">
-                <span class="v-align-middle">Expiration Date</span>
+                <span>Expiration Date</span>
               </label>
               <div class="control">
-                <p class="control has-icon">
+                <div class="control has-icon">
                   <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input modal-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-                  <i class="fa fa-calendar-o"></i>
-                </p>
+									<div class="icon">
+										<i class="far fa-calendar-alt"></i>
+									</div>
+                </div>
               </div>
             </div>
             <div class="control">
               <label class="label">
-                <span class="v-align-middle">Security Code</span>
+                <span>Security Code</span>
               </label>
               <div class="control">
-                <p class="control has-icon">
+                <div class="control has-icon">
                   <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input modal-input" type="tel" placeholder="•••" autocomplete="off"/>
-                  <i class="fa fa-lock"></i>
-                </p>
+									<div class="icon">
+										<i class="far fa-lock"></i>
+									</div>
+                </div>
               </div>
             </div>
             <div class="control">
               <label class="label">
-                <span class="v-align-middle">Zip Code</span>
+                <span>Zip Code</span>
               </label>
               <div class="control">
-                <p class="control has-icon">
+                <div class="control has-icon">
                   <input id="cc-zip" required tabindex="0" maxlength="6" data-stripe="address_zip" class="input modal-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                  <i class="fa fa-map-marker"></i>
-                </p>
+									<div class="icon">
+										<i class="far fa-map-marker-alt"></i>
+									</div>
+                </div>
               </div>
             </div>
             <div class="content">
               <small class="tip">This information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-underlined">Stripe</a>.</small>
             </div>
             <div class="control is-grouped is-grouped-center">
-              <p class="control">
+              <div class="control">
                 <button id="submit-card-button" tabindex="0" type="submit" form="credit-card-form" class='button is-primary is-stylish is-small'>
-                  <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+                  <div class="icon is-small">
+										<i class="far fa-check-circle"></i>
+									</div>
                   <span>Save Card</span>
                 </button>
-              </p>
-              <p class="control">
+              </div>
+              <div class="control">
                 <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
-                  <span class="icon is-small"><i class="fa fa-ban"></i></span>
+                  <div class="icon is-small">
+										<i class="far fa-ban"></i>
+									</div>
                   <span>Cancel</span>
                 </a>
-              </p>
+              </div>
             </div>
           </form>
       </div>
@@ -1038,29 +1092,34 @@
     <div class="modal-container">
       <div class="modal-content">
         <div class="control">
-          <p class="control">
-            Are you sure you want to cancel your Premium account?
-          </p>
-          <div>
-            <p class="control has-text-centered">
-              <span class="icon is-danger"><i class="fa fa-exclamation-triangle"></i></span>
-              The following <strong>will be disabled</strong> for your account.
-              <span class="icon is-danger"><i class="fa fa-exclamation-triangle"></i></span>
-            </p>
-            <div id="premium-cancel-disable-wrapper">
-              <li>
-                0% commission on sales and rentals
-              </li>
-              <li>
-                Customization on your listings
-              </li>
-              <li>
-                Custom HTTPS URLs on your listings
-              </li>
-              <li>
-                Customized email communications from your listings
-              </li>
-            </div>
+          <div class="notification no-shadow is-small has-icon is-danger">
+						<div class="icon-box">
+							<div class="icon is-white">
+								<i class="far fa-exclamation-triangle"></i>
+							</div>
+						</div>
+            <div class="content">
+							<p>
+								Are you sure you want to cancel your Premium account?
+								The following <strong>will be disabled</strong> for your account.
+							</p>
+						</div>
+          </div>
+          <div id="premium-cancel-disable-wrapper" class="content">
+            <ul class="has-disc">
+							<li>
+	              0% commission on sales and rentals
+	            </li>
+	            <li>
+	              Customization on your listings
+	            </li>
+	            <li>
+	              Custom HTTPS URLs on your listings
+	            </li>
+	            <li>
+	              Customized email communications from your listings
+	            </li>
+						</ul>
           </div>
         </div>
         <div class="control">
@@ -1069,14 +1128,14 @@
         </div>
         <div class="control is-grouped is-grouped-center">
             <div class="control">
-              <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-danger is-inverted'>
-                <span class="icon is-small"><i class="fa fa-frown-o"></i></span>
+              <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-stylish is-small is-danger'>
+                <div class="icon is-small"><i class="far fa-frown-o"></i></div>
                 <span>Cancel Premium</span>
               </a>
             </div>
             <div class="control">
-              <a tabindex="0" class='button cancel-modal'>
-                <span class="icon is-small"><i class="fa fa-ban"></i></span>
+              <a tabindex="0" class='button is-stylish is-small is-inverted is-black cancel-modal'>
+                <div class="icon is-small"><i class="far fa-ban"></i></div>
                 <span>Nevermind</span>
               </a>
             </div>
@@ -1092,7 +1151,7 @@
     <div class="modal-container">
       <div class="modal-content">
         <form id="stripe-bank-form" autocomplete="off" class="content">
-            <p class="control existing-bank is-hidden"></p>
+            <div class="control existing-bank is-hidden"></div>
             <div class="control">
               <label class="label" for="country-input">Country</label>
               <span class="select is-fullwidth">
@@ -1159,23 +1218,23 @@
             <div id="account-wrapper" class="is-hidden control">
               <label id="account_number-label" class="label" for="account_number-input">
                 <span id="account_number-text">Account Number </span>
-                <span class="is-hidden" id="account_number-last4">(Last 4 Digits)</span>
+                <div class="is-hidden" id="account_number-last4">(Last 4 Digits)</div>
               </label>
               <input id="account_number-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_number" />
             </div>
             <div class="control is-grouped is-grouped-center">
-              <p class="control">
+              <div class="control">
                 <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-primary is-stylish is-small">
-                  <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+                  <div class="icon is-small"><i class="far fa-check-circle"></i></div>
                   <span>Save Bank</span>
                 </button>
-              </p>
-              <p class="control">
+              </div>
+              <div class="control">
                 <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
-                  <span class="icon is-small"><i class="fa fa-ban"></i></span>
+                  <div class="icon is-small"><i class="far fa-ban"></i></div>
                   <span>Cancel</span>
                 </a>
-              </p>
+              </div>
             </div>
           </form>
       </div>
@@ -1198,33 +1257,48 @@
         <div class="content">
           <ul id="transactions-info">
             <li id="pending-transfer-wrapper" class="is-hidden">
-              <span class="icon is-small is-danger" title="Pending Transfer of Ownership"><i class="fa fa-question-circle"></i></span><span>Please <a id="transfer-ownership-href" class="is-underlined is-primary">transfer ownership</a> of this domain to access these funds!</span>
+              <div class="icon is-small is-danger" title="Pending Transfer of Ownership">
+								<i class="far fa-question-circle"></i></span>
+							<div>
+							Please <a id="transfer-ownership-href" class="is-underlined is-primary">transfer ownership</a> of this domain to access these funds!</span>
             </li>
             <li id="available-on-wrapper">
-              <span class="icon is-small" title="Type"><i class="fa fa-clock-o"></i></span><span id="transactions-modal-available"></span>
+              <div class="icon is-small" title="Type">
+								<i class="far fa-clock-o"></i>
+							</div>
+							<span id="transactions-modal-available"></span>
             </li>
             <li>
-              <span class="icon is-small" title="DomaHub Fees"><i class="fa fa-trophy"></i></span>
-              </span><span id="transactions-modal-domafees"></span>
+              <div class="icon is-small" title="DomaHub Fees">
+								<i class="far fa-trophy"></i>
+							</div>
+              <span id="transactions-modal-domafees"></span>
             </li>
             <li>
-              <span class="icon is-small" title="Payment Processing Fees"><i class="fa fa-money"></i></span><span id="transactions-modal-processfees"></span>
+              <div class="icon is-small" title="Payment Processing Fees">
+								<i class="far fa-money"></i>
+							</div>
+							<span id="transactions-modal-processfees"></span>
             </li>
           </ul>
         </div>
         <div id="rental-buttons-wrapper" class="is-hidden control is-grouped is-grouped-center">
-          <p class="control">
+          <div class="control">
             <a target="_blank" id="view-rental-button" type="submit" class="button">
-              <span class="icon is-small"><i class="fa fa-search"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-search"></i>
+							</div>
               <span>Preview rental</span>
             </a>
-          </p>
-          <p class="control">
+          </div>
+          <div class="control">
             <a id="refund-rental-submit" type="submit" class="button is-danger is-inverted">
-              <span class="icon is-small"><i class="fa fa-repeat"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-repeat"></i>
+							</div>
               <span>Refund rental</span>
             </a>
-          </p>
+          </div>
         </div>
         <div class="control basic-hidden">
           <small class="tip remove-margin-bottom-content">* Hurray! You paid 0% commission on this transaction!</small>

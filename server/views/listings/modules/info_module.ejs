@@ -8,11 +8,10 @@
         (listing_info.domain_owner ||
          listing_info.domain_age ||
          listing_info.domain_appraisal ||
-         listing_info.social_sharing ||
          listing_info.categories
        )) { %>
 
-       <div class="level">
+       <div class="level is-mobile">
           <%# LISTING OWNER MODULE %>
           <%- include("info/domain_owner_module.ejs", {
             listing_info : listing_info
@@ -41,23 +40,15 @@
 
       <% } %>
 
-      <!--
-      <%# CATEGORIES MODULE %>
-      <%- include("info/categories_module.ejs", {
-        listing_info : listing_info
-      }); %>-->
-
-
     <% } else { %>
 
       <% if (!listing_info.premium ||
         (listing_info.domain_owner ||
          listing_info.domain_age ||
          listing_info.domain_appraisal ||
-         listing_info.social_sharing ||
          listing_info.categories
        )) { %>
-         <div class="level">
+         <div class="level is-mobile">
             <%# LISTING OWNER MODULE %>
             <%- include("info/domain_owner_module.ejs", {
               listing_info : listing_info
@@ -68,15 +59,20 @@
             }); %>
          </div>
 
-         <%# APPRAISALS MODULE %>
-         <%- include("info/appraisals_module.ejs", {
-           listing_info : listing_info
-         }); %>
-
          <%# DESCRIPTION AND CHECK AVAILABILITY MODULE %>
          <%- include("desc_avail_module.ejs", {
-             listing_info : listing_info});
-          %>
+             listing_info : listing_info
+         });%>
+
+          <%# CATEGORIES MODULE %>
+          <%- include("info/categories_module.ejs", {
+            listing_info : listing_info
+          }); %>
+
+          <%# APPRAISALS MODULE %>
+          <%- include("info/appraisals_module.ejs", {
+            listing_info : listing_info
+          }); %>
 
       <% } %>
 

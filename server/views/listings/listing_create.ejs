@@ -22,9 +22,9 @@
           <div class="content">
             <div class="content">
               <a href="/profile/mylistings" class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
-                <span class="icon is-small">
-                  <i class="fa fa-long-arrow-left"></i>
-                </span>
+                <div class="icon is-small">
+                  <i class="far fa-long-arrow-left"></i>
+                </div>
                 <span>Go Back To Listings</span>
               </a>
             </div>
@@ -51,30 +51,36 @@
             </p>
             <p class="content">
               <button tabindex="0" id="domain-names-submit" class="button is-fullwidth-mobile is-primary is-stylish" title="Submit Domains">
-                <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+                <div class="icon is-small">
+									<i class="far fa-check-circle"></i>
+								</div>
                 <span>Submit</span>
               </button>
             </p>
 	        </div>
           <div id="table-buttons-wrapper" class="is-hidden button-wrapper control">
             <button tabindex="0" class="add-domain-button button is-small is-stylish is-primary is-inverted">
-              <span class="icon is-small"><i class="fa fa-plus"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-plus"></i>
+							</div>
               <span>Add Row</span>
             </button>
             <button tabindex="0" class="delete-domains-button button is-small is-stylish is-danger is-inverted">
-              <span class='icon is-small is-danger'>
-                <i class='fa fa-trash-o'></i>
-              </span>
+              <div class='icon is-small is-danger'>
+                <i class='far fa-trash'></i>
+              </div>
               <span>Remove All</span>
             </button>
             <button id='clear-errored-button' tabindex="0" class="is-hidden delete-errors-button button is-small is-stylish is-black is-inverted">
-              <span class='icon is-small'>
-                <i class='fa fa-ban'></i>
-              </span>
+              <div class='icon is-small'>
+                <i class='far fa-ban'></i>
+              </div>
               <span>Clear Errored Rows</span>
             </button>
             <button id='domains-submit' class="is-hidden button is-small is-stylish is-primary">
-              <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+              <div class="icon is-small">
+								<i class="far fa-check-circle"></i>
+							</div>
               <span>Submit</span>
             </button>
           </div>
@@ -88,7 +94,7 @@
                   <th class="td-min-price is-hidden-mobile">
                     <span>Min. Price</span>
                     <span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-                      <i class="fa fa-question-circle"></i>
+                      <i class="far fa-question-circle"></i>
                     </span>
                   </th>
                 </tr>
@@ -99,7 +105,7 @@
                     <div class='control has-addons is-marginless'>
                       <button class="button is-icon delete-icon no-shadow">
                         <span class='icon is-small'>
-                          <i class='fa fa-trash-o'></i>
+                          <i class='far fa-trash'></i>
                         </span>
                       </button>
                       <input class="domain-name-input input is-expanded no-shadow" type="text" value=""/>

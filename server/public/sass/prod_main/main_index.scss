@@ -40,6 +40,13 @@
     width: 300%;
     height: 120%;
   }
+  @media screen and (max-height: 768px) {
+    height: 500px;
+    &:before {
+      @include skew(0,0);
+      top: 0;
+    }
+  }
   @include mobile {
     padding: 40px 20px;
     &:before {
