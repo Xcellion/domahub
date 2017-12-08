@@ -12,7 +12,7 @@
             <input id="select-all" class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
             <label for="select-button"></label>
           </form>
-          <span class="icon "><i class="fa fa-angle-down"></i></span>
+          <div class="icon"><i class="far fa-angle-down"></i></div>
         </a>
         <div id="select-all-drop" class="is-hidden domain-tooltip">
           <a class="select-drop-button" data-type="all" data-value=true>All</a>
@@ -28,40 +28,40 @@
         </div>
       </div>
 
-      <a id="selector-edit-button" class="selector-button button is-primary is-stylish is-small is-hidden" tabindex="0" title="Edit Details">
-        <span class="icon is-small">
-          <i class="fa fa-pencil-square-o"></i>
-        </span>
+      <a id="selector-edit-button" class="selector-button button is-primary is-stylish is-inverted is-small is-hidden" tabindex="0" title="Edit Details">
+        <div class="icon is-small">
+          <i class="far fa-edit"></i>
+        </div>
         <span class="is-hidden-mobile">Edit Details</span>
       </a>
-      <a id="selector-verify-button" class="selector-button button is-primary is-stylish is-small is-hidden" tabindex="0" title="Verify Ownership">
-        <span class="icon is-small">
-          <i class="fa fa-check-circle-o"></i>
-        </span>
+      <a id="selector-verify-button" class="selector-button button is-primary is-stylish is-inverted is-small is-hidden" tabindex="0" title="Verify Ownership">
+        <div class="icon is-small">
+          <i class="far fa-check-circle"></i>
+        </div>
         <span class="is-hidden-mobile">Verify Ownership</span>
       </a>
-      <a id="selector-offers-button" class="selector-button button is-info is-stylish is-small is-hidden" tabindex="0" title="View Offers">
-        <span class="icon is-small">
-          <i class="fa fa-money"></i>
-        </span>
+      <a id="selector-offers-button" class="selector-button button is-info is-stylish is-inverted is-small is-hidden" tabindex="0" title="View Offers">
+        <div class="icon is-small">
+          <i class="far fa-money-bill"></i>
+        </div>
         <span class="is-hidden-mobile">View Offers</span>
       </a>
-      <a id="selector-delete-button" class="selector-button button is-danger is-stylish is-small is-hidden" tabindex="0" title="Delete Listing(s)">
-        <span class="icon is-small">
-          <i class="fa fa-trash"></i>
-        </span>
+      <a id="selector-delete-button" class="selector-button button is-danger is-stylish is-inverted is-small is-hidden" tabindex="0" title="Delete Listing(s)">
+        <div class="icon is-small">
+          <i class="far fa-trash"></i>
+        </div>
         <span class="is-hidden-mobile">Delete</span>
       </a>
       <%# <a id="selector-stats-button" class="selector-verified-button button is-hidden" tabindex="0" title="View Statistics">
-        <span class="icon is-small">
-          <i class="fa fa-bar-chart"></i>
-        </span>
+        <div class="icon is-small">
+          <i class="far fa-bar-chart"></i>
+        </div>
         <span>View Statistics</span>
       </a>%>
       <a class="button is-black is-inverted is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
-        <span class="icon is-small">
-          <i class="fa fa-plus"></i>
-        </span>
+        <div class="icon is-small">
+          <i class="far fa-plus-circle"></i>
+        </div>
         <span class="is-hidden-mobile">Create New Listings</span>
       </a>
     </div>
@@ -70,7 +70,7 @@
     <div id="filter-menu" class="yes-listings-elem control">
       <div class="control is-grouped">
         <div class="control">
-          <span class="select is-narrow no-borders is-transparent">
+          <span class="select is-narrow has-shadow">
             <select id="filter-select" tabindex="0">
               <option selected value="id">View All</option>
               <option value="unverified">Unverified</option>
@@ -84,16 +84,18 @@
           </span>
         </div>
         <div class="control">
-          <button id="refresh-listings-button" class="button is-black is-transparent no-shadow" title="Refresh Listings" tabindex="0">
-            <span class="icon is-small">
-              <i class="fa fa-refresh"></i>
-            </span>
+          <button id="refresh-listings-button" class="button is-stylish is-small" title="Refresh Listings" tabindex="0">
+            <div class="icon is-small">
+              <i class="far fa-sync-alt"></i>
+            </div>
             <span class="is-hidden-mobile">Refresh</span>
           </button>
         </div>
         <div class="control has-icon">
-          <i class="fa fa-search"></i>
-          <input id="domain-search" tabindex="0" class="input is-expanded is-transparent no-border" type="text" placeholder="Search Listings" />
+          <div class="icon">
+            <i class="far fa-search"></i>
+          </div>
+          <input id="domain-search" tabindex="0" class="input is-expanded has-shadow" type="text" placeholder="Search" />
         </div>
       </div>
     </div>
@@ -106,23 +108,23 @@
         <th class="checkbox-col"></th>
         <th data-value="domain_name" class="td-domain listing-header-sort">
           <span>Domain Name</span>
-          <span class="icon is-small"><i class="fa fa-sort"></i></span>
+          <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="status" class="td-status listing-header-sort">
           <span>Status</span>
-          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <div class="listing-header-sort icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="date_created" class="is-hidden-mobile listing-header-sort">
           <span>Created</span>
-          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <div class="listing-header-sort icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="min_price" class="is-hidden-456px listing-header-sort">
-          <span>Minimum Price</span>
-          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span>Min. Offer</span>
+          <div class="listing-header-sort icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="buy_price" class="is-hidden-456px listing-header-sort">
-          <span>Buy it now Price</span>
-          <span class="listing-header-sort icon is-small"><i class="fa fa-sort"></i></span>
+          <span>BIN</span>
+          <div class="listing-header-sort icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
         </th>
       </tr>
     </thead>
@@ -130,9 +132,8 @@
       <tr id="loading-listings-row" class="no-hover-effect">
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
-            <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
-            <p>Now loading your DomaHub listings.</p>
-            <p>This may take some time.</p>
+            <p class="icon is-medium"><i class="far fa-spin fa-refresh"></i></p>
+            <p>Now loading your DomaHub listings...</p>
           </div>
         </td>
       </tr>
@@ -144,9 +145,9 @@
               You have no listings. Let's go make some!
             </p>
             <a class="button is-primary is-stylish" href="/listings/create">
-              <span class="icon is-small">
-                <i class="fa fa-plus"></i>
-              </span>
+              <div class="icon is-small">
+                <i class="far fa-plus"></i>
+              </div>
               <span>Create New Listings</span>
             </a>
           </div>
@@ -188,12 +189,12 @@
         </td>
         <td class="td-domain domain_name-sort-value"></td>
         <td>
-          <span class="td-status status-sort-value is-danger"></span>
-          <span class="icon is-danger is-inline is-small" data-balloon-length="large"
+          <span class="td-status status-sort-value"></span>
+          <div class="icon is-danger is-inline is-small" data-balloon-length="large"
           data-balloon="You must prove that you own this domain. Please verify ownership by selecting it and clicking the 'Verify Ownership' button above."
           data-balloon-pos="up">
-            <i class="fa fa-exclamation-circle"></i>
-          </span>
+            <i class="far fa-exclamation-circle" data-fa-transform="down-1"></i>
+          </div>
         </td>
         <td class="td-date is-hidden-mobile"></td>
         <td class="td-min is-hidden-456px"></td>
@@ -216,18 +217,18 @@
         </ul>
       </div>
       <div class="control is-grouped is-grouped-center">
-        <p class="control">
-          <a id="delete-confirmed" tabindex="0" class='button is-stylish is-small is-danger is-outlined '>
-            <span class="icon is-small"><i class="fa fa-trash"></i></span>
+        <div class="control">
+          <a id="delete-confirmed" tabindex="0" class='button is-danger is-stylish is-small'>
+            <div class="icon is-small"><i class="far fa-trash"></i></div>
             <span>Delete</span>
           </a>
-        </p>
-        <p class="control">
+        </div>
+        <div class="control">
           <a tabindex="0" class='button is-stylish is-small cancel-modal'>
-            <span class="icon is-small"><i class="fa fa-times"></i></span>
+            <div class="icon is-small"><i class="far fa-times"></i></div>
             <span>Nevermind</span>
           </a>
-        </p>
+        </div>
       </div>
     </div>
   </div>
