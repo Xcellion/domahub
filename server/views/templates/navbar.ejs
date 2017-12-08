@@ -127,7 +127,7 @@
         <a id="profile-button" tabindex="0" class="button is-primary is-outlined is-stylish is-small" title="Profile">
           <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
           <div class="icon">
-            <i class="fa fa-angle-down"></i>
+            <i class="far fa-angle-down"></i>
           </div>
         </a>
         <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/mylistings" title="My Listings">
@@ -137,27 +137,27 @@
           <ul class="profile-dropdown-menu">
             <li><a tabindex="0" href="/profile/mylistings">
               <div class="icon is-small">
-                <i class="fa fa-tasks"></i>
+                <i class="far fa-list-alt"></i>
               </div>
               <span>My Listings</span>
             </a></li>
             <li><a tabindex="0" href="/profile/settings">
               <div class="icon is-small">
-                <i class="fa fa-cog"></i>
+                <i class="far fa-cog"></i>
               </div>
               <span>Account Settings</span>
             </a></li>
             <% if (!user.stripe_subscription_id) { %>
               <li id="nav-premium-link"><a tabindex="0" href="/profile/settings#premium">
                 <div class="icon is-primary is-small">
-                  <i class="fa fa-trophy"></i>
+                  <i class="far fa-trophy"></i>
                 </div>
                 <span>Upgrade Account</span>
               </a></li>
             <% } %>
             <li><a tabindex="0" href="/logout">
               <div class="icon is-small">
-                <i class="fa fa-sign-out"></i>
+                <i class="far fa-sign-out"></i>
               </div>
               <span>Log Out</span>
             </a></li>
