@@ -13,20 +13,20 @@
     <ul class="menu-list">
       <li class="menu-item has-icon">
         <a id="dashboard-left-tab" tabindex="0" title="View My Dashboard" href="/profile/dashboard" class="left-tab primary-theme">
-          <span class="icon is-white"><i class="fa fa-window-maximize"></i></span>
+          <div class="icon is-white"><i class="far fa-window-maximize"></i></div>
           <p class="is-white is-hidden-tablet-only">Dashboard</p>
         </a>
       </li>
       <li class="menu-item has-icon">
         <a id="mylistings-left-tab" tabindex="0" title="View My Listings" href="/profile/mylistings" class="left-tab primary-theme">
-          <span class="icon is-white"><i class="fa fa-list-alt"></i></span>
+          <div class="icon is-white"><i class="far fa-list-alt"></i></div>
           <p class="is-white is-hidden-tablet-only">My Listings</p>
         </a>
         <ul id="collapse-submenu">
           <% if (user.listings.length > 0 ){ %>
             <li class="menu-item has-icon">
               <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme is-sublink">
-                <span class="icon is-white is-hidden-desktop"><i class="fa fa-money"></i></span>
+                <div class="icon is-white is-hidden-desktop"><i class="far fa-money-bill"></i></div>
                 <small class="is-white is-hidden-tablet-only">My Listing Offers</small>
               </a>
             </li>
@@ -38,7 +38,7 @@
           </li>%>
           <li class="menu-item has-icon">
             <a id="create-left-tab"  tabindex="0" title="Create New Listings" href="/listings/create" class="left-tab primary-theme is-sublink">
-              <span class="icon is-white is-hidden-desktop"><i class="fa fa-plus"></i></span>
+              <div class="icon is-white is-hidden-desktop"><i class="far fa-plus"></i></div>
               <small class="is-white is-hidden-tablet-only">Create Listings</small>
             </a>
           </li>
@@ -46,17 +46,17 @@
       </li>
       <li class="menu-item has-icon">
         <a id="settings-left-tab" tabindex="0" title="Change Account Settings" href="/profile/settings" class="left-tab primary-theme">
-          <span class="icon is-white"><i class="fa fa-cogs"></i></span>
+          <div class="icon is-white"><i class="far fa-cogs"></i></div>
           <p class="is-white is-hidden-tablet-only">Account Settings</p>
         </a>
         <ul class="is-hidden-tablet-only">
           <li>
             <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-sublink is-hidden">
               <small class="is-white">
+                <div class="icon is-small">
+                  <i class="far fa-trophy-alt"></i>
+                </div>
                 Upgrade to Premium
-                <span class="icon is-small">
-                  <i class="fa fa-diamond"></i>
-                </span>
               </small>
             </a>
           </li>
@@ -67,25 +67,27 @@
   <div class="user-panel">
     <div class="user-button" title="Send us a Message">
       <button tabindex="0" id="contact-button" class="button is-primary is-inverted nav-button" data-menu="contact-dropdown-menu">
-        <i class="fa fa-comments"></i>
+        <i class="far fa-comment"></i>
       </button>
-      <aside id="contact-dropdown-menu" class="nav-drop is-hidden">
+      <div id="contact-dropdown-menu" class="nav-drop is-hidden">
         <p class="menu-label">Contact Us</p>
         <form id="contact-form">
-          <textarea id="contact_message" required class="textarea no-shadow" placeholder="Comments? Questions? Let us know and we'll be happy to help."></textarea>
-          <button id="contact-submit-button" class="button is-stylish is-small is-fullwidth is-primary" type="submit" form="contact-form">
-            <span class="icon is-small">
-              <i class="fa fa-comment-o"></i>
-            </span>
+          <textarea id="contact_message" required class="textarea no-shadow" placeholder="Comments? Questions? Let us know! We're happy to help."></textarea>
+          <button id="contact-submit-button" class="button is-stylish is-fullwidth is-primary" type="submit" form="contact-form">
+            <div class="icon is-small">
+              <i class="far fa-check-circle"></i>
+            </div>
             <span id="contact-submit-text">Send Message</span>
           </button>
         </form>
-      </aside>
+      </div>
     </div>
     <div class="user-button" title="Check Your Notifications">
       <button tabindex="0" id="notification-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="notification-dropdown-menu">
         <span id="notification-counter" class="is-hidden"></span>
-        <i class="fa fa-bell"></i>
+        <div class="icon">
+          <i class="far fa-bell"></i>
+        </div>
       </button>
       <aside id="notification-dropdown-menu" class="nav-drop is-hidden">
         <ul id="notification-tray" class="menu-list"></ul>
@@ -93,7 +95,9 @@
     </div>
     <div class="user-button" title="Other Links">
       <button tabindex="0" id="user-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="user-dropdown-menu">
-        <i class="fa fa-user-circle"></i>
+        <div class="icon">
+          <i class="far fa-user-alt"></i>
+        </div>
       </button>
       <aside id="user-dropdown-menu" class="nav-drop is-hidden">
         <p class="menu-label">Support</p>

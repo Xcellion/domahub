@@ -165,10 +165,10 @@ td.free-times {
       border-radius: 4px; }
   .daterangepicker .daterangepicker_input {
     position: relative; }
-    .daterangepicker .daterangepicker_input i {
+    .daterangepicker .daterangepicker_input .icon {
       position: absolute;
-      left: 8px;
-      top: 8px; }
+      left: 2px;
+      top: 2px; }
   .daterangepicker.rtl .input-mini {
     padding-right: 28px;
     padding-left: 6px; }

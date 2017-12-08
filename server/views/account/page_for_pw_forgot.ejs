@@ -19,16 +19,20 @@
       <form id="forgot-form" action="/forgot" method="post">
         <div id="form_to_hide">
           <label class="label" for="email">Enter Your Email</label>
-          <p class="control has-icon">
+          <div class="control has-icon">
             <input id="email" required autofocus class="input is-medium no-shadow" name="email" type="email" placeholder="Email" spellcheck="false">
-            <i class="fa fa-envelope-o"></i>
-          </p>
-          <p class="control">
+            <div class="icon">
+              <i class="far fa-envelope"></i>
+            </div>
+          </div>
+          <div class="control">
             <button type="submit" id="forgot-button" class="is-stylish login-button button is-primary is-medium is-fullwidth">
-              <span class="icon"><i class="fa fa-unlock-alt"></i></span>
+              <div class="icon">
+                <i class="far fa-check-circle"></i>
+              </div>
               <span>Send reset password email</span>
             </button>
-          </p>
+          </div>
 
           <div class="control has-text-centered">
             <small>

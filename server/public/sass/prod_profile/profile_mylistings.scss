@@ -23,11 +23,6 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
-.tabs a:not(.button) {
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .columns {
   margin-left:-20px;
   margin-right:-20px;
@@ -130,15 +125,9 @@
 // design tab blackout !premium
 #premium-only-notification {
   @include translate(-50%,50%);
-  background-color: $white;
-  border-radius: $radius-large;
   left: 50%;
-  padding: 15px;
   position: absolute;
   top: 10%;
-  @include mobile {
-    width: 225px;
-  }
 }
 
 .blackscreen {
@@ -260,7 +249,7 @@
 
 .domain-tooltip {
   position: absolute;
-  top: 35px;
+  top: 100%;
   right: 10px;
   z-index:99;
   overflow-y: auto;
@@ -338,13 +327,6 @@
   }
 }
 
-.tip {
-  color: $text-light;
-  display: block;
-  line-height: 1.5;
-  margin: 5px 0;
-}
-
 // listing image
 .on-img {
   top: 0;
@@ -368,7 +350,10 @@
   border-radius: 0 $radius-small $radius-small $radius-small;
   display: flex;
   flex-direction: column;
+  position: absolute;
+  left: 0;
   top: 32px;
+  width: 185px;
   a {
     padding: 6px 10px;
     &:hover {

@@ -1,13 +1,18 @@
+.checkbox-form {
+	width: 20px;
+	height: 20px;
+}
+
 .checkbox-form label {
 	@include transition(all 0.25s ease);
 	color: $text;
 	cursor: pointer;
 	display: inline-block;
+	height: 20px;
 	position: relative;
   box-sizing: border-box;
   font-size: $size-6;
-  padding: 6px 5px 6px 34px;
-  width: 100%;
+  width: 20px;
   &.has-border {
     border: 1px solid $border;
     border-radius: $radius;
@@ -17,7 +22,6 @@
       border-color: $black-secondary;
     }
   }
-  // Hover, focus, active effects
   &:focus,
   &:active {
     outline: 1px solid $black-secondary;
@@ -29,8 +33,8 @@
 .checkbox-form label::before {
   cursor: pointer;
   position: absolute;
-  height: 24px;
-  width: 24px;
+  height: 20px;
+  width: 20px;
 }
 
 .checkbox-form input[type="checkbox"],
@@ -43,8 +47,8 @@
 .checkbox-form label::before {
   content: url(/images/lib/material/unchecked-box.svg);
   opacity: 0.7;
-  left: 5px;
-  top: 4px;
+  left: -2px;
+  top: -2px;
 	@include transition(all 0.25s ease);
 }
 
