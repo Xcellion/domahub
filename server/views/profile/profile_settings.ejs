@@ -79,12 +79,6 @@
                       <span>Save</span>
                     </button>%>
                   </div>
-                  <div class="control">
-                    <a id="cancel-button" class="toolbar-button is-hidden button is-danger is-stylish is-small">
-                      <span class="icon is-small"><i class="fa fa-ban"></i></span>
-                      <span>Cancel</span>
-                    </a>
-                  </div>
                 </div>
               </li>
             </ul>
@@ -130,7 +124,7 @@
                     <small class="tip">Click the button to change your password.</small>
                   </div>
                   <div class="control-right">
-                    <a id="change-password-button" class="button is-primary is-stylish is-small">
+                    <a id="change-password-button" class="button is-stylish is-small">
                       <span class="icon is-small"><i class="fa fa-unlock-alt"></i></span>
                       <span>Change Password</span>
                     </a>
@@ -154,31 +148,31 @@
                     <p>
                       GoDaddy
                     </p>
-                    <small data-registrar_name="godaddy" data-registrar="GoDaddy" class="tip registrar-tip">Click the button to connect to a GoDaddy account.</small>
+                    <small data-registrar_name="godaddy" data-registrar="GoDaddy" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar_name="godaddy" class="add-registrar-button button is-primary is-stylish is-small">
+                    <a data-registrar_name="godaddy" class="add-registrar-button button is-stylish is-small">
                       <span class="icon is-small"><i class="fa fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar="GoDaddy"></span>
                     </a>
                   </div>
                 </div>
-                <%# <div class="control is-spaced is-mobile">
+                <div class="control is-spaced is-mobile">
                   <div class="control-left">
                     <p>
-                      NameCheap
+                      Namecheap
                     </p>
-                    <small class="tip">Click the button to connect to a NameCheap account.</small>
+                    <small data-registrar_name="namecheap" data-registrar="Namecheap" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar_name="namecheap" class="add-registrar-button button">
+                    <a data-registrar_name="namecheap" class="add-registrar-button is-stylish is-small button">
                       <span class="icon is-small"><i class="fa fa-link"></i></span>
-                      <span class="registrar-button-text" data-registrar="NameCheap"></span>
+                      <span class="registrar-button-text" data-registrar="Namecheap"></span>
                     </a>
                   </div>
-                </div>%>
+                </div>
                 <div class="tip">
-                  Need help or you don't see your registrar listed? <a target="_blank" class="is-primary is-underlined contact-link" href="/contact">Let us know!</a>
+                  Don't see your registrar listed or need help? <a target="_blank" class="is-primary is-underlined contact-link" href="/contact">Let us know!</a>
                 </div>
               </div>
             </div>
@@ -214,7 +208,7 @@
           					<span class="button-text">Upgrade</span>
           				</a>
           				<div class="premium-elem control">
-          					<a id="cancel-premium-confirm-button" class="is-hidden is-inverted button is-danger is-stylish is-small">
+          					<a id="cancel-premium-confirm-button" class="is-hidden is-outlined button is-danger is-stylish is-small">
           						<span class="icon is-small">
           							<i class="fa fa-frown-o"></i>
           						</span>
@@ -237,7 +231,7 @@
           				<small class="tip existing-cc">Click the button to add a default credit card!</small>
           			</div>
           			<div class="control-right">
-          				<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-stylish is-small">
+          				<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-stylish is-small">
           					<span class="icon is-small">
           						<i class="fa fa-credit-card"></i>
           					</span>
@@ -309,7 +303,7 @@
                     <p class="control has-icon has-addons">
                       <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
                       <i class="fa fa-tags"></i>
-                      <button id="promo-submit" class="promo-input button no-shadow is-primary is-stylish is-small" text="Submit" type="submit" form="promo-form">Submit</button>
+                      <button id="promo-submit" class="promo-input button no-shadow is-stylish is-small" text="Submit" type="submit" form="promo-form">Submit</button>
                     </p>
                   </form>
                 </div>
@@ -326,7 +320,7 @@
           			</small>
                 <div class="control has-addons">
                   <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input" placeholder="Invite your friends!"/>
-                  <a id="referral-link-copy" class="button no-shadow is-primary is-stylish is-small" tabindex="0">
+                  <a id="referral-link-copy" class="button no-shadow is-stylish is-small" tabindex="0">
                     <span class="icon is-small"><i class="fa fa-clipboard"></i></span>
                     <span id="referral-link-text">Copy Link</span>
                   </a>
@@ -670,7 +664,7 @@
                     <small class="tip existing-bank">Click the button to add a default bank account!</small>
                   </div>
                   <div class="control-right">
-                    <a id="change-bank-button" tabindex="0" title="Change Bank Account" class="is-hidden button is-primary is-stylish is-small">
+                    <a id="change-bank-button" tabindex="0" title="Change Bank Account" class="is-hidden button is-stylish is-small">
                       <span class="icon is-small">
                         <i class="fa fa-university"></i>
                       </span>
@@ -897,7 +891,7 @@
             </button>
           </p>
           <p class="control">
-            <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
+            <a tabindex="0" class='button is-outlined is-danger is-stylish is-small cancel-modal'>
               <span class="icon is-small"><i class="fa fa-ban"></i></span>
               <span>Cancel</span>
             </a>
@@ -973,7 +967,7 @@
                 </button>
               </p>
               <p class="control">
-                <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
+                <a tabindex="0" class='button is-outlined is-danger is-stylish is-small cancel-modal'>
                   <span class="icon is-small"><i class="fa fa-ban"></i></span>
                   <span>Cancel</span>
                 </a>
@@ -1022,13 +1016,13 @@
         </div>
         <div class="control is-grouped is-grouped-center">
             <div class="control">
-              <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-danger is-inverted'>
+              <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-danger is-outlined is-stylish is-small'>
                 <span class="icon is-small"><i class="fa fa-frown-o"></i></span>
                 <span>Cancel Premium</span>
               </a>
             </div>
             <div class="control">
-              <a tabindex="0" class='button cancel-modal'>
+              <a tabindex="0" class='button cancel-modal is-stylish is-small'>
                 <span class="icon is-small"><i class="fa fa-ban"></i></span>
                 <span>Nevermind</span>
               </a>
@@ -1124,7 +1118,7 @@
                 </button>
               </p>
               <p class="control">
-                <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
+                <a tabindex="0" class='button is-outlined is-danger is-stylish is-small cancel-modal'>
                   <span class="icon is-small"><i class="fa fa-ban"></i></span>
                   <span>Cancel</span>
                 </a>
