@@ -18,39 +18,46 @@
     <div class="account-form">
       <form id="login-form" action="/login" method="post">
         <label class="label" for="email">Email</label>
-        <p class="control has-icon">
+        <div class="control has-icon">
           <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
-          <i class="fa fa-envelope-o"></i>
-        </p>
+          <div class="icon">
+            <i class="far fa-envelope"></i>
+          </div>
+        </div>
         <label class="label" for="password">Password</label>
-        <p class="control has-icon">
+        <div class="control has-icon">
           <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password">
-          <i class="fa fa-lock"></i>
-        </p>
-        <p class="control">
+          <div class="icon">
+            <i class="far fa-lock"></i>
+          </div>
+        </div>
+        <div class="control">
           <button id="login-button" class="login-button button is-primary is-stylish is-fullwidth">
-            <span class="icon is-small">
-              <i class="fa fa-sign-in"></i>
-            </span>
+            <div class="icon">
+              <i class="far fa-sign-in"></i>
+            </div>
             <span>Log In</span>
           </button>
-        </p>
+        </div>
         <div class="control is-spaced">
-          <div class="checkbox-form">
+          <div class="checkbox-form control-left">
             <input id="remember-checkbox" type="checkbox" class="v-align-middle" tabindex="0" />
-            <label for="remember-checkbox" class="v-align-middle">Remember Me</label>
+            <label for="remember-checkbox" class="v-align-middle"></label>
+            <p class="remember-text">
+              Remember Me
+            </p>
           </div>
-          <p class="control">
-              <a class="forgot is-primary is-underlined" href="/forgot">Forgot password?</a>
-          </p>
+          <div class="control-right">
+            <a class="forgot is-primary is-underlined" href="/forgot">Forgot password?</a>
+          </div>
         </div>
         <div class="control has-text-centered">
           <small>
             Don't have an account?
           </small>
-          <small class="is-block">
-            <a tabindex="0" class="is-primary is-underlined" href="/signup"><small>Sign Up</small></a>
-          </small>
+          <a tabindex="0" class="is-primary is-block is-underlined" href="/signup">
+            <small>Sign Up</small>
+          </a>
         </div>
       </form>
     </div>

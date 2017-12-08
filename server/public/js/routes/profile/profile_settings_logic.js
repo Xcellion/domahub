@@ -53,7 +53,6 @@ $(document).ready(function() {
       hideSaveCancelButtons();
       if ($(this).val() != user[$(this).data("uservar")] && user[$(this).data("uservar")]){
         $("#account-submit, #cancel-button").removeClass("is-hidden");
-        $(".tab").last().addClass("sub-tabs");
       }
     });
 
@@ -238,7 +237,6 @@ $(document).ready(function() {
       hideSaveCancelButtons();
       if (!user.stripe_account_id || $(this).val() != user.stripe_account[$(this).data("uservar")]){
         $("#stripe-account-submit, #cancel-button").removeClass("is-hidden");
-        $(".tab").last().addClass("sub-tabs");
       }
     });
 
@@ -847,7 +845,7 @@ function showSectionByURL(){
       $("#referral-link").select();
       document.execCommand("copy");
       $("#referral-link").blur();
-      $(this).find("i").removeClass("fa-clipboard").addClass('fa-check');
+      $(this).find("svg").replaceWith("<i class='far fa-check'></i>");
       $("#referral-link-text").text("Copied!");
     });
   }
@@ -1281,7 +1279,6 @@ function calculateTotals(){
 //<editor-fold>-------------------------------HELPERS-------------------------------
 
 function hideSaveCancelButtons(){
-  $("#settings-toolbar .tab").last().removeClass("sub-tabs");
   $(".toolbar-submit-button").removeClass('is-loading');
   $(".toolbar-button").addClass('is-hidden');
 }

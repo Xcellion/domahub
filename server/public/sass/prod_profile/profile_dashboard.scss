@@ -37,6 +37,12 @@
   margin-bottom: 10px;
 }
 
+.card-header {
+  &.is-primary {
+    background-color: $primary;
+  }
+}
+
 .button-wrapper {
   display: flex;
   flex-wrap: wrap;

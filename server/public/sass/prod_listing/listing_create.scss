@@ -60,20 +60,6 @@
   }
 }
 
-.tip {
-  display: block;
-  margin: 5px 0;
-  color: $text-light;
-  line-height: 1.5;
-  &.no-margin{
-    margin:0;
-  }
-  &.is-inline{
-    display:inline;
-    margin-right:5px;
-  }
-}
-
 .modal-content {
   background-color: $white;
   border-radius: $radius-large;

@@ -17,11 +17,12 @@ $(document).ready(function() {
   $("#referral-link").on("focus", function(){
     $(this).select();
   });
+
   $("#referral-link-copy").on("click", function(){
     $("#referral-link").select();
     document.execCommand("copy");
     $("#referral-link").blur();
-    $(this).find("i").removeClass("fa-clipboard").addClass('fa-check');
+    $(this).find("svg").replaceWith("<i class='far fa-check'></i>");
     $("#referral-link-text").text("Copied!");
   });
 

@@ -9,14 +9,12 @@ $(document).ready(function() {
 
     //hide bottom right notification button
     $("#compare-msg .delete").on("click", function(e){
-      $("#compare-msg").addClass('is-hidden');
-      $("#compare-footer").removeClass('is-hidden');
+      $("#compare-msg").appendTo('#compare-content').removeClass("is-hidden").addClass("is-footer");
     });
 
     //hide compare msg automatically if mobile
     if (window.mobilecheck()){
-      $("#compare-msg").addClass('is-hidden');
-      $("#compare-footer").removeClass('is-hidden');
+      $("#compare-msg").appendTo('#compare-content').removeClass("is-hidden").addClass("is-footer");
     }
 
     //<editor-fold>---------------------------------COMPARE TOOL SETUP--------------------------------------------------
@@ -46,7 +44,6 @@ $(document).ready(function() {
     updateDescription();
     updatePricing();
     updateBIN();
-    updateRentable();
 
     //DESIGN TAB
     loadThemeHandler();
@@ -70,21 +67,21 @@ $(document).ready(function() {
       template: "<div class='popover tour'> \
                   <div class='popover-content margin-top-0 content'></div> \
                   <div class='popover-navigation'> \
-                    <button class='button is-small' data-role='prev'> \
+                    <button class='button is-stylish is-small' data-role='prev'> \
                       <span class='icon is-small'> \
-                        <i class='fa fa-angle-double-left'></i> \
+                        <i class='far fa-angle-double-left'></i> \
                       </span> \
                       <span>Prev</span> \
                     </button> \
-                    <button class='button is-small is-primary' data-role='next'> \
+                    <button class='button is-stylish is-small is-primary' data-role='next'> \
                       <span>Next</span> \
                       <span class='icon is-small'> \
-                        <i class='fa fa-angle-double-right'></i> \
+                        <i class='far fa-angle-double-right'></i> \
                       </span> \
                     </button> \
-                    <button class='button is-small' data-role='end'> \
+                    <button class='button is-stylish is-small' data-role='end'> \
                       <span class='icon is-small'> \
-                        <i class='fa fa-sign-out'></i> \
+                        <i class='far fa-sign-out'></i> \
                       </span> \
                       <span>End Tutorial</span> \
                     </button> \
@@ -101,24 +98,24 @@ $(document).ready(function() {
           <h3 class='popover-title'></h3> \
           <div class='popover-content content'></div> \
           <div> \
-          <div class='button-wrapper has-text-centered'> \
-            <button class='button is-small is-primary' data-role='next'> \
+          <div class='is-flex-wrap is-centered'> \
+            <button class='button is-stylish is-small is-primary' data-role='next'> \
               <span class='icon is-small'> \
-                <i class='fa fa-thumbs-up'></i> \
+                <i class='far fa-thumbs-up'></i> \
               </span> \
               <span>Yes! Show me how it works.</span> \
             </button> \
-            <button class='button is-small is-danger is-outlined' data-role='end'> \
+            <button class='button is-stylish is-small is-danger is-outlined' data-role='end'> \
               <span class='icon is-small'> \
-                <i class='fa fa-frown-o'></i> \
+                <i class='far fa-frown'></i> \
               </span> \
               <span>No, I'll figure it out.</span> \
             </button> \
             </div> \
           </div> \
           </div>",
-          title: "Welcome to the DomaHub demo!",
-          content: "This tutorial will guide you on how your domains can look as a DomaHub listing.",
+          title: "Welcome to the DomaHub demo",
+          content: "This demo will guide you through creating and customizing a DomaHub landing page.",
         },
 
         //show menu button step - 1
@@ -138,15 +135,15 @@ $(document).ready(function() {
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
                         <div> \
-                          <button class='button is-small' data-role='prev'> \
+                          <button class='button is-stylish is-small' data-role='prev'> \
                             <span class='icon is-small'> \
-                              <i class='fa fa-angle-double-left'></i> \
+                              <i class='far fa-angle-double-left'></i> \
                             </span> \
                             <span>Prev</span> \
                           </button> \
-                          <button class='button is-small' data-role='end'> \
+                          <button class='button is-stylish is-small' data-role='end'> \
                             <span class='icon is-small'> \
-                              <i class='fa fa-sign-out'></i> \
+                              <i class='far fa-sign-out'></i> \
                             </span> \
                             <span>End Tutorial</span> \
                           </button> \
@@ -167,21 +164,21 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-left'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-left'></i> \
+                            <i class='far fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
+                        <button class='button is-stylish is-small is-primary' data-role='next'> \
                           <span>Next</span> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-right'></i> \
+                            <i class='far fa-angle-double-right'></i> \
                           </span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-sign-out'></i> \
+                            <i class='far fa-sign-out'></i> \
                           </span> \
                           <span>End Tutorial</span> \
                         </button> \
@@ -212,21 +209,21 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-left'></i> \
+                            <i class='far fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
+                        <button class='button is-stylish is-small is-primary' data-role='next'> \
                           <span>Next</span> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-right'></i> \
+                            <i class='far fa-angle-double-right'></i> \
                           </span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-sign-out'></i> \
+                            <i class='far fa-sign-out'></i> \
                           </span> \
                           <span>End Tutorial</span> \
                         </button> \
@@ -252,15 +249,15 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-left'></i> \
+                            <i class='far fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-sign-out'></i> \
+                            <i class='far fa-sign-out'></i> \
                           </span> \
                           <span>End Tutorial</span> \
                         </button> \
@@ -286,21 +283,21 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-left'></i> \
+                            <i class='far fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
+                        <button class='button is-stylish is-small is-primary' data-role='next'> \
                           <span>Next</span> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-right'></i> \
+                            <i class='far fa-angle-double-right'></i> \
                           </span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-sign-out'></i> \
+                            <i class='far fa-sign-out'></i> \
                           </span> \
                           <span>End Tutorial</span> \
                         </button> \
@@ -311,7 +308,7 @@ $(document).ready(function() {
 
         //contact offer form - 6
         {
-          element: "#buy-rent-column",
+          element: "#buy-module",
           backdropContainer: "#page-contents",
           placement: (window.mobilecheck()) ? "top" : "left",
           onShow: function(){
@@ -323,7 +320,7 @@ $(document).ready(function() {
 
         //click rentable tab - 7
         {
-          element: "#rent-now-button",
+          element: "#calendar-tab",
           backdropContainer: "#page-contents",
           placement: "bottom",
           onShow: function(){
@@ -336,15 +333,15 @@ $(document).ready(function() {
           template: "<div class='popover tour'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-left'></i> \
+                            <i class='far fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small' data-role='end'> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-sign-out'></i> \
+                            <i class='far fa-sign-out'></i> \
                           </span> \
                           <span>End Tutorial</span> \
                         </button> \
@@ -355,7 +352,7 @@ $(document).ready(function() {
 
         //rental tab - 8
         {
-          element: "#buy-rent-column",
+          element: "#calendar-module",
           backdropContainer: "#page-contents",
           placement: (window.mobilecheck()) ? "top" : "left",
           onShow: function(){
@@ -368,44 +365,52 @@ $(document).ready(function() {
           content: 'Customers use this calendar to rent the domain for variable lengths of time and forward the domain to their desired URL. All rentals are cross-checked against the <a href="https://developers.google.com/safe-browsing/" class="is-primary">Google Safe Browsing API.</a>'
         },
 
-        //modules - 9
+        //click traffic tab - 9
         {
-          element: "#modules-wrapper",
+          element: "#traffic-tab",
           backdropContainer: "#page-contents",
-          placement: "top",
+          placement: "bottom",
           onShow: function(){
             $("#compare-menu").append("<div class='tour-backdrop'></div>");
           },
           onHide: function(){
             $("#compare-menu").find(".tour-backdrop").remove();
           },
-          template: "<div class='popover tour arrow-bottom'> \
+          template: "<div class='popover tour'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
+                        <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-left'></i> \
+                            <i class='far fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
-                          <span>Next</span> \
+                        <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-right'></i> \
-                          </span> \
-                        </button> \
-                        <button class='button is-small' data-role='end'> \
-                          <span class='icon is-small'> \
-                            <i class='fa fa-sign-out'></i> \
+                            <i class='far fa-sign-out'></i> \
                           </span> \
                           <span>End Tutorial</span> \
                         </button> \
                       </div> \
                     </div>",
-          content: 'Additional information is displayed here--including links to other listings, domain traffic, and recent events.'
+          content: "We also provide traffic information about your domain in this tab."
         },
 
-        //final step - 10
+        //traffic module - 10
+        {
+          element: "#traffic-module",
+          backdropContainer: "#page-contents",
+          placement: "left",
+          onShow: function(){
+            $("#compare-menu").append("<div class='tour-backdrop'></div>");
+          },
+          onHide: function(){
+            $("#compare-menu").find(".tour-backdrop").remove();
+          },
+          content: 'This tab shows traffic information about your domain including number of visits, and Alexa rankings.'
+        },
+
+        //final step - 11
         {
           autoScroll: true,
           title: "Thats the end of the DomaHub demo!",
@@ -417,16 +422,16 @@ $(document).ready(function() {
             <h3 class='popover-title'></h3> \
             <div class='popover-content content'></div> \
             <div> \
-              <div class='button-wrapper'> \
-                <a href='/signup' class='button is-small is-primary'> \
+              <div class='is-flex-wrap'> \
+                <a href='/signup' class='button is-stylish is-small is-primary'> \
                   <span class='icon is-small'> \
-                    <i class='fa fa-thumbs-up'></i> \
+                    <i class='far fa-thumbs-up'></i> \
                   </span> \
                   <span>That was awesome! Sign me up.</span> \
                 </a> \
-                <button class='button is-small is-danger is-outlined' data-role='end'> \
+                <button class='button is-stylish is-small is-danger is-outlined' data-role='end'> \
                   <span class='icon is-small'> \
-                    <i class='fa fa-sign-out'></i> \
+                    <i class='far fa-sign-out'></i> \
                   </span> \
                   <span>I still want to explore.</span> \
                 </button> \
@@ -683,30 +688,6 @@ function updateBIN(){
   });
 }
 
-//update rentable
-function updateRentable(){
-  checkBox(listing_info.rentable, $("#rentable-input"));
-
-  $("#rentable-input").on("change", function(){
-    //switch to buy tab if on rent tab
-    showBuyStuff($("#buy-now-button"));
-
-    //allow rent
-    if ($(this).prop("checked")){
-      listing_info.rentable = 1;
-      $("#rent-price-tag").removeClass('is-hidden');
-      $("#buy-rent-tabs").removeClass('is-hidden');
-    }
-
-    //dont allow rent
-    else {
-      listing_info.rentable = 0;
-      $("#rent-price-tag").addClass('is-hidden');
-      $("#buy-rent-tabs").addClass('is-hidden');
-    }
-  });
-}
-
 //</editor-fold>
 
 //<editor-fold>-----------------------------------------------------------------------------------DESIGN TAB
@@ -805,7 +786,7 @@ function updateFooter(premium){
   else {
     $("#dh-footer-right-text").replaceWith("<p id='dh-footer-right-text' class='footer-item'>Simple, clean sales pages for your domains.</p>");
     $("#dh-footer-right-smile").removeClass("is-hidden");
-    $("#doma_logo").replaceWith('<a id="doma_logo" href="https://domahub.com"><i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.</a>');
+    $("#doma_logo").replaceWith('<a id="doma_logo" href="https://domahub.com"><i class="far fa-copyright v-align-bottom"></i> DomaHub, Inc.</a>');
     $("#custom_logo").removeClass('is-hidden').removeAttr("style").attr("href", "/");
   }
 }
@@ -894,9 +875,10 @@ function updateFontName(font_name){
 //update modules
 function updateModules(){
   checkBox(listing_info.info_module, $("#info-module-input"));
+  checkBox(listing_info.rentable, $("#calendar-input"));
   checkBox(listing_info.domain_owner, $("#domain-owner-input"));
   checkBox(listing_info.domain_age, $("#domain-age-input"));
-  checkBox(listing_info.domain_list, $("#domain-list-input"));
+  checkBox(listing_info.domain_list, $("#domainlist-input"));
   checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
   checkBox(listing_info.social_sharing, $("#social-sharing-input"));
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
@@ -917,6 +899,7 @@ function updateModules(){
 
     //selected position is current position
     if (selected_position == current_position || current_position == undefined){
+      console.log("Current position undefined or same as selected.");
       $(".module").addClass('is-active');
       $(".module-tab").removeClass('is-active');
       hideShowModules(which_module, $(this).prop("checked"), false);
@@ -924,13 +907,20 @@ function updateModules(){
       //show next one if nothing is showing
       var next_visible = $(".module-tab:not(.is-hidden)").first();
       if (next_visible.attr("id")){
+        console.log("Showing next visible module.");
         var next_visible_id = next_visible.attr("id").split("-")[0];
+        //add is-active to the tab
+        $("#" + next_visible.attr("id")).addClass("is-active");
+        //display respective module
         $("#" + next_visible_id + "-module").removeClass('is-hidden');
-        next_visible.addClass('is-active');
 
         //create test chart if it's the next visible
         if (next_visible_id == "traffic"){
           getTrafficData();
+        }
+
+        if (next_visible_id == "calendar"){
+          showBuyStuff($("#buy-now-button"));
         }
       }
     }
@@ -946,11 +936,17 @@ function hideShowModules(which_module, checked, tabOnly){
     if (!tabOnly){
       $("#" + which_module + "-module").removeClass('is-hidden');
     }
+    if (which_module == "calendar") {
+      $("#rent-price-tag").removeClass('is-hidden');
+    }
     $("#" + which_module + "-tab").removeClass('is-hidden');
   }
   else {
     if (!tabOnly){
       $("#" + which_module + "-module").addClass('is-hidden');
+    }
+    if (which_module == "calendar") {
+      $("#rent-price-tag").addClass('is-hidden');
     }
     $("#" + which_module + "-tab").addClass('is-hidden');
   }
@@ -1120,7 +1116,7 @@ function createTestRentals(){
 function testSubmitBuyHandler(){
   setTimeout(function(){
     $("button[type=submit][clicked=true]").removeClass('is-loading');
-    $("#contact-success-compare").removeClass('is-hidden').addClass('is-active');
+    successMessage("Success! If this were your real domain, you would receive a notification with the details of this new offer once it has been verified.");
   }, 500);
 }
 
@@ -1130,7 +1126,7 @@ function testSubmitRentHandler(checkout_button){
     checkout_button.removeClass('is-loading').addClass('is-disabled').on('click', function(){
       submitTimes(checkout_button);
     });
-    $("#rental-success-compare").removeClass('is-hidden').addClass('is-active');
+    successMessage("Success! If this were your real domain, the user would be redirected to a checkout page where they can edit the details of their domain rental.");
   }, 500);
 }
 

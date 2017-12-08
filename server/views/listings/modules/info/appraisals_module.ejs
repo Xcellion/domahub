@@ -1,22 +1,28 @@
 <% if (!listing_info.premium || (listing_info.premium && listing_info.domain_appraisal)) { %>
-  <div id="domain-appraisal-module" class="content">
-    <p>
-      <span>Appraisal Sites</span>
-      <span class="icon is-small is-tooltip" data-balloon="We are not affiliated with the below appraisal sites. They are simply another tool to help evaluate the value of a domain name and may not be an accurate representation of its true value." data-balloon-length="large" data-balloon-pos="up">
-        <i class="fa fa-question-circle"></i>
-      </span>
-    </p>
-    <li>
-      <a class="is-info is-underlined" target="_blank" rel="noreferrer noopener" title="Check GoDaddy Domain Appraisal" href="https://www.godaddy.com/domain-value-appraisal/appraisal/?checkAvail=1&tmskey=&domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
-    </li>
-    <li>
-      <a class="is-info is-underlined" target="_blank" rel="noreferrer noopener" title="Check Domain Index" href="http://domainindex.com/domains/<%= listing_info.domain_name %>">Domain Index</a>
-    </li>
-    <li>
-      <a class="is-info is-underlined" target="_blank" rel="noreferrer noopener" title="Check Free Valuator" href="http://www.freevaluator.com/?domain=<%= listing_info.domain_name %>">Free Valuator</a>
-    </li>
-    <li>
-      <a class="is-info is-underlined" target="_blank" rel="noreferrer noopener" title="Check EstiBot" href="https://www.estibot.com/verify.php?data=<%= listing_info.domain_name %>&type=normal">EstiBot</a>
-    </li>
+  <div id="domain-appraisal-module" class="level">
+    <div class="level-item">
+      <small class="heading">
+        Appraisal Sites
+        <span class="icon is-small is-tooltip" data-balloon="We are not affiliated with the below appraisal sites. These evaluation tools may not be accurate representations of the domain's true value." data-balloon-length="large" data-balloon-pos="up">
+          <i class="fa fa-question-circle"></i>
+        </span>
+      </small>
+      <div class="content">
+        <ul class="is-vertical">
+          <li>
+            <a class="is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check GoDaddy Domain Appraisal" href="https://www.godaddy.com/domain-value-appraisal/appraisal/?checkAvail=1&tmskey=&domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
+          </li>
+          <li>
+            <a class="is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check Domain Index" href="http://domainindex.com/domains/<%= listing_info.domain_name %>">Domain Index</a>
+          </li>
+          <li>
+            <a class="is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check Free Valuator" href="http://www.freevaluator.com/?domain=<%= listing_info.domain_name %>">Free Valuator</a>
+          </li>
+          <li>
+            <a class="is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check EstiBot" href="https://www.estibot.com/verify.php?data=<%= listing_info.domain_name %>&type=normal">EstiBot</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 <% } %>
