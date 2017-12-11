@@ -33,6 +33,12 @@
   text-transform: uppercase;
 }
 
+.overview-tile-wrapper {
+  &:hover {
+    background-color:$grey-lighter;
+  }
+}
+
 .counter {
   margin-bottom: 10px;
 }
@@ -60,7 +66,6 @@
 
 .traffic-chart-wrapper {
   position:relative;
-  min-height:150px;
 }
 
 .traffic-chart {
@@ -93,9 +98,10 @@
   text-align:center;
   width:49%;
   height:100px;
+  margin-left:-3px;
   max-width:100px;
-  &.is-active{
-    border-top:5px solid $primary;
+  &.is-active .heading{
+    color:$primary;
   }
   &:hover{
     background-color:$grey-lighter;

@@ -7,8 +7,8 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------PORTFOLIO OVERVIEW-------------------------------
 
-  calcOffers();
-  calcSold();
+  //update the portfolio with counters
+  updatePortfolioOverviewCounters();
 
   //</editor-fold>
 
@@ -45,30 +45,26 @@ $(document).ready(function() {
       return "/" + listing.domain_name;
     }).join("|");
 
-    //build charts
-    var now = moment();
-    buildTimeChart(listing_filters, now, "time-chart");
-    buildCountriesChart(listing_filters, now, "countries-chart");
-    buildSourcesChart(listing_filters, now, "sources-chart");
-    buildChannelsChart(listing_filters, now, "channels-chart");
-    buildStats(listing_filters, now);
+    buildCharts(listing_filters);
 
     //change date range
     $("#last-days-select").on("change", function(){
-      var now = moment();
-      buildTimeChart(listing_filters, now, "time-chart");
-      buildCountriesChart(listing_filters, now, "countries-chart");
-      buildSourcesChart(listing_filters, now, "sources-chart");
-      buildChannelsChart(listing_filters, now, "channels-chart");
-      buildStats(listing_filters, now);
+      buildCharts(listing_filters);
     });
 
-    //change stats on time chart
+    //change stats on time chart (only if different from current)
     $(".stat-wrapper").on("click", function(){
-      $(".stat-wrapper").removeClass("is-active");
-      $(this).addClass("is-active");
-      var now = moment();
-      buildTimeChart(listing_filters, now, "time-chart");
+      if (!$(this).hasClass("is-active")){
+        $(".stat-wrapper").removeClass("is-active");
+        $(this).addClass("is-active");
+        var now = moment();
+        buildTimeChart(listing_filters, now, "time-chart");
+      }
+    });
+
+    //refresh charts
+    $("#refresh-tables-button").on("click", function(){
+      buildCharts(listing_filters);
     });
 
   });
@@ -79,20 +75,30 @@ $(document).ready(function() {
 
 //<editor-fold>-------------------------------PORTFOLIO OVERVIEW-------------------------------
 
-//find out how many offers per domain
-function calcOffers(){
+//update the portfolio with counters
+function updatePortfolioOverviewCounters(){
+
+  //find out how many offers per domain
   var num_total_offers = user.listings.reduce(function(arr, listing) {
     return arr + ((listing.offers_count) ? listing.offers_count : 0);
   }, 0) || 0;
   $("#offers-counter").text(num_total_offers);
-}
 
-//figure out sold domains
-function calcSold(){
+  //figure out sold domains
   $("#sold-counter").text(user.listings.filter(function(listing) {
     return listing.deposited || listing.transferred;
   }).length);
+
+  //figure out total unverified
+  var num_total_unverified = user.listings.reduce(function(arr, listing) {
+    return arr + ((listing.verified) ? 0 : 1);
+  }, 0) || 0;
+  $("#unverified-counter").text(num_total_unverified);
+  if (num_total_unverified > 0){
+    $("#unverified-counter").prev(".heading").addClass('is-danger');
+  }
 }
+
 
 //</editor-fold>
 
@@ -446,6 +452,8 @@ function calcSold(){
         var chartOptions = {
           type : "doughnut",
           options : {
+            responsive : true,
+            maintainAspectRatio : false,
             legend : {
               position: "bottom"
             }
@@ -480,8 +488,12 @@ function calcSold(){
   //build the countries chart
   function buildCountriesChart(listing_filters, now, canvas_id){
 
+    //hide blank canvas height filler
+    var wrapper_height = $("#" + canvas_id).closest(".column").height() - $("#" + canvas_id).closest(".traffic-chart-wrapper").prev(".content").height() - 12;
+    $("#" + canvas_id).height($("#countries-blank-canvas").height() + 2);
+    $("#countries-blank-canvas").addClass("is-hidden");
+
     //options for building country chart
-    $("#" + canvas_id).removeClass('is-hidden');
     var countries_chart_options = {
       query: {
         'ids': 'ga:141565191',
@@ -495,9 +507,9 @@ function calcSold(){
         type: 'GEO',
         container: canvas_id,
         options: {
-          height : "100%",
+          height : wrapper_height,
           width : "100%",
-          keepAspectRatio : false,
+          keepAspectRatio : true,
           colorAxis : {
             colors : ["#c4eadc", "#3cbc8d"]
           }
@@ -518,6 +530,7 @@ function calcSold(){
     countries_chart.on("success", function(results){
       //if no data
       if (!results.data.rows){
+        $("#countries-blank-canvas").removeClass("is-hidden");
         showLoadingOrNone(canvas_id, false);
         $("#" + canvas_id).addClass('is-hidden');
       }
@@ -526,7 +539,9 @@ function calcSold(){
         $("#" + canvas_id + "-overlay").addClass('is-hidden');
       }
     }).on("error", function(){
+      $("#countries-blank-canvas").removeClass("is-hidden");
       showLoadingOrNone(canvas_id, false);
+      $("#" + canvas_id).addClass('is-hidden');
     });
 
     countries_chart.execute();
@@ -543,7 +558,6 @@ function calcSold(){
     if (sources_chart){
       showLoadingOrNone(canvas_id, true);
     }
-    "/youreacutie.com/"
 
     //build the query
     gaQuery({
@@ -630,6 +644,8 @@ function calcSold(){
         var chartOptions = {
           type : "horizontalBar",
           options : {
+            responsive : true,
+            maintainAspectRatio : false,
             legend : {
               display: false
             },
@@ -674,6 +690,16 @@ function calcSold(){
   //</editor-fold>
 
   //<editor-fold>-------------------------------CHART HELPERS-------------------------------
+
+  //build all charts
+  function buildCharts(listing_filters){
+    var now = moment();
+    buildTimeChart(listing_filters, now, "time-chart");
+    buildCountriesChart(listing_filters, now, "countries-chart");
+    buildSourcesChart(listing_filters, now, "sources-chart");
+    buildChannelsChart(listing_filters, now, "channels-chart");
+    buildStats(listing_filters, now);
+  }
 
   //show loading message or no data message per chart
   function showLoadingOrNone(canvas_id, loading){

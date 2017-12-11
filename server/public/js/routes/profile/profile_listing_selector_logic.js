@@ -90,10 +90,10 @@ $(document).ready(function(){
     viewDomainOffers();
   });
 
-  //go into stats mode
-  $("#selector-stats-button").on('click', function(){
-    viewDomainStats();
-  });
+  // //go into stats mode
+  // $("#selector-stats-button").on('click', function(){
+  //   viewDomainStats();
+  // });
 
   //go into verify mode
   $("#selector-verify-button").on("click", function(e){
@@ -522,24 +522,42 @@ function viewDomainDetails(url_tab){
 }
 
 //view domain offers
-function viewDomainOffers(url_tab){
+function viewDomainOffers(){
   var selected_domain_ids = getSelectedDomains("id", true);
-  showEditor("offers", selected_domain_ids);
-  updateEditorOffers(selected_domain_ids);
+  if (selected_domain_ids.length > 0){
+    showEditor("offers", selected_domain_ids);
+    updateEditorOffers(selected_domain_ids);
+  }
+  else {
+    window.history.replaceState({}, "", "/profile/mylistings");
+    showSelector();
+  }
 }
 
-//view domain stats
-function viewDomainStats(url_tab){
-  var selected_domain_ids = getSelectedDomains("id", true);
-  showEditor("stats", selected_domain_ids);
-  updateEditorStats(selected_domain_ids);
-}
+// //view domain stats
+// function viewDomainStats(){
+//   var selected_domain_ids = getSelectedDomains("id", true);
+//   if (selected_domain_ids.length > 0){
+//     showEditor("stats", selected_domain_ids);
+//     updateEditorStats(selected_domain_ids);
+//   }
+//   else {
+//     window.history.replaceState({}, "", "/profile/mylistings");
+//     showSelector();
+//   }
+// }
 
 //change domain
 function viewDomainDNS(){
   var selected_domain_ids = getSelectedDomains("id", false);
-  showEditor("verify", selected_domain_ids);
-  updateEditorUnverified(selected_domain_ids);
+  if (selected_domain_ids.length > 0){
+    showEditor("verify", selected_domain_ids);
+    updateEditorUnverified(selected_domain_ids);
+  }
+  else {
+    window.history.replaceState({}, "", "/profile/mylistings");
+    showSelector();
+  }
 }
 
   //<editor-fold>-------------------------------DELETE LISTINGS-------------------------------

@@ -333,7 +333,7 @@
                       <div class="icon">
 												<i class="far fa-tags"></i>
 											</div>
-                      <button id="promo-submit" class="promo-input button no-shadow is-primary is-stylish is-small" text="Submit" type="submit" form="promo-form">
+                      <button id="promo-submit" class="promo-input button no-shadow is-stylish is-small" text="Submit" type="submit" form="promo-form">
 												<div class="icon is-small">
 													<i class="far fa-check-circle"></i>
 												</div>
@@ -799,17 +799,9 @@
           </div>
           <div class="column">
             <div id="transactions-toolbar" class="control">
-              <div class="control">
-                <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" tabindex="0" title="Refresh Transactions">
-                  <div class="icon is-small">
-										<i class="far fa-sync-alt"></i>
-									</div>
-                  <span>Refresh Transactions</span>
-                </a>
-              </div>
               <div class="control is-grouped">
                 <div class="control">
-                  <span class="select is-narrow">
+                  <span class="select has-shadow is-narrow">
                     <select id="transactions-filter-select" tabindex="0">
                       <option selected value="exists">View All</option>
                       <option value="sale">Domain Sales</option>
@@ -821,8 +813,10 @@
                   </span>
                 </div>
                 <div class="control">
-                  <a id="refresh-transactions-button" class="button is-transparent is-black no-shadow is-stylish is-small" title="Refresh Transactions">
-                    <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+                  <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" tabindex="0" title="Refresh Transactions">
+                    <div class="icon is-small">
+  										<i class="far fa-sync-alt"></i>
+  									</div>
                     <span>Refresh</span>
                   </a>
                 </div>
@@ -830,7 +824,7 @@
                   <div class="icon">
 										<i class="far fa-search"></i>
 									</div>
-                  <input id="transactions-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search Transactions" />
+                  <input id="transactions-search" tabindex="0" class="input has-shadow is-expanded" type="text" placeholder="Search Transactions" />
                 </div>
               </div>
             </div>
@@ -1059,11 +1053,13 @@
             <div class="content">
 							<p>
 								Are you sure you want to cancel your Premium account?
-								The following <strong>will be disabled</strong> for your account.
 							</p>
 						</div>
           </div>
           <div id="premium-cancel-disable-wrapper" class="content">
+            <p>
+              The following <strong>will be disabled</strong> for your account.
+            </p>
             <ul class="has-disc">
 							<li>
 	              0% commission on sales and rentals
