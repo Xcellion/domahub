@@ -709,18 +709,18 @@
             <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
           </div>
           <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
-            <p class="control">
+            <div class="control">
               <a id="accept_button" tabindex="0" class='button is-stylish is-small is-primary '>
                 <div class="icon is-small"><i class="far fa-check"></i></div>
                 <span>Accept offer</span>
               </a>
-            </p>
-            <p class="control">
+            </div>
+            <div class="control">
               <a id="reject_button" tabindex="0" class='button is-stylish is-small is-outlined is-danger'>
                 <div class="icon is-small"><i class="far fa-times"></i></div>
                 <span>Reject offer</span>
               </a>
-            </p>
+            </div>
           </div>
           <div class="content">
             <a id="offer-modal-whats-next" tabindex="0" class='is-underlined is-primary'>
@@ -910,11 +910,11 @@
             <div class="icon is-small"><i class="far fa-check-circle"></i></div>
             <span>Verify Now</span>
           </a>
-          <a id="prev-dns-table-button" data-value="-1" class="button is-stylish is-small is-black is-inverted" title="Previous DNS Table">
+          <a id="prev-dns-table-button" data-value="-1" class="button is-stylish is-small is-black is-inverted" title="Previous Domain Name">
             <div class="icon is-small"><i class="far fa-angle-left"></i></div>
             <span class="is-hidden-mobile">Previous</span>
           </a>
-          <a id="next-dns-table-button" data-value="1" class="button is-stylish is-small is-black is-transparent no-shadow" title="Next Domain Name">
+          <a id="next-dns-table-button" data-value="1" class="button is-stylish is-small is-black-is-inverted" title="Next Domain Name">
             <span class="is-hidden-mobile">Next</span>
             <div class="icon is-small"><i class="far fa-angle-right"></i></div>
           </a>
@@ -959,7 +959,7 @@
           </tr>
           <tr class='doma-www-record needs-action-row no-hover-effect'>
             <td class="td-dns-host">www</td>
-            <td class="td-record">A</td>
+            <td class="td-record">CNAME</td>
             <td class='required_data'>208.68.37.82</td>
             <td class="existing_data is-hidden-mobile"></td>
             <td class="next_step is-danger"></td>
