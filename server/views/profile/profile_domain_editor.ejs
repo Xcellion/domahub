@@ -663,12 +663,12 @@
         </p>
 
       </div>
-      <p class="resend-wrapper">
+      <div class="resend-wrapper">
         <a class="button is-stylish is-small resend-offer-email-button">
           <div class="icon is-small"><i class="far fa-repeat"></i></div>
           <span>Re-send verification email</span></a>
         </a>
-      </p>
+      </div>
     </div>
 
     <!-- OFFER MODAL -->
@@ -686,13 +686,22 @@
           <div class="content">
             <ul id="offer-info" class="offer-info">
               <li>
-                <div class="icon is-small" title="From"><i class="far fa-user-alt"></i></span><span id="offer-modal-name"></div>
+                <div class="icon is-small" title="From">
+                  <i class="far fa-user-alt"></i></span>
+                </div>
+                <span id="offer-modal-name">
               </li>
               <li>
-                <div class="icon is-small" title="Email"><i class="far fa-envelope"></i></span><span id="offer-modal-email"></div>
+                <div class="icon is-small" title="Email">
+                  <i class="far fa-envelope"></i></span>
+                </div>
+                <span id="offer-modal-email">
               </li>
               <li>
-                <div class="icon is-small" title="Phone"><i class="far fa-phone"></i></span><span id="offer-modal-phone"></div>
+                <div class="icon is-small" title="Phone">
+                  <i class="far fa-phone"></i></span>
+                </div>
+                <span id="offer-modal-phone">
               </li>
               <li>
                 <div class="icon is-small" title="Message"><i class="far fa-comment"></i></div>
@@ -823,7 +832,7 @@
         <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
           <td>
             <span class="td-offer-domain"></span>
-            <div class="icon is-inline is-small" data-balloon-length="medium" data-balloon="You can click on this offer to view more details or respond to it." data-balloon-pos="right">
+            <div class="icon is-tooltip is-inline is-small" data-balloon-length="medium" data-balloon="You can click on this offer to view more details or respond to it." data-balloon-pos="right">
               <i class="far fa-question-circle"></i>
             </div>
           </td>
