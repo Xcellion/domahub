@@ -221,8 +221,7 @@
                         What countries are your users in?
                       </p>
                       <div class="traffic-chart-wrapper">
-                        <canvas id="countries-blank-canvas" class="traffic-chart"></canvas>
-                        <div id="countries-chart" class="traffic-chart"></div>
+                        <canvas id="countries-chart" class="traffic-chart"></canvas>
                         <div id="countries-chart-overlay" class="traffic-overlay content">
                           <div id="countries-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
                             <figure class="image is-48x48">
@@ -326,7 +325,7 @@
                 </div>
                 <div class="level is-mobile">
                   <div class="overview-tile-wrapper level-item has-text-centered">
-                    <a title="View Expenses" href="/profile/mylistings">
+                    <a title="View Expenses" href="/profile/settings#transactions">
                       <div class="content">
                         <small class="heading">
                           Expenses YTD
@@ -336,7 +335,7 @@
                     </a>
                   </div>
                   <div class="overview-tile-wrapper level-item has-text-centered">
-                    <a title="View Revenue" href="/profile/mylistings">
+                    <a title="View Revenue" href="/profile/settings#transactions">
                       <div class="content">
                         <small class="heading">
                           Revenue YTD
@@ -346,7 +345,7 @@
                     </a>
                   </div>
                   <div class="overview-tile-wrapper level-item has-text-centered">
-                    <a title="View Profit" href="/profile/mylistings">
+                    <a title="View Profit" href="/profile/settings#transactions">
                       <div class="content">
                         <small class="heading">
                           Profit YTD
@@ -359,11 +358,29 @@
                     <a title="View Offers" href="/profile/mylistings?tab=offers">
                       <div class="content">
                         <small class="heading">
-                          Unanswered Offers
+                          Outstanding Offers
                         </small>
                         <h3 id="offers-counter" class="counter"></h1>
                       </div>
                     </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card is-fullwidth tile is-child">
+              <div class="card-header">
+                <h3 class="card-header-title">Outstanding Offers</h3>
+              </div>
+              <div class="card-content">
+                <div class="content">
+                  <div id="no-offers" class="is-hidden media">
+                    You don't have any outstanding offers!
+                  </div>
+                  <div id="offers-clone" class="is-hidden offers media">
+                    <li>
+                      <span class="offers-domain-name"></span>
+                      <a class="offers-count is-primary is-underlined is-pulled-right"></a>
+                    </li>
                   </div>
                 </div>
               </div>
@@ -392,18 +409,6 @@
                       <div class="icon is-small"><i id="referral-icon" class="far fa-clipboard" data-fa-transform="up-1"></i></div>
                       <span id="referral-link-text">Copy Link</span>
                     </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card is-fullwidth tile is-child">
-              <div class="card-header">
-                <h3 class="card-header-title">Latest Offers</h3>
-              </div>
-              <div class="card-content">
-                <div class="content">
-                  <div class="media">
-                    You don't have any outstanding offers!
                   </div>
                 </div>
               </div>

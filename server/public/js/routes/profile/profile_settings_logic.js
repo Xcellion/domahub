@@ -1007,7 +1007,7 @@ function showSectionByURL(){
 //get transactions from stripe
 function getTransactions(){
   $("#loading-transactions-table").removeClass('is-hidden');
-  $("#no-transactions-table, #transactions-table, #transactions-toolbar").addClass('is-hidden');
+  $("#no-matching-transactions-table, #no-transactions-table, #transactions-table").addClass('is-hidden');
 
   $.ajax({
     url: "/profile/gettransactions",
@@ -1134,6 +1134,7 @@ function showTransactionRows(){
   }).removeClass('is-hidden');
 
   if (user.transactions){
+    $("#no-transactions-table").addClass('is-hidden');
     //something matches
     if ($(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").length > 0){
       $("#no-matching-transactions-table").addClass('is-hidden');
