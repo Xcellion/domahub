@@ -26,7 +26,7 @@
           <div class="tabs is-boxed">
             <ul>
               <li id="account-tab" class="tab is-active">
-                <a tabindex="0">
+                <a tabindex="0" title="Account">
                   <div class="icon is-hidden-tablet">
 										<i class="far fa-user"></i>
 									</div>
@@ -34,9 +34,9 @@
                 </a>
               </li>
               <li id="premium-tab" class="tab">
-                <a tabindex="0">
+                <a tabindex="0" title="Premium Status">
                   <div class="icon is-hidden-tablet">
-										<i class="far fa-trophy"></i>
+										<i class="far fa-trophy-alt"></i>
 									</div>
                   <span class="is-hidden-mobile">
                     <% if (user.stripe_subscription_id) { %>
@@ -48,7 +48,7 @@
                 </a>
               </li>
               <li id="payment-tab" class="tab">
-                <a tabindex="0">
+                <a tabindex="0" title="Payments">
                   <div class="icon is-relative is-hidden-tablet">
 										<i class="far fa-university"></i>
 									</div>
@@ -60,9 +60,9 @@
                 </a>
               </li>
               <li id="transactions-tab" class="tab">
-                <a tabindex="0">
+                <a tabindex="0" title="Transactions">
                   <div class="icon is-hidden-tablet">
-										<i class="far fa-money"></i>
+										<i class="far fa-money-bill"></i>
 									</div>
                   <span class="is-hidden-mobile">Transactions</span>
                 </a>
@@ -208,107 +208,105 @@
         <!-- PREMIUM / REFERRAL / PROMO CODE TAB -->
         <div id="premium" class="columns is-hidden drop-tab">
           <div class="column is-5-widescreen">
-          <div class="card is-fullwidth">
-          	<div class="card-header">
-          		<h3 id="upgrade-tab-header" class="card-header-title">
-          			<span>Premium Status</span>
-          		</h3>
-          		<a tabindex="0" class="button is-small no-shadow is-transparent is-black card-header-icon" href="/features#pricing">
-          			<div class="icon is-small">
-									<i class="far fa-question-circle"></i>
-								</div>
-          			<span>What is Premium?</span>
-          		</a>
-          	</div>
-          	<div class="card-content">
-          		<div class="control is-spaced">
-          			<div class="control-left">
-          				<p>
-          					Premium Status
-          				</p>
-          				<small id="renew-status" class="tip"></small>
-          			</div>
-          			<div class="control-right">
-          				<a id="upgrade-button" class="basic-elem button is-stylish is-small is-primary">
-          					<div class="icon is-small">
-          						<i class="far fa-trophy"></i>
-          					</div>
-          					<span class="button-text">Upgrade</span>
-          				</a>
-          				<div class="premium-elem control">
-          					<a id="cancel-premium-confirm-button" class="is-hidden is-inverted button is-danger is-stylish is-small">
-          						<div class="icon is-small">
-          							<i class="far fa-ban"></i>
-          						</div>
-          						<span>Cancel Premium</span>
-          					</a>
-          					<a id="renew-premium-button" class="is-hidden is-inverted button is-primary is-stylish is-small">
-          						<div class="icon is-small">
-          							<i class="far fa-repeat"></i>
-          						</div>
-          						<span>Renew Premium</span>
-          					</a>
-          				</div>
-          			</div>
-          		</div>
-          		<div class="control is-spaced is-mobile">
-          			<div class="control-left">
-          				<p>
-          					Default Payment Method
-          				</p>
-          				<small class="tip existing-cc">Click the button to add a default credit card!</small>
-          			</div>
-          			<div class="control-right">
-          				<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-stylish is-small">
-          					<div class="icon is-small">
-          						<i class="far fa-credit-card"></i>
-          					</div>
-          					<span>Add A New Card</span>
-          				</a>
-          			</div>
-          		</div>
-          	</div>
-          </div>
+	          <div class="card is-fullwidth">
+	          	<div class="card-header">
+	          		<h3 id="upgrade-tab-header" class="card-header-title">
+	          			<span>Premium Status</span>
+	          		</h3>
+	          	</div>
+	          	<div class="card-content">
+								<% if (!user.stripe_subscription_id) { %>
+	          			<div class="notification no-shadow has-icon is-primary">
+										<div class="icon-box">
+											<div class="icon is-white">
+												<i class="far fa-exclamation-circle"></i>
+											</div>
+										</div>
+										<div class="content">
+											<p class="is-white">
+												Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
+												<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
+													Click here to learn more.
+												</a>
+											</p>
+										</div>
+									</div>
+								<% } %>
+	          		<div class="control is-spaced">
+	          			<div class="control-left">
+	          				<p>
+	          					Premium Status
+	          				</p>
+	          				<small id="renew-status" class="tip"></small>
+	          			</div>
+	          			<div class="control-right">
+	          				<a id="upgrade-button" class="basic-elem button is-stylish is-small is-primary is-outlined">
+	          					<div class="icon is-small">
+	          						<i class="far fa-trophy-alt"></i>
+	          					</div>
+	          					<span class="button-text">Upgrade</span>
+	          				</a>
+	          				<div class="premium-elem control">
+	          					<a id="cancel-premium-confirm-button" class="is-hidden is-outlined button is-danger is-stylish is-small">
+	          						<div class="icon is-small">
+	          							<i class="far fa-ban"></i>
+	          						</div>
+	          						<span>Cancel Premium</span>
+	          					</a>
+	          					<a id="renew-premium-button" class="is-hidden is-inverted button is-primary is-stylish is-small">
+	          						<div class="icon is-small">
+	          							<i class="far fa-repeat"></i>
+	          						</div>
+	          						<span>Renew Premium</span>
+	          					</a>
+	          				</div>
+	          			</div>
+	          		</div>
+	          		<div class="control is-spaced is-mobile">
+	          			<div class="control-left">
+	          				<p>
+	          					Default Payment Method
+	          				</p>
+	          				<small class="tip existing-cc">Click the button to add a default credit card!</small>
+	          			</div>
+	          			<div class="control-right">
+	          				<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-stylish is-small">
+	          					<div class="icon is-small">
+	          						<i class="far fa-credit-card"></i>
+	          					</div>
+	          					<span>Add A New Card</span>
+	          				</a>
+	          			</div>
+	          		</div>
+	          	</div>
+	          </div>
 
-          <%# <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">
-                <span>Premium Features</span>
-              </h3>
-              <h3 class="is-pulled-right">
-                $5 / month
-              </h3>
-            </div>
-            <div class="card-content">
-            </div>
-          </div>%>
-
-          <div id="payments-history-card" class="card is-fullwidth is-hidden">
-          	<div class="card-header is-block">
-          		<h3 class="card-header-title">
-          			<span>Premium Payments History</span>
-          		</h3>
-              <small id="next-charge-tip" class="tip is-inline-block"></small>
-          	</div>
-          	<div class="card-content">
-              <table id="payment-history-table" class="table no-border-bottom">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Card</th>
-                  </tr>
-                </thead>
-                <tbody id="payment-history-body">
-                  <tr id="payment-history-clone" class="is-hidden payment-history-row no-hover-effect">
-                    <td class="payment-history-date"></td>
-                    <td class="payment-history-amount"></td>
-                    <td class="payment-history-cc"></td>
-                  </tr>
-                </tbody>
-              </table>
-          	</div>
-          </div>
+	          <div id="payments-history-card" class="card is-fullwidth is-hidden">
+	          	<div class="card-header is-block">
+	          		<h3 class="card-header-title">
+	          			<span>Premium Payments History</span>
+	          		</h3>
+	              <small id="next-charge-tip" class="tip is-inline-block"></small>
+	          	</div>
+	          	<div class="card-content">
+	              <table id="payment-history-table" class="table">
+	                <thead>
+	                  <tr>
+	                    <th>Date</th>
+	                    <th>Amount</th>
+	                    <th>Card</th>
+	                  </tr>
+	                </thead>
+	                <tbody id="payment-history-body">
+	                  <tr id="payment-history-clone" class="is-hidden payment-history-row no-hover-effect">
+	                    <td class="payment-history-date"></td>
+	                    <td class="payment-history-amount"></td>
+	                    <td class="payment-history-cc"></td>
+	                  </tr>
+	                </tbody>
+	              </table>
+	          	</div>
+	          </div>
           </div>
           <div class="column is-5-widescreen">
             <div class="card is-fullwidth">
@@ -329,11 +327,11 @@
                 <div class="control-right">
                   <form id="promo-form">
                     <div class="control has-icon has-addons">
-                      <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
+                      <input id="promo-input" autocomplete="off" required tabindex="0" class="input has-shadow promo-input" type="text"/>
                       <div class="icon">
 												<i class="far fa-tags"></i>
 											</div>
-                      <button id="promo-submit" class="promo-input button no-shadow is-primary is-stylish is-small" text="Submit" type="submit" form="promo-form">
+                      <button id="promo-submit" class="promo-input button is-stylish is-small" text="Submit" type="submit" form="promo-form">
 												<div class="icon is-small">
 													<i class="far fa-check-circle"></i>
 												</div>
@@ -354,8 +352,8 @@
           				These are people who have signed up using your referral link or any promotional codes you may have applied to your account.
           			</small>
                 <div class="control has-addons">
-                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input" placeholder="Invite your friends!"/>
-                  <a id="referral-link-copy" class="button no-shadow is-stylish is-small" tabindex="0">
+                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input has-shadow" placeholder="Invite your friends!"/>
+                  <a id="referral-link-copy" class="button is-stylish is-small" tabindex="0">
                     <div class="icon is-small">
 											<i class="far fa-clipboard"></i>
 										</div>
@@ -363,7 +361,7 @@
                   </a>
                 </div>
           		</div>
-              <table id="loading-referral-table" class="table has-shadow no-border-bottom">
+              <table id="loading-referral-table" class="table">
           			<tbody>
                   <tr class="no-hover-effect">
                     <td>
@@ -376,7 +374,7 @@
                   </tr>
           			</tbody>
               </table>
-              <table id="no-referral-table" class="table is-hidden no-border-bottom">
+              <table id="no-referral-table" class="table is-hidden">
           			<tbody>
                   <tr id="no-referrals" class="no-hover-effect">
                     <td colspan="3">
@@ -392,17 +390,13 @@
                   </tr>
           			</tbody>
               </table>
-              <table id="referral-table" class="table is-hidden no-border-bottom">
+              <table id="referral-table" class="table is-hidden">
           			<thead>
-          				<tr>
-          					<th colspan=4>
-                      <div class="is-bold">
-                        Total free months redeemed - <span id="total-months-redeemed"></span>
-                      </div>
-                    </th>
-          				</tr>
-          			</thead>
-          			<thead>
+									<tr>
+										<th colspan="4">
+											Total free months redeemed: <span id="total-months-redeemed"></span>
+										</th>
+									</tr>
           				<tr>
           					<th>Type</th>
           					<th>Months</th>
@@ -787,7 +781,7 @@
                     <span>Available for withdrawal</span>
                     <span id="total-available" class="is-bold is-pulled-right">$0.00</span>
                   </p>
-                  <a id="transfer-button" class="is-fullwidth is-disabled is-stylish is-primary button">
+                  <a id="transfer-button" class="button is-fullwidth is-disabled is-stylish is-small is-primary">
                     <div class="icon is-small">
 											<i class="far fa-exchange"></i>
 										</div>
@@ -799,17 +793,9 @@
           </div>
           <div class="column">
             <div id="transactions-toolbar" class="control">
-              <div class="control">
-                <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" tabindex="0" title="Refresh Transactions">
-                  <div class="icon is-small">
-										<i class="far fa-sync-alt"></i>
-									</div>
-                  <span>Refresh Transactions</span>
-                </a>
-              </div>
               <div class="control is-grouped">
                 <div class="control">
-                  <span class="select is-narrow">
+                  <span class="select is-stylish has-shadow is-narrow">
                     <select id="transactions-filter-select" tabindex="0">
                       <option selected value="exists">View All</option>
                       <option value="sale">Domain Sales</option>
@@ -821,20 +807,22 @@
                   </span>
                 </div>
                 <div class="control">
-                  <a id="refresh-transactions-button" class="button is-transparent is-black no-shadow is-stylish is-small" title="Refresh Transactions">
-                    <span class="icon is-small"><i class="fa fa-refresh"></i></span>
-                    <span>Refresh</span>
-                  </a>
+									<button id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" tabindex="0" title="Refresh Transactions">
+	                  <div class="icon is-small">
+											<i class="far fa-sync-alt"></i>
+										</div>
+	                  <span>Refresh</span>
+	                </button>
                 </div>
                 <div class="control has-icon">
                   <div class="icon">
 										<i class="far fa-search"></i>
 									</div>
-                  <input id="transactions-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search Transactions" />
+                  <input id="transactions-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search Transactions" />
                 </div>
               </div>
             </div>
-            <table id="transactions-table" class="is-hidden table no-border-bottom">
+            <table id="transactions-table" class="table is-hidden">
               <thead>
                 <tr>
                   <th>Date</th>
@@ -856,7 +844,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="loading-transactions-table" class="table no-border-bottom">
+            <table id="loading-transactions-table" class="table">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>
@@ -869,7 +857,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="no-transactions-table" class="table has-shadow is-hidden no-border-bottom">
+            <table id="no-transactions-table" class="table is-hidden">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>
@@ -885,7 +873,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="no-matching-transactions-table" class="table is-hidden no-border-bottom">
+            <table id="no-matching-transactions-table" class="table is-hidden">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>
@@ -964,7 +952,19 @@
     <div class="modal-container">
       <div class="modal-content is-small">
         <form id="credit-card-form" class="content" autocomplete="on">
-            <div class="control existing-cc is-hidden"></div>
+					<div class="notification no-shadow has-icon is-primary">
+						<div class="icon-box">
+							<div class="icon is-white">
+								<i class="far fa-exclamation-circle"></i>
+							</div>
+						</div>
+						<div class="content">
+							<p class="is-hidden existing-cc is-white"></p>
+							<small class="is-white">
+								All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-white is-underlined">Stripe</a>.
+							</small>
+						</div>
+					</div>
             <div class="control">
               <label class="label">
                 <span>Card Number</span>
@@ -1017,20 +1017,17 @@
                 </div>
               </div>
             </div>
-            <div class="content">
-              <small class="tip">This information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-underlined">Stripe</a>.</small>
-            </div>
-            <div class="control is-grouped is-grouped-center">
-              <div class="control">
-                <button id="submit-card-button" tabindex="0" type="submit" form="credit-card-form" class='button is-primary is-stylish is-small'>
+            <div class="control is-grouped">
+              <div class="control is-expanded">
+                <button id="submit-card-button" tabindex="0" type="submit" form="credit-card-form" class='button is-fullwidth is-primary is-stylish is-small'>
                   <div class="icon is-small">
 										<i class="far fa-check-circle"></i>
 									</div>
                   <span>Save Card</span>
                 </button>
               </div>
-              <div class="control">
-                <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
+              <div class="control is-expanded">
+                <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
                   <div class="icon is-small">
 										<i class="far fa-ban"></i>
 									</div>
@@ -1228,13 +1225,13 @@
             </li>
             <li>
               <div class="icon is-small" title="DomaHub Fees">
-								<i class="far fa-trophy"></i>
+								<i class="far fa-trophy-alt"></i>
 							</div>
               <span id="transactions-modal-domafees"></span>
             </li>
             <li>
               <div class="icon is-small" title="Payment Processing Fees">
-								<i class="far fa-money"></i>
+								<i class="far fa-money-bill"></i>
 							</div>
 							<span id="transactions-modal-processfees"></span>
             </li>
