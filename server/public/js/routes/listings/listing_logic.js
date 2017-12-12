@@ -512,7 +512,7 @@ function createTrafficChart(compare){
     },
     options: {
       legend: {
-        display:false
+        display: false
       },
       hover: {
         mode: "index"

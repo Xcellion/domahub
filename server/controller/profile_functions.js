@@ -28,9 +28,36 @@ var request = require("request");
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
 var parseString = require('xml2js').parseString;
 
+//google analytics authentication
+var google = require('googleapis');
+var key = require("../lib/google_embed_api_key.json");
+var jwtClient = new google.auth.JWT(
+  key.client_email,
+  null,
+  key.private_key,
+  ["https://www.googleapis.com/auth/analytics.readonly"],   // array of auth scopes
+  null
+);
+
 //</editor-fold>
 
 module.exports = {
+
+  //<editor-fold>-------------------------------GOOGLE ANALYTICS-------------------------------
+
+  //google embed analytics authentication
+  authWithGoogle : function(req, res, next){
+    console.log("F: Authenticating with Google Analytics API...");
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        error.log(err);
+      }
+      req.user.ga_access_token = (tokens) ? tokens.access_token : false;
+      next();
+    });
+  },
+
+  //</editor-fold>
 
   //<editor-fold>-------------------------------------GET ACCOUNT INFO-------------------------------
 

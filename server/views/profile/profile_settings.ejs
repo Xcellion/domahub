@@ -331,7 +331,7 @@
                       <div class="icon">
 												<i class="far fa-tags"></i>
 											</div>
-                      <button id="promo-submit" class="promo-input button is-stylish is-small" text="Submit" type="submit" form="promo-form">
+                      <button id="promo-submit" class="promo-input button no-shadow is-stylish is-small" text="Submit" type="submit" form="promo-form">
 												<div class="icon is-small">
 													<i class="far fa-check-circle"></i>
 												</div>
@@ -807,12 +807,12 @@
                   </span>
                 </div>
                 <div class="control">
-									<button id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" tabindex="0" title="Refresh Transactions">
-	                  <div class="icon is-small">
-											<i class="far fa-sync-alt"></i>
-										</div>
-	                  <span>Refresh</span>
-	                </button>
+                  <a id="refresh-transactions-button" class="button is-inverted is-black is-stylish is-small" tabindex="0" title="Refresh Transactions">
+                    <div class="icon is-small">
+  										<i class="far fa-sync-alt"></i>
+  									</div>
+                    <span>Refresh</span>
+                  </a>
                 </div>
                 <div class="control has-icon">
                   <div class="icon">
@@ -844,7 +844,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="loading-transactions-table" class="table">
+            <table id="loading-transactions-table" class="table has-shadow no-border-bottom">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>
@@ -873,7 +873,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="no-matching-transactions-table" class="table is-hidden">
+            <table id="no-matching-transactions-table" class="table has-shadow is-hidden no-border-bottom">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>
@@ -1056,11 +1056,13 @@
             <div class="content">
 							<p>
 								Are you sure you want to cancel your Premium account?
-								The following <strong>will be disabled</strong> for your account.
 							</p>
 						</div>
           </div>
           <div id="premium-cancel-disable-wrapper" class="content">
+            <p>
+              The following <strong>will be disabled</strong> for your account.
+            </p>
             <ul class="has-disc">
 							<li>
 	              0% commission on sales and rentals

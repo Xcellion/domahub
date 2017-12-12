@@ -8,6 +8,7 @@
 @import '../bulma/components/level.sass';
 @import '../bulma/components/card.sass';
 @import '../bulma/elements/title.sass';
+@import '../bulma/elements/image.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/delete.sass';
@@ -27,8 +28,15 @@
   display: block;
   letter-spacing: 1px;
   font-weight: 500;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top:10px;
   text-transform: uppercase;
+}
+
+.overview-tile-wrapper {
+  &:hover {
+    background-color:$grey-lighter;
+  }
 }
 
 .counter {
@@ -54,4 +62,48 @@
 
 .tag {
   white-space: nowrap;
+}
+
+.traffic-chart-wrapper {
+  position:relative;
+}
+
+.traffic-chart {
+  width:100%;
+  height:100%;
+  position:relative;
+}
+
+.traffic-overlay {
+  position:absolute;
+  border:1px solid $grey-lighter;
+  background-color:rgba(255,255,255,0.5);
+  top:0;
+  width:100%;
+  height:100%;
+}
+
+.traffic-overlay-text {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  margin-right:-50%;
+}
+
+.stat-wrapper {
+  display:inline-block;
+  padding:5px;
+  cursor:pointer;
+  text-align:center;
+  width:49%;
+  height:100px;
+  margin-left:-3px;
+  max-width:100px;
+  &.is-active .heading{
+    color:$primary;
+  }
+  &:hover{
+    background-color:$grey-lighter;
+  }
 }

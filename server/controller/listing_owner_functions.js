@@ -20,6 +20,7 @@ var validator = require("validator");
 
 var whois = require("whois");
 var parser = require('parse-whois');
+var moment = require('moment');
 
 var multer = require("multer");
 var parse = require("csv-parse");
@@ -160,7 +161,8 @@ module.exports = {
             null,    //registrar_id, changes later if we're using a registrar to auto update DNS
             parseFloat(posted_domain_names[x].min_price) || 0,
             parseFloat(posted_domain_names[x].buy_price) || 0,
-            Descriptions.random()    //random default description
+            Descriptions.random(),    //random default description
+            null
           ]);
         }
       }
@@ -209,10 +211,10 @@ module.exports = {
                 //create promise to set DNS via API
                 switch (req.session.registrar_info[x].registrar_name){
                   case "godaddy":
-                    registrar_domain_promises.push(setDNSGoDaddy(registrar_info, registrar_domain_name));
+                    registrar_domain_promises.push(set_dns_godaddy_promise(registrar_info, registrar_domain_name));
                     break;
                   case "namecheap":
-                    registrar_domain_promises.push(setDNSNamecheap(registrar_info, registrar_domain_name));
+                    registrar_domain_promises.push(set_dns_namecheap_promise(registrar_info, registrar_domain_name));
                     break;
                 }
 
@@ -251,6 +253,27 @@ module.exports = {
       else {
         next();
       }
+    },
+
+    //find out the registrar expiration date and set it (if it exists)
+    setDNSExpiration : function(req, res, next){
+      console.log("F: Attempting to find out domain expiration dates for new listings...");
+
+      var whois_promises = [];
+      for (var x = 0 ; x < req.session.new_listings.db_object.length ; x++){
+        whois_promises.push(check_whois_promise(req.session.new_listings.db_object[x][2], x));
+      }
+
+      //all whois data received!
+      Q.allSettled(whois_promises).then(function(results){
+        console.log("F: Finished looking up domain expiration dates!");
+        for (var y = 0 ; y < results.length ; y++){
+          if (results[y].state == "fulfilled"){
+            req.session.new_listings.db_object[results[y].value.index][7] = moment(results[y].value.whois["Registry Expiry Date"]).valueOf();
+          }
+        }
+        next();
+      });
     },
 
     //create listings
@@ -309,8 +332,8 @@ module.exports = {
                    }
 
                    //waterfall to make verified / pending DNS updates to the listings
-                   Q.fcall(verified_dns_function, various_ids)      //function to call, and the parameter
-                    .then(pending_dns_function, pending_dns_function)   //function on success, function on error
+                   Q.fcall(verified_dns_promise, various_ids)      //function to call, and the parameter
+                    .then(pending_dns_promise, pending_dns_promise)   //function on success, function on error
                     .done(function(various_ids){
                      //see if we inserted anything and revert to unverified if necessary
                      checkInsertedIDs(req, res, various_ids.inserted_ids);
@@ -414,7 +437,7 @@ module.exports = {
             error.handler(req, res, "not-premium", "json");
           }
           else {
-            error.log(err, "something went wrong with an image upload");
+            error.log(err, "Something went wrong with an image upload");
             error.handler(req, res, 'Something went wrong with the upload!', "json");
           }
         }
@@ -442,7 +465,7 @@ module.exports = {
             }, function (err, response, body) {
               if (!err){
                 resolve({
-                  imgur_link: JSON.parse(body).data.link.replace("http", "https"),
+                  imgur_link: JSON.parse(body).data.link,
                   image_type: formData.image_type
                 });
               }
@@ -785,7 +808,7 @@ module.exports = {
         }
         //invalid font color
         else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
-          error.handler(req, res, "Invalid font color! Please choose a different color!", "json");
+          error.handler(req, res, "Invalid text color! Please choose a different color!", "json");
         }
         //invalid font name
         else if (req.body.font_name && Fonts.all().indexOf(req.body.font_name) == -1){
@@ -794,6 +817,14 @@ module.exports = {
         //invalid background color
         else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
           error.handler(req, res, "Invalid background color! Please choose a different color!", "json");
+        }
+        //invalid footer background color
+        else if (req.body.footer_background_color && !validator.isHexColor(req.body.footer_background_color)){
+          error.handler(req, res, "Invalid footer background color! Please choose a different color!", "json");
+        }
+        //invalid footer font color
+        else if (req.body.footer_color && !validator.isHexColor(req.body.footer_color)){
+          error.handler(req, res, "Invalid footer text color! Please choose a different color!", "json");
         }
         //invalid background link
         else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
@@ -862,6 +893,8 @@ module.exports = {
           req.session.new_listing_info.font_name = req.body.font_name;
           req.session.new_listing_info.font_color = req.body.font_color;
           req.session.new_listing_info.background_color = req.body.background_color;
+          req.session.new_listing_info.footer_color = req.body.footer_color;
+          req.session.new_listing_info.footer_background_color = req.body.footer_background_color;
 
           //info module
           req.session.new_listing_info.info_module = info_module;
@@ -899,6 +932,8 @@ module.exports = {
           req.body.font_name ||
           req.body.font_color ||
           req.body.background_color ||
+          req.body.footer_background_color ||
+          req.body.footer_color ||
           req.body.background_image_link ||
           req.body.logo_image_link ||
           req.body.info_module ||
@@ -1279,7 +1314,7 @@ function checkForCreatedListings(new_listings, inserted_domains, inserted_ids){
           if (good_listings[z].domain_name == formatted_listings[x][2]){
             good_reasons_exist = true;
             good_listings[z].reasons.unshift("Successfully created listing!");
-            check_dns_promises.push(checkDomainDNS(good_listings[z].domain_name, inserted_id));
+            check_dns_promises.push(check_domain_dns_promise(good_listings[z].domain_name, inserted_id));
             break;
           }
         }
@@ -1356,7 +1391,7 @@ function checkInsertedIDs(req, res, inserted_ids){
 }
 
 //promise function for verified DNS status change
-function verified_dns_function(various_ids){
+function verified_dns_promise(various_ids){
   var verified_dns_promise = Q.defer();
   if (various_ids.verified_ids.length > 0){
     console.log("F: Now setting status for successful DNS changes...");
@@ -1382,7 +1417,7 @@ function verified_dns_function(various_ids){
 }
 
 //promise function for pending DNS status change
-function pending_dns_function(various_ids){
+function pending_dns_promise(various_ids){
   var pending_dns_promise = Q.defer();
 
   //if we error and have to wrap this object in a error obj
@@ -1411,12 +1446,41 @@ function pending_dns_function(various_ids){
   return pending_dns_promise.promise;
 }
 
+//returns a promise to figure out domain name whois
+function check_whois_promise(domain_name, index){
+  return Q.Promise(function(resolve, reject, notify){
+    console.log("F: Looking up WHOIS info for domain - " + domain_name + "...");
+
+    //look up whois info
+    whois.lookup(domain_name, function(err, data){
+      if (err){
+        error.log(err, "Failed to lookup WHOIS information");
+        reject(false);
+      }
+      else if (data){
+        var whoisObj = {};
+        var array = parser.parseWhoIsData(data);
+        for (var x = 0; x < array.length; x++){
+          whoisObj[array[x].attribute.trim()] = array[x].value;
+        }
+        resolve({
+          whois : whoisObj,
+          index : index
+        });
+      }
+      else {
+        reject(false);
+      }
+    });
+  });
+}
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------REGISTRAR DNS HELPERS------------------------------
 
 //returns a promise to set DNS for godaddy domains
-function setDNSGoDaddy(registrar_info, registrar_domain_name){
+function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
   return Q.Promise(function(resolve, reject, notify){
     console.log("F: Setting DNS for GoDaddy domain - " + registrar_domain_name + "...");
 
@@ -1486,7 +1550,7 @@ function setDNSGoDaddy(registrar_info, registrar_domain_name){
 }
 
 //returns a promise to set DNS for namecheap domains
-function setDNSNamecheap(registrar_info, registrar_domain_name){
+function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
   return Q.Promise(function(resolve, reject, notify){
     console.log("F: Setting DNS for Namecheap domain - " + registrar_domain_name + "...");
     var username = encryptor.decryptText(registrar_info.username)
@@ -1556,7 +1620,7 @@ function setDNSNamecheap(registrar_info, registrar_domain_name){
 }
 
 //check a domain name to see if the DNS changes are good yet
-function checkDomainDNS(domain_name, inserted_id){
+function check_domain_dns_promise(domain_name, inserted_id){
   console.log("F: Checking to see if domain is still pointed to DomaHub...");
   return Q.Promise(function(resolve, reject, notify){
     dns.resolve(domain_name, "A", function (err, address, family) {

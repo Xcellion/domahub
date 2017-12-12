@@ -20,6 +20,7 @@ module.exports = function(app){
     stripe_functions.getStripeSubscription,
     profile_functions.updateAccountSettingsGet,
     profile_functions.getAccountListings,
+    profile_functions.authWithGoogle,
     profile_functions.renderDashboard
   ]);
 

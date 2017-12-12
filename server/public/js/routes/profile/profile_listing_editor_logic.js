@@ -298,6 +298,7 @@ function checkBox(module_value, elem, child){
     updatePremiumNotification();
     updateColorScheme(listing_info);
     updateFontStyling(listing_info);
+    updateFooterStyling(listing_info);
     updateBackground(listing_info);
     updateLogo(listing_info);
     updateModules(listing_info);
@@ -316,6 +317,7 @@ function checkBox(module_value, elem, child){
     updateBackground(theme_to_load);
     updateColorScheme(theme_to_load);
     updateFontStyling(theme_to_load);
+    updateFooterStyling(theme_to_load);
     $("#theme-input").val(theme_to_load.theme_name);
     changedValue($(".changeable-input"), theme_to_load);
   }
@@ -383,7 +385,7 @@ function checkBox(module_value, elem, child){
   function updateFontStyling(listing_info){
     var minicolor_options = {
       letterCase: "uppercase",
-      swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
+      swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
     }
 
     $("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
@@ -392,6 +394,19 @@ function checkBox(module_value, elem, child){
     //update the preview
     $("#example-domain-name").css("font-family", listing_info.font_name);
     $("#example-font").css("color", listing_info.font_color);
+  }
+  function updateFooterStyling(listing_info){
+    var minicolor_options = {
+      letterCase: "uppercase",
+      swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
+    }
+
+    $("#footer-background-color-input").val(listing_info.footer_background_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#footer-color-input").val(listing_info.footer_color).minicolors("destroy").minicolors(minicolor_options);
+
+    //update the preview
+    $("#example-footer-background").css("background-color", listing_info.footer_background_color);
+    $("#example-footer-text").css("color", listing_info.footer_color);
   }
   function updateBackground(listing_info){
     //remove any input values on upload forms
@@ -550,6 +565,16 @@ function checkBox(module_value, elem, child){
       $("#example-wrapper").css("background-color", $(this).val());
     });
 
+    //change footer background color
+    $("#footer-background-color-input").on("input", function(){
+      $("#example-footer-background").css("background-color", $(this).val());
+    });
+
+    //change footer font color
+    $("#footer-color-input").on("input", function(){
+      $("#example-footer-text").css("color", $(this).val());
+    });
+
     //remove uploading data and any uploaded images if typing the link
     $("#background-link-input").on("input", function(){
       $(this).data("uploading", false);
@@ -693,8 +718,8 @@ function checkBox(module_value, elem, child){
           var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
         }
 
-        //if null or undefined
-        if (input_val != listing_comparison && input_val != null && input_val != undefined){
+        //if null or undefined (or not uploading, for background/logo link input)
+        if (input_val != listing_comparison && input_val != null && input_val != undefined && !$(this).data("uploading")){
           if ((input_name == "logo_image_link" || input_name == "background_image_link") && input_val == "" && listing_comparison == undefined){
           }
           else {
@@ -751,28 +776,34 @@ function checkBox(module_value, elem, child){
           if (data.message == "verification-error"){
             var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
             var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
+            showSelector(true);
+            createRows(false);
           }
           else if (data.message == "ownership-error"){
             var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
             var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
+            showSelector(true);
+            createRows(false);
           }
           else if (data.message == "accepted-error"){
             var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
             var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
+            showSelector(true);
+            createRows(false);
           }
           else if (data.message == "deposited-error" || data.message == "transferred-error"){
             var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
             var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
+            showSelector(true);
+            createRows(false);
           }
           else {
             var error_msg = data.message;
           }
 
-          createRows(false);
-          showSelector(true);
+          errorMessage(error_msg);
         }
 
-        errorMessage(error_msg);
       }
     });
   }
