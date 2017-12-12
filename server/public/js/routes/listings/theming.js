@@ -84,4 +84,6 @@ function setupCustomColors(){
   stylize(listing_info.background_color, "#page-contents:not(.no-background)", "background-color");
   stylize(listing_info.font_name, "#domain-title", "font-family");
   stylize(listing_info.font_name, "#typed-slash", "font-family");
+  stylize(listing_info.footer_color, ".footer-item", "color");
+  stylize(listing_info.footer_background_color, ".footer", "background-color");
 }

@@ -44,6 +44,7 @@ module.exports = function(app){
       profile_functions.getAccountListings,    //to find out which listings were not created in multi-create
       owner_functions.checkPostedListingInfoForCreate,
       owner_functions.setDNSViaRegistrar,
+      owner_functions.setDNSExpiration,
       owner_functions.createListings
     ]);
 

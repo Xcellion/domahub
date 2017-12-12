@@ -22,7 +22,7 @@
           </h2>
         </div>
         <div class="control-right button-wrapper is-mobile">
-          <a id="status-toggle-button" tabindex="0" class="button is-primary is-inverted is-stylish is-small" title="Publicly hide or show landing page(s).">
+          <a id="status-toggle-button" tabindex="0" class="button is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
             <div id="status-icon" class="icon is-small"><i class="far fa-toggle-on"></i></div>
             <span id="status-text" class="is-hidden-mobile"></span>
           </a>
@@ -99,17 +99,27 @@
             </div>
             <div class="card-content">
               <div class="control">
+                <label class="label" for="categories-input">
+                  Categories
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="left">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">Don't see a category that fits your domain? <a class="is-primary is-underlined contact-link" href="/contact">Let us know!</a></small>
+                <input id="categories-input" class="input changeable-input" data-name="categories" type="text">
+              </div>
+              <div class="control">
                 <label class="label" for="domain-name-input">
                   Domain Capitalization
                   <% if (!user.stripe_subscription_id) { %>
                     <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
                       <i class="far fa-trophy-alt"></i>
                     </div>
-                    <% } %>
-                  </label>
-                  <small id="domain-name-cap-missing" class="tip">Change the capitalization of your domain name to fit your custom domain branding.</small>
-                  <input id="domain-name-input" class="input premium-input changeable-input is-narrow" data-name="domain_name" type="text">
-                </div>
+                  <% } %>
+                </label>
+                <small id="domain-name-cap-missing" class="tip">Change the capitalization of your domain name to fit your custom domain branding.</small>
+                <input id="domain-name-input" class="input premium-input changeable-input is-narrow" data-name="domain_name" type="text">
+              </div>
               <div class="control">
                 <label class="label" for="description-footer">
                   <span>Footer Description</span>
@@ -148,10 +158,9 @@
                 </div>
                 <div id="categories" class="category-control">
                   <input id="categories-input" data-name="categories" onchange="" tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
-
                   <%# make all the categories %>
                   <% for (var x = 0; x < categories.length; x++){ %>
-                  <a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag category-selector"><%= categories[x].front %></a>
+                    <a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag category-selector"><%= categories[x].front %></a>
                   <% } %>
                 </div>
               </div>
@@ -219,7 +228,7 @@
         <div id="premium-only-notification" class="box is-medium">
           <div class="content has-text-centered">
             <p>
-              Please upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to customize the look and feel of your landing page!
+              Please upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to customize the look and feel of your listing page!
             </p>
             <div class="control has-text-centered">
               <a href="/profile/settings#premium" class="button is-primary is-stylish">
@@ -244,7 +253,7 @@
           <h1 id="example-domain-name" class="preview-elem is-bold"></h1>
         </div>
         <div class="control">
-          <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</p>
+          <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your listing page!</p>
         </div>
         <div class="button-wrapper is-mobile control">
           <a id="example-button-primary" class="preview-elem button is-stylish">
@@ -262,6 +271,9 @@
         </div>
         <div class="control">
           <a id="example-link-info" class="is-underlined preview-elem">This is a link on your listing page.</a>
+        </div>
+        <div id="example-footer-background" class="box">
+          <span id="example-footer-text">This is some text on the footer of your listing page.</span>
         </div>
       </div>
       <div class="tile is-ancestor">
@@ -295,7 +307,7 @@
               <div class="control">
                 <label class="label">
                   <span>Color Scheme</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The three main colors of your landing page." data-balloon-pos="up">
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The three main colors of your listing page." data-balloon-pos="up">
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
@@ -312,9 +324,6 @@
               <div class="control">
                 <label class="label">
                   <span>Font Styling</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="You can choose both the color and the font-family." data-balloon-pos="up">
-                    <i class="far fa-question-circle"></i>
-                  </div>
                 </label>
                 <div class="control is-grouped">
                   <div class="control">
@@ -326,26 +335,40 @@
                         <%# make all the categories %>
                         <% for (var x = 0; x < fonts.length; x++){ %>
                           <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
-                          <% } %>
-                        </select>
-                      </span>
-                      <div class="icon">
-                        <i class="far fa-font"></i>
-                      </div>
+                        <% } %>
+                      </select>
+                    </span>
+                    <div class="icon">
+                      <i class="far fa-font"></i>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Background Color</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <div class="control">
+                  <input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input input changeable-input">
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Footer Styling</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The color of the footer background color and the color of the footer text." data-balloon-pos="up">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <div class="control">
+                  <input id="footer-background-color-input" data-name="footer_background_color" placeholder="#F1F1F1" type="text" class="premium-input input changeable-input">
                 </div>
                 <div class="control">
-                  <label class="label">
-                    <span>Background Color</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
-                  </label>
-                  <div class="control">
-                    <input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input input changeable-input">
-                  </div>
+                  <input id="footer-color-input" data-name="footer_color" placeholder="#565656" type="text" class="premium-input input changeable-input">
                 </div>
+              </div>
             </div>
           </div>
           <div class="card is-fullwidth tile is-child">
@@ -597,7 +620,7 @@
           <span class="current-domain-name"></span>
         </h2>
       </div>
-      <div id="offers-toolbar" class="hidden-while-loading-offers">
+      <div id="offers-toolbar">
         <div class="offer-button control button-wrapper is-mobile">
           <a id="refresh-offers-button" class="is-hidden button is-black is-stylish is-small is-inverted" title="Refresh Offers">
             <div class="icon is-small"><i class="far fa-sync-alt"></i></div>
@@ -718,18 +741,18 @@
             <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
           </div>
           <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
-            <p class="control">
+            <div class="control">
               <a id="accept_button" tabindex="0" class='button is-stylish is-small is-primary '>
                 <div class="icon is-small"><i class="far fa-check"></i></div>
                 <span>Accept offer</span>
               </a>
-            </p>
-            <p class="control">
+            </div>
+            <div class="control">
               <a id="reject_button" tabindex="0" class='button is-stylish is-small is-outlined is-danger'>
                 <div class="icon is-small"><i class="far fa-times"></i></div>
                 <span>Reject offer</span>
               </a>
-            </p>
+            </div>
           </div>
           <div class="content">
             <a id="offer-modal-whats-next" tabindex="0" class='is-underlined is-primary'>
@@ -742,7 +765,7 @@
     </div>
 
     <!-- OFFER TABLE -->
-    <table id="no-verified-listings-table" class="is-hidden table is-fixed is-bordered">
+    <table id="no-verified-listings-table" class="is-hidden has-shadow table is-fixed is-bordered">
       <tbody>
         <tr class="no-hover-effect">
           <td colspan="5">
@@ -778,7 +801,7 @@
         </tr>
       </tbody>
     </table>
-    <table id="no-offers-table" class="hidden-while-loading-offers is-hidden table is-fixed is-bordered">
+    <table id="no-offers-table" class="hidden-while-loading-offers has-shadow is-hidden table is-fixed is-bordered">
       <tbody>
         <tr class="no-hover-effect">
           <td colspan="5">
@@ -790,7 +813,7 @@
         </tr>
       </tbody>
     </table>
-    <table id="loading-offers-table" class="is-hidden table is-fixed is-bordered">
+    <table id="loading-offers-table" class="is-hidden has-shadow table is-fixed is-bordered">
       <tbody>
         <tr class="no-hover-effect">
           <td colspan="5">
@@ -803,7 +826,7 @@
         </tr>
       </tbody>
     </table>
-    <table id="offers-table" class="is-hidden has-shadow hidden-while-loading-offers table is-fixed is-bordered">
+    <table id="offers-table" class="is-hidden has-shadow has-shadow hidden-while-loading-offers table is-fixed is-bordered">
       <thead class="has-hover-effect">
         <tr>
           <th class="offer-header-sort" data-value="domain_name">
@@ -919,11 +942,11 @@
             <div class="icon is-small"><i class="far fa-check-circle"></i></div>
             <span>Verify Now</span>
           </a>
-          <a id="prev-dns-table-button" data-value="-1" class="button is-stylish is-small is-black is-inverted" title="Previous DNS Table">
+          <a id="prev-dns-table-button" data-value="-1" class="button is-stylish is-small is-black is-inverted" title="Previous Domain Name">
             <div class="icon is-small"><i class="far fa-angle-left"></i></div>
             <span class="is-hidden-mobile">Previous</span>
           </a>
-          <a id="next-dns-table-button" data-value="1" class="button is-stylish is-small is-black is-transparent no-shadow" title="Next Domain Name">
+          <a id="next-dns-table-button" data-value="1" class="button is-stylish is-small is-black-is-inverted" title="Next Domain Name">
             <span class="is-hidden-mobile">Next</span>
             <div class="icon is-small"><i class="far fa-angle-right"></i></div>
           </a>
@@ -931,7 +954,7 @@
       </div>
     </div>
     <div id="current-dns-tables">
-      <table id="loading-dns-table" class="table">
+      <table id="loading-dns-table" class="has-shadow table">
         <tbody>
           <tr class="no-hover-effect">
             <td class="has-text-centered">
@@ -944,7 +967,7 @@
           </tr>
         </tbody>
       </table>
-      <table id="current-dns-table-clone" class="is-hidden table has-shadow no-border-bottom">
+      <table id="current-dns-table-clone" class="has-shadow is-hidden table has-shadow no-border-bottom">
         <thead>
           <tr>
             <th class="table-header is-hidden-mobile" colspan=5></th>
@@ -968,7 +991,7 @@
           </tr>
           <tr class='doma-www-record needs-action-row no-hover-effect'>
             <td class="td-dns-host">www</td>
-            <td class="td-record">A</td>
+            <td class="td-record">CNAME</td>
             <td class='required_data'>208.68.37.82</td>
             <td class="existing_data is-hidden-mobile"></td>
             <td class="next_step is-danger"></td>

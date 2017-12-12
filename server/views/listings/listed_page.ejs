@@ -43,7 +43,7 @@
             <h1 class="title is-primary is-inline-block"><%= listing_info.domain_name %></h1>
           <% } %>
             <h2 class="subtitle is-4 is-blacklight">
-              <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
+              <% if (listing_info.status == 1) { %>
                 is available for purchase.
               <% } else { %>
                 is unavailable for purchase.
