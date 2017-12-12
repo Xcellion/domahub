@@ -36,6 +36,11 @@ input:-webkit-autofill
   &.is-large
     +control-large
   // Modifiers
+  &.is-stylish
+    font-size: 10px
+    font-weight: 500
+    letter-spacing: 1px
+    text-transform: uppercase
   &.has-shadow
     +box-shadow(0,2px,4px,$border,0)
   &.no-border
@@ -135,6 +140,17 @@ input:-webkit-autofill
   &:focus
     border-color: $black-disabled
   // Sizes
+  &.is-stylish
+    select
+      font-size: 10px
+      font-weight: 500
+      letter-spacing: 1px
+      text-transform: uppercase
+    option
+      font-size: 16px
+      font-weight: 400
+      letter-spacing: normal
+      text-transform: capitalize
   &.is-small
     height: 26px
     select
