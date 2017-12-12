@@ -102,6 +102,8 @@ module.exports = {
           IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
           IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
           IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
+          IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
+          IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
           accounts.username, \
           accounts.email AS owner_email, \
           accounts.stripe_subscription_id, \
