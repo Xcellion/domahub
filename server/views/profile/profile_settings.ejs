@@ -331,7 +331,7 @@
                       <div class="icon">
 												<i class="far fa-tags"></i>
 											</div>
-                      <button id="promo-submit" class="promo-input button no-shadow is-stylish is-small" text="Submit" type="submit" form="promo-form">
+                      <button id="promo-submit" class="promo-input button is-stylish is-small" text="Submit" type="submit" form="promo-form">
 												<div class="icon is-small">
 													<i class="far fa-check-circle"></i>
 												</div>
@@ -1045,16 +1045,16 @@
   <div id="cancel-premium-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content">
+      <div class="modal-content is-small">
         <div class="control">
-          <div class="notification no-shadow is-small has-icon is-danger">
+          <div class="notification no-shadow has-icon is-danger">
 						<div class="icon-box">
 							<div class="icon is-white">
 								<i class="far fa-exclamation-triangle"></i>
 							</div>
 						</div>
             <div class="content">
-							<p>
+							<p class="is-white">
 								Are you sure you want to cancel your Premium account?
 							</p>
 						</div>
@@ -1083,15 +1083,15 @@
           <label class="label" for="cancel-confirmation-input">Please type <strong>CANCEL</strong> to confirm cancellation.</label>
           <input id="cancel-confirmation-input" type="text" name="cancel-confirmation-input" class="modal-input input"/>
         </div>
-        <div class="control is-grouped is-grouped-center">
-            <div class="control">
-              <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-stylish is-small is-danger'>
+        <div class="control is-grouped">
+            <div class="control is-expanded">
+              <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-fullwidth is-stylish is-small is-danger'>
                 <div class="icon is-small"><i class="far fa-ban"></i></div>
                 <span>Cancel Premium</span>
               </a>
             </div>
-            <div class="control">
-              <a tabindex="0" class='button is-stylish is-small is-inverted is-black cancel-modal'>
+            <div class="control is-expanded">
+              <a tabindex="0" class='button is-fullwidth is-stylish is-small is-inverted is-black cancel-modal'>
                 <div class="icon is-small"><i class="far fa-times"></i></div>
                 <span>Nevermind</span>
               </a>
@@ -1179,15 +1179,15 @@
               </label>
               <input id="account_number-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_number" />
             </div>
-            <div class="control is-grouped is-grouped-center">
-              <div class="control">
-                <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-primary is-stylish is-small">
+            <div class="control is-grouped">
+              <div class="control is-expanded">
+                <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-fullwidth is-primary is-stylish is-small">
                   <div class="icon is-small"><i class="far fa-check-circle"></i></div>
                   <span>Save Bank</span>
                 </button>
               </div>
-              <div class="control">
-                <a tabindex="0" class='button is-inverted is-danger is-stylish is-small cancel-modal'>
+              <div class="control is-expanded">
+                <a tabindex="0" class='button is-fullwidth is-inverted is-danger is-stylish is-small cancel-modal'>
                   <div class="icon is-small"><i class="far fa-ban"></i></div>
                   <span>Cancel</span>
                 </a>

@@ -845,7 +845,7 @@ function showSectionByURL(){
       $("#referral-link").select();
       document.execCommand("copy");
       $("#referral-link").blur();
-      $(this).find("svg").replaceWith("<i class='far fa-check'></i>");
+      $(this).find("svg").attr("data-icon", "check");
       $("#referral-link-text").text("Copied!");
     });
   }
