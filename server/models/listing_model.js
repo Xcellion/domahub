@@ -398,7 +398,8 @@ module.exports = {
           registrar_id, \
           min_price, \
           buy_price, \
-          description \
+          description, \
+          date_expire \
         )\
          VALUES ? \
          ON DUPLICATE KEY UPDATE \

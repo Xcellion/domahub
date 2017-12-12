@@ -5,10 +5,10 @@ var channels_chart;
 
 $(document).ready(function() {
 
-  //<editor-fold>-------------------------------PORTFOLIO OVERVIEW-------------------------------
+  //<editor-fold>-------------------------------PORTFOLIO OVERVIEW / LATEST OFFERS-------------------------------
 
-  //update the portfolio with counters
   updatePortfolioOverviewCounters();
+  updateLatestOffers();
 
   //</editor-fold>
 
@@ -85,9 +85,14 @@ function updatePortfolioOverviewCounters(){
   $("#offers-counter").text(num_total_offers);
 
   //figure out sold domains
-  $("#sold-counter").text(user.listings.filter(function(listing) {
-    return listing.deposited || listing.transferred;
-  }).length);
+  $("#sold-counter").text(user.listings.reduce(function(arr, listing) {
+    return (listing.deposited || listing.transferred) ? 1 : 0;
+  }, 0));
+
+  //figure out unanswered offers
+  $("#offers-counter").text(user.listings.reduce(function(arr, listing) {
+    return listing.offers_count || 0;
+  }, 0));
 
   //figure out total unverified
   var num_total_unverified = user.listings.reduce(function(arr, listing) {
@@ -99,6 +104,24 @@ function updatePortfolioOverviewCounters(){
   }
 }
 
+//update latest offers card
+function updateLatestOffers(){
+  for (var x = 0 ; x < user.listings.length ; x++){
+
+    //unanswered offers exist!
+    if (user.listings.offers_count > 0){
+      var offers_clone = $("#offers-clone").clone().removeAttr("id").removeClass('is-hidden');
+      offers_clone.find(".offers-domain-name").text(user.listings[x].domain_name);
+      var offers_count = user.listings[x].offers_count;
+      offers_clone.find(".offers-count").text(user.listings[x].offers_count + ((offers_count == 1) ? " offer" : " offers"));
+    }
+  }
+
+  //no offers!
+  if ($(".offers:not(#offers-clone)").length == 0){
+    $("#no-offers").removeClass('is-hidden');
+  }
+}
 
 //</editor-fold>
 
@@ -488,66 +511,155 @@ function updatePortfolioOverviewCounters(){
   //build the countries chart
   function buildCountriesChart(listing_filters, now, canvas_id){
 
-    //hide blank canvas height filler
-    var wrapper_height = $("#" + canvas_id).closest(".column").height() - $("#" + canvas_id).closest(".traffic-chart-wrapper").prev(".content").height() - 12;
-    $("#" + canvas_id).height($("#countries-blank-canvas").height() + 2);
-    $("#countries-blank-canvas").addClass("is-hidden");
+    //show loading if chart already exists (for changing date range)
+    if (channels_chart){
+      showLoadingOrNone(canvas_id, true);
+    }
 
-    //options for building country chart
-    var countries_chart_options = {
-      query: {
-        'ids': 'ga:141565191',
-        'dimensions': 'ga:countryIsoCode',
-        'metrics': 'ga:users',
-        'filters': "ga:pagePathLevel2=~^(" + listing_filters + ");ga:country!=(not set)",
-        'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
-        'end-date': moment(now).format('YYYY-MM-DD')
-      },
-      chart: {
-        type: 'GEO',
-        container: canvas_id,
-        options: {
-          height : wrapper_height,
-          width : "100%",
-          keepAspectRatio : true,
-          colorAxis : {
-            colors : ["#c4eadc", "#3cbc8d"]
-          }
+    //build the query
+    gaQuery({
+      'ids': 'ga:141565191',
+      'metrics': 'ga:users',
+      'dimensions': 'ga:country',
+      'sort': '-ga:users',
+      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
+      'end-date': moment(now).format('YYYY-MM-DD'),
+      'include-empty-rows': false,
+      'max-results': 5
+    }).then(function(results) {
+      //no matching data
+      if (results.totalResults == 0){
+        showLoadingOrNone(canvas_id, false);
+        if (countries_chart){
+          countries_chart.destroy();
         }
       }
-    }
-
-    //show loading if chart already exists (for changing date range)
-    if (countries_chart){
-      showLoadingOrNone(canvas_id, true);
-      countries_chart.set(countries_chart_options);
-    }
-    else {
-      countries_chart = new gapi.analytics.googleCharts.DataChart(countries_chart_options);
-    }
-
-    //hide loading on success, show nothing on error
-    countries_chart.on("success", function(results){
-      //if no data
-      if (!results.data.rows){
-        $("#countries-blank-canvas").removeClass("is-hidden");
-        showLoadingOrNone(canvas_id, false);
-        $("#" + canvas_id).addClass('is-hidden');
-      }
-      //remove loading
       else {
-        $("#" + canvas_id + "-overlay").addClass('is-hidden');
-      }
-    }).on("error", function(){
-      $("#countries-blank-canvas").removeClass("is-hidden");
-      showLoadingOrNone(canvas_id, false);
-      $("#" + canvas_id).addClass('is-hidden');
-    });
+        //extract data
+        var data = [];
+        var labels = [];
+        var backgroundColors = [
+          "rgba(60,188,141,0.65)",       //primary
+          "rgba(255,87,34,0.65)",        //accent
+          "rgba(33,150,243,0.65)",       //info
+          "rgba(255,235,59,0.65)",       //yellow
+          "rgba(229,57,53,0.65)"         //red
+        ];
+        var borderColors = [
+          "rgba(60,188,141,1)",       //primary
+          "rgba(255,87,34,1)",        //accent
+          "rgba(33,150,243,1)",       //info
+          "rgba(255,235,59,1)",       //yellow
+          "rgba(229,57,53,1)"         //red
+        ];
+        results.rows.forEach(function(row, i) {
+          labels.push(row[0]);
+          data.push(+row[1]);
+        });
 
-    countries_chart.execute();
+        //make chart
+        var chartOptions = {
+          type : "pie",
+          options : {
+            responsive : true,
+            maintainAspectRatio : false,
+            legend : {
+              position: "bottom"
+            }
+          },
+          data : {
+            labels : labels,
+            datasets : [
+              {
+                data : data,
+                backgroundColor : backgroundColors,
+                borderColor : borderColors
+              }
+            ]
+          }
+        };
+
+        //remove loading overlay
+        $("#" + canvas_id + "-overlay").addClass('is-hidden');
+        if (countries_chart){
+          countries_chart.destroy();
+        }
+        var ctx = document.getElementById(canvas_id).getContext('2d');
+        countries_chart = new Chart(ctx, chartOptions);
+      }
+    });
   }
 
   //</editor-fold>
+
+  // //<editor-fold>-------------------------------COUNTRIES CHART (GEO CHART)-------------------------------
+  //
+  // //build the countries chart
+  // function buildCountriesChart(listing_filters, now, canvas_id){
+  //
+  //   //hide blank canvas height filler
+  //   var wrapper_height = $("#" + canvas_id).closest(".column").height() - $("#" + canvas_id).closest(".traffic-chart-wrapper").prev(".content").height() - 12;
+  //   $("#" + canvas_id).height($("#countries-blank-canvas").height() + 2);
+  //   $("#countries-blank-canvas").addClass("is-hidden");
+  //
+  //   var countries_chart_options = {
+  //     query: {
+  //       'ids': 'ga:141565191',
+  //       'dimensions': 'ga:countryIsoCode',
+  //       'metrics': 'ga:users',
+  //       'filters': "ga:pagePathLevel2=~^(" + listing_filters + ");ga:country!=(not set)",
+  //       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
+  //       'end-date': moment(now).format('YYYY-MM-DD')
+  //     },
+  //     chart: {
+  //       type: 'GEO',
+  //       container: canvas_id,
+  //       options: {
+  //         height : wrapper_height,
+  //         width : "100%",
+  //         keepAspectRatio : true,
+  //         colorAxis : {
+  //           colors : ["#c4eadc", "#3cbc8d"]
+  //         }
+  //       }
+  //     }
+  //   }
+  //
+  //   //show loading if chart already exists (for changing date range)
+  //   if (countries_chart){
+  //     showLoadingOrNone(canvas_id, true);
+  //     countries_chart_gapi.set(countries_chart_options);
+  //   }
+  //   else {
+  //     countries_chart_gapi = new gapi.analytics.googleCharts.DataChart(countries_chart_options);
+  //   }
+  //
+  //   //hide loading on success, show nothing on error
+  //   countries_chart_gapi.on("success", function(results){
+  //     countries_chart_data = results.dataTable;
+  //     countries_chart = results.chart;
+  //
+  //     //if no data
+  //     if (!results.data.rows){
+  //       $("#countries-blank-canvas").removeClass("is-hidden");
+  //       showLoadingOrNone(canvas_id, false);
+  //       $("#" + canvas_id).addClass('is-hidden');
+  //     }
+  //     //remove loading
+  //     else {
+  //       $("#" + canvas_id + "-overlay").addClass('is-hidden');
+  //     }
+  //   }).on("error", function(){
+  //     $("#countries-blank-canvas").removeClass("is-hidden");
+  //     showLoadingOrNone(canvas_id, false);
+  //     $("#" + canvas_id).addClass('is-hidden');
+  //   });
+  //
+  //   countries_chart_gapi.execute();
+  // }
+  //
+  // //</editor-fold>
 
   //<editor-fold>-------------------------------SOURCES CHART-------------------------------
 
@@ -695,9 +807,9 @@ function updatePortfolioOverviewCounters(){
   function buildCharts(listing_filters){
     var now = moment();
     buildTimeChart(listing_filters, now, "time-chart");
+    buildChannelsChart(listing_filters, now, "channels-chart");
     buildCountriesChart(listing_filters, now, "countries-chart");
     buildSourcesChart(listing_filters, now, "sources-chart");
-    buildChannelsChart(listing_filters, now, "channels-chart");
     buildStats(listing_filters, now);
   }
 

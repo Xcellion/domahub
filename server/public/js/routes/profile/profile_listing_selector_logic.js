@@ -24,7 +24,7 @@ $(document).ready(function(){
 
     //sort the rows
     $(".table-row:not(.clone-row)").sort(function(a,b){
-      if (sort_value == "date_created" || sort_value == "min_price" || sort_value == "buy_price"){
+      if (sort_value == "date_expire" || sort_value == "date_created" || sort_value == "min_price" || sort_value == "buy_price"){
         var a_sort = $(a).data("listing_info")[sort_value];
         var b_sort = $(b).data("listing_info")[sort_value];
       }
@@ -270,7 +270,9 @@ function createRows(selected_ids){
   //if listings, create rows
   if (listings.length > 0){
     $("#loading-listings-row").addClass('is-hidden');
+
     //create rows for each listing
+    var now = moment();
     for (var x = 0; x < listings.length; x++){
 
       //if there is any existing selected
@@ -283,7 +285,7 @@ function createRows(selected_ids){
           }
         }
       }
-      $("#table-body").append(createRow(listings[x], x, selected));
+      $("#table-body").append(createRow(now, listings[x], x, selected));
     }
 
     multiSelectButtons();
@@ -296,7 +298,7 @@ function createRows(selected_ids){
 }
 
 //create a listing row
-function createRow(listing_info, rownum, selected){
+function createRow(now, listing_info, rownum, selected){
   //choose a row to clone (accepted listings are verified by default)
   if (listing_info.verified){
     var tempRow = $("#verified-clone-row").clone();
@@ -307,7 +309,7 @@ function createRow(listing_info, rownum, selected){
 
   //update row specifics and add handlers
   tempRow.removeClass('is-hidden clone-row').attr("id", "row-listing_id" + listing_info.id);
-  updateDomainRow(tempRow, listing_info);
+  updateDomainRow(tempRow, listing_info, now);
   updateRowData(tempRow, listing_info);
 
   if (selected){
@@ -339,12 +341,21 @@ function updateRowData(row, listing_info){
 }
 
 //update the clone row with row specifics
-function updateDomainRow(tempRow, listing_info){
+function updateDomainRow(tempRow, listing_info, now){
   var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
 
   tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mmA"));
+
+  //registrar expiration date
+  if (listing_info.date_expire){
+    var moment_expire = moment(listing_info.date_expire);
+    tempRow.find(".td-date-expire").text(moment.duration(moment_expire.diff(now)).humanize()).attr("title", "Expires on " +  moment_expire.format("MMMM DD, YYYY - hh:mmA"));
+  }
+  else {
+    tempRow.find(".td-date-expire").text("-").removeAttr("title");
+  }
 
   //status text
   if (listing_info.transferred){
@@ -524,14 +535,8 @@ function viewDomainDetails(url_tab){
 //view domain offers
 function viewDomainOffers(){
   var selected_domain_ids = getSelectedDomains("id", true);
-  if (selected_domain_ids.length > 0){
-    showEditor("offers", selected_domain_ids);
-    updateEditorOffers(selected_domain_ids);
-  }
-  else {
-    window.history.replaceState({}, "", "/profile/mylistings");
-    showSelector();
-  }
+  showEditor("offers", selected_domain_ids);
+  updateEditorOffers(selected_domain_ids);
 }
 
 // //view domain stats
