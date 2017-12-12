@@ -437,7 +437,7 @@ module.exports = {
             error.handler(req, res, "not-premium", "json");
           }
           else {
-            error.log(err, "something went wrong with an image upload");
+            error.log(err, "Something went wrong with an image upload");
             error.handler(req, res, 'Something went wrong with the upload!', "json");
           }
         }
@@ -465,7 +465,7 @@ module.exports = {
             }, function (err, response, body) {
               if (!err){
                 resolve({
-                  imgur_link: JSON.parse(body).data.link.replace("http", "https"),
+                  imgur_link: JSON.parse(body).data.link,
                   image_type: formData.image_type
                 });
               }
@@ -808,7 +808,7 @@ module.exports = {
         }
         //invalid font color
         else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
-          error.handler(req, res, "Invalid font color! Please choose a different color!", "json");
+          error.handler(req, res, "Invalid text color! Please choose a different color!", "json");
         }
         //invalid font name
         else if (req.body.font_name && Fonts.all().indexOf(req.body.font_name) == -1){
@@ -817,6 +817,14 @@ module.exports = {
         //invalid background color
         else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
           error.handler(req, res, "Invalid background color! Please choose a different color!", "json");
+        }
+        //invalid footer background color
+        else if (req.body.footer_background_color && !validator.isHexColor(req.body.footer_background_color)){
+          error.handler(req, res, "Invalid footer background color! Please choose a different color!", "json");
+        }
+        //invalid footer font color
+        else if (req.body.footer_color && !validator.isHexColor(req.body.footer_color)){
+          error.handler(req, res, "Invalid footer text color! Please choose a different color!", "json");
         }
         //invalid background link
         else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
@@ -885,6 +893,8 @@ module.exports = {
           req.session.new_listing_info.font_name = req.body.font_name;
           req.session.new_listing_info.font_color = req.body.font_color;
           req.session.new_listing_info.background_color = req.body.background_color;
+          req.session.new_listing_info.footer_color = req.body.footer_color;
+          req.session.new_listing_info.footer_background_color = req.body.footer_background_color;
 
           //info module
           req.session.new_listing_info.info_module = info_module;
@@ -922,6 +932,8 @@ module.exports = {
           req.body.font_name ||
           req.body.font_color ||
           req.body.background_color ||
+          req.body.footer_background_color ||
+          req.body.footer_color ||
           req.body.background_image_link ||
           req.body.logo_image_link ||
           req.body.info_module ||

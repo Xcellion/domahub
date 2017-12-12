@@ -139,7 +139,7 @@
 }
 
 .price-card {
-  @include transition(all 0.25s ease);
+  @include transition(translate 0.25s ease);
   border-radius: $radius;
   .card-title {
     border-bottom: 1px solid $border;

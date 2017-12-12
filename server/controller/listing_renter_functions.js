@@ -798,7 +798,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      data_model.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newListingHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding new history for listing.")}});  //async
       delete req.session.from_api;
     }
     next();
@@ -818,7 +818,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      data_model.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding new availability check history.")}});  //async
     }
     next();
   },
@@ -840,7 +840,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      data_model.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newCheckoutHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding a new checkout history item.")}});  //async
     }
     next();
   },
@@ -1013,7 +1013,6 @@ module.exports = {
     //make sure owner and domain exclude are legit
     if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id)){
       listing_model.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
-        console.log(result);
         if (!result.info.length || result.state == "error"){
           res.send({
             state: "error"

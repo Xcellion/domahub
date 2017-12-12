@@ -71,8 +71,15 @@
   }
 }
 
-.company-logo {
+.menu-info {
   margin: 40px 20px;
+  p {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
 }
 
 #collapse-submenu {
@@ -92,6 +99,9 @@
   padding: 40px 40px;
   position: absolute;
   width: calc(100% - 300px);
+  .tabs {
+    min-height: 36px;
+  }
   @include tablet-only {
     left: 80px;
     width: calc(100% - 80px);
