@@ -327,6 +327,24 @@
   }
 }
 
+//categories dropdown
+#categories-dropdown {
+  position:absolute;
+  padding-left:8px;
+  width:100%;
+  height:150px;
+  border:1px solid $grey;
+  overflow-y:auto;
+  background-color:$white;
+  z-index:999;
+  margin-top: -1px;
+}
+
+.category-checkbox-wrapper {
+  padding-top:4px;
+  padding-bottom:4px;
+}
+
 // listing image
 .on-img {
   top: 0;

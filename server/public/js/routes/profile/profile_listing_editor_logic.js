@@ -71,7 +71,7 @@ function updateEditorDomains(selected_domain_ids){
       for (var x = 0 ; x < selected_domain_names.length ; x++){
         domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
       }
-      $(".title-wrapper").append('<span class="current-domain-list icon is-tooltip" data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" data-balloon-pos="down"> <i class="fa fa-question-circle"></i> </span> ');
+      $(".title-wrapper").append('<span class="current-domain-list icon is-tooltip" data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" data-balloon-pos="down"> <i class="far fa-question-circle"></i> </span> ');
     }
   }
 }
@@ -98,8 +98,11 @@ function updateEditorEditing(selected_domain_ids){
     var listing_info = getCommonListingInfo(selected_domain_ids);
     current_listing = listing_info;
 
+    //plural "this domain"
+    $(".this-domain").text("these domains");
+
     //hide domain capitalization
-    $("#domain-name-cap-missing").text('You cannot edit capitalization for multiple domains. Please select one domain only.');
+    $("#domain-name-cap-missing").text('You cannot edit capitalization for multiple domains. Please select a single domain to edit.');
     $("#domain-name-input").addClass('is-hidden');
 
     //change preview name
@@ -123,6 +126,9 @@ function updateEditorEditing(selected_domain_ids){
     var listing_info = getDomainByID(selected_domain_ids[0]);
     current_listing = listing_info;
 
+    //plural "this domain"
+    $(".this-domain").text("this domain");
+
     //view listing button link
     $("#view-listings-button").off().attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
 
@@ -134,7 +140,7 @@ function updateEditorEditing(selected_domain_ids){
   updateInfoTab(current_listing);
   updateDesignTab(current_listing);
   updateRentalTab(current_listing);
-  updateBindings(current_listing);
+  updateBindings(current_listing, selected_domain_ids);
 }
 
 function setupEditingButtons(){
@@ -224,21 +230,42 @@ function checkBox(module_value, elem, child){
     $("#domain-name-input").val(listing_info.domain_name).attr("placeholder", listing_info.domain_name);
 
     //categories
-    //remove any existing categories
-    $(".category-selector").removeClass('is-primary');
-    var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
-    for (var x = 0; x < listing_categories.length; x++){
-      //color existing categories
-      var temp_category = $("." + listing_categories[x] + "-category").addClass('is-primary');
-    }
-    updateHiddenCategoryInput();
+    $("#categories-input").val(listing_info.categories);
+    updateCategorySelections(listing_info.categories);
+
+    //registrar info
+    $("#registrar-name-input").val(listing_info.registrar_name);
+    $("#date-expire-input").val((listing_info.date_expire) ? moment(listing_info.date_expire).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
+    $("#annual-cost-input").val(listing_info.registrar_cost);
   }
-  function updateHiddenCategoryInput(){
-    var joined_categories = $(".category-selector.is-primary").map(function() {
-      return $(this).data("category");
-    }).toArray().sort().join(" ");
-    joined_categories = (joined_categories == "") ? null : joined_categories;
-    $("#categories-input").val(joined_categories);
+  function updateCategoryInputDropdown(listing_info){
+    $("#categories-input").on("focusin", function(){
+      $("#categories-dropdown").removeClass('is-hidden');
+    });
+
+    //close category dropdown
+    $(document).on("click", function(event) {
+      if (!$(event.target).closest("#categories-input").length && !$(event.target).closest("#categories-dropdown").length) {
+        if ($("#categories-dropdown").is(":visible")) {
+          $("#categories-dropdown").addClass("is-hidden");
+        }
+      }
+    });
+
+    //category checkbox
+    $(".category-checkbox-input").on("change", function(){
+      $("#categories-input").val($(".category-checkbox-input").map(function(){
+        if ($(this).prop("checked")) { return $(this).val() }
+      }).toArray().join(" "));
+      changedValue($("#categories-input"), listing_info);
+    });
+  }
+  function updateCategorySelections(categories){
+    $(".category-checkbox-input").prop("checked", false);
+    var categories_array = (categories) ? categories.split(" ") : "";
+    for (var x = 0 ; x < categories_array.length ; x++){
+      $("#" + categories_array[x] + "-category-input").prop('checked', true);
+    }
   }
 
   //</editor-fold>
@@ -487,14 +514,7 @@ function checkBox(module_value, elem, child){
   //<editor-fold>-------------------------------BINDINGS-------------------------------
 
   //update change bindings (category, changeable-input, status)
-  function updateBindings(listing_info){
-
-    //click to add this category
-    $(".category-selector").off().on("click", function(e){
-      $(this).toggleClass('is-primary');
-      updateHiddenCategoryInput();
-      changedValue($("#categories-input"), listing_info);
-    });
+  function updateBindings(listing_info, selected_domain_ids){
 
     //bind new handlers for any changeable inputs
     $(".changeable-input").off().on("change input", function(e){
@@ -504,6 +524,37 @@ function checkBox(module_value, elem, child){
     //update status binding
     $("#status-toggle-button").off().on("click", function(e){
       submitListingChanges($(this), true);
+    });
+
+    //lookup DNS button
+    var selected_listings = [];
+    for (var x = 0; x < selected_domain_ids.length; x++){
+      var listing_info = getDomainByID(selected_domain_ids[x]);
+
+      //get whois and A record data if we haven't yet
+      if (listing_info.a_records == undefined || listing_info.whois == undefined){
+        selected_listings.push({
+          domain_name : listing_info.domain_name,
+          id : selected_domain_ids[x],
+          client_index : x
+        });
+      }
+    }
+    $("#lookup-dns-button").off().on("click", function(e){
+      $(this).addClass('is-loading');
+      getDNSRecords(selected_listings, selected_domain_ids, function(data){
+        $("#lookup-dns-button").removeClass('is-loading');
+        if (data.state == "success"){
+          listings = data.listings;
+          updateEditorEditing(selected_domain_ids);
+          createRows();
+          var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
+          successMessage("Successfully changed registrar information for " + plural_success_msg + "!");
+        }
+        else {
+          errorMessage(data.message);
+        }
+      });
     });
 
     //module checkbox handlers
@@ -517,6 +568,12 @@ function checkBox(module_value, elem, child){
         updateModuleChildren($(this));
       }
     });
+
+    //category dropdown
+    $("#categories-input").on("input", function(){
+      updateCategorySelections($(this).val());
+    });
+    updateCategoryInputDropdown(listing_info);
 
     //load theme buttons
     loadThemeHandler();
@@ -620,7 +677,7 @@ function checkBox(module_value, elem, child){
   //<editor-fold>-------------------------------SUBMIT LISTING UPDATES-------------------------------
 
   //helper function to bind to inputs to listen for any changes from existing listing info
-  function changedValue(input_elem, listing_info){
+  function changedValue(input_elem, listing_info, force){
     var name_of_attr = input_elem.data("name");
 
     if (listing_info){
@@ -639,9 +696,9 @@ function checkBox(module_value, elem, child){
     clearNotification();
 
     //only change if the value changed from existing (and if premium elem, has premium)
-    if (input_elem.val() != listing_info_comparison &&
+    if (force || (input_elem.val() != listing_info_comparison &&
       ((input_elem.hasClass('premium-input') && user.stripe_subscription_id) ||
-      (!input_elem.hasClass('premium-input')))
+      (!input_elem.hasClass('premium-input'))))
     ){
       $("#save-changes-button").removeClass("is-hidden");
       $("#cancel-changes-button").removeClass("is-hidden");
@@ -659,7 +716,7 @@ function checkBox(module_value, elem, child){
     //hide the cancel / save
     else {
       //reset premium only inputs!
-      if (input_elem.hasClass('premium-input')){
+      if (input_elem.hasClass('premium-input') && !user.stripe_subscription_id){
         input_elem.blur();
         errorMessage("You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!");
         cancelListingChanges(true);
@@ -1611,7 +1668,7 @@ function createDNSRecordRows(selected_domain_ids, force){
   for (var x = 0; x < selected_domain_ids.length; x++){
     var listing_info = getDomainByID(selected_domain_ids[x]);
 
-    //get who is an A record data if we haven't yet (or being refreshed)
+    //get whois and A record data if we haven't yet (or being refreshed)
     if (listing_info.a_records == undefined || listing_info.whois == undefined || force){
       selected_listings.push({
         domain_name : listing_info.domain_name,
@@ -1626,12 +1683,31 @@ function createDNSRecordRows(selected_domain_ids, force){
 
   //if we need to get any DNS records, get them in one call
   if (selected_listings.length > 0){
-    getDNSRecords(selected_listings, selected_domain_ids);
+    getDNSRecords(selected_listings, selected_domain_ids, function(data){
+      if (data.state == "success"){
+        listings = data.listings;
+
+        //make tables for domains we didnt yet
+        for (var x = 0 ; x < selected_listings.length ; x++){
+          for (var y = 0 ; y < listings.length ; y++){
+            if (listings[y].id == selected_listings[x].id){
+              selected_listings[x].a_records = listings[y].a_records;
+              selected_listings[x].whois = listings[y].whois;
+              createDNSTable(selected_listings[x], selected_domain_ids.length, selected_listings[x].client_index);
+              break;
+            }
+          }
+        }
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
   }
 }
 
 //get DNS settings at once for all selected domains (and unknown DNS)
-function getDNSRecords(selected_listings, selected_domain_ids){
+function getDNSRecords(selected_listings, selected_domain_ids, cb){
   $.ajax({
     url: "/profile/mylistings/dnsrecords",
     method: "POST",
@@ -1639,24 +1715,7 @@ function getDNSRecords(selected_listings, selected_domain_ids){
       selected_listings : selected_listings
     }
   }).done(function(data){
-    if (data.state == "success"){
-      listings = data.listings;
-
-      //make tables for domains we didnt yet
-      for (var x = 0 ; x < selected_listings.length ; x++){
-        for (var y = 0 ; y < listings.length ; y++){
-          if (listings[y].id == selected_listings[x].id){
-            selected_listings[x].a_records = listings[y].a_records;
-            selected_listings[x].whois = listings[y].whois;
-            createDNSTable(selected_listings[x], selected_domain_ids.length, selected_listings[x].client_index);
-            break;
-          }
-        }
-      }
-    }
-    else {
-      errorMessage(data.message);
-    }
+    cb(data);
   });
 }
 
@@ -1894,7 +1953,10 @@ function getCommonListingInfo(listing_ids){
   return listings.reduce(function(arr, item){
     if (listing_ids.indexOf(item.id) != -1){
       for (var x in item){
-        if (x == "categories" && item[x]){
+        if (!arr){
+          arr = Object.assign({}, item);
+        }
+        else if (x == "categories" && item[x] && arr[x]){
           arr[x] = arr[x].split(" ").filter(function(n){
             return item[x].split(" ").indexOf(n) != -1
           }).join(" ");
@@ -1905,7 +1967,7 @@ function getCommonListingInfo(listing_ids){
       }
     }
     return arr;
-  }, Object.assign({}, listings[0]));
+  }, false);
 }
 
 //get the listing

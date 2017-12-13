@@ -23,6 +23,7 @@ var parser = require('parse-whois');
 var dns = require("dns");
 var validator = require("validator");
 var request = require("request");
+var moment = require("moment");
 
 //registrar info
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
@@ -263,16 +264,14 @@ module.exports = {
     if (req.body.selected_listings){
       for (var x = 0; x < req.body.selected_listings.length; x++){
         for (var y = 0; y < req.user.listings.length; y++){
-          //user object has the same listing id as the listing being verified
+          //user object has the same listing id as the posted listing
           if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
           && req.user.listings[y].id == req.body.selected_listings[x].id){
-            if (req.user.listings[y].verified != 1){
-              //add to list of promises
-              dns_record_promises.push(getDomainDNSPromise({
-                domain_name : req.user.listings[y].domain_name,
-                id : req.user.listings[y].id
-              }));
-            }
+            //add to list of promises
+            dns_record_promises.push(getDomainDNSPromise({
+              domain_name : req.user.listings[y].domain_name,
+              id : req.user.listings[y].id
+            }));
             break;
           }
         }
@@ -289,11 +288,23 @@ module.exports = {
         console.log("F: Finished looking up DNS records! Now parsing for info...");
 
         //update req.user.listings
+        var temp_listing_objs_for_db = [];      //object for DB updating
         for (var x = 0; x < results.length; x++){
           if (results[x].state == "fulfilled"){
             var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
-            temp_listing_obj.whois = results[x].value.whois;
-            temp_listing_obj.a_records = results[x].value.a_records;
+            if (!temp_listing_obj.verified){
+              temp_listing_obj.whois = results[x].value.whois;
+              temp_listing_obj.a_records = results[x].value.a_records;
+            }
+            temp_listing_obj.date_expire = moment(results[x].value.whois["Registry Expiry Date"]).valueOf();
+            temp_listing_obj.registrar_name = results[x].value.whois["Registrar"];
+
+            //temp object for DB insertion
+            temp_listing_objs_for_db.push([
+              results[x].value.id,
+              results[x].value.whois["Registrar"],
+              moment(results[x].value.whois["Registry Expiry Date"]).valueOf()
+            ]);
           }
           else {
             var temp_listing_obj = getListingByID(req.user.listings, results[x].reason.listing_obj.id);
@@ -302,10 +313,17 @@ module.exports = {
           }
         }
 
-        res.send({
-          state: "success",
-          listings: req.user.listings
-        });
+        //go next to update DB
+        if (temp_listing_objs_for_db.length > 0){
+          req.session.new_listing_info = temp_listing_objs_for_db;
+          next();
+        }
+        else {
+          res.send({
+            state: "success",
+            listings: req.user.listings
+          });
+        }
       });
     }
   },
