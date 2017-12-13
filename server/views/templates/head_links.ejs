@@ -53,6 +53,10 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-92778659-1', 'auto');
+  //for GA premium custom URLs
+  if (window.location.hostname != "domahub.com"){
+    ga('set', 'page', "/listing/" + window.location.hostname);
+  }
   ga('send', 'pageview');
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

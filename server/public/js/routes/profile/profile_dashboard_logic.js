@@ -164,7 +164,7 @@ function updateLatestOffers(){
       'ids': 'ga:141565191',
       'dimensions': 'ga:date',
       'metrics': stat_to_get,
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract(days_to_go_back, 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD')
     });
@@ -172,7 +172,7 @@ function updateLatestOffers(){
       'ids': 'ga:141565191',
       'dimensions': 'ga:date',
       'metrics': stat_to_get,
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(0).subtract(days_to_go_back * 2, 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).day(6).subtract(days_to_go_back, 'day').day(-1).format('YYYY-MM-DD')
     });
@@ -352,7 +352,7 @@ function updateLatestOffers(){
     gaQuery({
       'ids': 'ga:141565191',
       'metrics': 'ga:users,ga:sessions,ga:bounceRate,ga:avgSessionDuration,ga:newUsers,ga:percentNewSessions,ga:sessionsPerUser,ga:pageviews',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD')
     }).then(function(results) {
@@ -435,7 +435,7 @@ function updateLatestOffers(){
       'metrics': 'ga:users',
       'dimensions': 'ga:channelGrouping',
       'sort': '-ga:users',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
@@ -522,7 +522,7 @@ function updateLatestOffers(){
       'metrics': 'ga:users',
       'dimensions': 'ga:country',
       'sort': '-ga:users',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
@@ -593,74 +593,6 @@ function updateLatestOffers(){
 
   //</editor-fold>
 
-  // //<editor-fold>-------------------------------COUNTRIES CHART (GEO CHART)-------------------------------
-  //
-  // //build the countries chart
-  // function buildCountriesChart(listing_filters, now, canvas_id){
-  //
-  //   //hide blank canvas height filler
-  //   var wrapper_height = $("#" + canvas_id).closest(".column").height() - $("#" + canvas_id).closest(".traffic-chart-wrapper").prev(".content").height() - 12;
-  //   $("#" + canvas_id).height($("#countries-blank-canvas").height() + 2);
-  //   $("#countries-blank-canvas").addClass("is-hidden");
-  //
-  //   var countries_chart_options = {
-  //     query: {
-  //       'ids': 'ga:141565191',
-  //       'dimensions': 'ga:countryIsoCode',
-  //       'metrics': 'ga:users',
-  //       'filters': "ga:pagePathLevel2=~^(" + listing_filters + ");ga:country!=(not set)",
-  //       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
-  //       'end-date': moment(now).format('YYYY-MM-DD')
-  //     },
-  //     chart: {
-  //       type: 'GEO',
-  //       container: canvas_id,
-  //       options: {
-  //         height : wrapper_height,
-  //         width : "100%",
-  //         keepAspectRatio : true,
-  //         colorAxis : {
-  //           colors : ["#c4eadc", "#3cbc8d"]
-  //         }
-  //       }
-  //     }
-  //   }
-  //
-  //   //show loading if chart already exists (for changing date range)
-  //   if (countries_chart){
-  //     showLoadingOrNone(canvas_id, true);
-  //     countries_chart_gapi.set(countries_chart_options);
-  //   }
-  //   else {
-  //     countries_chart_gapi = new gapi.analytics.googleCharts.DataChart(countries_chart_options);
-  //   }
-  //
-  //   //hide loading on success, show nothing on error
-  //   countries_chart_gapi.on("success", function(results){
-  //     countries_chart_data = results.dataTable;
-  //     countries_chart = results.chart;
-  //
-  //     //if no data
-  //     if (!results.data.rows){
-  //       $("#countries-blank-canvas").removeClass("is-hidden");
-  //       showLoadingOrNone(canvas_id, false);
-  //       $("#" + canvas_id).addClass('is-hidden');
-  //     }
-  //     //remove loading
-  //     else {
-  //       $("#" + canvas_id + "-overlay").addClass('is-hidden');
-  //     }
-  //   }).on("error", function(){
-  //     $("#countries-blank-canvas").removeClass("is-hidden");
-  //     showLoadingOrNone(canvas_id, false);
-  //     $("#" + canvas_id).addClass('is-hidden');
-  //   });
-  //
-  //   countries_chart_gapi.execute();
-  // }
-  //
-  // //</editor-fold>
-
   //<editor-fold>-------------------------------SOURCES CHART-------------------------------
 
   //build the sources chart
@@ -677,7 +609,7 @@ function updateLatestOffers(){
       'metrics': 'ga:users',
       'dimensions': 'ga:pagePathLevel2',
       'sort': '-ga:pagePathLevel2',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
