@@ -5,8 +5,8 @@
 <div class="left-menu">
   <div class="menu-info">
     <a class="dh-logo" tabindex="0" title="Home" href="/">
-      <div class="flat-logo is-white is-hidden-tablet-only"></div>
-      <div class="circle-logo is-white is-hidden-desktop"></div>
+      <div class="flat-logo is-white is-hidden-laptop"></div>
+      <div class="circle-logo is-white is-hidden-widescreen"></div>
     </a>
     <p class="is-white"><%= user.username %></p>
   </div>
@@ -15,20 +15,20 @@
       <li class="menu-item has-icon">
         <a id="dashboard-left-tab" tabindex="0" title="View My Dashboard" href="/profile/dashboard" class="left-tab primary-theme">
           <div class="icon is-white"><i class="far fa-window-maximize"></i></div>
-          <p class="is-white is-hidden-tablet-only">Dashboard</p>
+          <p class="is-white is-hidden-laptop">Dashboard</p>
         </a>
       </li>
       <li class="menu-item has-icon">
         <a id="mylistings-left-tab" tabindex="0" title="View My Listings" href="/profile/mylistings" class="left-tab primary-theme">
           <div class="icon is-white"><i class="far fa-list-alt"></i></div>
-          <p class="is-white is-hidden-tablet-only">My Listings</p>
+          <p class="is-white is-hidden-laptop">My Listings</p>
         </a>
         <ul id="collapse-submenu">
           <% if (user.listings.length > 0 ){ %>
             <li class="menu-item has-icon">
               <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme is-sublink">
-                <div class="icon is-white is-hidden-desktop"><i class="far fa-money-bill"></i></div>
-                <small class="is-white is-hidden-tablet-only">My Listing Offers</small>
+                <div class="icon is-white is-hidden-widescreen"><i class="far fa-money-bill"></i></div>
+                <small class="is-white is-hidden-laptop">My Listing Offers</small>
               </a>
             </li>
           <% } %>
@@ -39,8 +39,8 @@
           </li>%>
           <li class="menu-item has-icon">
             <a id="create-left-tab"  tabindex="0" title="Create New Listings" href="/listings/create" class="left-tab primary-theme is-sublink">
-              <div class="icon is-white is-hidden-desktop"><i class="far fa-plus"></i></div>
-              <small class="is-white is-hidden-tablet-only">Create Listings</small>
+              <div class="icon is-white is-hidden-widescreen"><i class="far fa-plus"></i></div>
+              <small class="is-white is-hidden-laptop">Create Listings</small>
             </a>
           </li>
         </ul>
@@ -48,9 +48,9 @@
       <li class="menu-item has-icon">
         <a id="settings-left-tab" tabindex="0" title="Change Account Settings" href="/profile/settings" class="left-tab primary-theme">
           <div class="icon is-white"><i class="far fa-cogs"></i></div>
-          <p class="is-white is-hidden-tablet-only">Account Settings</p>
+          <p class="is-white is-hidden-laptop">Account Settings</p>
         </a>
-        <ul class="is-hidden-tablet-only">
+        <ul class="is-hidden-laptop">
           <li>
             <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-sublink is-hidden">
               <small class="is-white">
@@ -67,7 +67,7 @@
   </aside>
   <div class="user-panel">
     <div class="user-button" title="Send us a Message">
-      <button tabindex="0" id="contact-button" class="button is-primary is-inverted nav-button" data-menu="contact-dropdown-menu">
+      <button tabindex="0" id="contact-button" class="button is-black is-inverted nav-button" data-menu="contact-dropdown-menu">
         <div class="icon">
           <i class="far fa-comment"></i>
         </div>
@@ -86,7 +86,7 @@
       </div>
     </div>
     <div class="user-button" title="Check Your Notifications">
-      <button tabindex="0" id="notification-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="notification-dropdown-menu">
+      <button tabindex="0" id="notification-dropdown-button" class="button is-black is-inverted nav-button" data-menu="notification-dropdown-menu">
         <span id="notification-counter" class="is-hidden"></span>
         <div class="icon">
           <i class="far fa-bell"></i>
@@ -97,7 +97,7 @@
       </aside>
     </div>
     <div class="user-button" title="Other Links">
-      <button tabindex="0" id="user-dropdown-button" class="button is-primary is-inverted nav-button" data-menu="user-dropdown-menu">
+      <button tabindex="0" id="user-dropdown-button" class="button is-black is-inverted nav-button" data-menu="user-dropdown-menu">
         <div class="icon">
           <i class="far fa-user-alt"></i>
         </div>

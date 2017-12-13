@@ -27,26 +27,13 @@
 .heading {
   display: block;
   letter-spacing: 1px;
+  font-size: 12px;
   font-weight: 500;
   margin-bottom: 10px;
-  margin-top:10px;
-  text-transform: uppercase;
-}
-
-.overview-tile-wrapper {
-  &:hover {
-    background-color:$grey-lighter;
-  }
 }
 
 .counter {
   margin-bottom: 10px;
-}
-
-.card-header {
-  &.is-primary {
-    background-color: $primary;
-  }
 }
 
 .button-wrapper {
@@ -60,50 +47,84 @@
   }
 }
 
-.tag {
-  white-space: nowrap;
-}
-
 .traffic-chart-wrapper {
-  position:relative;
+  position: relative;
 }
 
 .traffic-chart {
-  width:100%;
-  height:100%;
-  position:relative;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .traffic-overlay {
-  position:absolute;
-  border:1px solid $grey-lighter;
-  background-color:rgba(255,255,255,0.5);
-  top:0;
-  width:100%;
-  height:100%;
+  position: absolute;
+  background-color: rgba(255,255,255,0.5);
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .traffic-overlay-text {
-  position:absolute;
-  top:50%;
-  left:50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  margin-right:-50%;
+  margin-right: -50%;
+}
+
+.chart-tabs {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 .stat-wrapper {
-  display:inline-block;
-  padding:5px;
-  cursor:pointer;
-  text-align:center;
-  width:49%;
-  height:100px;
-  margin-left:-3px;
-  max-width:100px;
-  &.is-active .heading{
-    color:$primary;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  padding: 5px;
+  text-align: center;
+  &::before {
+    @include transition(all 0.2s ease);
+    content: "";
+    height: 3px;
+    opacity: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
   }
-  &:hover{
-    background-color:$grey-lighter;
+  &.is-active {
+    color: $primary;
+    &::before {
+      width: 100%;
+      opacity: 1;
+      background: $primary;
+    }
+  }
+  &:hover {
+    background-color: $pastel;
+  }
+  &:focus {
+    outline: 0;
+  }
+}
+
+.portfolio-table {
+  a {
+    display: block;
+    padding: 10px;
+    &:hover {
+      background-color: $pastel;
+    }
+  }
+}
+
+.fac {
+  display: flex;
+  align-items: center;
+  .icon {
+    margin-right: 10px;
   }
 }
