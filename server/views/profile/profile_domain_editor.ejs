@@ -27,7 +27,7 @@
             <span id="status-text" class="is-hidden-mobile"></span>
           </a>
           <div id="view-listings-button-wrapper" class="is-relative">
-            <a id="view-listings-button" class="button is-black is-inverted is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
+            <a id="view-listings-button" class="button is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
               <div class="icon is-small"><i class="far fa-external-link"></i></div>
               <span class="is-hidden-mobile">View Page<span class="edit-domain-plural is-hidden">s</span></span>
             </a>
@@ -80,15 +80,21 @@
               <div class="control">
                 <label class="label" for="min-price-input">
                   Minimum Price
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
                 </label>
-                <small class="tip">The minimum offer you will consider selling this domain for. Leave blank or set to 0 for no minimum price.</small>
+                <small class="tip">The minimum offer you will consider selling <span class="this-domain">this domain</span> for.</small>
                 <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
               </div>
               <div class="control">
                 <label class="label" for="buy-price-input">
                   Buy It Now Price
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
                 </label>
-                <small class="tip">The price you are willing to sell this domain for immediately. Leave blank or set to 0 to disable.</small>
+                <small class="tip">The price you are willing to sell <span class="this-domain">this domain</span> for immediately.</small>
                 <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
               </div>
             </div>
@@ -98,16 +104,25 @@
               <h3 class="card-header-title">Descriptions</h3>
             </div>
             <div class="card-content">
-              <%# <div class="control">
+              <div class="control">
                 <label class="label" for="categories-input">
                   Categories
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="left">
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="top">
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
-                <small class="tip">Don't see a category that fits your domain? <a class="is-primary is-underlined contact-link" href="/contact">Let us know!</a></small>
+                <small class="tip">Categories or industries <span class="this-domain">this domain</span> belong to. Helpful for users to find similar domains.</small>
                 <input id="categories-input" class="input changeable-input" data-name="categories" type="text">
-              </div>%>
+                <div id="categories-dropdown" class="is-hidden">
+                  <%# make all the categories %>
+                  <% for (var x = 0; x < categories.length; x++){ %>
+                    <div class="category-checkbox-wrapper">
+                      <input type="checkbox" id="<%= categories[x].back %>-category-input" class="category-checkbox-input" value="<%= categories[x].back %>" />
+                      <label for="<%= categories[x].back %>-category-input"><%= categories[x].front %></label>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
               <div class="control">
                 <label class="label" for="domain-name-input">
                   Domain Capitalization
@@ -118,7 +133,7 @@
                   <% } %>
                 </label>
                 <small id="domain-name-cap-missing" class="tip">Change the capitalization of your domain name to fit your custom domain branding.</small>
-                <input id="domain-name-input" class="input premium-input changeable-input is-narrow" data-name="domain_name" type="text">
+                <input id="domain-name-input" class="input premium-input changeable-input" data-name="domain_name" type="text">
               </div>
               <div class="control">
                 <label class="label" for="description-footer">
@@ -127,18 +142,24 @@
                     <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
                       <i class="far fa-trophy-alt"></i>
                     </div>
-                    <% } %>
-                  </label>
-                  <small class="tip">Insert up to 75 characters to be displayed in the footer of your sales page. An ideal location for a slogan, phrase, or trademark.</small>
-                  <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
+                  <% } %>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">Text that is displayed on the footer of your listing page. An ideal location for a slogan, phrase, or trademark.</small>
+                <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
                 </div>
               <div class="control">
                 <label class="label" for="description">
                   Listing Description
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="A good description helps your potential customers understand the value of your domain name." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
                 </label>
-                <small class="tip">Say anything you want about your domain. This will appear as a paragraph below the domain name.</small>
+                <small class="tip">Text description that will appear as a paragraph below the domain name on the listing page.</small>
                 <textarea id="description" class="description-input textarea changeable-input"
-                tabindex="0" data-name="description" placeholder="A good description helps your potential customers understand the value of your domain name."></textarea>
+                tabindex="0" data-name="description" placeholder="The greatest domain name to ever have existed. Buy it today and start investing in your next project or venture!"></textarea>
               </div>
             </div>
           </div>
@@ -146,22 +167,41 @@
         <div class="tile is-vertical is-parent is-6">
           <div class="card is-fullwidth tile is-child">
             <div class="card-header">
-              <h3 class="card-header-title">Categories</h3>
-              <div class="icon is-tooltip" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="left">
-                <i class="far fa-question-circle"></i>
-              </div>
+              <h3 class="card-header-title">Registrar Information</h3>
+              <a id="lookup-dns-button" class="button is-icon is-stylish is-small">
+                <span class="icon is-small"><i class="far fa-search"></i></span>
+                <span>Lookup Automatically</span>
+              </a>
             </div>
             <div class="card-content">
               <div class="control">
-                <div class="content">
-                  <small class="tip">Don't see a category that fits your domain? <a class="is-primary is-underlined contact-link" href="/contact">Let us know!</a></small>
+                <div class="control">
+                  <label class="label" for="registrar-name-input">
+                    Registrar Name
+                  </label>
+                  <small class="tip">The registrar or company you first purchased <span class="this-domain">this domain</span> from.</small>
+                  <input id="registrar-name-input" class="input changeable-input" data-name="registrar_name" type="text">
                 </div>
-                <div id="categories" class="category-control">
-                  <input id="categories-input" data-name="categories" onchange="" tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
-                  <%# make all the categories %>
-                  <% for (var x = 0; x < categories.length; x++){ %>
-                    <a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag category-selector"><%= categories[x].front %></a>
-                  <% } %>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="date-expire-input">
+                    Domain Expiration Date
+                  </label>
+                  <small class="tip">When <span class="this-domain">this domain</span> will expire with your registrar.</small>
+                  <input id="date-expire-input" class="input changeable-input" data-name="date_expire" type="datetime-local">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="annual-cost-input">
+                    Annual Renewal Cost
+                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Registrar specific costs cannot be obtained automatically, please enter this information in manually." data-balloon-pos="top">
+                      <i class="far fa-question-circle"></i>
+                    </div>
+                  </label>
+                  <small class="tip">How much it costs per year to renew <span class="this-domain">this domain</span> with your registrar.</small>
+                  <input id="annual-cost-input" class="input changeable-input" data-name="registrar_cost" type="number" min="1" step="1">
                 </div>
               </div>
             </div>
@@ -169,17 +209,15 @@
           <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">Domain Rentals</h3>
+              <a target="_blank" rel="noopener" href="/faq#renting" class="is-primary is-underlined">Why should I rent my domain out?</a>
             </div>
             <div class="card-content">
               <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label" for="rentable-input">
                     Allow Rentals
-                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Allows verified users to rent usage of this domain for short amounts of time." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
                   </label>
-                  <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary is-underlined">Why should I rent my domain out?</a></small>
+                  <small class="tip">Allows users to rent usage of <span class="this-domain">this domain</span> for short amounts of time.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -190,11 +228,11 @@
               </div>
               <label class="label">
                 Rental Price
-                <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
+                <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for free rentals on your domain." data-balloon-pos="up">
                   <i class="far fa-question-circle"></i>
                 </div>
               </label>
-              <small class="tip">Price per unit of time for the domain rental.</small>
+              <small class="tip">The price per unit of time for a domain rental.</small>
               <div class="control">
                 <div class="control has-addons">
                   <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
@@ -212,10 +250,11 @@
               <div class="control">
                 <label class="label">
                   <span>Example Paths</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must consist of either letters or numbers." data-balloon-pos="up">
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
+                <small class="tip">Example paths or subdirectories that users may want to rent on <span class="this-domain">this domain</span>.</small>
                 <input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input rentable-input" />
               </div>
             </div>
@@ -287,7 +326,7 @@
                 <label class="label" for="random-button">Theme</label>
                 <div class="control is-grouped">
                   <div class="control has-icon">
-                    <span class="select is-fullwidth">
+                    <span class="select has-shadow is-fullwidth is-stylish">
                       <select tabindex="0" id="theme-input" class="premium-input"></select>
                     </span>
                     <div class="icon">
@@ -307,10 +346,8 @@
               <div class="control">
                 <label class="label">
                   <span>Color Scheme</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The three main colors of your listing page." data-balloon-pos="up">
-                    <i class="far fa-question-circle"></i>
-                  </div>
                 </label>
+                <small class="tip">The three main colors of your listing page.</small>
                 <div class="control">
                   <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input input changeable-input">
                 </div>
@@ -330,7 +367,7 @@
                     <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input input changeable-input">
                   </div>
                   <div class="control has-icon">
-                    <span class="select is-fullwidth">
+                    <span class="select has-shadow is-stylish is-fullwidth">
                       <select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
                         <%# make all the categories %>
                         <% for (var x = 0; x < fonts.length; x++){ %>
@@ -358,10 +395,8 @@
               <div class="control">
                 <label class="label">
                   <span>Footer Styling</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The color of the footer background color and the color of the footer text." data-balloon-pos="up">
-                    <i class="far fa-question-circle"></i>
-                  </div>
                 </label>
+                <small class="tip">The color of the footer background color and the color of the footer text.</small>
                 <div class="control">
                   <input id="footer-background-color-input" data-name="footer_background_color" placeholder="#F1F1F1" type="text" class="premium-input input changeable-input">
                 </div>
@@ -405,7 +440,7 @@
                       <i class="far fa-question-circle"></i>
                     </div>
                   </label>
-                  <small class="tip">Displays a small sentence showing when this domain was first registered.</small>
+                  <small class="tip">Displays a small sentence showing when <span class="this-domain">this domain</span> was first registered.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -622,11 +657,11 @@
       </div>
       <div id="offers-toolbar">
         <div class="offer-button control button-wrapper is-mobile">
-          <a id="refresh-offers-button" class="is-hidden button is-black is-stylish is-small is-inverted" title="Refresh Offers">
+          <a id="refresh-offers-button" class="is-hidden button is-stylish is-small" title="Refresh Offers">
             <div class="icon is-small"><i class="far fa-sync-alt"></i></div>
             <span>Refresh Offers</span>
           </a>
-          <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-black is-stylish is-small is-inverted">
+          <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-stylish is-small">
             <div class="icon is-small"><i class="far fa-toggle-off"></i></div>
             <span>Show Rejected</span>
           </a>
@@ -648,7 +683,7 @@
         </h3>
         <p>
           The buyer has been sent an email with instructions on completing payment.
-          Once the payment has been verified, you will need to manually transfer the ownership of this domain to him/her.
+          Once the payment has been verified, you will need to manually transfer the ownership of <span class="this-domain">this domain</span> to him/her.
           If you do not know how to manually transfer a domain, please refer to our <a target="_blank" href="/faq#transferguide" class="is-primary is-underlined">Domain Transfer Guide</a>.
         </p>
         <p>
@@ -671,12 +706,12 @@
           Congratulations on selling your domain.
         </h3>
         <p>
-          The money has been deposited and verified by DomaHub. You must now transfer the ownership of this domain to the new owner.
+          The money has been deposited and verified by DomaHub. You must now transfer the ownership of <span class="this-domain">this domain</span> to the new owner.
           Once the new owner has verified that the ownership has been transferred over, the money will become available for withdrawal.
           If you do not know how to manually transfer a domain, please refer to our <a target="_blank" href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-primary is-underlined">Domain Transfer Guide</a>.
         </p>
         <p>
-          This domain must be transferred by <span id="deposited-deadline" class="is-bold"></span>. Otherwise your account will be flagged for review.
+          <span class="this-domain">this domain</span> must be transferred by <span id="deposited-deadline" class="is-bold"></span>. Otherwise your account will be flagged for review.
         </p>
         <p class="is-bold">
           Failure to transfer ownership of the domain within the next 14 days will result in the money being refunded.
@@ -878,7 +913,7 @@
     </div>
     <div id="no-stats" class="content is-hidden">
       <p>
-        There is no activity on this domain yet. Need some tips? Check out our <a href="/faq" class="is-primary is-underlined">FAQ</a>.
+        There is no activity on <span class="this-domain">this domain</span> yet. Need some tips? Check out our <a href="/faq" class="is-primary is-underlined">FAQ</a>.
       </p>
     </div>
     <div class='stats-loading control'>
@@ -934,7 +969,7 @@
     <div id="verify-toolbar" class="is-hidden content">
       <div class="control is-grouped">
         <div class="control button-wrapper is-mobile">
-          <a id="refresh-dns-button" class="button is-stylish is-small is-black is-inverted" title="Refresh DNS Table">
+          <a id="refresh-dns-button" class="button is-stylish is-small" title="Refresh DNS Table">
             <div class="icon is-small"><i class="far fa-sync-alt"></i></div>
             <span>Refresh DNS Table<span class="verification-plural"></span></span>
           </a>
@@ -942,11 +977,11 @@
             <div class="icon is-small"><i class="far fa-check-circle"></i></div>
             <span>Verify Now</span>
           </a>
-          <a id="prev-dns-table-button" data-value="-1" class="button is-stylish is-small is-black is-inverted" title="Previous Domain Name">
+          <a id="prev-dns-table-button" data-value="-1" class="button is-stylish is-small" title="Previous Domain Name">
             <div class="icon is-small"><i class="far fa-angle-left"></i></div>
             <span class="is-hidden-mobile">Previous</span>
           </a>
-          <a id="next-dns-table-button" data-value="1" class="button is-stylish is-small is-black-is-inverted" title="Next Domain Name">
+          <a id="next-dns-table-button" data-value="1" class="button is-stylish is-small" title="Next Domain Name">
             <span class="is-hidden-mobile">Next</span>
             <div class="icon is-small"><i class="far fa-angle-right"></i></div>
           </a>

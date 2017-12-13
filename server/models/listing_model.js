@@ -401,7 +401,8 @@ module.exports = {
           min_price, \
           buy_price, \
           description, \
-          date_expire \
+          date_expire, \
+          registrar_name \
         )\
          VALUES ? \
          ON DUPLICATE KEY UPDATE \
@@ -462,6 +463,18 @@ module.exports = {
         SET ? \
         WHERE (listings.domain_name IN (?) OR listings.id IN (?))"
     database.query(query, "Failed to update domain(s)!", callback, [listing_info, domains, domains]);
+  },
+
+  //updates listing registrar info (for getting registrar related info after creation)
+  updateListingsRegistrarInfo : function(listing_info, callback){
+    console.log("DB: Attempting to update registrar info for domain(s)...");
+    var query = "INSERT INTO listings \
+        (id, registrar_name, date_expire) \
+        VALUES ? \
+        ON DUPLICATE KEY UPDATE \
+          registrar_name = VALUES(registrar_name), \
+          date_expire = VALUES(date_expire)"
+    database.query(query, "Failed to update registrar info for domain(s)!", callback, [listing_info]);
   },
 
   //updates multiple listings, needs to be all created without error, or else cant figure out insert IDs
