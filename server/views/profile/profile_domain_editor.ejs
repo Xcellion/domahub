@@ -124,18 +124,6 @@
                 </div>
               </div>
               <div class="control">
-                <label class="label" for="domain-name-input">
-                  Domain Capitalization
-                  <% if (!user.stripe_subscription_id) { %>
-                    <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
-                      <i class="far fa-trophy-alt"></i>
-                    </div>
-                  <% } %>
-                </label>
-                <small id="domain-name-cap-missing" class="tip">Change the capitalization of your domain name to fit your custom domain branding.</small>
-                <input id="domain-name-input" class="input premium-input changeable-input" data-name="domain_name" type="text">
-              </div>
-              <div class="control">
                 <label class="label" for="description-footer">
                   <span>Footer Description</span>
                   <% if (!user.stripe_subscription_id) { %>
@@ -147,7 +135,7 @@
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
-                <small class="tip">Text that is displayed on the footer of your listing page. An ideal location for a slogan, phrase, or trademark.</small>
+                <small class="tip">Text that is displayed on the footer of the listing page. An ideal location for a slogan, phrase, or trademark.</small>
                 <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
                 </div>
               <div class="control">
@@ -267,7 +255,7 @@
         <div id="premium-only-notification" class="box is-medium">
           <div class="content has-text-centered">
             <p>
-              Please upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to customize the look and feel of your listing page!
+              Please upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to customize the look and feel of the listing page!
             </p>
             <div class="control has-text-centered">
               <a href="/profile/settings#premium" class="button is-primary is-stylish">
@@ -292,7 +280,7 @@
           <h1 id="example-domain-name" class="preview-elem is-bold"></h1>
         </div>
         <div class="control">
-          <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your listing page!</p>
+          <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize the listing page!</p>
         </div>
         <div class="button-wrapper is-mobile control">
           <a id="example-button-primary" class="preview-elem button is-stylish">
@@ -309,10 +297,10 @@
           </a>
         </div>
         <div class="control">
-          <a id="example-link-info" class="is-underlined preview-elem">This is a link on your listing page.</a>
+          <a id="example-link-info" class="is-underlined preview-elem">This is a link on the listing page.</a>
         </div>
         <div id="example-footer-background" class="box">
-          <span id="example-footer-text">This is some text on the footer of your listing page.</span>
+          <span id="example-footer-text">This is some text on the footer of the listing page.</span>
         </div>
       </div>
       <div class="tile is-ancestor">
@@ -347,7 +335,7 @@
                 <label class="label">
                   <span>Color Scheme</span>
                 </label>
-                <small class="tip">The three main colors of your listing page.</small>
+                <small class="tip">The three main colors of the listing page.</small>
                 <div class="control">
                   <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input input changeable-input">
                 </div>
@@ -423,7 +411,7 @@
                       <i class="far fa-question-circle"></i>
                     </div>
                   </label>
-                  <small class="tip">Displays a small sentence showing your username and when this listing was created.</small>
+                  <small class="tip">Displays a small sentence showing your username and when the listing page was created.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -440,7 +428,7 @@
                       <i class="far fa-question-circle"></i>
                     </div>
                   </label>
-                  <small class="tip">Displays a small sentence showing when <span class="this-domain">this domain</span> was first registered.</small>
+                  <small class="tip">Displays a small sentence showing the registration date of <span class="this-domain">this domain</span>.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -570,13 +558,44 @@
           </div>
           <div class="card is-fullwidth tile is-child">
             <div class="card-header">
+              <h3 class="card-header-title">Content Design</h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label" for="domain-name-input">
+                  Domain Capitalization
+                </label>
+                <small id="domain-name-cap-missing" class="tip">Change the capitalization of your domain name to fit your custom domain branding.</small>
+                <input id="domain-name-input" class="input premium-input changeable-input" data-name="domain_name" type="text">
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label" for="placeholder-input">
+                    Placeholder Text
+                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The placeholder text is a light-hearted way of letting your users know what information to put in what form." data-balloon-pos="up">
+                      <i class="far fa-question-circle"></i>
+                    </div>
+                  </label>
+                  <small class="tip">Enables the movie-quote placeholder text on the listing page contact form.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="placeholder-input" data-name="placeholder" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="placeholder-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card is-fullwidth tile is-child">
+            <div class="card-header">
               <h3 class="card-header-title">Traffic and History Tabs</h3>
             </div>
             <div class="card-content">
               <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label">Traffic Tab</label>
-                  <small class="tip">Displays detailed traffic information about this listing.</small>
+                  <small class="tip">Displays detailed traffic information about the listing.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -622,7 +641,7 @@
               <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label">History Tab</label>
-                  <small class="tip">Displays recent activity on your listing - useful if you have rentals enabled.</small>
+                  <small class="tip">Displays a table of recent activity - useful if you have rentals enabled.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">

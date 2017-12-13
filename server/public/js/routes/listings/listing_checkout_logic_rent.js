@@ -206,12 +206,12 @@ $(document).ready(function () {
     if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
 
     //show appropriate card icon
-    if ($(".fa-cc-" + card_type) && card_type){
-      $("#cc-icon").find("svg").replaceWith("<i class='far fa-cc-" + card_type + "'></i>");
+    if ($(".far-cc-" + card_type) && card_type){
+      $("#cc-icon").attr("data-icon", "cc-" + card_type);
     }
     //or show default
     else {
-      $("#cc-icon").find("svg").replaceWith("<i class='far fa-credit-card'");
+      $("#cc-icon").attr("data-icon", "credit-card");
     }
   });
 

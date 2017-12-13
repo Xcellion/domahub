@@ -788,6 +788,8 @@ module.exports = {
 
         var history_module = parseFloat(req.body.history_module);
 
+        var placeholder = parseFloat(req.body.placeholder);
+
         //invalid footer description
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
@@ -858,7 +860,7 @@ module.exports = {
         }
         //invalid traffic module
         else if (req.body.traffic_module && (traffic_module != 0 && traffic_module != 1)){
-          error.handler(req, res, "Invalid traffic module selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "Invalid traffic tab selection! Please refresh the page and try again!", "json");
         }
         //invalid traffic graph module
         else if (req.body.traffic_graph && (traffic_graph != 0 && traffic_graph != 1)){
@@ -870,11 +872,15 @@ module.exports = {
         }
         //invalid history module
         else if (req.body.history_module && (history_module != 0 && history_module != 1)){
-          error.handler(req, res, "Invalid history module selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "Invalid history tab selection! Please refresh the page and try again!", "json");
         }
         //invalid info module
         else if (req.body.info_module && (info_module != 0 && info_module != 1)){
-          error.handler(req, res, "Invalid info module selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "Invalid info tab selection! Please refresh the page and try again!", "json");
+        }
+        //invalid placeholder
+        else if (req.body.placeholder && (placeholder != 0 && placeholder != 1)){
+          error.handler(req, res, "Invalid placeholder selection! Please refresh the page and try again!", "json");
         }
         //all good!
         else {
@@ -913,6 +919,8 @@ module.exports = {
 
           req.session.new_listing_info.history_module = history_module;
 
+          req.session.new_listing_info.placeholder = placeholder;
+
           //posted a URL for background image, not upload
           if (req.body.background_image_link){
             req.session.new_listing_info.background_image = req.body.background_image_link;
@@ -948,6 +956,7 @@ module.exports = {
           req.body.traffic_graph ||
           req.body.alexa_stats ||
           req.body.history_module ||
+          req.body.placeholder ||
           req.body.domain_name ||
           req.body.description_footer
         ){
