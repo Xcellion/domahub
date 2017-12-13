@@ -30,7 +30,7 @@
     margin-left: auto;
     margin-right: auto;
   }
-  &:before {
+  &::before {
     @include skew(0,-6);
     content:"";
     background-image: linear-gradient(135deg, $primary-dark 0%, $primary 100%);

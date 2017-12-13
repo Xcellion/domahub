@@ -40,9 +40,9 @@
           </p>
         </div>
 
-        <div class="tile is-ancestor">
-          <div class="tile is-vertical is-parent is-8">
-            <div class="card is-fullwidth tile is-child">
+        <div class="columns">
+          <div class="column is-8">
+            <div class="card is-fullwidth">
               <div class="card-header">
                 <h3 class="card-header-title">Traffic Overview</h3>
                 <div class="control is-grouped">
@@ -67,118 +67,118 @@
                 </div>
               </div>
               <div class="card-content">
-                <div class='columns'>
-                  <div class="column is-9">
+                <div class="columns">
+                  <div class="column is-12">
+                    <!-- chart tabs -->
+                    <div class="chart-tabs">
+                      <a tabindex="0" data-cumulative="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active">
+                        <p class="heading">
+                          Unique Visitors
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="users-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-cumulative="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper">
+                        <p class="heading">
+                          Unique Sessions
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="sessions-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-cumulative="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper">
+                        <p class="heading">
+                          New Visitors
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="new-users-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-cumulative="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions" data-stat-desc="% New Sessions" class="stat-wrapper">
+                        <p class="heading">
+                          % New Sessions
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="new-sessions-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-cumulative="false" data-stat="ga:sessionsPerUser" data-stat-desc="Sessions Per User" class="stat-wrapper">
+                        <p class="heading">
+                          Sessions Per User
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="sessions-per-user-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-cumulative="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper">
+                        <p class="heading">
+                          Total Pageviews
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="pageviews-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-cumulative="false" data-tooltip-type="percent" data-stat="ga:bounceRate" data-stat-desc="Bounce Rate" class="stat-wrapper">
+                        <p class="heading">
+                          Bounce Rate
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="bounce-rate-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-cumulative="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper">
+                        <p class="heading">
+                          Session Duration
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="session-duration-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                    </div>
                     <!-- sessions chart -->
                     <div class="content">
-                      <div class="content">
-                        <span id="current-stat-name">Unique Users</span> Over Time
-                        <span class="icon is-small is-tooltip" data-balloon="Various metrics viewed over time." data-balloon-pos="up" data-balloon-length="medium">
-                          <i class="far fa-question-circle"></i>
-                        </span>
+                      <div class="content has-text-centered">
+                        <h3 class="is-hidden">
+                          <span id="current-stat-name">Unique Users</span> Over Time
+                        </h3>
                       </div>
                       <div class="traffic-chart-wrapper">
-                          <canvas id="time-chart" class="traffic-chart"></canvas>
-                          <div id="time-chart-overlay" class="traffic-overlay content">
-                            <div id="time-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
-                              <figure class="image is-48x48">
-                                <img src="/images/lib/ggface.png">
-                              </figure>
-                              <p>
-                                There is not enough data!
-                              </p>
-                              <p>
-                                Please try changing the date range.
-                              </p>
-                            </div>
-                            <div id="time-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                              <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
-                              <p>Now loading <span id="current-stat-name-loading">unique users</span> data.</p>
-                            </div>
+                        <canvas id="time-chart" class="traffic-chart"></canvas>
+                        <div id="time-chart-overlay" class="traffic-overlay content">
+                          <div id="time-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
+                            <figure class="image is-48x48">
+                              <img src="/images/lib/ggface.png">
+                            </figure>
+                            <p>
+                              There is not enough data!
+                            </p>
+                            <p>
+                              Please try changing the date range.
+                            </p>
+                          </div>
+                          <div id="time-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                            <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
+                            <p>Now loading <span id="current-stat-name-loading">unique users</span> data.</p>
                           </div>
                         </div>
-                    </div>
-                  </div>
-                  <div class="column has-text-centered">
-                    <div data-cumulative="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active" data-balloon="The total number of unique users for the requested time period." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        Unique Users
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="users-counter">Loading...</p>
-                        </div>
-                      </h1>
-                    </div>
-                    <div data-cumulative="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper"data-balloon="The total number of unique sessions for the requested time period." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        Unique Sessions
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="sessions-counter">Loading...</p>
-                        </div>
-                      </h1>
-                    </div>
-                    <div data-cumulative="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper" data-balloon="The total number of new users for the requested time period." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        New</br>Users
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="new-users-counter">Loading...</p>
-                        </div>
-                      </h1>
-                    </div>
-                    <div data-cumulative="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions" data-stat-desc="% New Sessions" class="stat-wrapper" data-balloon="The percentage of sessions from new users for the requested time period." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        % New Sessions
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="new-sessions-counter">Loading...</p>
-                        </div>
-                      </h1>
-                    </div>
-                    <div data-cumulative="false" data-stat="ga:sessionsPerUser" data-stat-desc="Sessions Per User" class="stat-wrapper" data-balloon="The average amount of sessions per user for the requested time period." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        Sessions Per User
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="sessions-per-user-counter">Loading...</p>
-                        </div>
-                      </h1>
-                    </div>
-                    <div data-cumulative="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper" data-balloon="The total amount of pageviews for the requested time period." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        Total Pageviews
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="pageviews-counter">Loading...</p>
-                        </div>
-                      </h1>
-                    </div>
-                    <div data-cumulative="false" data-tooltip-type="percent" data-stat="ga:bounceRate" data-stat-desc="Bounce Rate" class="stat-wrapper" data-balloon="The average percentage of sessions in which the user left the site from the first page." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        Bounce Rate
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="bounce-rate-counter">Loading...</p>
-                        </div>
-                      </h1>
-                    </div>
-                    <div data-cumulative="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper" data-balloon="The average duration of sessions for the requested time period." data-balloon-pos="up" data-balloon-length="medium">
-                      <small class="heading">
-                        Session Duration
-                      </small>
-                      <h1 class="counter">
-                        <div class="counter-link">
-                          <p id="session-duration-counter">Loading...</p>
-                        </div>
-                      </h1>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -187,8 +187,8 @@
 
                   <!-- channels chart -->
                   <div class="column is-4">
-                    <div class="content">
-                      <p class="content">
+                    <div class="content has-text-centered">
+                      <p>
                         How are users finding your listings?
                       </p>
                       <div class="traffic-chart-wrapper">
@@ -216,8 +216,8 @@
 
                   <!-- countries chart -->
                   <div class="column is-4">
-                    <div class="content">
-                      <p class="content">
+                    <div class="content has-text-centered">
+                      <p>
                         What countries are your users in?
                       </p>
                       <div class="traffic-chart-wrapper">
@@ -245,8 +245,8 @@
 
                   <!-- sources chart -->
                   <div class="column is-4">
-                    <div class="content">
-                      <p class="content">
+                    <div class="content has-text-centered">
+                      <p>
                         Which listings are the most popular?
                       </p>
                       <div class="traffic-chart-wrapper">
@@ -275,99 +275,134 @@
               </div>
             </div>
           </div>
-          <div class="tile is-vertical is-parent">
-            <div class="card is-fullwidth tile is-child">
+          <div class="column">
+            <div class="card is-fullwidth">
               <div class="card-header">
                 <h3 class="card-header-title">Portfolio Overview</h3>
               </div>
               <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="overview-tile-wrapper level-item has-text-centered">
+                <div class="portfolio-table">
+                  <div class="content">
+                    <p class="heading">
+                      Domains
+                    </p>
                     <a title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
-                      <div class="content">
-                        <small class="heading">
-                          Total Listings
-                        </small>
-                        <h3 class="counter"><%= user.listings.length %></h3>
+                      <div class="level is-mobile">
+                        <div class="level-item">
+                          <div class="fac">
+                            <div class="icon is-small">
+                              <i class="far fa-folder"></i>
+                            </div>
+                            <p>
+                              Total Listings
+                            </p>
+                          </div>
+                        </div>
+                        <p class="level-item has-text-right">
+                          <%= user.listings.length %>
+                        </p>
                       </div>
                     </a>
-                  </div>
-                  <div class="overview-tile-wrapper level-item has-text-centered">
                     <a title="View Sold" href="/profile/mylistings?tab=offers">
-                      <div class="content">
-                        <small class="heading">
-                          Domains Sold
-                        </small>
-                        <h3 id="sold-counter" class="counter"></h1>
+                      <div class="level is-mobile">
+                        <div class="level-item">
+                          <div class="fac">
+                            <div class="icon is-small">
+                              <i class="far fa-usd-circle"></i>
+                            </div>
+                            <p>
+                              Domains Sold
+                            </p>
+                          </div>
+                        </div>
+                        <p id="sold-counter" class="level-item has-text-right"></p>
                       </div>
                     </a>
-                  </div>
-                  <div class="overview-tile-wrapper level-item has-text-centered">
                     <a title="View Unverified" href="/profile/mylistings?tab=verify">
-                      <div class="content">
-                        <small class="heading">
-                          Unverified Listings
-                        </small>
-                        <h3 id="unverified-counter" class="counter"></h1>
+                      <div class="level is-mobile">
+                        <div class="level-item">
+                          <div class="fac">
+                            <div class="icon is-small">
+                              <i class="far fa-exclamation-triangle"></i>
+                            </div>
+                            <p>
+                              Unverified Listings
+                            </p>
+                          </div>
+                        </div>
+                        <p id="unverified-counter" class="level-item has-text-right"></p>
                       </div>
                     </a>
-                  </div>
-                  <div class="overview-tile-wrapper level-item has-text-centered">
                     <a title="View Expiring" href="/profile/mylistings">
-                      <div class="content">
-                        <small class="heading">
-                          Expiring Domains
-                        </small>
-                        <h3 id="expiring-counter" class="counter">0</h1>
+                      <div class="level is-mobile">
+                        <div class="level-item">
+                          <div class="fac">
+                            <div class="icon is-small">
+                              <i class="far fa-alarm-clock"></i>
+                            </div>
+                            <p>
+                              Expiring Domains
+                            </p>
+                          </div>
+                        </div>
+                        <p id="expiring-counter" class="level-item has-text-right">0</p>
                       </div>
                     </a>
                   </div>
-                </div>
-                <div class="level is-mobile">
-                  <div class="overview-tile-wrapper level-item has-text-centered">
+                  <div class="content">
+                    <p class="heading">
+                      Revenue
+                    </p>
                     <a title="View Expenses" href="/profile/settings#transactions">
-                      <div class="content">
-                        <small class="heading">
-                          Expenses YTD
-                        </small>
-                        <h3 id="expenses-counter" class="counter">$0</h1>
+                      <div class="level is-mobile">
+                        <div class="level-item">
+                          <div class="fac">
+                            <div class="icon is-small">
+                              <i class="far fa-minus-circle"></i>
+                            </div>
+                            <p>
+                              Expenses YTD
+                            </p>
+                          </div>
+                        </div>
+                        <p id="expenses-counter" class="level-item has-text-right">$0</p>
                       </div>
                     </a>
-                  </div>
-                  <div class="overview-tile-wrapper level-item has-text-centered">
-                    <a title="View Revenue" href="/profile/settings#transactions">
-                      <div class="content">
-                        <small class="heading">
-                          Revenue YTD
-                        </small>
-                        <h3 id="revenue-counter" class="counter">$0</h1>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="overview-tile-wrapper level-item has-text-centered">
                     <a title="View Profit" href="/profile/settings#transactions">
-                      <div class="content">
-                        <small class="heading">
-                          Profit YTD
-                        </small>
-                        <h3 id="profit-counter" class="counter">$0</h1>
+                      <div class="level is-mobile">
+                        <div class="level-item">
+                          <div class="fac">
+                            <div class="icon is-small">
+                              <i class="far fa-plus-circle"></i>
+                            </div>
+                            <p>
+                              Profit YTD
+                            </p>
+                          </div>
+                        </div>
+                        <p id="profit-counter" class="level-item has-text-right">$0</p>
                       </div>
                     </a>
-                  </div>
-                  <div class="overview-tile-wrapper level-item has-text-centered">
                     <a title="View Offers" href="/profile/mylistings?tab=offers">
-                      <div class="content">
-                        <small class="heading">
-                          Outstanding Offers
-                        </small>
-                        <h3 id="offers-counter" class="counter"></h1>
+                      <div class="level is-mobile">
+                        <div class="level-item">
+                          <div class="fac">
+                            <div class="icon is-small">
+                              <i class="far fa-shopping-basket"></i>
+                            </div>
+                            <p>
+                              Offers
+                            </p>
+                          </div>
+                        </div>
+                        <p id="offers-counter" class="level-item has-text-right"></p>
                       </div>
                     </a>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="card is-fullwidth tile is-child">
+            <div class="card is-fullwidth is-hidden">
               <div class="card-header">
                 <h3 class="card-header-title">Outstanding Offers</h3>
               </div>
@@ -385,31 +420,38 @@
                 </div>
               </div>
             </div>
-            <div class="card is-fullwidth tile is-child">
-              <div class="card-header is-primary">
-                <h3 class="card-header-title is-white">Get Free Months of Premium</h3>
-                <div class="card-header-icon">
-                  <a tabindex="0" href="/features#pricing" class="button is-stylish is-small no-shadow">
-                    <div class="icon is-small"><i class="far fa-question-circle"></i></div>
-                    <span>What is Premium?</span>
-                  </a>
+            <div class="card is-fullwidth">
+              <div class="card-header no-border-bottom">
+                <h3 class="card-header-title">Get Free Months of Premium</h3>
+              </div>
+              <div class="card-image">
+                <div class="notification no-shadow has-icon is-lighter">
+                  <div class="icon-box">
+                    <a tabindex="0" href="/features#pricing" title="Learn More">
+                      <div class="icon">
+                        <i class="far fa-trophy-alt"></i>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="content">
+                    <p>
+                      Invite a friend to join Premium and you’ll each receive a free month when they sign up!
+                    </p>
+                  </div>
                 </div>
               </div>
               <div class="card-content">
                 <div class="content">
-                  <p>
-                    Invite your friends and get a free month of premium for both you and your friend when they sign up for a Premium account!
-                  </p>
-                  <p>
-                    Check the status of your existing invites in <a class="is-primary is-underlined" href="/profile/settings#premium" tabindex="0">Account Settings</a>.
-                  </p>
                   <div class="control has-addons">
-                    <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input no-shadow" placeholder="Invite your friends!"/>
+                    <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input" placeholder="Invite your friends!"/>
                     <button id="referral-link-copy" class="button is-stylish is-small no-shadow" tabindex="0">
                       <div class="icon is-small"><i class="far fa-clipboard" data-fa-transform="up-1"></i></div>
                       <span id="referral-link-text">Copy Link</span>
                     </button>
                   </div>
+                  <small class="tip">
+                    Check the status of your existing invites in <a class="is-primary is-underlined" href="/profile/settings#premium" tabindex="0">Account Settings</a>.
+                  </small>
                 </div>
               </div>
             </div>

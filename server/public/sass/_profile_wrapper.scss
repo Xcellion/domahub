@@ -9,7 +9,7 @@
 
 .left-menu {
   @include transition(all 0.2s ease);
-  background-color: $primary;
+  background-color: $grey-darker;
   height: 100%;
   min-width: 300px;
   width: 300px;
@@ -24,12 +24,13 @@
   }
   .menu-list {
     .menu-item {
-      @include tablet-only {
+      @include laptop {
         margin-top: 10px;
         &.has-icon {
-          .fa {
-            margin-left: 5px;
-            margin-top: 4px;
+          a {
+            .icon {
+              margin-right: 0;
+            }
           }
         }
       }
@@ -39,7 +40,7 @@
         border-left: 5px solid transparent;
         padding: 10px 20px;
         &:hover {
-          background-color: $primary-lighter;
+          background-color: $grey-dark;
         }
         &.is-active {
           background-color: $primary-light;
@@ -50,7 +51,7 @@
         }
         &.is-sublink {
           padding: 5px;
-          @include tablet-only {
+          @include laptop {
             padding: 10px 20px;
           }
         }
@@ -65,7 +66,7 @@
     min-width: 0;
     width: 0;
   }
-  @include tablet-only {
+  @include laptop {
     min-width: 80px;
     width: 80px;
   }
@@ -83,7 +84,7 @@
 }
 
 #collapse-submenu {
-  @include tablet-only {
+  @include laptop {
     margin: 0;
     padding-left: 0;
     border-left: none;
@@ -102,7 +103,7 @@
   .tabs {
     min-height: 36px;
   }
-  @include tablet-only {
+  @include laptop {
     left: 80px;
     width: calc(100% - 80px);
   }

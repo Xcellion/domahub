@@ -229,6 +229,9 @@ function updateLatestOffers(){
             },
             scales: {
               xAxes: [{
+                gridLines : {
+                    display : false
+                },
                 ticks: {
                   // only return month axis ticks
                   callback: function(value, index, values){
@@ -237,8 +240,11 @@ function updateLatestOffers(){
                 }
               }],
               yAxes: [{
+                gridLines : {
+                    display : false
+                },
                 ticks: {
-                  suggestedMax: 10,
+                  suggestedMax: 5,
                   beginAtZero: true,   // minimum value will be 0.
                   callback: function(value, index, values){
                     if (Math.floor(value) === value) {
