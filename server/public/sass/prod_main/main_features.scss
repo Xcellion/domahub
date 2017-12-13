@@ -169,14 +169,14 @@
 
 .slick-prev {
   left: -10px !important;
-  &:before {
+  &::before {
     color: $primary !important;
   }
 }
 
 .slick-next {
   right: -10px !important;
-  &:before {
+  &::before {
     color: $primary !important;
   }
 }
@@ -185,17 +185,17 @@
   li {
     button {
       &:hover, &:focus {
-        &:before {
+        &::before {
           color: $primary-lighter;
         }
       }
-      &:before {
+      &::before {
         font-size: 10px !important;
       }
     }
     &.slick-active {
       button {
-        &:before {
+        &::before {
           color: $primary !important;
         }
       }
