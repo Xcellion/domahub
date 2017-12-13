@@ -305,6 +305,11 @@ function createRow(now, listing_info, rownum, selected){
   }
   else {
     var tempRow = $("#unverified-clone-row").clone();
+
+    //to fix the overlap on unverified tooltips for first two rows
+    if (rownum < 2){
+      tempRow.find(".unverified-icon").attr("data-balloon-pos", "down");
+    }
   }
 
   //update row specifics and add handlers
