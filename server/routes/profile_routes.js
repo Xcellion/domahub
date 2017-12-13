@@ -74,7 +74,8 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
-    profile_functions.getDNSRecordsMulti
+    profile_functions.getDNSRecordsMulti,
+    owner_functions.updateListingsRegistrarInfo
   ]);
 
   //mylistings multi verify
