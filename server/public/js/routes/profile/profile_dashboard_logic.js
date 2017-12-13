@@ -164,7 +164,7 @@ function updateLatestOffers(){
       'ids': 'ga:141565191',
       'dimensions': 'ga:date',
       'metrics': stat_to_get,
-      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract(days_to_go_back, 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD')
     });
@@ -172,7 +172,7 @@ function updateLatestOffers(){
       'ids': 'ga:141565191',
       'dimensions': 'ga:date',
       'metrics': stat_to_get,
-      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(0).subtract(days_to_go_back * 2, 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).day(6).subtract(days_to_go_back, 'day').day(-1).format('YYYY-MM-DD')
     });
@@ -352,7 +352,7 @@ function updateLatestOffers(){
     gaQuery({
       'ids': 'ga:141565191',
       'metrics': 'ga:users,ga:sessions,ga:bounceRate,ga:avgSessionDuration,ga:newUsers,ga:percentNewSessions,ga:sessionsPerUser,ga:pageviews',
-      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD')
     }).then(function(results) {
@@ -435,7 +435,7 @@ function updateLatestOffers(){
       'metrics': 'ga:users',
       'dimensions': 'ga:channelGrouping',
       'sort': '-ga:users',
-      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
@@ -522,7 +522,7 @@ function updateLatestOffers(){
       'metrics': 'ga:users',
       'dimensions': 'ga:country',
       'sort': '-ga:users',
-      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
@@ -609,7 +609,7 @@ function updateLatestOffers(){
       'metrics': 'ga:users',
       'dimensions': 'ga:pagePathLevel2',
       'sort': '-ga:pagePathLevel2',
-      // 'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
