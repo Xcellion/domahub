@@ -5,14 +5,14 @@
   <div class="description-text">
     <form id="buy-now-form" autocomplete="off" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
       <div class="control has-icon">
-        <input id="contact_name" required class="contact-input input" name="contact_name" type="text">
+        <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
         <label class="error_message label" for="contact_name">Name</label>
         <div class="icon">
           <i class="far fa-user-alt"></i>
         </div>
       </div>
       <div class="control has-icon">
-        <input id="contact_email" required class="contact-input input" name="contact_email" type="email">
+        <input id="contact_email" placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email">
         <label class="error_message label" for="contact_email">Email Address</label>
         <div class="icon">
           <i class="far fa-envelope"></i>

@@ -329,6 +329,7 @@ function checkBox(module_value, elem, child){
     updateBackground(listing_info);
     updateLogo(listing_info);
     updateModules(listing_info);
+    updateContentDesign(listing_info);
     updatePriceInputs(listing_info);
   }
 
@@ -475,6 +476,9 @@ function checkBox(module_value, elem, child){
 
     $("#logo-link-input").val(listing_info.logo);
     $("#example-logo").attr('src', logo);
+  }
+  function updateContentDesign(listing_info){
+    checkBox(listing_info.placeholder, $("#placeholder-input"));
   }
   function updateModules(listing_info){
     //info module

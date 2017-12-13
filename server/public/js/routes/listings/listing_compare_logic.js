@@ -501,14 +501,14 @@ function toggleMenu(show){
     $("#page-contents").addClass("is-active");
     $("#modules-wrapper").addClass("is-active");
     $("#dh-footer").addClass("is-active");
-    $("#show-menu-button").fadeIn(100).addClass("is-hidden");
+    $("#show-menu-button").fadeIn(100).removeAttr("style").addClass("is-hidden");
   }
   else {
     $("#compare-menu").removeClass("is-active");
     $("#page-contents").removeClass("is-active");
     $("#modules-wrapper").removeClass("is-active");
     $("#dh-footer").removeClass("is-active");
-    $("#show-menu-button").fadeIn(100).removeClass("is-hidden");
+    $("#show-menu-button").fadeIn(100).removeAttr("style").removeClass("is-hidden");
   }
 }
 

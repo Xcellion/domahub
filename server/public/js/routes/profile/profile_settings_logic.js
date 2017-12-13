@@ -117,7 +117,7 @@ $(document).ready(function() {
     //<editor-fold>-------------------------------CREDIT CARD CHANGE-------------------------------
 
     //format stripe cc icons
-    $("#credit-card-form").find(".stripe-account-input").on("change keyup paste", function(){
+    $("#credit-card-form").find(".input").on("change keyup paste", function(){
       errorMessage(false);
 
       var card_type = $.payment.cardType($("#cc-num").val());
@@ -125,12 +125,12 @@ $(document).ready(function() {
       if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
 
       //show appropriate card icon
-      if ($(".fa-cc-" + card_type) && card_type){
-        $("#cc-icon").removeClass().addClass("fa fa-cc-" + card_type);
+      if ($(".far-cc-" + card_type) && card_type){
+        $("#cc-icon").attr("data-icon", "cc-" + card_type);
       }
       //or show default
       else {
-        $("#cc-icon").removeClass().addClass("fa fa-credit-card");
+        $("#cc-icon").attr("data-icon", "credit-card");
       }
     });
 
@@ -1086,10 +1086,10 @@ function createTransactionsRow(stripe_charge){
   else {
     //actionable
     if (stripe_charge.pending_transfer == "true"){
-      temp_row.find(".transactions-row-available").text("Requires Action").append('<span class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="fa fa-exclamation-circle"></i></span>');
+      temp_row.find(".transactions-row-available").text("Requires Action").append('<span class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="far fa-exclamation-circle"></i></span>');
     }
     else {
-      temp_row.find(".transactions-row-available").text("Not yet available").append('<span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM DD, YYYY") + '" data-balloon-pos="up"><i class="fa fa-question-circle"></i></span>');
+      temp_row.find(".transactions-row-available").text("Not yet available").append('<span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM DD, YYYY") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></span>');
     }
   }
 
@@ -1113,7 +1113,7 @@ function createTransactionsRow(stripe_charge){
     //tooltip
     var tooltip_size = (moneyFormat.to(total_earned).length > 6) ? "large" : "medium";
     var tooltip_text = "Total earned - " + moneyFormat.to(total_earned) + "&#10;" + "Total fees - " + moneyFormat.to(total_fees);
-    var tooltip_icon = $('<span class="icon is-small is-tooltip" data-balloon-break data-balloon-length="' + tooltip_size + '" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="fa fa-question-circle"></i></span>');
+    var tooltip_icon = $('<span class="icon is-small is-tooltip" data-balloon-break data-balloon-length="' + tooltip_size + '" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></span>');
 
     temp_row.find(".transactions-row-amount").text(moneyFormat.to(total_profit)).append(tooltip_icon);
   }
