@@ -7,9 +7,8 @@
   min-height: 60px
   padding: 15px 20px
   border-radius: $radius $radius 0 0
-  &.is-grey
-    background-color: $lighter
-    border-bottom: none
+  &.no-border-bottom
+    border-bottom-width: 0
   &.is-justified-start
     justify-content: flex-start
     .card-header-title
@@ -45,6 +44,8 @@
 .card-image
   display: block
   position: relative
+  .notification
+    border-radius: 0
 
 .card-content
   padding: 20px

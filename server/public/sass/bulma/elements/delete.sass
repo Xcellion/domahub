@@ -14,7 +14,7 @@
   position: relative
   vertical-align: top
   width: 24px
-  &:before,
+  &::before,
   &:after
     background-color: $white
     content: ""
@@ -24,7 +24,7 @@
     top: 50%
     transform: translateX(-50%) translateY(-50%) rotate(45deg)
     transform-origin: center center
-  &:before
+  &::before
     height: 2px
     width: 50%
   &:after
@@ -41,7 +41,7 @@
       margin-right: 10px
     &.is-lc
       margin-left: 10px
-    &:before,
+    &::before,
     &:after
       background-color: $black-secondary
     &:hover,

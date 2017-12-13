@@ -185,12 +185,12 @@ function updateStatus(listing_info){
   //turned on, turn off?
   if (listing_info.status == 1){
     $("#status-toggle-button").addClass("is-primary").removeClass('is-danger');
-    $("#status-icon").find("svg").replaceWith("<i class='far fa-toggle-on'></i>");
+    $("#status-icon").find("svg").attr("data-icon", "toggle-on");
     $("#status-text").text("Active");
   }
   else {
     $("#status-toggle-button").addClass('is-danger').removeClass("is-primary");
-    $("#status-icon").find("svg").replaceWith("<i class='far fa-toggle-off'></i>");
+    $("#status-icon").find("svg").attr("data-icon", "toggle-off");
     $("#status-text").text("Inactive");
   }
 }
@@ -904,10 +904,10 @@ function setupOfferButtons(selected_domain_ids){
     $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
       $(this).toggleClass("is-primary is-black");
       if ($(this).hasClass("is-primary")) {
-        $(this).find("svg").replaceWith("<i class='far fa-toggle-on'></i>");
+        $(this).find("svg").attr("data-icon", "toggle-on");
       }
       else {
-        $(this).find("svg").replaceWith("<i class='far fa-toggle-off'></i>");
+        $(this).find("svg").attr("data-icon", "toggle-off");
       }
       refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
     });
