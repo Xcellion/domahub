@@ -305,6 +305,11 @@ function createRow(now, listing_info, rownum, selected){
   }
   else {
     var tempRow = $("#unverified-clone-row").clone();
+
+    //to fix the overlap on unverified tooltips for first two rows
+    if (rownum < 2){
+      tempRow.find(".unverified-icon").attr("data-balloon-pos", "down");
+    }
   }
 
   //update row specifics and add handlers
@@ -344,6 +349,7 @@ function updateRowData(row, listing_info){
 function updateDomainRow(tempRow, listing_info, now){
   var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
+  listing_href = (window.location.hostname == "domahub.com") ? listing_href : "http://localhost:8080/listing/" + listing_info.domain_name;
 
   tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mmA"));

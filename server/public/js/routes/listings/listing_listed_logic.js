@@ -266,11 +266,13 @@ function showBuyStuff(buy_now_button){
     $(".post-rent-module").addClass('is-hidden');
     $("#contact_name").focus();
 
-    //get a random char phrase
-    var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
-    $("#contact_name").attr("placeholder", random_char.name);
-    $("#contact_email").attr("placeholder", random_char.email);
-    $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+    if (!listing_info.premium || (listing_info.premium && listing_info.placeholder == 1)){
+      //get a random char phrase
+      var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
+      $("#contact_name").attr("placeholder", random_char.name);
+      $("#contact_email").attr("placeholder", random_char.email);
+      $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+    }
     //revert domain title to get rid of the slash at the end
     $("#domain-title").text(listing_info.domain_name);
   }

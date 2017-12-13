@@ -68,12 +68,14 @@ module.exports = {
 
     //notify via email of any errors
     if (process.env.NODE_ENV != "dev"){
-      mailer.sendBasicMail({
-        to: "general@domahub.com",
-        from: 'general@domahub.com',
-        subject: "There was an error on DomaHub production servers!",
-        html: JSON.stringify(error) + JSON.stringify(info)
-      });
+      if (error.code != "ECONNREFUSED"){
+        mailer.sendBasicMail({
+          to: "general@domahub.com",
+          from: 'general@domahub.com',
+          subject: "There was an error on DomaHub production servers!",
+          html: JSON.stringify(error) + JSON.stringify(info)
+        });
+      }
     }
   }
 

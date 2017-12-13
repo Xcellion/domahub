@@ -162,6 +162,7 @@ module.exports = {
             parseFloat(posted_domain_names[x].min_price) || 0,
             parseFloat(posted_domain_names[x].buy_price) || 0,
             Descriptions.random(),    //random default description
+            null,
             null
           ]);
         }
@@ -270,6 +271,7 @@ module.exports = {
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
             req.session.new_listings.db_object[results[y].value.index][7] = moment(results[y].value.whois["Registry Expiry Date"]).valueOf();
+            req.session.new_listings.db_object[results[y].value.index][8] = results[y].value.whois["Registrar"];
           }
         }
         next();
@@ -786,6 +788,8 @@ module.exports = {
 
         var history_module = parseFloat(req.body.history_module);
 
+        var placeholder = parseFloat(req.body.placeholder);
+
         //invalid footer description
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
@@ -856,7 +860,7 @@ module.exports = {
         }
         //invalid traffic module
         else if (req.body.traffic_module && (traffic_module != 0 && traffic_module != 1)){
-          error.handler(req, res, "Invalid traffic module selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "Invalid traffic tab selection! Please refresh the page and try again!", "json");
         }
         //invalid traffic graph module
         else if (req.body.traffic_graph && (traffic_graph != 0 && traffic_graph != 1)){
@@ -868,11 +872,15 @@ module.exports = {
         }
         //invalid history module
         else if (req.body.history_module && (history_module != 0 && history_module != 1)){
-          error.handler(req, res, "Invalid history module selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "Invalid history tab selection! Please refresh the page and try again!", "json");
         }
         //invalid info module
         else if (req.body.info_module && (info_module != 0 && info_module != 1)){
-          error.handler(req, res, "Invalid info module selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "Invalid info tab selection! Please refresh the page and try again!", "json");
+        }
+        //invalid placeholder
+        else if (req.body.placeholder && (placeholder != 0 && placeholder != 1)){
+          error.handler(req, res, "Invalid placeholder selection! Please refresh the page and try again!", "json");
         }
         //all good!
         else {
@@ -911,6 +919,8 @@ module.exports = {
 
           req.session.new_listing_info.history_module = history_module;
 
+          req.session.new_listing_info.placeholder = placeholder;
+
           //posted a URL for background image, not upload
           if (req.body.background_image_link){
             req.session.new_listing_info.background_image = req.body.background_image_link;
@@ -946,6 +956,7 @@ module.exports = {
           req.body.traffic_graph ||
           req.body.alexa_stats ||
           req.body.history_module ||
+          req.body.placeholder ||
           req.body.domain_name ||
           req.body.description_footer
         ){
@@ -970,6 +981,11 @@ module.exports = {
       var price_type = req.body.price_type;
       var buy_price = req.body.buy_price;
       var min_price = req.body.min_price;
+
+      //registrar info
+      var registrar_cost = parseFloat(req.body.registrar_cost).toFixed(2);
+      var registrar_name = req.body.registrar_name;
+      var date_expire = moment(req.body.date_expire);
 
       //rentable?
       var rentable = parseFloat(req.body.rentable);
@@ -999,31 +1015,40 @@ module.exports = {
 
       //invalid short description
       if (req.body.description_hook && (description_hook.length < 0 || description_hook.length > 75)){
-        error.handler(req, res, "Invalid short listing description!", "json");
+        error.handler(req, res, "That's an invalid listing description!", "json");
       }
       //no paths
       else if (req.body.paths && paths_clean.length == 0){
-        error.handler(req, res, "Invalid example pathes!", "json");
+        error.handler(req, res, "You have entered invalid example pathes! Please try again.", "json");
       }
       //invalid categories
       else if (req.body.categories && categories_clean.length == 0){
-        error.handler(req, res, "Invalid categories!", "json");
+        error.handler(req, res, "You have selected invalid categories! Please try again.", "json");
       }
       //invalid price type
       else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
-        error.handler(req, res, "Invalid rental price type!", "json");
+        error.handler(req, res, "You have selected an invalid rental price type! Please try again.", "json");
       }
       else if (req.body.price_rate && !validator.isInt(price_rate)){
-        error.handler(req, res, "Rental price must be a whole number!", "json");
+        error.handler(req, res, "The rental price must be a whole number! Please try a different price.", "json");
       }
       else if (req.body.buy_price && !validator.isInt(buy_price) && buy_price != 0){
-        error.handler(req, res, "The buy it now price must be a whole number!", "json");
+        error.handler(req, res, "The buy it now price must be a whole number! Please try a different price.", "json");
       }
       else if (req.body.min_price && !validator.isInt(min_price) && min_price != 0){
-        error.handler(req, res, "The minimum price must be a whole number!", "json");
+        error.handler(req, res, "The minimum price must be a whole number! Please try a different price.", "json");
+      }
+      else if (req.body.registrar_name && req.body.registrar_name.length <= 0){
+        error.handler(req, res, "You have entered an invalid registrar name! Please try something else.", "json");
+      }
+      else if (req.body.date_expire && date_expire && !date_expire._isAMomentObject){
+        error.handler(req, res, "You have entered an invalid expiration date! Please try a different date.", "json");
+      }
+      else if (req.body.registrar_cost && !validator.isFloat(registrar_cost)){
+        error.handler(req, res, "You have entered an invalid annual renewal cost! Please try a different price.", "json");
       }
       else if (rentable && rentable != 1 && rentable != 0){
-        error.handler(req, res, "Invalid option! Please refresh the page and try again!", "json");
+        error.handler(req, res, "You have selected an invalid option! Please refresh the page and try again!", "json");
       }
       else {
         if (!req.session.new_listing_info) {
@@ -1039,6 +1064,9 @@ module.exports = {
         req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
         req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
         req.session.new_listing_info.rentable = rentable;
+        req.session.new_listing_info.date_expire = date_expire.valueOf();
+        req.session.new_listing_info.registrar_name = registrar_name;
+        req.session.new_listing_info.registrar_cost = registrar_cost;
 
         //delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
         for (var x in req.session.new_listing_info){
@@ -1111,6 +1139,21 @@ module.exports = {
           }
         });
       }
+    },
+
+    //update a listing based on user object
+    updateListingsRegistrarInfo: function(req, res, next){
+      console.log("F: Updating domain registrar details...");
+      listing_model.updateListingsRegistrarInfo(req.session.new_listing_info, function(result){
+        if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
+        else {
+          delete req.session.new_listing_info;
+          res.json({
+            state: "success",
+            listings: req.user.listings
+          });
+        }
+      });
     },
 
     //delete a listing
