@@ -71,7 +71,7 @@
                   <div class="column is-12">
                     <!-- chart tabs -->
                     <div class="chart-tabs">
-                      <a tabindex="0" data-cumulative="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active">
+                      <a tabindex="0" data-additive="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active">
                         <p class="heading">
                           Unique Visitors
                         </p>
@@ -81,7 +81,7 @@
                           </div>
                         </h1>
                       </a>
-                      <a tabindex="0" data-cumulative="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper">
+                      <a tabindex="0" data-additive="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper">
                         <p class="heading">
                           Unique Sessions
                         </p>
@@ -91,7 +91,7 @@
                           </div>
                         </h1>
                       </a>
-                      <a tabindex="0" data-cumulative="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper">
+                      <a tabindex="0" data-additive="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper">
                         <p class="heading">
                           New Visitors
                         </p>
@@ -101,7 +101,7 @@
                           </div>
                         </h1>
                       </a>
-                      <a tabindex="0" data-cumulative="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions" data-stat-desc="% New Sessions" class="stat-wrapper">
+                      <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions,ga:sessions" data-stat-desc="% New Sessions" class="stat-wrapper">
                         <p class="heading">
                           % New Sessions
                         </p>
@@ -111,7 +111,7 @@
                           </div>
                         </h1>
                       </a>
-                      <a tabindex="0" data-cumulative="false" data-stat="ga:sessionsPerUser" data-stat-desc="Sessions Per User" class="stat-wrapper">
+                      <a tabindex="0" data-additive="false" data-tooltip-type="sessionsPerUser" data-stat="ga:sessionsPerUser,ga:users" data-stat-desc="Sessions Per User" class="stat-wrapper">
                         <p class="heading">
                           Sessions Per User
                         </p>
@@ -121,7 +121,17 @@
                           </div>
                         </h1>
                       </a>
-                      <a tabindex="0" data-cumulative="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper">
+                      <a tabindex="0" data-additive="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper">
+                        <p class="heading">
+                          Session Duration
+                        </p>
+                        <h1 class="counter">
+                          <div class="counter-link">
+                            <p id="session-duration-counter">Loading...</p>
+                          </div>
+                        </h1>
+                      </a>
+                      <a tabindex="0" data-additive="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper">
                         <p class="heading">
                           Total Pageviews
                         </p>
@@ -131,23 +141,13 @@
                           </div>
                         </h1>
                       </a>
-                      <a tabindex="0" data-cumulative="false" data-tooltip-type="percent" data-stat="ga:bounceRate" data-stat-desc="Bounce Rate" class="stat-wrapper">
+                      <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:bounceRate,ga:sessions" data-stat-desc="Bounce Rate" class="stat-wrapper">
                         <p class="heading">
                           Bounce Rate
                         </p>
                         <h1 class="counter">
                           <div class="counter-link">
                             <p id="bounce-rate-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-cumulative="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper">
-                        <p class="heading">
-                          Session Duration
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="session-duration-counter">Loading...</p>
                           </div>
                         </h1>
                       </a>
@@ -243,16 +243,16 @@
                     </div>
                   </div>
 
-                  <!-- sources chart -->
+                  <!-- popular chart -->
                   <div class="column is-4">
                     <div class="content has-text-centered">
                       <p>
                         Which listings are the most popular?
                       </p>
                       <div class="traffic-chart-wrapper">
-                        <canvas id="sources-chart" class="traffic-chart"></canvas>
-                        <div id="sources-chart-overlay" class="traffic-overlay content">
-                          <div id="sources-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
+                        <canvas id="popular-chart" class="traffic-chart"></canvas>
+                        <div id="popular-chart-overlay" class="traffic-overlay content">
+                          <div id="popular-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
                             <figure class="image is-48x48">
                               <img src="/images/lib/ggface.png">
                             </figure>
@@ -263,9 +263,9 @@
                               Please try changing the date range.
                             </p>
                           </div>
-                          <div id="sources-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                          <div id="popular-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
                             <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
-                            <p>Now loading sources data.</p>
+                            <p>Now loading listing data.</p>
                           </div>
                         </div>
                       </div>

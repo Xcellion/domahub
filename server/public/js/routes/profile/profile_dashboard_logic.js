@@ -1,6 +1,6 @@
 var time_chart;
 var countries_chart;
-var sources_chart;
+var popular_chart;
 var channels_chart;
 
 $(document).ready(function() {
@@ -42,14 +42,15 @@ $(document).ready(function() {
 
     //filter out only user listings
     var listing_filters = user.listings.map(function(listing){
-      return "/" + listing.domain_name;
+      return listing.domain_name;
     }).join("|");
+    var listing_regex = new RegExp("^(" + listing_filters + ")");
 
-    buildCharts(listing_filters);
+    buildCharts(listing_regex);
 
     //change date range
     $("#last-days-select").on("change", function(){
-      buildCharts(listing_filters);
+      buildCharts(listing_regex);
     });
 
     //change stats on time chart (only if different from current)
@@ -58,13 +59,13 @@ $(document).ready(function() {
         $(".stat-wrapper").removeClass("is-active");
         $(this).addClass("is-active");
         var now = moment();
-        buildTimeChart(listing_filters, now, "time-chart");
+        buildTimeChart(listing_regex, now, "time-chart");
       }
     });
 
     //refresh charts
     $("#refresh-tables-button").on("click", function(){
-      buildCharts(listing_filters);
+      buildCharts(listing_regex);
     });
 
   });
@@ -144,13 +145,14 @@ function updateLatestOffers(){
   //<editor-fold>-------------------------------TIME CHART-------------------------------
 
   //build the time chart
-  function buildTimeChart(listing_filters, now, canvas_id){
+  function buildTimeChart(listing_regex, now, canvas_id){
+    console.log("NEW CHARTSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
 
     //variables for this chart
     var days_to_go_back = $("#last-days-select").val();
     var stat_to_get = $(".stat-wrapper.is-active").data("stat") || "ga:users";
     var stat_to_get_desc = $(".stat-wrapper.is-active").data("stat-desc") || "Unique Users";
-    var average_or_cumulative = $(".stat-wrapper.is-active").data("cumulative");
+    var average = !$(".stat-wrapper.is-active").data("additive");
     var tooltip_type = $(".stat-wrapper.is-active").data("tooltip-type");
 
     //show loading if chart already exists (for changing date range)
@@ -159,37 +161,46 @@ function updateLatestOffers(){
       showLoadingOrNone(canvas_id, true);
     }
 
+    //start and end times for the two queries
+    var start_time_1 = moment(now).day(7).subtract(days_to_go_back, 'day').day(0);
+    var end_time_1 = moment(now);
+    var start_time_2 = moment(now).day(0).subtract(days_to_go_back * 2, 'day').day(0);
+    var end_time_2 = moment(now).day(6).subtract(days_to_go_back, 'day').day(-1);
+
     //build the query promises
     var currentRange = gaQuery({
       'ids': 'ga:141565191',
-      'dimensions': 'ga:date',
+      'dimensions': 'ga:pagePathLevel2,ga:date',
       'metrics': stat_to_get,
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
-      'start-date': moment(now).day(7).subtract(days_to_go_back, 'day').day(0).format('YYYY-MM-DD'),
-      'end-date': moment(now).format('YYYY-MM-DD')
+      'start-date': start_time_1.format('YYYY-MM-DD'),
+      'end-date': end_time_1.format('YYYY-MM-DD'),
+      "max-results": 100000
     });
     var lastRange = gaQuery({
       'ids': 'ga:141565191',
-      'dimensions': 'ga:date',
+      'dimensions': 'ga:pagePathLevel2,ga:date',
       'metrics': stat_to_get,
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
-      'start-date': moment(now).day(0).subtract(days_to_go_back * 2, 'day').day(0).format('YYYY-MM-DD'),
-      'end-date': moment(now).day(6).subtract(days_to_go_back, 'day').day(-1).format('YYYY-MM-DD')
+      'start-date': start_time_2.format('YYYY-MM-DD'),
+      'end-date': end_time_2.format('YYYY-MM-DD'),
+      "max-results": 100000
     });
 
     //wait for all promises to finish
     Promise.all([currentRange, lastRange]).then(function(results) {
 
+      //analyze data, remove non-owned domains, add 0 count days
+      var parsed_data_1 = removeUnownedAddZeroCounts(start_time_1, end_time_1, results[0].rows, listing_regex, average);
+      var parsed_data_2 = removeUnownedAddZeroCounts(start_time_2, end_time_2, results[1].rows, listing_regex, average);
+
       //no matching data
-      if (results[0].rows.length + results[1].rows.length == 0){
+      if (parsed_data_1.length + parsed_data_2.length == 0){
         showLoadingOrNone(canvas_id, false);
       }
       else {
-
-        //extract data
-        var data1 = splitTimeHits(results[0].rows, average_or_cumulative);
-        var data2 = splitTimeHits(results[1].rows, average_or_cumulative);
-        var labels = splitTimeLabels(days_to_go_back, results[0].rows);
+        //split data into weekly sets (if necessary)
+        var chart_data1 = splitDataToWeekly(days_to_go_back, parsed_data_1, average);
+        var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
+        var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
 
         //make chart
         var chartOptions = {
@@ -211,7 +222,10 @@ function updateLatestOffers(){
                       return data.datasets[0].label + " : " + Math.floor(now_rounded/60) + "m " + now_rounded%60 + "s";
                       break;
                     case ("percent"):
-                      return data.datasets[0].label + " : " + tooltipItem.yLabel + "%";
+                      return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2) + "%";
+                      break;
+                    case ("sessionsPerUser"):
+                      return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2);
                       break;
                     default:
                       return data.datasets[0].label + " : " + tooltipItem.yLabel;
@@ -222,7 +236,7 @@ function updateLatestOffers(){
                   var prev_range = (tooltipItem[1]) ? tooltipItem[1].yLabel : 0;
                   var cur_range = (tooltipItem[0]) ? tooltipItem[0].yLabel : 0;
                   var percent_change = Math.round((((cur_range - prev_range) / prev_range) * 100) * 10) / 10;
-                  var increase_or_decrease = (percent_change == 0) ? "No change" : ((percent_change > 0) ? "An increase of" : "A decrease of") + " " + Math.abs(percent_change) + "%";
+                  var increase_or_decrease = (percent_change == 0) ? "No change" : ((percent_change > 0) ? "An increase of" : "A decrease of") + " " + Math.abs(percent_change).toFixed(2) + "%";
                   return (!isFinite(percent_change) || isNaN(percent_change)) ? "" : (increase_or_decrease);
                 }
               }
@@ -256,22 +270,22 @@ function updateLatestOffers(){
             }
           },
           data : {
-            labels : labels,
+            labels : chart_labels,
             datasets : [
               {
                 label: stat_to_get_desc,
-                lineTension: 0,
+                // lineTension: 0,
                 backgroundColor : 'rgba(60,188,141,0.65)',
                 borderColor : 'rgba(60,188,141,1)',
-                data : data1
+                data : chart_data1
               },
               {
                 label: stat_to_get_desc,
-                lineTension: 0,
+                // lineTension: 0,
                 backgroundColor : 'rgba(220,220,220,0.65)',
                 borderColor : 'rgba(220,220,220,1)',
                 borderDash : [5],
-                data : data2
+                data : chart_data2
               }
             ]
           }
@@ -292,40 +306,97 @@ function updateLatestOffers(){
     });
   }
 
+  //analyze data, remove non-owned domains, add 0 count days
+  function removeUnownedAddZeroCounts(start_time, end_time, rows, listing_regex, average){
+    //create empty hash tables with 0 count for all days for past X days
+    var empty_daily_hash_table = {};
+    for (var x = 0 ; x <= end_time.diff(start_time, "days") ; x++){
+      if (average){
+        empty_daily_hash_table[moment(start_time).add(x, "day").format("YYYYMMDD")] = {
+          value : 0,
+          count : 0
+        }
+      }
+      else {
+        empty_daily_hash_table[moment(start_time).add(x, "day").format("YYYYMMDD")] = 0;
+      }
+    }
+
+    //filter out not owned domains and add counts to above hashtable
+    rows.map(function(row){
+      row[0] = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+      return row;
+    }).filter(function(row){
+      return listing_regex.test(row[0]);
+    }).forEach(function(row){
+      if (average){
+        empty_daily_hash_table[row[1]].value += parseFloat(row[2]);
+        empty_daily_hash_table[row[1]].count += parseFloat(row[3]);
+      }
+      else {
+        empty_daily_hash_table[row[1]] += parseFloat(row[2]);
+      }
+    });
+
+    //rebuild array from hash
+    var parsed_array = [];
+    for (var x in empty_daily_hash_table){
+      if (average){
+        parsed_array.push([x, empty_daily_hash_table[x].value, empty_daily_hash_table[x].count]);
+      }
+      else {
+        parsed_array.push([x, empty_daily_hash_table[x]]);
+      }
+    }
+    return parsed_array;
+  }
+
   //splits GA results array into weekly if past last week
-  function splitTimeHits(rows, cumulative, time){
+  function splitDataToWeekly(days_to_go_back, rows, average){
     //past week, no need for split into weekly
-    if (rows.length <= 7){
+    if (days_to_go_back <= 7){
       return rows.map(function(row) { return +row[1]; } );
     }
     //greater than past week (30, 90, 180 days), split to weekly
     else {
-      var last_hits = 0;
-      return rows.reduce(function(p, c){
-        var cur_value = parseFloat(c[1]);
+      var average_counter = 0;
+      var seen = {};
+      var average_counter = {};
+      rows.forEach(function(row){
         //if changing weeks
-        if (moment(c[0]).day() == 0){
-          p.push(last_hits);
-          last_hits = cur_value;
+        if (moment(row[0]).day() == 0){
+          seen[row[0]] = (seen[row[0]]) ? seen[row[0]] += parseFloat(row[1]) : parseFloat(row[1]);
+          if (average && parseFloat(row[1]) != 0){
+            average_counter[row[0]] = parseFloat(row[2]);
+          }
         }
         //otherwise add/avg value
         else {
-          if (cumulative){
-            last_hits += cur_value;
-          }
-          else if (cur_value != 0){
-            last_hits = (last_hits != 0) ? (last_hits + cur_value) / 2 : cur_value;
+          var beginning_of_week = moment(row[0]).day(0).format("YYYYMMDD");
+          seen[beginning_of_week] += parseFloat(row[1]);
+          if (average && parseFloat(row[1]) != 0){
+            average_counter[beginning_of_week] = (average_counter[beginning_of_week]) ? average_counter[beginning_of_week] += parseFloat(row[2]) : parseFloat(row[2]);
           }
         }
-        return p;
-      }, []);
+      });
+
+      var hits_split = [];
+      for (var x in seen){
+        if (average){
+          hits_split.push(seen[x] / ((average_counter[x]) ? average_counter[x] : 1));
+        }
+        else {
+          hits_split.push(seen[x]);
+        }
+      }
+      return hits_split;
     }
   }
 
   //splits GA results array into monthly labels
-  function splitTimeLabels(days_to_go_back, rows){
+  function createChartLabels(days_to_go_back, rows){
     //past week, no need for split into weekly
-    if (rows.length <= 7){
+    if (days_to_go_back <= 7){
       return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     }
     //greater than past week (30, 90, 180 days), split to weekly
@@ -352,44 +423,70 @@ function updateLatestOffers(){
   //<editor-fold>-------------------------------STATS-------------------------------
 
   //get the 4 numbers for the stats portion
-  function buildStats(listing_filters, now){
+  function buildStats(listing_regex, now){
 
     //build the query
     gaQuery({
       'ids': 'ga:141565191',
-      'metrics': 'ga:users,ga:sessions,ga:bounceRate,ga:avgSessionDuration,ga:newUsers,ga:percentNewSessions,ga:sessionsPerUser,ga:pageviews',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'dimensions': 'ga:pagePathLevel2',
+      'metrics': 'ga:users,ga:sessions,ga:bounceRate,ga:avgSessionDuration,ga:newUsers,ga:pageviews',
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD')
     }).then(function(results) {
 
+      //sort the results by listing name and filter out not owner domains and sort by domain name
+      var listings_data_sorted = results.rows.map(function(row){
+        row[0] = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+        return row;
+      }).filter(function(row){
+        return listing_regex.test(row[0]);
+      }).sort(function(a, b){
+        return ((a[0] > b[0]) ? -1 : ((a[0] == b[0]) ? 0 : 1));
+      });
+
+      var stats_holder = {}
+      listings_data_sorted.forEach(function(row){
+        stats_holder.users = (stats_holder.users) ? stats_holder.users += parseFloat(row[1]) : parseFloat(row[1]);
+        stats_holder.sessions = (stats_holder.sessions) ? stats_holder.sessions += parseFloat(row[2]) : parseFloat(row[2]);
+        stats_holder.bounce_rate = (stats_holder.bounce_rate) ? stats_holder.bounce_rate += (parseFloat(row[3]) * parseFloat(row[2])) : parseFloat(row[3]) * parseFloat(row[2]);
+        stats_holder.session_duration = (stats_holder.session_duration) ? stats_holder.session_duration += (parseFloat(row[4]) * parseFloat(row[2])) : parseFloat(row[4]) * parseFloat(row[2]);
+        stats_holder.new_users = (stats_holder.new_users) ? stats_holder.new_users += parseFloat(row[5]) : parseFloat(row[5]);
+        stats_holder.pageviews = (stats_holder.pageviews) ? stats_holder.pageviews += parseFloat(row[6]) : parseFloat(row[6]);
+      });
+
+      //averages
+      stats_holder.bounce_rate = stats_holder.bounce_rate / stats_holder.sessions;
+      stats_holder.session_duration = stats_holder.session_duration / stats_holder.sessions;
+      stats_holder.new_sessions = ((stats_holder.new_users / stats_holder.sessions) * 100).toFixed(2);
+      stats_holder.sessions_per_user = stats_holder.sessions / stats_holder.users;
+
       //animate the various counters
-      numberCountAnimation($("#users-counter"), results.rows[0][0], {
+      numberCountAnimation($("#users-counter"), stats_holder.users, {
         thousand : ",",
         decimals : 0
       });
-      numberCountAnimation($("#sessions-counter"), results.rows[0][1], {
+      numberCountAnimation($("#sessions-counter"), stats_holder.sessions, {
         thousand : ",",
         decimals : 0
       });
-      numberCountAnimation($("#bounce-rate-counter"), results.rows[0][2], {
+      numberCountAnimation($("#bounce-rate-counter"), stats_holder.bounce_rate, {
         postfix : "%",
         decimals : 1
       });
-      timeCountAnimation($("#session-duration-counter"), results.rows[0][3]);
-      numberCountAnimation($("#new-users-counter"), results.rows[0][4], {
+      timeCountAnimation($("#session-duration-counter"), stats_holder.session_duration);
+      numberCountAnimation($("#new-users-counter"), stats_holder.new_users, {
         thousand : ",",
         decimals : 0
       });
-      numberCountAnimation($("#new-sessions-counter"), results.rows[0][5], {
+      numberCountAnimation($("#new-sessions-counter"), stats_holder.new_sessions, {
         postfix : "%",
         decimals : 1
       });
-      numberCountAnimation($("#sessions-per-user-counter"), results.rows[0][6], {
+      numberCountAnimation($("#sessions-per-user-counter"), stats_holder.sessions_per_user, {
         thousand : ",",
         decimals : 2
       });
-      numberCountAnimation($("#pageviews-counter"), results.rows[0][7], {
+      numberCountAnimation($("#pageviews-counter"), stats_holder.pageviews, {
         thousand : ",",
         decimals : 0
       });
@@ -428,7 +525,7 @@ function updateLatestOffers(){
   //<editor-fold>-------------------------------CHANNELS CHART-------------------------------
 
   //build the channels chart
-  function buildChannelsChart(listing_filters, now, canvas_id){
+  function buildChannelsChart(listing_regex, now, canvas_id){
 
     //show loading if chart already exists (for changing date range)
     if (channels_chart){
@@ -439,13 +536,12 @@ function updateLatestOffers(){
     gaQuery({
       'ids': 'ga:141565191',
       'metrics': 'ga:users',
-      'dimensions': 'ga:channelGrouping',
+      'dimensions': 'ga:pagePathLevel2,ga:channelGrouping',
       'sort': '-ga:users',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
-      'max-results': 5
+      'max-results': 100000
     }).then(function(results) {
       //no matching data
       if (results.totalResults == 0){
@@ -472,40 +568,80 @@ function updateLatestOffers(){
           "rgba(255,235,59,1)",       //yellow
           "rgba(229,57,53,1)"         //red
         ];
-        results.rows.forEach(function(row, i) {
-          labels.push(row[0]);
-          data.push(+row[1]);
+
+        //sort the results by listing name and filter out not owner domains and sort by country name
+        var listings_data_sorted = results.rows.map(function(row){
+          var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+          return [domain_name, row[1], row[2]];
+        }).filter(function(row){
+          return listing_regex.test(row[0]);
+        }).sort(function(a, b){
+          return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
         });
 
-        //make chart
-        var chartOptions = {
-          type : "doughnut",
-          options : {
-            responsive : true,
-            maintainAspectRatio : false,
-            legend : {
-              position: "bottom"
-            }
-          },
-          data : {
-            labels : labels,
-            datasets : [
-              {
-                data : data,
-                backgroundColor : backgroundColors,
-                borderColor : borderColors
-              }
-            ]
+        //if nothing exists
+        if (listings_data_sorted.length == 0){
+          showLoadingOrNone(canvas_id, false);
+          if (countries_chart){
+            countries_chart.destroy();
           }
-        };
-
-        //remove loading overlay
-        $("#" + canvas_id + "-overlay").addClass('is-hidden');
-        if (channels_chart){
-          channels_chart.destroy();
         }
-        var ctx = document.getElementById(canvas_id).getContext('2d');
-        channels_chart = new Chart(ctx, chartOptions);
+        else {
+
+          //collapse by country and sort
+          var seen = {};
+          listings_data_sorted.forEach(function(row) {
+            if (seen.hasOwnProperty(row[1])){
+              seen[row[1]] += parseFloat(row[2]);
+            }
+            else {
+              seen[row[1]] = parseFloat(row[2]);
+            }
+          });
+          listings_data_sorted = [];
+          for (var x in seen){
+            listings_data_sorted.push([x, seen[x]]);
+          }
+
+          //sort by user count and get top 5
+          listings_data_sorted.sort(function(a,b){
+            return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+          }).slice(0,5).forEach(function(row){
+            labels.push(row[0]);
+            data.push(row[1]);
+          });
+
+          //make chart
+          var chartOptions = {
+            type : "doughnut",
+            options : {
+              responsive : true,
+              maintainAspectRatio : false,
+              legend : {
+                position: "bottom"
+              }
+            },
+            data : {
+              labels : labels,
+              datasets : [
+                {
+                  data : data,
+                  backgroundColor : backgroundColors,
+                  borderColor : borderColors
+                }
+              ]
+            }
+          };
+
+          //remove loading overlay
+          $("#" + canvas_id + "-overlay").addClass('is-hidden');
+          if (channels_chart){
+            channels_chart.destroy();
+          }
+          var ctx = document.getElementById(canvas_id).getContext('2d');
+          channels_chart = new Chart(ctx, chartOptions);
+
+        }
       }
     });
   }
@@ -515,7 +651,7 @@ function updateLatestOffers(){
   //<editor-fold>-------------------------------COUNTRIES CHART-------------------------------
 
   //build the countries chart
-  function buildCountriesChart(listing_filters, now, canvas_id){
+  function buildCountriesChart(listing_regex, now, canvas_id){
 
     //show loading if chart already exists (for changing date range)
     if (channels_chart){
@@ -526,13 +662,12 @@ function updateLatestOffers(){
     gaQuery({
       'ids': 'ga:141565191',
       'metrics': 'ga:users',
-      'dimensions': 'ga:country',
-      'sort': '-ga:users',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
+      'dimensions': 'ga:pagePathLevel2,ga:country',
+      'sort': '-ga:country',
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
-      'max-results': 5
+      'max-results' : 100000,
     }).then(function(results) {
       //no matching data
       if (results.totalResults == 0){
@@ -559,53 +694,92 @@ function updateLatestOffers(){
           "rgba(255,235,59,1)",       //yellow
           "rgba(229,57,53,1)"         //red
         ];
-        results.rows.forEach(function(row, i) {
-          labels.push(row[0]);
-          data.push(+row[1]);
+
+        //sort the results by listing name and filter out not owner domains and sort by country name
+        var listings_data_sorted = results.rows.map(function(row){
+          var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+          return [domain_name, row[1], row[2]];
+        }).filter(function(row){
+          return listing_regex.test(row[0]);
+        }).sort(function(a, b){
+          return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
         });
 
-        //make chart
-        var chartOptions = {
-          type : "pie",
-          options : {
-            responsive : true,
-            maintainAspectRatio : false,
-            legend : {
-              position: "bottom"
-            }
-          },
-          data : {
-            labels : labels,
-            datasets : [
-              {
-                data : data,
-                backgroundColor : backgroundColors,
-                borderColor : borderColors
-              }
-            ]
+        //if nothing exists
+        if (listings_data_sorted.length == 0){
+          showLoadingOrNone(canvas_id, false);
+          if (countries_chart){
+            countries_chart.destroy();
           }
-        };
-
-        //remove loading overlay
-        $("#" + canvas_id + "-overlay").addClass('is-hidden');
-        if (countries_chart){
-          countries_chart.destroy();
         }
-        var ctx = document.getElementById(canvas_id).getContext('2d');
-        countries_chart = new Chart(ctx, chartOptions);
+        else {
+
+          //collapse by country and sort
+          var seen = {};
+          listings_data_sorted.forEach(function(row) {
+            if (seen.hasOwnProperty(row[1])){
+              seen[row[1]] += parseFloat(row[2]);
+            }
+            else {
+              seen[row[1]] = parseFloat(row[2]);
+            }
+          });
+          listings_data_sorted = [];
+          for (var x in seen){
+            listings_data_sorted.push([x, seen[x]]);
+          }
+
+          //sort by user count and get top 5
+          listings_data_sorted.sort(function(a,b){
+            return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+          }).slice(0,5).forEach(function(row){
+            labels.push(row[0]);
+            data.push(row[1]);
+          });
+
+          //make chart
+          var chartOptions = {
+            type : "pie",
+            options : {
+              responsive : true,
+              maintainAspectRatio : false,
+              legend : {
+                position: "bottom"
+              }
+            },
+            data : {
+              labels : labels,
+              datasets : [
+                {
+                  data : data,
+                  backgroundColor : backgroundColors,
+                  borderColor : borderColors
+                }
+              ]
+            }
+          };
+
+          //remove loading overlay
+          $("#" + canvas_id + "-overlay").addClass('is-hidden');
+          if (countries_chart){
+            countries_chart.destroy();
+          }
+          var ctx = document.getElementById(canvas_id).getContext('2d');
+          countries_chart = new Chart(ctx, chartOptions);
+        }
       }
     });
   }
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------SOURCES CHART-------------------------------
+  //<editor-fold>-------------------------------POPULAR CHART-------------------------------
 
-  //build the sources chart
-  function buildSourcesChart(listing_filters, now, canvas_id){
+  //build the popular chart
+  function buildPopularChart(listing_regex, now, canvas_id){
 
     //show loading if chart already exists (for changing date range)
-    if (sources_chart){
+    if (popular_chart){
       showLoadingOrNone(canvas_id, true);
     }
 
@@ -615,7 +789,6 @@ function updateLatestOffers(){
       'metrics': 'ga:users',
       'dimensions': 'ga:pagePathLevel2',
       'sort': '-ga:pagePathLevel2',
-      'filters': "ga:pagePathLevel2=~^(" + listing_filters + ")",
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD'),
       'include-empty-rows': false,
@@ -623,13 +796,15 @@ function updateLatestOffers(){
       //no matching data
       if (results.totalResults == 0){
         showLoadingOrNone(canvas_id, false);
-        if (sources_chart){
-          sources_chart.destroy();
+        if (popular_chart){
+          popular_chart.destroy();
         }
       }
       else {
 
         //set colors
+        var data = [];
+        var labels = [];
         var backgroundColors = [
           "rgba(60,188,141,0.65)",       //primary
           "rgba(255,87,34,0.65)",        //accent
@@ -645,94 +820,91 @@ function updateLatestOffers(){
           "rgba(229,57,53,1)"         //red
         ];
 
-        //extract data
-        var last_listing = results.rows[0][0].replace(/\//g, "").split("?")[0].toLowerCase();
-        var last_listing_users = 0;
-
-        //sort the results by listing name
+        //sort the results by listing name and filter out not owner domains
         var listings_data_sorted = results.rows.map(function(row){
-          return [row[0].replace(/\//g, "").split("?")[0].toLowerCase(), row[1]]
+          var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+          return [domain_name, row[1]];
+        }).filter(function(row){
+          return listing_regex.test(row[0]);
         }).sort(function(a, b){
           return ((a[0] > b[0]) ? -1 : ((a[0] == b[0]) ? 0 : 1));
         });
-        var listings_data = listings_data_sorted.reduce(function(p, c, i) {
-          var cur_listing = c[0].replace(/\//g, "").split("?")[0].toLowerCase();
-          if (last_listing != cur_listing){
-            p.push({
-              count : last_listing_users,
-              label : last_listing
-            });
-            last_listing = cur_listing;
-            last_listing_users = parseFloat(c[1]);
+
+        //if nothing exists
+        if (listings_data_sorted.length == 0){
+          showLoadingOrNone(canvas_id, false);
+          if (popular_chart){
+            popular_chart.destroy();
           }
-          else {
-            last_listing_users += parseFloat(c[1]);
-          }
-          return p;
-        }, []);
-
-        //final one
-        listings_data.push({
-          count : last_listing_users,
-          label : last_listing
-        });
-
-        //sort
-        listings_data.sort(function(a, b){
-          return ((a.count > b.count) ? -1 : ((a.count == b.count) ? 0 : 1));
-        });
-
-        //create labels and chart data
-        var labels = [];
-        var data = [];
-        for (var x = 0 ; x < Math.min(5, listings_data.length) ; x++){
-          labels.push(listings_data[x].label);
-          data.push(listings_data[x].count);
         }
+        else {
+          //collapse data by domain name and sort
+          var seen = {};
+          listings_data_sorted.forEach(function(row) {
+            if (seen.hasOwnProperty(row[0])){
+              seen[row[0]] += parseFloat(row[1]);
+            }
+            else {
+              seen[row[0]] = parseFloat(row[1]);
+            }
+          });
+          listings_data_sorted = [];
+          for (var x in seen){
+            listings_data_sorted.push([x, seen[x]]);
+          }
 
-        //make chart
-        var chartOptions = {
-          type : "horizontalBar",
-          options : {
-            responsive : true,
-            maintainAspectRatio : false,
-            legend : {
-              display: false
-            },
-            scales: {
-              xAxes: [{
-                ticks: {
-                  suggestedMax: 5,
-                  beginAtZero: true,   // minimum value will be 0.
-                  callback: function(value, index, values){
-                    if (Math.floor(value) === value) {
-                        return value;
+          //sort by users and get top 5
+          listings_data_sorted.sort(function(a, b){
+            return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+          }).slice(0, 5).forEach(function(row){
+            labels.push(row[0]);
+            data.push(row[1]);
+          });
+
+          //make chart
+          var chartOptions = {
+            type : "horizontalBar",
+            options : {
+              responsive : true,
+              maintainAspectRatio : false,
+              legend : {
+                display: false
+              },
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    suggestedMax: 5,
+                    beginAtZero: true,   // minimum value will be 0.
+                    callback: function(value, index, values){
+                      if (Math.floor(value) === value) {
+                          return value;
+                      }
                     }
                   }
-                }
-              }]
-            }
-          },
-          data : {
-            labels : labels,
-            datasets : [
-              {
-                data : data,
-                backgroundColor : backgroundColors,
-                borderColor : borderColors
+                }]
               }
-            ]
+            },
+            data : {
+              labels : labels,
+              datasets : [
+                {
+                  data : data,
+                  backgroundColor : backgroundColors,
+                  borderColor : borderColors
+                }
+              ]
+            }
+          };
+
+          //remove loading overlay
+          $("#" + canvas_id + "-overlay").addClass('is-hidden');
+
+          var ctx = document.getElementById(canvas_id).getContext('2d');
+          if (popular_chart){
+            popular_chart.destroy();
           }
-        };
-
-        //remove loading overlay
-        $("#" + canvas_id + "-overlay").addClass('is-hidden');
-
-        var ctx = document.getElementById(canvas_id).getContext('2d');
-        if (sources_chart){
-          sources_chart.destroy();
+          popular_chart = new Chart(ctx, chartOptions);
         }
-        sources_chart = new Chart(ctx, chartOptions);
       }
     });
   }
@@ -742,13 +914,13 @@ function updateLatestOffers(){
   //<editor-fold>-------------------------------CHART HELPERS-------------------------------
 
   //build all charts
-  function buildCharts(listing_filters){
+  function buildCharts(listing_regex){
     var now = moment();
-    buildTimeChart(listing_filters, now, "time-chart");
-    buildChannelsChart(listing_filters, now, "channels-chart");
-    buildCountriesChart(listing_filters, now, "countries-chart");
-    buildSourcesChart(listing_filters, now, "sources-chart");
-    buildStats(listing_filters, now);
+    buildTimeChart(listing_regex, now, "time-chart");
+    buildChannelsChart(listing_regex, now, "channels-chart");
+    buildCountriesChart(listing_regex, now, "countries-chart");
+    buildPopularChart(listing_regex, now, "popular-chart");
+    buildStats(listing_regex, now);
   }
 
   //show loading message or no data message per chart
