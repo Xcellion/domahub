@@ -8,22 +8,23 @@
           <% if (listing_info.logo) { %>
             <img id="custom_logo" class="footer-item" />
           <% } %>
-          <span class="footer-item"><%= listing_info.description_footer %></span>
         <% } %>
       </div>
       <div class="bar-right">
-        <% if (!listing_info.premium || listing_info.social_sharing) { %>
-        <p id="dh-footer-right-text" class="footer-item has-text-centered">
-          Sell your domains faster and easier with DomaHub Landing Pages.
-        </p>
-
-        <%# SOCIAL SHARING MODULE %>
-        <%- include("modules/info/social_share_module.ejs", {
-          listing_info : listing_info
-        }); %>
-
+        <% if (listing_info.premium) { %>
+          <p id="dh_footer-right-text" class="footer-item"><%= listing_info.description_footer %></p>
         <% } else { %>
-          <p id="dh_footer-right-text" class="footer-item"><%= listing_info.domain_name %></p>
+          <p id="dh-footer-right-text" class="footer-item has-text-centered">
+            Sell your domains faster and easier with DomaHub Landing Pages.
+          </p>
+        <% } %>
+        <% if (listing_info.social_sharing) { %>
+
+          <%# SOCIAL SHARING MODULE %>
+          <%- include("modules/info/social_share_module.ejs", {
+            listing_info : listing_info
+          }); %>
+
         <% } %>
       </div>
     </div>
