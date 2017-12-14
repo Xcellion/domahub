@@ -107,19 +107,15 @@
   }
 }
 
-.warning-msg {
-  font-size: $size-7;
-  color: $danger;
-  margin-left: 10px;
-  margin-top: 2px;
-}
-
 .stripe-required-info {
   &.icon {
     position: absolute;
-    right: -13px;
+    right: -15px;
     top: -6px;
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+  &.tag {
+    margin-left: 10px;
   }
 }
