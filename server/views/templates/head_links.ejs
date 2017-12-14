@@ -57,6 +57,10 @@
   if (window.location.hostname != "domahub.com"){
     ga('set', 'page', "/listing/" + window.location.hostname);
   }
+  //for GA custom dimension tracking
+  if (typeof listing_info != "undefined"){
+    ga('set', 'dimension1', listing_info.owner_id);
+  }
   ga('send', 'pageview');
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
