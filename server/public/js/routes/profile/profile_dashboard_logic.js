@@ -146,12 +146,13 @@ function updateLatestOffers(){
 
   //build the time chart
   function buildTimeChart(listing_regex, now, canvas_id){
+    console.log("NEW CHARTSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
 
     //variables for this chart
     var days_to_go_back = $("#last-days-select").val();
     var stat_to_get = $(".stat-wrapper.is-active").data("stat") || "ga:users";
     var stat_to_get_desc = $(".stat-wrapper.is-active").data("stat-desc") || "Unique Users";
-    var average_or_cumulative = $(".stat-wrapper.is-active").data("cumulative");
+    var average = !$(".stat-wrapper.is-active").data("additive");
     var tooltip_type = $(".stat-wrapper.is-active").data("tooltip-type");
 
     //show loading if chart already exists (for changing date range)
@@ -160,35 +161,46 @@ function updateLatestOffers(){
       showLoadingOrNone(canvas_id, true);
     }
 
+    //start and end times for the two queries
+    var start_time_1 = moment(now).day(7).subtract(days_to_go_back, 'day').day(0);
+    var end_time_1 = moment(now);
+    var start_time_2 = moment(now).day(0).subtract(days_to_go_back * 2, 'day').day(0);
+    var end_time_2 = moment(now).day(6).subtract(days_to_go_back, 'day').day(-1);
+
     //build the query promises
     var currentRange = gaQuery({
       'ids': 'ga:141565191',
-      'dimensions': 'ga:date',
+      'dimensions': 'ga:pagePathLevel2,ga:date',
       'metrics': stat_to_get,
-      'start-date': moment(now).day(7).subtract(days_to_go_back, 'day').day(0).format('YYYY-MM-DD'),
-      'end-date': moment(now).format('YYYY-MM-DD')
+      'start-date': start_time_1.format('YYYY-MM-DD'),
+      'end-date': end_time_1.format('YYYY-MM-DD'),
+      "max-results": 100000
     });
     var lastRange = gaQuery({
       'ids': 'ga:141565191',
-      'dimensions': 'ga:date',
+      'dimensions': 'ga:pagePathLevel2,ga:date',
       'metrics': stat_to_get,
-      'start-date': moment(now).day(0).subtract(days_to_go_back * 2, 'day').day(0).format('YYYY-MM-DD'),
-      'end-date': moment(now).day(6).subtract(days_to_go_back, 'day').day(-1).format('YYYY-MM-DD')
+      'start-date': start_time_2.format('YYYY-MM-DD'),
+      'end-date': end_time_2.format('YYYY-MM-DD'),
+      "max-results": 100000
     });
 
     //wait for all promises to finish
     Promise.all([currentRange, lastRange]).then(function(results) {
 
+      //analyze data, remove non-owned domains, add 0 count days
+      var parsed_data_1 = removeUnownedAddZeroCounts(start_time_1, end_time_1, results[0].rows, listing_regex, average);
+      var parsed_data_2 = removeUnownedAddZeroCounts(start_time_2, end_time_2, results[1].rows, listing_regex, average);
+
       //no matching data
-      if (results[0].rows.length + results[1].rows.length == 0){
+      if (parsed_data_1.length + parsed_data_2.length == 0){
         showLoadingOrNone(canvas_id, false);
       }
       else {
-
-        //extract data
-        var data1 = splitTimeHits(results[0].rows, average_or_cumulative);
-        var data2 = splitTimeHits(results[1].rows, average_or_cumulative);
-        var labels = splitTimeLabels(days_to_go_back, results[0].rows);
+        //split data into weekly sets (if necessary)
+        var chart_data1 = splitDataToWeekly(days_to_go_back, parsed_data_1, average);
+        var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
+        var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
 
         //make chart
         var chartOptions = {
@@ -210,7 +222,10 @@ function updateLatestOffers(){
                       return data.datasets[0].label + " : " + Math.floor(now_rounded/60) + "m " + now_rounded%60 + "s";
                       break;
                     case ("percent"):
-                      return data.datasets[0].label + " : " + tooltipItem.yLabel + "%";
+                      return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2) + "%";
+                      break;
+                    case ("sessionsPerUser"):
+                      return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2);
                       break;
                     default:
                       return data.datasets[0].label + " : " + tooltipItem.yLabel;
@@ -221,7 +236,7 @@ function updateLatestOffers(){
                   var prev_range = (tooltipItem[1]) ? tooltipItem[1].yLabel : 0;
                   var cur_range = (tooltipItem[0]) ? tooltipItem[0].yLabel : 0;
                   var percent_change = Math.round((((cur_range - prev_range) / prev_range) * 100) * 10) / 10;
-                  var increase_or_decrease = (percent_change == 0) ? "No change" : ((percent_change > 0) ? "An increase of" : "A decrease of") + " " + Math.abs(percent_change) + "%";
+                  var increase_or_decrease = (percent_change == 0) ? "No change" : ((percent_change > 0) ? "An increase of" : "A decrease of") + " " + Math.abs(percent_change).toFixed(2) + "%";
                   return (!isFinite(percent_change) || isNaN(percent_change)) ? "" : (increase_or_decrease);
                 }
               }
@@ -255,22 +270,22 @@ function updateLatestOffers(){
             }
           },
           data : {
-            labels : labels,
+            labels : chart_labels,
             datasets : [
               {
                 label: stat_to_get_desc,
-                lineTension: 0,
+                // lineTension: 0,
                 backgroundColor : 'rgba(60,188,141,0.65)',
                 borderColor : 'rgba(60,188,141,1)',
-                data : data1
+                data : chart_data1
               },
               {
                 label: stat_to_get_desc,
-                lineTension: 0,
+                // lineTension: 0,
                 backgroundColor : 'rgba(220,220,220,0.65)',
                 borderColor : 'rgba(220,220,220,1)',
                 borderDash : [5],
-                data : data2
+                data : chart_data2
               }
             ]
           }
@@ -291,40 +306,97 @@ function updateLatestOffers(){
     });
   }
 
+  //analyze data, remove non-owned domains, add 0 count days
+  function removeUnownedAddZeroCounts(start_time, end_time, rows, listing_regex, average){
+    //create empty hash tables with 0 count for all days for past X days
+    var empty_daily_hash_table = {};
+    for (var x = 0 ; x <= end_time.diff(start_time, "days") ; x++){
+      if (average){
+        empty_daily_hash_table[moment(start_time).add(x, "day").format("YYYYMMDD")] = {
+          value : 0,
+          count : 0
+        }
+      }
+      else {
+        empty_daily_hash_table[moment(start_time).add(x, "day").format("YYYYMMDD")] = 0;
+      }
+    }
+
+    //filter out not owned domains and add counts to above hashtable
+    rows.map(function(row){
+      row[0] = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+      return row;
+    }).filter(function(row){
+      return listing_regex.test(row[0]);
+    }).forEach(function(row){
+      if (average){
+        empty_daily_hash_table[row[1]].value += parseFloat(row[2]);
+        empty_daily_hash_table[row[1]].count += parseFloat(row[3]);
+      }
+      else {
+        empty_daily_hash_table[row[1]] += parseFloat(row[2]);
+      }
+    });
+
+    //rebuild array from hash
+    var parsed_array = [];
+    for (var x in empty_daily_hash_table){
+      if (average){
+        parsed_array.push([x, empty_daily_hash_table[x].value, empty_daily_hash_table[x].count]);
+      }
+      else {
+        parsed_array.push([x, empty_daily_hash_table[x]]);
+      }
+    }
+    return parsed_array;
+  }
+
   //splits GA results array into weekly if past last week
-  function splitTimeHits(rows, cumulative, time){
+  function splitDataToWeekly(days_to_go_back, rows, average){
     //past week, no need for split into weekly
-    if (rows.length <= 7){
+    if (days_to_go_back <= 7){
       return rows.map(function(row) { return +row[1]; } );
     }
     //greater than past week (30, 90, 180 days), split to weekly
     else {
-      var last_hits = 0;
-      return rows.reduce(function(p, c){
-        var cur_value = parseFloat(c[1]);
+      var average_counter = 0;
+      var seen = {};
+      var average_counter = {};
+      rows.forEach(function(row){
         //if changing weeks
-        if (moment(c[0]).day() == 0){
-          p.push(last_hits);
-          last_hits = cur_value;
+        if (moment(row[0]).day() == 0){
+          seen[row[0]] = (seen[row[0]]) ? seen[row[0]] += parseFloat(row[1]) : parseFloat(row[1]);
+          if (average && parseFloat(row[1]) != 0){
+            average_counter[row[0]] = parseFloat(row[2]);
+          }
         }
         //otherwise add/avg value
         else {
-          if (cumulative){
-            last_hits += cur_value;
-          }
-          else if (cur_value != 0){
-            last_hits = (last_hits != 0) ? (last_hits + cur_value) / 2 : cur_value;
+          var beginning_of_week = moment(row[0]).day(0).format("YYYYMMDD");
+          seen[beginning_of_week] += parseFloat(row[1]);
+          if (average && parseFloat(row[1]) != 0){
+            average_counter[beginning_of_week] = (average_counter[beginning_of_week]) ? average_counter[beginning_of_week] += parseFloat(row[2]) : parseFloat(row[2]);
           }
         }
-        return p;
-      }, []);
+      });
+
+      var hits_split = [];
+      for (var x in seen){
+        if (average){
+          hits_split.push(seen[x] / ((average_counter[x]) ? average_counter[x] : 1));
+        }
+        else {
+          hits_split.push(seen[x]);
+        }
+      }
+      return hits_split;
     }
   }
 
   //splits GA results array into monthly labels
-  function splitTimeLabels(days_to_go_back, rows){
+  function createChartLabels(days_to_go_back, rows){
     //past week, no need for split into weekly
-    if (rows.length <= 7){
+    if (days_to_go_back <= 7){
       return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     }
     //greater than past week (30, 90, 180 days), split to weekly
@@ -357,7 +429,7 @@ function updateLatestOffers(){
     gaQuery({
       'ids': 'ga:141565191',
       'dimensions': 'ga:pagePathLevel2',
-      'metrics': 'ga:users,ga:sessions,ga:bounceRate,ga:avgSessionDuration,ga:newUsers,ga:percentNewSessions,ga:sessionsPerUser,ga:pageviews',
+      'metrics': 'ga:users,ga:sessions,ga:bounceRate,ga:avgSessionDuration,ga:newUsers,ga:pageviews',
       'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
       'end-date': moment(now).format('YYYY-MM-DD')
     }).then(function(results) {
@@ -376,19 +448,17 @@ function updateLatestOffers(){
       listings_data_sorted.forEach(function(row){
         stats_holder.users = (stats_holder.users) ? stats_holder.users += parseFloat(row[1]) : parseFloat(row[1]);
         stats_holder.sessions = (stats_holder.sessions) ? stats_holder.sessions += parseFloat(row[2]) : parseFloat(row[2]);
-        stats_holder.bounce_rate = (stats_holder.bounce_rate) ? stats_holder.bounce_rate += parseFloat(row[3]) : parseFloat(row[3]);
-        stats_holder.session_duration = (stats_holder.session_duration) ? stats_holder.session_duration += parseFloat(row[4]) : parseFloat(row[4]);
+        stats_holder.bounce_rate = (stats_holder.bounce_rate) ? stats_holder.bounce_rate += (parseFloat(row[3]) * parseFloat(row[2])) : parseFloat(row[3]) * parseFloat(row[2]);
+        stats_holder.session_duration = (stats_holder.session_duration) ? stats_holder.session_duration += (parseFloat(row[4]) * parseFloat(row[2])) : parseFloat(row[4]) * parseFloat(row[2]);
         stats_holder.new_users = (stats_holder.new_users) ? stats_holder.new_users += parseFloat(row[5]) : parseFloat(row[5]);
-        stats_holder.new_sessions = (stats_holder.new_sessions) ? stats_holder.new_sessions += parseFloat(row[6]) : parseFloat(row[6]);
-        stats_holder.sessions_per_user = (stats_holder.sessions_per_user) ? stats_holder.sessions_per_user += parseFloat(row[7]) : parseFloat(row[7]);
-        stats_holder.pageviews = (stats_holder.pageviews) ? stats_holder.pageviews += parseFloat(row[8]) : parseFloat(row[8]);
+        stats_holder.pageviews = (stats_holder.pageviews) ? stats_holder.pageviews += parseFloat(row[6]) : parseFloat(row[6]);
       });
 
       //averages
-      stats_holder.bounce_rate = stats_holder.bounce_rate / listings_data_sorted.length;
-      stats_holder.session_duration = stats_holder.session_duration / listings_data_sorted.length;
-      stats_holder.new_sessions = stats_holder.new_sessions / listings_data_sorted.length;
-      stats_holder.sessions_per_user = stats_holder.sessions_per_user / listings_data_sorted.length;
+      stats_holder.bounce_rate = stats_holder.bounce_rate / stats_holder.sessions;
+      stats_holder.session_duration = stats_holder.session_duration / stats_holder.sessions;
+      stats_holder.new_sessions = ((stats_holder.new_users / stats_holder.sessions) * 100).toFixed(2);
+      stats_holder.sessions_per_user = stats_holder.sessions / stats_holder.users;
 
       //animate the various counters
       numberCountAnimation($("#users-counter"), stats_holder.users, {
