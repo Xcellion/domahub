@@ -21,3 +21,9 @@
 .min-height {
   min-height: calc(100vh - 110px);
 }
+
+.image {
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
