@@ -21,10 +21,10 @@ module.exports = function(app){
   app.get("/emailviews/:email_template", emailViews);
   app.get("/viewstest/:path/:view_name", showView);
 
-  //create coupon codes
-  app.get("/createcodes/:number", [
-    createCouponCodes
-  ]);
+  // //create coupon codes
+  // app.get("/createcodes/:number", [
+  //   createCouponCodes
+  // ]);
 
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
@@ -49,7 +49,7 @@ module.exports = function(app){
 
 //coupon
 var randomstring = require("randomstring");
-var stripe_key = "sk_test_PHd0TEZT5ytlF0qCNvmgAThp";
+var stripe_key = (process.env.NODE_ENV == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
 var stripe = require("stripe")(stripe_key);
 
 //create X sign up codes

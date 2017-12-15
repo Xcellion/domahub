@@ -819,6 +819,72 @@ module.exports = {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------STRIPE WEBHOOK-------------------------------
+
+  //function so only wonmin can create codes
+  checkAdmin : function(req, res, next){
+    console.log("SF: Checking if admin to create codes...");
+    if (!req.user || req.user.id != 1 || req.user.email != "won2blee@gmail.com"){
+      console.log("SF: Not admin! Redirecting...");
+      res.redirect("/");
+    }
+    else {
+      next();
+    }
+  },
+
+  //create X sign up codes
+  createCouponCodes : function(req, res, next){
+    console.log("SF: Creating " + req.params.number + " coupon codes...");
+    insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
+      var stripe_promises = [];
+      for (var x = 0 ; x < codes.length ; x++){
+        var promise = (function(code){
+          var deferred = Q.defer();
+          stripe.coupons.create({
+            id: code,
+            duration: "repeating",
+            percent_off: 100,
+            duration_in_months: 1,
+            max_redemptions : 1
+          }, function(err, coupon) {
+            if (err){
+              deferred.reject(err);
+            }
+            else {
+              deferred.resolve(coupon);
+            }
+          });
+          return deferred.promise;
+        })(codes[x][0]);
+        stripe_promises.push(promise);
+      }
+
+      Q.allSettled(stripe_promises).then(function(results) {
+        var success_codes = []
+        for (var x = 0 ; x < results.length; x++){
+          if (results[x].state == "fulfilled"){
+            success_codes.push(results[x].value.id);
+          }
+        }
+
+        //all successful!
+        if (success_codes.length == parseFloat(req.params.number)){
+          mailer.sendBasicMail({
+            to: "general@domahub.com",
+            from: 'general@domahub.com',
+            subject: "Created new coupon codes on production!",
+            html: success_codes.join("</br>")
+          });
+        }
+        res.redirect("/");
+      });
+
+    });
+  },
+
+  //</editor-fold>
+
 }
 
 //<editor-fold>-------------------------------PROMO HELPERS-------------------------------
@@ -1008,7 +1074,7 @@ function addMonthReferral(referer_id){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------NEW STRIPE CREATOR HELPERS -------------------------------
+//<editor-fold>-------------------------------NEW STRIPE CREATOR HELPERS-------------------------------
 
 //create a new stripe customer
 function newStripeCustomer(req, res, next){
@@ -1135,7 +1201,7 @@ function newStripeAccount(req, res, next, legal_entity){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------REQ.USER HELPERS -------------------------------
+//<editor-fold>-------------------------------REQ.USER HELPERS-------------------------------
 
 //delete an expired stripe info (our DB was outdated)
 function deleteDHStripeDetails(req, stripe_col){
@@ -1352,6 +1418,37 @@ function handleSubscriptionCancel(event){
     //done!
   });
 };
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------CREATE COUPON CODE-------------------------------
+
+//create unique coupon codes
+function createUniqueCoupons(number, referrer){
+  var codes = [];
+
+  if (validator.isInt(number)){
+    for (var x = 0; x < number; x++){
+      var random_string = randomstring.generate(10);
+      codes.push([random_string, null, 1]);
+    }
+  }
+
+  return codes;
+}
+
+//insert the coupon codes
+function insertCoupons(codes, number, cb){
+  account_model.createCouponCodes(codes, function(result){
+    if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
+      console.log("Duplicate coupon!");
+      insertCoupons(createUniqueCoupons(number), number);
+    }
+    else if (result.state != "error"){
+      cb(codes);
+    }
+  });
+}
 
 //</editor-fold>
 
