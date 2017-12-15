@@ -1113,7 +1113,7 @@ function updateOffersTable(listing_info, total_domains){
       }
 
       //accepted an offer!
-      if (listing_info.offers[x].deposited == 1 && listing_info.offers[x].transferred != -1){
+      if (listing_info.offers[x].deposited == 1 && listing_info.offers[x].transferred != 1){
         listing_info.accepted = 1;
         cloned_offer_row.find(".td-offer-status").text('Sold (Not Transferred)').addClass('is-primary');
       }
@@ -1322,7 +1322,10 @@ function whatsNextOfferView(listing_info, dont_reselect){
   $("#offer-response-wrapper").addClass('remove-margin-bottom-content');
 
   //show appropriate next steps
-  if (listing_info.deposited){
+  if (listing_info.transferred){
+    $("#transferred-offer").removeClass('is-hidden');
+  }
+  else if (listing_info.deposited){
     $("#deposited-offer").removeClass('is-hidden');
     deposit_offer = true;
     $("#deposited-deadline").text(moment(offer.deadline).format("MMMM DD, YYYY"));

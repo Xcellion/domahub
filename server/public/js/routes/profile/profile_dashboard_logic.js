@@ -146,7 +146,6 @@ function updateLatestOffers(){
 
   //build the time chart
   function buildTimeChart(listing_regex, now, canvas_id){
-    console.log("NEW CHARTSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
 
     //variables for this chart
     var days_to_go_back = $("#last-days-select").val();
