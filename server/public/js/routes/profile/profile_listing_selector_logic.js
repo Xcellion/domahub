@@ -357,7 +357,8 @@ function updateDomainRow(tempRow, listing_info, now){
   //registrar expiration date
   if (listing_info.date_expire){
     var moment_expire = moment(listing_info.date_expire);
-    tempRow.find(".td-date-expire").text(moment.duration(moment_expire.diff(now)).humanize()).attr("title", "Expires on " +  moment_expire.format("MMMM DD, YYYY - hh:mmA"));
+    var humanized = moment.duration(moment_expire.diff(now)).humanize(true);
+    tempRow.find(".td-date-expire").text(humanized.substr(0,1).toUpperCase() + humanized.substr(1, humanized.length)).attr("title", "Expires on " +  moment_expire.format("MMMM DD, YYYY - hh:mmA"));
   }
   else {
     tempRow.find(".td-date-expire").text("-").removeAttr("title");
