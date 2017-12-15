@@ -209,14 +209,18 @@
         <div id="premium" class="columns is-hidden drop-tab">
           <div class="column is-5-widescreen">
 	          <div class="card is-fullwidth">
-	          	<div class="card-header">
+							<% if (!user.stripe_subscription_id) { %>
+          		<div class="card-header no-border-bottom">
+							<% } else { %>
+							<div class="card-header">
+							<% } %>
 	          		<h3 id="upgrade-tab-header" class="card-header-title">
 	          			<span>Premium Status</span>
 	          		</h3>
 	          	</div>
-	          	<div class="card-content">
-								<% if (!user.stripe_subscription_id) { %>
-	          			<div class="notification no-shadow has-icon is-primary">
+							<% if (!user.stripe_subscription_id) { %>
+								<div class="card-image">
+									<div class="notification no-shadow has-icon is-primary">
 										<div class="icon-box">
 											<div class="icon is-white">
 												<i class="far fa-trophy-alt"></i>
@@ -231,7 +235,9 @@
 											</p>
 										</div>
 									</div>
-								<% } %>
+								</div>
+							<% } %>
+	          	<div class="card-content">
 	          		<div class="control is-spaced">
 	          			<div class="control-left">
 	          				<p>
@@ -761,34 +767,65 @@
                 </div>
               </div>
               <div class="card-content">
-                <div class="content">
-                  <p>
-                    <span>Total earned</span>
-                    <span id="total-earned" class="is-pulled-right">$0.00</span>
-                  </p>
-                  <p class="is-inline">
-                    <span>Total fees paid</span>
-                    <div class="icon is-tooltip is-small" data-balloon="There is a 2.9% + $0.30 fee for payments processing. Basic accounts have an additional 10% commission fee." data-balloon-pos="up" data-balloon-length="large">
+								<div class="control is-spaced">
+									<div class="control-left">
+										<p>
+											Total Earned
+										</p>
+									</div>
+									<div class="control-right">
+										<p id="total-earned">
+											$0.00
+										</p>
+									</div>
+								</div>
+								<div class="control is-spaced">
+									<div class="control-left is-flex">
+										<p>
+											Total Fees Paid
+										</p>
+										<div class="icon is-tooltip is-small control-item" data-balloon="There is a 2.9% + $0.30 fee for payments processing. Basic accounts have an additional 10% commission fee." data-balloon-pos="up" data-balloon-length="large">
                       <i class="far fa-question-circle"></i>
                     </div>
-                    <span id="total-fees" class="is-pulled-right">$0.00</span>
-                  </p>
-                  <p>
-                    <span>Total profit</span>
-                    <span id="total-profit" class="is-pulled-right">$0.00</span>
-                  </p>
-                  <p class="earnings-divider">
-                    <span>Available for withdrawal</span>
-                    <span id="total-available" class="is-bold is-pulled-right">$0.00</span>
-                  </p>
-                  <a id="transfer-button" class="button is-fullwidth is-disabled is-stylish is-small is-primary">
-                    <div class="icon is-small">
-											<i class="far fa-exchange"></i>
-										</div>
-                    <span>Withdraw <span class="withdrawal-available"></span> to Bank</span>
-                  </a>
-                </div>
-            </div>
+									</div>
+									<div class="control-right">
+										<p id="total-fees">
+											$0.00
+										</p>
+									</div>
+								</div>
+								<div class="control is-spaced">
+									<div class="control-left">
+										<p>
+											Total Profit
+										</p>
+									</div>
+									<div class="control-right">
+										<p id="total-profit">
+											$0.00
+										</p>
+									</div>
+								</div>
+								<hr />
+								<div class="control is-spaced">
+									<div class="control-left">
+										<p>
+											Available for Withdrawal
+										</p>
+									</div>
+									<div class="control-right">
+										<p id="total-available">
+											$0.00
+										</p>
+									</div>
+								</div>
+                <a id="transfer-button" class="button is-fullwidth is-disabled is-stylish is-small is-primary">
+                  <div class="icon is-small">
+										<i class="far fa-exchange"></i>
+									</div>
+                  <span>Withdraw <span class="withdrawal-available"></span> to Bank</span>
+                </a>
+            	</div>
             </div>
           </div>
           <div class="column">
@@ -955,7 +992,7 @@
 					<div class="notification no-shadow has-icon is-primary">
 						<div class="icon-box">
 							<div class="icon is-white">
-								<i class="far fa-exclamation-circle"></i>
+								<i class="far fa-credit-card"></i>
 							</div>
 						</div>
 						<div class="content">
@@ -1216,7 +1253,7 @@
             <li id="pending-transfer-wrapper" class="is-hidden">
               <div class="icon is-small is-danger" title="Pending Transfer of Ownership">
 								<i class="far fa-question-circle"></i></span>
-							<div>
+							</div>
 							Please <a id="transfer-ownership-href" class="is-underlined is-primary">transfer ownership</a> of this domain to access these funds!</span>
             </li>
             <li id="available-on-wrapper">
@@ -1239,17 +1276,17 @@
             </li>
           </ul>
         </div>
-        <div id="rental-buttons-wrapper" class="is-hidden control is-grouped is-grouped-center">
-          <div class="control">
-            <a target="_blank" id="view-rental-button" type="submit" class="button">
+        <div id="rental-buttons-wrapper" class="is-hidden control is-grouped">
+          <div class="control is-expanded">
+            <a target="_blank" id="view-rental-button" type="submit" class="button is-fullwidth">
               <div class="icon is-small">
 								<i class="far fa-search"></i>
 							</div>
               <span>Preview rental</span>
             </a>
           </div>
-          <div class="control">
-            <a id="refund-rental-submit" type="submit" class="button is-stylish is-small is-danger is-outlined">
+          <div class="control is-expanded">
+            <a id="refund-rental-submit" type="submit" class="button is-fullwidthis-stylish is-small is-danger is-outlined">
               <div class="icon is-small">
 								<i class="far fa-repeat"></i>
 							</div>

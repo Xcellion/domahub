@@ -10,11 +10,30 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section class="section is-medium">
+
+  <section class="section is-medium is-primary">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="content has-text-centered">
+            <figure class="image is-128x128">
+              <img src="/images/lib/q-a.svg" alt="Questions and Answers" />
+            </figure>
+            <h1 class="title is-2 is-white">Frequently Asked Questions</h1>
+            <p class="subtitle is-4 is-white">
+              ...and other questions, too!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-small">
     <div class="container">
       <div class="columns">
         <div class="column is-3 is-hidden-mobile">
-          <aside class="menu is-fixed">
+          <aside class="menu">
             <p class="menu-label">
               Categories
             </p>
@@ -29,24 +48,29 @@
           </aside>
         </div>
         <div class="column">
-          <h1>Frequently Asked Questions</h1>
           <div id="about" class="faq-section">
             <h2 class="faq-header is-active">About Us</h3>
             <div class="content">
               <h3 class="faq-question" title="What exactly does DomaHub do?">
                 What exactly does DomaHub do?</h3>
               <p>
-                DomaHub is a domain name marketplace that allows you to create simple and beautiful
-                landing pages for your domains.
+                DomaHub is a platform to easily set up landing pages for your domains, allowing you to fully automate your sales process and sell domains quicker.
+              </p>
+              <p>
+                DomaHub is also a domain management tool that helps you organize your domain portfolio and keep track of key metrics like revenue, profit,
+                domain renewal, domain traffic, etc.
               </p>
             </div>
             <div class="content">
               <h3 class="faq-question" title="How does DomaHub make money?">
                 Why should I use DomaHub?</h3>
               <p>
-                Landing pages help you sell your domain. DomaHub provides the quickest solution to setting
-                up landing pages for all of your domains. We also provide management tools as well as secure
-                payment processing.
+                DomaHub is the quickest solution to automatically set up landing pages for your entire domain portfolio, boosting your domains' online presence
+                and increasing the likelihood of a sale.
+              </p>
+              <p>
+                Utilize the DomaHub platform to make informed decisions without having to install or learn other clunky software. Make DomaHub your home
+                page for all your portfolio-related business and tasks.
               </p>
             </div>
           </div>
@@ -238,11 +262,11 @@
               </p>
               <ul>
                   <p>
-                      <span class="icon is-danger"><i class="fa fa-times" aria-hidden="true"></i></span>
+                      <span class="icon is-danger"><i class="far fa-times" aria-hidden="true"></i></span>
                       Brandable domain names that can be a company name (hotu.com, vovu.com, doto.com, etc.)
                   </p>
                   <p>
-                      <span class="icon is-danger"><i class="fa fa-times" aria-hidden="true"></i></span>
+                      <span class="icon is-danger"><i class="far fa-times" aria-hidden="true"></i></span>
                       Domains without clear definition / meaning (ethmini.com, sousforce.com, emugg.com, etc.)
                   </p>
               </ul>
@@ -251,15 +275,15 @@
               </p>
               <ul>
                   <p>
-                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      <span class="icon is-primary"><i class="far fa-check" aria-hidden="true"></i></span>
                       Holiday / event related (happybirthday.com, congratulations.com, marryme.com, etc.)
                   </p>
                   <p>
-                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      <span class="icon is-primary"><i class="far fa-check" aria-hidden="true"></i></span>
                       Slogans / hashtags / marketable phrases (greatestboxer.com, itsfinallyhere.com, thenextbigthing.com, etc.)
                   </p>
                   <p>
-                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      <span class="icon is-primary"><i class="far fa-check" aria-hidden="true"></i></span>
                       Common phrases / words (youredumb.com, imsorry.com, iloveyou.com, etc.)
                   </p>
               </ul>
