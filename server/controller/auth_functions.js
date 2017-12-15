@@ -551,7 +551,7 @@ module.exports = {
 
     //if user is authenticated, log them out first
     if (req.isAuthenticated()){
-      console.log("F: Logging out...");
+      console.log("F: Logging out existing user before DomaHub demo...");
       req.logout();
       delete req.user;
     }
