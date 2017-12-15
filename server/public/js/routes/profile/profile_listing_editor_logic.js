@@ -117,8 +117,20 @@ function updateEditorEditing(selected_domain_ids){
     $("#view-listings-button-drop").empty();
     var domain_names_list = getSelectedDomains("domain_name");
     for (var x = 0 ; x < domain_names_list.length ; x++){
-      var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
-      listing_href = (window.location.hostname == "domahub.com") ? listing_href : "http://localhost:8080/listing/" + domain_names_list[x];
+
+      //if demo
+      if (!user.id){
+        var listing_href = ((window.location.hostname.indexOf("domahub") != -1) ? "https://domahub.com/listing/" + domain_names_list[x].toLowerCase() : "http://localhost:8080/listing/" + domain_names_list[x].toLowerCase()) + "?compare=true&theme=Random";
+      }
+      //if production
+      else if (window.location.hostname.indexOf("domahub") != -1){
+        var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
+      }
+      //testing
+      else {
+        var listing_href = "https://localhost:8080/listing/" + domain_names_list[x].toLowerCase();
+      }
+
       var clipped_domain_name = (domain_names_list[x].length > 25) ? domain_names_list[x].substr(0, 15) + "..." + domain_names_list[x].substr(domain_names_list[x].length - 7, domain_names_list[x].length - 1) : domain_names_list[x];
       $("#view-listings-button-drop").append("<a target='_blank' href='" + listing_href + "' class='is-underlined'>" + clipped_domain_name + "</a>" + " ");
     }
@@ -131,7 +143,10 @@ function updateEditorEditing(selected_domain_ids){
     $(".this-domain").text("this domain");
 
     //view listing button link
-    $("#view-listings-button").off().attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
+    var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
+    listing_href = (window.location.hostname == "domahub.com" && user.id) ? listing_href : "http://localhost:8080/listing/" + listing_info.domain_name;
+    listing_href = (!user.id) ? listing_href += "?compare=true&theme=Random" : listing_href;
+    $("#view-listings-button").off().attr("href", listing_href);
 
     //show domain capitalization
     $("#domain-name-input").removeClass('is-hidden');
@@ -551,14 +566,14 @@ function checkBox(module_value, elem, child){
         $("#lookup-dns-button").removeClass('is-loading');
         if (data.state == "success"){
           listings = data.listings;
-          updateEditorEditing(selected_domain_ids);
-          createRows();
           var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
           successMessage("Successfully changed registrar information for " + plural_success_msg + "!");
         }
         else {
           errorMessage(data.message);
         }
+        updateEditorEditing(selected_domain_ids);
+        createRows();
       });
     });
 
@@ -820,7 +835,6 @@ function checkBox(module_value, elem, child){
           successMessage("Successfully changed settings for " + plural_success_msg + "!");
         }
         listings = data.listings;
-        updateEditorEditing(selected_ids);
         createRows();
       }
       else {
@@ -830,7 +844,6 @@ function checkBox(module_value, elem, child){
 
         //not premium but tried to update premium stuff
         if (data.message == "not-premium"){
-          updateEditorEditing(selected_ids);
           var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
         }
         else {
@@ -867,6 +880,8 @@ function checkBox(module_value, elem, child){
         }
 
       }
+
+      updateEditorEditing(selected_ids);
     });
   }
 
@@ -1069,20 +1084,20 @@ function getListingOffers(selected_listings, selected_domain_ids){
   }).done(function(data){
     if (data.state == "success"){
       listings = data.listings;
-
-      //make offer rows for domains we didnt yet
-      for (var x = 0 ; x < selected_listings.length ; x++){
-        for (var y = 0 ; y < listings.length ; y++){
-          if (listings[y].id == selected_listings[x].id){
-            selected_listings[x].offers = listings[y].offers;
-            updateOffersTable(selected_listings[x], selected_domain_ids.length);
-            break;
-          }
-        }
-      }
     }
     else {
       errorMessage(data.message);
+    }
+
+    //make offer rows for domains we didnt yet
+    for (var x = 0 ; x < selected_listings.length ; x++){
+      for (var y = 0 ; y < listings.length ; y++){
+        if (listings[y].id == selected_listings[x].id){
+          selected_listings[x].offers = listings[y].offers;
+          updateOffersTable(selected_listings[x], selected_domain_ids.length);
+          break;
+        }
+      }
     }
   });
 }
@@ -1113,7 +1128,7 @@ function updateOffersTable(listing_info, total_domains){
       }
 
       //accepted an offer!
-      if (listing_info.offers[x].deposited == 1 && listing_info.offers[x].transferred != -1){
+      if (listing_info.offers[x].deposited == 1 && listing_info.offers[x].transferred != 1){
         listing_info.accepted = 1;
         cloned_offer_row.find(".td-offer-status").text('Sold (Not Transferred)').addClass('is-primary');
       }
@@ -1187,8 +1202,11 @@ function editOfferModal(offer, listing_info){
     var accept_or_reject_text = (offer.accepted == 1) ? "Accepted" : "Rejected";
     $("#offer-modal-domain").text(accept_or_reject_text + " offer for " + listing_info.domain_name);
 
+    //hide margin on modal
+    $("#offer-response-wrapper").addClass('remove-margin-bottom-content');
+
     //accepted and toolbar visible (not already displaying whats next)
-    if (offer.accepted && !$("#offers-toolbar").hasClass('is-hidden')){
+    if (!offer.transferred && offer.accepted && !$("#offers-toolbar").hasClass('is-hidden')){
       $("#offer-modal-whats-next").removeClass('is-hidden').off().on("click", function(){
         whatsNextOfferView(listing_info);
       });
@@ -1200,6 +1218,10 @@ function editOfferModal(offer, listing_info){
     $("#offer-modal-domain").text("Offer for " + listing_info.domain_name);
     $("#offer-response-label").addClass('is-hidden');
     $("#offer-response").val("").removeClass('is-disabled');
+
+    //hide margin on modal
+    $("#offer-response-wrapper").removeClass('remove-margin-bottom-content');
+
     $("#accept_button").off().on("click", function(){
       acceptOrRejectOffer(true, $(this), listing_info, offer);
     });
@@ -1322,7 +1344,10 @@ function whatsNextOfferView(listing_info, dont_reselect){
   $("#offer-response-wrapper").addClass('remove-margin-bottom-content');
 
   //show appropriate next steps
-  if (listing_info.deposited){
+  if (listing_info.transferred){
+    $("#transferred-offer").removeClass('is-hidden');
+  }
+  else if (listing_info.deposited){
     $("#deposited-offer").removeClass('is-hidden');
     deposit_offer = true;
     $("#deposited-deadline").text(moment(offer.deadline).format("MMMM DD, YYYY"));
@@ -1691,21 +1716,21 @@ function createDNSRecordRows(selected_domain_ids, force){
     getDNSRecords(selected_listings, selected_domain_ids, function(data){
       if (data.state == "success"){
         listings = data.listings;
-
-        //make tables for domains we didnt yet
-        for (var x = 0 ; x < selected_listings.length ; x++){
-          for (var y = 0 ; y < listings.length ; y++){
-            if (listings[y].id == selected_listings[x].id){
-              selected_listings[x].a_records = listings[y].a_records;
-              selected_listings[x].whois = listings[y].whois;
-              createDNSTable(selected_listings[x], selected_domain_ids.length, selected_listings[x].client_index);
-              break;
-            }
-          }
-        }
       }
       else {
         errorMessage(data.message);
+      }
+
+      //make tables for domains we didnt yet
+      for (var x = 0 ; x < selected_listings.length ; x++){
+        for (var y = 0 ; y < listings.length ; y++){
+          if (listings[y].id == selected_listings[x].id){
+            selected_listings[x].a_records = listings[y].a_records;
+            selected_listings[x].whois = listings[y].whois;
+            createDNSTable(selected_listings[x], selected_domain_ids.length, selected_listings[x].client_index);
+            break;
+          }
+        }
       }
     });
   }

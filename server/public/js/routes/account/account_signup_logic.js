@@ -70,13 +70,13 @@ $(document).ready(function() {
   //verify passwords are matching
   $("#verify-pw").keyup(function() {
     if ($("#pw-input").val().length > 0 && $("#pw-input").val() == $(this).val()) {
-      showSuccessDanger($(this), true);
+      showSuccessDanger($("#verify-pw"), true);
     }
     else if ($(this).val().length == 0){
-      showSuccessDanger($(this));
+      showSuccessDanger($("#verify-pw"));
     }
     else {
-      showSuccessDanger($(this), false);
+      showSuccessDanger($("#verify-pw"), false);
     }
   });
 

@@ -747,6 +747,22 @@
         </a>
       </div>
     </div>
+    <div id="transferred-offer" class="whats-next-offer control is-hidden">
+      <div class="box no-shadow no-border content">
+        <h3 class="is-bold">
+          Congratulations on selling your domain.
+        </h3>
+        <p>
+          The money has been deposited and verified by DomaHub. You can see your earnings on your <a class="is-primary is-underlined contact-link" href="/settings#transactions">Account Settings transactions</a> page.
+        </p>
+        <figure class="image is-64x64">
+          <img src="/images/lib/smile.png">
+        </figure>
+        <p>
+          Have questions about this transaction? <a class="is-primary is-underlined contact-link" href="/contact">Contact us</a> for assistance.
+        </p>
+      </div>
+    </div>
 
     <!-- OFFER MODAL -->
     <div id="offer-modal" class="modal">
@@ -893,16 +909,16 @@
             <span>Offer</span>
             <div class="icon is-small"><i class="far fa-sort"></i></div>
           </th>
-          <th class="offer-header-sort is-hidden-456px" data-value="name">
-            <span>Name</span>
+          <th class="offer-header-sort" data-value="accepted">
+            <span>Status</span>
             <div class="icon is-small"><i class="far fa-sort"></i></div>
           </th>
           <th class="offer-header-sort is-hidden-mobile" data-value="timestamp">
             <span>Date</span>
             <div class="icon is-small"><i class="far fa-sort"></i></div>
           </th>
-          <th class="offer-header-sort" data-value="accepted">
-            <span>Status</span>
+          <th class="offer-header-sort is-hidden-456px" data-value="name">
+            <span>Name</span>
             <div class="icon is-small"><i class="far fa-sort"></i></div>
           </th>
         </tr>
@@ -911,14 +927,14 @@
         <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
           <td>
             <span class="td-offer-domain"></span>
-            <div class="icon is-tooltip is-inline is-small" data-balloon-length="medium" data-balloon="You can click on this offer to view more details or respond to it." data-balloon-pos="right">
+            <div class="icon is-tooltip is-inline is-small" data-balloon-length="medium" data-balloon="Click on this offer to view more details or respond to it." data-balloon-pos="right">
               <i class="far fa-question-circle"></i>
             </div>
           </td>
           <td class="td-offer-offer"></td>
-          <td class="td-offer-name is-hidden-456px"></td>
-          <td class="td-offer-timestamp is-hidden-mobile"></td>
           <td class="td-offer-status"></td>
+          <td class="td-offer-timestamp is-hidden-mobile"></td>
+          <td class="td-offer-name is-hidden-456px"></td>
         </tr>
       </tbody>
     </table>

@@ -32,6 +32,11 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------LOGIN / LOGOUT-------------------------------
 
+  //login to demo user
+  app.get("/demo", [
+    auth_functions.loginToDemo
+  ]);
+
   //render login page
   app.get('/login', [
     auth_functions.checkLoggedIn,
