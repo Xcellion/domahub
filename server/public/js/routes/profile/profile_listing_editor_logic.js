@@ -117,9 +117,19 @@ function updateEditorEditing(selected_domain_ids){
     $("#view-listings-button-drop").empty();
     var domain_names_list = getSelectedDomains("domain_name");
     for (var x = 0 ; x < domain_names_list.length ; x++){
-      var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
-      listing_href = (window.location.hostname.indexOf("domahub") != -1) ? listing_href : "http://localhost:8080/listing/" + domain_names_list[x];
-      listing_href = (!user.id) ? "https://domahub.com/listing/" + domain_names_list[x].toLowerCase() + "?compare=true&theme=Random" : listing_href;
+
+      //if demo
+      if (!user.id){
+        var listing_href = ((window.location.hostname.indexOf("domahub") != -1) ? "https://domahub.com/listing/" + domain_names_list[x].toLowerCase() : "http://localhost:8080/listing/" + domain_names_list[x].toLowerCase()) + "?compare=true&theme=Random";
+      }
+      //if production
+      else if (window.location.hostname.indexOf("domahub") != -1){
+        var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
+      }
+      //testing
+      else {
+        var listing_href = "https://localhost:8080/listing/" + domain_names_list[x].toLowerCase();
+      }
 
       var clipped_domain_name = (domain_names_list[x].length > 25) ? domain_names_list[x].substr(0, 15) + "..." + domain_names_list[x].substr(domain_names_list[x].length - 7, domain_names_list[x].length - 1) : domain_names_list[x];
       $("#view-listings-button-drop").append("<a target='_blank' href='" + listing_href + "' class='is-underlined'>" + clipped_domain_name + "</a>" + " ");
