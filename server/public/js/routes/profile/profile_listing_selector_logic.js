@@ -350,7 +350,7 @@ function updateDomainRow(tempRow, listing_info, now){
   var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
   listing_href = (window.location.hostname.indexOf("domahub") != -1) ? listing_href : "http://localhost:8080/listing/" + listing_info.domain_name;
-  listing_href = (!user.id) ? listing_href += "?compare=true&theme=Random" : listing_href;
+  listing_href = (!user.id) ? "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "?compare=true&theme=Random" : listing_href;
 
   tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mmA"));
