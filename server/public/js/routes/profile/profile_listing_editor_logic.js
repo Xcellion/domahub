@@ -118,7 +118,7 @@ function updateEditorEditing(selected_domain_ids){
     var domain_names_list = getSelectedDomains("domain_name");
     for (var x = 0 ; x < domain_names_list.length ; x++){
       var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
-      listing_href = (window.location.hostname == "domahub.com") ? listing_href : "http://localhost:8080/listing/" + domain_names_list[x];
+      listing_href = (window.location.hostname.indexOf("domahub") != -1) ? listing_href : "http://localhost:8080/listing/" + domain_names_list[x];
       listing_href = (!user.id) ? listing_href += "?compare=true&theme=Random" : listing_href;
 
       var clipped_domain_name = (domain_names_list[x].length > 25) ? domain_names_list[x].substr(0, 15) + "..." + domain_names_list[x].substr(domain_names_list[x].length - 7, domain_names_list[x].length - 1) : domain_names_list[x];
