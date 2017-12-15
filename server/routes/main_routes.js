@@ -28,11 +28,6 @@ module.exports = function(app){
     main_functions.contactUs
   ]);
 
-  //redirect to demo
-  app.get("/demo", [
-    main_functions.redirectToDemo
-  ]);
-
   //</editor-fold>
 
 }

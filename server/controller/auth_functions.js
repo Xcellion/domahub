@@ -7,6 +7,7 @@ var stripe_functions = require('./stripe_functions.js');
 var passport = require('../lib/passport.js').passport;
 var error = require('../lib/error.js');
 var mailer = require('../lib/mailer.js');
+var Descriptions = require("../lib/descriptions.js");
 
 //</editor-fold>
 
@@ -18,11 +19,317 @@ var validator = require("validator");
 var request = require('request');
 
 var path = require("path");
+var moment = require("moment");
 
 var monkey_api_key = "8255be227b33934b7822c777f2cbb11e-us15"
 var monkey_url = "https://us15.api.mailchimp.com/3.0/lists/9bcbd932cd/members"
 
 //</editor-fold>
+
+//<editor-fold>------------------------------------------DEMO USER OBJECT---------------------------------------
+
+//user object for domahub demo
+var demo_domahub_user = {
+  id : false,
+  type : 2,
+  username : "DomaHubDemo",
+  email : "general@domahub.com",
+  paypal_email : "general@domahub.com",
+  stripe_account_id : "demo",
+  stripe_account : {
+    addressline1 : "555 Domain Street",
+    addressline2 : null,
+    birthday_day : 1,
+    birthday_month : 1,
+    birthday_year : 1970,
+    charges_enabled : true,
+    city : "Domain City",
+    country : "US",
+    first_name : "DomaHub",
+    last_name : "Demo",
+    postal_code : "11111",
+    state : "CA",
+    transfers_enabled : true,
+  },
+  stripe_customer_id : "demo",
+  stripe_customer : {
+    brand : "Visa",
+    charges : [],
+    last4 : "1234",
+    upcoming_invoice : {
+      amount_due : 500,
+      date : moment().endOf("month").valueOf()
+    }
+  },
+  stripe_subscription_id : "demo",
+  stripe_subscription : {
+    cancel_at_period_end : false,
+    created : moment().valueOf(),
+    current_period_end : moment().endOf("month").valueOf()
+  },
+  stripe_bank : {
+    bank_country : "US",
+    bank_name : "DomaHub Demo Bank",
+    currency : "USD",
+    last4 : "1234"
+  },
+  transactions : {
+    total : 5,
+    stripe_transactions : [
+      {
+        amount : 2500000,
+        amount_refunded : 0,
+        stripe_fees : "72530",
+        doma_fees : "0",
+        available_on : moment().valueOf(),
+        created : moment().subtract(1, "month").valueOf(),
+        currency : "usd",
+        domain_name : "mysolddomain.com",
+      },
+      {
+        amount : 25000,
+        amount_refunded : 0,
+        stripe_fees : "755",
+        doma_fees : "0",
+        available_on : moment().valueOf(),
+        created : moment().subtract(1, "month").valueOf(),
+        currency : "usd",
+        domain_name : "mycooldomain.com",
+        rental_id : "demorental1",
+        renter_name : "Guest",
+      }
+    ]
+  },
+  listings : [
+    {
+      id : "demo1",
+      domain_name : "cooldomains.com",
+      status : 1,
+      verified : 1,
+      min_price : 10000,
+      buy_price : 25000,
+      date_created : moment().add(6, "day").subtract(1, "year").valueOf(),
+      date_expire : moment().add(6, "day").valueOf(),
+      categories : "hightraffic industry other startup",
+      description : Descriptions.random(),
+      registrar_cost : 12.00,
+      registrar_name : "GoDaddy, LLC",
+      rentable : 1,
+      offers_count : 1,
+      price_type : "month",
+      price_rate : 200,
+      paths : "",
+      offers : [
+        {
+          accepted : null,
+          bin : null,
+          deadline : null,
+          domain_name : "mycooldomains.com",
+          email : "dave@buyer.com",
+          id : false,
+          message : "Hey, this is an amazing domain. I'm interested in purchasing it. Let's talk.",
+          name : "Dave Johnson",
+          offer : 10000,
+          phone : "+1 111-222-3333",
+          response : null,
+          timestamp : moment().valueOf(),
+          user_ip : null
+        }
+      ]
+    },
+    {
+      id : "demo2",
+      domain_name : "mycooldomain.com",
+      status : 1,
+      verified : 1,
+      min_price : 3000,
+      buy_price : 5000,
+      rented : 1,
+      date_created : moment().add(1, "month").subtract(1, "year").valueOf(),
+      date_expire : moment().add(1, "month").valueOf(),
+      categories : "industry other startup",
+      description : Descriptions.random(),
+      registrar_cost : 12.00,
+      registrar_name : "GoDaddy, LLC",
+      rentable : 1,
+      offers_count : 0,
+      price_type : "month",
+      price_rate : 250,
+      paths : "",
+      offers : [
+        {
+          accepted : 0,
+          bin : null,
+          deadline : null,
+          domain_name : "mycooldomains.com",
+          email : "suspicious@dude.com",
+          id : false,
+          message : "Hey, let me buy this domain please.",
+          name : "Suspicious Buyer",
+          offer : 3000,
+          phone : "+1 222-222-2222",
+          response : null,
+          timestamp : moment().subtract(1, "month").valueOf(),
+          user_ip : null
+        }
+      ]
+    },
+    {
+      id : "demo3",
+      domain_name : "abc.xyz",
+      status : 1,
+      verified : 1,
+      min_price : 0,
+      buy_price : 0,
+      date_created : moment().valueOf(),
+      date_expire : moment().add(1, "year").valueOf(),
+      categories : "brandable business career industry keywords other promotion startup technology",
+      description : Descriptions.random(),
+      registrar_cost : 12.00,
+      registrar_name : "GoDaddy, LLC",
+      rentable : 1,
+      offers_count : 3,
+      price_type : "month",
+      price_rate : 5000,
+      paths : "",
+      offers : [
+        {
+          accepted : 0,
+          bin : null,
+          deadline : null,
+          domain_name : "abc.xyz",
+          email : "sarah@domainers.com",
+          id : false,
+          message : "OMG this is an amazing deal...let's negotiate.",
+          name : "Sarah C",
+          offer : 5000,
+          phone : "+1 111-222-3333",
+          response : null,
+          timestamp : moment().subtract(5, "day").valueOf(),
+          user_ip : null
+        },
+        {
+          accepted : null,
+          bin : null,
+          deadline : null,
+          domain_name : "abc.xyz",
+          email : "lisa@buyer.com",
+          id : false,
+          message : "Hello, please let me purchase this domain for my next venture.",
+          name : "Lisa K",
+          offer : 25000,
+          phone : "+1 999-888-2255",
+          response : null,
+          timestamp : moment().subtract(3, "day").valueOf(),
+          user_ip : null
+        },
+        {
+          accepted : null,
+          bin : null,
+          deadline : null,
+          domain_name : "abc.xyz",
+          email : "john@highroller.com",
+          id : false,
+          message : "You won't get a better offer elsewhere. I'll match whatever you get.",
+          name : "John",
+          offer : 150000,
+          phone : "+1 999-999-9999",
+          response : null,
+          timestamp : moment().valueOf(),
+          user_ip : null
+        }
+      ]
+    },
+    {
+      id : "demo4",
+      domain_name : "goingon.holiday",
+      status : 1,
+      verified : 1,
+      min_price : 0,
+      buy_price : 0,
+      date_created : moment().add(5, "month").subtract(1, "year").valueOf(),
+      date_expire : moment().add(5, "month").valueOf(),
+      categories : "event hightraffic holiday kids lifestyle niche other personal promotion shopping toys travel",
+      description : Descriptions.random(),
+      registrar_cost : 9.99,
+      registrar_name : "Namecheap, LLC",
+      rentable : 0,
+      offers_count : 0,
+      price_type : "day",
+      price_rate : 50,
+      paths : "",
+      offers : []
+    },
+    {
+      id : "demo5",
+      domain_name : "unverifieddomain.com",
+      status : 0,
+      verified : null,
+      min_price : 10000,
+      buy_price : 25000,
+      a_records : [],
+      whois : {
+        "Registrar" : "GoDaddy, LLC",
+        "Registrar URL" : "https://godaddy.com"
+      },
+      date_created : moment(),
+      date_expire : moment().add(1, "year").valueOf(),
+      categories : "hightraffic industry other startup",
+      description : Descriptions.random(),
+      registrar_cost : 9.99,
+      registrar_name : "NameCheap, LLC",
+      rentable : 1,
+      offers_count : 0,
+      price_type : "month",
+      price_rate : 200,
+      paths : "",
+      offers : []
+    },
+    {
+      id : "demo6",
+      domain_name : "mysolddomain.com",
+      status : 0,
+      deposited : 1,
+      transferred : 1,
+      accepted : 1,
+      verified : 1,
+      min_price : 5000,
+      buy_price : 25000,
+      date_created : moment(),
+      date_expire : moment().add(1, "year").valueOf(),
+      categories : "hightraffic industry other startup",
+      description : Descriptions.random(),
+      registrar_cost : 9.99,
+      registrar_name : "NameCheap, LLC",
+      rentable : 1,
+      offers_count : 0,
+      price_type : "month",
+      price_rate : 200,
+      paths : "",
+      offers : [
+        {
+          accepted : 1,
+          bin : 1,
+          deposited : 1,
+          transferred : 1,
+          deadline : moment().subtract(1, "week"),
+          domain_name : "mysolddomain.com",
+          email : "jack@leezak.com",
+          id : false,
+          message : "Great price, great domain, I'll take it.",
+          name : "Jack Lee",
+          offer : 25000,
+          phone : "+1 123-123-1234",
+          response : "Sounds great, Jack. Thanks.",
+          timestamp : moment().subtract(1, "week").valueOf(),
+          user_ip : null
+        },
+      ]
+    }
+  ],
+}
+
+//</editor-fold>//email variables
 
 module.exports = {
 
@@ -63,7 +370,8 @@ module.exports = {
   checkReferralCode : function(req, res, next){
     console.log("F: Checking referral code validity...");
 
-    if (!req.params.promo_code){
+    //if no promo code or if it's the demo username
+    if (!req.params.promo_code || req.params.promo_code == "domahubdemo"){
       res.redirect("/signup");
     }
     else {
@@ -108,8 +416,8 @@ module.exports = {
       error.handler(req, res, "Please enter an email address!");
     }
     //invalid username
-    else if (!username){
-      error.handler(req, res, "Please enter a username!");
+    else if (!username || username == "domahubdemo"){
+      error.handler(req, res, "Please enter a valid username!");
     }
     //username has a space
     else if (/\s/.test(username)){
@@ -238,7 +546,26 @@ module.exports = {
 
   //<editor-fold>------------------------------------------LOGIN / LOGOUT---------------------------------------
 
-  //check if account exists on domahub
+  //login as demo user
+  loginToDemo : function(req, res, next){
+
+    //if user is authenticated, log them out first
+    if (req.isAuthenticated()){
+      console.log("F: Logging out...");
+      req.logout();
+      delete req.user;
+    }
+
+    console.log("F: Attempting to log in as the DomaHub demo user...");
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    req.login(demo_domahub_user, function(err){
+      res.redirect("/profile/dashboard");
+    });
+  },
+
+  //check if account exists on domahub (for password reset)
   checkAccountExists : function(req, res, next){
     console.log("F: Checking if account exists...");
 
@@ -267,8 +594,13 @@ module.exports = {
         res.render("account/page_for_not_verified_email.ejs", {message: messageReset(req)});
       }
       else {
-        req.session.touch();  //reset maxAge for session since user did something
-        next();
+        if (!req.user.id && req.method == "POST"){
+          error.handler(req, res, "demo-error", "json");
+        }
+        else {
+          req.session.touch();  //reset maxAge for session since user did something
+          next();
+        }
       }
     }
     else {
@@ -618,4 +950,4 @@ function generateVerify(req, res, email, username, cb){
   });
 }
 
-//</editor-fold>//email variables
+//</editor-fold>

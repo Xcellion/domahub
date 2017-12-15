@@ -8,7 +8,6 @@ $(document).ready(function() {
   //<editor-fold>-------------------------------PORTFOLIO OVERVIEW / LATEST OFFERS-------------------------------
 
   updatePortfolioOverviewCounters();
-  updateLatestOffers();
 
   //</editor-fold>
 
@@ -87,12 +86,12 @@ function updatePortfolioOverviewCounters(){
 
   //figure out sold domains
   $("#sold-counter").text(user.listings.reduce(function(arr, listing) {
-    return (listing.deposited || listing.transferred) ? 1 : 0;
+    return arr + ((listing.deposited || listing.transferred) ? 1 : 0);
   }, 0));
 
   //figure out unanswered offers
   $("#offers-counter").text(user.listings.reduce(function(arr, listing) {
-    return listing.offers_count || 0;
+    return arr + (listing.offers_count || 0);
   }, 0));
 
   //figure out total unverified
@@ -101,27 +100,41 @@ function updatePortfolioOverviewCounters(){
   }, 0) || 0;
   $("#unverified-counter").text(num_total_unverified);
   if (num_total_unverified > 0){
-    $("#unverified-counter").prev(".heading").addClass('is-danger');
+    $("#unverified-counter").addClass('is-danger');
   }
-}
 
-//update latest offers card
-function updateLatestOffers(){
-  for (var x = 0 ; x < user.listings.length ; x++){
-
-    //unanswered offers exist!
-    if (user.listings.offers_count > 0){
-      var offers_clone = $("#offers-clone").clone().removeAttr("id").removeClass('is-hidden');
-      offers_clone.find(".offers-domain-name").text(user.listings[x].domain_name);
-      var offers_count = user.listings[x].offers_count;
-      offers_clone.find(".offers-count").text(user.listings[x].offers_count + ((offers_count == 1) ? " offer" : " offers"));
+  //figure out total expiring
+  var num_total_expiring = user.listings.reduce(function(arr, listing) {
+    if (moment(listing.date_expire).diff(moment(), "day") <= 30){
+      return arr + 1;
     }
+    else {
+      return arr;
+    }
+  }, 0) || 0;
+  $("#expiring-counter").text(num_total_expiring);
+  if (num_total_expiring > 0){
+    $("#expiring-counter").addClass('is-danger');
   }
 
-  //no offers!
-  if ($(".offers:not(#offers-clone)").length == 0){
-    $("#no-offers").removeClass('is-hidden');
+  //figure out total profit
+  var total_profit = 0;
+  var total_expenses = 0;
+  for (var x = 0 ; x < user.transactions.stripe_transactions.length ; x++){
+    var current_expense = parseFloat(user.transactions.stripe_transactions[x].doma_fees) + parseFloat(user.transactions.stripe_transactions[x].stripe_fees);
+    total_profit += user.transactions.stripe_transactions[x].amount - user.transactions.stripe_transactions[x].amount_refunded - current_expense;
+    total_expenses += current_expense;
   }
+  $("#profit-counter").addClass("is-primary").text(wNumb({
+    prefix: '$ ',
+    decimals: 2,
+    thousand: ','
+  }).to(total_profit/100));
+  $("#expenses-counter").text(wNumb({
+    prefix: '$ ',
+    decimals: 2,
+    thousand: ','
+  }).to(total_expenses/100));
 }
 
 //</editor-fold>
@@ -699,7 +712,7 @@ function updateLatestOffers(){
           var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
           return [domain_name, row[1], row[2]];
         }).filter(function(row){
-          return listing_regex.test(row[0]);
+          return listing_regex.test(row[0]) && row[1] != "(not set)";
         }).sort(function(a, b){
           return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
         });

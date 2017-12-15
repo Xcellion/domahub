@@ -580,28 +580,31 @@ module.exports = {
   },
 
   //get all charges made to account (transactions of rentals + sales)
-  getTransactions : function(req, res, next){
-    if (req.user.stripe_account_id){
-      console.log('SF: Retrieving all Stripe transactions...');
+  getStripeTransactions : function(req, res, next){
+    console.log("SF: Getting Stripe transactions for an account...");
 
+    if (!req.user.transactions || req.method == "POST"){
       stripe.charges.list({
         transfer_group: req.user.id,
         expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
       }, function(err, charges) {
         if (err) { error.log(err, "Failed to get Stripe charges."); }
         updateUserTransactions(req.user, charges.data, "stripe");
-        res.send({
-          state : "success",
-          user : req.user
-        });
+
+        //refreshing transactions
+        if (req.method == "POST"){
+          res.send({
+            state : "success",
+            user : req.user
+          });
+        }
+        else {
+          next();
+        }
       });
     }
     else {
-      updateUserTransactions(req.user, [], "stripe");
-      res.send({
-        state : "success",
-        user : req.user
-      });
+      next();
     }
   },
 
@@ -1218,10 +1221,10 @@ function updateUserTransactions(user, charges, type){
   if (!user.dev_transactions && process.env.NODE_ENV == "dev"){
     user.dev_transactions = {};
   }
-  if (!user.transactions){
-    user.transactions = {
-      total : 0
-    }
+
+  //reset transactions
+  user.transactions = {
+    total : 0
   }
 
   //stripe transactions
