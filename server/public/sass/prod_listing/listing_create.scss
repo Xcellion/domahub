@@ -60,15 +60,6 @@
   }
 }
 
-.modal-content {
-  background-color: $white;
-  border-radius: $radius-large;
-  padding: 20px;
-  &.is-small {
-    max-width: 300px !important;
-  }
-}
-
 .aligned {
   vertical-align: top !important;
 }
