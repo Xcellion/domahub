@@ -776,7 +776,7 @@ module.exports = {
     //add to search only if not development
     if (process.env.NODE_ENV != "dev"){
       var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-      var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+      var account_id = (typeof req.user == "undefined" || req.user != false) ? null : req.user.id;
       var now = new Date().getTime();
       var history_info = {
         account_id: account_id,      //who searched if who exists

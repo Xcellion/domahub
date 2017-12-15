@@ -65,7 +65,7 @@ module.exports = {
         con.query(custom_query, post, function(err, result, fields){
           con.release();
           if (err){
-            error.log(err, custom_query);
+            error.log(err, custom_query + JSON.stringify(post));
             callback({
               state : "error",
               info : error_description
@@ -81,7 +81,7 @@ module.exports = {
       }
       //something went wrong with the mysql query!
       else {
-        error.log(err, custom_query);
+        error.log(err, custom_query + JSON.stringify(post));
         callback({
           state : "error",
           info : error_description

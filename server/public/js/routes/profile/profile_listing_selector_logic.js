@@ -123,12 +123,12 @@ $(document).ready(function(){
       $("#refresh-listings-button").removeClass('is-loading');
       if (data.state == "success"){
         listings = data.listings;
-        createRows();
-        showRows();
       }
       else {
         errorMessage(data.message);
       }
+      createRows();
+      showRows();
     });
   });
 
@@ -348,8 +348,19 @@ function updateRowData(row, listing_info){
 //update the clone row with row specifics
 function updateDomainRow(tempRow, listing_info, now){
   var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
-  var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
-  listing_href = (window.location.hostname == "domahub.com") ? listing_href : "http://localhost:8080/listing/" + listing_info.domain_name;
+
+  //if demo
+  if (!user.id){
+    var listing_href = ((window.location.hostname.indexOf("domahub") != -1) ? "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() : "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase()) + "?compare=true&theme=Random";
+  }
+  //if production
+  else if (window.location.hostname.indexOf("domahub") != -1){
+    var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name.toLowerCase();
+  }
+  //testing
+  else {
+    var listing_href = "https://localhost:8080/listing/" + listing_info.domain_name.toLowerCase();
+  }
 
   tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mmA"));
@@ -357,7 +368,8 @@ function updateDomainRow(tempRow, listing_info, now){
   //registrar expiration date
   if (listing_info.date_expire){
     var moment_expire = moment(listing_info.date_expire);
-    tempRow.find(".td-date-expire").text(moment.duration(moment_expire.diff(now)).humanize()).attr("title", "Expires on " +  moment_expire.format("MMMM DD, YYYY - hh:mmA"));
+    var humanized = moment.duration(moment_expire.diff(now)).humanize(true);
+    tempRow.find(".td-date-expire").text(humanized.substr(0,1).toUpperCase() + humanized.substr(1, humanized.length)).attr("title", "Expires on " +  moment_expire.format("MMMM DD, YYYY - hh:mmA"));
   }
   else {
     tempRow.find(".td-date-expire").text("-").removeAttr("title");
@@ -372,6 +384,9 @@ function updateDomainRow(tempRow, listing_info, now){
   }
   else if (listing_info.accepted){
     var status_text = "Accepted An Offer";
+  }
+  else if (listing_info.rented){
+    var status_text = "Currently Rented";
   }
   else if (listing_info.verified && listing_info.status == 1){
     var status_text = "Active";
@@ -561,14 +576,8 @@ function viewDomainOffers(){
 //change domain
 function viewDomainDNS(){
   var selected_domain_ids = getSelectedDomains("id", false);
-  if (selected_domain_ids.length > 0){
-    showEditor("verify", selected_domain_ids);
-    updateEditorUnverified(selected_domain_ids);
-  }
-  else {
-    window.history.replaceState({}, "", "/profile/mylistings");
-    showSelector();
-  }
+  showEditor("verify", selected_domain_ids);
+  updateEditorUnverified(selected_domain_ids);
 }
 
   //<editor-fold>-------------------------------DELETE LISTINGS-------------------------------

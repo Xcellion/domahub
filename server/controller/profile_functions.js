@@ -44,7 +44,7 @@ var jwtClient = new google.auth.JWT(
 
 module.exports = {
 
-  //<editor-fold>-------------------------------GOOGLE ANALYTICS-------------------------------
+  //<editor-fold>-------------------------------------GOOGLE ANALYTICS-------------------------------
 
   //google embed analytics authentication
   authWithGoogle : function(req, res, next){
