@@ -546,6 +546,15 @@ module.exports = {
 
   //<editor-fold>------------------------------------------LOGIN / LOGOUT---------------------------------------
 
+  //logout demo
+  logoutDemo : function(req, res, next){
+    if (req.isAuthenticated() && !req.user.id){
+      console.log("F: Logging out as the Domahub demo user...");
+      req.logout();
+    }
+    next();
+  },
+
   //login as demo user
   loginToDemo : function(req, res, next){
 
