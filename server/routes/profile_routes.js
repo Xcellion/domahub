@@ -16,6 +16,7 @@ module.exports = function(app){
   app.get("/profile/dashboard", [
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
+    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     profile_functions.updateAccountSettingsGet,
@@ -97,6 +98,7 @@ module.exports = function(app){
     profile_functions.getAccountListings,
     profile_functions.getAccountRegistrars,
     stripe_functions.getStripeAccount,
+    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeCustomerCharges,
     stripe_functions.getStripeCustomerNextInvoice,
@@ -117,7 +119,7 @@ module.exports = function(app){
   app.post("/profile/gettransactions", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    stripe_functions.getTransactions
+    stripe_functions.getStripeTransactions
   ]);
 
   //</editor-fold>
@@ -222,7 +224,7 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
-    stripe_functions.getTransactions,
+    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     stripe_functions.transferMoney

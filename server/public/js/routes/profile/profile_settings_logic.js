@@ -89,7 +89,7 @@ $(document).ready(function() {
 
     //</editor-fold>
 
-    //<editor-fold>-------------------------------SUBMIT REGISTRAR-------------------------------
+    //<editor-fold>-------------------------------CONNECT A REGISTRAR-------------------------------
 
     updateRegistrars();
 
@@ -452,6 +452,13 @@ function showSectionByURL(){
 
 //<editor-fold>-------------------------------ACCOUNT TAB-------------------------------
 
+  //prefills all domahub account info
+  function prefillAccountInfo(){
+    $(".account-input").each(function(){
+      $(this).val(user[$(this).data("uservar")]);
+    });
+  }
+
   //<editor-fold>-------------------------------SUBMIT ACCOUNT CHANGES-------------------------------
 
   //submit account changes AJAX
@@ -473,6 +480,8 @@ function showSectionByURL(){
         else {
           errorMessage(data.message);
         }
+
+        prefillAccountInfo();
       });
     }
   }
@@ -495,14 +504,9 @@ function showSectionByURL(){
   function cancelChanges(){
     clearNotification();
     hideSaveCancelButtons();
-    $(".account-input").each(function(){
-      $(this).val(user[$(this).data("uservar")]);
-    });
-
-    closeModals();
-
-    //prefill stripe account info
+    prefillAccountInfo();
     prefillStripeInfo();
+    closeModals();
   }
 
   //</editor-fold>
@@ -929,7 +933,6 @@ function showSectionByURL(){
 
   //change bank forms based on country
   function changeBankCountry(currency){
-    clearNotification();
     $("#account-wrapper").removeClass('is-hidden');
     $(".excess-routing-input").val("").attr("required", false);
     $("#account_number-input").attr("required", true);
@@ -1016,6 +1019,9 @@ function getTransactions(){
     if (data.state == "success"){
       user = data.user;
     }
+    else {
+      errorMessage(data.message);
+    }
     createTransactionsTable();
   });
 }
@@ -1086,10 +1092,10 @@ function createTransactionsRow(stripe_charge){
   else {
     //actionable
     if (stripe_charge.pending_transfer == "true"){
-      temp_row.find(".transactions-row-available").text("Requires Action").append('<span class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="far fa-exclamation-circle"></i></span>');
+      temp_row.find(".transactions-row-available").text("Requires Action").append('<div class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="far fa-exclamation-circle"></i></div>');
     }
     else {
-      temp_row.find(".transactions-row-available").text("Not yet available").append('<span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM DD, YYYY") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></span>');
+      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM DD, YYYY") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
     }
   }
 
@@ -1113,9 +1119,9 @@ function createTransactionsRow(stripe_charge){
     //tooltip
     var tooltip_size = (moneyFormat.to(total_earned).length > 6) ? "large" : "medium";
     var tooltip_text = "Total earned - " + moneyFormat.to(total_earned) + "&#10;" + "Total fees - " + moneyFormat.to(total_fees);
-    var tooltip_icon = $('<span class="icon is-small is-tooltip" data-balloon-break data-balloon-length="' + tooltip_size + '" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></span>');
+    var tooltip_icon = $('<div class="icon is-small is-tooltip" data-balloon-break data-balloon-length="' + tooltip_size + '" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
 
-    temp_row.find(".transactions-row-amount").text(moneyFormat.to(total_profit)).append(tooltip_icon);
+    temp_row.find(".transactions-row-amount").html("<span>" + moneyFormat.to(total_profit) + "</span>").append(tooltip_icon);
   }
 
   return temp_row;
@@ -1280,7 +1286,7 @@ function calculateTotals(){
 //<editor-fold>-------------------------------HELPERS-------------------------------
 
 function hideSaveCancelButtons(){
-  $(".toolbar-submit-button").removeClass('is-loading');
+  $(".toolbar-button").removeClass('is-loading');
   $(".toolbar-button").addClass('is-hidden');
 }
 
