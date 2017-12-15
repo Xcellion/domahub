@@ -1,3 +1,9 @@
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
+var error = require('./error.js');
+
+//</editor-fold>
+
 //<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var account_model = require('../models/account_model.js');
@@ -102,14 +108,24 @@ module.exports = {
             return done(null, false, {message: 'No user exists with that combination of email and password!'});
           }
 
-          //if the user is found but the password is wrong
-          else if (!bcrypt.compareSync(password, result.info[0].password)){
-            return done(null, false, {message: 'Invalid password! Please try again.'});
-          }
-
           else {
-            user = result.info[0];
-            return done(null, user);
+            bcrypt.compare(password, result.info[0].password, function(err, same){
+              //error with bcrypt
+              if (err) {
+                error.log(err, "Password comparison failed!");
+                return done(null, false, {message: 'Invalid password! Please try again.'});
+              }
+              else {
+                //if the user is found but the password is wrong
+                if (!same){
+                  return done(null, false, {message: 'Invalid password! Please try again.'});
+                }
+                else {
+                  user = result.info[0];
+                  return done(null, user);
+                }
+              }
+            })
           }
         });
       })
