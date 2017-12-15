@@ -9,19 +9,29 @@
   <%- include("../templates/navbar", {user: user}); %>
   <%- include("../templates/notifications.ejs"); %>
 
-  <section class="section is-medium min-height">
+  <section class="section is-medium is-primary">
     <div class="container">
       <div class="columns">
         <div class="column is-8 is-offset-2">
-          <div class="content">
-            <h1>Contact Us</h1>
-            <p>
-              Feel free to use the form below to send us any questions,
-              inquiries, suggestions, bug reports, and anything else
-              you wish to share!
+          <div class="content has-text-centered">
+            <figure class="image is-128x128">
+              <img src="/images/lib/contact-us.svg" alt="Contact Us Guy" />
+            </figure>
+            <h1 class="title is-2 is-white">Contact Us</h1>
+            <p class="subtitle is-4 is-white">
+              Use the form below to get in touch with our team.
             </p>
           </div>
-          <form id="contact-form" autocomplete="off">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-small">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <form id="contact-form" class="box" autocomplete="off" style="margin-top:-130px;">
             <label class="error_message label" for="contact_name">Name</label>
             <div class="control has-icon">
               <input id="contact_name" required class="input" name="contact_name" type="text">
