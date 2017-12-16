@@ -46,7 +46,7 @@ module.exports = {
           error.log(err, "Failed to retrieve Stripe customer.");
         }
         //update our DH database to remove stripe_customer_id
-        else if ((customer && customer.deleted) || !customer){
+        if (!customer || (customer && customer.deleted)){
           console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_customer_id");
         }
@@ -233,8 +233,9 @@ module.exports = {
         if (err){
           error.log(err, "Failed to retrieve Stripe subscription.");
         }
+
         //update our DH database to remove stripe_subscription_id
-        else if (!subscription){
+        if (!subscription){
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_subscription_id");
         }
@@ -393,7 +394,7 @@ module.exports = {
           error.log(err, "Failed to retrieve Stripe account.");
         }
         //update our DH database to remove stripe_account_id
-        else if (!account){
+        if (!account){
           console.log("SF: Not a real Stripe account! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_account_id");
         }

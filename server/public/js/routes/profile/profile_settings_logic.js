@@ -536,6 +536,10 @@ function showSectionByURL(){
         setupPaymentsHistory();
       }
 
+      //show and hide premium/basic stuff
+      $(".basic-elem").addClass('is-hidden');
+      $(".premium-elem").removeClass('is-hidden');
+
       //expiring
       if (user.stripe_subscription.cancel_at_period_end == true){
         //left nav and tab text
@@ -583,6 +587,10 @@ function showSectionByURL(){
     }
     else {
       $("#upgrade-to-premium-text, #upgrade-tab-header").text("Upgrade to Premium");
+
+      //show and hide premium/basic stuff
+      $(".basic-elem").removeClass('is-hidden');
+      $(".premium-elem").addClass('is-hidden');
 
       //has a credit card on file, but no premium
       if (user.stripe_customer){
