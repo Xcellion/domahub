@@ -70,7 +70,7 @@ module.exports = {
       next();
     }
     //if customer id and subscription id exists in our database
-    else if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && !req.user.stripe_customer.charges){
+    else if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && typeof req.user.stripe_customer.charges == "undefined"){
       console.log("SF: Getting Stripe customer payment history for an account...");
 
       stripe.charges.list({
@@ -96,7 +96,7 @@ module.exports = {
       next();
     }
     //if customer id and subscription id exists in our database
-    if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && req.user.stripe_customer.upcoming_invoice == undefined){
+    if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && typeof req.user.stripe_customer.upcoming_invoice == "undefined"){
       console.log("SF: Getting Stripe customer upcoming invoice for an account...");
 
       stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
@@ -371,8 +371,16 @@ module.exports = {
   applyPromoCode : function(req, res, next){
     applyPromoCodeStripe(req.user.stripe_subscription_id, req.user.promo_code, req.user.id, function(result){
       if (result){
-        res.json({
-          state:'success'
+        //update upcoming invoice
+        stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
+          if (err) { error.log(err, "Failed to get upcoming Stripe customer invoice."); }
+          else {
+            updateUserStripeCustomerInvoice(req.user, upcoming);
+          }
+          res.json({
+            state: 'success',
+            user : req.user
+          });
         });
       }
       else {
@@ -820,7 +828,7 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------STRIPE WEBHOOK-------------------------------
+  //<editor-fold>-------------------------------CREATE COUPON CODE-------------------------------
 
   //function so only wonmin can create codes
   checkAdmin : function(req, res, next){
@@ -871,14 +879,19 @@ module.exports = {
 
         //all successful!
         if (success_codes.length == parseFloat(req.params.number)){
-          mailer.sendBasicMail({
-            to: "general@domahub.com",
-            from: 'general@domahub.com',
-            subject: "Created new coupon codes on production!",
-            html: success_codes.join("</br>")
-          });
+          if (process.env.NODE_ENV == "dev"){
+            res.send(success_codes.join("</br>"))
+          }
+          else {
+            mailer.sendBasicMail({
+              to: "general@domahub.com",
+              from: 'general@domahub.com',
+              subject: "Created new coupon codes on production!",
+              html: success_codes.join("</br>")
+            });
+            res.redirect("/");
+          }
         }
-        res.redirect("/");
       });
 
     });
@@ -1138,6 +1151,9 @@ function newStripeSubscription(req, res, next){
         stripe_subscription_id : subscription.id,
         stripe_customer_id : req.user.stripe_customer_id
       }
+
+      //create this now for getting charges + invoice
+      req.user.stripe_subscription_id = subscription.id;
 
       //update date accessed in the promo code in our DB
       if (req.user.existing_promo_code){
