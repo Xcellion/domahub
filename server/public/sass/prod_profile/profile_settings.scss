@@ -91,15 +91,6 @@
   }
 }
 
-.modal-content {
-  background-color: $white;
-  border-radius: $radius-large;
-  padding: 20px;
-  &.is-small {
-    max-width: 400px;
-  }
-}
-
 .select {
   &.is-narrow {
     select {

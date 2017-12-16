@@ -1125,11 +1125,9 @@ function createTransactionsRow(stripe_charge){
     temp_row.data("total_profit", total_profit);
 
     //tooltip
-    var tooltip_size = (moneyFormat.to(total_earned).length > 6) ? "large" : "medium";
     var tooltip_text = "Total earned - " + moneyFormat.to(total_earned) + "&#10;" + "Total fees - " + moneyFormat.to(total_fees);
-    var tooltip_icon = $('<div class="icon is-small is-tooltip" data-balloon-break data-balloon-length="' + tooltip_size + '" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
 
-    temp_row.find(".transactions-row-amount").html("<span>" + moneyFormat.to(total_profit) + "</span>").append(tooltip_icon);
+    temp_row.find(".transactions-row-amount").html("<span data-balloon-break data-balloon='" + tooltip_text + "' data-balloon-pos='up'>" + moneyFormat.to(total_profit) + "</span>");
   }
 
   return temp_row;
