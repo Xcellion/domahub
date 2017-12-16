@@ -6,6 +6,8 @@
 @import '../bulma/components/menu.sass';
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/box.sass';
+@import '../bulma/elements/image.sass';
+@import '../bulma/elements/title.sass';
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/hamburger.sass';
@@ -14,35 +16,39 @@
 @import '../bulma/layout/section.sass';
 
 .faq-section {
-  padding-top: 70px;
+  padding: 70px 0;
+  border-top: 1px solid $border;
 }
 
 .faq-question {
+  font-size: 16px;
   font-weight: 500;
 }
 
 .faq-header {
   @include transition(all 0.25s ease);
-  color: $primary;
   cursor: pointer;
-  font-weight: 400;
   margin-bottom: 20px;
+  font-weight: 500;
+  letter-spacing: 1px;
   position: relative;
+  text-align: center;
   &::before {
     @include transition(all 0.25s ease);
+    @include translate(-50%,0);
     content: "";
     position: absolute;;
-    height: 100%;
-    width: 0;
+    height: 0;
+    width: 30px;
     background: $primary;
-    left: 0;
+    left: 50%;
     bottom: 0;
   }
   &.is-active {
     position: relative;
-    padding-left: 15px;
+    padding-bottom: 10px;
     &::before {
-      width: 5px;
+      height: 3px;
     }
   }
   &:hover {
