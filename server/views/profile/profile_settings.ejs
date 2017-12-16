@@ -215,23 +215,21 @@
 	          		</h3>
 	          	</div>
 	          	<div class="card-content">
-								<% if (!user.stripe_subscription_id) { %>
-	          			<div class="notification no-shadow has-icon is-primary">
-										<div class="icon-box">
-											<div class="icon is-white">
-												<i class="far fa-trophy-alt"></i>
-											</div>
-										</div>
-										<div class="content">
-											<p class="is-white">
-												Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
-												<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
-													Click here to learn more.
-												</a>
-											</p>
+          			<div class="basic-elem notification no-shadow has-icon is-primary">
+									<div class="icon-box">
+										<div class="icon is-white">
+											<i class="far fa-trophy-alt"></i>
 										</div>
 									</div>
-								<% } %>
+									<div class="content">
+										<p class="is-white">
+											Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
+											<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
+												Click here to learn more.
+											</a>
+										</p>
+									</div>
+								</div>
 	          		<div class="control is-spaced">
 	          			<div class="control-left">
 	          				<p>
@@ -240,13 +238,13 @@
 	          				<small id="renew-status" class="tip"></small>
 	          			</div>
 	          			<div class="control-right">
-	          				<a id="upgrade-button" class="basic-elem button is-stylish is-small is-primary is-outlined">
+	          				<a id="upgrade-button" class="button is-stylish is-small is-primary is-outlined">
 	          					<div class="icon is-small">
 	          						<i class="far fa-trophy-alt"></i>
 	          					</div>
 	          					<span class="button-text">Upgrade</span>
 	          				</a>
-	          				<div class="premium-elem control">
+	          				<div class="control">
 	          					<a id="cancel-premium-confirm-button" class="is-hidden is-outlined button is-danger is-stylish is-small">
 	          						<div class="icon is-small">
 	          							<i class="far fa-ban"></i>
@@ -281,7 +279,7 @@
 	          	</div>
 	          </div>
 
-	          <div id="payments-history-card" class="card is-fullwidth is-hidden">
+	          <div id="payments-history-card" class="premium-elem card is-fullwidth is-hidden">
 	          	<div class="card-header is-block">
 	          		<h3 class="card-header-title">
 	          			<span>Premium Payments History</span>
@@ -289,7 +287,7 @@
 	              <small id="next-charge-tip" class="tip is-inline-block"></small>
 	          	</div>
 	          	<div class="card-content">
-	              <table id="payment-history-table" class="table">
+	              <table id="payment-history-table" class="remove-margin-bottom-content table">
 	                <thead>
 	                  <tr>
 	                    <th>Date</th>
@@ -361,7 +359,7 @@
                   </a>
                 </div>
           		</div>
-              <table id="loading-referral-table" class="table">
+              <table id="loading-referral-table" class="remove-margin-bottom-content table">
           			<tbody>
                   <tr class="no-hover-effect">
                     <td>
@@ -374,7 +372,7 @@
                   </tr>
           			</tbody>
               </table>
-              <table id="no-referral-table" class="table is-hidden">
+              <table id="no-referral-table" class="remove-margin-bottom-content table is-hidden">
           			<tbody>
                   <tr id="no-referrals" class="no-hover-effect">
                     <td colspan="3">
@@ -390,7 +388,7 @@
                   </tr>
           			</tbody>
               </table>
-              <table id="referral-table" class="table is-hidden">
+              <table id="referral-table" class="remove-margin-bottom-content table is-hidden">
           			<thead>
 									<tr>
 										<th colspan="4">
