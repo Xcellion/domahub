@@ -41,7 +41,7 @@ $(document).ready(function() {
 
     //filter out only user listings
     var listing_filters = user.listings.map(function(listing){
-      return listing.domain_name;
+      return listing.domain_name.toLowerCase();
     }).join("|");
     var listing_regex = new RegExp("^(" + listing_filters + ")");
 
@@ -472,33 +472,40 @@ function updatePortfolioOverviewCounters(){
       stats_holder.new_sessions = ((stats_holder.new_users / stats_holder.sessions) * 100).toFixed(2);
       stats_holder.sessions_per_user = stats_holder.sessions / stats_holder.users;
 
+      //if missing data
+      for (var x in stats_holder){
+        if (!stats_holder[x] || typeof stats_holder[x] == "undefined" || isNaN(stats_holder[x])){
+          stats_holder[x] = 0;
+        }
+      }
+
       //animate the various counters
-      numberCountAnimation($("#users-counter"), stats_holder.users, {
+      numberCountAnimation($("#users-counter"), stats_holder.users || 0, {
         thousand : ",",
         decimals : 0
       });
-      numberCountAnimation($("#sessions-counter"), stats_holder.sessions, {
+      numberCountAnimation($("#sessions-counter"), stats_holder.sessions || 0, {
         thousand : ",",
         decimals : 0
       });
-      numberCountAnimation($("#bounce-rate-counter"), stats_holder.bounce_rate, {
+      numberCountAnimation($("#bounce-rate-counter"), stats_holder.bounce_rate || 0, {
         postfix : "%",
         decimals : 1
       });
-      timeCountAnimation($("#session-duration-counter"), stats_holder.session_duration);
-      numberCountAnimation($("#new-users-counter"), stats_holder.new_users, {
+      timeCountAnimation($("#session-duration-counter"), stats_holder.session_duration || 0);
+      numberCountAnimation($("#new-users-counter"), stats_holder.new_users || 0, {
         thousand : ",",
         decimals : 0
       });
-      numberCountAnimation($("#new-sessions-counter"), stats_holder.new_sessions, {
+      numberCountAnimation($("#new-sessions-counter"), stats_holder.new_sessions || 0, {
         postfix : "%",
         decimals : 1
       });
-      numberCountAnimation($("#sessions-per-user-counter"), stats_holder.sessions_per_user, {
+      numberCountAnimation($("#sessions-per-user-counter"), stats_holder.sessions_per_user || 0, {
         thousand : ",",
         decimals : 2
       });
-      numberCountAnimation($("#pageviews-counter"), stats_holder.pageviews, {
+      numberCountAnimation($("#pageviews-counter"), stats_holder.pageviews || 0, {
         thousand : ",",
         decimals : 0
       });
