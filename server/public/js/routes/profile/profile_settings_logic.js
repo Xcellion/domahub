@@ -785,7 +785,9 @@ function showSectionByURL(){
         user = data.user;
       }
       else {
-        errorMessage(data.message);
+        if (data.message != "demo-error"){
+          errorMessage(data.message);
+        }
       }
       createReferralsTable();
     });
