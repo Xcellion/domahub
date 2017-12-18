@@ -926,7 +926,7 @@ function setupOfferButtons(selected_domain_ids){
 
     //reset sort
     $(".offer-header-sort").data("sort_direction", false).find(".icon").removeClass('is-primary')
-    $(".offer-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+    $(".offer-header-sort").find("svg").attr("data-icon", "sort");
 
     //sort by header
     $(".offer-header-sort").off().on("click", function(){
@@ -935,14 +935,14 @@ function setupOfferButtons(selected_domain_ids){
 
       //sort icon
       $(".offer-header-sort").find(".icon").removeClass('is-primary')
-      $(".offer-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+      $(".offer-header-sort").find("svg").attr("data-icon", "sort");
       $(this).find(".icon").addClass('is-primary');
       $(this).data("sort_direction", !sort_direction);
       if (sort_direction){
-        $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
+        $(this).find("svg").attr("data-icon", "sort-up");
       }
       else {
-        $(this).find(".fa").addClass("fa-sort-desc").removeClass("fa-sort-asc");
+        $(this).find("svg").attr("data-icon", "sort-down");
       }
 
       //sort the rows
