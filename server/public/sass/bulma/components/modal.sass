@@ -3,16 +3,17 @@
   background-color: rgba($black, 0.8)
 
 .modal-content
+  background-color: $white
+  border-radius: $radius-large
   max-height: calc(100vh - 120px)
+  padding: 20px
   position: relative
   width: 100%
   // Responsiveness
-  &.login-box
-    border-radius: $radius
-    +tablet
-      margin: 0 auto
-      max-height: calc(100vh - 40px)
-      width: 400px
+  &.is-small
+    max-width: 400px
+  &.is-login
+    width: 400px
 
 .modal-close
   @extend .unselectable
@@ -32,7 +33,7 @@
   top: 20px
   vertical-align: top
   width: 30px
-  &:before,
+  &::before,
   &:after
     background-color: $white
     content: ""
@@ -42,7 +43,7 @@
     top: 50%
     transform: translateX(-50%) translateY(-50%) rotate(45deg)
     transform-origin: center center
-  &:before
+  &::before
     height: 2px
     width: 50%
   &:after

@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+  //display message from the server
+  loadNotification();
+
   //if remember me is set in the cookie
   var remember_cookie = readCookie("remember");
   if (remember_cookie){

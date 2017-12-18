@@ -139,10 +139,10 @@ module.exports = {
           getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
             if (offer_result){
               console.log("F: Emailing owner about new verified offer...");
-              var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs');
               var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
 
-              var EJSVariables = {
+              //email the owner
+              mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs'), {
                 domain_name: req.params.domain_name,
                 owner_name: owner_result.username,
                 offerer_name: offer_result.name,
@@ -151,16 +151,21 @@ module.exports = {
                 verification_code: req.params.verification_code,
                 offer: offer_formatted,
                 message: offer_result.message
-              }
-
-              var emailDetails = {
+              }, {
                 to: owner_result.email,
                 from: '"DomaHub Domains" <general@domahub.com>',
                 subject: 'You have a new ' + offer_formatted + ' offer for ' + req.params.domain_name + "!"
-              };
+              }, false);
 
-              //email the owner
-              mailer.sendEJSMail(pathEJSTemplate, EJSVariables, emailDetails, false);
+              //notify domahub
+              if (process.env.NODE_ENV != "dev"){
+                mailer.sendBasicMail({
+                  to: "general@domahub.com",
+                  from: 'general@domahub.com',
+                  subject: "New verified offer for a listing on DomaHub!",
+                  html: "There was a new offer for - " + req.params.domain_name + "<br />From - " + offer_result.name + "<br />Email - " + offer_result.email + "<br />Message - " + offer_result.message
+                });
+              }
             }
           });
         }

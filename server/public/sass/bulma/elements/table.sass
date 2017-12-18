@@ -5,7 +5,6 @@
   border-spacing: 0px
   border: 1px solid $border
   box-shadow: none
-  color: $text
   margin-bottom: 20px
   width: 100%
   &.is-fixed
@@ -16,6 +15,15 @@
     td,
     th
       border-bottom: none
+  &.is-transparent-head
+    background-color: transparent
+    border: none
+    thead
+      background-color: transparent
+      th
+        border-bottom: none
+    tbody
+      background-color: #fff
   td,
   th
     text-align: left
@@ -27,13 +35,17 @@
     +mobile-456px
       font-size: 14px
   th
+    border-bottom: none
+    font-size: $size-8
     font-weight: 500
-    padding: 10px
+    letter-spacing: 1px
+    padding: 15px 12px
+    text-transform: uppercase
     &.is-400
       font-weight: 400
   td
     border-bottom: 1px solid $border
-    padding: 10px
+    padding: 15px 12px
     a
       word-break: break-all
     &.is-danger
@@ -45,9 +57,8 @@
       border-bottom: 1px solid $border
     &.has-hover-effect
       th
-        &:not(:first-child)
-          &:hover
-            cursor: pointer
+        &:hover
+          cursor: pointer
   tbody
     tr
       &:hover
@@ -58,6 +69,12 @@
         &:hover
           cursor: auto
   // Modifiers
+  &.has-shadow
+    border: none
+    tbody
+      +box-shadow(1px,1px,1px,$border,0)
+    thead
+      background-color: #e5ecf1
   &.is-bordered
     td,
     th

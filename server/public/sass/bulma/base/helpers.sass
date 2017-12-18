@@ -17,6 +17,9 @@ $displays: 'block' 'flex' 'inline' 'inline-block' 'inline-flex'
   .is-#{$display}-touch
     +touch
       display: #{$display} !important
+  .is-#{$display}-laptop
+    +laptop
+      display: #{$display} !important
   .is-#{$display}-desktop
     +desktop
       display: #{$display} !important

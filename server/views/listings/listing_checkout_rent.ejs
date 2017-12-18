@@ -25,6 +25,7 @@
           <header id="step-header-site" class="checkout-track step-header header margin-top-15">
             <h2>Customize Your Website</h2>
           </header>
+
           <div id="step-content-site" class="step-content">
             <div class="notification is-lighter no-shadow has-border">
               <p id="site-regular-message" class="regular-message">
@@ -47,13 +48,14 @@
               <div id="forward-choice" class="checkout-track box hover-effect choice-block forward-choice">
                 <div class="content">
                   <div class="step-box">
-                    <span class="icon is-medium is-primary">
-                      <i class="fa fa-share-square"></i>
-                    </span>
-                    <h2>Forward elsewhere
-                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
-                        <i class="fa fa-question-circle"></i>
-                      </span>
+                    <div class="icon is-primary">
+                      <i class="far fa-share-square"></i>
+                    </div>
+                    <h2>
+                      Forward elsewhere
+                      <div class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="far fa-question-circle"></i>
+                      </div>
                     </h2>
                   </div>
                   <p>
@@ -64,13 +66,13 @@
               <div id="link-choice" class="checkout-track content box hover-effect choice-block link-choice">
                 <div class="content">
                   <div class="step-box">
-                    <span class="icon is-medium is-info">
-                      <i class="fa fa-external-link-square"></i>
-                    </span>
+                    <div class="icon is-info">
+                      <i class="far fa-external-link"></i>
+                    </div>
                     <h2>Display web content
-                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
-                        <i class="fa fa-question-circle"></i>
-                      </span>
+                      <div class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="far fa-question-circle"></i>
+                      </div>
                     </h2>
                   </div>
                   <p>
@@ -82,13 +84,13 @@
               <div id="build-choice" class="checkout-track content box hover-effect choice-block build-choice">
                 <div class="content">
                   <div class="step-box">
-                    <span class="icon is-medium is-accent">
-                      <i class="fa fa-pencil-square"></i>
-                    </span>
+                    <div class="icon is-accent">
+                      <i class="far fa-edit"></i>
+                    </div>
                     <h2>Build a website
-                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
-                        <i class="fa fa-question-circle"></i>
-                      </span>
+                      <div class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="far fa-question-circle"></i>
+                      </div>
                     </h2>
                   </div>
                   <p>
@@ -103,16 +105,20 @@
 
               <div class="control is-hidden forward-choice-column choice-column">
                 <div class="control is-grouped">
-                  <p class="control is-expanded has-icon">
+                  <div class="control is-expanded has-icon">
                     <input tabindex="0" id="address-forward-input" class="checkout-track address-input input is-large" type="url" placeholder="Your company website, your friend's Instagram, or a product page..."/>
-                    <i class="fa fa-link"></i>
-                  </p>
-                  <p class="control">
+                    <div class="icon">
+                      <i class="far fa-link"></i>
+                    </div>
+                  </div>
+                  <div class="control">
                     <button id="forward-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
-                      <span class="icon"><i class="fa fa-check-circle"></i></span>
+                      <div class="icon">
+                        <i class="far fa-check-circle"></i>
+                      </div>
                       <span>Submit</span>
                     </button>
-                  </p>
+                  </div>
                 </div>
                 <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
                 <div class='is-flex-wrap'>
@@ -147,21 +153,25 @@
                     </div>
                   </div>
                 </div>
-                <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                <small>We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
               </div>
 
               <div class="control is-hidden link-choice-column choice-column">
                 <div class="control is-grouped">
-                  <p class="control is-expanded has-icon">
+                  <div class="control is-expanded has-icon">
                     <input tabindex="0" id="address-link-input" class="checkout-track address-input input is-large" type="url" placeholder="A funny picture, a viral meme, or a cat GIF..."/>
-                    <i class="fa fa-link"></i>
-                  </p>
-                  <p class="control">
+                    <div class="icon">
+                      <i class="far fa-link"></i>
+                    </div>
+                  </div>
+                  <div class="control">
                     <button id="link-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
-                      <span class="icon"><i class="fa fa-check-circle"></i></span>
+                      <div class="icon">
+                        <i class="far fa-check-circle"></i>
+                      </div>
                       <span>Submit</span>
                     </button>
-                  </p>
+                  </div>
                 </div>
                 <p class='margin-bottom-10 margin-top-30'>These websites provide great content for your domain rental.</p>
                 <div class='is-flex-wrap'>
@@ -201,16 +211,20 @@
 
               <div class="control is-hidden build-choice-column choice-column">
                 <div class="control is-grouped">
-                  <p class="control is-expanded has-icon">
+                  <div class="control is-expanded has-icon">
                     <input tabindex="0" id="address-build-input" class="checkout-track address-input input is-large" type="url" placeholder="Your personal portfolio, an eCommerce store, or a new website..."/>
-                    <i class="fa fa-link"></i>
-                  </p>
-                  <p class="control">
+                    <div class="icon">
+                      <i class="far fa-link"></i>
+                    </div>
+                  </div>
+                  <div class="control">
                     <button id="build-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
-                      <span class="icon"><i class="fa fa-check-circle"></i></span>
+                      <div class="icon">
+                        <i class="far fa-check-circle"></i>
+                      </div>
                       <span>Submit</span>
                     </button>
-                  </p>
+                  </div>
                 </div>
                 <p class='margin-bottom-10 margin-top-30'>Here are some premium website creation services!</p>
                 <div class='is-flex-wrap'>
@@ -294,8 +308,10 @@
               </div>
 
               <div class="control">
-                <button id="site-cancel" class="checkout-track button is-stylish back-button">
-                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                <button id="site-cancel" class="checkout-track button is-black is-inverted is-stylish back-button">
+                  <div class="icon is-small">
+                    <i class="far fa-long-arrow-left"></i>
+                  </div>
                   <span>Back to Rental Types</span>
                 </button>
               </div>
@@ -335,9 +351,9 @@
               <div id="stripe-choice" class="stripe-choice checkout-track box hover-effect choice-block">
                 <div class="content">
                   <div class="step-box">
-                    <span class="icon is-medium is-primary">
-                      <i class="fa fa-credit-card"></i>
-                    </span>
+                    <div class="icon is-primary">
+                      <i class="far fa-credit-card"></i>
+                    </div>
                     <h2>Pay with a card</h2>
                   </div>
                   <p>
@@ -350,7 +366,7 @@
                 <div class="content">
                   <div class="step-box">
                     <span class="icon is-medium is-accent">
-                        <i class="fa fa-bitcoin"></i>
+                        <i class="far fa-bitcoin"></i>
                     </span>
                     <h2>Pay with Bitcoin</h2>
                   </div>
@@ -361,8 +377,10 @@
               </div>%>
 
               <div class="control">
-                <button id="back-to-address-button" class="checkout-track button is-stylish">
-                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                <button id="back-to-address-button" class="checkout-track button is-black is-inverted is-stylish">
+                  <div class="icon is-small">
+                    <i class="far fa-long-arrow-left"></i>
+                  </div>
                   <span>Back to Edit Address</span>
                 </button>
               </div>
@@ -374,43 +392,59 @@
                   <label class="label">Card Number</label>
                   <div class="control has-icon">
                     <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                    <i id="cc-icon" class="fa fa-credit-card"></i>
+                    <div class="icon">
+                      <i id="cc-icon" class="far fa-credit-card"></i>
+                    </div>
                   </div>
                   <div class="control is-grouped">
                     <div class="control is-expanded has-icon">
                       <label class="label">Expiration Date</label>
                       <div class="control has-icon">
                         <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-                        <i class="fa fa-calendar-o"></i>
+                        <div class="icon">
+                          <i class="far fa-calendar-alt"></i>
+                        </div>
                       </div>
                     </div>
                     <div class="control">
                       <label class="label">Security Code</label>
                       <div class="control has-icon">
                         <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
-                        <i class="fa fa-lock"></i>
+                        <div class="icon">
+                          <i class="far fa-lock"></i>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <label class="label">Zip Code</label>
                   <div class="control has-icon">
                     <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                    <i class="fa fa-map-marker"></i>
+                    <div class="icon">
+                      <i class="far fa-map-marker-alt"></i>
+                    </div>
                   </div>
                 </form>
               </div>
               <div class="control is-hidden bitcoin-choice-column choice-column">
                  BITCOIN
               </div>
-              <div class="control">
-                <button id="payment-cancel" class="checkout-track button is-stylish back-button">
-                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
-                  <span>Back to Payment Choices</span>
-                </button>
-                <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
-                  <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
-                  <span>Confirm & Pay</span>
-                </button>
+              <div class="control is-grouped">
+                <div class="control">
+                  <button id="payment-cancel" class="checkout-track button is-black is-inverted is-stylish back-button">
+                    <div class="icon is-small">
+                      <i class="far fa-long-arrow-left"></i>
+                    </div>
+                    <span>Back to Payment Choices</span>
+                  </button>
+                </div>
+                <div class="control">
+                  <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
+                    <div class="icon is-small">
+                      <i class="far fa-shopping-cart"></i>
+                    </div>
+                    <span>Confirm & Pay</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -424,12 +458,14 @@
                 <div class="control has-addons">
                   <input id="rental-link-input" class='checkout-track is-large input is-expanded' placeholder="Save me for later!"/>
                   <a id="rental-link-copy" class="checkout-track button is-large is-primary no-shadow">
-                    <i class="fa fa-clipboard"></i>
+                    <i class="far fa-clipboard"></i>
                   </a>
                 </div>
               </div>
               <a id="rental-preview-button" class="checkout-track button is-stylish is-primary no-shadow">
-                <span class="icon is-small"><i class="fa fa-search"></i></span>
+                <div class="icon is-small">
+                  <i class="far fa-search"></i>
+                </div>
                 <span>Preview Rental</span>
               </a>
             </div>
@@ -437,10 +473,14 @@
         </div>
         <div class="column is-5">
           <div class="card is-checkout">
-            <figure class="card-image img-wrapper" style="background-image:url('<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : 'https://domahub.com/images/lib/money.png'%>')"></figure>
+            <div class="card-image">
+              <figure class="image is-128x128">
+                <img src="<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : '/images/lib/wallet-send.svg'%>" alt="Logo" />
+              </figure>
+            </div>
             <div class="card-content">
-              <div class="content">
-                <h1 class="is-primary is-breakword"><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></h1>
+              <div class="content has-text-centered">
+                <h1 class="is-primary is-bold is-breakword"><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></h1>
               </div>
               <p id="rental-will-wrapper" class="content is-hidden">
                 <span id="rental-will-msg"></span>
@@ -457,9 +497,9 @@
                   <p id="rental-start"></p>
                 </div>
                 <div class="column is-2 is-hidden-mobile">
-                  <span class="icon is-medium is-blacklight">
-                    <i class="fa fa-long-arrow-right"></i>
-                  </span>
+                  <div class="icon is-medium is-blacklight">
+                    <i class="far fa-long-arrow-right"></i>
+                  </div>
                 </div>
                 <div class="column is-5">
                   <p id="preview-end-dates">
@@ -487,17 +527,17 @@
             </div>
             <footer id="edit-dates-button" class="card-footer">
               <% if (listing_info.premium){ %>
-                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
-                  <span class="icon is-small">
-                    <i id="edit-dates-icon" class="fa fa-pencil"></i>
-                  </span>
+                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-black is-inverted is-stylish is-fullwidth">
+                  <div class="icon is-small">
+                    <i id="edit-dates-icon" class="far fa-pencil"></i>
+                  </div>
                   <span id="edit-dates-text">Edit Dates or Path</span>
                 </a>
               <% } else { %>
-                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
-                  <span class="icon is-small">
-                    <i id="edit-dates-icon" class="fa fa-pencil"></i>
-                  </span>
+                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-black is-inverted is-stylish is-fullwidth">
+                  <div class="icon is-small">
+                    <i id="edit-dates-icon" class="far fa-pencil"></i>
+                  </div>
                   <span id="edit-dates-text">Edit Dates or Path</span>
                 </a>
               <% } %>

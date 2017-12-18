@@ -10,11 +10,30 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section class="section is-medium">
+
+  <section class="section is-medium is-primary">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="content has-text-centered">
+            <figure class="image is-128x128">
+              <img src="/images/lib/q-a.svg" alt="Questions and Answers" />
+            </figure>
+            <h1 class="title is-2 is-white">Frequently Asked Questions</h1>
+            <p class="subtitle is-4 is-white">
+              ...and other questions, too!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-small">
     <div class="container">
       <div class="columns">
         <div class="column is-3 is-hidden-mobile">
-          <aside class="menu is-fixed">
+          <aside class="menu">
             <p class="menu-label">
               Categories
             </p>
@@ -29,24 +48,29 @@
           </aside>
         </div>
         <div class="column">
-          <h1>Frequently Asked Questions</h1>
           <div id="about" class="faq-section">
             <h2 class="faq-header is-active">About Us</h3>
             <div class="content">
               <h3 class="faq-question" title="What exactly does DomaHub do?">
                 What exactly does DomaHub do?</h3>
               <p>
-                DomaHub is a domain name marketplace that allows you to create simple and beautiful
-                landing pages for your domains.
+                DomaHub is a platform to easily set up landing pages for your domains, allowing you to fully automate your sales process and sell domains quicker.
+              </p>
+              <p>
+                DomaHub is also a domain management tool that helps you organize your domain portfolio and keep track of key metrics like revenue, profit,
+                domain renewal, domain traffic, etc.
               </p>
             </div>
             <div class="content">
               <h3 class="faq-question" title="How does DomaHub make money?">
                 Why should I use DomaHub?</h3>
               <p>
-                Landing pages help you sell your domain. DomaHub provides the quickest solution to setting
-                up landing pages for all of your domains. We also provide management tools as well as secure
-                payment processing.
+                DomaHub is the quickest solution to automatically set up landing pages for your entire domain portfolio, boosting your domains' online presence
+                and increasing the likelihood of a sale.
+              </p>
+              <p>
+                Utilize the DomaHub platform to make informed decisions without having to install or learn other clunky software. Make DomaHub your home
+                page for all your portfolio-related business and tasks.
               </p>
             </div>
           </div>
@@ -67,7 +91,7 @@
               <p>
                 Users on our Premium subscription package will have access to our full line of features including
                 HTTPS connection, no commission fees, complete design and text customization, unlimited domains, etc.
-                Please refer to our <a class="is-primary"  href="/features#pricing" tabindex="0">Pricing Table</a> for more information.
+                Please refer to our <a class="is-underlined is-primary"  href="/features#pricing" tabindex="0">Pricing Table</a> for more information.
               </p>
             </div>
             <div class="content">
@@ -89,7 +113,7 @@
               <h3 class="faq-question" title="Can I cancel my Premium subscription?">
                 Can I cancel my Premium subscription?</h3>
               <p>
-                Yes, you may cancel your Premium subscription at any time through your <a class="is-primary" href="/profile/settings" tabindex="0">Account Settings</a>.
+                Yes, you may cancel your Premium subscription at any time through your <a class="is-underlined is-primary" href="/profile/settings" tabindex="0">Account Settings</a>.
                 Your subscription will end on the last day of the current payment cycle and will not be renewed.
               </p>
             </div>
@@ -107,8 +131,8 @@
               <h3 class="faq-question" title="How do I upload my domains?">
                 How do I upload my domains?</h3>
               <p>
-                First <a class="is-primary" href="/signup" tabindex="0"  >create an account</a> and then navigate to our
-                <a class="is-primary" href="/listings/create" tabindex="0"  >create listings page</a>. Upload as many
+                First <a class="is-underlined is-primary" href="/signup" tabindex="0"  >create an account</a> and then navigate to our
+                <a class="is-underlined is-primary" href="/listings/create" tabindex="0"  >create listings page</a>. Upload as many
                 domains as you want and they will be added to your account.
               </p>
             </div>
@@ -117,7 +141,7 @@
                 How do I verify my domains?</h3>
               <p>
                 Verify your domains from your
-                <a class="is-primary" href="/profile" tabindex="0">account dashboard</a>.
+                <a class="is-underlined is-primary" href="/profile" tabindex="0">account dashboard</a>.
                 You must create the listed A Record for each domain name in order for us to verify them.
                 You may have to delete existing A Records as well.
               </p>
@@ -136,7 +160,7 @@
                 Why can't I change my themes or designs?</h3>
               <p>
                 You must be a Premium account member to have access to theme and design customization. You
-                can upgrade your account to Premium at any time through your <a class="is-primary" href="/profile/settings" tabindex="0">Account Settings</a>.
+                can upgrade your account to Premium at any time through your <a class="is-underlined is-primary" href="/profile/settings" tabindex="0">Account Settings</a>.
               </p>
             </div>
             <div class="content">
@@ -192,10 +216,10 @@
               <h3 class="faq-question" title="How do I transfer the domain to the buyer?">
                 How do I transfer the domain to the buyer?</h3>
               <p>
-                For general instructions, please read our <a tabindex="0" href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-primary">guide</a>.
+                For general instructions, please read our <a tabindex="0" href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-underlined is-primary">guide</a>.
               </p>
               <p>
-                For registrar-specific instructions, please refer to our <a tabindex="0" href="https://medium.com/@domahub/links-to-registrar-specific-transfer-guides-eea8ebc14cfd" class="is-primary">guide</a>.
+                For registrar-specific instructions, please refer to our <a tabindex="0" href="https://medium.com/@domahub/links-to-registrar-specific-transfer-guides-eea8ebc14cfd" class="is-underlined is-primary">guide</a>.
                 If your registrar is not listed here, please visit their website for more instructions.
               </p>
             </div>
@@ -207,7 +231,7 @@
                 What does it mean to rent a domain on DomaHub?</h3>
               <p>
                 Renting a domain means paying for the ability to temporarily use a subpage on a specific domain or the root domain itself. For example,
-                a user can rent the URL <a class="is-primary" href="http://imsorryimdumb.com/lisa">imsorryimdumb.com/lisa</a>
+                a user can rent the URL <a class="is-underlined is-primary" href="http://imsorryimdumb.com/lisa">imsorryimdumb.com/lisa</a>
                 for a fraction of the price the domain is being sold for. This allows users to benefit from a great domain
                 name at an economically feasible price point.
               </p>
@@ -238,11 +262,11 @@
               </p>
               <ul>
                   <p>
-                      <span class="icon is-danger"><i class="fa fa-times" aria-hidden="true"></i></span>
+                      <span class="icon is-danger"><i class="far fa-times" aria-hidden="true"></i></span>
                       Brandable domain names that can be a company name (hotu.com, vovu.com, doto.com, etc.)
                   </p>
                   <p>
-                      <span class="icon is-danger"><i class="fa fa-times" aria-hidden="true"></i></span>
+                      <span class="icon is-danger"><i class="far fa-times" aria-hidden="true"></i></span>
                       Domains without clear definition / meaning (ethmini.com, sousforce.com, emugg.com, etc.)
                   </p>
               </ul>
@@ -251,15 +275,15 @@
               </p>
               <ul>
                   <p>
-                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      <span class="icon is-primary"><i class="far fa-check" aria-hidden="true"></i></span>
                       Holiday / event related (happybirthday.com, congratulations.com, marryme.com, etc.)
                   </p>
                   <p>
-                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      <span class="icon is-primary"><i class="far fa-check" aria-hidden="true"></i></span>
                       Slogans / hashtags / marketable phrases (greatestboxer.com, itsfinallyhere.com, thenextbigthing.com, etc.)
                   </p>
                   <p>
-                      <span class="icon is-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+                      <span class="icon is-primary"><i class="far fa-check" aria-hidden="true"></i></span>
                       Common phrases / words (youredumb.com, imsorry.com, iloveyou.com, etc.)
                   </p>
               </ul>
@@ -291,7 +315,7 @@
                 the rental and refund the renter their money.
               </p>
               <p>
-                In addition, all domain rentals are screened using the official <a href="https://developers.google.com/safe-browsing/" class="is-primary">
+                In addition, all domain rentals are screened using the official <a href="https://developers.google.com/safe-browsing/" class="is-underlined is-primary">
                 Google Safe Browsing API</a>. This way, we ensure that all content being
                 displayed on your website has been deemed safe to browse by Google.
               </p>
@@ -300,7 +324,7 @@
               <h3 class="faq-question" title="How do I set up rentals on my listing?">
                 How do I set up rentals on my listing?</h3>
               <p>
-                Simply go into your <a href="/profile/mylistings" class="is-primary">My Listings</a> page and enable the option for rentals on any listing.
+                Simply go into your <a href="/profile/mylistings" class="is-underlined is-primary">My Listings</a> page and enable the option for rentals on any listing.
               </p>
             </div>
           </div>
@@ -318,7 +342,7 @@
               <h3 class="faq-question" title="How do I get paid?">
                 How do I get paid?</h3>
               <p>
-                Simply go to your <a tabindex="0" class="is-primary" href="/profile/settings" title="Account Settings">settings page</a>
+                Simply go to your <a tabindex="0" class="is-underlined is-primary" href="/profile/settings" title="Account Settings">settings page</a>
                 and add your bank account information. We will directly deposit all payments into your bank account.
               </p>
             </div>
@@ -348,7 +372,7 @@
             </div>
             <div class="content">
               <p>
-                Still have questions? Feel free to <a tabindex="0" href="/contact" class="is-primary" title="Contact Us">Contact Us</a>.
+                Still have questions? Feel free to <a tabindex="0" href="/contact" class="is-underlined is-primary" title="Contact Us">contact us</a>.
               </p>
             </div>
           </div>

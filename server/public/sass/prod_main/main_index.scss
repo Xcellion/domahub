@@ -8,6 +8,8 @@
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/hamburger.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/notification.sass';
 @import '../bulma/elements/title.sass';
 @import '../bulma/elements/image.sass';
 @import '../bulma/elements/icon.sass';
@@ -28,7 +30,7 @@
     margin-left: auto;
     margin-right: auto;
   }
-  &:before {
+  &::before {
     @include skew(0,-6);
     content:"";
     background-image: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
@@ -37,21 +39,6 @@
     left: -100%;
     width: 300%;
     height: 120%;
-  }
-  @include mobile {
-    padding: 40px 20px;
-    &:before {
-      left: -500px;
-    }
-  }
-  @media screen and (max-height: 715px) {
-    padding: 80px 20px 40px;
-    height: 450px;
-    &:before {
-      @include skew(0,0);
-      left: -20px;
-      top: 0;
-    }
   }
 }
 

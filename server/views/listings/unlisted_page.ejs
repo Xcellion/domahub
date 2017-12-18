@@ -1,50 +1,42 @@
 <section id="page-contents" class="min-height">
-  <div class="container">
-    <div class="columns master right">
-      <div class="column is-6">
+  <div class="listing-page">
+    <div class="listing-left">
+      <div class="listing-left-content">
 
-        <span class="tag is-primary margin-bottom-5 is-medium">
-          <% if (listing_info.available){ %>
+        <% if (listing_info.available){ %>
+          <span class="tag is-primary is-stylish has-shadow is-medium">
             Available for purchase
-          <% } else { %>
-            Currently unavailable
-          <% } %>
-        </span>
+        <% } else { %>
+          <span class="tag is-danger is-stylish has-shadow is-medium">
+            Unavailable
+        <% } %>
+          </span>
 
-        <div id="domain-display" class="content margin-top-15">
-          <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+        <div id="domain-display" class="content">
+          <h1 id="domain-title" class="title is-primary is-bold is-inline-block"><%= listing_info.domain_name %></h1>
         </div>
 
+        <%# INFO MODULE %>
+        <%- include("modules/info_module.ejs", {
+          listing_info : listing_info
+        }); %>
+
+      </div>
+    </div>
+    <div class="listing-right">
+      <div class="tabs is-medium is-boxed">
+        <ul>
+          <li class="is-active">
+            <a tabindex="0">Traffic</a>
+          </li>
+        </ul>
       </div>
 
-      <div class="column is-6">
-        <div class='box has-tabs'>
-          <%# UNAVAILABLE MODULE %>
-          <%- include("modules/unavailable_module.ejs"); %>
-        </div>
-      </div>
+      <%# TRAFFIC MODULE %>
+      <%- include("modules/traffic_module.ejs", {
+        listing_info : listing_info
+      }); %>
 
     </div>
-
-    <%# TABS FOR THE BELOW MODULES %>
-    <%- include("modules/tabs_module.ejs", {
-        listing_info : listing_info
-    }); %>
-
-    <%# INFO MODULE %>
-    <%- include("modules/info_module.ejs", {
-      listing_info : listing_info
-    }); %>
-
-    <%# TRAFFIC MODULE %>
-    <%- include("modules/traffic_module.ejs", {
-      listing_info : listing_info
-    }); %>
-
-    <%# TICKER MODULE %>
-    <%- include("modules/ticker_module.ejs", {
-        listing_info : listing_info
-    }); %>
-
   </div>
 </section>

@@ -1,9 +1,3 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
-
-var mailer = require("./mailer.js");
-
-//</editor-fold>
-
 module.exports = {
 
   //<editor-fold>-------------------------------ERROR FUNCTIONS-------------------------------
@@ -58,40 +52,30 @@ module.exports = {
             redirectTo = "/nothinghere";
             break;
 
-
           default:
             break;
         }
 
         console.log("\x1b[31m", "ERROR: " + message + " Sending back to " + redirectTo + " | Requested " + req.originalUrl , '\x1b[0m');
-
-        //notify via email of any errors
-        if (process.env.NODE_ENV != "dev"){
-          mailer.sendBasicMail({
-            to: "general@domahub.com",
-            from: 'general@domahub.com',
-            subject: "There was an error on DomaHub production servers!",
-            html: message
-          });
-        }
-
         res.redirect(redirectTo);
         break;
     }
   },
 
   //console log the error and send a mail to notify if production
-  log : function(error){
-    console.log("\x1b[31m", "ERROR: " + error, '\x1b[0m');
+  log : function(error, info){
+    console.log("\x1b[31m", "ERROR: " + error + " INFO : " + info, '\x1b[0m');
 
     //notify via email of any errors
     if (process.env.NODE_ENV != "dev"){
-      mailer.sendBasicMail({
-        to: "general@domahub.com",
-        from: 'general@domahub.com',
-        subject: "There was an error on DomaHub production servers!",
-        html: JSON.stringify(error)
-      });
+      if (error.code != "ECONNREFUSED"){
+        mailer.sendBasicMail({
+          to: "general@domahub.com",
+          from: 'general@domahub.com',
+          subject: "There was an error on DomaHub production servers!",
+          html: JSON.stringify(error) + JSON.stringify(info)
+        });
+      }
     }
   }
 
@@ -107,5 +91,11 @@ function RemoveLastDirectoryPartOf(the_url){
     the_arr.pop();
     return( the_arr.join('/') );
 }
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
+var mailer = require("./mailer.js");
 
 //</editor-fold>

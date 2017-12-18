@@ -2,12 +2,18 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------SHOW TAB-------------------------------
 
+  //function that runs when back button is pressed
+  window.onpopstate = function(event) {
+    showSectionByURL();
+  }
+
   //show section depending on url
   showSectionByURL();
 
   //show red notification indication next to tab
   if (!user.stripe_account){
-    $("#payment-tab .required-info").removeClass('is-hidden');
+    $("#payment-tab .stripe-required-info").removeClass('is-hidden');
+    $("#stripe-personal-form").children(".card").removeClass('is-danger');
   }
 
   //add to history object depending on which table i clicked
@@ -25,6 +31,16 @@ $(document).ready(function() {
     showSection(temp_id);
   });
 
+  //reset password inputs on modals close
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    cancelChanges();
+  });
+  $(document).on("keyup", function(e) {
+    if (e.which == 27) {
+      cancelChanges();
+    }
+  });
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------ACCOUNT TAB-------------------------------
@@ -37,7 +53,6 @@ $(document).ready(function() {
       hideSaveCancelButtons();
       if ($(this).val() != user[$(this).data("uservar")] && user[$(this).data("uservar")]){
         $("#account-submit, #cancel-button").removeClass("is-hidden");
-        $(".tab").last().addClass("sub-tabs");
       }
     });
 
@@ -61,6 +76,7 @@ $(document).ready(function() {
 
     //change password modal
     $("#change-password-button").on("click", function(){
+      clearNotification();
       $("#change-password-modal").addClass('is-active');
       $("#old-pw-input").focus();
     });
@@ -71,15 +87,11 @@ $(document).ready(function() {
       submitChanges(checkAccountPassword());
     });
 
-    //reset password inputs on modal close
-    $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
-      cancelChanges();
-    });
-    $(document).on("keyup", function(e) {
-      if (e.which == 27) {
-        cancelChanges();
-      }
-    });
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------CONNECT A REGISTRAR-------------------------------
+
+    updateRegistrars();
 
     //</editor-fold>
 
@@ -89,11 +101,13 @@ $(document).ready(function() {
 
     //<editor-fold>-------------------------------STRIPE SET UP-------------------------------
 
-    if (window.location.hostname == "localhost"){
-      Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
-    }
-    else {
-      Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+    if (typeof Stripe != "undefined"){
+      if (window.location.hostname == "localhost"){
+        Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+      }
+      else {
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+      }
     }
 
     setupUpgradeTab();
@@ -103,7 +117,7 @@ $(document).ready(function() {
     //<editor-fold>-------------------------------CREDIT CARD CHANGE-------------------------------
 
     //format stripe cc icons
-    $("#credit-card-form").find(".stripe-account-input").on("change keyup paste", function(){
+    $("#credit-card-form").find(".input").on("change keyup paste", function(){
       errorMessage(false);
 
       var card_type = $.payment.cardType($("#cc-num").val());
@@ -111,12 +125,12 @@ $(document).ready(function() {
       if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
 
       //show appropriate card icon
-      if ($(".fa-cc-" + card_type) && card_type){
-        $("#cc-icon").removeClass().addClass("fa fa-cc-" + card_type);
+      if ($(".far-cc-" + card_type) && card_type){
+        $("#cc-icon").attr("data-icon", "cc-" + card_type);
       }
       //or show default
       else {
-        $("#cc-icon").removeClass().addClass("fa fa-credit-card");
+        $("#cc-icon").attr("data-icon", "credit-card");
       }
     });
 
@@ -154,6 +168,7 @@ $(document).ready(function() {
       setupCancelPremiumDisables();
     });
 
+    //confirm cancel premium by typing cancel
     $("#cancel-confirmation-input").on('input', function(){
       if ($(this).val().toLowerCase() == "cancel"){
         $("#cancel-premium-button").removeClass('is-disabled');
@@ -189,6 +204,9 @@ $(document).ready(function() {
         $("#promo-submit").removeClass('is-loading');
         $("#promo-input").val("");
         if (data.state == "success"){
+          if (data.user){
+            user = data.user;
+          }
           getReferrals();
           var subscription_exists_text = (user.stripe_subscription_id) ? "Your free month will be applied on the next applicable pay cycle." : "Please upgrade to Premium to receive your free month.";
           successMessage("Successfully applied promo code! " + subscription_exists_text);
@@ -196,6 +214,7 @@ $(document).ready(function() {
         else {
           errorMessage(data.message);
         }
+        setupUpgradeTab();
       });
     });
 
@@ -222,7 +241,6 @@ $(document).ready(function() {
       hideSaveCancelButtons();
       if (!user.stripe_account_id || $(this).val() != user.stripe_account[$(this).data("uservar")]){
         $("#stripe-account-submit, #cancel-button").removeClass("is-hidden");
-        $(".tab").last().addClass("sub-tabs");
       }
     });
 
@@ -233,8 +251,8 @@ $(document).ready(function() {
       clearNotification();
       $.ajax({
         url: "/profile/settings/payout",
-        data: $(this).serialize(),
-        method: "POST"
+        method: "POST",
+        data: $(this).serialize()
       }).done(function(data){
         hideSaveCancelButtons();
         if (data.state == "success"){
@@ -379,11 +397,6 @@ $(document).ready(function() {
 
 //<editor-fold>-------------------------------SHOW TAB-------------------------------
 
-//function that runs when back button is pressed
-window.onpopstate = function(event) {
-  showSectionByURL();
-}
-
 //show a specific section
 function showSection(section_id){
   clearNotification();
@@ -404,7 +417,7 @@ function showSection(section_id){
     }
 
     //if not premium, highlight upgrade left nav
-    if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+    if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
       $(".left-tab").removeClass('is-active');
       $("#nav-premium-link").addClass('is-active');
     }
@@ -424,6 +437,7 @@ function showSection(section_id){
 
 //show a specific section when loading the page;
 function showSectionByURL(){
+  $('.nav-drop').addClass('is-hidden');   //for hiding the notification bubble when already on this page
   var temp_hash = location.hash.split("#")[1];
   var array_of_ids = $(".drop-tab").map(function(index) {
     return $(this).attr("id");
@@ -442,6 +456,13 @@ function showSectionByURL(){
 
 //<editor-fold>-------------------------------ACCOUNT TAB-------------------------------
 
+  //prefills all domahub account info
+  function prefillAccountInfo(){
+    $(".account-input").each(function(){
+      $(this).val(user[$(this).data("uservar")]);
+    });
+  }
+
   //<editor-fold>-------------------------------SUBMIT ACCOUNT CHANGES-------------------------------
 
   //submit account changes AJAX
@@ -455,6 +476,7 @@ function showSectionByURL(){
         data: submit_data
       }).done(function(data){
         hideSaveCancelButtons();
+        closeModals();
         if (data.state == "success"){
           successMessage("Successfully updated account settings!");
           user = data.user;
@@ -462,6 +484,8 @@ function showSectionByURL(){
         else {
           errorMessage(data.message);
         }
+
+        prefillAccountInfo();
       });
     }
   }
@@ -484,15 +508,9 @@ function showSectionByURL(){
   function cancelChanges(){
     clearNotification();
     hideSaveCancelButtons();
-    $(".account-input").each(function(){
-      $(this).val(user[$(this).data("uservar")]);
-    });
-
-    //clear modal inputs
-    $(".modal-input").val("");
-
-    //prefill stripe account info
+    prefillAccountInfo();
     prefillStripeInfo();
+    closeModals();
   }
 
   //</editor-fold>
@@ -521,6 +539,10 @@ function showSectionByURL(){
       if (user.stripe_customer && user.stripe_customer.charges){
         setupPaymentsHistory();
       }
+
+      //show and hide premium/basic stuff
+      $(".basic-elem").addClass('is-hidden');
+      $(".premium-elem").removeClass('is-hidden');
 
       //expiring
       if (user.stripe_subscription.cancel_at_period_end == true){
@@ -569,6 +591,10 @@ function showSectionByURL(){
     }
     else {
       $("#upgrade-to-premium-text, #upgrade-tab-header").text("Upgrade to Premium");
+
+      //show and hide premium/basic stuff
+      $(".basic-elem").removeClass('is-hidden');
+      $(".premium-elem").addClass('is-hidden');
 
       //has a credit card on file, but no premium
       if (user.stripe_customer){
@@ -637,16 +663,22 @@ function showSectionByURL(){
   //submit to Stripe for a new token
   function submitForToken(){
     $("#submit-card-button").addClass('is-loading');
-    Stripe.card.createToken($("#credit-card-form"), function(status, response){
-      if (response.error){
-        $("#submit-card-button").removeClass('is-loading');
-        errorMessage(response.error.message);
-      }
-      else {
-        //all good, submit stripetoken and listing id to dh server
-        submitToDomaHub(response.id);
-      }
-    });
+    if (typeof Stripe == "undefined"){
+      $("#submit-card-button").removeClass('is-loading');
+      errorMessage("Something went wrong with your payment details. Please refresh the page and try again.");
+    }
+    else {
+      Stripe.card.createToken($("#credit-card-form"), function(status, response){
+        if (response.error){
+          $("#submit-card-button").removeClass('is-loading');
+          errorMessage(response.error.message);
+        }
+        else {
+          //all good, submit stripetoken and listing id to dh server
+          submitToDomaHub(response.id);
+        }
+      });
+    }
   }
 
   //submit for a new CC card (or change existing)
@@ -752,6 +784,11 @@ function showSectionByURL(){
       if (data.state == "success"){
         user = data.user;
       }
+      else {
+        if (data.message != "demo-error"){
+          errorMessage(data.message);
+        }
+      }
       createReferralsTable();
     });
   }
@@ -766,43 +803,46 @@ function showSectionByURL(){
       $(".referral-row:not(#referral-clone)").remove();
 
       for (var x = 0 ; x < user.referrals.length ; x++){
-        if (user.referrals[x].duration_in_months == 1 && user.referrals[x].referer_id == null){
-          //not a promo code, just 1 month from a referral
+        //calculate total months free
+        if (user.referrals[x].date_accessed){
+          total_months_redeemed += user.referrals[x].duration_in_months;
         }
-        else {
-          //calculate total months free
-          if (user.referrals[x].date_accessed){
-            total_months_redeemed += user.referrals[x].duration_in_months;
-          }
 
-          var referral_clone = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
-          var duration_in_months = user.referrals[x].duration_in_months;
+        var referral_clone = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
+        var duration_in_months = user.referrals[x].duration_in_months;
 
-          //referred by someone
-          if (user.referrals[x].referer_id != user.id){
-            duration_in_months--;
-            var referral_clone_referred = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
-            referral_clone_referred.find(".referral-type").text("Referred by user");
-            referral_clone_referred.find(".referral-months").text("1");
-            referral_clone_referred.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
-            referral_clone_referred.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? "1 month redeemed!" : "Not yet redeemed");
-            $("#referral-table").append(referral_clone_referred);
-          }
+        //referred by someone
+        if (user.referrals[x].referer_id != user.id && Number.isInteger(user.referrals[x].referer_id)){
+          duration_in_months--;
+          var referral_clone_referred = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
+          referral_clone_referred.find(".referral-type").text("Referred by user");
+          referral_clone_referred.find(".referral-months").text("1");
+          referral_clone_referred.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
+          referral_clone_referred.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? "1 month redeemed!" : "Not yet redeemed");
+          $("#referral-table").append(referral_clone_referred);
+        }
 
-          //referral or coupon
-          if (duration_in_months > 0){
-            referral_clone.find(".referral-type").text((user.referrals[x].referer_id == user.id) ? "Referred a user" : "Promo code");
-            referral_clone.find(".referral-months").text(duration_in_months);
-            referral_clone.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
-            var months_redeemed_text = (duration_in_months == 1) ? " month " : " months ";
-            referral_clone.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? duration_in_months + months_redeemed_text + "redeemed!" : "Not yet redeemed");
-            $("#referral-table").append(referral_clone);
-          }
+        //referral or coupon
+        if (duration_in_months > 0){
+          referral_clone.find(".referral-type").text((user.referrals[x].referer_id == user.id) ? "Referred a user" : "Promo code");
+          referral_clone.find(".referral-months").text(duration_in_months);
+          referral_clone.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
+          var months_redeemed_text = (duration_in_months == 1) ? " month " : " months ";
+          referral_clone.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? duration_in_months + months_redeemed_text + "redeemed!" : "Not yet redeemed");
+          $("#referral-table").append(referral_clone);
         }
       }
 
       //show referral table + total months free
       $("#total-months-redeemed").text(total_months_redeemed);
+
+      //change upgrade text
+      if (total_months_redeemed > 0){
+        $("#upgrade-button .button-text").text("Upgrade - Free");
+      }
+      else {
+        $("#upgrade-button .button-text").text("Upgrade - $5.00");
+      }
       $("#referral-table").removeClass('is-hidden');
     }
 
@@ -821,7 +861,7 @@ function showSectionByURL(){
       $("#referral-link").select();
       document.execCommand("copy");
       $("#referral-link").blur();
-      $(this).find("i").removeClass("fa-clipboard").addClass('fa-check');
+      $(this).find("svg").attr("data-icon", "check");
       $("#referral-link-text").text("Copied!");
     });
   }
@@ -842,12 +882,14 @@ function showSectionByURL(){
         $("#" + x + "-input").val(user.stripe_account[x]);
       }
       $("#change-bank-button").removeClass('is-hidden');
-      $("#payment-tab .required-info").addClass('is-hidden');
+      $(".stripe-required-info").addClass('is-hidden');
+      $("#stripe-personal-form").children(".card").removeClass('is-danger');
       $("#bank-tooltip").removeClass('is-hidden');
       $(".existing-bank").text("Click the button to add a default bank account!");
     }
     else {
-      $("#payment-tab .required-info").removeClass('is-hidden');
+      $(".stripe-required-info").removeClass('is-hidden');
+      $("#stripe-personal-form").children(".card").addClass('is-danger');
       $("#bank-tooltip").addClass('is-hidden');
       $(".stripe-account-input").val("");
       $(".existing-bank").text("Please enter your legal information before you can add a bank account!");
@@ -903,7 +945,6 @@ function showSectionByURL(){
 
   //change bank forms based on country
   function changeBankCountry(currency){
-    clearNotification();
     $("#account-wrapper").removeClass('is-hidden');
     $(".excess-routing-input").val("").attr("required", false);
     $("#account_number-input").attr("required", true);
@@ -981,7 +1022,7 @@ function showSectionByURL(){
 //get transactions from stripe
 function getTransactions(){
   $("#loading-transactions-table").removeClass('is-hidden');
-  $("#no-transactions-table, #transactions-table, #transactions-toolbar").addClass('is-hidden');
+  $("#no-matching-transactions-table, #no-transactions-table, #transactions-table").addClass('is-hidden');
 
   $.ajax({
     url: "/profile/gettransactions",
@@ -989,6 +1030,9 @@ function getTransactions(){
   }).done(function(data){
     if (data.state == "success"){
       user = data.user;
+    }
+    else {
+      errorMessage(data.message);
     }
     createTransactionsTable();
   });
@@ -1005,7 +1049,7 @@ function createTransactionsTable(){
   $(".transactions-row:not(#transactions-row-clone)").remove();
 
   //transactions rows
-  if (user.transactions){
+  if (user.transactions && user.transactions.total > 0){
 
     //stripe transactions
     if (user.transactions.stripe_transactions){
@@ -1060,10 +1104,10 @@ function createTransactionsRow(stripe_charge){
   else {
     //actionable
     if (stripe_charge.pending_transfer == "true"){
-      temp_row.find(".transactions-row-available").text("Requires Action").append('<span class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="fa fa-exclamation-circle"></i></span>');
+      temp_row.find(".transactions-row-available").text("Requires Action").append('<div class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="far fa-exclamation-circle"></i></div>');
     }
     else {
-      temp_row.find(".transactions-row-available").text("Not yet available").append('<span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM DD, YYYY") + '" data-balloon-pos="up"><i class="fa fa-question-circle"></i></span>');
+      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM DD, YYYY") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
     }
   }
 
@@ -1085,11 +1129,9 @@ function createTransactionsRow(stripe_charge){
     temp_row.data("total_profit", total_profit);
 
     //tooltip
-    var tooltip_size = (moneyFormat.to(total_earned).length > 6) ? "large" : "medium";
     var tooltip_text = "Total earned - " + moneyFormat.to(total_earned) + "&#10;" + "Total fees - " + moneyFormat.to(total_fees);
-    var tooltip_icon = $('<span class="icon is-small is-tooltip" data-balloon-break data-balloon-length="' + tooltip_size + '" data-balloon="' + tooltip_text + '" data-balloon-pos="up"><i class="fa fa-question-circle"></i></span>');
 
-    temp_row.find(".transactions-row-amount").text(moneyFormat.to(total_profit)).append(tooltip_icon);
+    temp_row.find(".transactions-row-amount").html("<span data-balloon-break data-balloon='" + tooltip_text + "' data-balloon-pos='up'>" + moneyFormat.to(total_profit) + "</span>");
   }
 
   return temp_row;
@@ -1108,6 +1150,7 @@ function showTransactionRows(){
   }).removeClass('is-hidden');
 
   if (user.transactions){
+    $("#no-transactions-table").addClass('is-hidden');
     //something matches
     if ($(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").length > 0){
       $("#no-matching-transactions-table").addClass('is-hidden');
@@ -1253,8 +1296,8 @@ function calculateTotals(){
 //<editor-fold>-------------------------------HELPERS-------------------------------
 
 function hideSaveCancelButtons(){
-  $("#settings-toolbar .tab").last().removeClass("sub-tabs");
-  $(".toolbar-button").addClass('is-hidden').removeClass('is-loading');
+  $(".toolbar-button").removeClass('is-loading');
+  $(".toolbar-button").addClass('is-hidden');
 }
 
 //to format a number for $$$$

@@ -746,7 +746,24 @@ module.exports = {
               next();
             }
             else {
-              next();
+              //if pending DNS changes, mark it active
+              if (req.session.listing_info.status == 3){
+                console.log("F: Listing is now pointed to DomaHub! Marking as active...");
+                req.session.listing_info.status = 1;
+                listing_model.updateListingsInfo(domain_name, {
+                  status: 1
+                }, function(result){
+                  //change req.user.listings if req.user exists and is the owner of this domain
+                  if (req.user && req.user.listings && req.user.id == req.session.listing_info.owner_id){
+                    getUserListingObj(req.user.listings, domain_name).status = 1;
+                  }
+                  next();
+                });
+              }
+              else {
+                next();
+              }
+
             }
           });
         }
@@ -759,7 +776,7 @@ module.exports = {
     //add to search only if not development
     if (process.env.NODE_ENV != "dev"){
       var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-      var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+      var account_id = (typeof req.user == "undefined" || req.user != false) ? null : req.user.id;
       var now = new Date().getTime();
       var history_info = {
         account_id: account_id,      //who searched if who exists
@@ -781,7 +798,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      data_model.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newListingHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding new history for listing.")}});  //async
       delete req.session.from_api;
     }
     next();
@@ -801,7 +818,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      data_model.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding new availability check history.")}});  //async
     }
     next();
   },
@@ -823,7 +840,7 @@ module.exports = {
       }
 
       console.log("F: Adding to search history...");
-      data_model.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
+      data_model.newCheckoutHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding a new checkout history item.")}});  //async
     }
     next();
   },
@@ -1249,7 +1266,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
     //who is for unlisted only
     if (unlisted){
       var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-      var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
+      var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Unknown";
 
       var listing_info = {
         domain_name: domain_name,
@@ -1304,7 +1321,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       }
 
       //nobody owns it!
-      else if (whoisObj["End Text"] && whoisObj["End Text"].indexOf("No match for domain ") != -1 && owner_name == "Someone out there" && data){
+      else if (whoisObj["End Text"] && whoisObj["End Text"].indexOf("No match for domain ") != -1 && owner_name == "Unknown" && data){
         listing_info.available = true;
         listing_info.username = "Nobody yet!";
       }

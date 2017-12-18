@@ -20,14 +20,7 @@
       var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
     </script>
 
-		<div id="contact-success" class="is-hidden notification is-popup is-primary">
-	    <button class="delete"></button>
-	    Success! Please check your email for further instructions.
-		</div>
-		<div id="contact-error" class="is-hidden notification is-popup is-danger">
-	    <button class="delete"></button>
-	    <span id="contact-error-message">Something went wrong! Please refresh the page and try again.</span>
-		</div>
+		<%- include("../templates/notifications.ejs");%>
 
 		<%# TOOL TO COMPARE %>
 		<% if (compare) { %>
@@ -42,7 +35,7 @@
 		<% } %>
 
 		<%# LISTING FOOTER %>
-    <%- include("listing_footer.ejs") %>
+		<%- include("listing_footer.ejs") %>
 
     <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
 		<script src="/js/routes/listings/listing_logic.js" type="text/javascript"></script>

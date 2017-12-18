@@ -2,7 +2,8 @@
 
 var listing_model = require('../models/listing_model.js');
 
-var stripe = require('./stripe_functions.js');
+var stripe_functions = require("../controller/stripe_functions.js");
+
 
 //</editor-fold>
 
@@ -17,14 +18,14 @@ module.exports = function(app){
   app.use("*", [
     checkHost,
     checkListed,
-    stripe.checkStripeSubscription,
+    stripe_functions.checkStripeSubscriptionForUser,
     sendOkayToNginx
   ]);
 }
 
 //<editor-fold>-------------------------------FUNCTIONS-------------------------------
 
-//function to check for hostname
+//check for hostname
 function checkHost(req, res, next){
   if (req.headers.host){
     var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');

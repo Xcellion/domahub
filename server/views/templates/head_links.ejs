@@ -16,7 +16,8 @@
 <% } %>
 
 <link href="https://fonts.googleapis.com/css?family=Rubik:400,500" rel="stylesheet" />
-<script async type="text/javascript" src="https://use.fontawesome.com/b36602cf54.js"></script>
+<script defer type="text/javascript" src="/js/lib/fa-regular.min.js"></script>
+<script type="text/javascript" src="/js/lib/fontawesome.min.js"></script>
 <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -52,18 +53,19 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-92778659-1', 'auto');
+  //for GA premium custom URLs
+  if (window.location.hostname != "domahub.com"){
+    ga('set', 'page', "/listing/" + window.location.hostname);
+  }
+  //for GA custom dimension tracking
+  if (typeof listing_info != "undefined"){
+    ga('set', 'dimension1', listing_info.owner_id);
+  }
   ga('send', 'pageview');
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
-  (function($){
-    var $span = $('<span class="fa" style="display:none"></span>').appendTo('body');
-    if ($span.css('fontFamily') !== 'FontAwesome' ) {
-      //fallback link
-      $('head').append('<link href="/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">');
-    }
-    $span.remove();
-  })(jQuery);
+  (jQuery);
   $(document).ready(function(){
     //delete notifications button
     $(".delete").on("click", function(e){

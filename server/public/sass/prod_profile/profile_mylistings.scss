@@ -12,22 +12,25 @@
 @import '../bulma/elements/box.sass';
 @import '../bulma/elements/tag.sass';
 @import '../bulma/elements/delete.sass';
+@import '../bulma/elements/image.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/table.sass';
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
+@import '../bulma/elements/switch.sass';
 @import '../bulma/elements/hamburger.sass';
 @import '../bulma/elements/icon.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
-.remove-margin-bottom-content {
-  margin-bottom:0 !important;
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
 }
 
-.company-logo {
-  margin-bottom: 30px;
+.remove-margin-bottom-content {
+  margin-bottom:0 !important;
 }
 
 .delete-modal-cloned-domain {
@@ -83,15 +86,9 @@
   }
 }
 
-.offer-popup {
-  background-color: $white;
-  border-radius: $radius-large;
-  padding: 20px;
-  width: 400px !important;
-}
-
 .offer-info {
   li {
+    padding : 5px;
     .icon {
       margin-right: 10px;
     }
@@ -123,15 +120,9 @@
 // design tab blackout !premium
 #premium-only-notification {
   @include translate(-50%,50%);
-  background-color: $white;
-  border-radius: $radius-large;
   left: 50%;
-  padding: 15px;
   position: absolute;
   top: 10%;
-  @include mobile {
-    width: 225px;
-  }
 }
 
 .blackscreen {
@@ -141,14 +132,6 @@
   left: 0;
   background-color: $black-secondary;
   z-index: 5;
-}
-
-#filter-menu {
-  @include mobile {
-    select {
-      width: 68px;
-    }
-  }
 }
 
 // edit listing tabs
@@ -164,7 +147,7 @@
     @include mobile {
       li {
         &:not(:last-child) {
-          margin-right: 5px;
+          margin-right: 10px;
         }
       }
     }
@@ -261,7 +244,8 @@
 
 .domain-tooltip {
   position: absolute;
-  top:40px;
+  top: 100%;
+  right: 10px;
   z-index:99;
   overflow-y: auto;
   overflow-x: hidden;
@@ -280,7 +264,7 @@
     }
   }
   &.is-selected {
-    background-color:#ffc;
+    background-color:rgba(60,188,141,0.12);
   }
 }
 
@@ -300,20 +284,14 @@
   }
 }
 
-.is-unverified {
-  td {
-    color: $danger;
-  }
-}
-
 .button-wrapper {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
   .button,
-  .select {
+  .select,
+  .field {
     margin-right: 10px;
-    margin-bottom: 8px;
   }
   &.is-mobile {
     @include mobile {
@@ -344,11 +322,22 @@
   }
 }
 
-.tip {
-  color: $text-light;
-  display: block;
-  line-height: 1.5;
-  margin: 5px 0;
+//categories dropdown
+#categories-dropdown {
+  position:absolute;
+  padding-left:8px;
+  width:100%;
+  height:150px;
+  border:1px solid $grey;
+  overflow-y:auto;
+  background-color:$white;
+  z-index:999;
+  margin-top: -1px;
+}
+
+.category-checkbox-wrapper {
+  padding-top:4px;
+  padding-bottom:4px;
 }
 
 // listing image
@@ -369,16 +358,27 @@
 }
 
 #select-all-drop {
-  @include box-shadow(0,3px,15px,$border,0);
+  @include box-shadow(1px,2px,4px,$border,0);
   background-color: $white;
   border-radius: 0 $radius-small $radius-small $radius-small;
   display: flex;
   flex-direction: column;
-  top: 32px;
+  position: absolute;
+  left: 0;
+  top: 38px;
+  width: 185px;
   a {
     padding: 6px 10px;
     &:hover {
       background-color: $lighter;
+    }
+  }
+}
+
+.select {
+  &.is-narrow {
+    select {
+      width: 105px;
     }
   }
 }

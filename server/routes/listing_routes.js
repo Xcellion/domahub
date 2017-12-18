@@ -21,7 +21,11 @@ module.exports = function(app){
     app.get('/listings/create', [
       auth_functions.checkLoggedIn,
       profile_functions.getAccountListings,
+      profile_functions.getAccountRegistrars,
       stripe_functions.getStripeAccount,
+      stripe_functions.getStripeCustomer,
+      stripe_functions.getStripeSubscription,
+      profile_functions.updateAccountSettingsGet,
       owner_functions.renderCreateListing
     ]);
 
@@ -39,6 +43,8 @@ module.exports = function(app){
       auth_functions.checkLoggedIn,
       profile_functions.getAccountListings,    //to find out which listings were not created in multi-create
       owner_functions.checkPostedListingInfoForCreate,
+      owner_functions.setDNSViaRegistrar,
+      owner_functions.setDNSExpiration,
       owner_functions.createListings
     ]);
 
@@ -316,7 +322,7 @@ module.exports = function(app){
       // renter_functions.deletePipeToDH,
       renter_functions.checkSessionListingInfoPost,
       stripe_functions.checkStripeSubscriptionForUser,
-      renter_functions.getListingFreeTimes,
+      // renter_functions.getListingFreeTimes,
       renter_functions.createNewRentalObject,
       renter_functions.checkRentalTimes,
       renter_functions.checkRentalPrice,
@@ -335,7 +341,7 @@ module.exports = function(app){
       listing_general_functions.checkDomainListed,
       renter_functions.checkSessionListingInfoPost,
       stripe_functions.checkStripeSubscriptionForUser,
-      renter_functions.getListingFreeTimes,
+      // renter_functions.getListingFreeTimes,
       renter_functions.checkRentalInfoNew,
       renter_functions.checkRentalTimes,
       renter_functions.checkRentalPrice,

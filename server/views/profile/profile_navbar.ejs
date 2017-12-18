@@ -3,31 +3,32 @@
 </script>
 <script src="/js/profile_navbar_logic.js" type="text/javascript"></script>
 <div class="left-menu">
-  <div class="company-logo">
+  <div class="menu-info">
     <a class="dh-logo" tabindex="0" title="Home" href="/">
-      <div class="flat-logo is-white is-hidden-tablet-only"></div>
-      <div class="circle-logo is-white is-hidden-desktop"></div>
+      <div class="flat-logo is-white is-hidden-laptop"></div>
+      <div class="circle-logo is-white is-hidden-widescreen"></div>
     </a>
+    <p class="is-white"><%= user.username %></p>
   </div>
   <aside class="menu">
     <ul class="menu-list">
       <li class="menu-item has-icon">
         <a id="dashboard-left-tab" tabindex="0" title="View My Dashboard" href="/profile/dashboard" class="left-tab primary-theme">
-          <span class="icon is-white"><i class="fa fa-window-maximize"></i></span>
-          <p class="is-white is-hidden-tablet-only">Dashboard</p>
+          <div class="icon is-white"><i class="far fa-window-maximize"></i></div>
+          <p class="is-white is-hidden-laptop">Dashboard</p>
         </a>
       </li>
       <li class="menu-item has-icon">
         <a id="mylistings-left-tab" tabindex="0" title="View My Listings" href="/profile/mylistings" class="left-tab primary-theme">
-          <span class="icon is-white"><i class="fa fa-list-alt"></i></span>
-          <p class="is-white is-hidden-tablet-only">My Listings</p>
+          <div class="icon is-white"><i class="far fa-list-alt"></i></div>
+          <p class="is-white is-hidden-laptop">My Listings</p>
         </a>
         <ul id="collapse-submenu">
           <% if (user.listings.length > 0 ){ %>
             <li class="menu-item has-icon">
-              <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme">
-                <span class="icon is-white is-hidden-desktop"><i class="fa fa-money"></i></span>
-                <small class="is-white is-hidden-tablet-only">My Listing Offers</small>
+              <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme is-sublink">
+                <div class="icon is-white is-hidden-widescreen"><i class="far fa-money-bill"></i></div>
+                <small class="is-white is-hidden-laptop">My Listing Offers</small>
               </a>
             </li>
           <% } %>
@@ -37,26 +38,23 @@
             </a>
           </li>%>
           <li class="menu-item has-icon">
-            <a id="create-left-tab"  tabindex="0" title="Create New Listings" href="/listings/create" class="left-tab primary-theme">
-              <span class="icon is-white is-hidden-desktop"><i class="fa fa-plus"></i></span>
-              <small class="is-white is-hidden-tablet-only">Create Listings</small>
+            <a id="create-left-tab"  tabindex="0" title="Create New Listings" href="/listings/create" class="left-tab primary-theme is-sublink">
+              <div class="icon is-white is-hidden-widescreen"><i class="far fa-plus"></i></div>
+              <small class="is-white is-hidden-laptop">Create Listings</small>
             </a>
           </li>
         </ul>
       </li>
       <li class="menu-item has-icon">
         <a id="settings-left-tab" tabindex="0" title="Change Account Settings" href="/profile/settings" class="left-tab primary-theme">
-          <span class="icon is-white"><i class="fa fa-cogs"></i></span>
-          <p class="is-white is-hidden-tablet-only">Account Settings</p>
+          <div class="icon is-white"><i class="far fa-cogs"></i></div>
+          <p class="is-white is-hidden-laptop">Account Settings</p>
         </a>
-        <ul class="is-hidden-tablet-only">
+        <ul class="is-hidden-laptop">
           <li>
-            <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-hidden">
+            <a id="nav-premium-link" tabindex="0" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-sublink is-hidden">
               <small class="is-white">
                 Upgrade to Premium
-                <span class="icon is-small">
-                  <i class="fa fa-diamond"></i>
-                </span>
               </small>
             </a>
           </li>
@@ -64,44 +62,62 @@
       </li>
     </ul>
   </aside>
-  <hr class="is-hidden-tablet-only"/>
-  <div class="content is-hidden-tablet-only">
-    <p class="is-white">
-      You are currently logged in as <%= user.username %>.
-    </p>
-  </div>
   <div class="user-panel">
-    <div>
-      <button tabindex="0" id="user-dropdown-button" class="button is-large is-primary is-inverted">
-        <i class="fa fa-user-circle"></i>
+    <div class="user-button" title="Send us a Message">
+      <button tabindex="0" id="contact-button" class="button is-black is-inverted nav-button" data-menu="contact-dropdown-menu">
+        <div class="icon">
+          <i class="far fa-comment"></i>
+        </div>
       </button>
+      <div id="contact-dropdown-menu" class="nav-drop is-hidden">
+        <p class="menu-label">Contact Us</p>
+        <form id="contact-form">
+          <textarea id="contact_message" required class="textarea no-shadow" placeholder="Comments? Questions? Let us know! We're happy to help."></textarea>
+          <button id="contact-submit-button" class="button is-stylish is-fullwidth is-primary" type="submit" form="contact-form">
+            <div class="icon is-small">
+              <i class="far fa-check-circle"></i>
+            </div>
+            <span id="contact-submit-text">Send Message</span>
+          </button>
+        </form>
+      </div>
     </div>
-    <aside class="user-dropdown-menu is-hidden">
-      <p class="menu-label">Support</p>
-      <ul class="menu-list">
-        <li><a tabindex="0" href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
-        <li><a tabindex="0" href="/faq" title="FAQ">FAQ</a></li>
-        <li><a tabindex="0" href="/features#pricing" title="Pricing">Pricing</a></li>
-      </ul>
-      <p class="menu-label">Company</p>
-      <ul class="menu-list">
-        <li><a tabindex="0" href="/contact" title="Contact Us">Contact Us</a></li>
-        <li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
-        <li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
-      </ul>
-      <p class="menu-label">Account</p>
-      <ul class="menu-list">
-        <li><a tabindex="0" href="/logout" title="Log Out">Log Out</a></li>
-      </ul>
-    </aside>
+    <div class="user-button" title="Check Your Notifications">
+      <button tabindex="0" id="notification-dropdown-button" class="button is-black is-inverted nav-button" data-menu="notification-dropdown-menu">
+        <span id="notification-counter" class="is-hidden"></span>
+        <div class="icon">
+          <i class="far fa-bell"></i>
+        </div>
+      </button>
+      <aside id="notification-dropdown-menu" class="nav-drop is-hidden">
+        <ul id="notification-tray" class="menu-list"></ul>
+      </aside>
+    </div>
+    <div class="user-button" title="Other Links">
+      <button tabindex="0" id="user-dropdown-button" class="button is-black is-inverted nav-button" data-menu="user-dropdown-menu">
+        <div class="icon">
+          <i class="far fa-user-alt"></i>
+        </div>
+      </button>
+      <aside id="user-dropdown-menu" class="nav-drop is-hidden">
+        <p class="menu-label">Support</p>
+        <ul class="menu-list">
+          <li><a tabindex="0" href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
+          <li><a tabindex="0" href="/faq" title="FAQ">FAQ</a></li>
+          <li><a tabindex="0" href="/features#pricing" title="Pricing">Pricing</a></li>
+        </ul>
+        <p class="menu-label">Company</p>
+        <ul class="menu-list">
+          <li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
+          <li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
+        </ul>
+        <p class="menu-label">Account</p>
+        <ul class="menu-list">
+          <li><a tabindex="0" href="/logout" title="Log Out">Log Out</a></li>
+        </ul>
+      </aside>
+    </div>
   </div>
 </div>
 
-<div id="profile-msg-error" class="is-hidden is-danger notification is-popup">
-  <button class="delete"></button>
-  <p id="profile-msg-error-text" class='is-white'></p>
-</div>
-<div id="profile-msg-success" class="is-hidden is-primary notification is-popup">
-  <button class="delete"></button>
-  <p id="profile-msg-success-text" class='is-white'></p>
-</div>
+<%- include("../templates/notifications.ejs"); %>

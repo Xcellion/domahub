@@ -81,40 +81,7 @@ module.exports = {
   getAccountListings : function(account_id, callback){
     console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
     var query = "SELECT \
-          listings.id,\
-          listings.date_created,\
-          listings.domain_name,\
-          listings.owner_id,\
-          listings.status,\
-          listings.verified,\
-          listings.rentable,\
-          listings.price_type,\
-          listings.price_rate,\
-          listings.buy_price,\
-          listings.min_price,\
-          listings.description,\
-          listings.description_hook,\
-          listings.description_footer,\
-          listings.categories,\
-          listings.paths,\
-          listings.background_image,\
-          listings.background_color,\
-          listings.logo,\
-          listings.domain_owner,\
-          listings.domain_age,\
-          listings.domain_list,\
-          listings.domain_appraisal,\
-          listings.social_sharing,\
-          listings.traffic_module,\
-          listings.traffic_graph,\
-          listings.alexa_stats,\
-          listings.history_module,\
-          listings.info_module,\
-          IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
-          IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
-          IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
-          IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
-          IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
+          listings.*, \
           rented_table.rented, \
           offers_table.deposited, \
           offers_table_accepted.accepted, \
@@ -164,6 +131,16 @@ module.exports = {
         AND listings.deleted IS NULL \
         ORDER BY listings.id ASC";
     database.query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
+  },
+
+  //gets all registrars connected to specific account
+  getAccountRegistrars : function(account_id, callback){
+    console.log("DB: Attempting to get all registrars connected to account " + account_id + "...");
+    var query = "SELECT \
+          registrars.* \
+            FROM registrars \
+          WHERE registrars.account_id = ? ";
+    database.query(query, "Failed to get all registrars connected to account " + account_id + "!", callback, account_id);
   },
 
   //gets the stripe ID and listing type of a listing owner
@@ -238,6 +215,24 @@ module.exports = {
     database.query(query, "Failed to create coupon codes!", callback, [codes]);
   },
 
+  //creates a new registrar
+  newRegistrar : function(registrar_array, callback){
+    console.log("DB: Attempting to create or update registrar information for user...");
+    var query = "INSERT INTO registrars ( \
+          account_id, \
+          registrar_name, \
+          api_key, \
+          username, \
+          password \
+        )\
+         VALUES ? \
+         ON DUPLICATE KEY UPDATE \
+         api_key = VALUES(api_key), \
+         username = VALUES(username), \
+         password = VALUES(password)"
+    database.query(query, "Failed to create or update registrar information!", callback, [registrar_array]);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------UPDATES-------------------------------
@@ -260,6 +255,15 @@ module.exports = {
           SET ? \
         WHERE code = ? "
     database.query(query, "Failed to apply coupon code!", callback, [account_info, code]);
+  },
+
+  //cancels a user's premium subscription
+  cancelStripeSubscription : function(stripe_subscription_id, callback){
+    console.log("DB: Cancelling Stripe subscription...");
+    var query = "UPDATE accounts \
+          SET stripe_subscription_id = null \
+        WHERE stripe_subscription_id = ? "
+    database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_subscription_id);
   },
 
   //</editor-fold>

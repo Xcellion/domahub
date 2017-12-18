@@ -1,6 +1,14 @@
 $(document).ready(function() {
 
-  //<editor-fold>-------------------------------PROFILE DROPDOWNS--------------------------------
+  //<editor-fold>-------------------------------PROFILE NAVBAR--------------------------------
+
+  showNotifications();
+
+  //toggle user drop down menu on icon button click
+  $(".nav-button").on("click", function() {
+    $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
+    $("#" + $(this).data("menu")).toggleClass("is-hidden").find("textarea").focus();
+  });
 
   //mobile view nav menu
   $(".nav-toggle").on("click", function() {
@@ -10,10 +18,10 @@ $(document).ready(function() {
 
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
-    if (!$(event.target).closest("#user-dropdown-button").length) {
-      if ($(".user-dropdown-menu").is(":visible")) {
-        $(".user-dropdown-menu").addClass("is-hidden");
-        $("#user-dropdown-button").toggleClass("is-active").blur();
+    if (!$(event.target).closest(".user-button").length && !$(event.target).closest(".contact-link").length) {
+      if ($(".nav-drop").is(":visible")) {
+        $(".nav-drop").addClass("is-hidden");
+        $(this).toggleClass("is-active").blur();
       }
     }
   });
@@ -22,21 +30,15 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------MODAL--------------------------------
 
-  //toggle user drop down menu on icon button click
-  $("#user-dropdown-button").on("click", function() {
-    $(this).toggleClass("is-active");
-    $(".user-dropdown-menu").toggleClass("is-hidden");
-  });
-
   $(document).on("keyup", function(e) {
     if (e.which == 27) {
-      $('.modal').removeClass('is-active');
+      closeModals();
     }
   });
 
   //close modal
   $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
-    $('.modal').removeClass('is-active');
+    closeModals();
   });
 
   //</editor-fold>
@@ -46,15 +48,54 @@ $(document).ready(function() {
   leftMenuActive();
 
   //hide upgrade link on left nav if already premium
-  if (!user.stripe_subscription_id || user.stripe_subscription.cancel_at_period_end == true){
+  if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
     $("#nav-premium-link").removeClass('is-hidden');
   }
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------CONTACT US--------------------------------
+
+  contactLinkHandler();
+
+  //contact us form
+  $("#contact-form").on("submit", function(e){
+    e.preventDefault();
+    $("#contact-submit-button").addClass('is-loading');
+    $.ajax({
+      url: "/contact",
+      data: {
+        contact_email: user.email,
+        contact_name: user.username,
+        contact_message: $("#contact_message").val()
+      },
+      method: "POST"
+    }).done(function(){
+      clearNotification();
+      $("#contact-submit-button").removeClass('is-loading');
+      $("#contact_message").val("");
+      $("#contact-dropdown-menu").addClass('is-hidden');
+      successMessage("Message sent! We will get back to you as soon as possible. Thank you for your patience.");
+    });
+  });
+
+  //</editor-fold>
+
 });
 
-//<editor-fold>-------------------------------URL HELPER FUNCTIONS--------------------------------
+//<editor-fold>----------------------------------MODAL HELPERS-------------------------
+
+//close modals
+function closeModals(){
+  clearNotification();
+  $(".modal").find("input, textarea, select").val("");
+  $(".modal").removeClass('is-active');
+  $("#cancel-premium-button").addClass("is-disabled");
+}
+
+//</editor-fold>
+
+//<editor-fold>----------------------------------URL HELPER FUNCTIONS-------------------------
 
 //add active to left menu
 function leftMenuActive(){
@@ -71,7 +112,7 @@ function leftMenuActive(){
   }
 }
 
-//function to get a URL query param by name
+//get a URL query param by name
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");
@@ -126,40 +167,62 @@ function removeURLParameter(parameter) {
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------NOTIFICATION--------------------------------
+//<editor-fold>----------------------------------NOTIFICATIONS-------------------------
 
-//helper function to display/hide error messages per listing
-function errorMessage(message){
-  //hide success
-  $("#profile-msg-success").addClass('is-hidden').removeClass("is-active");
+//populate the notifications tray
+function showNotifications() {
 
-  if (message){
-    $("#profile-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#profile-msg-error-text").html(message);
+  //if no listings
+  if (!user.listings || user.listings.length == 0){
+    appendNotification("<a tabindex='0' class='is-primary' href='/listings/create'>Create DomaHub listings</a>");
   }
-  else if (!message) {
-    $("#profile-msg-error").addClass('is-hidden').removeClass("is-active");
+
+  //if unverified domains exist
+  var unverified_listings = user.listings.filter(function(listing) {
+    return !listing.verified;
+  });
+  if (unverified_listings.length > 0){
+    appendNotification("<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
+  }
+
+  //if stripe payout settings are not set
+  if (!user.stripe_account) {
+    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Complete payout settings</a>");
+  }
+
+  //if bank account is not connected
+  if (!user.stripe_bank) {
+    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Connect a bank account</a>");
+  }
+
+  //if not premium
+  if (!user.stripe_subscription){
+    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
+  }
+
+  calcNotificationCounter();
+}
+
+//when notifications tray is empty
+function calcNotificationCounter() {
+  var notification_length = $("#notification-tray li").length;
+  if (notification_length > 0) {
+    $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications<span class='is-pulled-right'>" + notification_length + "</span></p>");
+    $("#notification-counter").removeClass("is-hidden").text(notification_length);
+    var page_title = document.title.split(" - ");
+    if (page_title){
+      document.title = page_title[0] + " (" + notification_length + ") - " + page_title[1];
+    }
+  }
+  else {
+    $("#notification-tray").append(
+      "<div class='smile-text'><figure class='smile'><img src='/images/lib/smile.png'></img></figure><p>No notifications - you're all set!</p></div>");
   }
 }
 
-//helper function to display success messages per listing
-function successMessage(message){
-  //hide error
-  $("#profile-msg-error").addClass('is-hidden').removeClass("is-active");
-
-  if (message){
-    $("#profile-msg-success").removeClass('is-hidden').addClass("is-active");
-    $("#profile-msg-success-text").html(message);
-  }
-  else if (!message){
-    $("#profile-msg-success").addClass('is-hidden').removeClass("is-active");
-  }
-}
-
-//function to refresh notifications
-function clearNotification(){
-  errorMessage(false);
-  successMessage(false);
+function appendNotification(msg) {
+  var tray = $("#notification-tray");
+  return tray.append("<li>" + msg + "</li>");
 }
 
 //</editor-fold>

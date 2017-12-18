@@ -8,6 +8,7 @@
 @import '../bulma/components/level.sass';
 @import '../bulma/components/card.sass';
 @import '../bulma/elements/title.sass';
+@import '../bulma/elements/image.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/delete.sass';
@@ -18,37 +19,21 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
+}
+
 .heading {
   display: block;
   letter-spacing: 1px;
+  font-size: 12px;
   font-weight: 500;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-}
-
-#notification-counter {
-  background-color: $danger;
-  padding: 0 8px;
-  margin-right: 15px;
-  border-radius: 3px;
-}
-
-#notifications-tray {
-  li {
-    line-height: 1.5;
-  }
+  margin-bottom: 10px;
 }
 
 .counter {
   margin-bottom: 10px;
-}
-
-.counter-link {
-
-}
-
-.company-logo {
-  margin-bottom: 30px;
 }
 
 .button-wrapper {
@@ -62,6 +47,84 @@
   }
 }
 
-.tag {
-  white-space: nowrap;
+.traffic-chart-wrapper {
+  position: relative;
+}
+
+.traffic-chart {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.traffic-overlay {
+  position: absolute;
+  background-color: rgba(255,255,255,0.5);
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.traffic-overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-right: -50%;
+}
+
+.chart-tabs {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.stat-wrapper {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  padding: 5px;
+  text-align: center;
+  &::before {
+    @include transition(all 0.2s ease);
+    content: "";
+    height: 3px;
+    opacity: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+  }
+  &.is-active {
+    color: $primary;
+    &::before {
+      width: 100%;
+      opacity: 1;
+      background: $primary;
+    }
+  }
+  &:hover {
+    background-color: $pastel;
+  }
+  &:focus {
+    outline: 0;
+  }
+}
+
+.portfolio-table {
+  a {
+    display: block;
+    padding: 10px;
+    &:hover {
+      background-color: $pastel;
+    }
+  }
+}
+
+.fac {
+  display: flex;
+  align-items: center;
+  .icon {
+    margin-right: 10px;
+  }
 }

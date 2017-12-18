@@ -16,8 +16,9 @@ $white-secondary: #f1f1f1 !default
 $white-disabled: rgba(255,255,255,0.5) !default
 $divider: rgba(0,0,0,0.12) !default
 
+$pastel: #f2f5f7 !default
 $brown: #795548 !default
-$blue: #2196f3 !default
+$blue: #007bff !default
 $blue-darker: #23415f !default
 $indigo: #3F51B5 !default
 $green: #81c784 !default
@@ -25,7 +26,7 @@ $orange: #ff5722 !default
 $orange-light: #ff8a65 !default
 $orange-dark: #e64a19 !default
 $purple: #9c27b0 !default
-$red: #EF5350 !default
+$red: #E53935 !default
 $turquoise: #3cbc8d !default
 $turquoise-light: #62c9a3 !default
 $turquoise-lighter: #8ad6ba !default
@@ -80,6 +81,7 @@ $primary-light: $turquoise-light !default
 $primary-lighter: $turquoise-lighter !default
 $primary-dark: $turquoise-dark !default
 $primary-darker: $turquoise-darker !default
+$success: $green !default
 $info: $blue !default
 $accent: $orange !default
 $accent-light: $orange-light !default
@@ -95,11 +97,13 @@ $dark: $grey-dark !default
 // Invert colors
 
 $primary-invert: findColorInvert($primary) !default
+$success-invert: findColorInvert($success) !default
 $info-invert: findColorInvert($blue) !default
 $accent-invert: findColorInvert($accent) !default
 $warning-invert: findColorInvert($warning) !default
 $danger-invert: findColorInvert($danger) !default
 $purple-invert: findColorInvert($purple) !default
+$pastel-invert: findColorInvert($pastel) !default
 
 $light-invert: $dark !default
 $dark-invert: $light !default
@@ -114,7 +118,7 @@ $border-hover: $black-disabled !default
 
 // Text colors
 
-$text: $grey-darker !default
+$text: #1b2733 !default
 $text-invert: findColorInvert($text) !default
 $text-light: $black-secondary !default
 $text-strong: $black-primary !default
@@ -165,7 +169,7 @@ $size-huge: $size-1 !default
 
 // 4. Lists and maps
 
-$colors: (white: ($white, $black-primary), whitelight: ($white-secondary, $black-secondary), black: ($black-primary, $white), blacklight: ($black-secondary, $white-secondary), light: ($light, $light-invert), lighter: ($lighter, $lighter), dark: ($dark, $dark-invert), primary: ($primary, $primary-invert), info: ($info, $info-invert), accent: ($accent, $accent-invert), danger: ($danger, $danger-invert)) !default
+$colors: (white: ($white, $black-primary), whitelight: ($white-secondary, $black-secondary), black: ($black-primary, $white), blacklight: ($black-secondary, $white-secondary), light: ($light, $light-invert), lighter: ($lighter, $lighter), dark: ($dark, $dark-invert), primary: ($primary, $primary-invert), info: ($info, $info-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), accent: ($accent, $accent-invert), danger: ($danger, $danger-invert)) !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 !default
 

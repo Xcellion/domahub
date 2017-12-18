@@ -16,10 +16,12 @@ module.exports = function(app){
   app.get("/profile/dashboard", [
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
+    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     profile_functions.updateAccountSettingsGet,
     profile_functions.getAccountListings,
+    profile_functions.authWithGoogle,
     profile_functions.renderDashboard
   ]);
 
@@ -73,7 +75,8 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
-    profile_functions.getDNSRecordsMulti
+    profile_functions.getDNSRecordsMulti,
+    owner_functions.updateListingsRegistrarInfo
   ]);
 
   //mylistings multi verify
@@ -93,7 +96,9 @@ module.exports = function(app){
   app.get("/profile/settings", [
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
+    profile_functions.getAccountRegistrars,
     stripe_functions.getStripeAccount,
+    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeCustomerCharges,
     stripe_functions.getStripeCustomerNextInvoice,
@@ -114,7 +119,26 @@ module.exports = function(app){
   app.post("/profile/gettransactions", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    stripe_functions.getTransactions
+    stripe_functions.getStripeTransactions
+  ]);
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------REGISTRAR-------------------------------
+
+  //post to update registrar
+  app.post("/profile/registrar", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.checkRegistrarInfo,
+    profile_functions.updateAccountRegistrar
+  ]);
+
+  //lookup registrars and pull domain names
+  app.post("/profile/registrar/lookup", [
+    auth_functions.checkLoggedIn,
+    profile_functions.getRegistrarAPI,
+    profile_functions.getRegistrarDomains
   ]);
 
   //</editor-fold>
@@ -200,7 +224,7 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
-    stripe_functions.getTransactions,
+    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     stripe_functions.transferMoney

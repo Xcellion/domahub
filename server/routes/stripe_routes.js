@@ -12,6 +12,12 @@ module.exports = function(app){
 
   //<editor-fold>----------------------------------------------------------------------STRIPE ROUTES
 
+  //create coupon codes
+  app.get("/createcodes/:number", [
+    stripe_functions.checkAdmin,
+    stripe_functions.createCouponCodes
+  ]);
+
   app.post('/stripe/webhook', [
     general_functions.jsonParser,
     stripe_functions.stripeWebhookEventCatcher

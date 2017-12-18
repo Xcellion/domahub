@@ -40,7 +40,7 @@ module.exports = {
     });
   },
 
-  //function to check dev or not
+  //check dev or not
   ifNotDev : function(req, res, next){
     if (process.env.NODE_ENV != "dev"){
       next();

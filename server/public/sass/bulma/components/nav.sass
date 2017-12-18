@@ -38,6 +38,12 @@
     &:focus
       +translate(6px,0)
 
+.remember-text
+  position: absolute
+  left: 25px
+  top: 1px
+
+
 .nav-item
   align-items: center
   display: flex
@@ -141,6 +147,9 @@ a.nav-item
   // Modifiers
   &.has-shadow
     +box-shadow(0,3px,5px,$border,0)
+  &.is-fluid
+    position: relative
+    padding: 0
   // Responsiveness
   +mobile
     padding: 0
@@ -159,31 +168,19 @@ a.nav-item
   +mobile
     display: none
 
-// login button
-.login-modal
-  width: auto
-
-// modal login box
-#login-dropdown
-  background-color: $white
-  padding: 20px
-
 // profile dropdown menu
 #profile-dropdown
-  +box-shadow(-2px,9px,15px,$border,1px)
-  +transition(all 0.3s ease-in-out)
+  +box-shadow(0,8px,20px,$border,0)
   background-color: $white
   position: absolute
   right: 10px
   text-align: left
-  top: 46px
+  top: 49px
   width: 200px
 
-
 .profile-dropdown-menu
-  border-radius: 0 0 3px 3px
+  border-radius: 3px
   li
-    box-sizing: border-box
     &:not(:first-child)
       border-top: 1px solid $border
     &:first-child
@@ -193,13 +190,24 @@ a.nav-item
       a
         font-weight: 500
   a
-    width: 100%
-    display: inline-block
+    display: inline-flex
+    align-items: center
     padding: 15px
-    box-sizing: border-box
-    span + span
-      margin-left: 5px
+    width: 100%
+    .icon
+      margin-right: 10px
     &:hover,
     &:active,
     &:focus
-      background-color: $grey-lighter
+      background-color: $pastel
+
+.expand-out
+  +keyframes(expand 0.1s forwards)
+
+@keyframes expand
+  0%
+    opacity: 0
+    height: 0
+  100%
+    opacity: 1
+    height: auto

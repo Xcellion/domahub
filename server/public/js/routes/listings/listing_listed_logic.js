@@ -28,7 +28,7 @@ $(document).ready(function() {
         var buy_text = "Buy now - " + moneyFormat.to(listing_info.buy_price);
         $("#price-tag").text(buy_text).removeClass('is-hidden');
 
-        $("#buy-button").on('click', function(){
+        $("#buy-now-button").on('click', function(){
           //dont need the min offer input if you're just buying now
           $("#contact_offer").removeAttr("required");
         }).find("#buy-button-text").text(buy_text);
@@ -49,7 +49,7 @@ $(document).ready(function() {
     }
 
     //click buy now button or unavailable description
-    $("#buy-now-button").on("click", function(e){
+    $("#buy-tab").on("click", function(e){
       //doing the tutorial!
       if (compare && tutorial_tour && !tutorial_tour.ended()){
         tutorial_tour.goTo(6);
@@ -87,7 +87,8 @@ $(document).ready(function() {
 
             if (data.state == "success"){
               if (type_of_submit == "offer"){
-                $("#contact-success").removeClass('is-hidden').addClass('is-active');
+                clearNotification();
+                successMessage("Success! Please check your email for further instructions.");
                 $("#buy-now-form").off();
               }
               else {
@@ -95,9 +96,9 @@ $(document).ready(function() {
               }
             }
             else {
+              clearNotification();
               $(".contact-input").removeClass('is-disabled');
-              $("#contact-error").removeClass('is-hidden').addClass('is-active');
-              $("#contact-error-message").text(data.message);
+              errorMessage(data.message);
             }
           });
         }
@@ -117,7 +118,7 @@ $(document).ready(function() {
     if (listing_info.rentable){
 
       //click rent now or unavailable description
-      $("#rent-now-button").on("click", function(e) {
+      $("#calendar-tab").on("click", function(e) {
         //doing the tutorial!
         if (compare && tutorial_tour && !tutorial_tour.ended()){
           tutorial_tour.goTo(8);
@@ -246,7 +247,7 @@ $(document).ready(function() {
 
 //<editor-fold>-------------------------------BUY NOW-------------------------------
 
-//function to show buy now module
+//show buy now module
 function showBuyStuff(buy_now_button){
 
   //hide the slash input
@@ -260,21 +261,19 @@ function showBuyStuff(buy_now_button){
   if (listing_info.status == 1){
     $("#unavailable-module").addClass('is-hidden');
 
-    //fade out buy button
-    buy_now_button.addClass('is-disabled is-active');
-    $("#rent-now-button").removeClass('is-disabled is-active');
-
     //show buy related stuff
     $(".post-buy-module").removeClass('is-hidden');
     $(".post-rent-module").addClass('is-hidden');
     $("#contact_name").focus();
 
-    //get a random char phrase
-    var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
-    $("#contact_name").attr("placeholder", random_char.name);
-    $("#contact_email").attr("placeholder", random_char.email);
-    $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
-    //add a / to end of domain
+    if (!listing_info.premium || (listing_info.premium && listing_info.placeholder == 1)){
+      //get a random char phrase
+      var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
+      $("#contact_name").attr("placeholder", random_char.name);
+      $("#contact_email").attr("placeholder", random_char.email);
+      $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+    }
+    //revert domain title to get rid of the slash at the end
     $("#domain-title").text(listing_info.domain_name);
   }
   else {
@@ -283,12 +282,8 @@ function showBuyStuff(buy_now_button){
 
 }
 
-//function to show rental module
+//show rental module
 function showRentalStuff(rent_now_button){
-
-  //fade out rent button
-  rent_now_button.addClass('is-disabled is-active');
-  $("#buy-now-button").removeClass('is-disabled is-active');
 
   //show rental related stuff
   $(".post-rent-module").removeClass('is-hidden');
@@ -337,14 +332,14 @@ function showRentalStuff(rent_now_button){
   }
 }
 
-//function to check phone number
+//check phone number
 function checkPhone(){
   if ($("#contact_phone").intlTelInput("isValidNumber")){
     return true;
   }
   else {
-    $("#contact-error-message").text("Please enter a real phone number! Did you select the correct country for your phone number?");
-    $("#contact-error").removeClass('is-hidden').addClass('is-active');
+    clearNotification();
+    errorMessage("Please enter a real phone number! Did you select the correct country for your phone number?")
   }
 }
 
@@ -444,7 +439,7 @@ function errorHandler(message){
 
 //<editor-fold>-------------------------------CALENDAR SET UP>-------------------------------
 
-//function to get times from the server
+//get times from the server
 function getTimes(calendar_elem){
   //now loading messages
   $("#calendar").addClass('is-disabled');
@@ -499,7 +494,7 @@ function getTimes(calendar_elem){
   }
 }
 
-//function to setup the calendar
+//setup the calendar
 function setUpCalendar(listing_info){
   //create a new range picker based on new path rental availability
   var start_date = moment();
@@ -650,7 +645,7 @@ function updatePrices(){
   }
 }
 
-//function to count number for price
+//count number for price
 function countPrice(elem, price){
   elem.prop('Counter', $("#price").prop('Counter')).stop().animate({
     Counter: price

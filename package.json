@@ -19,6 +19,7 @@
     "express-session": "1.13.0",
     "glob": "7.1.2",
     "google-libphonenumber": "2.0.15",
+    "googleapis": "^23.0.0",
     "json2csv": "3.11.2",
     "moment": "2.17.1",
     "multer": "1.1.0",
@@ -42,7 +43,8 @@
     "webshot": "0.18.0",
     "whois": "2.5.0",
     "wnumb": "1.1.0",
-    "xlsx": "0.11.3"
+    "xlsx": "0.11.3",
+    "xml2js": "^0.4.19"
   },
   "repository": {
     "type": "git",
