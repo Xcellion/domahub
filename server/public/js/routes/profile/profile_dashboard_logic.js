@@ -19,7 +19,7 @@ $(document).ready(function() {
     document.execCommand("copy");
     $("#referral-link").blur();
     $(this).find("i").removeClass("fa-clipboard").addClass('fa-check');
-    $(this).find("p").text("Copied!");
+    $("#referral-link-text").text("Copied!");
   });
 
 });
@@ -59,12 +59,12 @@ function showNotifications() {
 
   //if stripe payout settings are not set
   if (!user.stripe_account) {
-    appendNotification("Complete your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-address'>payout settings</a> to start receiving payments.");
+    appendNotification("Complete your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payment'>payout settings</a> to start receiving payments.");
   }
 
   //if bank account is not connected
   if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
-    appendNotification("Connect your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payout-bank'>bank account</a> to start receiving payments.");
+    appendNotification("Connect your <a tabindex='0' class='is-primary is-underlined' href='/profile/settings#payment'>bank account</a> to start receiving payments.");
   }
 
   //if not premium

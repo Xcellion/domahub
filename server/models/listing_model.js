@@ -133,7 +133,7 @@ module.exports = {
           accounts.username, \
           accounts.email AS owner_email, \
           accounts.stripe_subscription_id, \
-          !ISNULL(accounts.stripe_account) AS stripe_connected, \
+          !ISNULL(accounts.stripe_account_id) AS stripe_connected, \
           accounts.date_created AS user_created, \
           offers_table.deposited \
         FROM listings \
@@ -396,7 +396,7 @@ module.exports = {
         WHERE listings.status = 1 \
         AND listings.verified = 1 \
         AND listings.deleted IS NULL \
-        AND accounts.stripe_account IS NOT NULL \
+        AND accounts.stripe_account_id IS NOT NULL \
         AND listings.domain_name LIKE ? \
         ORDER BY listings.domain_name ASC \
         LIMIT ?, 10";
@@ -461,6 +461,18 @@ module.exports = {
   //</editor-fold>
 
   //<editor-fold>-------------------------------UPDATES-------------------------------
+
+  //turns off listings above 100 count (for cancellation of premium)
+  selectAbove100Listings : function(stripe_customer_id, callback){
+    console.log("DB: Attempting to get any listings above 100 basic limit...");
+    var query = "SELECT listings.id \
+        FROM listings \
+        INNER JOIN accounts \
+        ON accounts.id = listings.owner_id \
+        WHERE (accounts.stripe_customer_id = ?) \
+        LIMIT 100, 18446744073709551615"
+    database.query(query, "Failed to get listings above 100 basic limit!", callback, stripe_customer_id);
+  },
 
   //updates listing info
   updateListingsInfo : function(domains, listing_info, callback){

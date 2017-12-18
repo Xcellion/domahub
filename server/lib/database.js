@@ -1,5 +1,13 @@
 console.log("Connecting to database...");
 
+//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+
+var error = require('./error.js');
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------VARIABLES-------------------------------
+
 var mysql = require('mysql');
 var mysql_options = {
   host: "localhost",
@@ -12,51 +20,74 @@ var mysql_options = {
   charset: "utf8_unicode_ci"
 }
 
-//uncomment to use production database, but needs to open ports on serverHTTP
+//</editor-fold>
 
-//command to open port
+//<editor-fold>-------------------------------PROD INSTRUCTIONS ON MYSQL SETUP-------------------------------
+
+////////////////////////////////////////////////////////OPEN UFW PORT
 //will revert on iptables on reboot (remain on ufw)
 //sudo ufw allow in on eth0 to any port 3306
 
-//remove leftover ufw rules
+////////////////////////////////////////////////////////REMOVE LEFTOVER UFW RULES ( BE CAREFUL NOT TO DELETE WRONG RULES )
 //sudo ufw status
 //sudo ufw delete 4
 //sudo ufw delete 7
+//sudo service ufw restart
 
-//access to phpmyadmin (prod)
-//sudo nano /usr/local/openresty/nginx/conf/sites-enabled/default
+////////////////////////////////////////////////////////ACCESS TO PHPMY ADMIN ON PRODUCTION SERVER
 //find and uncomment out (using a # at the front) include sites-enabled/mysql
-//restart openresty with sudo openresty -s reload
+//restart openresty
+
+//sudo nano /usr/local/openresty/nginx/conf/sites-enabled/default
+//CTRL + SHIFT + _
+//line 32
+//sudo openresty -s reload
 
 // if (process.env.NODE_ENV == "dev"){
 //   mysql_options.host = "domahub.com";
 // }
 
+//</editor-fold>
+
 var pool = mysql.createPool(mysql_options);
 
 module.exports = {
+
+  //<editor-fold>-------------------------------FUNCTIONS-------------------------------
+
   //grab a connection from the pool, then run SQL query
   query: function(custom_query, error_description, callback, post){
     pool.getConnection(function(err, con){
 
-      //something went wrong with the mysql query!
       if (!err){
-        con.query(custom_query, post, function(err, result){
+        con.query(custom_query, post, function(err, result, fields){
           con.release();
-          callback({
-            state : "success",
-            info : result
-          });
+          if (err){
+            error.log(err);
+            callback({
+              state : "error",
+              info : error_description
+            });
+          }
+          else {
+            callback({
+              state : "success",
+              info : result
+            });
+          }
         });
       }
+      //something went wrong with the mysql query!
       else {
-        console.log(err);
+        error.log(err);
         callback({
           state : "error",
-          info : error_description,
-          errcode : err.code
+          info : error_description
         });
       }
     });
   }
+
+  //</editor-fold>
+
 };
