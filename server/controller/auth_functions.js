@@ -31,7 +31,7 @@ module.exports = {
   //resets message before returning it
   messageReset : messageReset,
 
-  //function to check token length (for pw reset, email verify)
+  //check token length (for pw reset, email verify)
   checkToken : function(req, res, next){
     if (req.params.token.length != 10 || !req.params.token){
       res.redirect('/');
@@ -59,7 +59,7 @@ module.exports = {
     res.render("account/signup.ejs", { message: messageReset(req)});
   },
 
-  //function to check promo code for referral
+  //check promo code for referral
   checkReferralCode : function(req, res, next){
     console.log("F: Checking referral code validity...");
 
@@ -95,7 +95,7 @@ module.exports = {
     }
   },
 
-  //function to sign up for a new account
+  //sign up for a new account
   signupPost: function(req, res, next){
     var email = req.body.email;
     var username = req.body.username;
@@ -181,42 +181,44 @@ module.exports = {
               }
 
               //sign up on mailchimp
-              console.log("F: Adding to Mailchimp list...");
-              request({
-                url : monkey_url,
-                method : "POST",
-                headers : {
-                  "Authorization" : "Basic " + new Buffer('any:' + monkey_api_key ).toString('base64')
-                },
-                json : {
-                  email_address : user.email,
-                  status : "subscribed",
-                  merge_fields : {
-                    "USERNAME" : user.username
+              if (process.env.NODE_ENV != "dev"){
+                console.log("F: Adding to Mailchimp list...");
+                request({
+                  url : monkey_url,
+                  method : "POST",
+                  headers : {
+                    "Authorization" : "Basic " + new Buffer('any:' + monkey_api_key ).toString('base64')
+                  },
+                  json : {
+                    email_address : user.email,
+                    status : "subscribed",
+                    merge_fields : {
+                      "USERNAME" : user.username
+                    }
                   }
-                }
-              }, function(err, response, body){
-                if (err || body.errors || body.status == 400){
-                  //send email to notify
-                  error.log("Failed to add to Mailchimp list! Notifying...");
-                  mailer.sendBasicMail({
-                    to: "general@domahub.com",
-                    from: 'general@domahub.com',
-                    subject: "New user signed up for DomaHub! Failed monkey insert!",
-                    html: "Username - " + user.username + "<br />Email - " + user.email + "<br />Error - " + err + "<br />Body - " + body
-                  });
-                }
-                else {
-                  //send email to notify
-                  console.log("F: Successfully added to Mailchimp list! Notifying...");
-                  mailer.sendBasicMail({
-                    to: "general@domahub.com",
-                    from: 'general@domahub.com',
-                    subject: "New user signed up for DomaHub!",
-                    html: "Username - " + user.username + "<br />Email - " + user.email + "<br />"
-                  });
-                }
-              });
+                }, function(err, response, body){
+                  if (err || body.errors || body.status == 400){
+                    //send email to notify
+                    error.log("Failed to add to Mailchimp list! Notifying...");
+                    mailer.sendBasicMail({
+                      to: "general@domahub.com",
+                      from: 'general@domahub.com',
+                      subject: "New user signed up for DomaHub! Failed monkey insert!",
+                      html: "Username - " + user.username + "<br />Email - " + user.email + "<br />Error - " + err + "<br />Body - " + body
+                    });
+                  }
+                  else {
+                    //send email to notify
+                    console.log("F: Successfully added to Mailchimp list! Notifying...");
+                    mailer.sendBasicMail({
+                      to: "general@domahub.com",
+                      from: 'general@domahub.com',
+                      subject: "New user signed up for DomaHub!",
+                      html: "Username - " + user.username + "<br />Email - " + user.email + "<br />"
+                    });
+                  }
+                });
+              }
 
               generateVerify(req, res, email, username, function(state){
                 req.session.message = "Success! Please check your email for further instructions!";
@@ -236,7 +238,7 @@ module.exports = {
 
   //<editor-fold>------------------------------------------LOGIN / LOGOUT---------------------------------------
 
-  //function to check if account exists on domahub
+  //check if account exists on domahub
   checkAccountExists : function(req, res, next){
     console.log("F: Checking if account exists...");
 
@@ -299,15 +301,11 @@ module.exports = {
       req.session.destroy();
       delete req.session;
       delete req.user;
-      redirectTo = "/login";
-      res.redirect(redirectTo);
     }
-    else {
-      res.redirect('/');
-    }
+    res.redirect("/login");
   },
 
-  //function to login
+  //login
   loginPost: function(req, res, next){
     var referer = req.header("Referer").split("/");
     var redirectTo = "";
@@ -474,7 +472,7 @@ module.exports = {
     res.render("account/page_for_pw_forgot.ejs", {message: messageReset(req)});
   },
 
-  //function to change password
+  //change password
   forgotPost: function(req, res, next){
     email = req.body.email;
     console.log('F: Sending account password forgot email...');
@@ -524,12 +522,12 @@ module.exports = {
 
   //<editor-fold>------------------------------------------RESET PASSWORD---------------------------------------
 
-  //function to check token for resetting password
+  //check token for resetting password
   renderResetPW: function(req, res){
     res.render("account/page_for_pw_reset.ejs", {message: messageReset(req)});
   },
 
-  //function to reset password
+  //reset password
   resetPost: function(req, res, next){
     var token = req.params.token;
     var password = req.body.password;

@@ -170,7 +170,7 @@ module.exports = {
   getStripeAndType : function(domain_name, callback){
     console.log("DB: Attempting to get the Stripe ID of the owner of: " + domain_name + "...");
     var query = "SELECT \
-          accounts.stripe_account \
+          accounts.stripe_account_id \
             FROM accounts \
             JOIN listings ON listings.owner_id = accounts.id \
             WHERE listings.domain_name = ? ";
@@ -184,18 +184,20 @@ module.exports = {
     database.query(query, "Failed to get all coupon codes!", callback);
   },
 
-  //gets all referrals made by a user
-  getReferralsFromUser : function(account_id, callback){
-    console.log("DB: Attempting to get all referrals made by user #" + account_id + "...");
+  //gets all referrals/existing coupons for a user
+  getCouponsAndReferralsForUser : function(account_id, callback){
+    console.log("DB: Attempting to get all referrals/coupons for user #" + account_id + "...");
     var query = "SELECT \
           coupon_codes.date_created, \
           coupon_codes.date_accessed, \
-          accounts.username, \
-          accounts.stripe_subscription_id \
+          coupon_codes.duration_in_months, \
+          accounts.stripe_subscription_id, \
+          coupon_codes.referer_id \
             FROM accounts \
-            LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
-            WHERE coupon_codes.referer_id = ?"
-    database.query(query, "Failed to get all coupon codes!", callback, account_id);
+          LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
+          WHERE coupon_codes.referer_id = ? \
+          OR coupon_codes.account_id = ?"
+    database.query(query, "Failed to get all coupon codes!", callback, [account_id, account_id]);
   },
 
   //gets any existing coupon code for a user
@@ -207,9 +209,9 @@ module.exports = {
           coupon_codes.duration_in_months, \
           accounts.stripe_subscription_id \
             FROM accounts \
-            LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
-            WHERE accounts.id = ?"
-    database.query(query, "Failed to get an existing coupon code!", callback, account_id);
+          LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
+          WHERE accounts.id = ? "
+  database.query(query, "Failed to get an existing coupon code!", callback, account_id);
   },
 
   //</editor-fold>
