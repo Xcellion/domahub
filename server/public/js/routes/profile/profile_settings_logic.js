@@ -204,6 +204,9 @@ $(document).ready(function() {
         $("#promo-submit").removeClass('is-loading');
         $("#promo-input").val("");
         if (data.state == "success"){
+          if (data.user){
+            user = data.user;
+          }
           getReferrals();
           var subscription_exists_text = (user.stripe_subscription_id) ? "Your free month will be applied on the next applicable pay cycle." : "Please upgrade to Premium to receive your free month.";
           successMessage("Successfully applied promo code! " + subscription_exists_text);
@@ -211,6 +214,7 @@ $(document).ready(function() {
         else {
           errorMessage(data.message);
         }
+        setupUpgradeTab();
       });
     });
 
@@ -780,6 +784,11 @@ function showSectionByURL(){
       if (data.state == "success"){
         user = data.user;
       }
+      else {
+        if (data.message != "demo-error"){
+          errorMessage(data.message);
+        }
+      }
       createReferralsTable();
     });
   }
@@ -794,38 +803,33 @@ function showSectionByURL(){
       $(".referral-row:not(#referral-clone)").remove();
 
       for (var x = 0 ; x < user.referrals.length ; x++){
-        if (user.referrals[x].duration_in_months == 1 && user.referrals[x].referer_id == null){
-          //not a promo code, just 1 month from a referral
+        //calculate total months free
+        if (user.referrals[x].date_accessed){
+          total_months_redeemed += user.referrals[x].duration_in_months;
         }
-        else {
-          //calculate total months free
-          if (user.referrals[x].date_accessed){
-            total_months_redeemed += user.referrals[x].duration_in_months;
-          }
 
-          var referral_clone = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
-          var duration_in_months = user.referrals[x].duration_in_months;
+        var referral_clone = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
+        var duration_in_months = user.referrals[x].duration_in_months;
 
-          //referred by someone
-          if (user.referrals[x].referer_id != user.id){
-            duration_in_months--;
-            var referral_clone_referred = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
-            referral_clone_referred.find(".referral-type").text("Referred by user");
-            referral_clone_referred.find(".referral-months").text("1");
-            referral_clone_referred.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
-            referral_clone_referred.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? "1 month redeemed!" : "Not yet redeemed");
-            $("#referral-table").append(referral_clone_referred);
-          }
+        //referred by someone
+        if (user.referrals[x].referer_id != user.id && Number.isInteger(user.referrals[x].referer_id)){
+          duration_in_months--;
+          var referral_clone_referred = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
+          referral_clone_referred.find(".referral-type").text("Referred by user");
+          referral_clone_referred.find(".referral-months").text("1");
+          referral_clone_referred.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
+          referral_clone_referred.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? "1 month redeemed!" : "Not yet redeemed");
+          $("#referral-table").append(referral_clone_referred);
+        }
 
-          //referral or coupon
-          if (duration_in_months > 0){
-            referral_clone.find(".referral-type").text((user.referrals[x].referer_id == user.id) ? "Referred a user" : "Promo code");
-            referral_clone.find(".referral-months").text(duration_in_months);
-            referral_clone.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
-            var months_redeemed_text = (duration_in_months == 1) ? " month " : " months ";
-            referral_clone.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? duration_in_months + months_redeemed_text + "redeemed!" : "Not yet redeemed");
-            $("#referral-table").append(referral_clone);
-          }
+        //referral or coupon
+        if (duration_in_months > 0){
+          referral_clone.find(".referral-type").text((user.referrals[x].referer_id == user.id) ? "Referred a user" : "Promo code");
+          referral_clone.find(".referral-months").text(duration_in_months);
+          referral_clone.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
+          var months_redeemed_text = (duration_in_months == 1) ? " month " : " months ";
+          referral_clone.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? duration_in_months + months_redeemed_text + "redeemed!" : "Not yet redeemed");
+          $("#referral-table").append(referral_clone);
         }
       }
 
