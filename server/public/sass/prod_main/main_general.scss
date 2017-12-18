@@ -1,3 +1,4 @@
+@import "../balloon";
 @import '../bulma/utilities/utilities.sass';
 @import '../bulma/base/base.sass';
 @import '../bulma/components/grid.sass';
@@ -19,4 +20,10 @@
 
 .min-height {
   min-height: calc(100vh - 110px);
+}
+
+.image {
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
 }

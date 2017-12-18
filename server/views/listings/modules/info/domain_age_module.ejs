@@ -1,7 +1,17 @@
 <% if (listing_info.date_registered && (!listing_info.premium || (listing_info.premium && listing_info.domain_age))) { %>
-  <div id="domain-age-module" class='content'>
-    <p>
-    This domain was first registered at <span class="is-bold"><%= listing_info.registrar %></span> on <span id="date_registered"></span>.
+  <div id="domain-age-module" class='level-item'>
+    <small class="heading">
+      Registered
+    </small>
+    <p id="date_registered" class="regular-font">
+    </p>
+  </div>
+  <div id="domain-registrar-module" class='level-item'>
+    <small class="heading">
+      Registrar
+    </small>
+    <p id="registrar" class="regular-font">
+      <%= listing_info.registrar %>
     </p>
   </div>
 <% } %>

@@ -7,60 +7,57 @@
 </head>
 <body>
   <%- include("../templates/navbar", {user: user}); %>
+  <%- include("../templates/notifications.ejs"); %>
 
-  <section class="section is-medium min-height">
+  <section class="section is-medium is-primary">
     <div class="container">
-      <div id="message-success" class="notification is-primary is-hidden is-popup">
-        <span class="delete"></span>
-        <p class="is-white">
-          Message sent! We will get back to you as soon as possible. Thank you for your patience.
-        </p>
-      </div>
-      <div id="message-error" class="notification is-danger is-hidden is-popup">
-        <span class="delete"></span>
-        <span id="message-error-text"></span>
-      </div>
       <div class="columns">
-        <div class="column is-6">
-          <div class="content">
-            <h1>Contact Us</h1>
-            <p>
-              Feel free to use the form below to send us any questions,
-              inquiries, suggestions, bug reports, and anything else
-              you wish to share!
+        <div class="column is-8 is-offset-2">
+          <div class="content has-text-centered">
+            <figure class="image is-128x128">
+              <img src="/images/lib/contact-us.svg" alt="Contact Us Guy" />
+            </figure>
+            <h1 class="title is-2 is-white">Contact Us</h1>
+            <p class="subtitle is-4 is-white">
+              Use the form below to get in touch with our team.
             </p>
           </div>
-          <form id="contact-form" autocomplete="off">
-            <label class="error_message label is-medium">Name</label>
-            <p class="control has-icon">
-              <input id="contact_name" required class="input is-medium" name="contact_name" type="text">
-              <i class="fa fa-user-o"></i>
-            </p>
-            <label class="error_message label is-medium">Email Address</label>
-            <p class="control has-icon">
-              <input id="contact_email" required class="input is-medium" name="contact_email" type="email">
-              <i class="fa fa-envelope-o"></i>
-            </p>
-            <label class="error_message label is-medium">Message</label>
-            <p class="control">
-              <textarea id="contact_message" required class="textarea" name="contact_message"></textarea>
-            </p>
-            <nav class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <div class='control is-grouped'>
-                    <div class='control'>
-                      <button id="submit-button" type="submit" class="button has-icon is-primary is-stylish">
-                        <span class="icon is-small">
-                          <i class="fa fa-comment"></i>
-                        </span>
-                        <span>Send Message</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-small">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <form id="contact-form" class="box" autocomplete="off" style="margin-top:-105px;">
+            <label class="error_message label" for="contact_name">Name</label>
+            <div class="control has-icon">
+              <input id="contact_name" required class="input" name="contact_name" type="text">
+              <div class="icon">
+                <i class="far fa-user-alt"></i>
               </div>
-            </nav>
+            </div>
+            <label class="error_message label" for="contact_email">Email Address</label>
+            <div class="control has-icon">
+              <input id="contact_email" required class="input" name="contact_email" type="email">
+              <div class="icon">
+                <i class="far fa-envelope"></i>
+              </div>
+            </div>
+            <label class="error_message label" for="contact_message">Message</label>
+            <div class="control">
+              <textarea id="contact_message" required class="textarea" name="contact_message"></textarea>
+            </div>
+            <div class='control'>
+              <button id="submit-button" type="submit" class="button has-icon is-primary is-stylish is-fullwidth-mobile">
+                <div class="icon is-small">
+                  <i class="far fa-check-circle"></i>
+                </div>
+                <span>Send Message</span>
+              </button>
+            </div>
           </form>
         </div>
       </div>

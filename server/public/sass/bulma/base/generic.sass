@@ -35,6 +35,8 @@ textarea
   text-transform: uppercase !important
 .is-capitalized
   text-transform: capitalize !important
+.break-all
+  word-break: break-all
 
 h1,
 h2,
@@ -105,8 +107,10 @@ a
   &:hover,
   &:focus
     text-decoration: none !important
-  &.is-generic
-    text-decoration: underline !important
+  &.is-underlined-hover
+    &:hover,
+    &:focus
+      text-decoration: underline !important
     &:active
       outline: none
   +mobile-456px
@@ -157,7 +161,11 @@ strong
   &.is-500
     font-weight: 500
 
-// Block
+.tip
+  display: block
+  margin: 5px 0
+  color: $text-light
+  line-height: 1.5
 
 pre
   background-color: $pre-background

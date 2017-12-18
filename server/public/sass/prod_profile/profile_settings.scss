@@ -22,6 +22,11 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
+}
+
 #settings-toolbar .tabs {
   overflow:visible;
   overflow-x:visible;
@@ -30,10 +35,6 @@
 .earnings-divider {
   padding-top:10px;
   border-top:1px solid $border;
-}
-
-.company-logo {
-  margin-bottom: 30px;
 }
 
 .has-border-right {
@@ -59,38 +60,6 @@
   }
 }
 
-.tip {
-  display: block;
-  margin: 5px 0;
-  color: $text-light;
-  line-height: 1.5;
-
-  &.is-inline{
-    display:inline-block !important;
-  }
-}
-
-.sub-tabs {
-  position: relative;
-  padding-right: 20px;
-  &:after {
-    content: "";
-    position: absolute;
-    right: 0;
-    height: 50%;
-    top: 25%;
-    width: 2px;
-    background: $border;
-    @include mobile {
-      right: 15px;
-    }
-  }
-}
-
-.card-header.is-block {
-  display:block;
-}
-
 .nothing-exists-row {
   padding:25px;
   img {
@@ -112,6 +81,7 @@
 
 #transactions-info {
   li {
+    padding : 5px;
     .icon {
       margin-right: 10px;
     }
@@ -121,11 +91,23 @@
   }
 }
 
-.modal-content {
-  background-color: $white;
-  border-radius: $radius-large;
-  padding: 20px;
-  &.is-small {
-    max-width: 300px !important;
+.select {
+  &.is-narrow {
+    select {
+      width: 105px;
+    }
+  }
+}
+
+.stripe-required-info {
+  &.icon {
+    position: absolute;
+    right: -15px;
+    top: -6px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  &.tag {
+    margin-left: 10px;
   }
 }

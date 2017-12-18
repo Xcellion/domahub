@@ -40,6 +40,11 @@
       +scale(0.7)
     100%
       opacity: 1
+  @keyframes flash
+    0%
+      opacity: 0.5
+    100%
+      opacity: 1
   // Sizes
   &.is-small
     width: 500px
@@ -49,4 +54,16 @@
     $color-invert: nth($pair, 2)
     &.is-#{$name}
       background-color: $color
-      color: $color-invert
+      &.has-icon
+        display: flex
+        justify-content: flex-start
+        padding: 0
+        .icon-box
+          align-items: center
+          background-color: darken($color, 10%)
+          display: flex
+          padding: 20px
+          .icon
+            +keyframes(flash 1s infinite alternate)
+        .content
+          padding: 20px

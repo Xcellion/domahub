@@ -10,14 +10,16 @@ var error = require('./error.js');
 
 var mysql = require('mysql');
 var mysql_options = {
-  host: "localhost",
+  port: 3306,
+  host: "127.0.0.1",
   user: 'domadministrator',
   password: 'k#h8$.Kg.TWQ',
   database: 'domahub',
   multipleStatements: true,
   dateStrings: true,
   timezone: '+0:00',
-  charset: "utf8_unicode_ci"
+  charset: "utf8_unicode_ci",
+  connectionLimit: 100
 }
 
 //</editor-fold>
@@ -40,7 +42,7 @@ var mysql_options = {
 
 //sudo nano /usr/local/openresty/nginx/conf/sites-enabled/default
 //CTRL + SHIFT + _
-//line 32
+//line 41
 //sudo openresty -s reload
 
 // if (process.env.NODE_ENV == "dev"){
@@ -63,7 +65,7 @@ module.exports = {
         con.query(custom_query, post, function(err, result, fields){
           con.release();
           if (err){
-            error.log(err);
+            error.log(err, custom_query + JSON.stringify(post));
             callback({
               state : "error",
               info : error_description
@@ -79,7 +81,7 @@ module.exports = {
       }
       //something went wrong with the mysql query!
       else {
-        error.log(err);
+        error.log(err, custom_query + JSON.stringify(post));
         callback({
           state : "error",
           info : error_description

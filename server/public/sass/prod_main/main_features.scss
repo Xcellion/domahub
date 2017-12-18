@@ -7,6 +7,7 @@
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/image.sass';
 @import '../bulma/elements/delete.sass';
+@import '../bulma/elements/notification.sass';
 @import '../bulma/elements/tag.sass';
 @import '../bulma/elements/box.sass';
 @import '../bulma/elements/button.sass';
@@ -22,8 +23,7 @@
 }
 
 #hero-image {
-  width: 256px;
-  margin: 0 auto 25px;
+  width: 150px;
 }
 
 #product-img {
@@ -104,7 +104,7 @@
   margin: 0 auto;
   width: 35px;
   @include mobile {
-    margin: 0 0 10px;
+    margin: 0 auto 10px;
   }
 }
 
@@ -139,7 +139,7 @@
 }
 
 .price-card {
-  @include transition(all 0.25s ease);
+  @include transition(translate 0.25s ease);
   border-radius: $radius;
   .card-title {
     border-bottom: 1px solid $border;
@@ -169,14 +169,14 @@
 
 .slick-prev {
   left: -10px !important;
-  &:before {
+  &::before {
     color: $primary !important;
   }
 }
 
 .slick-next {
   right: -10px !important;
-  &:before {
+  &::before {
     color: $primary !important;
   }
 }
@@ -185,17 +185,17 @@
   li {
     button {
       &:hover, &:focus {
-        &:before {
+        &::before {
           color: $primary-lighter;
         }
       }
-      &:before {
+      &::before {
         font-size: 10px !important;
       }
     }
     &.slick-active {
       button {
-        &:before {
+        &::before {
           color: $primary !important;
         }
       }

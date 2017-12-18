@@ -33,7 +33,7 @@ module.exports = function(app){
 
 //<editor-fold>------------------------------------------FUNCTIONS---------------------------------------
 
-//function to check if the requested host is not for domahub
+//check if the requested host is not for domahub
 function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'').toLowerCase();
 
@@ -160,7 +160,7 @@ function searchAndDirect(rental_info, req, res){
   }
 }
 
-//function to proxy request
+//proxy request
 function requestProxy(req, res, rental_info){
   //now rendering rental, delete any sensitive stuff
   if (!req.session.proxy_edit){
@@ -206,7 +206,7 @@ function requestProxy(req, res, rental_info){
 
 //<editor-fold>------------------------------------------HELPERS---------------------------------------
 
-//function to add http or https
+//add http or https
 function addProtocol(address){
   if (!validator.isURL(address, {
     protocols: ["http", "https"],

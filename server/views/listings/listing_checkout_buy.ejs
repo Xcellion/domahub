@@ -23,8 +23,8 @@
           <header class="step-header header margin-top-15">
             <h2>Checkout</h2>
           </header>
-          <div id="step-content-payment" class='step-content'>
-            <div class="notification is-lighter no-shadow has-border">
+          <div class='step-content'>
+            <div id="payment-notification" class="notification is-lighter no-shadow">
               <p id="payment-regular-message" class="regular-message">
                 Please choose your preferred method of payment.</a>
               </p>
@@ -43,9 +43,9 @@
               <div id="stripe-choice" class="checkout-track box hover-effect choice-block">
                 <div class="content">
                   <div class="step-box">
-                    <span class="icon is-medium is-primary">
-                      <i class="fa fa-credit-card"></i>
-                    </span>
+                    <div class="icon is-primary">
+                      <i class="far fa-credit-card"></i>
+                    </div>
                     <h2>Pay with a card</h2>
                   </div>
                   <p>
@@ -57,9 +57,9 @@
               <div id="bitcoin-choice" class="checkout-track box hover-effect choice-block">
                 <div class="content">
                   <div class="step-box">
-                    <span class="icon is-medium is-accent">
-                        <i class="fa fa-bitcoin"></i>
-                    </span>
+                    <div class="icon is-medium is-accent">
+                        <i class="far fa-bitcoin"></i>
+                    </div>
                     <h2>Pay with Bitcoin</h2>
                   </div>
                   <p>
@@ -70,9 +70,9 @@
               <div id="paypal-choice" class="checkout-track box hover-effect choice-block">
                 <div class="content">
                   <div class="step-box">
-                    <span class="icon is-medium is-info">
-                        <i class="fa fa-paypal"></i>
-                    </span>
+                    <div class="icon is-medium is-info">
+                        <i class="far fa-paypal"></i>
+                    </div>
                     <h2>Pay with PayPal</h2>
                   </div>
                   <p>
@@ -88,48 +88,66 @@
                   <label class="label">Card Number</label>
                   <div class="control has-icon">
                     <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                    <i id="cc-icon" class="fa fa-credit-card"></i>
+                    <div class="icon">
+                      <i id="cc-icon" class="far fa-credit-card"></i>
+                    </div>
                   </div>
                   <div class="control is-grouped">
                     <div class="control is-expanded has-icon">
                       <label class="label">Expiration Date</label>
                       <div class="control has-icon">
                         <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-                        <i class="fa fa-calendar-o"></i>
+                        <div class="icon">
+                          <i class="far fa-calendar-alt"></i>
+                        </div>
                       </div>
                     </div>
                     <div class="control">
                       <label class="label">Security Code</label>
                       <div class="control has-icon">
                         <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
-                        <i class="fa fa-lock"></i>
+                        <div class="icon">
+                          <i class="far fa-lock"></i>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <label class="label">Zip Code</label>
                   <div class="control has-icon">
                     <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                    <i class="fa fa-map-marker"></i>
+                    <div class="icon">
+                      <i class="far fa-map-marker-alt"></i>
+                    </div>
                   </div>
                 </form>
 
-                <div class="control">
-                  <a tabindex="0" class="goback-button checkout-track button is-stylish">
-                    <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
-                    <span>Back to Payment Selection</span>
-                  </a>
-                  <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
-                    <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
-                    <span>Confirm & Pay</span>
-                  </button>
+                <div class="control is-grouped">
+                  <div class="control">
+                    <a tabindex="0" class="goback-button checkout-track button is-black is-inverted is-stylish">
+                      <div class="icon is-small">
+                        <i class="far fa-long-arrow-left"></i>
+                      </div>
+                      <span>Back to Payment Selection</span>
+                    </a>
+                  </div>
+                  <div class="control">
+                    <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
+                      <div class="icon is-small">
+                        <i class="far fa-shopping-cart"></i>
+                      </div>
+                      <span>Confirm & Pay</span>
+                    </button>
+                  </div>
                 </div>
               </div>
               <div id="paypal-choice-column" class="is-hidden choice-column">
                 Log in with PayPal
 
                 <div class="control margin-top-30">
-                  <a tabindex="0" class="goback-button checkout-track button is-danger no-shadow is-stylish">
-                    <span class="icon is-small"><i class="fa fa-undo"></i></span>
+                  <a tabindex="0" class="goback-button checkout-track button is-black is-inverted is-stylish">
+                    <div class="icon is-small">
+                      <i class="far fa-undo"></i>
+                    </div>
                     <span>Back to Payment Selection</span>
                   </a>
                 </div>
@@ -150,10 +168,14 @@
         </div>
         <div class="column is-5">
           <div class="card is-checkout">
-            <figure class="card-image img-wrapper" style="background-image:url('<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : 'https://domahub.com/images/lib/money.png'%>')"></figure>
+            <div class="card-image">
+              <figure class="image is-128x128">
+                <img src="<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : '/images/lib/wallet-send.svg'%>" alt="Logo" />
+              </figure>
+            </div>
             <div class="card-content">
               <div class="content has-text-centered">
-                <h1 class="is-primary is-breakword"><%= listing_info.domain_name %></h1>
+                <h1 class="is-primary is-bold is-breakword"><%= listing_info.domain_name %></h1>
               </div>
               <div class="control-flex">
                 <p>Name</p>
@@ -174,13 +196,13 @@
             </div>
             <footer id="edit-dates-button" class="card-footer">
               <% if (listing_info.premium){ %>
-                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
-                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-black is-inverted is-stylish is-fullwidth">
+                  <div class="icon is-small"><i class="far fa-long-arrow-left"></i></div>
                   <span>Back to <%= listing_info.domain_name %></span>
                 </a>
               <% } else { %>
-                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
-                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-black is-inverted is-stylish is-fullwidth">
+                  <div class="icon is-small"><i class="far fa-long-arrow-left"></i></div>
                   <span>Back to <%= listing_info.domain_name %></span>
                 </a>
               <% } %>

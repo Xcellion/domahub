@@ -14,16 +14,21 @@ $(document).ready(function() {
   //<editor-fold>-----------------------------------------------------------------------------------TABS
 
   //switch tabs
-  $(".tab").not(".top-tab").on("click", function(){
+  $(".tab").on("click", function(){
     var which_tab = $(this).attr("id").replace("-tab", "");
 
     //show the tab
-    $(".tab").not(".top-tab").removeClass('is-active');
+    $(".tab").removeClass('is-active');
     $(this).addClass('is-active');
 
     //show the module
-    $(".module").not(".top-module").addClass('is-hidden');
+    $(".module").addClass('is-hidden');
     $("#" + which_tab + "-module").removeClass('is-hidden');
+
+    if (!(which_tab == "calendar")) {
+      //this will get rid of the slash
+      $("#domain-title").text(listing_info.domain_name);
+    }
   });
 
   //</editor-fold>
@@ -48,10 +53,23 @@ $(document).ready(function() {
     }
     else {
       $("#traffic-tab").on("click", function(){
+        //hide the slash input
+        $("#path-input").addClass("is-hidden");
+        //if tutorial, go to the traffic module step
+        if (compare && tutorial_tour && !tutorial_tour.ended()){
+          tutorial_tour.goTo(10);
+        }
+
         getTrafficData();
       });
     }
   }
+
+  $("#ticker-tab").on("click", function() {
+    //hide the slash input
+    $("#path-input").addClass("is-hidden");
+
+  });
 
   //</editor-fold>
 
@@ -178,7 +196,7 @@ function editTickerModule(loaded_rentals, max_count){
   }
 }
 
-//function to create ticker row
+//create ticker row
 function createTickerRow(rental, now){
   var start_moment = moment(rental.date);
   var end_moment = moment(rental.date + rental.duration);
@@ -249,21 +267,21 @@ function createTickerRow(rental, now){
     if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>an image</a>";
       ticker_icon_color.addClass('is-info');
-      ticker_icon.addClass('fa-camera-retro');
+      ticker_icon.replaceWith("<i class='far fa-camera-retro'></i>");
     }
 
     //showing a GIF
     else if (rental.address.match(/\.(gif)$/) != null){
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a GIF</a>";
       ticker_icon_color.addClass('is-dark');
-      ticker_icon.addClass('fa-smile-o');
+      ticker_icon.replaceWith("<i class='far fa-video'></i>");
     }
 
     //showing a PDF
     else if (rental.address.match(/\.(pdf)$/) != null){
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a PDF</a>";
       ticker_icon_color.addClass('is-danger');
-      ticker_icon.addClass('fa-file-pdf-o');
+      ticker_icon.replaceWith("<i class='far fa-file-pdf'></i>");
     }
 
     //showing a website
@@ -271,14 +289,14 @@ function createTickerRow(rental, now){
       var ticker_address = getHost(rental.address);
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>" + ticker_address + "</a>";
       ticker_icon_color.addClass('is-primary');
-      ticker_icon.addClass('fa-external-link');
+      ticker_icon.replaceWith("<i class='far fa-desktop'></i>");
     }
 
     //showing nothing
     else {
       var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display nothing";
       ticker_icon_color.addClass('is-black');
-      ticker_icon.addClass('fa-times-circle-o');
+      ticker_icon.replaceWith("<i class='far fa-eye-slash'></i>");
     }
   }
   //forward the domain
@@ -286,7 +304,7 @@ function createTickerRow(rental, now){
     var ticker_address = getHost(rental.address);
     var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='" + rental.address + "' class='is-info is-underlined'>" + ticker_address + "</a>";
     ticker_icon_color.addClass('is-accent');
-    ticker_icon.addClass('fa-share-square');
+    ticker_icon.replaceWith("<i class='far fa-share'></i>");
   }
   ticker_clone.find(".ticker-type").html(ticker_type);
 
@@ -321,7 +339,7 @@ function pastViewsTickerRow(){
 
 //<editor-fold>-----------------------------------------------------------------------------------TRAFFIC MODULE
 
-//function to get traffic data if we havent yet
+//get traffic data if we havent yet
 function getTrafficData(){
   if (compare && listing_info.unlisted){
     createTestChart();
@@ -363,7 +381,7 @@ function createCharts(traffic){
   }
 }
 
-//function to create an empty chart
+//create an empty chart
 function createEmptyChart(){
 
   //create the monthly x-axis labels array
@@ -375,7 +393,7 @@ function createEmptyChart(){
   }
 
   //create the chart
-  myChart = new Chart($("#traffic-chart"), {
+  myChart = new Chart($("#traffic-chart-module"), {
     type: 'line',
     data: {
       labels: monthly_labels,
@@ -387,6 +405,9 @@ function createEmptyChart(){
       },
       scales: {
         xAxes: [{
+          gridLines: {
+            display: false
+          },
           type: "category"
         }],
         yAxes: [{
@@ -402,12 +423,12 @@ function createEmptyChart(){
 
   //unhide the overlay
   $("#traffic-overlay").css({
-    "height" : $("#traffic-chart").height(),
-    "width" : $("#traffic-chart").width()
+    "height" : $("#traffic-chart-module").height(),
+    "width" : $("#traffic-chart-module").width()
   }).removeClass('is-hidden');
 }
 
-//function to format the stats to the required format
+//format the stats to the required format
 function formatDataset(stats) {
 
   //compare tool (not listed)
@@ -470,7 +491,7 @@ function formatDataset(stats) {
   }
 }
 
-//function to initiate chart only if uninitiated
+//initiate chart only if uninitiated
 function createTrafficChart(compare){
   formatted_dataset = formatDataset(listing_info.traffic);
 
@@ -481,7 +502,7 @@ function createTrafficChart(compare){
     traffic_chart.destroy();
   }
 
-  traffic_chart = new Chart($("#traffic-chart"), {
+  traffic_chart = new Chart($("#traffic-chart-module"), {
     type: 'line',
     data: {
       labels: formatted_dataset.traffic_labels,
@@ -494,7 +515,7 @@ function createTrafficChart(compare){
     },
     options: {
       legend: {
-        display:false
+        display: false
       },
       hover: {
         mode: "index"
@@ -537,6 +558,9 @@ function createTrafficChart(compare){
       },
       scales: {
         xAxes: [{
+          gridLines: {
+            display: false
+          },
           type: "category"
         }],
         yAxes: [{
@@ -555,7 +579,7 @@ function createTrafficChart(compare){
 
 //<editor-fold>-----------------------------------------------------------------------------------ALEXA MODULE
 
-//function to get alexa data
+//get alexa data
 function getAlexaData(){
   $.ajax({
     url: "/listing/" + listing_info.domain_name.toLowerCase() + "/alexa",
@@ -565,7 +589,7 @@ function getAlexaData(){
   });
 }
 
-//function to edit alexa information
+//edit alexa information
 function createAlexa(alexa){
   if (alexa){
     listing_info.alexa = alexa;
@@ -609,10 +633,9 @@ function findOtherDomains(){
   }
 }
 
-//function to create the other domain
+//create the other domain
 function createOtherDomains(other_listings){
   $("#otherowner-domains").removeClass('is-hidden');
-  $("#otherowner-domains-title").text("More From This Owner");
   for (var x = 0; x < other_listings.length; x++){
     var cloned_similar_listing = $("#otherowner-domain-clone").clone();
     cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
@@ -650,7 +673,8 @@ function createOtherDomains(other_listings){
 
     //if compare tool
     if (other_listings[x].compare && listing_info.unlisted){
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+      cloned_similar_listing.attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
     }
     else {
       //premium or basic link
@@ -660,7 +684,8 @@ function createOtherDomains(other_listings){
       else {
         var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
       }
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", link_to_domain);
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+      cloned_similar_listing.attr("href", link_to_domain);
     }
     $("#otherowner-domain-table").append(cloned_similar_listing);
   }
@@ -682,7 +707,7 @@ function getHost(href) {
   return l.hostname.replace("www.", "");
 };
 
-//function to get query string
+//get query string
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");

@@ -7,6 +7,7 @@
 @import '../bulma/elements/box.sass';
 @import '../bulma/elements/delete.sass';
 @import '../bulma/elements/notification.sass';
+@import '../bulma/elements/image.sass';
 @import '../bulma/elements/table.sass';
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/button.sass';
@@ -14,6 +15,11 @@
 @import '../bulma/elements/hamburger.sass';
 @import '../bulma/elements/icon.sass';
 @import '../bulma/layout/section.sass';
+@import '../bulma/layout/footer.sass';
+
+.min-height {
+  min-height: calc(100vh - 110px) !important;
+}
 
 .box {
   @include transition(all 0.3s ease);
@@ -23,11 +29,12 @@
   &:active {
     @include translate(0,2px);
   }
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: #f9f9f9;
-    @include translate(0,2px);
     @include box-shadow(0,2px,5px,$border,0);
+  }
+  &:focus {
+    @include translate(0,2px);
   }
 }
 
@@ -36,7 +43,7 @@
   align-items: center;
   justify-content: flex-start;
   margin: 10px 0;
-  span,
+  .icon,
   a {
     margin-right: 10px;
   }

@@ -206,14 +206,12 @@ $(document).ready(function () {
     if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
 
     //show appropriate card icon
-    if ($(".fa-cc-" + card_type) && card_type){
-      $("#cc-icon").removeClass();
-      $("#cc-icon").addClass("fa fa-cc-" + card_type);
+    if ($(".far-cc-" + card_type) && card_type){
+      $("#cc-icon").attr("data-icon", "cc-" + card_type);
     }
     //or show default
     else {
-      $("#cc-icon").removeClass();
-      $("#cc-icon").addClass("fa fa-credit-card");
+      $("#cc-icon").attr("data-icon", "credit-card");
     }
   });
 
@@ -439,7 +437,7 @@ function trackCheckoutBehavior(id){
   });
 }
 
-//function to show a specific message, hide all others
+//show a specific message, hide all others
 function showMessage(message_id, text){
   $(".regular-message").addClass('is-hidden');
   $(".error-message").addClass('is-hidden');
@@ -452,7 +450,7 @@ function showMessage(message_id, text){
   }
 }
 
-//function to show step
+//show step
 function showStep(step_id){
   $(".step-header").addClass('is-disabled');
   $(".step-content").addClass('is-hidden');

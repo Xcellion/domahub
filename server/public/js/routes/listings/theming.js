@@ -27,7 +27,7 @@ var primaryColor = "#3CBC8D";
 var secondaryColor = "0f0";
 var tertiaryColor = "00f";
 var whiteText = "#fff";
-var blackText = "#222";
+var blackText = "#1b2733";
 
 //return white or black text based on luminance
 function calculateLuminance(rgb) {
@@ -47,7 +47,7 @@ function calculateLuminance(rgb) {
   var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
   if (luminance > 0.8) {
-    return "#222";
+    return "#1b2733";
   }
   else {
     return "#fff";
@@ -63,20 +63,27 @@ function stylize(color, element, style, calculateluminance) {
   }
 }
 
-//function to setup any custom premium colors
+//setup any custom premium colors
 function setupCustomColors(){
   console.log("Setting up custom theme...");
   stylize(listing_info.primary_color, "#page-contents .is-primary:not(.notification)", "color");
   stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color", true);
   stylize(listing_info.primary_color, "#page-contents .is-primary.button", "background-color", true);
   stylize(listing_info.primary_color, ".tag:not(.category-tag)", "background-color", true);
+  stylize(listing_info.primary_color, ".social-share", "color");
+  stylize(listing_info.font_color, ".subtitle", "color");
   stylize(listing_info.font_color, ".regular-font", "color");
-  stylize(listing_info.tertiary_color, ".is-info", "color");
+  stylize(listing_info.font_color, "#page-contents .tabs li a", "color");
+  stylize(listing_info.font_color, "small.heading", "color");
   stylize(listing_info.secondary_color, ".category-tag", "background-color", true);
   stylize(listing_info.secondary_color, ".is-accent:not(.tag)", "color");
   stylize(listing_info.secondary_color, ".is-accent.button", "background-color", true);
   stylize(listing_info.secondary_color, "#typed-slash", "color");
+  stylize(listing_info.tertiary_color, "a.is-info", "color");
+  stylize(listing_info.tertiary_color, "ul.is-vertical li", "color");
   stylize(listing_info.background_color, "#page-contents:not(.no-background)", "background-color");
   stylize(listing_info.font_name, "#domain-title", "font-family");
   stylize(listing_info.font_name, "#typed-slash", "font-family");
+  stylize(listing_info.footer_color, ".footer-item", "color");
+  stylize(listing_info.footer_background_color, ".footer", "background-color");
 }

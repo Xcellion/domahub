@@ -36,7 +36,7 @@ module.exports = {
     });
   },
 
-  //function to redirect demo to compare tool
+  //redirect demo to compare tool
   redirectToDemo : function(req, res){
     res.redirect("/listing/cooldomains.com?compare=true&theme=Random")
   },
@@ -45,7 +45,7 @@ module.exports = {
 
   //<editor-fold>-------------------------------CONTACT-------------------------------
 
-  //function to handle contact us form submission
+  //handle contact us form submission
   contactUs : function(req, res, next){
     console.log("F: Checking posted message for contact us form...");
 
@@ -70,8 +70,7 @@ module.exports = {
         to: 'general@domahub.com',
         subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
         text: req.body.contact_message
-      }, function(err) {
-        if (err) {console.log(err)}
+      }, function() {
         res.send({
           state: "success"
         });

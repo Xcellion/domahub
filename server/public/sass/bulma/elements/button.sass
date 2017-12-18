@@ -5,7 +5,7 @@
   padding-right: 6px
 =button-medium
   font-size: 18px
-  height: 40px
+  height: 44px
   padding-left: 14px
   padding-right: 14px
 =button-large
@@ -20,8 +20,9 @@
 
 .button
   @extend .unselectable
-  +box-shadow(0,2px,4px,$border,0)
+  +box-shadow(0,1px,3px,$border,0)
   +control
+  cursor: pointer
   justify-content: center
   text-align: center
   white-space: nowrap
@@ -33,6 +34,7 @@
     line-height: 1
     margin-top: 5px
   .icon
+    margin-top: -2px
     &:first-child
       margin-left: -3px
       margin-right: 3px
@@ -43,27 +45,23 @@
       margin-left: 3px
       margin-right: -3px
   &:active
-    +box-shadow(0,0,0,$border,0)
-  &:hover,
-  &:focus
-    +box-shadow(0,2px,6px,$border,1px)
-  &:hover,
-  &:focus,
-  &.is-active
+    +box-shadow(0,1px,1px,$border,0)
+  &:hover
     border-color: $black-disabled
-  &.is-active
-    &:hover,
-    &:focus
-      border-color: $black-secondary
-      color: $black-secondary
+  &:focus
+    border-color: $info
   // Modifiers
   &.no-shadow
     +box-shadow(0,0,0,$black,0)
   &.is-icon
-    border: none
-    &:hover,
-    &:focus
-      background-color: $border
+    .icon
+      margin-left: 0 !important
+      margin-right: 0 !important
+  &.is-circle
+    border-radius: 25px
+    height: 40px
+    &.is-small
+      height: 30px
 
   // Colors
   @each $name, $pair in $colors
@@ -97,7 +95,7 @@
           background-color: darken($color-invert, 5%)
       &.is-loading
         &:after
-          border-color: transparent transparent $grey $grey !important
+          border-color: transparent transparent $light $light !important
       &.is-outlined
         background-color: $color-invert
         border-color: $color
@@ -116,21 +114,20 @@
     +button-large
   &.is-stylish
     +button-stylish
-    font-size: 14px
-    height: 38px
+    font-size: 12px
+    height: 44px
     padding-left: 14px
     padding-right: 14px
     +mobile-456px
-      font-size: 12px
       height: 32px
     &.is-small
-      font-size: 12px
-      height: 32px
-      padding-left: 8px
-      padding-right: 8px
+      font-size: 10px
+      height: 36px
+      padding-left: 10px
+      padding-right: 10px
     &.is-large
-      font-size: 16px
-      height: 44px
+      font-size: 14px
+      height: 48px
       padding-left: 20px
       padding-right: 20px
       +mobile-456px
@@ -145,6 +142,10 @@
   &.is-fullwidth
     display: flex
     width: 100%
+  &.is-fullwidth-mobile
+    +mobile-456px
+      display: flex
+      width: 100%
   &.is-loading
     +transition(none)
     color: transparent !important
@@ -159,7 +160,7 @@ button
 
 .loader
   animation: spin-around 500ms infinite linear
-  border: 2px solid $black-disabled
+  border: 2px solid $light
   border-radius: 290486px
   border-right-color: transparent
   border-top-color: transparent

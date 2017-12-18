@@ -4,6 +4,7 @@ var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 
 var error = require('../lib/error.js');
+var mailer = require('../lib/mailer.js');
 
 //</editor-fold>
 
@@ -18,6 +19,7 @@ var stripe = require("stripe")(stripe_key);
 var randomstring = require("randomstring");
 var validator = require('validator');
 var moment = require("moment");
+var path = require("path");
 
 var wNumb = require("wnumb");
 var moneyFormat = wNumb({
@@ -40,17 +42,19 @@ module.exports = {
 
       //check it against stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+        if (err){
+          error.log(err, "Failed to retrieve Stripe customer.");
+        }
         //update our DH database to remove stripe_customer_id
-        if (err || (customer && customer.deleted) || !customer){
+        if (!customer || (customer && customer.deleted)){
           console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_customer_id");
-          next();
         }
         //legit customer
         else {
           updateUserStripeCustomer(req.user, customer);
-          next();
         }
+        next();
       });
     }
     else {
@@ -66,13 +70,13 @@ module.exports = {
       next();
     }
     //if customer id and subscription id exists in our database
-    else if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && !req.user.stripe_customer.charges){
+    else if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && typeof req.user.stripe_customer.charges == "undefined"){
       console.log("SF: Getting Stripe customer payment history for an account...");
 
       stripe.charges.list({
         customer: req.user.stripe_customer_id
       }, function(err, charges) {
-        if (err) { error.log(err); }
+        if (err) { error.log(err, "Failed to get customer Stripe charges."); }
         else {
           updateUserStripeCustomerCharges(req.user, charges);
         }
@@ -92,11 +96,11 @@ module.exports = {
       next();
     }
     //if customer id and subscription id exists in our database
-    if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && req.user.stripe_customer.upcoming_invoice == undefined){
+    if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && typeof req.user.stripe_customer.upcoming_invoice == "undefined"){
       console.log("SF: Getting Stripe customer upcoming invoice for an account...");
 
       stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
-        if (err) { error.log(err); }
+        if (err) { error.log(err, "Failed to get upcoming Stripe customer invoice."); }
         else {
           updateUserStripeCustomerInvoice(req.user, upcoming);
         }
@@ -119,7 +123,6 @@ module.exports = {
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
         //our db is outdated, customer doesnt exist
         if (err){
-          error.log(err);
           newStripeCustomer(req, res, next);
         }
         else {
@@ -131,7 +134,7 @@ module.exports = {
               source: req.body.stripeToken
             }, function(err, customer) {
               if (err){
-                error.log(err);
+                error.log(err, ("Failed to update Stripe customer."));
                 error.handler(req, res, err.message, "json");
               }
               else {
@@ -227,17 +230,20 @@ module.exports = {
 
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
+        if (err){
+          error.log(err, "Failed to retrieve Stripe subscription.");
+        }
+
         //update our DH database to remove stripe_subscription_id
-        if (err || !subscription){
+        if (!subscription){
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_subscription_id");
-          next();
         }
         //legit subscription!
         else {
           updateUserStripeSubscription(req.user, subscription);
-          next();
         }
+        next();
       });
     }
     else {
@@ -256,7 +262,6 @@ module.exports = {
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
         //our db is outdated, subscription doesnt exist
         if (err){
-          error.log(err);
           newStripeSubscription(req, res, next);
         }
         else {
@@ -268,7 +273,7 @@ module.exports = {
               plan: "premium_account"
             }, function(err, subscription) {
               if (err){
-                error.log(err);
+                error.log(err, "Failed to update Stripe subscription.");
                 error.handler(req, res, err.message, "json");
               }
               else {
@@ -301,7 +306,7 @@ module.exports = {
       //cancel the subscription at period end (not immediately)
       stripe.subscriptions.del(req.user.stripe_subscription_id, { at_period_end: true }, function(err, subscription) {
         if (err){
-          error.log(err);
+          error.log(err, "Failed to cancel Stripe subscription.");
           error.handler(req, res, err.message, "json");
         }
         else {
@@ -366,8 +371,16 @@ module.exports = {
   applyPromoCode : function(req, res, next){
     applyPromoCodeStripe(req.user.stripe_subscription_id, req.user.promo_code, req.user.id, function(result){
       if (result){
-        res.json({
-          state:'success'
+        //update upcoming invoice
+        stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
+          if (err) { error.log(err, "Failed to get upcoming Stripe customer invoice."); }
+          else {
+            updateUserStripeCustomerInvoice(req.user, upcoming);
+          }
+          res.json({
+            state: 'success',
+            user : req.user
+          });
         });
       }
       else {
@@ -385,18 +398,19 @@ module.exports = {
     if (req.user.stripe_account_id && !req.user.stripe_account){
       console.log('SF: Getting existing Stripe managed account information for an account...');
       stripe.accounts.retrieve(req.user.stripe_account_id, function(err, account) {
+        if (err){
+          error.log(err, "Failed to retrieve Stripe account.");
+        }
         //update our DH database to remove stripe_account_id
-        if (err || !account){
+        if (!account){
           console.log("SF: Not a real Stripe account! Updating our database appropriately...");
-          error.log(err);
           deleteDHStripeDetails(req, "stripe_account_id");
-          next();
         }
         else {
           updateUserStripeAccount(req.user, account);
           updateUserStripeBank(req.user, account);
-          next();
         }
+        next();
       });
     }
     else {
@@ -492,7 +506,6 @@ module.exports = {
       //cross reference with stripe
       stripe.accounts.retrieve(req.user.stripe_account_id, function(err, account) {
         if (err){
-          error.log(err);
           error.handler(req, res, "Please update your legal contact information!", "json");
         }
         else {
@@ -536,7 +549,7 @@ module.exports = {
             legal_entity: legal_entity
           }, function(err, account){
             if (err){
-              error.log(err);
+              error.log(err, "Failed to update Stripe account.");
               error.handler(req, res, err.message, "json");
             }
             else {
@@ -562,7 +575,7 @@ module.exports = {
       external_account: req.body.stripe_token
     }, function(err, account){
       if (err){
-        error.log(err);
+        error.log(err, "Failed to update Stripe account.");
         error.handler(req, res, err.message, "json");
       }
       else {
@@ -576,27 +589,31 @@ module.exports = {
   },
 
   //get all charges made to account (transactions of rentals + sales)
-  getTransactions : function(req, res, next){
-    if (req.user.stripe_account_id){
-      console.log('SF: Retrieving all Stripe transactions...');
+  getStripeTransactions : function(req, res, next){
+    console.log("SF: Getting Stripe transactions for an account...");
 
+    if (!req.user.transactions || req.method == "POST"){
       stripe.charges.list({
         transfer_group: req.user.id,
         expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
       }, function(err, charges) {
-        if (err) { error.log(err); }
+        if (err) { error.log(err, "Failed to get Stripe charges."); }
         updateUserTransactions(req.user, charges.data, "stripe");
-        res.send({
-          state : "success",
-          user : req.user
-        });
+
+        //refreshing transactions
+        if (req.method == "POST"){
+          res.send({
+            state : "success",
+            user : req.user
+          });
+        }
+        else {
+          next();
+        }
       });
     }
     else {
-      res.send({
-        state : "success",
-        user : req.user
-      });
+      next();
     }
   },
 
@@ -640,7 +657,7 @@ module.exports = {
             });
           }
           else {
-            console.log(err);
+            error.log(err, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
             error.handler(req, res, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
           }
         });
@@ -692,7 +709,7 @@ module.exports = {
           //charge the end user, transfer to the owner, take doma fees if its a basic listing
           stripe.charges.create(stripeOptions, function(err, charge) {
             if (err) {
-              error.log(err);
+              error.log(err, "Failed to create Stripe charge.");
               error.handler(req, res, "Invalid price!", "json");
             }
             else {
@@ -759,7 +776,7 @@ module.exports = {
         //charge the end user, transfer to the owner, take doma fees if its a basic listing
         stripe.charges.create(stripeOptions, function(err, charge) {
           if (err) {
-            error.log(err);
+            error.log(err, "Failed to create Stripe charge.");
             error.handler(req, res, "Invalid price!", "json");
           }
           else {
@@ -799,14 +816,85 @@ module.exports = {
   //to catch all stripe web hook events
   stripeWebhookEventCatcher : function(req, res){
     if (process.env.NODE_ENV == "dev"){
-      switchEvents(req.body, res);
+      switchStripeEvents(req.body, res);
     }
     else {
       //Verify the event by fetching it from Stripe
       stripe.events.retrieve(req.body.id, function(err, event) {
-        switchEvents(event, res);
+        switchStripeEvents(event, res);
       });
     }
+  },
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------CREATE COUPON CODE-------------------------------
+
+  //function so only wonmin can create codes
+  checkAdmin : function(req, res, next){
+    console.log("SF: Checking if admin to create codes...");
+    if (!req.user || req.user.id != 1 || req.user.email != "won2blee@gmail.com"){
+      console.log("SF: Not admin! Redirecting...");
+      res.redirect("/");
+    }
+    else {
+      next();
+    }
+  },
+
+  //create X sign up codes
+  createCouponCodes : function(req, res, next){
+    console.log("SF: Creating " + req.params.number + " coupon codes...");
+    insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
+      var stripe_promises = [];
+      for (var x = 0 ; x < codes.length ; x++){
+        var promise = (function(code){
+          var deferred = Q.defer();
+          stripe.coupons.create({
+            id: code,
+            duration: "repeating",
+            percent_off: 100,
+            duration_in_months: 1,
+            max_redemptions : 1
+          }, function(err, coupon) {
+            if (err){
+              deferred.reject(err);
+            }
+            else {
+              deferred.resolve(coupon);
+            }
+          });
+          return deferred.promise;
+        })(codes[x][0]);
+        stripe_promises.push(promise);
+      }
+
+      Q.allSettled(stripe_promises).then(function(results) {
+        var success_codes = []
+        for (var x = 0 ; x < results.length; x++){
+          if (results[x].state == "fulfilled"){
+            success_codes.push(results[x].value.id);
+          }
+        }
+
+        //all successful!
+        if (success_codes.length == parseFloat(req.params.number)){
+          if (process.env.NODE_ENV == "dev"){
+            res.send(success_codes.join("</br>"))
+          }
+          else {
+            mailer.sendBasicMail({
+              to: "general@domahub.com",
+              from: 'general@domahub.com',
+              subject: "Created new coupon codes on production!",
+              html: success_codes.join("</br>")
+            });
+            res.redirect("/");
+          }
+        }
+      });
+
+    });
   },
 
   //</editor-fold>
@@ -884,7 +972,6 @@ function getExistingDiscount(stripe_subscription_id, callback){
   console.log("SF: Getting any existing Stripe subscription discounts...");
   stripe.subscriptions.retrieve(stripe_subscription_id, function(err, subscription){
     if (err){
-      error.log(err);
       callback(false);
     }
     else {
@@ -921,7 +1008,7 @@ function applyPromoCodeStripe(stripe_subscription_id, promo_code, account_id, cb
       });
     }
     else {
-      console.log(err);
+      error.log(err, "Something went wrong applying a promo to a Stripe subscription.");
       cb(false);
     }
   });
@@ -1001,7 +1088,7 @@ function addMonthReferral(referer_id){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------NEW STRIPE CREATOR HELPERS -------------------------------
+//<editor-fold>-------------------------------NEW STRIPE CREATOR HELPERS-------------------------------
 
 //create a new stripe customer
 function newStripeCustomer(req, res, next){
@@ -1017,7 +1104,7 @@ function newStripeCustomer(req, res, next){
     }
   }, function(err, customer) {
     if (err){
-      error.log(err);
+      error.log(err, "Failed to create Stripe customer.");
       error.handler(req, res, err.message, "json");
     }
     else {
@@ -1053,7 +1140,7 @@ function newStripeSubscription(req, res, next){
   //create the subscription in stripe!
   stripe.subscriptions.create(new_sub_details, function(err, subscription) {
     if (err){
-      error.log(err);
+      error.log(err, "Failed to create Stripe subscription.");
       error.handler(req, res, err.message, "json");
     }
     else {
@@ -1065,6 +1152,9 @@ function newStripeSubscription(req, res, next){
         stripe_customer_id : req.user.stripe_customer_id
       }
 
+      //create this now for getting charges + invoice
+      req.user.stripe_subscription_id = subscription.id;
+
       //update date accessed in the promo code in our DB
       if (req.user.existing_promo_code){
         account_model.updatePromoCode(req.user.existing_promo_code, { date_accessed : new Date() }, function(){});
@@ -1075,6 +1165,19 @@ function newStripeSubscription(req, res, next){
       if (req.user.existing_referer_id){
         addMonthReferral(req.user.existing_referer_id);
       }
+
+      //email congrats
+      mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'welcome_premium.ejs'), {
+        username : req.user.username,
+      }, {
+        to: req.user.email,
+        from: 'general@domahub.com',
+        subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
+      }, function(state){
+        if (state == "success"){
+          console.log("F: Successfully sent email!");
+        }
+      });
 
       next();
     }
@@ -1115,19 +1218,15 @@ function newStripeAccount(req, res, next, legal_entity){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------REQ.USER HELPERS -------------------------------
+//<editor-fold>-------------------------------REQ.USER HELPERS-------------------------------
 
 //delete an expired stripe info (our DB was outdated)
 function deleteDHStripeDetails(req, stripe_col){
-  //update our DH database to remove stripe_customer_id
-  if (req.session.new_account_info){
-    req.session.new_account_info[stripe_col] = null;
+  if (!req.session.new_account_info){
+    req.session.new_account_info = {}
   }
-  else {
-    req.session.new_account_info = {
-      stripe_col : null
-    }
-  }
+  //update our DH database to remove specific stripe info
+  req.session.new_account_info[stripe_col] = null;
 }
 
 //update req.user with stripe customer object
@@ -1202,11 +1301,13 @@ function updateUserStripeSubscription(user, subscription){
 
 //update req.user with stripe charges (or paypal)
 function updateUserTransactions(user, charges, type){
-  if (!user.dev_transactions){
+  if (!user.dev_transactions && process.env.NODE_ENV == "dev"){
     user.dev_transactions = {};
   }
-  if (!user.transactions){
-    user.transactions = {}
+
+  //reset transactions
+  user.transactions = {
+    total : 0
   }
 
   //stripe transactions
@@ -1238,6 +1339,7 @@ function updateUserTransactions(user, charges, type){
       }
       temp_charges.push(temp_transfer);
     }
+    user.transactions.total += charges.length;
     user.transactions.stripe_transactions = temp_charges;
   }
 
@@ -1297,9 +1399,9 @@ function updateUserStripeBank(user, account){
 //<editor-fold>-------------------------------STRIPE WEBHOOK-------------------------------
 
 //switch between event types for stripe webhooks
-function switchEvents(event, res){
+function switchStripeEvents(event, res){
   if (event){
-    console.log("Event from Stripe: " + event.type);
+    console.log("SF: Event from Stripe: " + event.type);
     res.sendStatus(200);
     switch (event.type){
       case "customer.subscription.deleted":
@@ -1327,7 +1429,43 @@ function handleSubscriptionCancel(event){
       });
     }
   });
+
+  console.log('F: Removing Premium DomaHub subscription...');
+  account_model.cancelStripeSubscription(event.data.object.id, function(result){
+    //done!
+  });
 };
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------CREATE COUPON CODE-------------------------------
+
+//create unique coupon codes
+function createUniqueCoupons(number, referrer){
+  var codes = [];
+
+  if (validator.isInt(number)){
+    for (var x = 0; x < number; x++){
+      var random_string = randomstring.generate(10);
+      codes.push([random_string, null, 1]);
+    }
+  }
+
+  return codes;
+}
+
+//insert the coupon codes
+function insertCoupons(codes, number, cb){
+  account_model.createCouponCodes(codes, function(result){
+    if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
+      console.log("Duplicate coupon!");
+      insertCoupons(createUniqueCoupons(number), number);
+    }
+    else if (result.state != "error"){
+      cb(codes);
+    }
+  });
+}
 
 //</editor-fold>
 

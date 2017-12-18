@@ -7,9 +7,10 @@
   min-height: 60px
   padding: 15px 20px
   border-radius: $radius $radius 0 0
-  &.is-grey
-    background-color: $lighter
-    border-bottom: none
+  &.is-block
+    display: block
+  &.no-border-bottom
+    border-bottom-width: 0
   &.is-justified-start
     justify-content: flex-start
     .card-header-title
@@ -45,6 +46,8 @@
 .card-image
   display: block
   position: relative
+  .notification
+    border-radius: 0
 
 .card-content
   padding: 20px
@@ -86,7 +89,7 @@
 
 
 .card
-  +box-shadow(0,8px,20px,rgba(0,0,0,0.07),2px)
+  +box-shadow(0,2px,4px,$border,0)
   background-color: $white
   border-radius: $radius
   max-width: 100%
@@ -100,6 +103,9 @@
   +mobile
     margin: auto
   // Modifiers
+  &.is-fullwidth-mobile
+    +mobile
+      width: 100%
   &.no-shadow
     border: 1px solid $border
     +box-shadow(0,0,0,$black,0)
@@ -117,6 +123,10 @@
     &:hover,
     &:active,
     &:focus
+<<<<<<< HEAD
       +box-shadow(0,10px,20px,$border,2px)
+=======
+      +box-shadow(0,8px,20px,$border,0)
+>>>>>>> master
   &.min-height
     min-height: 350px
