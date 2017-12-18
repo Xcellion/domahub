@@ -39,6 +39,7 @@ module.exports = function(app){
 
   //render login page
   app.get('/login', [
+    auth_functions.logoutDemo,
     auth_functions.checkLoggedIn,
     function(req, res){
       res.redirect("/profile/dashboard");
