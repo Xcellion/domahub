@@ -405,6 +405,9 @@ function createEmptyChart(){
       },
       scales: {
         xAxes: [{
+          gridLines: {
+            display: false
+          },
           type: "category"
         }],
         yAxes: [{
@@ -555,6 +558,9 @@ function createTrafficChart(compare){
       },
       scales: {
         xAxes: [{
+          gridLines: {
+            display: false
+          },
           type: "category"
         }],
         yAxes: [{

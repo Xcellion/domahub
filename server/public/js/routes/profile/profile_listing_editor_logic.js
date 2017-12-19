@@ -143,7 +143,7 @@ function updateEditorEditing(selected_domain_ids){
     $(".this-domain").text("this domain");
 
     //view listing button link
-    var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
+    var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name.toLowerCase();
     listing_href = (window.location.hostname == "domahub.com" && user.id) ? listing_href : "http://localhost:8080/listing/" + listing_info.domain_name;
     listing_href = (!user.id) ? listing_href += "?compare=true&theme=Random" : listing_href;
     $("#view-listings-button").off().attr("href", listing_href);
@@ -931,7 +931,7 @@ function setupOfferButtons(selected_domain_ids){
 
     //reset sort
     $(".offer-header-sort").data("sort_direction", false).find(".icon").removeClass('is-primary')
-    $(".offer-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+    $(".offer-header-sort").find("svg").attr("data-icon", "sort");
 
     //sort by header
     $(".offer-header-sort").off().on("click", function(){
@@ -940,14 +940,14 @@ function setupOfferButtons(selected_domain_ids){
 
       //sort icon
       $(".offer-header-sort").find(".icon").removeClass('is-primary')
-      $(".offer-header-sort").find(".fa").removeClass("fa-sort-desc fa-sort-asc").addClass("fa-sort");
+      $(".offer-header-sort").find("svg").attr("data-icon", "sort");
       $(this).find(".icon").addClass('is-primary');
       $(this).data("sort_direction", !sort_direction);
       if (sort_direction){
-        $(this).find(".fa").removeClass("fa-sort-desc").addClass("fa-sort-asc");
+        $(this).find("svg").attr("data-icon", "sort-up");
       }
       else {
-        $(this).find(".fa").addClass("fa-sort-desc").removeClass("fa-sort-asc");
+        $(this).find("svg").attr("data-icon", "sort-down");
       }
 
       //sort the rows
