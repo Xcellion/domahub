@@ -3,7 +3,7 @@ var profile_demo_tour;
 $(document).ready(function(){
 
   profile_demo_tour = new Tour({
-    debug : true,
+    // debug : true,
     backdrop : true,
     smartPlacement : true,
     name : "profile_demo",
