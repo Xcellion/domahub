@@ -2,253 +2,142 @@ var tutorial_tour;
 var listing_description_tour = false;
 
 $(document).ready(function() {
-  if (compare){
 
-    //overflow x-hidden to prevent scroll appearing when hiding menu
-    $("body").css("overflow-x", "hidden");
+  //<editor-fold>---------------------------------COMPARE TOOL SETUP--------------------------------------------------
 
-    //hide bottom right notification button
-    $("#compare-msg .delete").on("click", function(e){
-      $("#compare-msg").appendTo('#compare-content').removeClass("is-hidden").addClass("is-footer");
-    });
+  //overflow x-hidden to prevent scroll appearing when hiding menu
+  $("body").css("overflow-x", "hidden");
 
-    //hide compare msg automatically if mobile
-    if (window.mobilecheck()){
-      $("#compare-msg").appendTo('#compare-content').removeClass("is-hidden").addClass("is-footer");
+  //hide bottom right notification button
+  $("#compare-msg .delete").on("click", function(e){
+    $("#compare-msg").appendTo('#compare-content').removeClass("is-hidden").addClass("is-footer");
+  });
+
+  //hide compare msg automatically if mobile
+  if (window.mobilecheck()){
+    $("#compare-msg").appendTo('#compare-content').removeClass("is-hidden").addClass("is-footer");
+  }
+
+  //change compare tabs
+  $(".compare-tab").on("click", function(){
+    $(".compare-tab").removeClass('is-active');
+    $(this).addClass('is-active');
+
+    var box_id = $(this).attr('id').split("-")[0];
+    $(".compare-box").addClass('is-hidden');
+    $("#" + box_id + "-box").removeClass('is-hidden');
+
+    //design tab
+    if (box_id == "design" && tutorial_tour && !tutorial_tour.ended() && tutorial_tour.getCurrentStep() == 4){
+      tutorial_tour.goTo(5);
     }
+  });
 
-    //<editor-fold>---------------------------------COMPARE TOOL SETUP--------------------------------------------------
+  //populate all themes
+  populateThemeDropdown();
 
-    //change compare tabs
-    $(".compare-tab").on("click", function(){
-      $(".compare-tab").removeClass('is-active');
-      $(this).addClass('is-active');
+  var current_theme = getParameterByName("theme") || $("#theme-input").val();
+  switchTheme(current_theme);
 
-      var box_id = $(this).attr('id').split("-")[0];
-      $(".compare-box").addClass('is-hidden');
-      $("#" + box_id + "-box").removeClass('is-hidden');
+  //INFO TAB
+  updateDescription();
+  updatePricing();
+  updateBIN();
 
-      //design tab
-      if (box_id == "design" && tutorial_tour && !tutorial_tour.ended() && tutorial_tour.getCurrentStep() == 4){
-        tutorial_tour.goTo(5);
-      }
-    });
+  //DESIGN TAB
+  loadThemeHandler();
+  loadBackgroundHandlers();
+  loadColorSchemeHandlers();
+  loadFontStyleHandlers();
+  updateModules();
 
-    //populate all themes
-    populateThemeDropdown();
+  loadPremiumAndBasicHandler();
+  menuButtonHandlers();
 
-    var current_theme = getParameterByName("theme") || $("#theme-input").val();
-    switchTheme(current_theme);
+  //</editor-fold>
 
-    //INFO TAB
-    updateDescription();
-    updatePricing();
-    updateBIN();
+  //<editor-fold>---------------------------------TUTORIAL--------------------------------------------------
 
-    //DESIGN TAB
-    loadThemeHandler();
-    loadBackgroundHandlers();
-    loadColorSchemeHandlers();
-    loadFontStyleHandlers();
-    updateModules();
+  tutorial_tour = new Tour({
+    storage: false,
+    orphan: true,
+    backdrop: true,
+    name: "tutorial",
+    template: "<div class='popover tour'> \
+                <div class='popover-content margin-top-0 content'></div> \
+                <div class='popover-navigation'> \
+                  <button class='button is-stylish is-small' data-role='prev'> \
+                    <span class='icon is-small'> \
+                      <i class='far fa-angle-double-left'></i> \
+                    </span> \
+                    <span>Prev</span> \
+                  </button> \
+                  <button class='button is-stylish is-small is-primary' data-role='next'> \
+                    <span>Next</span> \
+                    <span class='icon is-small'> \
+                      <i class='far fa-angle-double-right'></i> \
+                    </span> \
+                  </button> \
+                  <button class='button is-stylish is-small' data-role='end'> \
+                    <span class='icon is-small'> \
+                      <i class='far fa-sign-out'></i> \
+                    </span> \
+                    <span>End Tutorial</span> \
+                  </button> \
+                </div> \
+              </div>",
+    steps: [
 
-    loadPremiumAndBasicHandler();
-    menuButtonHandlers();
-
-    //</editor-fold>
-
-    //<editor-fold>---------------------------------TUTORIAL--------------------------------------------------
-
-    tutorial_tour = new Tour({
-      storage: false,
-      orphan: true,
-      backdrop: true,
-      name: "tutorial",
-      template: "<div class='popover tour'> \
-                  <div class='popover-content margin-top-0 content'></div> \
-                  <div class='popover-navigation'> \
-                    <button class='button is-stylish is-small' data-role='prev'> \
-                      <span class='icon is-small'> \
-                        <i class='far fa-angle-double-left'></i> \
-                      </span> \
-                      <span>Prev</span> \
-                    </button> \
-                    <button class='button is-stylish is-small is-primary' data-role='next'> \
-                      <span>Next</span> \
-                      <span class='icon is-small'> \
-                        <i class='far fa-angle-double-right'></i> \
-                      </span> \
-                    </button> \
-                    <button class='button is-stylish is-small' data-role='end'> \
-                      <span class='icon is-small'> \
-                        <i class='far fa-sign-out'></i> \
-                      </span> \
-                      <span>End Tutorial</span> \
-                    </button> \
-                  </div> \
-                </div>",
-      steps: [
-
-        //main welcome step - 0
-        {
-          onShow: function(){
-            toggleMenu(false);
-          },
-          template: "<div class='popover tour'> \
-          <h3 class='popover-title'></h3> \
-          <div class='popover-content content'></div> \
-          <div> \
-          <div class='is-flex-wrap is-centered'> \
-            <button class='button is-stylish is-small is-primary' data-role='next'> \
+      //main welcome step - 0
+      {
+        onShow: function(){
+          toggleMenu(false);
+        },
+        template: "<div class='popover tour'> \
+        <h3 class='popover-title'></h3> \
+        <div class='popover-content content'></div> \
+        <div> \
+        <div class='is-grouped control'> \
+          <div class='control is-expanded'> \
+            <button class='button is-fullwidth is-stylish is-small is-primary' data-role='next'> \
               <span class='icon is-small'> \
                 <i class='far fa-thumbs-up'></i> \
               </span> \
               <span>Yes! Show me how it works.</span> \
             </button> \
-            <button class='button is-stylish is-small is-danger is-outlined' data-role='end'> \
+          </div> \
+          <div class='control is-expanded'> \
+            <button class='button is-fullwidth is-stylish is-small is-danger is-outlined' data-role='end'> \
               <span class='icon is-small'> \
                 <i class='far fa-frown'></i> \
               </span> \
               <span>No, I'll figure it out.</span> \
             </button> \
-            </div> \
           </div> \
-          </div>",
-          title: "Welcome to the DomaHub demo",
-          content: "This demo will guide you through creating and customizing a DomaHub landing page.",
-        },
+          </div> \
+        </div> \
+        </div>",
+        title: "Welcome to the DomaHub demo",
+        content: "This demo will guide you through creating and customizing a DomaHub landing page.",
+      },
 
-        //show menu button step - 1
-        {
-          element: "#show-menu-button",
-          container: "#show-menu-wrapper",
-          backdropContainer: "#show-menu-wrapper",
-          placement: "bottom",
-          onShow : function(){
-            toggleMenu(false);
-            $("#show-menu-button").addClass('is-primary');
-          },
-          onHide: function(){
-            $("#show-menu-button").removeClass('is-primary');
-          },
-          template: "<div class='popover tour arrow-top'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
-                        <div> \
-                          <button class='button is-stylish is-small' data-role='prev'> \
-                            <span class='icon is-small'> \
-                              <i class='far fa-angle-double-left'></i> \
-                            </span> \
-                            <span>Prev</span> \
-                          </button> \
-                          <button class='button is-stylish is-small' data-role='end'> \
-                            <span class='icon is-small'> \
-                              <i class='far fa-sign-out'></i> \
-                            </span> \
-                            <span>End Tutorial</span> \
-                          </button> \
-                        </div> \
-                      </div> \
-                    </div>",
-          content: "Click this button to bring up the settings menu for this page.",
+      //show menu button step - 1
+      {
+        element: "#show-menu-button",
+        container: "#show-menu-wrapper",
+        backdropContainer: "#show-menu-wrapper",
+        placement: "bottom",
+        onShow : function(){
+          toggleMenu(false);
+          $("#show-menu-button").addClass('is-primary');
         },
-
-        //explain menu step - 2
-        {
-          element: "#compare-menu",
-          container: "#compare-menu",
-          placement: "right",
-          onShow: function(){
-            toggleMenu(true);
-          },
-          template: "<div class='popover tour arrow-left'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
-                        <button class='button is-stylish is-small' data-role='prev'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-left'></i> \
-                          </span> \
-                          <span>Prev</span> \
-                        </button> \
-                        <button class='button is-stylish is-small is-primary' data-role='next'> \
-                          <span>Next</span> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-right'></i> \
-                          </span> \
-                        </button> \
-                        <button class='button is-stylish is-small' data-role='end'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-sign-out'></i> \
-                          </span> \
-                          <span>End Tutorial</span> \
-                        </button> \
-                      </div> \
-                    </div>",
-          backdropContainer: "#page-contents",
-          content: "You can use this menu to quickly test the look and feel of your DomaHub domain listing.",
+        onHide: function(){
+          $("#show-menu-button").removeClass('is-primary');
         },
-
-        //try editing description - 3
-        {
-          element: "#compare-description-control",
-          container: "#compare-menu",
-          backdropContainer: "#compare-menu",
-          backdropPadding: 15,
-          placement: "bottom",
-          onShow: function(){
-            toggleMenu(true);
-            $("#info-edit-tab").click();
-            $("#page-contents").append("<div class='tour-backdrop'></div>");
-          },
-          onHide: function(){
-            if (listing_description_tour && !listing_description_tour.ended()){
-              listing_description_tour.end();
-            }
-            $("#page-contents").find(".tour-backdrop").remove();
-          },
-          template: "<div class='popover tour arrow-top'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
-                        <button class='button is-stylish is-small' data-role='prev'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-left'></i> \
-                          </span> \
-                          <span>Prev</span> \
-                        </button> \
-                        <button class='button is-stylish is-small is-primary' data-role='next'> \
-                          <span>Next</span> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-right'></i> \
-                          </span> \
-                        </button> \
-                        <button class='button is-stylish is-small' data-role='end'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-sign-out'></i> \
-                          </span> \
-                          <span>End Tutorial</span> \
-                        </button> \
-                      </div> \
-                    </div>",
-          content: "You can edit the listing description here! Remember, this is just a testing tool. Nothing is saved."
-        },
-
-        //design tab - 4
-        {
-          element: "#design-tab",
-          container: "#compare-menu",
-          backdropContainer: "#compare-menu",
-          backdropPadding: 15,
-          placement: "bottom",
-          onShow: function(){
-            toggleMenu(true);
-            $("#page-contents").append("<div class='tour-backdrop'></div>");
-          },
-          onHide: function(){
-            $("#page-contents").find(".tour-backdrop").remove();
-          },
-          template: "<div class='popover tour arrow-top'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
+        template: "<div class='popover tour'> \
+                    <div class='popover-content margin-top-0 content'></div> \
+                    <div class='popover-navigation'> \
+                      <div> \
                         <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
                             <i class='far fa-angle-double-left'></i> \
@@ -262,174 +151,291 @@ $(document).ready(function() {
                           <span>End Tutorial</span> \
                         </button> \
                       </div> \
-                    </div>",
-          content: "You can also change the look and feel of your DomaHub listing."
-        },
+                    </div> \
+                  </div>",
+        content: "Click this button to bring up the settings menu for this page.",
+      },
 
-        //try theme - 5
-        {
-          element: "#theme-control",
-          container: "#compare-menu",
-          backdropContainer: "#compare-menu",
-          backdropPadding: 15,
-          placement: "bottom",
-          onShow: function(){
-            toggleMenu(true);
-            $("#page-contents").append("<div class='tour-backdrop'></div>");
-          },
-          onHide: function(){
-            $("#page-contents").find(".tour-backdrop").remove();
-          },
-          template: "<div class='popover tour arrow-top'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
-                        <button class='button is-stylish is-small' data-role='prev'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-left'></i> \
-                          </span> \
-                          <span>Prev</span> \
-                        </button> \
-                        <button class='button is-stylish is-small is-primary' data-role='next'> \
-                          <span>Next</span> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-right'></i> \
-                          </span> \
-                        </button> \
-                        <button class='button is-stylish is-small' data-role='end'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-sign-out'></i> \
-                          </span> \
-                          <span>End Tutorial</span> \
-                        </button> \
-                      </div> \
-                    </div>",
-          content: "Click here to edit the listing theme! If none of them fit your needs, you can always create a custom theme for your DomaHub listing."
+      //explain menu step - 2
+      {
+        element: "#compare-menu",
+        container: "#compare-menu",
+        placement: "right",
+        onShow: function(){
+          toggleMenu(true);
         },
+        template: "<div class='popover tour'> \
+                    <div class='popover-content margin-top-0 content'></div> \
+                    <div class='popover-navigation'> \
+                      <button class='button is-stylish is-small' data-role='prev'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-left'></i> \
+                        </span> \
+                        <span>Prev</span> \
+                      </button> \
+                      <button class='button is-stylish is-small is-primary' data-role='next'> \
+                        <span>Next</span> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-right'></i> \
+                        </span> \
+                      </button> \
+                      <button class='button is-stylish is-small' data-role='end'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-sign-out'></i> \
+                        </span> \
+                        <span>End Tutorial</span> \
+                      </button> \
+                    </div> \
+                  </div>",
+        backdropContainer: "#page-contents",
+        content: "You can use this menu to quickly test the look and feel of your DomaHub domain listing.",
+      },
 
-        //contact offer form - 6
-        {
-          element: "#buy-module",
-          backdropContainer: "#page-contents",
-          placement: (window.mobilecheck()) ? "top" : "left",
-          onShow: function(){
-            toggleMenu(false);
-            showBuyStuff($("#buy-now-button"));
-          },
-          content: 'Potential customers can use this form to contact you. All contact information is verified before you are notified of any new offers.'
+      //try editing description - 3
+      {
+        element: "#compare-description-control",
+        container: "#compare-menu",
+        backdropContainer: "#compare-menu",
+        backdropPadding: 15,
+        placement: "bottom",
+        onShow: function(){
+          toggleMenu(true);
+          $("#info-edit-tab").click();
+          $("#page-contents").append("<div class='tour-backdrop'></div>");
         },
-
-        //click rentable tab - 7
-        {
-          element: "#calendar-tab",
-          backdropContainer: "#page-contents",
-          placement: "bottom",
-          onShow: function(){
-            showBuyStuff($("#buy-now-button"));
-            $("#compare-menu").append("<div class='tour-backdrop'></div>");
-          },
-          onHide: function(){
-            $("#compare-menu").find(".tour-backdrop").remove();
-          },
-          template: "<div class='popover tour'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
-                        <button class='button is-stylish is-small' data-role='prev'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-left'></i> \
-                          </span> \
-                          <span>Prev</span> \
-                        </button> \
-                        <button class='button is-stylish is-small' data-role='end'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-sign-out'></i> \
-                          </span> \
-                          <span>End Tutorial</span> \
-                        </button> \
-                      </div> \
-                    </div>",
-          content: "At DomaHub, you can also choose to rent out your domains as a new source of revenue."
+        onHide: function(){
+          if (listing_description_tour && !listing_description_tour.ended()){
+            listing_description_tour.end();
+          }
+          $("#page-contents").find(".tour-backdrop").remove();
         },
+        template: "<div class='popover tour'> \
+                    <div class='popover-content margin-top-0 content'></div> \
+                    <div class='popover-navigation'> \
+                      <button class='button is-stylish is-small' data-role='prev'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-left'></i> \
+                        </span> \
+                        <span>Prev</span> \
+                      </button> \
+                      <button class='button is-stylish is-small is-primary' data-role='next'> \
+                        <span>Next</span> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-right'></i> \
+                        </span> \
+                      </button> \
+                      <button class='button is-stylish is-small' data-role='end'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-sign-out'></i> \
+                        </span> \
+                        <span>End Tutorial</span> \
+                      </button> \
+                    </div> \
+                  </div>",
+        content: "You can edit the listing description here! Remember, this is just a testing tool. Nothing is saved."
+      },
 
-        //rental tab - 8
-        {
-          element: "#calendar-module",
-          backdropContainer: "#page-contents",
-          placement: (window.mobilecheck()) ? "top" : "left",
-          onShow: function(){
-            $("#compare-menu").append("<div class='tour-backdrop'></div>");
-            showRentalStuff($("#rent-now-button"));
-          },
-          onHide: function(){
-            $("#compare-menu").find(".tour-backdrop").remove();
-          },
-          content: 'Customers use this calendar to rent the domain for variable lengths of time and forward the domain to their desired URL. All rentals are cross-checked against the <a href="https://developers.google.com/safe-browsing/" class="is-primary">Google Safe Browsing API.</a>'
+      //design tab - 4
+      {
+        element: "#design-tab",
+        container: "#compare-menu",
+        backdropContainer: "#compare-menu",
+        backdropPadding: 15,
+        placement: "bottom",
+        onShow: function(){
+          toggleMenu(true);
+          $("#page-contents").append("<div class='tour-backdrop'></div>");
         },
-
-        //click traffic tab - 9
-        {
-          element: "#traffic-tab",
-          backdropContainer: "#page-contents",
-          placement: "bottom",
-          onShow: function(){
-            $("#compare-menu").append("<div class='tour-backdrop'></div>");
-          },
-          onHide: function(){
-            $("#compare-menu").find(".tour-backdrop").remove();
-          },
-          template: "<div class='popover tour'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
-                        <button class='button is-stylish is-small' data-role='prev'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-angle-double-left'></i> \
-                          </span> \
-                          <span>Prev</span> \
-                        </button> \
-                        <button class='button is-stylish is-small' data-role='end'> \
-                          <span class='icon is-small'> \
-                            <i class='far fa-sign-out'></i> \
-                          </span> \
-                          <span>End Tutorial</span> \
-                        </button> \
-                      </div> \
-                    </div>",
-          content: "We also provide traffic information about your domain in this tab."
+        onHide: function(){
+          $("#page-contents").find(".tour-backdrop").remove();
         },
+        template: "<div class='popover tour'> \
+                    <div class='popover-content margin-top-0 content'></div> \
+                    <div class='popover-navigation'> \
+                      <button class='button is-stylish is-small' data-role='prev'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-left'></i> \
+                        </span> \
+                        <span>Prev</span> \
+                      </button> \
+                      <button class='button is-stylish is-small' data-role='end'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-sign-out'></i> \
+                        </span> \
+                        <span>End Tutorial</span> \
+                      </button> \
+                    </div> \
+                  </div>",
+        content: "You can also change the look and feel of your DomaHub listing."
+      },
 
-        //traffic module - 10
-        {
-          element: "#traffic-module",
-          backdropContainer: "#page-contents",
-          placement: "left",
-          onShow: function(){
-            $("#compare-menu").append("<div class='tour-backdrop'></div>");
-          },
-          onHide: function(){
-            $("#compare-menu").find(".tour-backdrop").remove();
-          },
-          content: 'This tab shows traffic information about your domain including number of visits, and Alexa rankings.'
+      //try theme - 5
+      {
+        element: "#theme-control",
+        container: "#compare-menu",
+        backdropContainer: "#compare-menu",
+        backdropPadding: 15,
+        placement: "bottom",
+        onShow: function(){
+          toggleMenu(true);
+          $("#page-contents").append("<div class='tour-backdrop'></div>");
         },
+        onHide: function(){
+          $("#page-contents").find(".tour-backdrop").remove();
+        },
+        template: "<div class='popover tour'> \
+                    <div class='popover-content margin-top-0 content'></div> \
+                    <div class='popover-navigation'> \
+                      <button class='button is-stylish is-small' data-role='prev'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-left'></i> \
+                        </span> \
+                        <span>Prev</span> \
+                      </button> \
+                      <button class='button is-stylish is-small is-primary' data-role='next'> \
+                        <span>Next</span> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-right'></i> \
+                        </span> \
+                      </button> \
+                      <button class='button is-stylish is-small' data-role='end'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-sign-out'></i> \
+                        </span> \
+                        <span>End Tutorial</span> \
+                      </button> \
+                    </div> \
+                  </div>",
+        content: "Click here to edit the listing theme! If none of them fit your needs, you can always create a custom theme for your DomaHub listing."
+      },
 
-        //final step - 11
-        {
-          autoScroll: true,
-          title: "Thats the end of the DomaHub demo!",
-          content: "If you have any further questions, please do not hesitate to <a href='/contact' class='is-primary'>contact us</a>.",
-          onShow: function(){
-            toggleMenu(false);
-          },
-          template: "<div class='popover tour'> \
-            <h3 class='popover-title'></h3> \
-            <div class='popover-content content'></div> \
-            <div> \
-              <div class='is-flex-wrap'> \
-                <a href='/signup' class='button is-stylish is-small is-primary'> \
+      //contact offer form - 6
+      {
+        element: "#buy-module",
+        backdropContainer: "#page-contents",
+        placement: (window.mobilecheck()) ? "top" : "left",
+        onShow: function(){
+          toggleMenu(false);
+          showBuyStuff($("#buy-now-button"));
+        },
+        content: 'Potential customers can use this form to contact you. All contact information is verified before you are notified of any new offers.'
+      },
+
+      //click rentable tab - 7
+      {
+        element: "#calendar-tab",
+        backdropContainer: "#page-contents",
+        placement: "bottom",
+        onShow: function(){
+          showBuyStuff($("#buy-now-button"));
+          $("#compare-menu").append("<div class='tour-backdrop'></div>");
+        },
+        onHide: function(){
+          $("#compare-menu").find(".tour-backdrop").remove();
+        },
+        template: "<div class='popover tour'> \
+                    <div class='popover-content margin-top-0 content'></div> \
+                    <div class='popover-navigation'> \
+                      <button class='button is-stylish is-small' data-role='prev'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-left'></i> \
+                        </span> \
+                        <span>Prev</span> \
+                      </button> \
+                      <button class='button is-stylish is-small' data-role='end'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-sign-out'></i> \
+                        </span> \
+                        <span>End Tutorial</span> \
+                      </button> \
+                    </div> \
+                  </div>",
+        content: "At DomaHub, you can also choose to rent out your domains as a new source of revenue."
+      },
+
+      //rental tab - 8
+      {
+        element: "#calendar-module",
+        backdropContainer: "#page-contents",
+        placement: (window.mobilecheck()) ? "top" : "left",
+        onShow: function(){
+          $("#compare-menu").append("<div class='tour-backdrop'></div>");
+          showRentalStuff($("#rent-now-button"));
+        },
+        onHide: function(){
+          $("#compare-menu").find(".tour-backdrop").remove();
+        },
+        content: 'Customers use this calendar to rent the domain for variable lengths of time and forward the domain to their desired URL. All rentals are cross-checked against the <a href="https://developers.google.com/safe-browsing/" class="is-primary is-underlined">Google Safe Browsing API.</a>'
+      },
+
+      //click traffic tab - 9
+      {
+        element: "#traffic-tab",
+        backdropContainer: "#page-contents",
+        placement: "bottom",
+        onShow: function(){
+          $("#compare-menu").append("<div class='tour-backdrop'></div>");
+        },
+        onHide: function(){
+          $("#compare-menu").find(".tour-backdrop").remove();
+        },
+        template: "<div class='popover tour'> \
+                    <div class='popover-content margin-top-0 content'></div> \
+                    <div class='popover-navigation'> \
+                      <button class='button is-stylish is-small' data-role='prev'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-angle-double-left'></i> \
+                        </span> \
+                        <span>Prev</span> \
+                      </button> \
+                      <button class='button is-stylish is-small' data-role='end'> \
+                        <span class='icon is-small'> \
+                          <i class='far fa-sign-out'></i> \
+                        </span> \
+                        <span>End Tutorial</span> \
+                      </button> \
+                    </div> \
+                  </div>",
+        content: "We also provide traffic information about your domain in this tab."
+      },
+
+      //traffic module - 10
+      {
+        element: "#traffic-module",
+        backdropContainer: "#page-contents",
+        placement: "left",
+        onShow: function(){
+          $("#compare-menu").append("<div class='tour-backdrop'></div>");
+        },
+        onHide: function(){
+          $("#compare-menu").find(".tour-backdrop").remove();
+        },
+        content: 'This tab shows traffic information about your domain including number of visits, and Alexa rankings.'
+      },
+
+      //final step - 11
+      {
+        autoScroll: true,
+        title: "Thats the end of the DomaHub demo!",
+        content: "If you have any further questions, please do not hesitate to <a href='/contact' class='is-primary is-underlined'>contact us</a>.",
+        onShow: function(){
+          toggleMenu(false);
+        },
+        template: "<div class='popover tour'> \
+          <h3 class='popover-title'></h3> \
+          <div class='popover-content content'></div> \
+          <div> \
+            <div class='control is-grouped'> \
+              <div class='control is-expanded'> \
+                <a href='/signup' class='button is-fullwidth is-stylish is-small is-primary'> \
                   <span class='icon is-small'> \
                     <i class='far fa-thumbs-up'></i> \
                   </span> \
                   <span>That was awesome! Sign me up.</span> \
                 </a> \
-                <button class='button is-stylish is-small is-danger is-outlined' data-role='end'> \
+              </div> \
+              <div class='control is-expanded'> \
+                <button class='button is-fullwidth is-stylish is-small is-danger is-outlined' data-role='end'> \
                   <span class='icon is-small'> \
                     <i class='far fa-sign-out'></i> \
                   </span> \
@@ -437,36 +443,36 @@ $(document).ready(function() {
                 </button> \
               </div> \
             </div> \
-          </div>"
-        },
+          </div> \
+        </div>"
+      },
 
-      ]
-    });
+    ]
+  });
 
-    tutorial_tour.init();
-    tutorial_tour.start();
+  tutorial_tour.init();
+  tutorial_tour.start();
 
-    //restart the tutorial (where you left off)
-    $(".restart-tutorial-button").on('click', function(){
-      if (tutorial_tour){
-        var cur_step = tutorial_tour.getCurrentStep();
-        if (cur_step == 10){
-          tutorial_tour.restart();
-        }
-        else {
-          tutorial_tour.start(true);
-        }
+  //restart the tutorial (where you left off)
+  $(".restart-tutorial-button").on('click', function(){
+    if (tutorial_tour){
+      var cur_step = tutorial_tour.getCurrentStep();
+      if (cur_step == 10){
+        tutorial_tour.restart();
       }
-    });
+      else {
+        tutorial_tour.start(true);
+      }
+    }
+  });
 
-    //click backdrop to end tour
-    $(".tour-backdrop").on("click", function(){
-      tutorial_tour.end();
-    });
+  //click backdrop to end tour
+  $(".tour-backdrop").on("click", function(){
+    tutorial_tour.end();
+  });
 
-    //</editor-fold>
+  //</editor-fold>
 
-  }
 });
 
 //<editor-fold>-----------------------------------------------------------------------------------MENU
