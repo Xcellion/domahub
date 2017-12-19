@@ -337,6 +337,7 @@ function updateRowData(row, listing_info){
   row.data("all", true);
   row.data("unverified", (listing_info.verified) ? false : true);
   row.data("verified", (listing_info.verified) ? true : false);
+  row.data("editable", (listing_info.verified && !listing_info.accepted) ? true : false);
   row.data("accepted", (listing_info.accepted) ? true : false);
   row.data("deposited", (listing_info.deposited) ? true : false);
   row.data("transferred", (listing_info.transferred) ? true : false);

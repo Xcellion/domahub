@@ -192,12 +192,17 @@ function setupEditingButtons(){
       $(".tab.verified-elem").removeClass('is-active');
       $(this).addClass('is-active');
 
-      //show specific tab
-      $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
-      $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
+      //show this new tab
+      showTab(new_tab);
     }
   });
 
+}
+
+//show specific tab
+function showTab(new_tab){
+  $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
+  $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
 }
 
 function updateStatus(listing_info){
