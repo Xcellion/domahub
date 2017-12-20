@@ -300,7 +300,7 @@ function createRows(selected_ids){
 //create a listing row
 function createRow(now, listing_info, rownum, selected){
   //choose a row to clone (accepted listings are verified by default)
-  if (listing_info.verified){
+  if (listing_info.verified || listing_info.status == 3){
     var tempRow = $("#verified-clone-row").clone();
   }
   else {
