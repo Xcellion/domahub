@@ -36,6 +36,7 @@ module.exports = function(app){
   //registrar tests
   app.get("/godaddy", godaddy);
   app.get("/namecheap", namecheap);
+  app.get("/namesilo", namesilo);
   app.get("/dns/:domain_name", dnsCheck);
 
   //google embed analytics
@@ -693,6 +694,9 @@ var namecheap_api_key = "90ecfcb1d49e4204a69af26efc6d854a";
 var namecheap_username = "domahub";
 var parseString = require('xml2js').parseString;
 
+var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.com/api" : "https://www.namesilo.com/api";
+var namesilo_api = (process.env.NODE_ENV == "dev") ? "aaa3f4cfdcd5faf386a8b" : "3812ea6e0bd23db7e704452";
+
 function godaddy(req, res, next){
   request({
     url: "https://api.godaddy.com/v1/domains/cALEntopia.com/records/A",
@@ -738,6 +742,134 @@ function namecheap(req, res, next){
     console.log(response.statusCode);
     parseString(body, {trim: true}, function (err, result) {
       res.json(result);
+    });
+  });
+}
+
+function namesilo(req, res, next){
+  console.log("F: namesilo...");
+
+  //get list of DNS records
+  request({
+    url: namesilo_url + "/dnsListRecords",
+    method: "GET",
+    timeout: 10000,
+    qs : {
+      version : 1,
+      type : "xml",
+      key : namesilo_api,
+      domain : "testdomainwoohoohoohoo.com",
+    }
+  }, function(err, response, body){
+    parseString(body, {
+      trim: true,
+      explicitRoot : false,
+      explicitArray : false,
+    }, function (err, result) {
+
+      //delete all DNS records
+      // var delete_dns_promises = [];
+      // for (var x = 0 ; x < result.namesilo.reply[0].resource_record.length ; x++){
+      //   delete_dns_promises.push(deleteNameSiloDNSRecord("testdomainwoohoohoohoo.com", result.namesilo.reply[0].resource_record[x].record_id[0]));
+      // }
+      //
+      // //deleted all DNS records, now create the two we need
+      // Q.allSettled(delete_dns_promises).then(function(results){
+      //   res.send(result);
+      // });
+
+      //just see the DNS records
+      res.send(result);
+    });
+  });
+
+  // //get all domains
+  // request({
+  //   url: namesilo_url + "/listDomains",
+  //   method: "GET",
+  //   timeout: 10000,
+  //   qs : {
+  //     version : 1,
+  //     type : "xml",
+  //     key : namesilo_api
+  //   }
+  // }, function(err, response, body){
+  //   parseString(body, {
+  //     trim: true,
+  //     explicitRoot : false,
+  //     explicitArray : false,
+  //   }, function (err, result) {
+  //     res.json(result);
+  //   });
+  // });
+
+  // //register a new domain
+  // request({
+  //   url: namesilo_url + "/registerDomain",
+  //   method: "GET",
+  //   timeout: 10000,
+  //   qs : {
+  //     version : 1,
+  //     type : "xml",
+  //     key : namesilo_api,
+  //     domain : "testdomahub1.com",
+  //     years : 1
+  //   }
+  // }, function(err, response, body){
+  //   parseString(body, {trim: true}, function (err, result) {
+  //     res.json(result);
+  //   });
+  // });
+
+  // //add A record for 208
+  // request({
+  //   url: namesilo_url + "/dnsAddRecord",
+  //   method: "GET",
+  //   timeout: 10000,
+  //   qs : {
+  //     version : 1,
+  //     type : "xml",
+  //     key : namesilo_api,
+  //     domain : "testdomainwoohoohoohoo.com",
+  //     rrtype : "CNAME",
+  //     rrhost : "www",
+  //     rrvalue : "testdomainwoohoohoohoo.com",
+  //   }
+  // }, function(err, response, body){
+  //   parseString(body, {trim: true}, function (err, result) {
+  //     res.json(result);
+  //   });
+  // });
+}
+
+function deleteNameSiloDNSRecord(domain_name, record_id){
+  return Q.Promise(function(resolve, reject, notify){
+    console.log("F: Setting DNS for NameSilo domain - " + domain_name + "..." + "record " + record_id);
+
+    //delete an existing DNS record
+    request({
+      url: namesilo_url + "/dnsDeleteRecord",
+      method: "GET",
+      timeout: 10000,
+      qs : {
+        version : 1,
+        type : "xml",
+        key : namesilo_api,
+        domain : domain_name,
+        rrid : record_id
+      }
+    }, function(err, response, body){
+      parseString(body, function (err, result) {
+        if (err){
+          reject(err);
+        }
+        else if (!result || !result.namesilo || !result.namesilo.reply || result.namesilo.reply[0].code != "300"){
+          reject();
+        }
+        else {
+          resolve();
+        }
+      });
     });
   });
 }
