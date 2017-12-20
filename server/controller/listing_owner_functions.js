@@ -28,7 +28,6 @@ var parser = require('parse-whois');
 var moment = require('moment');
 
 var multer = require("multer");
-var parse = require("csv-parse");
 var parseDomain = require("parse-domain");
 var Q = require('q');
 var fs = require('fs');

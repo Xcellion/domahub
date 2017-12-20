@@ -660,11 +660,10 @@ function toTitleCase(str){
 var dns = require('dns');
 //use google servers
 dns.setServers([
-  "8.8.4.4",
-  "8.8.8.8"
+  "8.8.8.8",
+  "8.8.4.4"
 ]);
 function dnsCheck(req, res, next){
-  console.log(dns.getServers());
   var domain_name = req.params.domain_name;
   dns.resolve(domain_name, "A", function (err, address, family) {
     var domain_ip = address;
