@@ -360,7 +360,7 @@ function updateDomainRow(tempRow, listing_info, now){
   }
   //testing
   else {
-    var listing_href = "https://localhost:8080/listing/" + listing_info.domain_name.toLowerCase();
+    var listing_href = "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase();
   }
 
   tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");

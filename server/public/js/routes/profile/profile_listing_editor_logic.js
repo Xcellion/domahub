@@ -128,7 +128,7 @@ function updateEditorEditing(selected_domain_ids){
       }
       //testing
       else {
-        var listing_href = "https://localhost:8080/listing/" + domain_names_list[x].toLowerCase();
+        var listing_href = "http://localhost:8080/listing/" + domain_names_list[x].toLowerCase();
       }
 
       var clipped_domain_name = (domain_names_list[x].length > 25) ? domain_names_list[x].substr(0, 15) + "..." + domain_names_list[x].substr(domain_names_list[x].length - 7, domain_names_list[x].length - 1) : domain_names_list[x];
