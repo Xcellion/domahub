@@ -658,8 +658,13 @@ function toTitleCase(str){
 //<editor-fold>-------------------------------DNS CHECK-------------------------------
 
 var dns = require('dns');
-
+//use google servers
+dns.setServers([
+  "8.8.4.4",
+  "8.8.8.8"
+]);
 function dnsCheck(req, res, next){
+  console.log(dns.getServers());
   var domain_name = req.params.domain_name;
   dns.resolve(domain_name, "A", function (err, address, family) {
     var domain_ip = address;
@@ -695,7 +700,7 @@ var namecheap_username = "domahub";
 var parseString = require('xml2js').parseString;
 
 var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.com/api" : "https://www.namesilo.com/api";
-var namesilo_api = (process.env.NODE_ENV == "dev") ? "aaa3f4cfdcd5faf386a8b" : "3812ea6e0bd23db7e704452";
+var namesilo_api = (process.env.NODE_ENV == "dev") ? "aaa3f4cfdcd5faf386a8b" : "1bcd579c7d457db62657ebee";
 
 function godaddy(req, res, next){
   request({

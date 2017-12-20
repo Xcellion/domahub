@@ -16,6 +16,11 @@ var error = require('../lib/error.js');
 var validator = require("validator");
 var whois = require("whois");
 var dns = require("dns");
+//use google servers
+dns.setServers([
+  "8.8.4.4",
+  "8.8.8.8"
+]);
 
 var alexaData = require('alexa-traffic-rank');
 var parser = require('parse-whois');

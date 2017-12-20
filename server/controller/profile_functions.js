@@ -21,6 +21,11 @@ var bcrypt = require("bcrypt-nodejs");
 var whois = require("whois");
 var parser = require('parse-whois');
 var dns = require("dns");
+//use google servers
+dns.setServers([
+  "8.8.4.4",
+  "8.8.8.8"
+]);
 var validator = require("validator");
 var request = require("request");
 var moment = require("moment");
@@ -892,6 +897,7 @@ function getDomainDNSPromise(listing_obj){
         //look up any existing DNS A Records
         dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
           if (err){
+            console.log(err);
             error.log(err, "Failed to look up A record information for table building during verification.");
             reject({
               info : err,

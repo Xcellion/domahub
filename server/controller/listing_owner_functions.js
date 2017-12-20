@@ -16,6 +16,11 @@ var encryptor = require('../lib/encryptor.js');
 
 var request = require("request");
 var dns = require("dns");
+//use google servers
+dns.setServers([
+  "8.8.4.4",
+  "8.8.8.8"
+]);
 var validator = require("validator");
 
 var whois = require("whois");
