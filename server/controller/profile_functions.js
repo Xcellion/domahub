@@ -1257,11 +1257,13 @@ function getDomainIPPromise(listing_obj){
               }
               else {
                 var good_domains = [];
-                for (var x = 0 ; x < result.reply.domains.domain.length ; x++){
-                  good_domains.push({
-                    domain_name : result.reply.domains.domain[x],
-                    reasons : ["Domain retrieved from NameSilo!"]
-                  });
+                if (result.reply.domains.domain){
+                  for (var x = 0 ; x < result.reply.domains.domain.length ; x++){
+                    good_domains.push({
+                      domain_name : result.reply.domains.domain[x],
+                      reasons : ["Domain retrieved from NameSilo!"]
+                    });
+                  }
                 }
                 resolve({
                   domains : good_domains,
