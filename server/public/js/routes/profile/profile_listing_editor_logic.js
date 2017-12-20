@@ -1694,8 +1694,11 @@ function createDNSRecordRows(selected_domain_ids, force){
   //show loading
   $("#loading-dns-table").removeClass('is-hidden');
   $("#verify-toolbar").addClass("is-hidden");
-  $("#verification-left").addClass('is-hidden');
-  $("#required-assistance").addClass("remove-margin-bottom-content");
+
+  $("#verification-left").addClass('is-lighter').removeClass('is-primary is-danger');
+  $("#verification-left-danger, #verification-left-success").addClass('is-hidden');
+  $("#verification-left-load").removeClass('is-hidden');
+  $("#verification-left-text").removeClass('is-white').text("Now loading existing DNS records.");
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-table").remove();
@@ -1854,16 +1857,20 @@ function checkDNSAllDone(total_unverified){
     }
 
     //all DNS settings are good
-    $("#required-assistance").removeClass("remove-margin-bottom-content");
+    $("#verification-left-load").addClass('is-hidden');
     if ($(".cloned-dns-table .needs-action-row").length == 0){
       $("#verify-button").removeClass('is-hidden');
       $("#refresh-dns-button").addClass('is-hidden');
-      $("#verification-left").addClass('is-primary').removeClass('is-danger is-hidden').text("All DNS settings look good! Click the button below to verify your domains.");
+      $("#verification-left").addClass('is-primary').removeClass('is-danger');
+      $("#verification-left-success").removeClass('is-hidden');
+      $("#verification-left-text").addClass('is-white').text("All DNS settings look good! Click the verify now button to verify your domains.");
     }
     else {
       $("#verify-button").addClass('is-hidden');
       $("#refresh-dns-button").removeClass('is-hidden');
-      $("#verification-left").addClass('is-danger').removeClass('is-primary is-hidden').text("You have " + $(".cloned-dns-table .needs-action-row").length + " entries left to modify.");
+      $("#verification-left").addClass('is-danger').removeClass('is-primary');
+      $("#verification-left-danger").removeClass('is-hidden');
+      $("#verification-left-text").addClass('is-white').text("You have " + $(".cloned-dns-table .needs-action-row").length + " entries left to modify.");
     }
   }
 }
