@@ -897,7 +897,6 @@ function getDomainDNSPromise(listing_obj){
         //look up any existing DNS A Records
         dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
           if (err){
-            console.log(err);
             error.log(err, "Failed to look up A record information for table building during verification.");
             reject({
               info : err,
