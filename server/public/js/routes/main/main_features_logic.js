@@ -20,11 +20,11 @@ $(document).ready(function() {
     arrows: false,
     slidesToShow: 1,
     focusOnSelect: false,
-    appendDots: $("#carousel")
+    appendDots: $("#features-title")
   });
 
   // read hash and go to appropriate slide
-  window.onload = goToSlide();
+  // window.onload = goToSlide();
 
 });
 
@@ -62,7 +62,7 @@ function goToSlide() {
   }
 
   if (number >= 0) {
-    return $("#carousel").slick("slickGoTo", number);
+    // return $("#carousel").slick("slickGoTo", number);
   }
   else {
     return false;

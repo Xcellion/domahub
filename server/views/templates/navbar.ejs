@@ -14,7 +14,7 @@
         <div id="login-dropdown">
           <div class="content has-text-centered">
             <h2>
-              <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+              <a class='is-inline-block flat-logo is-primary' title="Home" href="/">
                 <div class='is-inline-block flat-logo is-primary'></div>
               </a>
             </h2>
@@ -43,7 +43,7 @@
             <div class="control is-spaced">
               <div>
                 <div class="checkbox-form is-inline">
-                  <input id="remember-checkbox" type="checkbox" tabindex="0" title="Remember Me" />
+                  <input id="remember-checkbox" type="checkbox" title="Remember Me" />
                   <label for="remember-checkbox" tabindex="0"></label>
                 </div>
                 <p class="remember-text">
@@ -70,15 +70,39 @@
   </div>
 <% } %>
 
-<nav id="navbar" class="nav has-shadow is-white">
+<nav id="navbar" class="nav">
   <div class="nav-left">
     <div class="nav-item">
-      <a id="nav-logo" class="flat-logo is-primary is-hidden-mobile" tabindex="0" title="Home" href="/">
+      <a id="nav-logo" class="flat-logo is-white is-hidden-mobile" title="Home" href="/">
       </a>
-      <a class="circle-logo is-hidden-tablet" tabindex="0" title="Home" href="/"></a>
+      <a class="circle-logo is-hidden-tablet" title="Home" href="/"></a>
     </div>
   </div>
-  <div class="nav-center"></div>
+  <div class="nav-center">
+    <% if (!user) { %>
+      <div class="nav-item is-hidden-tablet">
+        <a id="nav-demo-button" class="is-hidden has-icon button is-stylish is-small is-accent is-outlined" title="Try Demo" href="/demo">
+          <div class="icon is-small">
+            <i class="far fa-desktop"></i>
+          </div>
+          <span>
+            Try Demo
+          </span>
+        </a>
+      </div>
+      <div class="nav-item is-hidden-tablet">
+        <a id="nav-signup-button" class="is-hidden has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
+          <div class="icon">
+            <i class="far fa-user-circle"></i>
+          </div>
+          <span>
+            Sign Up
+          </span>
+        </a>
+      </div>
+    <% } %>
+  </div>
+
   <span class="nav-toggle is-black" tabindex="0">
     <span></span>
     <span></span>
@@ -89,17 +113,24 @@
     <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
     <% if (!user) { %>
       <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Demo" href="/demo">Demo</a>
+        <a class="nav-link is-white" title="Features" href="/features">Features</a>
       </div>
       <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Features" href="/features">Features</a>
+        <a class="nav-link is-white" title="Pricing" href="/features#pricing">Pricing</a>
       </div>
-      <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Pricing" href="/features#pricing">Pricing</a>
-      </div>
-      <div class="nav-item">
-        <a id="signup" tabindex="0" class="has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
+      <div class="nav-item is-hidden-mobile">
+        <a id="nav-demo-button" class="has-icon button is-stylish is-small is-accent" title="Try Demo" href="/demo">
           <div class="icon is-small">
+            <i class="far fa-desktop"></i>
+          </div>
+          <span>
+            Try Demo
+          </span>
+        </a>
+      </div>
+      <div class="nav-item is-hidden-mobile">
+        <a class="has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
+          <div class="icon">
             <i class="far fa-user-circle"></i>
           </div>
           <span>
@@ -108,7 +139,7 @@
         </a>
       </div>
       <div class="nav-item">
-        <a tabindex="0" id="login-navbar" class="checkout-track has-icon login-modal button is-stylish is-small is-primary modal-button" title="Log In" data-object="#modal-login">
+        <a id="login-navbar" class="checkout-track has-icon login-modal button is-stylish is-small is-primary modal-button" title="Log In" data-object="#modal-login">
           <div class="icon is-small">
             <i class="far fa-sign-in"></i>
           </div>
@@ -121,22 +152,22 @@
     <!-- or else display the user profile as logged in -->
     <% } else { %>
       <div class="nav-item">
-        <a class="nav-link" tabindex="0" title="My Dashboard" href="/profile/dashboard">Dashboard</a>
+        <a class="nav-link" title="My Dashboard" href="/profile/dashboard">Dashboard</a>
       </div>
       <div class="nav-item">
-        <a id="profile-button" tabindex="0" class="button is-primary is-outlined is-stylish is-small" title="Profile">
+        <a id="profile-button" class="button is-primary is-outlined is-stylish is-small" title="Profile">
           <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
           <div class="icon">
             <i class="far fa-angle-down"></i>
           </div>
         </a>
-        <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/mylistings" title="My Listings">
+        <a class="nav-link is-hidden-tablet" href="/profile/mylistings" title="My Listings">
           My Listings
         </a>
         <div id="profile-dropdown" class="is-hidden is-hidden-mobile expand-out">
           <ul class="profile-dropdown-menu">
             <li class="menu-item has-icon">
-              <a tabindex="0" href="/profile/mylistings">
+              <a href="/profile/mylistings">
                 <div class="icon is-small">
                   <i class="far fa-list-alt"></i>
                 </div>
@@ -144,7 +175,7 @@
               </a>
             </li>
             <li class="menu-item has-icon">
-              <a tabindex="0" href="/profile/settings">
+              <a href="/profile/settings">
                 <div class="icon is-small">
                   <i class="far fa-cog"></i>
                 </div>
@@ -153,7 +184,7 @@
             </li>
             <% if (!user.stripe_subscription_id) { %>
               <li id="nav-premium-link menu-item has-icon">
-                <a tabindex="0" href="/profile/settings#premium">
+                <a href="/profile/settings#premium">
                   <div class="icon is-primary is-small">
                     <i class="far fa-trophy-alt"></i>
                   </div>
@@ -162,7 +193,7 @@
               </li>
             <% } %>
             <li class="menu-item has-icon">
-              <a tabindex="0" href="/logout">
+              <a href="/logout">
                 <div class="icon is-small">
                   <i class="far fa-sign-out"></i>
                 </div>
@@ -173,19 +204,19 @@
         </div>
       </div>
       <div class="nav-item is-hidden-tablet">
-        <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/settings" title="Account Settings">
+        <a class="nav-link is-hidden-tablet" href="/profile/settings" title="Account Settings">
           Account Settings
         </a>
       </div>
       <% if (!user.stripe_subscription_id) { %>
         <div class="nav-item is-hidden-tablet">
-          <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/settings#premium" title="Upgrade to Premium">
+          <a class="nav-link is-hidden-tablet" href="/profile/settings#premium" title="Upgrade to Premium">
             Upgrade Account
           </a>
         </div>
       <% } %>
       <div class="nav-item is-hidden-tablet">
-        <a tabindex="0" class="nav-link is-hidden-tablet" href="/logout" title="Log Out">
+        <a class="nav-link is-hidden-tablet" href="/logout" title="Log Out">
           Log Out
         </a>
       </div>
