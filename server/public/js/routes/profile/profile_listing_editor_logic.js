@@ -1029,7 +1029,15 @@ function refreshOfferRows(search_term, show_rejected){
 
 //show loading offers row
 function showLoadingOffers(){
+  $("#refresh-offers-button").addClass('is-loading');
   $("#loading-offers-table").removeClass('is-hidden');
+  $(".hidden-while-loading-offers, .whats-next-offer").addClass('is-hidden');
+}
+
+//hide loading offers row
+function hideLoadingOffers(){
+  $("#refresh-offers-button").removeClass('is-loading');
+  $("#loading-offers-table").addClass('is-hidden');
   $(".hidden-while-loading-offers, .whats-next-offer").addClass('is-hidden');
 }
 
@@ -1172,8 +1180,7 @@ function updateOffersTable(listing_info, total_domains){
 
 //finish creating offers table
 function finishedOfferTable(total_domains, listing_info){
-  $("#loading-offers-table").addClass('is-hidden');
-  $(".hidden-while-loading-offers").removeClass('is-hidden');
+  hideLoadingOffers();
   $("#offer-response-wrapper").removeClass('remove-margin-bottom-content');
   refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
   if (total_domains == 1){
@@ -1693,7 +1700,8 @@ function setupVerificationButtons(selected_domain_ids){
 function createDNSRecordRows(selected_domain_ids, force){
   //show loading
   $("#loading-dns-table").removeClass('is-hidden');
-  $("#verify-toolbar").addClass("is-hidden");
+  $(".verify-hidden-while-loading").addClass("is-hidden");
+  $("#refresh-dns-button").addClass('is-loading');
 
   $("#verification-left").addClass('is-lighter').removeClass('is-primary is-danger');
   $("#verification-left-danger, #verification-left-success").addClass('is-hidden');
@@ -1841,7 +1849,8 @@ function createDomaRecords(cloned_a_row, cloned_www_row){
 function checkDNSAllDone(total_unverified){
   //remove loading from refresh, remove loading row, show all cloned rows
   if ($(".cloned-dns-table").length == total_unverified) {
-    $("#verify-toolbar").removeClass('is-hidden');
+    $(".verify-hidden-while-loading").removeClass('is-hidden');
+    $("#refresh-dns-button").removeClass('is-loading');
     $("#loading-dns-table").addClass('is-hidden');
 
     //sort by selected index

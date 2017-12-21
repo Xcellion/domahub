@@ -138,6 +138,11 @@
   }
 }
 
+.feature-video {
+  width: 100%;
+  max-height:400px;
+}
+
 .price-card {
   @include transition(translate 0.25s ease);
   border-radius: $radius;
