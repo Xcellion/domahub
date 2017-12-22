@@ -54,7 +54,7 @@ function clearNotification(){
 
 //check if we should display a success or error msg (for login)
 function loadNotification() {
-  if (message.substring(0,5) == "Promo") {
+  if (message.toLowerCase().indexOf("success") != -1) {
     successMessage(message);
   }
   else if (typeof message != "undefined") {
