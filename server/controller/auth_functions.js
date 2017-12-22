@@ -380,9 +380,10 @@ module.exports = {
       account_model.checkPromoCodeUnused(req.params.promo_code, function(result){
         if (result.state == "success" && result.info.length > 0){
           console.log("F: Promo code exists!");
+          delete req.session.referer_id;
           req.session.promo_code_signup = req.params.promo_code;
-          req.session.message = "Promo code applied! Sign up below to get started.";
-          next();
+          req.session.message = "Successfully applied promo code! Sign up below to get started.";
+          res.redirect("/signup");
         }
 
         //promo code doesnt exist, maybe it's a username (AKA referral)
@@ -392,8 +393,9 @@ module.exports = {
           account_model.getAccountIDByUsername(req.params.promo_code, function(result){
             if (result.state == "success" && result.info.length > 0){
               console.log("F: Username referral code exists!");
+              delete req.session.promo_code_signup;
               req.session.referer_id = result.info[0].id;
-              req.session.message = "Promo code applied! Sign up below to get started.";
+              req.session.message = "Successfully applied promo code! Sign up below to get started.";
             }
             res.redirect("/signup");
           });
