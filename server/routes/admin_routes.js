@@ -42,7 +42,10 @@ module.exports = function(app){
 //only wonmin can create codes
 function checkAdmin(req, res, next){
   console.log("F: Checking if admin...");
-  if (!req.user || req.user.id != 1 || req.user.email != "won2blee@gmail.com"){
+  if (process.env.NODE_ENV == "dev"){
+    next();
+  }
+  else if (!req.user || req.user.id != 1 || req.user.email != "won2blee@gmail.com"){
     console.log("F: Not admin! Redirecting...");
     res.redirect("/");
   }
