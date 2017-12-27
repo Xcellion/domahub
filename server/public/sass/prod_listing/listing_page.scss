@@ -22,14 +22,16 @@
 @import '../bulma/layout/section.sass';
 
 .min-height {
-  min-height: calc(100vh - 110px) !important;
+  min-height: calc(100vh - 110px);
 }
 
 .heading {
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-size: $size-8;
+  color: $black-secondary;
+  text-transform: capitalize;
+  font-size: $size-7;
+  &.is-small {
+    width: 125px;
+  }
 }
 
 #domain-title {
@@ -46,7 +48,6 @@
   &:focus {
     background-color: $pastel;
   }
-  &:active,
   &:focus {
     border-color: #007bff;
     outline: 0;
@@ -113,44 +114,120 @@
 //<editor-fold>---------------------LISTING---------------------
 
 .listing-page {
-  display: flex;
   height: 100%;
   margin: 0 auto;
   max-width: 1200px;
-  @include touch {
+}
+
+.listing-wrapper {
+  display: flex;
+  @media screen and (max-width: 1070px) {
     flex-direction: column;
+  }
+  &.is-active {
+    flex-direction: column;
+    .listing-left,
+    .listing-right {
+      width: 100%;
+    }
+    .listing-right {
+      #info-module {
+        display: flex;
+        & > .control {
+          &:first-child {
+            margin-right: 25px;
+          }
+        }
+      }
+      @media screen and (max-width: 1070px) {
+        margin-top: 40px;
+        #info-module {
+          display: block;
+          .control {
+            &:first-child {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#info-module {
+  @media screen and (max-width: 1070px) {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 .listing-left {
-  padding: 60px 40px;
+  @include transition(all 0.4s ease);
+  padding-right: 40px;
   position: relative;
   width: 50%;
-  @include touch {
+  @media screen and (max-width: 1070px) {
     border-bottom: 1px solid $border;
-    padding: 60px 20px 20px;
+    padding-right: 0;
+    padding-bottom: 40px;
+    width: 100%;
+    .box {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #buy-rent-tabs {
+      ul {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.listing-right {
+  @include transition(all 0.4s ease);
+  margin-top: 60px;
+  width: 50%;
+  @media screen and (max-width: 1070px) {
+    margin-top: 40px;
     width: 100%;
   }
 }
 
-.listing-left-content {
-  @include touch {
-    text-align: center;
+#traffic-module {
+  display: flex;
+  padding: 20px;
+  @media screen and (max-width: 1070px) {
+    flex-direction: column;
+    .control {
+      display: flex;
+      justify-content: center;
+      .content + .content {
+        margin-top: 0;
+        margin-left: 20px;
+      }
+    }
   }
 }
 
-#domain-display {
-  margin-top: 15px;
-  margin-bottom: 60px;
-  h1 {
-    font-size: $size-1;
-    word-break: break-all;
-    @include mobile {
-      font-size: 40px;
-    }
-    @include mobile-456px {
-      font-size: 28px;
-    }
+.traffic-chart {
+  height: 360px;
+}
+
+.traffic-left {
+  width: 66%;
+  margin-right: 40px;
+  @media screen and (max-width: 1070px) {
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+.traffic-right {
+  width: 33%;
+  @media screen and (max-width: 1070px) {
+    margin-top: 20px;
+    width: 100%;
   }
 }
 
@@ -176,15 +253,6 @@
         margin-right: 0;
       }
     }
-  }
-}
-
-.listing-right {
-  padding: 60px 40px;
-  width: 50%;
-  @include touch {
-    padding: 60px 20px 20px;
-    width: 100%;
   }
 }
 
@@ -240,11 +308,6 @@
 
 #dh-footer {
   @include transition(all 0.2s ease);
-  .social-share {
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
   .bar-right {
     @include mobile {
       flex-wrap: nowrap;
@@ -271,11 +334,18 @@
   }
 }
 
+.social-share {
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
 #page-contents {
   @include transition(width 0.2s ease, transform 0.2s ease);
   background-attachment: fixed;
   background-color: $white;
   background-color: $white;
+  min-height: 100vh;
   width: 100%;
   &.is-active {
     @include translate(500px,0);
@@ -355,20 +425,20 @@
 }
 
 .input-tooltip {
-  background-color: $grey-dark;
+  background-color: $black;
   border-radius: 0 $radius-large $radius-large $radius-large;
-  bottom: -30px;
+  bottom: -25px;
   box-sizing: border-box;
   color: $white;
   cursor: pointer;
-  font-size: $size-6;
+  font-size: $size-8;
   left: 2px;
-  padding: 2px 5px;
+  padding: 5px;
   position: absolute;
   right: 0;
-  width: 142px;
+  width: 80px;
   @include mobile-456px {
-    font-size: $size-7
+    bottom: -26px;
   }
   &.is-active {
     background-color: $danger;
@@ -384,20 +454,20 @@
     height: 0;
     position: absolute;
     width: 0;
-    border: 5px solid transparent;
+    border: 3px solid transparent;
   }
   &::before {
-    border-bottom-color: $grey-dark;
-    border-left-color: $grey-dark;
-    top: -10px;
+    border-bottom-color: $black;
+    border-left-color: $black;
+    top: -6px;
     left: 0;
   }
 }
 
 #typed-slash {
   border: none;
-  color: $accent;
-  font-size: $size-1;
+  color: $text;
+  font-size: $size-3;
   margin-right: auto;
   position: relative;
   vertical-align: baseline !important;
@@ -411,12 +481,12 @@
   }
   &:hover {
     cursor: pointer;
-    border-color: $black-secondary;
+    border-color: $black;
   }
   &.is-active {
     outline: none;
     cursor: auto;
-    border-color: $black-primary;
+    border-color: $black;
     &::-webkit-input-placeholder {
       /* Chrome/Opera/Safari */
       color: transparent;
@@ -434,6 +504,10 @@
       color: transparent;
     }
   }
+}
+
+#otherowner-domain-table {
+  max-height: 506px;
 }
 
 .phone-number {
@@ -458,10 +532,6 @@
 #description-text {
   word-break: break-word;
   white-space: pre-wrap;
-}
-
-#social-sharing-module {
-
 }
 
 .tip {
@@ -523,12 +593,6 @@
 
 .ticker-icon-color {
   margin-right: 15px;
-}
-
-#traffic-module {
-  .box {
-    margin-bottom: 40px;
-  }
 }
 
 #traffic-overlay {

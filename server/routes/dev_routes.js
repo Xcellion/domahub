@@ -169,7 +169,7 @@ function showView(req, res, next){
     user: "Wonkyu",
     listing_info : {
       domain_name : "testdomain.com",
-      primary_color : "#e86666",
+      primary_color : "#3cbc8d",
       premium: true,
       logo: "",
       compare: false

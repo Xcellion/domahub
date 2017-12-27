@@ -1,18 +1,22 @@
-<div class="notification is-lighter no-shadow">
+<div class="notification is-primary">
   <div class="content">
-    <h3>Do you own this domain?</h3>
-    <p>
+    <h2 class="is-bold is-white">Do you own this domain?</h2>
+    <p class="is-white">
       You can create your own custom landing page with DomaHub for free! Click below to try out a demo or learn more about our features!
     </p>
   </div>
-  <div class="control control-wrapper is-aligned-left">
-    <a class='button is-primary is-stylish' tabindex="0" href='/listing/<%= listing_info.domain_name %>?compare=true&theme=Random'>
-      <div class="icon is-small"><i class="far fa-thumbs-up"></i></div>
-      <span>Try the Free Demo</span>
-    </a>
-    <a class='button is-primary is-outlined is-stylish' tabindex="0" href='/features'>
-      <div class="icon is-small"><i class="far fa-exclamation-circle"></i></div>
-      <span>Learn more</span>
-    </a>
+  <div class="control is-grouped is-grouped-center">
+    <div class="control">
+      <a class='button is-accent is-stylish' tabindex="0" href='/listing/<%= listing_info.domain_name %>?compare=true&theme=Random'>
+        <div class="icon is-small"><i class="far fa-thumbs-up"></i></div>
+        <span>Try the Free Demo</span>
+      </a>
+    </div>
+    <div class="control">
+      <a class='button is-primary is-outlined is-stylish' tabindex="0" href='/features'>
+        <div class="icon is-small"><i class="far fa-exclamation-circle"></i></div>
+        <span>Learn more</span>
+      </a>
+    </div>
   </div>
 </div>

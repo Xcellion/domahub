@@ -1,12 +1,16 @@
 <% if (!listing_info.premium || (listing_info.premium && listing_info.social_sharing)) { %>
-  <div id="social-sharing-module" class="footer-item">
+  <div id="social-sharing-module" class="control is-grouped">
+    <div class="control">
+      <p class="heading is-small">Share:</p>
+    </div>
+    <div class="control">
       <% if (listing_info.premium) { %>
         <a class="social-share" title="Share on Facebook!" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
       <% } else { %>
         <a class="social-share" title="Share on Facebook!" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
       <% } %>
-        <div class="icon is-small">
-          <i class="far fa-facebook-f"></i>
+        <div class="icon is-small is-white is-circle no-borders">
+          <i class="far fa-facebook-f fa-fw"></i>
         </div>
       </a>
       <% if (listing_info.premium) { %>
@@ -14,8 +18,8 @@
       <% } else { %>
         <a class="social-share" title="Share on Twitter!" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://domahub.com/listing/<%= listing_info.domain_name %>">
       <% } %>
-        <div class="icon is-small">
-          <i class="far fa-twitter"></i>
+        <div class="icon is-small is-white is-circle no-borders">
+          <i class="far fa-twitter fa-fw"></i>
         </div>
       </a>
       <% if (listing_info.premium) { %>
@@ -23,8 +27,8 @@
       <% } else { %>
         <a class="social-share" title="Share on LinkedIn!" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
       <% } %>
-        <div class="icon is-small">
-          <i class="far fa-linkedin-in"></i>
+        <div class="icon is-small is-white is-circle no-borders">
+          <i class="far fa-linkedin-in fa-fw"></i>
         </div>
       </a>
       <% if (listing_info.premium) { %>
@@ -32,9 +36,10 @@
       <% } else { %>
         <a class="social-share" title="Share via email!" target="_blank" href="mailto:?body=https://domahub.com/listing/<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
       <% } %>
-        <div class="icon is-small">
-          <i class="far fa-envelope"></i>
+        <div class="icon is-small is-white is-circle no-borders">
+          <i class="far fa-envelope fa-fw"></i>
         </div>
       </a>
+    </div>
   </div>
 <% } %>

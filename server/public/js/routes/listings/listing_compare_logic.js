@@ -313,7 +313,7 @@ $(document).ready(function() {
       {
         element: "#buy-module",
         backdropContainer: "#page-contents",
-        placement: (window.mobilecheck()) ? "top" : "left",
+        placement: (window.mobilecheck()) ? "top" : "right",
         onShow: function(){
           toggleMenu(false);
           showBuyStuff($("#buy-now-button"));
@@ -357,7 +357,7 @@ $(document).ready(function() {
       {
         element: "#calendar-module",
         backdropContainer: "#page-contents",
-        placement: (window.mobilecheck()) ? "top" : "left",
+        placement: (window.mobilecheck()) ? "top" : "right",
         onShow: function(){
           $("#compare-menu").append("<div class='tour-backdrop'></div>");
           showRentalStuff($("#rent-now-button"));
@@ -403,7 +403,7 @@ $(document).ready(function() {
       {
         element: "#traffic-module",
         backdropContainer: "#page-contents",
-        placement: "left",
+        placement: "top",
         onShow: function(){
           $("#compare-menu").append("<div class='tour-backdrop'></div>");
         },
@@ -658,10 +658,10 @@ function updatePricing(){
     // updateQueryStringParam("price_rate", $(this).val());
     var current_price = parseFloat($(this).val()) || 0;
     if (current_price == 0){
-      $("#rent-price-tag").text("For rent - Free");
+      $("#rent-price-text").text("For rent - Free");
     }
     else {
-      $("#rent-price-tag").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
+      $("#rent-price-text").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
     }
   });
   var price_type = getParameterByName("price_type") || listing_info.price_type;
@@ -670,10 +670,10 @@ function updatePricing(){
     // updateQueryStringParam("price_type", $(this).val());
     var current_price = parseFloat($("#price-rate-input").val()) || 0;
     if (current_price == 0){
-      $("#rent-price-tag").text("For rent - Free");
+      $("#rent-price-text").text("For rent - Free");
     }
     else {
-      $("#rent-price-tag").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
+      $("#rent-price-text").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
     }
   });
 }
@@ -777,10 +777,10 @@ function updateFooter(premium){
 
     //change logo if it exists
     if (listing_info.logo == ""){
-      $("#custom_logo").addClass("is-hidden");
+      $(".logo-item").addClass("is-hidden");
     }
     else {
-      $("#custom_logo").removeClass('is-hidden').css("background", "url(" + listing_info.logo + ") center/cover no-repeat").removeAttr("href");
+      $(".logo-item").attr('src', listing_info.logo).removeClass('is-hidden').css("background", "url(" + listing_info.logo + ") center/cover no-repeat").removeAttr("href");
     }
 
     //change text
@@ -793,7 +793,7 @@ function updateFooter(premium){
     $("#dh-footer-right-text").replaceWith("<p id='dh-footer-right-text' class='footer-item'>Simple, clean sales pages for your domains.</p>");
     $("#dh-footer-right-smile").removeClass("is-hidden");
     $("#doma_logo").replaceWith('<a id="doma_logo" href="https://domahub.com"><i class="far fa-copyright v-align-bottom"></i> DomaHub, Inc.</a>');
-    $("#custom_logo").removeClass('is-hidden').removeAttr("style").attr("href", "/");
+    $(".logo-item").attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png").removeClass('is-hidden').removeAttr("style").attr("href", "/");
   }
 }
 
