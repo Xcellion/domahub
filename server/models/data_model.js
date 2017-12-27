@@ -56,6 +56,31 @@ module.exports = {
 
   //<editor-fold>-------------------------------GETS-------------------------------
 
+  //gets total number of users
+  getUserCount : function(callback){
+    console.log("DB: Attempting to get total verified user count...");
+    var query = 'SELECT \
+          accounts.id, \
+          listings_count.total as listings_count \
+        FROM accounts \
+        LEFT JOIN (\
+          SELECT COUNT(*) as total, \
+          owner_id \
+        FROM listings \
+        WHERE listings.verified = 1 \
+        GROUP BY owner_id ) listings_count \
+        ON listings_count.owner_id = accounts.id \
+        WHERE accounts.type >= 1 '
+    database.query(query, "Failed to get verified user count!", callback);
+  },
+
+  //gets coupon info
+  getCoupons : function(callback){
+    console.log("DB: Attempting to get coupon info...");
+    var query = 'SELECT * FROM coupon_codes '
+    database.query(query, "Failed to get coupon info!", callback);
+  },
+
   //gets all views for a specific listing's rentals
   getRentalTraffic : function(domain_name, callback){
     console.log("DB: Attempting to get rental traffic for domain: " + domain_name + "...");

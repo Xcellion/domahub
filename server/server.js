@@ -40,6 +40,7 @@ app.use(function(req, res, next) {
 
 //which session store to use depending on DEV or PROD
 var session = require('express-session');
+app.set('json spaces', 2);    //pretty json
 if (process.env.NODE_ENV == "dev"){
   console.log("Development environment! Using memory for sessions store.");
 
@@ -53,9 +54,6 @@ if (process.env.NODE_ENV == "dev"){
     resave: false,
     rolling: true
   }));
-
-  //pretty json in dev
-  app.set('json spaces', 2);
 }
 else {
   console.log("Production environment! Using redis for sessions store.");
