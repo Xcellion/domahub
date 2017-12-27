@@ -887,7 +887,7 @@ module.exports = {
               to: "general@domahub.com",
               from: 'general@domahub.com',
               subject: "Created new coupon codes on production!",
-              html: success_codes.join("</br>")
+              html: success_codes.join("</br>|</br>")
             });
             res.redirect("/");
           }
