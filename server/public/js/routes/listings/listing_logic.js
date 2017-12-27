@@ -644,6 +644,9 @@ function findOtherDomains(){
       if (data.state == "success"){
         createOtherDomains(data.listings);
       }
+      else {
+        $("#domainlist-tab").addClass('is-hidden');
+      }
     });
   }
 }
