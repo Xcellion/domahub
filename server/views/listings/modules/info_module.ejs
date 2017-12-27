@@ -1,5 +1,5 @@
 <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
-  <div id="info-module" class="content">
+  <div id="info-module">
 
     <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
     <% if (listing_info.unlisted && !compare) { %>
@@ -10,17 +10,6 @@
          listing_info.domain_appraisal ||
          listing_info.categories
        )) { %>
-
-       <div class="level is-mobile">
-          <%# LISTING OWNER MODULE %>
-          <%- include("info/domain_owner_module.ejs", {
-            listing_info : listing_info
-          }); %>
-          <%# LISTING AGE MODULE %>
-          <%- include("info/domain_age_module.ejs", {
-            listing_info : listing_info
-          }); %>
-       </div>
 
       <% } %>
 
@@ -48,24 +37,12 @@
          listing_info.domain_appraisal ||
          listing_info.categories
        )) { %>
-         <div class="level is-mobile">
-            <%# LISTING OWNER MODULE %>
-            <%- include("info/domain_owner_module.ejs", {
-              listing_info : listing_info
-            }); %>
-            <%# LISTING AGE MODULE %>
-            <%- include("info/domain_age_module.ejs", {
-              listing_info : listing_info
-            }); %>
-         </div>
 
-         <%# DESCRIPTION AND CHECK AVAILABILITY MODULE %>
-         <%- include("desc_avail_module.ejs", {
-             listing_info : listing_info
-         });%>
+        <div class="control">
+          <%# LISTING OWNER MODULE temporarily removed %>
 
-          <%# CATEGORIES MODULE %>
-          <%- include("info/categories_module.ejs", {
+          <%# LISTING AGE MODULE %>
+          <%- include("info/domain_age_module.ejs", {
             listing_info : listing_info
           }); %>
 
@@ -73,6 +50,21 @@
           <%- include("info/appraisals_module.ejs", {
             listing_info : listing_info
           }); %>
+
+        </div>
+
+        <div class="control">
+
+          <%# CATEGORIES MODULE %>
+          <%- include("info/categories_module.ejs", {
+            listing_info : listing_info
+          }); %>
+
+          <%# SOCIAL SHARING MODULE %>
+          <%- include("info/social_share_module.ejs", {
+            listing_info : listing_info
+          }); %>
+        </div>
 
       <% } %>
 

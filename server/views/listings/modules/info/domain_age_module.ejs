@@ -1,17 +1,34 @@
-<% if (listing_info.date_registered && (!listing_info.premium || (listing_info.premium && listing_info.domain_age))) { %>
-  <div id="domain-age-module" class='level-item'>
-    <small class="heading">
-      Registered
-    </small>
-    <p id="date_registered" class="regular-font">
-    </p>
+  <div id="domain-age-module" class="control is-grouped">
+    <div class="control">
+      <p class="heading is-small">
+        Registered:
+      </p>
+    </div>
+    <div class="control">
+      <% if (listing_info.date_registered && (!listing_info.premium || (listing_info.premium && listing_info.domain_age))) { %>
+        <p id="date_registered" class="regular-font"></p>
+      <% } else { %>
+        <p class="regular-font">
+          Unknown
+        </p>
+      <% } %>
+    </div>
   </div>
-  <div id="domain-registrar-module" class='level-item'>
-    <small class="heading">
-      Registrar
-    </small>
-    <p id="registrar" class="regular-font">
-      <%= listing_info.registrar %>
-    </p>
+  <div id="domain-registrar-module" class="control is-grouped">
+    <div class="control">
+      <p class="heading is-small">
+        Registrar:
+      </p>
+    </div>
+    <div class="control">
+      <% if (listing_info.date_registered && (!listing_info.premium || (listing_info.premium && listing_info.domain_age))) { %>
+        <p class="regular-font">
+          <%= listing_info.registrar %>
+        </p>
+      <% } else { %>
+        <p class="regular-font">
+          Unknown
+        </p>
+      <% } %>
+    </div>
   </div>
-<% } %>

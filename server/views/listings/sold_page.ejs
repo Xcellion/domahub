@@ -11,13 +11,19 @@
         </div>
         <div class="content">
           <h1 id="domain-title" class="title is-2 is-inline-block"><%= listing_info.domain_name %></h1>
-          <p>Unfortunately, this domain is not available on DomaHub.</p>
-
-          <%# INFO MODULE %>
-          <%- include("modules/info_module.ejs", {
-            listing_info : listing_info
-          }); %>
-
+        </div>
+        <div class="notification is-primary has-icon">
+          <div class="icon-box">
+            <figure class="image is-64x64">
+              <img src="/images/lib/money-coin.svg" />
+            </figure>
+          </div>
+          <div class="content">
+            <h2 class="is-white is-bold">This domain has been sold!</h2>
+            <p class="is-white">
+              It is currently being transferred to its new owner.
+            </p>
+          </div>
         </div>
       </div>
     </div>

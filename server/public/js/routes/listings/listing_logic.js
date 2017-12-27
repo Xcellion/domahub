@@ -27,7 +27,15 @@ $(document).ready(function() {
 
     if (!(which_tab == "calendar")) {
       //this will get rid of the slash
+      $("#path-input").addClass("is-hidden");
       $("#domain-title").text(listing_info.domain_name);
+    }
+
+    if (!(which_tab == "traffic")) {
+      $(".listing-wrapper").removeClass("is-active");
+    }
+    else {
+      $(".listing-wrapper").addClass("is-active");
     }
   });
 
@@ -49,6 +57,7 @@ $(document).ready(function() {
   //only get traffic if it's visible due to chartjs responsive endless loop
   if ((listing_info.premium && listing_info.traffic_graph) || !listing_info.premium){
     if ($(".module").eq(0).attr("id") == "traffic-module"){
+      $(".listing-wrapper").addClass("is-active");
       getTrafficData();
     }
     else {
@@ -401,7 +410,7 @@ function createEmptyChart(){
     },
     options: {
       legend: {
-        display:false
+        display: false
       },
       scales: {
         xAxes: [{
@@ -493,7 +502,7 @@ function formatDataset(stats) {
 
 //initiate chart only if uninitiated
 function createTrafficChart(compare){
-  formatted_dataset = formatDataset(listing_info.traffic);
+  var formatted_dataset = formatDataset(listing_info.traffic);
 
   //hide any overlay
   $("#traffic-overlay").addClass('is-hidden');
@@ -514,6 +523,7 @@ function createTrafficChart(compare){
       }]
     },
     options: {
+      maintainAspectRatio: false,
       legend: {
         display: false
       },
@@ -564,10 +574,14 @@ function createTrafficChart(compare){
           type: "category"
         }],
         yAxes: [{
+          gridLines: {
+            drawTicks: false
+          },
           display: true,
           type: 'linear',
           ticks: {
-            beginAtZero: true   // minimum value will be 0.
+            beginAtZero: true,   // minimum value will be 0.
+            maxTicksLimit: 5
           }
         }]
       }
@@ -629,6 +643,9 @@ function findOtherDomains(){
       if (data.state == "success"){
         createOtherDomains(data.listings);
       }
+      else {
+        $("#domainlist-tab").addClass('is-hidden');
+      }
     });
   }
 }
@@ -651,7 +668,7 @@ function createOtherDomains(other_listings){
     //available to buy now
     if (other_listings[x].buy_price > 0){
       var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
-      cloned_similar_listing.find(".otherowner-domain-price").text("Buy now - " + buy_price);
+      cloned_similar_listing.find(".otherowner-domain-price").text("Buy Now: " + buy_price);
     }
     //available to buy at a specific minimum price
     else if (other_listings[x].min_price > 0){
