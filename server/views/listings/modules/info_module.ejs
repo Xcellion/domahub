@@ -11,13 +11,6 @@
          listing_info.categories
        )) { %>
 
-        <%# LISTING OWNER MODULE temporarily removed %>
-
-        <%# LISTING AGE MODULE %>
-        <%- include("info/domain_age_module.ejs", {
-          listing_info : listing_info
-        }); %>
-
       <% } %>
 
       <% if (!listing_info.available) { %>

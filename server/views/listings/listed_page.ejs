@@ -10,15 +10,19 @@
         <div class="control">
           <div class="control is-flex-wrap">
             <%# BUYABLE TAG %>
-            <div class="tag is-primary">
               <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
-                <span id="price-tag" class="is-hidden"></span>
+                <div class="tag is-primary">
+                  <span id="price-tag" class="is-hidden"></span>
+                </div>
               <% } else if (listing_info.status == 1){ %>
-                <span>Now available!</span>
+                <div class="tag is-primary">
+                  <span>Now available!</span>
+                </div>
               <% } else { %>
-                <span>Unavailable</span>
+                <div class="tag is-danger">
+                  <span>Unavailable</span>
+                </div>
               <% } %>
-            </div>
 
             <%# RENTABLE TAG %>
             <% if (listing_info.status == 1 && listing_info.rentable) { %>
@@ -99,22 +103,14 @@
             </ul>
           </div>
 
-          <%# SOLD MODULE %>
-          <% if (listing_info.deposited) { %>
-            <%- include("modules/sold_module.ejs"); %>
-          <% } else { %>
+          <% if (listing_info.status == 1) { %>
+            <%# BUY NOW MODULE %>
+            <%- include("modules/buy_now_module.ejs"); %>
 
-            <% if (listing_info.status == 1) { %>
-              <%# BUY NOW MODULE %>
-              <%- include("modules/buy_now_module.ejs"); %>
-
-            <% if (listing_info.rentable) { %>
-              <%# CALENDAR MODULE %>
-              <%- include("modules/calendar_module.ejs"); %>
-            <% } %>
-            <% } %>
-
-          <% } %>
+          <% if (listing_info.rentable) { %>
+            <%# CALENDAR MODULE %>
+            <%- include("modules/calendar_module.ejs"); %>
+          <% }} %>
 
           <%# TRAFFIC MODULE %>
           <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
