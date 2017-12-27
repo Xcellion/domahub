@@ -3,10 +3,12 @@
     <div class="footer-bar">
       <div class="bar-left">
         <% if (!listing_info.premium) { %>
-          <a id="custom_logo" tabindex="0" class="circle-logo footer-item" href="/" title="Go to DomaHub"></a>
+          <a id="custom_logo" tabindex="0" class="logo-item circle-logo footer-item" href="/" title="Go to DomaHub"></a>
         <% } else { %>
           <% if (listing_info.logo) { %>
-            <img id="custom_logo" class="footer-item" />
+            <figure class="image is-48x48">
+              <img class="logo-item footer-item" />
+            </figure>
           <% } %>
         <% } %>
       </div>
