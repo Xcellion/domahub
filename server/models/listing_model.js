@@ -281,7 +281,6 @@ module.exports = {
     console.log("DB: Attempting to get 10 random listings by the same owner...");
     var query = "SELECT \
           listings.domain_name, \
-          listings.background_image, \
           listings.status, \
           listings.buy_price, \
           listings.price_type, \
@@ -292,7 +291,6 @@ module.exports = {
         AND listings.status = 1 \
         AND listings.verified = 1 \
         AND listings.deleted IS NULL \
-        AND (listings.categories NOT LIKE '%adult%' OR listings.categories IS NULL) \
         ORDER BY RAND() \
         LIMIT 10"
     database.query(query, "Failed to get 10 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);
