@@ -78,6 +78,9 @@ function navbarChange(windowelem){
     if ($("#nav-logo").is(":visible")){
       $(".nav-link").addClass('is-white');
     }
+    else {
+      $(".nav-link").removeClass('is-white');
+    }
   }
   //past the top
   else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
