@@ -310,7 +310,7 @@ $(document).ready(function() {
         {
           element: "#buy-module",
           backdropContainer: "#page-contents",
-          placement: (window.mobilecheck()) ? "top" : "left",
+          placement: (window.mobilecheck()) ? "top" : "right",
           onShow: function(){
             toggleMenu(false);
             showBuyStuff($("#buy-now-button"));
@@ -354,7 +354,7 @@ $(document).ready(function() {
         {
           element: "#calendar-module",
           backdropContainer: "#page-contents",
-          placement: (window.mobilecheck()) ? "top" : "left",
+          placement: (window.mobilecheck()) ? "top" : "right",
           onShow: function(){
             $("#compare-menu").append("<div class='tour-backdrop'></div>");
             showRentalStuff($("#rent-now-button"));
@@ -400,7 +400,7 @@ $(document).ready(function() {
         {
           element: "#traffic-module",
           backdropContainer: "#page-contents",
-          placement: "left",
+          placement: "bottom",
           onShow: function(){
             $("#compare-menu").append("<div class='tour-backdrop'></div>");
           },

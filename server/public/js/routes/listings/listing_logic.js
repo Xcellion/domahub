@@ -581,8 +581,7 @@ function createTrafficChart(compare){
           type: 'linear',
           ticks: {
             beginAtZero: true,   // minimum value will be 0.
-            maxTicksLimit: 5,
-            stepSize: 500
+            maxTicksLimit: 5
           }
         }]
       }

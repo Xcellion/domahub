@@ -196,7 +196,7 @@
 
 #traffic-module {
   display: flex;
-  padding-bottom: 20px;
+  padding: 20px;
   @media screen and (max-width: 1070px) {
     flex-direction: column;
     .control {
@@ -211,9 +211,7 @@
 }
 
 .traffic-chart {
-  @media screen and (max-width: 1070px) {
-    height:400px;
-  }
+  height: 360px;
 }
 
 .traffic-left {
@@ -595,12 +593,6 @@
 
 .ticker-icon-color {
   margin-right: 15px;
-}
-
-#traffic-module {
-  .box {
-    margin-bottom: 40px;
-  }
 }
 
 #traffic-overlay {
