@@ -652,10 +652,10 @@ function updatePricing(){
     // updateQueryStringParam("price_rate", $(this).val());
     var current_price = parseFloat($(this).val()) || 0;
     if (current_price == 0){
-      $("#rent-price-tag").text("For rent - Free");
+      $("#rent-price-text").text("For rent - Free");
     }
     else {
-      $("#rent-price-tag").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
+      $("#rent-price-text").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
     }
   });
   var price_type = getParameterByName("price_type") || listing_info.price_type;
@@ -664,10 +664,10 @@ function updatePricing(){
     // updateQueryStringParam("price_type", $(this).val());
     var current_price = parseFloat($("#price-rate-input").val()) || 0;
     if (current_price == 0){
-      $("#rent-price-tag").text("For rent - Free");
+      $("#rent-price-text").text("For rent - Free");
     }
     else {
-      $("#rent-price-tag").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
+      $("#rent-price-text").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
     }
   });
 }
