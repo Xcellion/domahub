@@ -61,6 +61,9 @@ module.exports = {
     console.log("DB: Attempting to get total verified user count...");
     var query = 'SELECT \
           accounts.id, \
+          accounts.email, \
+          accounts.username, \
+          accounts.date_created, \
           listings_count.total as listings_count \
         FROM accounts \
         LEFT JOIN (\
