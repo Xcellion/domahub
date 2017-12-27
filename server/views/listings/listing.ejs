@@ -30,6 +30,8 @@
 		<%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
 		<% if (listing_info.unlisted && !compare) { %>
 			<%- include("unlisted_page.ejs") %>
+		<% } else if (listing_info.deposited) { %>
+			<%- include("sold_page.ejs") %>
 		<% } else { %>
 			<%- include("listed_page.ejs") %>
 		<% } %>
