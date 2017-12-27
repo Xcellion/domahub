@@ -1,42 +1,25 @@
-<section id="page-contents" class="min-height">
-  <div class="listing-page">
-    <div class="listing-left">
-      <div class="listing-left-content">
-
-        <% if (listing_info.available){ %>
-          <span class="tag is-primary is-stylish has-shadow is-medium">
-            Available for purchase
-        <% } else { %>
-          <span class="tag is-danger is-stylish has-shadow is-medium">
-            Unavailable
-        <% } %>
-          </span>
-
-        <div id="domain-display" class="content">
-          <h1 id="domain-title" class="title is-primary is-bold is-inline-block"><%= listing_info.domain_name %></h1>
+<section class="section is-large min-height">
+  <div class="container has-text-centered">
+    <div class="columns">
+      <div class="column is-6 is-offset-3">
+        <div class="control">
+          <figure class="image is-48x48">
+            <a href="/" title="Go to DomaHub" tabindex="0">
+              <img src="/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png" />
+            </a>
+          </figure>
         </div>
+        <div class="content">
+          <h1 id="domain-title" class="title is-2 is-inline-block"><%= listing_info.domain_name %></h1>
+          <p>Unfortunately, this domain is not available on DomaHub.</p>
 
-        <%# INFO MODULE %>
-        <%- include("modules/info_module.ejs", {
-          listing_info : listing_info
-        }); %>
+          <%# INFO MODULE %>
+          <%- include("modules/info_module.ejs", {
+            listing_info : listing_info
+          }); %>
 
+        </div>
       </div>
-    </div>
-    <div class="listing-right">
-      <div class="tabs is-medium is-boxed">
-        <ul>
-          <li class="is-active">
-            <a tabindex="0">Traffic</a>
-          </li>
-        </ul>
-      </div>
-
-      <%# TRAFFIC MODULE %>
-      <%- include("modules/traffic_module.ejs", {
-        listing_info : listing_info
-      }); %>
-
     </div>
   </div>
 </section>
