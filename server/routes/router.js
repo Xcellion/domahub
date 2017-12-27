@@ -5,6 +5,9 @@ module.exports = function(app){
     require('./dev_routes.js')(app);
   }
 
+  //admin routes
+  require('./admin_routes.js')(app);
+
   //all main page (domahub) links
   require('./main_routes.js')(app);
 
