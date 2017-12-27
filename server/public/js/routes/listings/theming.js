@@ -18,7 +18,7 @@ $(document).ready(function() {
 
     //show custom logo
     if (listing_info.logo){
-      $("#custom_logo").attr("src", listing_info.logo);
+      $(".logo-item").attr("src", listing_info.logo);
     }
   }
 });

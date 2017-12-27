@@ -502,7 +502,7 @@ function formatDataset(stats) {
 
 //initiate chart only if uninitiated
 function createTrafficChart(compare){
-  formatted_dataset = formatDataset(listing_info.traffic);
+  var formatted_dataset = formatDataset(listing_info.traffic);
 
   //hide any overlay
   $("#traffic-overlay").addClass('is-hidden');
@@ -523,7 +523,7 @@ function createTrafficChart(compare){
       }]
     },
     options: {
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
       legend: {
         display: false
       },

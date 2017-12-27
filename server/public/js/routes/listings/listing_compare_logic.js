@@ -771,10 +771,10 @@ function updateFooter(premium){
 
     //change logo if it exists
     if (listing_info.logo == ""){
-      $("#custom_logo").addClass("is-hidden");
+      $(".logo-item").addClass("is-hidden");
     }
     else {
-      $("#custom_logo").removeClass('is-hidden').css("background", "url(" + listing_info.logo + ") center/cover no-repeat").removeAttr("href");
+      $(".logo-item").attr('src', listing_info.logo).removeClass('is-hidden').css("background", "url(" + listing_info.logo + ") center/cover no-repeat").removeAttr("href");
     }
 
     //change text
@@ -787,7 +787,7 @@ function updateFooter(premium){
     $("#dh-footer-right-text").replaceWith("<p id='dh-footer-right-text' class='footer-item'>Simple, clean sales pages for your domains.</p>");
     $("#dh-footer-right-smile").removeClass("is-hidden");
     $("#doma_logo").replaceWith('<a id="doma_logo" href="https://domahub.com"><i class="far fa-copyright v-align-bottom"></i> DomaHub, Inc.</a>');
-    $("#custom_logo").removeClass('is-hidden').removeAttr("style").attr("href", "/");
+    $(".logo-item").attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png").removeClass('is-hidden').removeAttr("style").attr("href", "/");
   }
 }
 
