@@ -1,8 +1,10 @@
 .modal-background
   +overlay
+  +keyframes(fade-in 0.2s forwards)
   background-color: rgba($black, 0.8)
 
 .modal-content
+  +keyframes(pop 0.1s forwards)
   background-color: $white
   border-radius: $radius-large
   max-height: calc(100vh - 120px)
@@ -66,10 +68,13 @@
   &.is-active
     display: flex
 
-.pop-in
-  +keyframes(effect 0.1s forwards)
+@keyframes fade-in
+  0%
+    opacity: 0
+  100%
+    opacity: 1
 
-@keyframes effect
+@keyframes pop
   0%
     opacity: 0
     +scale(0.7)
