@@ -64,6 +64,8 @@ module.exports = {
           accounts.email, \
           accounts.username, \
           accounts.date_created, \
+          accounts.date_accessed, \
+          accounts.stripe_subscription_id, \
           listings_count.total as listings_count \
         FROM accounts \
         LEFT JOIN (\
@@ -73,7 +75,8 @@ module.exports = {
         WHERE listings.verified = 1 \
         GROUP BY owner_id ) listings_count \
         ON listings_count.owner_id = accounts.id \
-        WHERE accounts.type >= 1 '
+        WHERE accounts.type >= 1 \
+        ORDER BY listings_count DESC, stripe_subscription_id DESC'
     database.query(query, "Failed to get verified user count!", callback);
   },
 
@@ -82,6 +85,23 @@ module.exports = {
     console.log("DB: Attempting to get coupon info...");
     var query = 'SELECT * FROM coupon_codes '
     database.query(query, "Failed to get coupon info!", callback);
+  },
+
+  //gets verified domain info
+  getVerifiedDomains : function(callback){
+    console.log("DB: Attempting to get verified domain info...");
+    var query = 'SELECT \
+      listings.id, \
+      listings.date_created, \
+      listings.domain_name, \
+      listings.owner_id, \
+      accounts.username, \
+      accounts.email \
+     FROM listings \
+     INNER JOIN accounts \
+     ON accounts.id = listings.owner_id \
+     WHERE listings.verified IS NOT NULL'
+    database.query(query, "Failed to get verified domain info!", callback);
   },
 
   //gets all views for a specific listing's rentals
@@ -265,11 +285,49 @@ module.exports = {
   //gets all domains viewed on demo mode
   getDemoDomains : function(callback){
     console.log("DB: Attempting to get demo mode statistics...");
-    var query = 'SELECT domain_name, COUNT( * ) AS count \
-              FROM stats_search_history \
-              WHERE compare = 1 \
-              GROUP BY domain_name \
-              ORDER BY count DESC'
+    var query = "SELECT \
+    stats_hits.domain_name, \
+    stats_hits.count, \
+    listings.verified, \
+    listings.deleted, \
+    listings.owner_id, \
+    accounts.username, \
+    accounts.type, \
+    accounts.email \
+    FROM \
+      (SELECT domain_name, COUNT( * ) AS count \
+        FROM stats_search_history \
+        WHERE compare = 1 \
+        GROUP BY domain_name ) stats_hits \
+    LEFT JOIN listings \
+    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
+    LEFT JOIN accounts \
+    ON listings.owner_id = accounts.id \
+    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
+    database.query(query, "Failed to get demo mode statistics!", callback);
+  },
+
+  //gets all domains requested on domahub
+  getSearchedDomains : function(callback){
+    console.log("DB: Attempting to get demo mode statistics...");
+    var query = "SELECT \
+    stats_hits.domain_name, \
+    stats_hits.count, \
+    listings.verified, \
+    listings.deleted, \
+    listings.owner_id, \
+    accounts.username, \
+    accounts.type, \
+    accounts.email \
+    FROM \
+      (SELECT domain_name, COUNT( * ) AS count \
+        FROM stats_search_history \
+        GROUP BY domain_name ) stats_hits \
+    LEFT JOIN listings \
+    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
+    LEFT JOIN accounts \
+    ON listings.owner_id = accounts.id \
+    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
     database.query(query, "Failed to get demo mode statistics!", callback);
   },
 
