@@ -73,7 +73,8 @@ module.exports = {
         WHERE listings.verified = 1 \
         GROUP BY owner_id ) listings_count \
         ON listings_count.owner_id = accounts.id \
-        WHERE accounts.type >= 1 '
+        WHERE accounts.type >= 1 \
+        ORDER BY listings_count DESC'
     database.query(query, "Failed to get verified user count!", callback);
   },
 
@@ -83,6 +84,20 @@ module.exports = {
     var query = 'SELECT * FROM coupon_codes '
     database.query(query, "Failed to get coupon info!", callback);
   },
+
+  //gets verified domain info
+  getVerifiedDomains : function(callback){
+    console.log("DB: Attempting to get verified domain info...");
+    var query = 'SELECT \
+      id, \
+      date_created, \
+      domain_name, \
+      owner_id \
+     FROM listings \
+     WHERE verified IS NOT NULL'
+    database.query(query, "Failed to get verified domain info!", callback);
+  },
+
 
   //gets all views for a specific listing's rentals
   getRentalTraffic : function(domain_name, callback){
