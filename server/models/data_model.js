@@ -342,6 +342,22 @@ module.exports = {
     database.query(query, "Failed to get demo mode statistics!", callback);
   },
 
+  //get all contact history items
+  getContactHistory : function(callback){
+    console.log("DB: Attempting to get contact history...");
+    var query = 'SELECT \
+                listings.domain_name, \
+                accounts.username, \
+                accounts.email, \
+                stats_contact_history.* \
+              FROM stats_contact_history \
+              INNER JOIN listings \
+              ON listings.id = stats_contact_history.listing_id \
+              INNER JOIN accounts \
+              ON accounts.id = listings.owner_id'
+    database.query(query, "Failed to get contact history!", callback);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------SETS-------------------------------

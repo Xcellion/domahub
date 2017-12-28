@@ -82,6 +82,14 @@ module.exports = {
     console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
     var query = "SELECT \
           listings.*, \
+          IF(listings.background_color IS NULL, '#FFFFFF', listings.background_color) as background_color, \
+          IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
+          IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
+          IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
+          IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
+          IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
+          IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
+          IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
           rented_table.rented, \
           offers_table.deposited, \
           offers_table_accepted.accepted, \
