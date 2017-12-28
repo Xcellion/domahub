@@ -55,7 +55,7 @@ $(document).ready(function(){
 
       //create TD
       for (var z in analyzed_data[x][y]){
-        temp_row.append("<td>" + analyzed_data[x][y][z] + "</td>");
+        temp_row.append("<td>" + ((analyzed_data[x][y][z]) ? analyzed_data[x][y][z] : "-") + "</td>");
       }
 
       temp_table.append(temp_row);
