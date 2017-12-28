@@ -64,6 +64,7 @@ module.exports = {
           accounts.email, \
           accounts.username, \
           accounts.date_created, \
+          accounts.date_accessed, \
           accounts.stripe_subscription_id, \
           listings_count.total as listings_count \
         FROM accounts \
