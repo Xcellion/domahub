@@ -59,12 +59,17 @@ function analyzeProdData(req, res, next){
   console.log("F: Getting key production info...");
   var analyzed_data = {};
   data_model.getDemoDomains(function(result){
-    analyzed_data.demo_domains = result.info;
+    analyzed_data.domains_viewed_in_compare = result.info;
     data_model.getUserCount(function(result){
       analyzed_data.user_count = result.info;
       data_model.getCoupons(function(result){
         analyzed_data.coupon_info = result.info;
-        res.send(analyzed_data);
+        data_model.getVerifiedDomains(function(result){
+          analyzed_data.verified_domains = result.info;
+          res.render("./dev/analysis.ejs", {
+            analyzed_data : analyzed_data
+          });
+        });
       });
     });
   });
