@@ -347,9 +347,22 @@ module.exports = {
     console.log("DB: Attempting to get contact history...");
     var query = 'SELECT \
                 listings.domain_name, \
-                accounts.username, \
-                accounts.email, \
-                stats_contact_history.* \
+                accounts.username as owner_username, \
+                accounts.email as owner_email, \
+                stats_contact_history.timestamp, \
+                stats_contact_history.deadline, \
+                stats_contact_history.user_ip, \
+                stats_contact_history.name, \
+                stats_contact_history.email, \
+                stats_contact_history.phone, \
+                stats_contact_history.offer, \
+                stats_contact_history.bin, \
+                stats_contact_history.message, \
+                stats_contact_history.response, \
+                stats_contact_history.verified, \
+                stats_contact_history.accepted, \
+                stats_contact_history.deposited, \
+                stats_contact_history.transferred \
               FROM stats_contact_history \
               INNER JOIN listings \
               ON listings.id = stats_contact_history.listing_id \
