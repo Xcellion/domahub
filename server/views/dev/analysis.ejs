@@ -82,7 +82,7 @@ $(document).ready(function(){
 
         //create TD
         for (var z in analyzed_data[x][y]){
-          if (z.indexOf("date") != -1 && analyzed_data[x][y][z]){
+          if ((z.indexOf("date") != -1 || z.indexOf("timestamp") != -1 || z.indexOf("deadline") != -1) && analyzed_data[x][y][z]){
             var temp_td_text = moment(analyzed_data[x][y][z]).format("MMM DD YYYY - hh:mmA")
           }
           else if (analyzed_data[x][y][z]){
