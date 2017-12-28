@@ -292,10 +292,10 @@ module.exports = {
       (SELECT domain_name, COUNT( * ) AS count \
         FROM stats_search_history \
         WHERE compare = 1 \
-        GROUP BY domain_name \
-        ORDER BY count DESC) stats_hits \
+        GROUP BY domain_name ) stats_hits \
     LEFT JOIN listings \
-    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) "
+    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
+    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
     database.query(query, "Failed to get demo mode statistics!", callback);
   },
 
@@ -310,10 +310,10 @@ module.exports = {
       (SELECT domain_name, COUNT( * ) AS count \
         FROM stats_search_history \
         WHERE compare IS NULL \
-        GROUP BY domain_name \
-        ORDER BY count DESC) stats_hits \
+        GROUP BY domain_name ) stats_hits \
     LEFT JOIN listings \
-    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) "
+    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
+    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
     database.query(query, "Failed to get demo mode statistics!", callback);
   },
 
