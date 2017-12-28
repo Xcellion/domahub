@@ -21,11 +21,6 @@ module.exports = function(app){
   app.get("/emailviews/:email_template", emailViews);
   app.get("/viewstest/:path/:view_name", showView);
 
-  // //create coupon codes
-  // app.get("/createcodes/:number", [
-  //   createCouponCodes
-  // ]);
-
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
   app.get("/parsejsons/:date/", parseJSON);
@@ -45,92 +40,6 @@ module.exports = function(app){
   //</editor-fold>
 
 }
-
-//<editor-fold>-------------------------------COUPON-------------------------------------
-
-//coupon
-var randomstring = require("randomstring");
-var stripe_key = (process.env.NODE_ENV == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
-var stripe = require("stripe")(stripe_key);
-
-//create X sign up codes
-function createCouponCodes(req, res, next){
-  console.log("F: Creating " + req.params.number + " coupon codes...");
-
-  var createUniqueCoupons = function(number, referrer){
-    var codes = [];
-
-    if (validator.isInt(number)){
-      for (var x = 0; x < number; x++){
-        var random_string = randomstring.generate(10);
-        codes.push([random_string, null, 1]);
-      }
-    }
-
-    return codes;
-  }
-
-  var insertCoupons = function(codes, number, cb){
-    account_model.createCouponCodes(codes, function(result){
-      if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
-        console.log("Duplicate coupon!");
-        insertCoupons(createUniqueCoupons(number), number);
-      }
-      else if (result.state != "error"){
-        cb(codes);
-      }
-    });
-  }
-
-  insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
-    var stripe_promises = [];
-    for (var x = 0 ; x < codes.length ; x++){
-      var promise = (function(code){
-        var deferred = Q.defer();
-        stripe.coupons.create({
-          id: code,
-          duration: "repeating",
-          percent_off: 100,
-          duration_in_months: 1,
-          max_redemptions : 1
-        }, function(err, coupon) {
-          if (err){
-            deferred.reject(err);
-          }
-          else {
-            deferred.resolve(coupon);
-          }
-        });
-        return deferred.promise;
-      })(codes[x][0]);
-      stripe_promises.push(promise);
-    }
-
-    Q.allSettled(stripe_promises).then(function(results) {
-      var success_codes = []
-      for (var x = 0 ; x < results.length; x++){
-        if (results[x].state == "fulfilled"){
-          success_codes.push(results[x].value.id);
-        }
-        else {
-          console.log(results[x]);
-        }
-      }
-
-      //all successful!
-      if (success_codes.length == parseFloat(req.params.number)){
-        res.send(success_codes.join("</br>"));
-      }
-      else {
-        res.send("Something went wrong with Stripe coupons!");
-      }
-    });
-
-  });
-
-}
-
-//</editor-fold>
 
 //<editor-fold>-------------------------------MONKEY-------------------------------------
 

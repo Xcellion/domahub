@@ -1,0 +1,106 @@
+<html>
+<head>
+  <title>DomaHub Analysis</title>
+</head>
+<body>
+<script>
+  var analyzed_data = <% if(typeof analyzed_data != "undefined"){ %><%-JSON.stringify(analyzed_data)%><% }else{ %>""<% } %>;
+</script>
+<style>
+  .inline {
+    display:inline-block;
+    margin-right:10px;
+    padding-right:10px;
+    border-right:1px solid black;
+    vertical-align:top;
+  }
+  table {
+    font-family : courier;
+    text-align:left;
+    border-collapse: collapse;
+  }
+  tr:hover {
+    background-color:#F1F1F1;
+  }
+  td {
+    padding:5px;
+    border:1px solid lightgray;
+  }
+  td.checkavail{
+    height:29px;
+  }
+  th {
+    border:1px solid black;
+    padding:5px;
+  }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+
+  var test_domain_names = [
+    "knotonmywatch.com",
+    "treescompany.com",
+    "domains.rocks",
+    "excellent.design",
+    "creativedoma.in",
+    "great.bargains",
+    "greatdomains.cheap",
+    "ilove.coffee",
+    "thiswebsiteis.cool",
+    "goingon.holiday",
+    "illtakeyour.photo",
+    "cleanoutyour.plumbing",
+    "myboyfriendis.cool",
+    "mygirlfriendis.smart",
+    "whereareallthe.singles",
+    "ilove.nyc",
+    "abc.xyz",
+    "idrink.beer",
+  ];
+
+  for (var x in analyzed_data){
+    var temp_header = x;
+    var temp_table = $("<table></table>");
+
+    //create header
+    var temp_header_row = $("<tr></tr>");
+    temp_header_row.append("<th>#</th>");
+    for (var t in analyzed_data[x][0]){
+      temp_header_row.append("<th data-table='" + x + "' data-property=" + t + "'>" + t + "</th>");
+    }
+    temp_table.append(temp_header_row);
+    temp_header += " - " + analyzed_data[x].length + " total";
+
+    //create rows
+    for (var y = 0 ; y < analyzed_data[x].length ; y++){
+
+      if (x != "domains_viewed_in_compare" || (x == "domains_viewed_in_compare" && test_domain_names.indexOf(analyzed_data[x][y].domain_name)) == -1){
+        var temp_row = $("<tr></tr>");
+        temp_row.append("<td>" + (y + 1) + "</td>");
+
+        //create TD
+        for (var z in analyzed_data[x][y]){
+          if (z.indexOf("date") != -1 && analyzed_data[x][y][z]){
+            var temp_td_text = moment(analyzed_data[x][y][z]).format("MMM DD YYYY - hh:mmA")
+          }
+          else if (analyzed_data[x][y][z]){
+            var temp_td_text = analyzed_data[x][y][z];
+          }
+          else {
+            var temp_td_text = "-"
+          }
+          temp_row.append("<td>" + temp_td_text + "</td>");
+        }
+
+        temp_table.append(temp_row);
+      }
+    }
+
+    $("body").append("<h1>" + temp_header + "</h1>").append(temp_table);
+  }
+});
+</script>
+</body>
+</html>
