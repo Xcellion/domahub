@@ -891,9 +891,9 @@ function checkBox(module_value, elem, child){
             var error_msg = data.message;
           }
 
-          errorMessage(error_msg);
         }
 
+        errorMessage(error_msg);
       }
 
       updateEditorEditing(selected_ids);

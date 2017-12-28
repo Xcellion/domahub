@@ -1076,8 +1076,8 @@ module.exports = {
         req.session.new_listing_info.description_hook = description_hook;
         req.session.new_listing_info.price_type = price_type;
         req.session.new_listing_info.price_rate = price_rate;
-        req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
-        req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "" : min_price;
+        req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "0" : buy_price;
+        req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "0" : min_price;
         req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
         req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
         req.session.new_listing_info.rentable = rentable;
