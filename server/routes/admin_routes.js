@@ -68,11 +68,14 @@ function analyzeProdData(req, res, next){
           analyzed_data.coupon_info = result.info;
           data_model.getVerifiedDomains(function(result){
             analyzed_data.verified_domains = result.info;
-            data_model.getContactHistory(function(result){
-              analyzed_data.offer_history = result.info;
+            data_model.getUnverifiedDomains(function(result){
+              analyzed_data.unverified_domains = result.info;
+              data_model.getContactHistory(function(result){
+                analyzed_data.offer_history = result.info;
 
-              res.render("./dev/analysis.ejs", {
-                analyzed_data : analyzed_data
+                res.render("./dev/analysis.ejs", {
+                  analyzed_data : analyzed_data
+                });
               });
             });
           });

@@ -66,17 +66,25 @@ module.exports = {
           accounts.date_created, \
           accounts.date_accessed, \
           accounts.stripe_subscription_id, \
-          listings_count.total as listings_count \
+          verified_listings_count.total as verified_listings_count, \
+          unverified_listings_count.total as unverified_listings_count \
         FROM accounts \
         LEFT JOIN (\
           SELECT COUNT(*) as total, \
           owner_id \
         FROM listings \
         WHERE listings.verified = 1 \
-        GROUP BY owner_id ) listings_count \
-        ON listings_count.owner_id = accounts.id \
+        GROUP BY owner_id ) verified_listings_count \
+        ON verified_listings_count.owner_id = accounts.id \
+        LEFT JOIN (\
+          SELECT COUNT(*) as total, \
+          owner_id \
+        FROM listings \
+        WHERE listings.verified IS NULL \
+        GROUP BY owner_id ) unverified_listings_count \
+        ON unverified_listings_count.owner_id = accounts.id \
         WHERE accounts.type >= 1 \
-        ORDER BY listings_count DESC, stripe_subscription_id DESC'
+        ORDER BY verified_listings_count DESC, stripe_subscription_id DESC'
     database.query(query, "Failed to get verified user count!", callback);
   },
 
@@ -94,6 +102,7 @@ module.exports = {
       listings.id, \
       listings.date_created, \
       listings.domain_name, \
+      listings.status, \
       listings.owner_id, \
       accounts.username, \
       accounts.email \
@@ -102,6 +111,24 @@ module.exports = {
      ON accounts.id = listings.owner_id \
      WHERE listings.verified IS NOT NULL'
     database.query(query, "Failed to get verified domain info!", callback);
+  },
+
+  //gets unverified domain info
+  getUnverifiedDomains : function(callback){
+    console.log("DB: Attempting to get unverified domain info...");
+    var query = 'SELECT \
+      listings.id, \
+      listings.date_created, \
+      listings.domain_name, \
+      listings.status, \
+      listings.owner_id, \
+      accounts.username, \
+      accounts.email \
+     FROM listings \
+     INNER JOIN accounts \
+     ON accounts.id = listings.owner_id \
+     WHERE listings.verified IS NULL'
+    database.query(query, "Failed to get unverified domain info!", callback);
   },
 
   //gets all views for a specific listing's rentals
