@@ -44,10 +44,13 @@
   th {
     border:1px solid black;
     padding:5px;
+    cursor:pointer;
+    background-color:lightgray;
   }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="/js/lib/moment.min.js" type="text/javascript"></script>
+<script src="/js/jquery/jquery.tablesorter.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
 
@@ -77,12 +80,19 @@ $(document).ready(function(){
     var temp_table = $("<table id='table-" + x + "' class='is-hidden'></table>");
 
     //create header
+    var temp_header_head = $("<thead></thead>");
     var temp_header_row = $("<tr></tr>");
     temp_header_row.append("<th>#</th>");
     for (var t in analyzed_data[x][0]){
-      temp_header_row.append("<th data-table='" + x + "' data-property=" + t + "'>" + t + "</th>");
+      if ((t.indexOf("date") != -1 || t.indexOf("timestamp") != -1 || t.indexOf("deadline") != -1)){
+        temp_header_row.append("<th data-sorter='shortDate' data-date-format='yyyymmdd'>" + t + "</th>");
+      }
+      else {
+        temp_header_row.append("<th>" + t + "</th>");
+      }
+
     }
-    temp_table.append(temp_header_row);
+    temp_table.append(temp_header_head.append(temp_header_row));
     temp_header += " - " + analyzed_data[x].length + " total";
 
     //create rows
@@ -95,7 +105,7 @@ $(document).ready(function(){
         //create TD
         for (var z in analyzed_data[x][y]){
           if ((z.indexOf("date") != -1 || z.indexOf("timestamp") != -1 || z.indexOf("deadline") != -1) && analyzed_data[x][y][z]){
-            var temp_td_text = moment(analyzed_data[x][y][z]).format("MMM DD YYYY - hh:mmA")
+            var temp_td_text = moment(analyzed_data[x][y][z]).format("MM/DD/YYYY hh:mm A")
           }
           else if (analyzed_data[x][y][z]){
             var temp_td_text = analyzed_data[x][y][z];
@@ -118,7 +128,18 @@ $(document).ready(function(){
     $(this).text(($(this).text() == "show") ? "hide" : "show");
   });
 
+  $("table").tablesorter({
+    dateFormat : "mmddyyyy"
+  });
+
+  //download JSON file
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(analyzed_data));
+  var dlAnchorElem = document.getElementById('download-json');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "scene.json");
+
 });
 </script>
+<h1><a id="download-json">Download JSON file</a></h1>
 </body>
 </html>
