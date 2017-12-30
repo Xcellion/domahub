@@ -1,12 +1,24 @@
 <html>
 <head>
   <title>DomaHub Analysis</title>
+  <%- include("../templates/head_links");%>
 </head>
 <body>
 <script>
   var analyzed_data = <% if(typeof analyzed_data != "undefined"){ %><%-JSON.stringify(analyzed_data)%><% }else{ %>""<% } %>;
 </script>
 <style>
+  .is-hidden{
+    display:none!important;
+  }
+  .toggle-button {
+    margin-left:10px;
+    cursor:pointer;
+    background-color:black;
+    color:white;
+    padding:5px;
+    border-radius:5px;
+  }
   .inline {
     display:inline-block;
     margin-right:10px;
@@ -62,7 +74,7 @@ $(document).ready(function(){
 
   for (var x in analyzed_data){
     var temp_header = x;
-    var temp_table = $("<table></table>");
+    var temp_table = $("<table id='table-" + x + "' class='is-hidden'></table>");
 
     //create header
     var temp_header_row = $("<tr></tr>");
@@ -82,7 +94,7 @@ $(document).ready(function(){
 
         //create TD
         for (var z in analyzed_data[x][y]){
-          if (z.indexOf("date") != -1 && analyzed_data[x][y][z]){
+          if ((z.indexOf("date") != -1 || z.indexOf("timestamp") != -1 || z.indexOf("deadline") != -1) && analyzed_data[x][y][z]){
             var temp_td_text = moment(analyzed_data[x][y][z]).format("MMM DD YYYY - hh:mmA")
           }
           else if (analyzed_data[x][y][z]){
@@ -98,8 +110,14 @@ $(document).ready(function(){
       }
     }
 
-    $("body").append("<h1>" + temp_header + "</h1>").append(temp_table);
+    $("body").append("<h1>" + temp_header + "<span class='toggle-button' data-show='table-" + x + "'>show</span></h1>").append(temp_table);
   }
+
+  $(".toggle-button").on("click", function(){
+    $("#" + $(this).data("show")).toggleClass('is-hidden');
+    $(this).text(($(this).text() == "show") ? "hide" : "show");
+  });
+
 });
 </script>
 </body>
