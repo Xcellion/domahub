@@ -136,7 +136,7 @@ $(document).ready(function(){
   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(analyzed_data));
   var dlAnchorElem = document.getElementById('download-json');
   dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", "scene.json");
+  dlAnchorElem.setAttribute("download", moment().format("MM_DD_YYYY") + "-data.json");
 
 });
 </script>
