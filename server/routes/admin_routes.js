@@ -62,19 +62,28 @@ function analyzeProdData(req, res, next){
     analyzed_data.domains_requested_in_domahub = result.info;
     data_model.getDemoDomains(function(result){
       analyzed_data.domains_viewed_in_compare = result.info;
-      data_model.getUserCount(function(result){
-        analyzed_data.user_count = result.info;
-        data_model.getCoupons(function(result){
-          analyzed_data.coupon_info = result.info;
-          data_model.getVerifiedDomains(function(result){
-            analyzed_data.verified_domains = result.info;
-            data_model.getUnverifiedDomains(function(result){
-              analyzed_data.unverified_domains = result.info;
-              data_model.getContactHistory(function(result){
-                analyzed_data.offer_history = result.info;
+      data_model.getVerifiedUserCount(function(result){
+        analyzed_data.verified_users = result.info;
+        data_model.getUnverifiedUserCount(function(result){
+          analyzed_data.unverified_users = result.info;
+          data_model.getConnectedRegistrars(function(result){
+            analyzed_data.connected_registrars = result.info;
+            data_model.getCoupons(function(result){
+              analyzed_data.coupons = result.info;
+              data_model.getVerifiedDomains(function(result){
+                analyzed_data.verified_domains = result.info;
+                data_model.getUnverifiedDomains(function(result){
+                  analyzed_data.unverified_domains = result.info;
+                  data_model.getContactHistory(function(result){
+                    analyzed_data.offers = result.info;
+                    data_model.getAvailCheckHistory(function(result){
+                      analyzed_data.rental_paths_looked_up = result.info;
 
-                res.render("./dev/analysis.ejs", {
-                  analyzed_data : analyzed_data
+                      res.render("./dev/analysis.ejs", {
+                        analyzed_data : analyzed_data
+                      });
+                    });
+                  });
                 });
               });
             });
