@@ -389,7 +389,7 @@ module.exports = {
       else {
         var all_good = true;
         for (var x = 0 ; x < selected_ids.length ; x++){
-          if (!validator.isInt(selected_ids[x], { min : 1 })){
+          if (!validator.isInt(selected_ids[x], { min : 1 , allow_leading_zeroes : true})){
             all_good = false;
             break;
           }
@@ -1046,13 +1046,13 @@ module.exports = {
       else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
         error.handler(req, res, "You have selected an invalid rental price type! Please try again.", "json");
       }
-      else if (req.body.price_rate && !validator.isInt(price_rate)){
+      else if (req.body.price_rate && !validator.isInt(price_rate, {allow_leading_zeroes : true})){
         error.handler(req, res, "The rental price must be a whole number! Please try a different price.", "json");
       }
-      else if (req.body.buy_price && !validator.isInt(buy_price) && buy_price != 0){
+      else if (req.body.buy_price && !validator.isInt(buy_price, {allow_leading_zeroes : true}) && buy_price != 0){
         error.handler(req, res, "The buy it now price must be a whole number! Please try a different price.", "json");
       }
-      else if (req.body.min_price && !validator.isInt(min_price) && min_price != 0){
+      else if (req.body.min_price && !validator.isInt(min_price, {allow_leading_zeroes : true}) && min_price != 0){
         error.handler(req, res, "The minimum price must be a whole number! Please try a different price.", "json");
       }
       else if (req.body.registrar_name && req.body.registrar_name.length <= 0){
@@ -1076,8 +1076,8 @@ module.exports = {
         req.session.new_listing_info.description_hook = description_hook;
         req.session.new_listing_info.price_type = price_type;
         req.session.new_listing_info.price_rate = price_rate;
-        req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
-        req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "" : min_price;
+        req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "0" : buy_price;
+        req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "0" : min_price;
         req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
         req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
         req.session.new_listing_info.rentable = rentable;
@@ -1299,11 +1299,11 @@ function checkPostedDomainName(user, domains_sofar, domain_name, min_price, buy_
     bad_reasons.push("Duplicate domain name!");
   }
   //check price rate
-  if (min_price && !validator.isInt(min_price, {min: 0})){
+  if (min_price && !validator.isInt(min_price, { min : 0, allow_leading_zeroes : true })){
     bad_reasons.push("Invalid min. price!");
   }
   //check price rate
-  if (buy_price && !validator.isInt(buy_price, {min: 0})){
+  if (buy_price && !validator.isInt(buy_price, { min : 0, allow_leading_zeroes : true })){
     bad_reasons.push("Invalid BIN price!");
   }
   //domain is too long
