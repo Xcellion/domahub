@@ -54,10 +54,10 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------GETS-------------------------------
+  //<editor-fold>-------------------------------ANALYZE DATA-------------------------------
 
   //gets total number of users
-  getUserCount : function(callback){
+  getVerifiedUserCount : function(callback){
     console.log("DB: Attempting to get total verified user count...");
     var query = 'SELECT \
           accounts.id, \
@@ -86,6 +86,20 @@ module.exports = {
         WHERE accounts.type >= 1 \
         ORDER BY verified_listings_count DESC, stripe_subscription_id DESC'
     database.query(query, "Failed to get verified user count!", callback);
+  },
+
+  //gets total number of users
+  getUnverifiedUserCount : function(callback){
+    console.log("DB: Attempting to get total unverified user count...");
+    var query = 'SELECT \
+          accounts.id, \
+          accounts.email, \
+          accounts.username, \
+          accounts.date_created, \
+          accounts.date_accessed \
+        FROM accounts \
+        WHERE accounts.type = 0 '
+    database.query(query, "Failed to get unverified user count!", callback);
   },
 
   //gets coupon info
@@ -129,6 +143,110 @@ module.exports = {
      ON accounts.id = listings.owner_id \
      WHERE listings.verified IS NULL'
     database.query(query, "Failed to get unverified domain info!", callback);
+  },
+
+  //gets all connected registrars
+  getConnectedRegistrars : function(callback){
+    console.log("DB: Attempting to get connected registrars...");
+    var query = "SELECT \
+    registrars.registrar_name, \
+    accounts.username, \
+    accounts.email \
+    FROM registrars \
+    INNER JOIN accounts \
+    ON accounts.id = registrars.account_id "
+    database.query(query, "Failed to get connected registrars!", callback);
+  },
+
+  //gets all domains viewed on demo mode
+  getDemoDomains : function(callback){
+    console.log("DB: Attempting to get demo mode statistics...");
+    var query = "SELECT \
+    stats_hits.domain_name, \
+    stats_hits.count, \
+    listings.id, \
+    listings.verified, \
+    listings.deleted, \
+    listings.owner_id, \
+    accounts.username, \
+    accounts.type, \
+    accounts.email \
+    FROM \
+      (SELECT domain_name, COUNT( * ) AS count \
+        FROM stats_search_history \
+        WHERE compare = 1 \
+        GROUP BY domain_name ) stats_hits \
+    LEFT JOIN listings \
+    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
+    LEFT JOIN accounts \
+    ON listings.owner_id = accounts.id \
+    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
+    database.query(query, "Failed to get demo mode statistics!", callback);
+  },
+
+  //gets all domains requested on domahub
+  getSearchedDomains : function(callback){
+    console.log("DB: Attempting to get demo mode statistics...");
+    var query = "SELECT \
+    stats_hits.domain_name, \
+    stats_hits.count, \
+    listings.id, \
+    listings.verified, \
+    listings.deleted, \
+    listings.owner_id, \
+    accounts.username, \
+    accounts.type, \
+    accounts.email \
+    FROM \
+      (SELECT domain_name, COUNT( * ) AS count \
+        FROM stats_search_history \
+        GROUP BY domain_name ) stats_hits \
+    LEFT JOIN listings \
+    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
+    LEFT JOIN accounts \
+    ON listings.owner_id = accounts.id \
+    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
+    database.query(query, "Failed to get demo mode statistics!", callback);
+  },
+
+  //gets all referers on domains
+  getReferers : function(callback){
+    console.log("DB: Attempting to get referers...");
+    var query = 'SELECT referer, COUNT( * ) AS count \
+              FROM stats_search_history \
+              WHERE referer IS NOT NULL \
+              GROUP BY referer \
+              ORDER BY count DESC'
+    database.query(query, "Failed to get demo mode statistics!", callback);
+  },
+
+  //get all contact history items
+  getContactHistory : function(callback){
+    console.log("DB: Attempting to get contact history...");
+    var query = 'SELECT \
+                listings.domain_name, \
+                accounts.username as owner_username, \
+                accounts.email as owner_email, \
+                stats_contact_history.timestamp, \
+                stats_contact_history.deadline, \
+                stats_contact_history.user_ip, \
+                stats_contact_history.name, \
+                stats_contact_history.email, \
+                stats_contact_history.phone, \
+                stats_contact_history.offer, \
+                stats_contact_history.bin, \
+                stats_contact_history.message, \
+                stats_contact_history.response, \
+                stats_contact_history.verified, \
+                stats_contact_history.accepted, \
+                stats_contact_history.deposited, \
+                stats_contact_history.transferred \
+              FROM stats_contact_history \
+              INNER JOIN listings \
+              ON listings.id = stats_contact_history.listing_id \
+              INNER JOIN accounts \
+              ON accounts.id = listings.owner_id'
+    database.query(query, "Failed to get contact history!", callback);
   },
 
   //gets all views for a specific listing's rentals
@@ -182,15 +300,63 @@ module.exports = {
     database.query(query, "Failed to get listing traffic for " + domain_name + "!", callback, domain_name);
   },
 
-  //gets all availability check history for a specific listing
-  getAvailCheckHistory : function(domain_name, callback){
-    console.log("DB: Attempting to get avail check history for domain: " + domain_name + "...");
-    var query = 'SELECT \
-          stats_availcheck_history.* \
-        FROM stats_availcheck_history \
-        WHERE stats_availcheck_history.domain_name = ? \
-        ORDER BY timestamp DESC '
-    database.query(query, "Failed to get avail check history for " + domain_name + "!", callback, domain_name);
+  //gets all availability check history
+  getAvailCheckHistory : function(callback){
+    console.log("DB: Attempting to get rental path check history...");
+    var query = 'SELECT  \
+      account_hits_table.domain_name, \
+      account_hits_table.domain_hits as total_hits, \
+      path_hits_table.unique_paths, \
+      path_hits_table.paths, \
+      account_hits_table.unique_account_ids, \
+      account_hits_table.account_ids, \
+      ip_hits_table.unique_user_ips, \
+      ip_hits_table.user_ips \
+    FROM  \
+      (SELECT  \
+      domain_name, \
+      COUNT(path) as unique_paths, \
+      GROUP_CONCAT(DISTINCT IF(path = "", "ROOTPATH", path), " - ", CONCAT(path_hits, " hits") ORDER BY path_hits DESC SEPARATOR "</br>") as paths \
+      FROM \
+        (SELECT  \
+        domain_name,  \
+        count(*) as path_hits, \
+        path \
+        FROM stats_availcheck_history  \
+        GROUP BY domain_name, path) path_hits \
+      GROUP BY domain_name) as path_hits_table \
+    INNER JOIN  \
+      (SELECT  \
+      domain_name, \
+      SUM(hits) as domain_hits, \
+      COUNT(account_id) as unique_account_ids, \
+      GROUP_CONCAT(DISTINCT CASE WHEN account_id IS NULL THEN "Guest" ELSE CONCAT("Account #", account_id) END, " - ", CONCAT(hits, " hits") ORDER BY hits DESC SEPARATOR "</br>") as account_ids \
+      FROM \
+        (SELECT  \
+        domain_name,  \
+        count(*) as hits, \
+        account_id \
+        FROM stats_availcheck_history  \
+        GROUP BY domain_name, account_id) account_hits \
+      GROUP BY domain_name) as account_hits_table \
+    ON account_hits_table.domain_name = path_hits_table.domain_name \
+    INNER JOIN  \
+      (SELECT  \
+      domain_name, \
+      SUM(user_ip_hits) as domain_hits, \
+      COUNT(user_ip) as unique_user_ips, \
+      GROUP_CONCAT(DISTINCT CASE WHEN user_ip IS NULL THEN "Guest" ELSE user_ip END, " - ", user_ip_hits ORDER BY user_ip_hits DESC SEPARATOR "</br>") as user_ips \
+      FROM \
+        (SELECT  \
+        domain_name,  \
+        count(*) as user_ip_hits, \
+        user_ip \
+        FROM stats_availcheck_history  \
+      GROUP BY domain_name, user_ip) user_ip_hits_table \
+      GROUP BY domain_name) as ip_hits_table \
+    ON ip_hits_table.domain_name = path_hits_table.domain_name \
+    ORDER BY account_hits_table.domain_hits DESC'
+    database.query(query, "Failed to get rental path check history!", callback);
   },
 
   //gets all availability check history for a specific listing
@@ -221,6 +387,10 @@ module.exports = {
         ORDER BY timestamp DESC '
     database.query(query, "Failed to get checkout actions for " + domain_name + "!", callback, domain_name);
   },
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------GETS-------------------------------
 
   //gets specific offer details for a specific domain by offer ID
   getListingOffererContactInfoByID : function(domain_name, offer_id, callback){
@@ -307,95 +477,6 @@ module.exports = {
         WHERE stats_search_history.domain_name = ? \
         ORDER BY stats_search_history.timestamp DESC'
     database.query(query, "Failed to get statistics for " + domain_name + "!", callback, domain_name);
-  },
-
-  //gets all domains viewed on demo mode
-  getDemoDomains : function(callback){
-    console.log("DB: Attempting to get demo mode statistics...");
-    var query = "SELECT \
-    stats_hits.domain_name, \
-    stats_hits.count, \
-    listings.verified, \
-    listings.deleted, \
-    listings.owner_id, \
-    accounts.username, \
-    accounts.type, \
-    accounts.email \
-    FROM \
-      (SELECT domain_name, COUNT( * ) AS count \
-        FROM stats_search_history \
-        WHERE compare = 1 \
-        GROUP BY domain_name ) stats_hits \
-    LEFT JOIN listings \
-    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
-    LEFT JOIN accounts \
-    ON listings.owner_id = accounts.id \
-    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
-    database.query(query, "Failed to get demo mode statistics!", callback);
-  },
-
-  //gets all domains requested on domahub
-  getSearchedDomains : function(callback){
-    console.log("DB: Attempting to get demo mode statistics...");
-    var query = "SELECT \
-    stats_hits.domain_name, \
-    stats_hits.count, \
-    listings.verified, \
-    listings.deleted, \
-    listings.owner_id, \
-    accounts.username, \
-    accounts.type, \
-    accounts.email \
-    FROM \
-      (SELECT domain_name, COUNT( * ) AS count \
-        FROM stats_search_history \
-        GROUP BY domain_name ) stats_hits \
-    LEFT JOIN listings \
-    ON LOWER(listings.domain_name) = LOWER(stats_hits.domain_name) \
-    LEFT JOIN accounts \
-    ON listings.owner_id = accounts.id \
-    ORDER BY stats_hits.count DESC, listings.owner_id DESC"
-    database.query(query, "Failed to get demo mode statistics!", callback);
-  },
-
-  //gets all referers on domains
-  getReferers : function(callback){
-    console.log("DB: Attempting to get referers...");
-    var query = 'SELECT referer, COUNT( * ) AS count \
-              FROM stats_search_history \
-              WHERE referer IS NOT NULL \
-              GROUP BY referer \
-              ORDER BY count DESC'
-    database.query(query, "Failed to get demo mode statistics!", callback);
-  },
-
-  //get all contact history items
-  getContactHistory : function(callback){
-    console.log("DB: Attempting to get contact history...");
-    var query = 'SELECT \
-                listings.domain_name, \
-                accounts.username as owner_username, \
-                accounts.email as owner_email, \
-                stats_contact_history.timestamp, \
-                stats_contact_history.deadline, \
-                stats_contact_history.user_ip, \
-                stats_contact_history.name, \
-                stats_contact_history.email, \
-                stats_contact_history.phone, \
-                stats_contact_history.offer, \
-                stats_contact_history.bin, \
-                stats_contact_history.message, \
-                stats_contact_history.response, \
-                stats_contact_history.verified, \
-                stats_contact_history.accepted, \
-                stats_contact_history.deposited, \
-                stats_contact_history.transferred \
-              FROM stats_contact_history \
-              INNER JOIN listings \
-              ON listings.id = stats_contact_history.listing_id \
-              INNER JOIN accounts \
-              ON accounts.id = listings.owner_id'
-    database.query(query, "Failed to get contact history!", callback);
   },
 
   //</editor-fold>

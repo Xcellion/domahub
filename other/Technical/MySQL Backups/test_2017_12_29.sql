@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 12, 2017 at 04:33 PM
+-- Generation Time: Dec 29, 2017 at 06:29 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -47,20 +47,21 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `accounts`
 --
 
 INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `date_created`, `date_accessed`, `type`, `token`, `token_exp`, `stripe_account_id`, `stripe_customer_id`, `stripe_subscription_id`, `paypal_email`) VALUES
-(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2017-12-12 01:00:18', 2, NULL, NULL, 'acct_1BMX8eLa9wes0Toj', 'cus_Bk1UnVsezBS6Rc', NULL, 'won2blee@gmail.com'),
-(2, 'DomaHub', 'domahub@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2017-12-09 02:10:47', 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2017-12-09 03:23:40', 2, NULL, NULL, NULL, 'cus_BmYQ5liqD7lTMZ', NULL, 'wonq33@gmail.com'),
-(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2016-09-13 06:04:17', '2017-11-30 07:05:11', 2, NULL, NULL, NULL, NULL, NULL, NULL),
+(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2017-12-28 03:54:14', 2, NULL, NULL, 'acct_1BMX8eLa9wes0Toj', 'cus_Bk1UnVsezBS6Rc', NULL, 'won2blee@gmail.com'),
+(2, 'DomaHub', 'domahub@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2017-12-21 07:49:58', 2, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2017-12-20 01:53:54', 2, NULL, NULL, NULL, 'cus_BxOjhkAujWsP04', 'sub_BxOk9IGf3I3lJU', 'wonq33@gmail.com'),
+(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2016-09-13 06:04:17', '2017-12-16 05:21:09', 2, NULL, NULL, NULL, NULL, NULL, NULL),
 (37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2017-11-07 23:30:55', 0, NULL, NULL, NULL, NULL, NULL, NULL),
 (41, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2017-11-30 07:05:43', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2017-11-08 01:21:07', '2017-12-12 21:31:39', 1, NULL, NULL, 'acct_1BVo0bI1zc0NC6Vj', 'cus_BjSGpQ0LNzdws7', 'sub_BjSK8LETRWURUg', NULL);
+(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2017-11-08 01:21:07', '2017-12-28 00:29:59', 1, NULL, NULL, 'acct_1BVo0bI1zc0NC6Vj', 'cus_BjSGpQ0LNzdws7', 'sub_BjSK8LETRWURUg', NULL),
+(43, 'test1', 'test@test.com', '$2a$10$TxbjGkVt.yvgkMpDSNuYhuO0tHyn.sWeYu36oj.2dK7FlfzfaVmVC', '2017-12-22 13:03:40', '2017-12-22 13:03:40', 0, 'd9b341627f', '2017-12-23 00:03:40', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -109,7 +110,10 @@ CREATE TABLE IF NOT EXISTS `coupon_codes` (
 
 INSERT INTO `coupon_codes` (`code`, `account_id`, `referer_id`, `date_created`, `date_accessed`, `duration_in_months`) VALUES
 ('SI0Ydr5E2b', 1, NULL, '2017-11-08 19:40:24', '2017-11-09 00:40:24', 1),
-('zGz899C5j5', 42, 1, '2017-11-08 20:07:42', '2017-11-09 01:07:42', 2);
+('zGz899C5j5', 42, 1, '2017-11-08 20:07:42', '2017-11-09 01:07:42', 2),
+('c7riu1SXEp', 5, NULL, '2017-12-16 00:54:32', '2017-12-16 05:54:33', 1),
+('RXFavEeMai', 43, NULL, '2017-12-22 18:03:40', NULL, 1),
+('pPynsu6yu2', NULL, NULL, '2017-12-27 21:23:04', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -127,7 +131,9 @@ CREATE TABLE IF NOT EXISTS `listings` (
   `status` tinyint(1) DEFAULT '0',
   `deleted` tinyint(1) DEFAULT NULL,
   `verified` tinyint(1) DEFAULT '1',
+  `registrar_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `registrar_id` int(11) DEFAULT NULL,
+  `registrar_cost` float NOT NULL DEFAULT '0',
   `rentable` tinyint(1) NOT NULL DEFAULT '0',
   `price_type` varchar(5) NOT NULL DEFAULT 'month',
   `price_rate` int(11) NOT NULL DEFAULT '25',
@@ -139,15 +145,16 @@ CREATE TABLE IF NOT EXISTS `listings` (
   `categories` text,
   `paths` text CHARACTER SET utf8 COLLATE utf8_bin,
   `background_image` text,
-  `background_color` varchar(7) DEFAULT NULL,
+  `background_color` varchar(7) DEFAULT '#FFFFFF',
   `logo` text,
-  `primary_color` varchar(7) DEFAULT NULL,
-  `secondary_color` varchar(7) DEFAULT NULL,
-  `tertiary_color` varchar(7) DEFAULT NULL,
-  `font_name` varchar(100) DEFAULT NULL,
-  `font_color` varchar(7) DEFAULT NULL,
-  `footer_background_color` varchar(7) DEFAULT NULL,
-  `footer_color` varchar(7) DEFAULT NULL,
+  `primary_color` varchar(7) DEFAULT '#3CBC8D',
+  `secondary_color` varchar(7) DEFAULT '#FF5722',
+  `tertiary_color` varchar(7) DEFAULT '#2196F3',
+  `font_name` varchar(100) DEFAULT 'Rubik',
+  `font_color` varchar(7) DEFAULT '#000000',
+  `footer_background_color` varchar(7) DEFAULT '#F1F1F1',
+  `footer_color` varchar(7) DEFAULT '#565656',
+  `placeholder` tinyint(1) NOT NULL DEFAULT '1',
   `info_module` tinyint(1) NOT NULL DEFAULT '1',
   `domain_owner` tinyint(1) NOT NULL DEFAULT '1',
   `domain_age` tinyint(1) NOT NULL DEFAULT '1',
@@ -164,32 +171,39 @@ CREATE TABLE IF NOT EXISTS `listings` (
   UNIQUE KEY `listings_unique_domain` (`domain_name`,`verified`),
   KEY `listings_owner_fk_idx` (`owner_id`),
   KEY `registrar_id_fk` (`registrar_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1679 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1712 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `listings`
 --
 
-INSERT INTO `listings` (`id`, `date_created`, `date_expire`, `domain_name`, `owner_id`, `status`, `deleted`, `verified`, `registrar_id`, `rentable`, `price_type`, `price_rate`, `buy_price`, `min_price`, `description`, `description_hook`, `description_footer`, `categories`, `paths`, `background_image`, `background_color`, `logo`, `primary_color`, `secondary_color`, `tertiary_color`, `font_name`, `font_color`, `footer_background_color`, `footer_color`, `info_module`, `domain_owner`, `domain_age`, `domain_list`, `domain_appraisal`, `social_sharing`, `traffic_module`, `traffic_graph`, `alexa_stats`, `history_module`) VALUES
-(5, 1497056062817, NULL, 'imsorryimdumb.com', 1, 0, NULL, 1, NULL, 1, 'day', 5, 20000, 2600, 'The best way to apologize to your friends and family! Nothing quite says \"I\'m sorry\" like an entire website dedicated to saying just that! Use this website today and apologize away!', 'Use this website to apologize to your friends and family!', 'Best domain names for rentals.', 'ecard niche other personal promotion', 'alex,boss,connor,honey,lisa,madam,sarah,sir,mom,dad,peter,charles,matthew,vivian,chief,director,president,david', NULL, '#FFFFFF', NULL, '#C72E2E', '#FF9E1F', '#2196F3', 'Garamond', '#000000', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(7, 1476762961342, NULL, 'youreacutie.com', 1, 0, NULL, 1, NULL, 1, 'day', 5, 0, 0, 'Let your loved ones know what a cutie they are by sending them a website showing just exactly that! Let them know how you feel and that they are the one and only cutie in your life!', 'Use this website to let that special person know what a cutie they are!', NULL, 'ecard niche personal', 'emma,olivia,sophia,ava,mia,jack,sam,noah,liam,mason,ash,isabelle,adam,matthew,charles,brian,abigail,emily,charlotte,madison,amelia,elizabeth,sofia', NULL, '#FFFFFF', NULL, NULL, NULL, NULL, 'Bookman', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(8, 1490044814955, NULL, 'YoureToxic.com', 5, 1, NULL, 1, NULL, 1, 'month', 25, 5000, 2500, 'Perfect for telling someone they\'re toxic.', 'Use this website to flame your opponents!', 'Don\'t be toxic kids.', 'animals holiday keywords lifestyle marketing movies music realestate religion robot science', '', NULL, '#FFFFFF', 'https://68.media.tumblr.com/avatar_eb57388f82bd_128.png', '#FF5454', '#000000', '#570000', 'Trebuchet MS', '#000000', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0),
-(9, 1490758098071, NULL, 'ERAisAwesome.com', 5, 1, NULL, 1, NULL, 0, 'day', 1, 5000, 2500, 'Equal Rights Amendment. Earned Run Average. An era of time. ERA Real Estate. English Racing Automobiles. Excellence in Research for Australia. Employee Rights Act. Employment Relations Act. Exobiology Radiation Assembly. Explosive Reactive Armor. Era Online. \r\n\r\n\r\nWhat does your ERA stand for? Whatever it is--I\'m sure it\'s awesome.', '', 'Electronic Rodeo Association?', 'event promotion', '', NULL, '#222222', NULL, '#E8CF61', '#540000', '#6B6B6B', 'Courier', '#FFFFFF', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0),
-(50, 1512071198950, NULL, 'amazingdomain.com', 2, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(51, 1512071198950, NULL, 'greatestdomain.com', 2, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(52, 1508882908519, NULL, 'unverifieddomain.com', 2, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(53, 1512071198950, NULL, 'myawesomedomain.com', 2, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1402, 1508789320302, NULL, 'aikjsdfghikuasdhfgioasuwerhgiouswehrgiouashergiousheriogusherioguhseiorhuged.com', 35, 0, NULL, NULL, NULL, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1592, 1511556550613, NULL, 'test.com', 42, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 123, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1593, 1511556550613, NULL, 'test1.com', 42, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1594, 1511556734935, NULL, 'test2.com', 42, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1595, 1511556845907, NULL, 'test3.com', 42, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1597, 1511891474901, NULL, 'test4.com', 42, NULL, NULL, NULL, NULL, 0, 'month', 25, 13, 12, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1649, 1512509946390, NULL, 'calentopia.com', 42, 1, NULL, 1, 1, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, 'https://i.imgur.com/noTfMkv.jpg', NULL, 'https://i.imgur.com/yKCGkU6.jpg', '#FFCC00', '#942500', NULL, NULL, '#FFFFFF', '#000000', '#FFFFFF', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1650, 1512509984037, NULL, 'ihan.com', 42, 1, NULL, 1, 1, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1676, 1512087238865, NULL, 'test5.com', 42, 0, NULL, NULL, NULL, 0, 'month', 25, 2500, 2500, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1677, 1512510017412, NULL, 'fuacksauce.com', 42, NULL, NULL, NULL, 3, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(1678, 1513025736625, 1540218091000, 'test6.com', 42, 0, NULL, NULL, NULL, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+INSERT INTO `listings` (`id`, `date_created`, `date_expire`, `domain_name`, `owner_id`, `status`, `deleted`, `verified`, `registrar_name`, `registrar_id`, `registrar_cost`, `rentable`, `price_type`, `price_rate`, `buy_price`, `min_price`, `description`, `description_hook`, `description_footer`, `categories`, `paths`, `background_image`, `background_color`, `logo`, `primary_color`, `secondary_color`, `tertiary_color`, `font_name`, `font_color`, `footer_background_color`, `footer_color`, `placeholder`, `info_module`, `domain_owner`, `domain_age`, `domain_list`, `domain_appraisal`, `social_sharing`, `traffic_module`, `traffic_graph`, `alexa_stats`, `history_module`) VALUES
+(5, 1497056062817, NULL, 'imsorryimdumb.com', 1, 0, NULL, 1, NULL, NULL, 0, 1, 'day', 5, 20000, 2600, 'The best way to apologize to your friends and family! Nothing quite says \"I\'m sorry\" like an entire website dedicated to saying just that! Use this website today and apologize away!', 'Use this website to apologize to your friends and family!', 'Best domain names for rentals.', 'ecard niche other personal promotion', 'alex,boss,connor,honey,lisa,madam,sarah,sir,mom,dad,peter,charles,matthew,vivian,chief,director,president,david', NULL, '#FFFFFF', NULL, '#C72E2E', '#FF9E1F', '#2196F3', 'Garamond', '#000000', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(7, 1476762961342, NULL, 'youreacutie.com', 1, 0, NULL, 1, NULL, NULL, 0, 1, 'day', 5, 0, 15000, 'Let your loved ones know what a cutie they are by sending them a website showing just exactly that! Let them know how you feel and that they are the one and only cutie in your life!', 'Use this website to let that special person know what a cutie they are!', NULL, 'ecard niche personal', 'emma,olivia,sophia,ava,mia,jack,sam,noah,liam,mason,ash,isabelle,adam,matthew,charles,brian,abigail,emily,charlotte,madison,amelia,elizabeth,sofia', NULL, '#FFFFFF', NULL, NULL, NULL, NULL, 'Bookman', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(8, 1490044814955, NULL, 'YoureToxic.com', 5, 1, NULL, 1, NULL, NULL, 0, 1, 'month', 25, 5000, 2500, 'Perfect for telling someone they\'re toxic.', 'Use this website to flame your opponents!', 'Don\'t be toxic kids.', 'animals holiday keywords lifestyle marketing movies music realestate religion robot science', '', NULL, '#FFFFFF', 'https://68.media.tumblr.com/avatar_eb57388f82bd_128.png', '#FF5454', '#000000', '#570000', 'Trebuchet MS', '#000000', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0),
+(9, 1490758098071, NULL, 'ERAisAwesome.com', 5, 1, NULL, 1, NULL, NULL, 0, 0, 'day', 1, 5000, 2500, 'Equal Rights Amendment. Earned Run Average. An era of time. ERA Real Estate. English Racing Automobiles. Excellence in Research for Australia. Employee Rights Act. Employment Relations Act. Exobiology Radiation Assembly. Explosive Reactive Armor. Era Online. \r\n\r\n\r\nWhat does your ERA stand for? Whatever it is--I\'m sure it\'s awesome.', '', 'Electronic Rodeo Association?', 'event promotion', '', NULL, '#222222', NULL, '#E8CF61', '#540000', '#6B6B6B', 'Courier', '#FFFFFF', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0),
+(50, 1512071198950, 1519168174000, 'amazingdomain.com', 2, 1, NULL, 1, 'eNom, Inc.', NULL, 0, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(51, 1512071198950, 1519587202000, 'greatestdomain.com', 2, 1, NULL, 1, 'GoDaddy.com, LLC', NULL, 0, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(52, 1508882908519, NULL, 'unverifieddomain.com', 2, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(53, 1512071198950, 1516639529000, 'myawesomedomain.com', 2, 1, NULL, 1, 'GoDaddy.com, LLC', NULL, 0, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1402, 1508789320302, NULL, 'aikjsdfghikuasdhfgioasuwerhgiouswehrgiouashergiousheriogusherioguhseiorhuged.com', 35, 0, NULL, NULL, NULL, NULL, 0, 1, 'week', 500012, 125000, 25005, 'Awesome listings!!!!', NULL, NULL, 'animals holiday keywords lifestyle movies religion robot science', 'woot,sd,s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1592, 1511556550613, 1513825288499, 'test.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 123, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1593, 1511556550613, 1513825288499, 'test1.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1594, 1511556734935, NULL, 'test2.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1595, 1511556845907, 1513825288499, 'test3.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1597, 1511891474901, 1513825288499, 'test4.com', 42, NULL, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 13, 12, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1676, 1512087238865, 1513825288499, 'test5.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 2500, 2500, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1678, 1513025736625, 1513825288499, 'test6.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1680, 1513184283595, 1513825288499, 'test7.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1681, 1513184283595, 1513825288499, 'test8.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1682, 1513184283595, 1513825288500, 'test9.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1683, 1513184283595, 1513825288500, 'test10.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1684, 1513184283595, 1513825288500, 'test11.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1685, 1513353570938, 1523988602000, 'testerino.com', 1, 0, NULL, NULL, 'eNom1013, Inc.', NULL, 0, 0, 'month', 25, 0, 0, 'Buy this domain today and start your next adventure!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1686, 1513757567838, 1513752127261, 'testdomainwoohoohoohoo.com', 42, 3, NULL, 1, NULL, 4, 0, 0, 'month', 25, 0, 0, 'The greatest domain for your next project.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1709, 1513757567838, 1513757569790, 'testdomahub1.com', 42, 3, NULL, 1, NULL, 4, 0, 0, 'month', 25, 0, 0, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1710, 1513803189672, 1513825288500, 'distributedledgertechnology.com', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'Buy this domain today and start your next adventure!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(1711, 1513805008521, 1513825288500, 'blockchain.co.im', 42, 0, NULL, NULL, NULL, NULL, 0, 0, 'month', 25, 0, 0, 'Buy this domain today and start your next adventure!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -231,16 +245,15 @@ CREATE TABLE IF NOT EXISTS `registrars` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `registrars_account_id_unique` (`registrar_name`,`account_id`),
   KEY `registrars_account_id_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `registrars`
 --
 
 INSERT INTO `registrars` (`id`, `account_id`, `registrar_name`, `api_key`, `username`, `password`) VALUES
-(1, 42, 'godaddy', 'c3361fc4117811409cbb1ecd391ccdae576a3d282f67109f897e364bd530fc275d', 'c5375ca64b191d', 'c26103d74a5b7c67a4be0dae171eebe94c537d157955'),
 (2, 1, 'godaddy', 'c97228f230475c4080be25a0191cf99e595b501f7966638e9a7a0645c475bd355e38', 'c5325ca745181333', 'b66e1dd906604359dbdd118f3623caae675d78355a3e'),
-(3, 42, 'namecheap', 'c9370ff2154246328eda789a6b47beec423d31117e3e6c9e9e494a5bac30fa05', '946807f01b5446', NULL);
+(4, 42, 'namesilo', '91660ba2151547658e8d25ca3914e8eb1b3d69487a', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4431,7 +4444,7 @@ CREATE TABLE IF NOT EXISTS `stats_search_history` (
   `compare` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `search_history_account_id_fk_idx` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=252544 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=252549 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stats_search_history`
@@ -17152,7 +17165,9 @@ INSERT INTO `stats_search_history` (`id`, `domain_name`, `timestamp`, `rental_id
 (252533, 'youretoxic.com', 1509493551737, NULL, NULL, '171.25.193.78', 'http://youretoxic.com/', NULL),
 (252535, 'youretoxic.com', 1509493796353, NULL, NULL, '51.15.37.97', NULL, NULL),
 (252542, 'youretoxic.com', 1509493970084, NULL, NULL, '37.187.7.74', NULL, NULL),
-(252543, 'youretoxic.com', 1509493975196, NULL, NULL, '37.187.7.74', 'http://youretoxic.com/', NULL);
+(252543, 'youretoxic.com', 1509493975196, NULL, NULL, '37.187.7.74', 'http://youretoxic.com/', NULL),
+(252545, 'cooldomains.com', 1513378969273, NULL, NULL, '::1', NULL, 1),
+(252548, 'cooldomains.com', 1513379352823, NULL, NULL, '::ffff:127.0.0.1', 'http://localhost:8080/profile/mylistings', 1);
 
 --
 -- Constraints for dumped tables
