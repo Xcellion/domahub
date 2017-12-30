@@ -65,6 +65,7 @@ module.exports = {
           accounts.username, \
           accounts.date_created, \
           accounts.date_accessed, \
+          TIMESTAMPDIFF(DAY, accounts.date_accessed, NOW()) as days_since_log_on, \
           accounts.stripe_subscription_id, \
           verified_listings_count.total as verified_listings_count, \
           unverified_listings_count.total as unverified_listings_count \
@@ -96,7 +97,8 @@ module.exports = {
           accounts.email, \
           accounts.username, \
           accounts.date_created, \
-          accounts.date_accessed \
+          accounts.date_accessed, \
+          TIMESTAMPDIFF(DAY, accounts.date_accessed, NOW()) as days_since_log_on \
         FROM accounts \
         WHERE accounts.type = 0 '
     database.query(query, "Failed to get unverified user count!", callback);
