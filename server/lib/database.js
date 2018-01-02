@@ -49,6 +49,11 @@ var mysql_options = {
 //   mysql_options.host = "domahub.com";
 // }
 
+////////////////////////////////////////////////////////ACCESS TO PHPMY ADMIN ON PRODUCTION SERVER
+//mysqldump -u root -p domahub > domahub.SQL
+//enter password from keepbase database (MYSQL root)
+//scp -r wonmin@208.68.37.82:/home/wonmin/domahub.sql other/Technical/MySQL\ Backups/domahub.sql
+
 //</editor-fold>
 
 var pool = mysql.createPool(mysql_options);
