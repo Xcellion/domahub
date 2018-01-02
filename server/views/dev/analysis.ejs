@@ -76,7 +76,7 @@
     $(document).ready(function(){
 
       //build date selector
-      for (var x = 0 ; x < analyzed_data.length ; x++){
+      for (var x = analyzed_data.length - 1 ; x >= 0 ; x--){
         $(".dates-select").append("<option value=" + x + ">" + analyzed_data[x].date + "</option>")
       }
 
@@ -88,12 +88,12 @@
     });
 
     function buildTables(data_from_date){
-      $("table").remove();
+      $(".to-delete").remove();
 
       for (var x in data_from_date){
 
         var temp_header = x;
-        var temp_table = $("<table id='table-" + x + "' class='is-hidden'></table>");
+        var temp_table = $("<table id='table-" + x + "' class='is-hidden to-delete'></table>");
 
         //create header
         var temp_header_head = $("<thead></thead>");
@@ -136,8 +136,7 @@
           }
         }
 
-        $("body").append("<h1>" + temp_header + "<span class='toggle-button' data-show='table-" + x + "'>show</span></h1>").append(temp_table);
-
+        $("body").append("<h1 class='to-delete'>" + temp_header + "<span class='toggle-button' data-show='table-" + x + "'>show</span></h1>").append(temp_table);
       }
 
       //sort by table headers
