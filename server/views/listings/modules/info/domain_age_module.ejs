@@ -1,3 +1,4 @@
+<% if (!listing_info.premium || (listing_info.premium && listing_info.domain_age)) { %>
   <div id="domain-age-module" class="control is-grouped">
     <div class="control">
       <p class="heading is-small">
@@ -5,7 +6,7 @@
       </p>
     </div>
     <div class="control">
-      <% if (listing_info.date_registered && (!listing_info.premium || (listing_info.premium && listing_info.domain_age))) { %>
+      <% if (listing_info.date_registered) { %>
         <p id="date_registered" class="regular-font"></p>
       <% } else { %>
         <p class="regular-font">
@@ -21,7 +22,7 @@
       </p>
     </div>
     <div class="control">
-      <% if (listing_info.date_registered && (!listing_info.premium || (listing_info.premium && listing_info.domain_age))) { %>
+      <% if (listing_info.date_registered) { %>
         <p class="regular-font">
           <%= listing_info.registrar %>
         </p>
@@ -32,3 +33,4 @@
       <% } %>
     </div>
   </div>
+<% } %>
