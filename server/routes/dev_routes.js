@@ -125,7 +125,7 @@ function emailViews(req, res, next){
     offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     offer: moneyFormat.to(parseFloat("1231324")),
-    verification_code: randomstring.generate(10),
+    verification_code: "Fjj380bnD",
     message: "djkljakljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
   }
 
