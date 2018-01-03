@@ -1,0 +1,50 @@
+<html>
+<head>
+  <title>DomaHub Admin Dashboard</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <style>
+  .is-inline{
+    display:inline-block;
+  }
+  .is-hidden{
+    display:none!important;
+  }
+  </style>
+</head>
+<body>
+  <script>
+    $(document).ready(function(){
+
+      //get data for today
+      $("#get-data-button").on("click", function(){
+        $.ajax({
+          method : "POST",
+          url : "/admin/getdata"
+        }).done(function(data){
+          $("#get-data-button").off().addClass('is-hidden').prev("h3").text(data);
+        });
+      });
+
+      //send reminder email to unverified users
+      $("#remind-unverified-users-button").on("click", function(){
+        $.ajax({
+          method : "POST",
+          url : "/admin/remindVerifyEmail"
+        }).done(function(data){
+          $("#remind-unverified-users-button").off().addClass('is-hidden').prev("h3").text(data);
+        });
+      });
+    });
+  </script>
+  <h1>DomaHub Admin Dashboard</h1>
+  <div>
+    <h3 class="is-inline">Get data up to today</h3>
+    <button id="get-data-button" class="is-inline">GO</button>
+    <a href="/admin/analyze">Analyze the data</a>
+  </div>
+  <div>
+    <h3 class="is-inline">Email unverified users (type = 0) reminding them to verify their email.</h3>
+    <button id="remind-unverified-users-button" class="is-inline">GO</button>
+  </div>
+</body>
+</html>

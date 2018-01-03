@@ -51,6 +51,13 @@ module.exports = {
 
   //<editor-fold>-------------------------------GETS-------------------------------
 
+  //get unverified account emails
+  getUnverifiedAccount : function(callback){
+    console.log("DB: Attempting to get all unverified account information...");
+    var query = "SELECT username, email FROM accounts WHERE type = 0"
+    database.query(query, "Failed to get all unverified account information!", callback);
+  },
+
   //gets all account info
   getAccount : function(email, username, callback){
     if (email){
@@ -196,7 +203,7 @@ module.exports = {
             FROM accounts \
           LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
           WHERE accounts.id = ? "
-  database.query(query, "Failed to get an existing coupon code!", callback, account_id);
+          database.query(query, "Failed to get an existing coupon code!", callback, account_id);
   },
 
   //</editor-fold>

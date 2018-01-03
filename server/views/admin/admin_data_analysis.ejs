@@ -1,0 +1,178 @@
+<html>
+<head>
+  <title>DomaHub Analysis</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.2/js/jquery.tablesorter.min.js"></script>
+  <style>
+  .is-hidden{
+    display:none!important;
+  }
+  .is-inline{
+    margin-right:25px;
+    display:inline-block;
+  }
+  .toggle-button {
+    margin-left:10px;
+    cursor:pointer;
+    background-color:black;
+    color:white;
+    padding:5px;
+    border-radius:5px;
+  }
+  .inline {
+    display:inline-block;
+    margin-right:10px;
+    padding-right:10px;
+    border-right:1px solid black;
+    vertical-align:top;
+  }
+  table {
+    font-family : courier;
+    text-align:left;
+    border-collapse: collapse;
+  }
+  tr:hover {
+    background-color:#F1F1F1;
+  }
+  td {
+    padding:5px;
+    border:1px solid lightgray;
+  }
+  td.checkavail{
+    height:29px;
+  }
+  th {
+    border:1px solid black;
+    padding:5px;
+    cursor:pointer;
+    background-color:lightgray;
+  }
+  </style>
+</head>
+<body>
+  <script>
+    var analyzed_data = <% if(typeof analyzed_data != "undefined"){ %><%-JSON.stringify(analyzed_data)%><% }else{ %>""<% } %>;
+    var test_domain_names = [
+      "knotonmywatch.com",
+      "treescompany.com",
+      "domains.rocks",
+      "excellent.design",
+      "creativedoma.in",
+      "great.bargains",
+      "greatdomains.cheap",
+      "ilove.coffee",
+      "thiswebsiteis.cool",
+      "goingon.holiday",
+      "illtakeyour.photo",
+      "cleanoutyour.plumbing",
+      "myboyfriendis.cool",
+      "mygirlfriendis.smart",
+      "whereareallthe.singles",
+      "ilove.nyc",
+      "abc.xyz",
+      "idrink.beer",
+    ];
+    $(document).ready(function(){
+
+      //build date selector
+      for (var x = analyzed_data.length - 1 ; x >= 0 ; x--){
+        $(".dates-select").append("<option value=" + x + ">" + analyzed_data[x].date + "</option>")
+      }
+
+      //change date
+      $("#specific-date-data").on("input", function(){
+        buildTables(analyzed_data[$(this).val()].data);
+      });
+
+    });
+
+    function buildTables(data_from_date){
+      $(".to-delete").remove();
+
+      for (var x in data_from_date){
+
+        var temp_header = x;
+        var temp_table = $("<table id='table-" + x + "' class='is-hidden to-delete'></table>");
+
+        //create header
+        var temp_header_head = $("<thead></thead>");
+        var temp_header_row = $("<tr></tr>");
+        temp_header_row.append("<th>#</th>");
+        for (var t in data_from_date[x][0]){
+          if ((t.indexOf("date") != -1 || t.indexOf("timestamp") != -1 || t.indexOf("deadline") != -1)){
+            temp_header_row.append("<th data-sorter='shortDate' data-date-format='yyyymmdd'>" + t + "</th>");
+          }
+          else {
+            temp_header_row.append("<th>" + t + "</th>");
+          }
+
+        }
+        temp_table.append(temp_header_head.append(temp_header_row));
+        temp_header += " - " + data_from_date[x].length + " total";
+
+        //create rows
+        for (var y = 0 ; y < data_from_date[x].length ; y++){
+
+          if (x != "domains_viewed_in_compare" || (x == "domains_viewed_in_compare" && test_domain_names.indexOf(data_from_date[x][y].domain_name)) == -1){
+            var temp_row = $("<tr></tr>");
+            temp_row.append("<td>" + (y + 1) + "</td>");
+
+            //create TD
+            for (var z in data_from_date[x][y]){
+              if ((z.indexOf("date") != -1 || z.indexOf("timestamp") != -1 || z.indexOf("deadline") != -1) && data_from_date[x][y][z]){
+                var temp_td_text = moment(data_from_date[x][y][z]).format("MM/DD/YYYY hh:mm A")
+              }
+              else if (data_from_date[x][y][z]){
+                var temp_td_text = data_from_date[x][y][z];
+              }
+              else {
+                var temp_td_text = "-"
+              }
+              temp_row.append("<td>" + temp_td_text + "</td>");
+            }
+
+            temp_table.append(temp_row);
+          }
+        }
+
+        $("body").append("<h1 class='to-delete'>" + temp_header + "<span class='toggle-button' data-show='table-" + x + "'>show</span></h1>").append(temp_table);
+      }
+
+      //sort by table headers
+      $("table").tablesorter({
+        dateFormat : "mmddyyyy"
+      });
+
+      //show and hide buttons
+      $(".toggle-button").on("click", function(){
+        $("#" + $(this).data("show")).toggleClass('is-hidden');
+        $(this).text(($(this).text() == "show") ? "hide" : "show");
+      });
+    }
+  </script>
+
+  <h1>DomaHub Data Analysis</h1>
+  <div>
+    <a href="/admin/analyze/prod">Prod</a>
+    <a href="/admin/analyze">Test</a>
+    <a href="/admin">Admin Dashboard</a>
+  </div>
+  <div>
+    <h3>Show specific date's data</h3>
+    <select id="specific-date-data" class="dates-select">
+      <option disabled selected>
+        Select Date
+      </option>
+    </select>
+  </div>
+  <!-- <div class="is-inline">
+    <h3>See changes between dates</h3>
+    <select id="date-change-data" class="dates-select">
+      <option disabled selected>
+        Select End Date
+      </option>
+    </select>
+  </div> -->
+</body>
+</html>

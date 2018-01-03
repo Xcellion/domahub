@@ -20,6 +20,9 @@ $(document).ready(function() {
     if (listing_info.logo){
       $(".logo-item").attr("src", listing_info.logo);
     }
+    else {
+      $(".logo-item").removeAttr("src");
+    }
   }
 });
 
