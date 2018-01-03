@@ -71,6 +71,7 @@ function monkey(req, res, next){
 
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+var randomstring = require("randomstring");
 
 //show a specific view
 function showView(req, res, next){
