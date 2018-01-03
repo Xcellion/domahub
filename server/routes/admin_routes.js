@@ -3,6 +3,8 @@
 var data_model = require('../models/data_model.js');
 var account_model = require('../models/account_model.js');
 
+var mailer = require('../lib/mailer.js');
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------VARIABLES-------------------------------
@@ -16,6 +18,7 @@ var glob = require('glob');
 var stripe_key = (process.env.NODE_ENV == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
 var stripe = require("stripe")(stripe_key);
 var randomstring = require("randomstring");
+var crypto = require("crypto");
 var validator = require('validator');
 var moment = require('moment');
 
@@ -25,23 +28,35 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------ROUTES-------------------------------
 
+  //render the admin dashboard page
+  app.get("/admin", [
+    checkAdmin,
+    renderAdminDashboard
+  ]);
+
   //get key info for making business decisions
-  app.get("/getdata", [
+  app.post("/admin/getdata", [
     checkAdmin,
     getData
   ]);
 
+  //remind people with unverified emails to verify
+  app.post("/admin/remindVerifyEmail", [
+    checkAdmin,
+    remindVerifyEmail
+  ]);
+
   //analyze prod data
   app.get([
-    "/analyze/:prod_or_test",
-    "/analyze"
+    "/admin/analyze/:prod_or_test",
+    "/admin/analyze"
   ], [
     checkAdmin,
     analyzeData
   ]);
 
   //create coupon codes
-  app.get("/createcodes/:number", [
+  app.post("/admin/createcodes/:number", [
     checkAdmin,
     createCouponCodes
   ]);
@@ -127,7 +142,7 @@ function analyzeData(req, res, next){
       }
       analyzed_data.push(data_obj);
     });
-    res.render("./dev/analysis.ejs", {
+    res.render("./admin/admin_data_analysis.ejs", {
       analyzed_data : analyzed_data
     });
   });
@@ -209,3 +224,63 @@ function insertCoupons(codes, number, cb){
 }
 
 //</editor-fold>
+
+//<editor-fold>-------------------------------ADMIN DASHBOARD-------------------------------
+
+//render the admin dashboard
+function renderAdminDashboard(req, res, next){
+  res.render("./admin/admin_dashboard.ejs");
+}
+
+//</editor-fold>
+
+//remind all unverified users to verify their emails
+function remindVerifyEmail(req, res, next){
+  var promises = [];
+  account_model.getUnverifiedAccount(function(result){
+    for (var x = 0 ; x < result.info.length ; x++){
+      promises.push(send_remind_email_promise(result.info[x].email, result.info[x].username))
+    }
+
+    Q.allSettled(promises).then(function(results){
+      res.send("Sent emails!");
+    });
+
+  });
+}
+
+function send_remind_email_promise(email, username){
+  var deferred = Q.defer();
+
+  //generate token to email to user
+  crypto.randomBytes(5, function(err, buf) {
+    var verify_token = buf.toString('hex');
+    var now = new Date(new Date().getTime() + 3600000);   // 1 hour buffer
+    var verify_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+    var account_info = {
+      token : verify_token,
+      token_exp : verify_exp
+    };
+
+    //update account with token and expiration
+    account_model.updateAccount(account_info, email, function(result){
+      //email welcome to domahub email
+      mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify_remind.ejs'), {
+        username : username,
+        token : verify_token
+      }, {
+        to: email,
+        from: 'general@domahub.com',
+        subject: "Hi, " + username + ". Finish signing up for DomaHub and start selling domains today!",
+      }, function(state){
+        if (state == "success"){
+          console.log("F: Successfully sent email!");
+          deferred.resolve();
+        }
+      });
+    });
+  });
+
+  return deferred.promise;
+}
