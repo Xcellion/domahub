@@ -1830,11 +1830,11 @@ function createDNSTable(listing_info, total_unverified, row_index){
 
   //incomplete
   if (cloned_table.find(".is-danger").length > 1){
-    table_header_text = "<span class='is-incomplete dns-status'>Incomplete</span>" + table_header_text;
+    table_header_text = "<span class='tag is-small is-danger dns-status'>Incomplete</span>" + table_header_text;
   }
   //complete
   else {
-    table_header_text = "<span class='is-complete dns-status'>Completed</span>" + table_header_text;
+    table_header_text = "<span class='tag is-small is-primary dns-status'>Completed</span>" + table_header_text;
   }
 
   cloned_table.find(".existing-dns-row").remove();
