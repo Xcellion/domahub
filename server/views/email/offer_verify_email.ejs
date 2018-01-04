@@ -6,6 +6,7 @@
 </head>
 <body style="margin:0;background-color:#f2f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',Verdana,sans-serif;">
     <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',Verdana,sans-serif;">
+      <tbody>
         <tr>
             <td align="center" valign="top">
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:40px 0 0;background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
@@ -41,7 +42,7 @@
                       </td>
                     </tr>
                   </tbody>
-              </table>
+                </table>
                 <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer" style="background-color:#fff;margin:auto;border-radius:0 0 8px 8px;">
                   <tbody>
                       <tr>
@@ -120,27 +121,30 @@
         <tr>
           <td align="center" valign="top">
               <table border="0" cellpadding="10" cellspacing="0" width="600" id="emailFooter" style="padding:40px;margin:auto;">
-                  <tr>
-                      <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
-                          You are receving this email because you made an offer to purchase
-                          <span style="text-decoration:none;"><%= domain_name %></span>. If you did not do this, please disregard this email.
-                      </td>
-                  </tr>
-                  <% if (!premium) { %>
+                  <tbody>
                     <tr>
-                      <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
-                        Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
-                      </td>
+                        <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                            You are receving this email because you made an offer to purchase
+                            <span style="text-decoration:none;"><%= domain_name %></span>. If you did not do this, please disregard this email.
+                        </td>
                     </tr>
-                    <tr>
-                      <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
-                        &#169; DomaHub.com <%= (new Date()).getFullYear() %>
-                      </td>
-                    </tr>
-                  <% } %>
+                    <% if (!premium) { %>
+                      <tr>
+                        <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                          Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                          &#169; DomaHub.com <%= (new Date()).getFullYear() %>
+                        </td>
+                      </tr>
+                    <% } %>
+                  </tbody>
               </table>
           </td>
         </tr>
+      </tbody>
     </table>
 </body>
 </html>
