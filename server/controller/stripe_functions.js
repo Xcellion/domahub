@@ -1100,7 +1100,7 @@ function newStripeSubscription(req, res, next){
         username : req.user.username,
       }, {
         to: req.user.email,
-        from: 'general@domahub.com',
+        from: 'DomaHub <general@domahub.com>',
         subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
       }, function(state){
         if (state == "success"){

@@ -111,7 +111,7 @@
 				<div id="account" class="columns is-hidden drop-tab">
 
           <!-- ACCOUNT INFORMATION (EMAIL, USERNAME, PW) -->
-					<div class="column is-5-widescreen">
+					<div class="column">
 						<div class="card is-fullwidth">
 							<div class="card-header">
 								<h3 class="card-header-title">
@@ -159,7 +159,7 @@
 					</div>
 
           <!-- REGISTRAR INFORMATION -->
-          <div class="column is-5-widescreen">
+          <div class="column">
             <div class="card is-fullwidth">
               <div class="card-header">
                 <h3 class="card-header-title">
@@ -224,10 +224,10 @@
 
         <!-- PREMIUM / REFERRAL / PROMO CODE TAB -->
         <div id="premium" class="columns is-hidden drop-tab">
-          <div class="column is-5-widescreen">
+          <div class="column">
 	          <div class="card is-fullwidth">
 							<% if (!user.stripe_subscription_id) { %>
-          		<div class="card-header no-border-bottom">
+          		<div class="card-header">
 							<% } else { %>
 							<div class="card-header">
 							<% } %>
@@ -310,7 +310,7 @@
 	              <small id="next-charge-tip" class="tip is-inline-block"></small>
 	          	</div>
 	          	<div class="card-content">
-	              <table id="payment-history-table" class="remove-margin-bottom-content table">
+	              <table id="payment-history-table" class="table">
 	                <thead>
 	                  <tr>
 	                    <th>Date</th>
@@ -329,7 +329,7 @@
 	          	</div>
 	          </div>
           </div>
-          <div class="column is-5-widescreen">
+          <div class="column">
             <div class="card is-fullwidth">
           	<div class="card-header">
           		<h3 class="card-header-title">
@@ -382,7 +382,7 @@
                   </a>
                 </div>
           		</div>
-              <table id="loading-referral-table" class="remove-margin-bottom-content table">
+              <table id="loading-referral-table" class="table">
           			<tbody>
                   <tr class="no-hover-effect">
                     <td>
@@ -395,7 +395,7 @@
                   </tr>
           			</tbody>
               </table>
-              <table id="no-referral-table" class="remove-margin-bottom-content table is-hidden">
+              <table id="no-referral-table" class="table is-hidden">
           			<tbody>
                   <tr id="no-referrals" class="no-hover-effect">
                     <td colspan="3">
@@ -411,7 +411,7 @@
                   </tr>
           			</tbody>
               </table>
-              <table id="referral-table" class="remove-margin-bottom-content table is-hidden">
+              <table id="referral-table" class="table is-hidden">
           			<thead>
 									<tr>
 										<th colspan="4">
@@ -446,7 +446,7 @@
 
         <!-- PAYMENTS INFORMATION TAB -->
         <div id="payment" class="columns is-hidden drop-tab">
-          <div class="column is-5-widescreen">
+          <div class="column">
             <form id="stripe-personal-form">
 
               <!-- PERSONAL INFO -->
@@ -692,7 +692,7 @@
             </form>
           </div>
 
-          <div class="column is-5-widescreen">
+          <div class="column">
 
             <!-- BANK ACCOUNT (STRIPE) -->
             <div class="card is-fullwidth">
@@ -896,7 +896,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="loading-transactions-table" class="table has-shadow no-border-bottom">
+            <table id="loading-transactions-table" class="table has-shadow">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>
@@ -925,7 +925,7 @@
                 </tr>
               </tbody>
             </table>
-            <table id="no-matching-transactions-table" class="table has-shadow is-hidden no-border-bottom">
+            <table id="no-matching-transactions-table" class="table has-shadow is-hidden">
               <tbody>
                 <tr class="no-hover-effect">
                   <td>

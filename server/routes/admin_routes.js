@@ -271,7 +271,7 @@ function send_remind_email_promise(email, username){
         token : verify_token
       }, {
         to: email,
-        from: 'general@domahub.com',
+        from: 'DomaHub <general@domahub.com>',
         subject: "Hi, " + username + ". Finish signing up for DomaHub and start selling domains today!",
       }, function(state){
         if (state == "success"){
