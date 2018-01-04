@@ -4,134 +4,138 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>DomaHub Automated Email Template</title>
 </head>
-<body style="margin:0;">
-    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="background-color:#f2f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',Verdana,sans-serif;">
-        <tr>
-            <td align="center" valign="top">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:40px 0 0;background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
-                  <tbody>
-                    <tr>
-                      <td>
-                        <table border="0" cellspacing="0" cellpadding="0" width="600" id="emailHeader" style="border-radius:8px 8px 0 0;border-collapse:collapse!important;margin:0 auto;">
-                            <tbody>
-                              <tr>
-                                  <td align="center" valign="top" style="padding-bottom:40px;">
-                                    <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
-                                      <img alt height="72" width="72" alt="Logo" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
-                                    </a>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td align="center" style="background-color:#fff;border-radius:8px 8px 0 0;">
-                                    <div style="border:0;margin:0;font-size:24px;line-height:2;padding:20px;margin:0 20px;border-bottom:1px solid #ddd;">
-                                      Email Header Text
-                                    </div>
-                                  </td>
-                              </tr>
-                            </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  </tbody>
-              </table>
-                <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer" style="background-color:#fff;border-radius:0 0 8px 8px;">
-                  <tbody>
+<body style="margin:0;background-color:#f2f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',Verdana,sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+        <tbody>
+          <tr>
+              <td align="center" valign="top">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:40px 0 0;background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
+                    <tbody>
                       <tr>
-                          <td align="center" valign="top">
-                              <table border="0" cellpadding="0" cellspacing="0" id="emailBody" style="padding:20px 40px;">
-                                  <tbody>
-                                    <tr>
-                                      <td align="center" valign="top" colspan="2" style="font-size:18px;padding-bottom:20px;">
-                                        Table Header
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="left" valign="top" colspan="2" style="line-height:1.5;padding-bottom:20px;">
-                                        Explanation Text
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
-                                        Name
-                                      </td>
-                                      <td aling="right" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
-                                        Variable
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
-                                        Email
-                                      </td>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
-                                        Variable
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
-                                        Phone
-                                      </td>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
-                                        Variable
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
-                                        Offer
-                                      </td>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
-                                        Variable
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="left" valign="top" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
-                                        Message
-                                      </td>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0 10px 20px;white-space:pre-wrap;"><%= message %></td>
-                                    </tr>
-                                    <tr>
-                                      <td colspan="2" style="line-height:1.5;padding-top:20px;">
-                                        CTA Explanation Text
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td colspan="2" align="center" style="padding-top:20px;">
-                                        <div style="width:100%;">
-                                          <a href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>" style="display:block!important;font-weight:bold;text-decoration:none;padding:15px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">
-                                            CTA Button</a>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                              </table>
+                        <td>
+                          <table border="0" cellspacing="0" cellpadding="0" width="600" id="emailHeader" style="border-radius:8px 8px 0 0;border-collapse:collapse!important;margin:0 auto;">
+                              <tbody>
+                                <tr>
+                                    <td align="center" valign="top" style="padding-bottom:40px;">
+                                      <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
+                                        <img alt height="72" width="72" alt="Logo" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                      </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="background-color:#fff;border-radius:8px 8px 0 0;">
+                                      <div style="border:0;margin:0;font-size:24px;line-height:2;padding:20px;margin:0 20px;border-bottom:1px solid #ddd;">
+                                        Email Header Text
+                                      </div>
+                                    </td>
+                                </tr>
+                              </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                  <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer" style="background-color:#fff;margin:auto;border-radius:0 0 8px 8px;">
+                    <tbody>
+                        <tr>
+                            <td align="center" valign="top">
+                                <table border="0" cellpadding="0" cellspacing="0" id="emailBody" style="padding:20px 40px;">
+                                    <tbody>
+                                      <tr>
+                                        <td align="center" valign="top" colspan="2" style="font-size:18px;padding-bottom:20px;">
+                                          Table Header
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td align="left" valign="top" colspan="2" style="line-height:1.5;padding-bottom:20px;">
+                                          Explanation Text
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                          Name
+                                        </td>
+                                        <td aling="right" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
+                                          Variable
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                          Email
+                                        </td>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
+                                          Variable
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                          Phone
+                                        </td>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
+                                          Variable
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                          Offer
+                                        </td>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
+                                          Variable
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td align="left" valign="top" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                          Message
+                                        </td>
+                                        <td align="left" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0 10px 20px;white-space:pre-wrap;"><%= message %></td>
+                                      </tr>
+                                      <tr>
+                                        <td colspan="2" style="line-height:1.5;padding-top:20px;">
+                                          CTA Explanation Text
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td colspan="2" align="center" style="padding-top:20px;">
+                                          <div style="width:100%;">
+                                            <a href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>" style="display:block!important;font-weight:bold;text-decoration:none;padding:15px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">
+                                              CTA Button</a>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                  </table>
+              </td>
+          </tr>
+          <tr>
+            <td align="center" valign="top">
+                <table border="0" cellpadding="10" cellspacing="0" width="600" id="emailFooter" style="padding:40px;margin:auto;">
+                    <tbody>
+                      <tr>
+                          <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                            Footer Text
                           </td>
                       </tr>
-                  </tbody>
+                      <% if (!premium) { %>
+                        <tr>
+                          <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                            Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                            &#169; DomaHub.com <%= (new Date()).getFullYear() %>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
                 </table>
             </td>
-        </tr>
-        <tr>
-          <td align="center" valign="top">
-              <table border="0" cellpadding="10" cellspacing="0" width="600" id="emailFooter" style="padding:40px;">
-                  <tr>
-                      <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
-                        Footer Text
-                      </td>
-                  </tr>
-                  <% if (!premium) { %>
-                    <tr>
-                      <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
-                        Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
-                      </td>
-                    </tr>
-                    <tr>
-                      <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
-                        &#169; DomaHub.com <%= (new Date()).getFullYear() %>
-                      </td>
-                    </tr>
-                  <% } %>
-              </table>
-          </td>
-        </tr>
+          </tr>
+        </tbody>
     </table>
 </body>
 </html>
