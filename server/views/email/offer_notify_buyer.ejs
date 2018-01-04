@@ -54,7 +54,7 @@
                                   <tbody>
                                     <tr>
                                       <td align="center" valign="top" colspan="2" style="font-size:18px;padding-bottom:20px;">
-                                        <%= (accepted) ? "Congratulations" : "Hello" %> <%= offerer_name %>
+                                        <%= (accepted) ? "Congratulations" : "Hello" %> <%= offerer_name %>,
                                       </td>
                                     </tr>
                                     <tr>
@@ -74,9 +74,7 @@
                                       <td align="left" valign="top" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Message from Owner
                                       </td>
-                                      <td align="left" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0 10px 20px;white-space:pre-wrap;">
-                                        <% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %>
-                                      </td>
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0 10px 20px;white-space:pre-wrap;"><% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %></td>
                                     </tr>
                                     <tr>
                                       <td colspan="2" style="line-height:1.5;padding-top:20px;">
