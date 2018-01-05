@@ -212,16 +212,7 @@
 }
 
 .dns-status {
-  padding:5px;
   margin-right:10px;
-  color: $white;
-  border-radius:3px;
-  &.is-incomplete {
-    background-color: $danger;
-  }
-  &.is-complete {
-    background-color: $primary;
-  }
 }
 
 .cloned-dns-table {
