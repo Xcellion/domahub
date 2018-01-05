@@ -70,6 +70,22 @@
   }
 }
 
+// table
+#referral-table {
+  thead,
+  tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+  tbody {
+    display: block;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
 .no-border-bottom {
   border-bottom-width: 0px !important;
   margin-bottom:0;

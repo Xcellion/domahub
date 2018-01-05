@@ -62,8 +62,8 @@ module.exports = {
     }
   },
 
-  //get charges for a stripe customer
-  getStripeCustomerCharges : function(req, res, next){
+  //get invoices for a stripe customer
+  getStripeCustomerInvoices : function(req, res, next){
 
     //if we're deleting customer since it doesnt exist anymore
     if (req.session.new_account_info && req.session.new_account_info.stripe_customer_id == null){
@@ -71,14 +71,14 @@ module.exports = {
     }
     //if customer id and subscription id exists in our database
     else if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && typeof req.user.stripe_customer.charges == "undefined"){
-      console.log("SF: Getting Stripe customer payment history for an account...");
+      console.log("SF: Getting Stripe customer invoice history for an account...");
 
-      stripe.charges.list({
+      stripe.invoices.list({
         customer: req.user.stripe_customer_id
-      }, function(err, charges) {
-        if (err) { error.log(err, "Failed to get customer Stripe charges."); }
+      }, function(err, invoices) {
+        if (err) { error.log(err, "Failed to get customer Stripe invoices."); }
         else {
-          updateUserStripeCustomerCharges(req.user, charges);
+          updateUserStripeCustomerInvoices(req.user, invoices);
         }
         next();
       });
@@ -102,7 +102,7 @@ module.exports = {
       stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
         if (err) { error.log(err, "Failed to get upcoming Stripe customer invoice."); }
         else {
-          updateUserStripeCustomerInvoice(req.user, upcoming);
+          updateUserStripeCustomerUpcomingInvoice(req.user, upcoming);
         }
         next();
       });
@@ -153,6 +153,38 @@ module.exports = {
     //no customer exists, create a new stripe customer
     else {
       newStripeCustomer(req, res, next);
+    }
+  },
+
+  //delete existing customer CC
+  deleteCustomerCard : function(req, res, next){
+    if (!req.user.stripe_customer_id){
+      error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+    }
+    else {
+      //cross reference with stripe
+      stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+        if (err){
+          error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+        }
+        else {
+          stripe.customers.deleteCard(
+            customer.id,
+            customer.default_source,
+            function(err, confirmation) {
+              stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+                if (err){
+                  error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+                }
+                else {
+                  updateUserStripeCustomer(req.user, customer);
+                  next();
+                }
+              });
+            }
+          );
+        }
+      });
     }
   },
 
@@ -227,13 +259,11 @@ module.exports = {
     //if subscription id exists in our database
     if (req.user.stripe_subscription_id && !req.user.stripe_subscription){
       console.log("SF: Getting Stripe subscription information for an account...");
-
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
         if (err){
           error.log(err, "Failed to retrieve Stripe subscription.");
         }
-
         //update our DH database to remove stripe_subscription_id
         if (!subscription){
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
@@ -270,7 +300,7 @@ module.exports = {
             console.log("SF: Renewing existing Stripe subscription...");
 
             stripe.subscriptions.update(req.user.stripe_subscription_id, {
-              plan: "premium_account"
+              plan: subscription.plan.id
             }, function(err, subscription) {
               if (err){
                 error.log(err, "Failed to update Stripe subscription.");
@@ -321,72 +351,6 @@ module.exports = {
     else {
       error.handler(req, res, "You don't have a Premium account to cancel!", "json")
     }
-  },
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------PROMO CODES-------------------------------
-
-  //create a unique promo code
-  createPromoCode : createPromoCode,
-
-  //delete old stripe promo code
-  deletePromoCode : function(req, res, next){
-    if (req.user.old_promos){
-      console.log("SF: Deleting old Stripe promo codes...");
-      for (var x = 0; x < req.user.old_promos.length; x++){
-        stripe.coupons.del(req.user.old_promos[x]);
-      }
-      delete req.user.old_promos;
-      next();
-    }
-    else {
-      next();
-    }
-  },
-
-  //figure out if the existing subscription has any discounts on it
-  getExistingDiscount : function(req, res, next){
-    if (req.user.stripe_subscription_id){
-      getExistingDiscount(req.user.stripe_subscription_id, function(stripe_used_months){
-        //stripe error
-        if (stripe_used_months === false){
-          error.handler(req, res, "Something went wrong with this promo code! Please refresh the page and try again!", "json");
-        }
-        else {
-          //if there was a coupon
-          if (stripe_used_months != 0){
-            req.user.stripe_used_months = stripe_used_months;
-          }
-          next();
-        }
-      });
-    }
-    else {
-      next();
-    }
-  },
-
-  //apply promo code to stripe database (existing user)
-  applyPromoCode : function(req, res, next){
-    applyPromoCodeStripe(req.user.stripe_subscription_id, req.user.promo_code, req.user.id, function(result){
-      if (result){
-        //update upcoming invoice
-        stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
-          if (err) { error.log(err, "Failed to get upcoming Stripe customer invoice."); }
-          else {
-            updateUserStripeCustomerInvoice(req.user, upcoming);
-          }
-          res.json({
-            state: 'success',
-            user : req.user
-          });
-        });
-      }
-      else {
-        error.handler(req, res, "Something went wrong with this promo code! Please refresh the page and try again!", "json");
-      }
-    });
   },
 
   //</editor-fold>
@@ -830,193 +794,6 @@ module.exports = {
 
 }
 
-//<editor-fold>-------------------------------PROMO HELPERS-------------------------------
-
-function createPromoCode(number, referrer, duration_in_months, callback){
-  console.log("SF: Creating promo codes...");
-  var createUniqueCoupons = function(n, r, m){
-    var codes = [];
-
-    if (validator.isInt(n)){
-      for (var x = 0; x < n; x++){
-        var random_string = randomstring.generate(10);
-        codes.push([random_string, r, m]);
-      }
-    }
-
-    return codes;
-  }
-
-  var insertCoupons = function(codes, n, r, m, cb){
-    account_model.createCouponCodes(codes, function(result){
-      if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
-        console.log("Duplicate coupon!");
-        insertCoupons(createUniqueCoupons(n, r, m), n, r, m, cb);
-      }
-      else if (result.state != "error"){
-        cb(codes);
-      }
-    });
-  }
-
-  insertCoupons(createUniqueCoupons(number, referrer, duration_in_months), number, referrer, duration_in_months, function(codes){
-    var stripe_promises = [];
-    for (var x = 0 ; x < codes.length ; x++){
-      var promise = (function(code){
-        var deferred = Q.defer();
-        stripe.coupons.create({
-          id: code,
-          duration: "repeating",
-          percent_off: 100,
-          duration_in_months: duration_in_months,
-          max_redemptions : 1
-        }, function(err, coupon) {
-          if (err){
-            deferred.reject();
-          }
-          else {
-            deferred.resolve(coupon);
-          }
-        });
-        return deferred.promise;
-      })(codes[x][0]);
-      stripe_promises.push(promise);
-    }
-
-    Q.allSettled(stripe_promises).then(function(results) {
-      var success_codes = []
-      for (var x = 0 ; x < results.length; x++){
-        if (results[x].state == "fulfilled"){
-          success_codes.push(results[x].value.id);
-        }
-      }
-      callback(success_codes);
-    });
-
-  });
-}
-
-//get existing subscription and any coupons
-function getExistingDiscount(stripe_subscription_id, callback){
-  console.log("SF: Getting any existing Stripe subscription discounts...");
-  stripe.subscriptions.retrieve(stripe_subscription_id, function(err, subscription){
-    if (err){
-      callback(false);
-    }
-    else {
-      var stripe_used_months = 0;
-
-      //figure out how many months the coupon has been used
-      if (subscription.discount){
-        if (subscription.discount.start != subscription.created){
-          var stripe_used_months = Math.floor(moment.duration(new Date().getTime() - (subscription.discount.start * 1000)).as("months"));
-        }
-        //start of the discount is equal to start of subscription (aka, this coupon is already used for 1 month)
-        else {
-          var stripe_used_months = Math.max(subscription.discount.coupon.duration_in_months - 1, 1);
-        }
-      }
-
-      callback(stripe_used_months);
-    }
-  });
-}
-
-//apply code to a subscription / update promo code on our DB
-function applyPromoCodeStripe(stripe_subscription_id, promo_code, account_id, cb){
-  console.log("SF: Applying promo code to Stripe subscription...");
-  stripe.subscriptions.update(stripe_subscription_id, {
-    coupon : promo_code
-  }, function(err, subscription){
-    if (!err){
-      account_model.updatePromoCode(promo_code, {
-        account_id : account_id,
-        date_accessed : new Date()
-      }, function(result){
-        cb(true);
-      });
-    }
-    else {
-      error.log(err, "Something went wrong applying a promo to a Stripe subscription.");
-      cb(false);
-    }
-  });
-}
-
-//delete old code and create new
-function deleteExistingAddNew(referer_id, referrer_referrer, existing_coupon_code, existing_duration_in_months, stripe_subscription_id){
-  console.log("SF: Deleting old existing coupon and adding new coupon...");
-  account_model.deletePromoCode(existing_coupon_code, function(result){
-    stripe.coupons.del(existing_coupon_code);
-
-    //create 1 promo code, with no referer_id, and 1 duration_in_months
-    createPromoCode("1", referrer_referrer, existing_duration_in_months + 1, function(result){
-      if (stripe_subscription_id){
-        //update stripe and DH DB
-        applyPromoCodeStripe(stripe_subscription_id, result[0], referer_id, function(){});
-      }
-      else {
-        //update just DH DB
-        account_model.updatePromoCode(result[0], {
-          account_id : referer_id,
-          date_accessed : new Date()
-        }, function(result){ });
-      }
-    });
-  });
-}
-
-//add a month b/c referral
-function addMonthReferral(referer_id){
-  console.log("SF: Looking up any existing referrer coupons to add 1 month...");
-
-  //check if referrer has any existing coupons
-  account_model.getExistingPromoCodeByUser(referer_id, function(result){
-    var referrer_stripe_subscription_id = result.info[0].stripe_subscription_id;
-
-    if (result.state == "success" && result.info.length > 0 && result.info[0].code){
-      console.log("SF: Referrer coupon found! Adding 1 month...");
-
-      var existing_referrer_promo_code = result.info[0].code;
-      var referrer_referrer = result.info[0].referer_id;
-      var existing_duration_in_months = result.info[0].duration_in_months;
-
-      //referrer is premium
-      if (referrer_stripe_subscription_id){
-        console.log("SF: Adding 1 month on Stripe...");
-        getExistingDiscount(referrer_stripe_subscription_id, function(stripe_used_months){
-          //if there was a coupon
-          if (stripe_used_months === false){}
-          else {
-            deleteExistingAddNew(referer_id, referrer_referrer, existing_referrer_promo_code, existing_duration_in_months - stripe_used_months, referrer_stripe_subscription_id);
-          }
-        });
-      }
-      else {
-        deleteExistingAddNew(referer_id, referrer_referrer, existing_referrer_promo_code, existing_duration_in_months);
-      }
-    }
-    else {
-      console.log("SF: No referrer coupon found! Creating 1 month coupon...");
-
-      //create 1 promo code, with no referer_id, and 1 duration_in_months
-      createPromoCode("1", null, 1, function(result){
-        if (referrer_stripe_subscription_id){
-          applyPromoCodeStripe(referrer_stripe_subscription_id, result[0], referer_id, function(){});
-        }
-        else {
-          account_model.updatePromoCode(result[0], {
-            account_id : referer_id,
-            date_accessed : new Date()
-          }, function(result){ });
-        }
-      });
-    }
-  });
-}
-
-//</editor-fold>
-
 //<editor-fold>-------------------------------NEW STRIPE CREATOR HELPERS-------------------------------
 
 //create a new stripe customer
@@ -1047,68 +824,60 @@ function newStripeCustomer(req, res, next){
   });
 }
 
-//create a new stripe subscription
+//check for existing coupons and then create new subscription
 function newStripeSubscription(req, res, next){
-  console.log("SF: Creating a new Stripe subscription...");
+  var premium_annual = (req.body.annual && req.body.annual == "true");
+  var amount_due = (premium_annual) ? 5000 : 500;
 
-  //subscription details
-  var new_sub_details = {
-    customer: req.user.stripe_customer_id,
-    plan: "premium_account",
-    metadata: {
-      "account_id" : req.user.id,
-      "username" : req.user.username
-    }
-  }
+  checkForRedeemedableCoupons(req.user.stripe_customer_id, req.user.id, amount_due, function(result){
+    if (result){
+      console.log("SF: Creating a new Stripe subscription...");
 
-  //if the user has a promo code
-  if (req.user.existing_promo_code){
-    new_sub_details.coupon = req.user.existing_promo_code;
-  }
+      //create the subscription in stripe!
+      stripe.subscriptions.create({
+        customer: req.user.stripe_customer_id,
+        plan: (premium_annual) ? "premium_account_annual" : "premium_account",
+        // plan: "premium_account_test",      //daily test plan
+        metadata: {
+          "account_id" : req.user.id,
+          "username" : req.user.username
+        }
+      }, function(err, subscription) {
+        if (err){
+          error.log(err, "Failed to create Stripe subscription.");
+          error.handler(req, res, err.message, "json");
+        }
+        else {
+          updateUserStripeSubscription(req.user, subscription);
 
-  //create the subscription in stripe!
-  stripe.subscriptions.create(new_sub_details, function(err, subscription) {
-    if (err){
-      error.log(err, "Failed to create Stripe subscription.");
-      error.handler(req, res, err.message, "json");
-    }
-    else {
-      updateUserStripeSubscription(req.user, subscription);
+          //create this now for getting charges + invoice
+          req.user.stripe_subscription_id = subscription.id;
 
-      //update our database with new stripe customer ID
-      req.session.new_account_info = {
-        stripe_subscription_id : subscription.id,
-        stripe_customer_id : req.user.stripe_customer_id
-      }
+          //update our database with new stripe customer ID
+          req.session.new_account_info = {
+            stripe_subscription_id : subscription.id,
+            stripe_customer_id : req.user.stripe_customer_id
+          }
 
-      //create this now for getting charges + invoice
-      req.user.stripe_subscription_id = subscription.id;
+          //email congrats
+          mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'welcome_premium.ejs'), {
+            username : req.user.username,
+          }, {
+            to: req.user.email,
+            from: 'general@domahub.com',
+            subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
+          }, function(state){
+            if (state == "success"){
+              console.log("F: Successfully sent email!");
+            }
+          });
 
-      //update date accessed in the promo code in our DB
-      if (req.user.existing_promo_code){
-        account_model.updatePromoCode(req.user.existing_promo_code, { date_accessed : new Date() }, function(){});
-        delete req.user.existing_promo_code;
-      }
-
-      //referral! add one month to the referer
-      if (req.user.existing_referer_id){
-        addMonthReferral(req.user.existing_referer_id);
-      }
-
-      //email congrats
-      mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'welcome_premium.ejs'), {
-        username : req.user.username,
-      }, {
-        to: req.user.email,
-        from: 'general@domahub.com',
-        subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
-      }, function(state){
-        if (state == "success"){
-          console.log("F: Successfully sent email!");
+          next();
         }
       });
-
-      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again!", "json");
     }
   });
 }
@@ -1172,34 +941,35 @@ function updateUserStripeCustomer(user, customer){
         last4 : customer.sources.data[0].last4
       }
     }
+    else {
+      user.stripe_customer = {};
+    }
   }
 }
 
-//update req.user with stripe customer charge object
-function updateUserStripeCustomerCharges(user, charges){
-  if (charges){
+//update req.user with stripe customer invoices object
+function updateUserStripeCustomerInvoices(user, invoices){
+  if (invoices){
     //dev stripe info
     if (process.env.NODE_ENV == "dev"){
-      user.dev_stripe_customer.charges = charges;
+      user.dev_stripe_customer.invoices = invoices;
     }
 
     //charges array
-    var temp_charges = [];
-    for (var x = 0 ; x < charges.data.length ; x++){
-      temp_charges.push({
-        amount : charges.data[x].amount,
-        amount_refunded : charges.data[x].amount_refunded,
-        created : charges.data[x].created * 1000,
-        brand : charges.data[x].source.brand,
-        last4 : charges.data[x].source.last4
+    var temp_invoices = [];
+    for (var x = 0 ; x < invoices.data.length ; x++){
+      temp_invoices.push({
+        amount : invoices.data[x].total,
+        subtotal : invoices.data[x].subtotal,
+        created : invoices.data[x].date * 1000
       });
     }
-    user.stripe_customer.charges = temp_charges;
+    user.stripe_customer.invoices = temp_invoices;
   }
 }
 
 //update req.user with stripe customer invoice object
-function updateUserStripeCustomerInvoice(user, upcoming){
+function updateUserStripeCustomerUpcomingInvoice(user, upcoming){
   if (upcoming){
     //dev stripe info
     if (process.env.NODE_ENV == "dev"){
@@ -1208,8 +978,15 @@ function updateUserStripeCustomerInvoice(user, upcoming){
 
     user.stripe_customer.upcoming_invoice = {
       amount_due : upcoming.amount_due,
+      subtotal : upcoming.subtotal,
       date : upcoming.date * 1000
     };
+
+    //if any existing unredeemed coupons
+    if (user.existing_code_amount_off){
+      user.stripe_customer.upcoming_invoice.amount_due -= user.existing_code_amount_off;
+    }
+
   }
 }
 
@@ -1331,12 +1108,21 @@ function updateUserStripeBank(user, account){
 function switchStripeEvents(event, res){
   if (event){
     console.log("SF: Event from Stripe: " + event.type);
-    res.sendStatus(200);
     switch (event.type){
       case "customer.subscription.deleted":
-        handleSubscriptionCancel(event);
+        handleSubscriptionCancel(event.data.object.customer, event.data.object.id);
+        res.sendStatus(200);
         break;
+      case "invoice.payment_failed":
+        handleSubscriptionCancel(event.data.object.customer, event.data.object.subscription);
+        res.sendStatus(200);
+        break;
+      case "invoice.upcoming":
+        if (event.data.object.customer && event.data.object.subscription){
+          handleSubscriptionInvoice(event.data.object.customer, event.data.object.amount_due, res);
+        }
       default:
+        res.sendStatus(200);
         break;
     }
   }
@@ -1345,10 +1131,10 @@ function switchStripeEvents(event, res){
   }
 };
 
-//subscription was cancelled, check for over 100 listings
-function handleSubscriptionCancel(event){
+//subscription was cancelled, check for over 100 listings and remove it locally
+function handleSubscriptionCancel(customer_id, subscription_id){
   console.log('F: Checking if user has over 100 listings...');
-  listing_model.selectAbove100Listings(event.data.object.customer, function(result){
+  listing_model.selectAbove100Listings(customer_id, function(result){
     if (result.info.length > 100){
       console.log('F: Ex-Premium user has over 100 listings! Now setting some as inactive...');
       listing_model.updateListingsInfo(result.info,{
@@ -1360,10 +1146,171 @@ function handleSubscriptionCancel(event){
   });
 
   console.log('F: Removing Premium DomaHub subscription...');
-  account_model.cancelStripeSubscription(event.data.object.id, function(result){
+  account_model.cancelStripeSubscription(subscription_id, function(result){
     //done!
   });
 };
+
+//handle subscription payments and see if there are any applicable coupons
+function handleSubscriptionInvoice(customer_id, amount_due, res){
+  //get existing stripe customer data
+  stripe.customers.retrieve(customer_id, function(err, customer) {
+    if (err){
+      error.log(err, "Created invoice doesn't have an active customer attached!");
+    }
+    else if (customer && customer.subscriptions && customer.subscriptions.total_count == 1){
+      checkForRedeemedableCoupons(customer_id, parseFloat(customer.metadata.account_id), amount_due, function(result){
+        if (result){
+          res.sendStatus(200);
+        }
+        else {
+          res.sendStatus(404);
+        }
+      });
+    }
+  });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------PROMO HELPERS-------------------------------
+
+//create a new promo code on stripe with account_id as ID
+function createPromoCode(account_id, amount, callback){
+  console.log("SF: Creating Stripe promo code...");
+  stripe.coupons.create({
+    id: account_id,
+    duration : "once",
+    max_redemptions : 1,
+    amount_off : amount,
+    currency : "USD",
+  }, function(err, coupon) {
+    if (err){
+      error.log(err);
+      if (err.message == "Coupon already exists."){
+        stripe.coupons.del(account_id, function(){
+          createPromoCode(account_id, amount, callback);
+        });
+      }
+      else {
+        callback(false);
+      }
+    }
+    else {
+      callback(coupon.id);
+    }
+  });
+}
+
+//create a new promo code and apply it to a stripe customer with ID account_id
+function createPromoAndApply(stripe_customer_id, account_id, amount, cb){
+  createPromoCode(account_id, amount, function(coupon){
+    if (!coupon && cb){
+      cb(false);
+    }
+    else {
+      console.log("SF: Applying promo code to Stripe customer...");
+      stripe.customers.update(stripe_customer_id, {
+        coupon : coupon
+      }, function(err, customer){
+        if (err){
+          error.log(err, "Something went wrong while applying a promo code to a Stripe customer.");
+        }
+        else if (cb){
+          cb(true);
+        }
+      });
+    }
+  });
+}
+
+//redeem applicable coupons and create a new promo code on stripe
+function checkForRedeemedableCoupons(customer_id, account_id, amount_due, cb){
+  //redeem applicable coupons locally
+  account_model.getUnredeemedPromoCodesForUser(account_id, function(results){
+    var total_amount_off = 0;
+    var promo_code_ids = [];
+    var referral_code_ids = [];
+    var needle = 0;
+
+    //loop through and get the total amount we can discount (if greater, then stop)
+    while (total_amount_off < amount_due && needle < results.info.length){
+      if (parseFloat(results.info[needle].account_id) == account_id){
+        promo_code_ids.push([results.info[needle].id]);
+      }
+      else {
+        referral_code_ids.push([results.info[needle].id]);
+      }
+      total_amount_off += results.info[needle].amount_off;
+      needle++;
+    }
+    if (total_amount_off > 0){
+      //create a one-time coupon for total discount amount
+      createPromoAndApply(customer_id, account_id, total_amount_off, function(result){
+        if (!result){
+          error.log(err, "Something went wrong with creating and applying a coupon! Should probably delete Stripe coupons.");
+          cb(false);
+        }
+        //mark redeemed the coupons used
+        else {
+
+          //these arrays can be empty so we need to use promises
+          var redemption_promise_arrays = [];
+          if (promo_code_ids.length > 0){
+            redemption_promise_arrays.push(function(promo_code_ids){
+              return Q.Promise(function(resolve, reject, notify){
+                account_model.redeemUsedPromoCodes(promo_code_ids, function(result){
+                  if (result.state == "success"){
+                    resolve();
+                  }
+                  else {
+                    error.log("Something went wrong with marking promo codes as redeemed. Should probably delete Stripe coupons.");
+                    reject();
+                  }
+                });
+              });
+            }(promo_code_ids))
+          }
+          if (referral_code_ids.length > 0){
+            redemption_promise_arrays.push(function(referral_code_ids){
+              return Q.Promise(function(resolve, reject, notify){
+                account_model.redeemUsedReferralCodes(referral_code_ids, function(result){
+                  if (result.state == "success"){
+                    resolve();
+                  }
+                  else {
+                    error.log("Something went wrong with marking referral codes as redeemed. Should probably delete Stripe coupons.");
+                    reject();
+                  }
+                });
+              });
+            }(referral_code_ids))
+          }
+
+          Q.allSettled(redemption_promise_arrays).then(function(results){
+            var all_good = true;
+            for (var x = 0 ; x < results.length ; x++){
+              if (results[x].state != "fulfilled"){
+                var all_good = false;
+                break;
+              }
+            }
+
+            if (all_good){
+              cb(true);
+            }
+            else {
+              cb(false);
+            }
+          });
+        }
+      });
+    }
+    else {
+      cb(true);
+    }
+  });
+}
 
 //</editor-fold>
 

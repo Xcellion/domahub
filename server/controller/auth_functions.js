@@ -3,6 +3,7 @@
 var account_model = require('../models/account_model.js');
 
 var stripe_functions = require('./stripe_functions.js');
+var profile_functions = require('./profile_functions.js');
 
 var passport = require('../lib/passport.js').passport;
 var error = require('../lib/error.js');
@@ -26,7 +27,7 @@ var monkey_url = "https://us15.api.mailchimp.com/3.0/lists/9bcbd932cd/members"
 
 //</editor-fold>
 
-//<editor-fold>------------------------------------------DEMO USER OBJECT---------------------------------------
+//<editor-fold>-------------------------------DEMO USER OBJECT-------------------------------
 
 //user object for domahub demo
 var demo_domahub_user = {
@@ -475,17 +476,26 @@ module.exports = {
               error.handler(req, res, info.message);
             }
             else {
-              //create 1 promo code, with referer_id, and 1 duration_in_months
+              //create 1 promo code, with referer_id
               if (req.session.referer_id){
-                stripe_functions.createPromoCode("1", req.session.referer_id, "1", function(result){
-                  account_model.updatePromoCode(result[0], { account_id : user.id }, function(result){
+
+                //create a local coupon for the referral
+                profile_functions.createPromoCodes(1, 500, req.session.referer_id, function(codes){
+                  account_model.updatePromoCode(codes[0], {
+                    code : null,
+                    account_id : user.id,
+                    date_accessed : new Date()
+                  }, function(result){
                     delete req.session.referer_id;
                   });
                 });
               }
               //just update our database
               else if (req.session.promo_code_signup){
-                account_model.updatePromoCode(req.session.promo_code_signup, { account_id : user.id }, function(result){
+                account_model.updatePromoCode(req.session.promo_code_signup, {
+                  code : null,
+                  account_id : user.id
+                }, function(result){
                   delete req.session.promo_code_signup;
                 });
               }
