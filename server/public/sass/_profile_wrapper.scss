@@ -37,7 +37,6 @@
     }
     a {
       &.primary-theme {
-        border-left: 5px solid transparent;
         padding: 10px;
         @include laptop {
           padding: 10px 20px;
@@ -47,13 +46,12 @@
         }
         &.is-active {
           background-color: $primary-light;
-          border-color: $primary-darker;
           p {
             font-weight: 500;
           }
         }
         &.is-sublink {
-          padding: 5px;
+          padding: 5px 10px;
           @include laptop {
             padding: 10px 20px;
           }
