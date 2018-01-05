@@ -4,7 +4,6 @@ var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
 
-var stripe = require('./stripe_functions.js');
 var passport = require('../lib/passport.js').passport;
 
 var Categories = require("../lib/categories.js");
@@ -29,6 +28,8 @@ dns.setServers([
 var validator = require("validator");
 var request = require("request");
 var moment = require("moment");
+
+var randomstring = require("randomstring");
 
 //registrar info
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
@@ -697,6 +698,9 @@ module.exports = {
 
   //<editor-fold>-------------------------------------PROMO CODE-------------------------------
 
+  //create promo codes locally (only domahub database)
+  createPromoCodes : createPromoCodes,
+
   //get all referrals for a user
   getCouponsAndReferralsForUser : function(req, res, next){
     console.log("F: Getting all referrals made by user...");
@@ -716,13 +720,15 @@ module.exports = {
   },
 
   //get any existing promo code to apply to a new stripe subscription
-  getExistingCoupon : function(req, res, next){
+  getUnredeemedPromoCodes : function(req, res, next){
     console.log("F: Getting any existing coupons for user...");
 
-    account_model.getExistingPromoCodeByUser(req.user.id, function(result){
-      if (result.state == "success" && result.info.length > 0 && result.info[0].code){
-        req.user.existing_promo_code = result.info[0].code;
-        req.user.existing_referer_id = result.info[0].referer_id;
+    //get the total amount off of all existing unredeemed promo codes
+    account_model.getUnredeemedPromoCodesForUser(req.user.id, function(result){
+      if (result.state == "success" && result.info.length > 0){
+        req.user.existing_code_amount_off = result.info.reduce(function(a, c){
+          return a + c.amount_off;
+        }, 0);
       }
       next();
     });
@@ -737,7 +743,7 @@ module.exports = {
     }
     else {
 
-      //check if code exists and is unused
+      //check if code exists and is unclaimed
       account_model.checkPromoCodeUnused(req.body.code, function(result){
         if (result.state == "success" && result.info.length > 0){
           console.log("F: Promo code exists!");
@@ -759,18 +765,16 @@ module.exports = {
                 error.handler(req, res, "That's an invalid promo code!", "json");
               }
               else {
-                //check if current user has an existing promo code referral (if not, create a coupon)
+                //check if current already user has any existing referrals
                 account_model.checkExistingReferral(req.user.id, referer_id, function(result){
-                  req.user.new_referer_id = referer_id;
                   if (result.state == "success" && result.info.length > 0){
                     error.handler(req, res, "That's an invalid promo code!", "json");
                   }
+                  //all good! create a single local coupon
                   else {
                     console.log("F: User doesn't have any existing referrals! Creating coupon...");
-
-                    //create 1 promo code, with referer_id, and 1 duration_in_months
-                    stripe.createPromoCode("1", referer_id, "1", function(result){
-                      req.user.promo_code = result[0];
+                    createPromoCodes(1, 500, referer_id, function(codes){
+                      req.user.promo_code = codes[0];
                       next();
                     });
                   }
@@ -786,7 +790,7 @@ module.exports = {
 
         }
 
-        //already premium, no referrals allowed
+        //already premium, no referrals allowed (AKA, already signed up so we don't check for referrals, can just submit random usernames if this was allowed)
         else {
           error.handler(req, res, "That's an invalid promo code!", "json");
         }
@@ -794,78 +798,25 @@ module.exports = {
     }
   },
 
-  //check if this user has an existing promo code
-  checkExistingPromoCode : function(req, res, next){
-    console.log("F: Checking for any existing promo code for the user in our database...");
-    account_model.getExistingPromoCodeByUser(req.user.id, function(result){
-
-      //exists! delete it and re-create a combined coupon
-      if (result.state == "success" && result.info.length > 0 && result.info[0].code){
-        var existing_coupon_code = result.info[0].code || 1;
-        req.user.old_promos = [existing_coupon_code, req.user.promo_code];    //old promo codes to delete via stripe
-        var existing_duration_in_months = result.info[0].duration_in_months;
-        var existing_referer_id = result.info[0].referer_id || req.user.new_referer_id;
-        delete req.user.new_referer_id;
-
-        //delete newly made code
-        account_model.deletePromoCode(req.user.promo_code, function(result){
-          if (result.state == "success"){
-
-            //delete old existing code
-            account_model.deletePromoCode(existing_coupon_code, function(result){
-
-              //subtract any existing times redeemed from stripe
-              if (req.user.stripe_used_months){
-                var duration_in_months = existing_duration_in_months - req.user.stripe_used_months + 1;
-                delete req.user.stripe_used_months;
-              }
-              else {
-                var duration_in_months = existing_duration_in_months + 1;
-              }
-
-              //recreate new code with new duration_in_months
-              stripe.createPromoCode("1", existing_referer_id, duration_in_months, function(result){
-                req.user.promo_code = result[0];
-                next();
-              });
-
-            });
-
-          }
-          else {
-            error.handler(req, res, "Something went wrong with the promo code! Please refresh the page and try again!", "json");
-          }
-        });
-      }
-
-      //nothing exists, just go next
-      else {
-        next();
-      }
-    });
-  },
-
   //attach this user to the promo code
   applyPromoCode : function(req, res, next){
     console.log("F: Applying promo code to user in our database...");
-    //continue to stripe if existing user
-    if (req.user.stripe_subscription_id){
-      next();
-    }
-    //if not yet premium, just update our database
-    else {
-      account_model.updatePromoCode(req.user.promo_code, { account_id : req.user.id }, function(result){
-        if (result.state == "success"){
-          delete req.user.promo_code;
-          res.send({
-            state: "success"
-          });
-        }
-        else {
-          error.handler(req, res, "Something went wrong with the promo code! Please refresh the page and try again!", "json");
-        }
-      });
-    }
+    //remove coupon code ID and mark it as redeemed by account in domahub database
+    account_model.updatePromoCode(req.user.promo_code, {
+      code : null,
+      account_id : req.user.id,
+      date_accessed : new Date()
+    }, function(result){
+      if (result.state == "success"){
+        delete req.user.promo_code;
+        res.send({
+          state: "success"
+        });
+      }
+      else {
+        error.handler(req, res, "Something went wrong with the promo code! Please refresh the page and try again!", "json");
+      }
+    });
   },
 
   //</editor-fold>
@@ -1360,6 +1311,47 @@ function updateUserRegistrar(user, registrars){
     }
   }
 
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------------CREATE COUPON CODE-------------------------------
+
+//create local coupon codes (only domahub database)
+function createPromoCodes(number, amount_off, referer_id, cb){
+  console.log("F: Creating " + number + " coupon codes...");
+  insertPromoCodes(createUniqueCoupons(number, amount_off, referer_id), number, amount_off, referer_id, cb);
+}
+
+//create unique coupon codes
+function createUniqueCoupons(number, amount_off, referer_id){
+  var codes = [];
+  var amount_off_db = (amount_off) ? amount_off : 500;
+  if (Number.isInteger(parseFloat(number))){
+    for (var x = 0; x < number; x++){
+      var random_string = randomstring.generate(10);
+      codes.push([random_string, referer_id, amount_off_db]);
+    }
+  }
+  return codes;
+}
+
+//insert the coupon codes into domahub database
+function insertPromoCodes(codes, number, amount_off, referrer, cb){
+  console.log("F: Inserting newly created coupon codes into DomaHub database...");
+  account_model.createCouponCodes(codes, function(result){
+    if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
+      console.log("Duplicate coupon!");
+      insertPromoCodes(createUniqueCoupons(number, amount_off, referrer), number, amount_off, referrer, cb);
+    }
+    else if (result.state != "error"){
+      var codes_only = [];
+      for (var x = 0 ; x < codes.length ; x++){
+        codes_only.push(codes[x][0]);
+      }
+      cb(codes_only);
+    }
+  });
 }
 
 //</editor-fold>
