@@ -107,7 +107,7 @@ function emailViews(req, res, next){
   var data = {
     domain_name: "fuck.com",
     premium: false,
-    response: "Hey fuck yourself",
+    response: "Fuck you",
     listing_info: {
       primary_color: "#000"
     },
@@ -119,14 +119,15 @@ function emailViews(req, res, next){
     owner_name : "OWNERFUCK",
     offerer_name: "BUYERTWAT",
     offerer_email: "test@email.com",
+    price: "$5034",
     offer_id: 1,
     username: "fuck",
     email: "test@email.com",
-    accepted: false,
+    accepted: true,
     offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     offer: moneyFormat.to(parseFloat("1231324")),
-    verification_code: randomstring.generate(10),
+    verification_code: "Fjj380bnD",
     message: "djkljakljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
   }
 

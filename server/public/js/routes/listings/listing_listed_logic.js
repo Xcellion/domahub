@@ -64,7 +64,7 @@ $(document).ready(function() {
       if (checkPhone()){
         $("button[type=submit][clicked=true]").addClass('is-loading');
         $(".notification").addClass('is-hidden').removeClass('is-active');
-        $(".contact-input").addClass('is-disabled');
+        $(".contact-input").attr('disabled', true);
 
         //comparison only, no need for AJAX
         if (compare){
@@ -97,7 +97,7 @@ $(document).ready(function() {
             }
             else {
               clearNotification();
-              $(".contact-input").removeClass('is-disabled');
+              $(".contact-input").removeAttr('disabled');
               errorMessage(data.message);
             }
           });

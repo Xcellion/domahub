@@ -32,6 +32,7 @@
   }
   &::before {
     @include skew(0,-6);
+    @include box-shadow(0,-10px,20px,$border,4px,inset);
     content:"";
     background-image: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
     position: absolute;

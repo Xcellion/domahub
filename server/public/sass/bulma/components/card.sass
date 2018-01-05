@@ -48,6 +48,9 @@
   position: relative
   .notification
     border-radius: 0
+  &:first-child
+    .notification
+      border-radius: $radius $radius 0 0
 
 .card-content
   padding: 20px

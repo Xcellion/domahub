@@ -741,7 +741,7 @@ module.exports = {
               username : username,
             }, {
               to: email,
-              from: 'general@domahub.com',
+              from: 'DomaHub <general@domahub.com>',
               subject: "Hi, " + username + '. Welcome to DomaHub!',
             }, function(state){
               if (state == "success"){
@@ -781,7 +781,7 @@ module.exports = {
         token : req.user.token
       }, {
         to: user.email,
-        from: 'support@domahub.com',
+        from: 'DomaHub Support <support@domahub.com>',
         subject: "Hi, " + user.username + '! Please verify your email address for DomaHub!',
       }, function(state){
         req.logout();
@@ -856,7 +856,7 @@ module.exports = {
               token : token
             }, {
               to: req.body.email,
-              from: 'support@domahub.com',
+              from: 'DomaHub Support <support@domahub.com>',
               subject: 'Forgot your password for domahub?',
             }, function(err) {
               res.send({
@@ -963,7 +963,7 @@ function generateVerify(req, res, email, username, cb){
           token : verify_token
         }, {
           to: email,
-          from: 'support@domahub.com',
+          from: 'DomaHub Support <support@domahub.com>',
           subject: "Hi, " + username + '! Please verify your email address for DomaHub!',
         }, cb);
       }
