@@ -168,6 +168,7 @@ module.exports = {
           error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
         }
         else {
+          console.log("F: Deleting Stripe customer default card...");
           stripe.customers.deleteCard(
             customer.id,
             customer.default_source,
@@ -178,7 +179,18 @@ module.exports = {
                 }
                 else {
                   updateUserStripeCustomer(req.user, customer);
-                  next();
+
+                  //cancel subscription at period end if they have one
+                  if (req.user.stripe_subscription_id){
+                    next();
+                  }
+                  //otherwise just send success
+                  else {
+                    res.json({
+                      state: "success",
+                      user: req.user
+                    });
+                  }
                 }
               });
             }
