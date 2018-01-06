@@ -827,9 +827,9 @@ function newStripeCustomer(req, res, next){
 //check for existing coupons and then create new subscription
 function newStripeSubscription(req, res, next){
   var premium_annual = (req.body.annual && req.body.annual == "true");
-  // var amount_due = (premium_annual) ? 5000 : 500;
+  var amount_due = (premium_annual) ? 5000 : 500;
 
-  var amount_due = 500;   //for testing daily subscription
+  // var amount_due = 500;   //for testing daily subscription
   checkForRedeemedableCoupons(req.user.stripe_customer_id, req.user.id, amount_due, function(result){
     if (result){
       console.log("SF: Creating a new Stripe subscription...");
@@ -837,8 +837,8 @@ function newStripeSubscription(req, res, next){
       //create the subscription in stripe!
       stripe.subscriptions.create({
         customer: req.user.stripe_customer_id,
-        // plan: (premium_annual) ? "premium_account_annual" : "premium_account",
-        plan: "premium_account_test",      //daily test plan
+        plan: (premium_annual) ? "premium_account_annual" : "premium_account",
+        // plan: "premium_account_test",      //daily test plan
         metadata: {
           "account_id" : req.user.id,
           "username" : req.user.username
