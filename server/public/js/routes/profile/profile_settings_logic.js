@@ -600,7 +600,7 @@ function showSectionByURL(){
             next_charge_text += " will be posted to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."
           }
           else {
-            next_charge_text += " has been waived due to your existing promotional credits!";
+            next_charge_text += " will be waived thanks to your promotional credits!";
           }
         }
         $("#next-charge-tip").text(next_charge_text);
@@ -967,7 +967,7 @@ function showSectionByURL(){
         $("#unused-credit-status").text('You still have unused credits to use towards a Premium account!');
       }
       else {
-        $("#unused-credit-status").text('These credits will be applied at the next billing cycle.');
+        $("#unused-credit-status").text('Any unused credits will be applied three days before the next billing cycle.');
       }
 
       $("#referral-table").removeClass('is-hidden');

@@ -827,8 +827,9 @@ function newStripeCustomer(req, res, next){
 //check for existing coupons and then create new subscription
 function newStripeSubscription(req, res, next){
   var premium_annual = (req.body.annual && req.body.annual == "true");
-  var amount_due = (premium_annual) ? 5000 : 500;
+  // var amount_due = (premium_annual) ? 5000 : 500;
 
+  var amount_due = 500;   //for testing daily subscription
   checkForRedeemedableCoupons(req.user.stripe_customer_id, req.user.id, amount_due, function(result){
     if (result){
       console.log("SF: Creating a new Stripe subscription...");
@@ -836,8 +837,8 @@ function newStripeSubscription(req, res, next){
       //create the subscription in stripe!
       stripe.subscriptions.create({
         customer: req.user.stripe_customer_id,
-        plan: (premium_annual) ? "premium_account_annual" : "premium_account",
-        // plan: "premium_account_test",      //daily test plan
+        // plan: (premium_annual) ? "premium_account_annual" : "premium_account",
+        plan: "premium_account_test",      //daily test plan
         metadata: {
           "account_id" : req.user.id,
           "username" : req.user.username
@@ -859,18 +860,20 @@ function newStripeSubscription(req, res, next){
             stripe_customer_id : req.user.stripe_customer_id
           }
 
-          //email congrats
-          mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'welcome_premium.ejs'), {
-            username : req.user.username,
-          }, {
-            to: req.user.email,
-            from: 'DomaHub <general@domahub.com>',
-            subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
-          }, function(state){
-            if (state == "success"){
-              console.log("F: Successfully sent email!");
-            }
-          });
+          //email congrats on prod only
+          if (process.env.NODE_ENV != "dev"){
+            mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'welcome_premium.ejs'), {
+              username : req.user.username,
+            }, {
+              to: req.user.email,
+              from: 'DomaHub <general@domahub.com>',
+              subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
+            }, function(state){
+              if (state == "success"){
+                console.log("F: Successfully sent email!");
+              }
+            });
+          }
 
           next();
         }
@@ -1117,6 +1120,10 @@ function switchStripeEvents(event, res){
         handleSubscriptionCancel(event.data.object.customer, event.data.object.subscription);
         res.sendStatus(200);
         break;
+      case "customer.deleted":
+        handleCustomerDelete(event.data.object.customer.id);
+        res.sendStatus(200);
+        break;
       case "invoice.upcoming":
         if (event.data.object.customer && event.data.object.subscription){
           handleSubscriptionInvoice(event.data.object.customer, event.data.object.amount_due, res);
@@ -1147,6 +1154,14 @@ function handleSubscriptionCancel(customer_id, subscription_id){
 
   console.log('F: Removing Premium DomaHub subscription...');
   account_model.cancelStripeSubscription(subscription_id, function(result){
+    //done!
+  });
+};
+
+//customer was deleted
+function handleCustomerDelete(customer_id){
+  console.log('F: Removing Premium DomaHub customer...');
+  account_model.cancelStripeCustomer(customer_id, function(result){
     //done!
   });
 };
@@ -1186,13 +1201,13 @@ function createPromoCode(account_id, amount, callback){
     currency : "USD",
   }, function(err, coupon) {
     if (err){
-      error.log(err);
       if (err.message == "Coupon already exists."){
         stripe.coupons.del(account_id, function(){
           createPromoCode(account_id, amount, callback);
         });
       }
       else {
+        error.log(err);
         callback(false);
       }
     }
