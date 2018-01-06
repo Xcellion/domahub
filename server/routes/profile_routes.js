@@ -178,8 +178,7 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.deleteCustomerCard,
-    stripe_functions.cancelStripeSubscription,
-    profile_functions.getAccountListings
+    stripe_functions.cancelStripeSubscription
   ]);
 
   //upgrade account to premium
@@ -197,8 +196,7 @@ module.exports = function(app){
   app.post("/profile/downgrade", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    stripe_functions.cancelStripeSubscription,
-    profile_functions.getAccountListings
+    stripe_functions.cancelStripeSubscription
   ]);
 
   //</editor-fold>

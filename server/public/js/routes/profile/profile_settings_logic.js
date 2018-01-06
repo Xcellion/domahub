@@ -653,8 +653,10 @@ function showSectionByURL(){
         $(".existing-cc").text("");
         $(".tip.existing-cc").text("Click the button to add a default credit card!");
 
-        //show notification that premium is expiring
-        $("#premium-expire-notification").removeClass('is-hidden');
+        //show notification that premium is expiring if they have a subscription
+        if (user.stripe_subscription){
+          $("#premium-expire-notification").removeClass('is-hidden');
+        }
       }
 
     }
