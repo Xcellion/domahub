@@ -297,6 +297,15 @@ module.exports = {
     database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_subscription_id);
   },
 
+  //cancels a user's premium customer
+  cancelStripeCustomer : function(stripe_customer_id, callback){
+    console.log("DB: Cancelling Stripe customer...");
+    var query = "UPDATE accounts \
+          SET stripe_customer_id = null \
+        WHERE stripe_customer_id = ? "
+    database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_customer_id);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------DELETES-------------------------------
