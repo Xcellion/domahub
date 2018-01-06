@@ -977,6 +977,7 @@ function showSectionByURL(){
     else {
       $("#upgrade-button .button-text").text("Upgrade $5/mo");
       $("#no-referral-table").removeClass('is-hidden');
+      $(".unused-credits").text("$0.00");
     }
   }
 
