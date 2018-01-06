@@ -944,6 +944,10 @@ function showSectionByURL(){
           else {
             var redeemed_text = "Not yet usable!";
             referral_clone.find(".icon").removeClass('is-hidden');
+            //to fix the overlap on tooltips for first two rows
+            if (x < 2){
+              referral_clone.find(".icon").attr("data-balloon-pos", "down");
+            }
           }
           referral_clone.find(".referral-redeemed").text(redeemed_text);
         }
