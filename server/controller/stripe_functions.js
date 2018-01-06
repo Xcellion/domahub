@@ -1133,7 +1133,7 @@ function switchStripeEvents(event, res){
         res.sendStatus(200);
         break;
       case "customer.deleted":
-        handleCustomerDelete(event.data.object.customer.id);
+        handleCustomerDelete(event.data.object.id);
         res.sendStatus(200);
         break;
       case "invoice.upcoming":

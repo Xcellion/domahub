@@ -594,16 +594,7 @@ function showSectionByURL(){
         $("#renew-status").text("Premium is currently active! Press the button to cancel renewal.");
 
         //next charge (invoice)
-        if (user.stripe_customer.upcoming_invoice){
-          var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.subtotal / 100) + " on " + moment(user.stripe_customer.upcoming_invoice.date).format("MMMM D, YYYY");
-          if (user.stripe_customer.upcoming_invoice.amount_due > 0){
-            next_charge_text += " will be posted to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."
-          }
-          else {
-            next_charge_text += " will be waived thanks to your promotional credits!";
-          }
-        }
-        $("#next-charge-tip").text(next_charge_text);
+        setupNextChargeTip();
 
         //renewing, so hide the renew button
         $("#renew-premium-button").addClass("is-hidden").removeClass('is-loading');
@@ -741,6 +732,20 @@ function showSectionByURL(){
           $("#cancel-premium-button").addClass('is-disabled');
         }
       });
+    }
+  }
+
+  //set up next invoice charge
+  function setupNextChargeTip(){
+    if (user.stripe_customer){
+      var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.subtotal / 100) + " on " + moment(user.stripe_customer.upcoming_invoice.date).format("MMMM D, YYYY");
+      if (user.stripe_customer.upcoming_invoice.amount_due > 0){
+        next_charge_text += " will be posted to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."
+      }
+      else {
+        next_charge_text += " will be waived thanks to your promotional credits!";
+      }
+      $("#next-charge-tip").text(next_charge_text);
     }
   }
 
@@ -975,6 +980,8 @@ function showSectionByURL(){
       else {
         $("#unused-credit-status").text('Any unused credits will be applied three days before the next billing cycle.');
       }
+
+      setupNextChargeTip();
 
       $("#referral-table").removeClass('is-hidden');
     }
