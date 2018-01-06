@@ -76,7 +76,7 @@
     $(document).ready(function(){
 
       //build date selector
-      for (var x = analyzed_data.length - 1 ; x >= 0 ; x--){
+      for (var x = 0 ; x < analyzed_data.length ; x++){
         $(".dates-select").append("<option value=" + x + ">" + analyzed_data[x].date + "</option>")
       }
 

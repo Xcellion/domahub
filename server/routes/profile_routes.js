@@ -150,6 +150,8 @@ module.exports = function(app){
   app.post("/profile/getreferrals", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
+    profile_functions.getUnredeemedPromoCodes,
+    stripe_functions.getStripeCustomerNextInvoice,
     profile_functions.getCouponsAndReferralsForUser,
   ]);
 
