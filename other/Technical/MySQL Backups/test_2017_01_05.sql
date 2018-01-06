@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 29, 2017 at 06:29 PM
+-- Generation Time: Jan 06, 2018 at 02:54 AM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -47,21 +47,21 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `accounts`
 --
 
 INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `date_created`, `date_accessed`, `type`, `token`, `token_exp`, `stripe_account_id`, `stripe_customer_id`, `stripe_subscription_id`, `paypal_email`) VALUES
-(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2017-12-28 03:54:14', 2, NULL, NULL, 'acct_1BMX8eLa9wes0Toj', 'cus_Bk1UnVsezBS6Rc', NULL, 'won2blee@gmail.com'),
+(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2018-01-06 07:28:16', 2, NULL, NULL, NULL, 'cus_C5I1rIVxkAKJS3', 'sub_C5I1Dre5mK8t0y', 'won2blee@gmail.com'),
 (2, 'DomaHub', 'domahub@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2017-12-21 07:49:58', 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2017-12-20 01:53:54', 2, NULL, NULL, NULL, 'cus_BxOjhkAujWsP04', 'sub_BxOk9IGf3I3lJU', 'wonq33@gmail.com'),
-(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2016-09-13 06:04:17', '2017-12-16 05:21:09', 2, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2017-11-07 23:30:55', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2018-01-04 01:14:23', 2, NULL, NULL, NULL, 'cus_BxOjhkAujWsP04', 'sub_BxOk9IGf3I3lJU', 'wonq33@gmail.com'),
+(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2016-09-13 06:04:17', '2018-01-05 01:13:23', 2, NULL, NULL, NULL, NULL, NULL, NULL),
+(37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2017-11-07 23:30:55', 0, '6284771d2c', '2018-01-03 08:20:58', NULL, NULL, NULL, NULL),
 (41, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2017-11-30 07:05:43', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2017-11-08 01:21:07', '2017-12-28 00:29:59', 1, NULL, NULL, 'acct_1BVo0bI1zc0NC6Vj', 'cus_BjSGpQ0LNzdws7', 'sub_BjSK8LETRWURUg', NULL),
-(43, 'test1', 'test@test.com', '$2a$10$TxbjGkVt.yvgkMpDSNuYhuO0tHyn.sWeYu36oj.2dK7FlfzfaVmVC', '2017-12-22 13:03:40', '2017-12-22 13:03:40', 0, 'd9b341627f', '2017-12-23 00:03:40', NULL, NULL, NULL, NULL);
+(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2017-11-08 01:21:07', '2018-01-04 01:12:26', 1, NULL, NULL, 'acct_1BVo0bI1zc0NC6Vj', 'cus_BjSGpQ0LNzdws7', 'sub_C4Q6DmgHXP1jqM', NULL),
+(43, 'test1', 'test@test.com', '$2a$10$TxbjGkVt.yvgkMpDSNuYhuO0tHyn.sWeYu36oj.2dK7FlfzfaVmVC', '2017-12-22 13:03:40', '2017-12-22 13:03:40', 0, '8e29bb16a5', '2018-01-03 08:20:58', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -91,29 +91,20 @@ CREATE TABLE IF NOT EXISTS `chat_history` (
 
 DROP TABLE IF EXISTS `coupon_codes`;
 CREATE TABLE IF NOT EXISTS `coupon_codes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(10) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
   `account_id` int(11) DEFAULT NULL,
   `referer_id` int(11) DEFAULT NULL,
   `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `date_accessed` timestamp NULL DEFAULT NULL,
-  `duration_in_months` int(11) NOT NULL DEFAULT '1',
-  UNIQUE KEY `code` (`code`),
+  `date_redeemed` timestamp NULL DEFAULT NULL,
+  `date_redeemed_r` timestamp NULL DEFAULT NULL,
+  `amount_off` int(11) NOT NULL DEFAULT '500',
+  PRIMARY KEY (`id`),
   UNIQUE KEY `code_unique` (`code`),
   UNIQUE KEY `referral_unique` (`account_id`,`referer_id`),
-  UNIQUE KEY `signup_code_account_id_fk` (`account_id`),
   KEY `signup_code_referrer_id_fk` (`referer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `coupon_codes`
---
-
-INSERT INTO `coupon_codes` (`code`, `account_id`, `referer_id`, `date_created`, `date_accessed`, `duration_in_months`) VALUES
-('SI0Ydr5E2b', 1, NULL, '2017-11-08 19:40:24', '2017-11-09 00:40:24', 1),
-('zGz899C5j5', 42, 1, '2017-11-08 20:07:42', '2017-11-09 01:07:42', 2),
-('c7riu1SXEp', 5, NULL, '2017-12-16 00:54:32', '2017-12-16 05:54:33', 1),
-('RXFavEeMai', 43, NULL, '2017-12-22 18:03:40', NULL, 1),
-('pPynsu6yu2', NULL, NULL, '2017-12-27 21:23:04', NULL, 1);
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
