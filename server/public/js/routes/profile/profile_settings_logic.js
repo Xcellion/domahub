@@ -144,7 +144,7 @@ $(document).ready(function() {
     //click to delete existing card
     $("#delete-card-button").on("click", function(){
       clearNotification();
-      if (user.stripe_subscription && user.stripe_subscription.cancel_at_period_end){
+      if (!user.stripe_subscription || (user.stripe_subscription && user.stripe_subscription.cancel_at_period_end)){
         submitDeleteCustomerCard();
       }
       else {
