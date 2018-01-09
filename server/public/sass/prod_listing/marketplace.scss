@@ -30,6 +30,17 @@
   }
 }
 
+.nothing-exists-row {
+  padding:25px;
+  min-height:200px;
+  img {
+    width:100px;
+  }
+  p {
+    margin-top:25px;
+  }
+}
+
 .control-item {
   display: flex;
   justify-content: flex-start;

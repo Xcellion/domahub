@@ -822,7 +822,7 @@ function newStripeCustomer(req, res, next){
     }
   }, function(err, customer) {
     if (err){
-      error.log(err, "Failed to create Stripe customer.");
+      error.log(err, "Failed to create Stripe customer." + req.user.username);
       error.handler(req, res, err.message, "json");
     }
     else {
@@ -857,7 +857,7 @@ function newStripeSubscription(req, res, next){
         }
       }, function(err, subscription) {
         if (err){
-          error.log(err, "Failed to create Stripe subscription.");
+          error.log(err, "Failed to create Stripe subscription." + req.user.username);
           error.handler(req, res, err.message, "json");
         }
         else {
