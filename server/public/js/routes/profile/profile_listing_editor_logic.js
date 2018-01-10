@@ -1676,7 +1676,6 @@ function updateEditorUnverified(selected_domain_ids){
     $(".current-domain-name").text(verifying_domain.domain_name);
     $(".verification-plural").text("");
     $(".verification-domains-plural").text("this domain");
-    $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
   }
 
   //create all tables for each unverified listing
@@ -1860,6 +1859,15 @@ function checkDNSAllDone(total_unverified){
   //remove loading from refresh, remove loading row, show all cloned rows
   if ($(".cloned-dns-table").length == total_unverified) {
     $(".verify-hidden-while-loading").removeClass('is-hidden');
+
+    //figure out hiding or show next/prev buttons
+    if (total_unverified > 1){
+      $("#prev-dns-table-button, #next-dns-table-button").removeClass('is-hidden');
+    }
+    else {
+      $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
+    }
+
     $("#refresh-dns-button").removeClass('is-loading');
     $("#loading-dns-table").addClass('is-hidden');
 

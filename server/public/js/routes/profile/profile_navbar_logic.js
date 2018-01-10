@@ -6,6 +6,7 @@ $(document).ready(function() {
 
   //toggle user drop down menu on icon button click
   $(".nav-button").on("click", function() {
+    $(".nav-menu").removeClass('is-active');
     $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
     $("#" + $(this).data("menu")).toggleClass("is-hidden").find("textarea").focus();
   });
@@ -220,6 +221,10 @@ function showNotifications() {
   //if not premium
   if (!user.stripe_subscription){
     appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
+  }
+  //if premium expiring
+  else if (user.stripe_subscription.cancel_at_period_end){
+    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Premium is expiring!</a>");
   }
 
   calcNotificationCounter();

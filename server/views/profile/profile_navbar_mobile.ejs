@@ -85,6 +85,9 @@
         </ul>
         <p class="menu-label">Account</p>
         <ul class="menu-list">
+          <% if (process.env.NODE_ENV == "dev" || (user.email == "won2blee@gmail.com" && user.id == 1)) { %>
+            <li><a href="/admin" title="Admin">Admin Panel</a></li>
+          <% } %>
           <li><a href="/logout" title="Log Out">Log Out</a></li>
         </ul>
       </aside>

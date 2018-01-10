@@ -851,7 +851,7 @@ function getDomainDNSPromise(listing_obj){
         //look up any existing DNS A Records
         dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
           if (err){
-            if (err.code != "ENOTFOUND"){
+            if (err.code != "ENODATA"){
               error.log(err, "Failed to look up A record information for table building during verification.");
             }
             reject({
@@ -874,7 +874,7 @@ function getDomainIPPromise(listing_obj){
   return Q.Promise(function(resolve, reject, notify){
     dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
       if (err) {
-        if (err.code != "ENOTFOUND"){
+        if (err.code != "ENODATA"){
           error.log(err, "Failed to look up DNS records while trying to verify listings.");
         }
         reject(err);
