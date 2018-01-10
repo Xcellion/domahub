@@ -10,10 +10,12 @@ $(document).ready(function() {
 
     //show background image
     if (listing_info.background_image){
-      $("#page-contents:not(.no-background)").css("background-image", "url(" + listing_info.background_image + ")");
-      $("#page-contents:not(.no-background)").css("background-repeat", "no-repeat");
-      $("#page-contents:not(.no-background)").css("background-position", "center");
-      $("#page-contents:not(.no-background)").css("background-size", "cover");
+      $("#page-contents:not(.no-background)").css({
+        "background-image" : "url(" + listing_info.background_image + ")",
+        "background-repeat" : "no-repeat",
+        "background-position" : "center",
+        "background-size" : "cover"
+      });
     }
 
     //show custom logo

@@ -188,7 +188,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           <div class="control has-icon">
             <span class="select is-fullwidth">
               <select tabindex="0" id="font-name-input" class="theme-changeable-input">
-                <%# make all the categories %>
+                <%# make all the fonts %>
                 <% for (var x = 0; x < fonts.length; x++){ %>
                   <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
                 <% } %>
