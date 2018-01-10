@@ -208,7 +208,9 @@
     padding: 8px;
   }
   textarea {
+    @include box-shadow(0,0,0,$border,0);
     border-radius: $radius $radius 0 0;
+    border: none;
   }
   @include mobile {
     right: -97px;
@@ -244,4 +246,17 @@
   margin-right: auto;
   margin-bottom: 10px;
   width: 36px;
+}
+
+.columns {
+  &.is-laptop {
+    @include laptop {
+      display: block;
+      .column {
+        flex: auto;
+        padding: 20px;
+        width: 100%;
+      }
+    }
+  }
 }
