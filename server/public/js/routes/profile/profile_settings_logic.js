@@ -737,7 +737,7 @@ function showSectionByURL(){
 
   //set up next invoice charge
   function setupNextChargeTip(){
-    if (user.stripe_customer){
+    if (user.stripe_customer && user.stripe_customer.upcoming_invoice){
       var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.subtotal / 100) + " on " + moment(user.stripe_customer.upcoming_invoice.date).format("MMMM D, YYYY");
       if (user.stripe_customer.upcoming_invoice.amount_due > 0){
         next_charge_text += " will be posted to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."

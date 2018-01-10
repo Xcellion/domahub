@@ -119,6 +119,8 @@ module.exports = {
       listings.date_created, \
       listings.domain_name, \
       listings.status, \
+      listings.deleted, \
+      listings.verified, \
       listings.owner_id, \
       listings.min_price, \
       listings.buy_price, \
