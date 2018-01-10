@@ -914,7 +914,7 @@ function updateEditorOffers(selected_domain_ids){
 
   //change domain name header
   if (selected_domain_ids.length == 0){
-    $(".editor-title").text("My Listing Offers");
+    $(".editor-title").text("My Offers");
   }
   else {
     $(".editor-title").text("Viewing Offers - ");

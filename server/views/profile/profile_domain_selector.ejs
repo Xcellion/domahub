@@ -1,8 +1,5 @@
 <div id="domain-selector" class="is-hidden">
   <div id="domain-selector-toolbox" class="content">
-    <div class="content">
-      <h2 class="is-bold">My Listings<span id="total-selected-text" class="is-hidden"></span></h2>
-    </div>
 
     <!-- BUTTON MENU -->
     <div class="yes-listings-elem button-wrapper is-mobile control">
@@ -136,16 +133,18 @@
       <tr id="loading-listings-row" class="no-hover-effect">
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
-            <p class="icon is-medium"><i class="far fa-spin fa-refresh"></i></p>
+            <p class="icon is-medium"><i class="far fa-spin fa-sync-alt"></i></p>
             <p>Now loading your DomaHub listings...</p>
           </div>
         </td>
       </tr>
       <tr id="no-domains-row" class="no-hover-effect no-listings-elem is-hidden">
         <td colspan="6">
-          <div class="nothing-exists-row has-text-centered">
-            <img src="/images/lib/smile.png" />
-            <p class="control has-text-centered">
+          <div class="nothing-exists-row content has-text-centered">
+            <div class="icon is-large is-primary">
+              <i class="far fa-exclamation-circle"></i>
+            </div>
+            <p>
               You have no listings. Let's go make some!
             </p>
             <a class="button is-primary is-stylish" href="/listings/create">
@@ -159,8 +158,10 @@
       </tr>
       <tr id="no-listings-row" class="no-hover-effect is-hidden">
         <td colspan="6">
-          <div class="nothing-exists-row has-text-centered">
-            <img src="/images/lib/ggface.png" />
+          <div class="nothing-exists-row content has-text-centered">
+            <div class="icon is-large is-danger">
+              <i class="far fa-exclamation-circle"></i>
+            </div>
             <p>Oh, no! There are no matching listings!</p>
           </div>
         </td>

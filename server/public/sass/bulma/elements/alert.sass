@@ -1,0 +1,32 @@
+.alert
+  +box-shadow(0,2px,10px,$border,1px)
+  align-items: center
+  border-radius: 25px
+  display: inline-flex
+  justify-content: flex-start
+  padding: 5px
+  .tag
+    margin-right: 5px
+  p
+    font-size: $size-7
+    padding-right: 5px
+  &.has-arrow
+    position: relative
+    padding-right: 16px
+    &::before
+      +rotate(-135)
+      border: 2px solid $text
+      border-right: 0
+      border-top: 0
+      content: " "
+      display: block
+      height: 7px
+      pointer-events: none
+      position: absolute
+      width: 7px
+      right: 10px
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      background-color: $color

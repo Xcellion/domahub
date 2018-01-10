@@ -485,8 +485,7 @@ function multiSelectButtons(clicked_row){
 
   //selected something
   if (selected_rows.length > 0){
-    $(".selector-button, #total-selected-text").removeClass("is-hidden");
-    $("#total-selected-text").text(" - " + selected_rows.length + " Selected");
+    $(".selector-button").removeClass("is-hidden");
     $("#selector-delete-button").attr("title", "Delete " + ((selected_rows.length == 1) ? "Listing" : "Listings"));
 
     //verified selections (show edit)
@@ -514,7 +513,7 @@ function multiSelectButtons(clicked_row){
     }
   }
   else {
-    $(".selector-button, #total-selected-text").addClass("is-hidden");
+    $(".selector-button").addClass("is-hidden");
   }
 
   //every row is selected

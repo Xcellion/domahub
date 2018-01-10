@@ -1,39 +1,93 @@
-<nav class="nav is-hidden-tablet is-white">
-  <div class="nav-left">
-    <div class="nav-item">
-      <a id="nav-logo" class="flat-logo is-primary is-hidden-mobile" tabindex="0" title="Home" href="/">
-      </a>
-      <a class="circle-logo is-hidden-tablet" tabindex="0" title="Home" href="/"></a>
-    </div>
+<nav class="nav is-profile">
+  <div class="nav-item is-toggle is-hidden-tablet">
+    <span class="nav-toggle is-black" tabindex="0">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
   </div>
+  <ul class="nav-menu menu-list is-left">
+    <li class="is-hidden-tablet">
+      <a tabindex="0" title="Dashboard" href="/profile/dashboard">Dashboard</a>
+    </li>
+    <li class="is-hidden-tablet">
+      <a tabindex="0" title="Listings" href="/profile/mylistings">My Listings</a>
+    </li>
+    <li class="is-hidden-tablet">
+      <a tabindex="0" title="Create Listing" href="/listings/create">Create Listing</a>
+    </li>
+    <li class="is-hidden-tablet">
+      <a tabindex="0" title="View Offers" href="/profile/mylistings?tab=offers">View Offers</a>
+    </li>
+    <li class="is-hidden-tablet">
+      <a tabindex="0" title="Settings" href="/profile/settings">Settings</a>
+    </li>
+  </ul>
+  <h2 id="current-view-name" class="nav-item">
+
+  </h2>
   <div class="nav-center">
 
   </div>
-  <span class="nav-toggle is-black" tabindex="0">
-    <span></span>
-    <span></span>
-    <span></span>
-  </span>
-  <div class="nav-right">
-    <div class="nav-menu">
-      <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Dashboard" href="/profile/dashboard">Dashboard</a>
+  <div class="nav-right user-panel">
+    <div class="user-button nav-item" title="Send feedback">
+      <button id="contact-button" class="button nav-button is-dark is-transparent no-shadow" data-menu="contact-dropdown-menu">
+        <div class="icon">
+          <i class="far fa-comment"></i>
+        </div>
+      </button>
+      <div id="contact-dropdown-menu" class="nav-drop expand-out is-hidden">
+        <form id="contact-form">
+          <textarea id="contact_message" required class="textarea no-shadow" placeholder="Send us your feedback!"></textarea>
+          <div class="control">
+            <button id="contact-submit-button" class="button is-stylish is-small is-fullwidth is-primary" type="submit" form="contact-form">
+              <div class="icon is-small">
+                <i class="far fa-check-circle"></i>
+              </div>
+              <span id="contact-submit-text">Send Message</span>
+            </button>
+          </div>
+        </form>
       </div>
-      <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Listings" href="/profile/mylistings">My Listings</a>
-      </div>
-      <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Create Listing" href="/listings/create">Create Listing</a>
-      </div>
-      <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="View Offers" href="/profile/mylistings?tab=offers">View Offers</a>
-      </div>
-      <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Settings" href="/profile/settings">Settings</a>
-      </div>
-      <div class="nav-item">
-        <a tabindex="0" class="nav-link" title="Log Out" href="/logout">Log Out</a>
-      </div>
+    </div>
+    <div class="user-button nav-item" title="Check Your Notifications">
+      <button id="notification-dropdown-button" class="button nav-button is-dark is-transparent no-shadow" data-menu="notification-dropdown-menu">
+        <span id="notification-counter" class="is-hidden"></span>
+        <div class="icon">
+          <i class="far fa-bell"></i>
+        </div>
+      </button>
+      <aside id="notification-dropdown-menu" class="nav-drop menu expand-out is-hidden">
+        <p class="menu-label">
+          Notifications
+          <span id="notification-number" class="is-pulled-right"></span>
+        </p>
+        <ul id="notification-tray" class="menu-list"></ul>
+      </aside>
+    </div>
+    <div class="user-button nav-item" title="Other Links">
+      <button id="user-dropdown-button" class="button nav-button is-primary is-inverted" data-menu="user-dropdown-menu">
+        <div class="icon">
+          <i class="far fa-user"></i>
+        </div>
+      </button>
+      <aside id="user-dropdown-menu" class="nav-drop expand-out is-hidden">
+        <p class="menu-label">Support</p>
+        <ul class="menu-list">
+          <li><a href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
+          <li><a href="/faq" title="FAQ">FAQ</a></li>
+          <li><a href="/features#pricing" title="Pricing">Pricing</a></li>
+        </ul>
+        <p class="menu-label">Company</p>
+        <ul class="menu-list">
+          <li><a href="/terms" title="Terms of Service">Terms of Service</a></li>
+          <li><a href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
+        </ul>
+        <p class="menu-label">Account</p>
+        <ul class="menu-list">
+          <li><a href="/logout" title="Log Out">Log Out</a></li>
+        </ul>
+      </aside>
     </div>
   </div>
 </nav>

@@ -5,30 +5,30 @@
 <div class="left-menu">
   <div class="menu-info">
     <a class="dh-logo" title="Home" href="/">
-      <div class="flat-logo is-white is-hidden-laptop"></div>
-      <div class="circle-logo is-white is-hidden-widescreen"></div>
+      <div class="flat-logo is-hidden-laptop"></div>
+      <div class="circle-logo is-hidden-widescreen"></div>
     </a>
-    <p class="break-all is-white is-hidden-laptop"><%= user.username %></p>
+    <p class="break-all is-hidden-laptop"><%= user.username %></p>
   </div>
   <aside class="menu">
     <ul class="menu-list">
       <li class="menu-item has-icon">
         <a id="dashboard-left-tab" title="View My Dashboard" href="/profile/dashboard" class="left-tab primary-theme">
-          <div class="icon is-white"><i class="far fa-window-maximize"></i></div>
-          <p class="is-white is-hidden-laptop">Dashboard</p>
+          <div class="icon"><i class="far fa-window-maximize"></i></div>
+          <p class="is-hidden-laptop">Dashboard</p>
         </a>
       </li>
       <li class="menu-item has-icon">
         <a id="mylistings-left-tab" title="View My Listings" href="/profile/mylistings" class="left-tab primary-theme">
-          <div class="icon is-white"><i class="far fa-list-alt"></i></div>
-          <p class="is-white is-hidden-laptop">My Listings</p>
+          <div class="icon"><i class="far fa-list-alt"></i></div>
+          <p class="is-hidden-laptop">My Listings</p>
         </a>
         <ul id="collapse-submenu">
           <% if (user.listings.length > 0 ){ %>
             <li class="menu-item has-icon">
               <a id="offers-left-tab" href="/profile/mylistings?tab=offers" title="View Listing Offers" class="left-tab primary-theme is-sublink">
-                <div class="icon is-white is-hidden-widescreen"><i class="far fa-money-bill"></i></div>
-                <small class="is-white is-hidden-laptop">My Listing Offers</small>
+                <div class="icon is-hidden-widescreen"><i class="far fa-money-bill"></i></div>
+                <small class="is-hidden-laptop">My Offers</small>
               </a>
             </li>
           <% } %>
@@ -39,21 +39,21 @@
           </li>%>
           <li class="menu-item has-icon">
             <a id="create-left-tab"  title="Create New Listings" href="/listings/create" class="left-tab primary-theme is-sublink">
-              <div class="icon is-white is-hidden-widescreen"><i class="far fa-plus"></i></div>
-              <small class="is-white is-hidden-laptop">Create Listings</small>
+              <div class="icon is-hidden-widescreen"><i class="far fa-plus"></i></div>
+              <small class="is-hidden-laptop">Create Listings</small>
             </a>
           </li>
         </ul>
       </li>
       <li class="menu-item has-icon">
         <a id="settings-left-tab" title="Change Account Settings" href="/profile/settings" class="left-tab primary-theme">
-          <div class="icon is-white"><i class="far fa-cogs"></i></div>
-          <p class="is-white is-hidden-laptop">Account Settings</p>
+          <div class="icon"><i class="far fa-cogs"></i></div>
+          <p class="is-hidden-laptop">Account Settings</p>
         </a>
         <ul class="is-hidden-laptop">
           <li>
             <a id="nav-premium-link" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-sublink is-hidden">
-              <small class="is-white">
+              <small>
                 Upgrade to Premium
               </small>
             </a>
@@ -63,70 +63,13 @@
       <% if (!user.id || !user || user.username == "DomaHubDemo") { %>
         <li class="menu-item has-icon">
           <a id="restart-tour-button" title="Restart DomaHub Demo Tutorial" class="left-tab primary-theme">
-            <div class="icon is-white"><i class="far fa-sync"></i></div>
-            <p class="is-white is-hidden-laptop">Restart Tutorial</p>
+            <div class="icon"><i class="far fa-sync"></i></div>
+            <p class="is-hidden-laptop">Restart Tutorial</p>
           </a>
         </li>
       <% } %>
     </ul>
   </aside>
-
-  <div class="user-panel">
-    <div class="user-button" title="Send us a Message">
-      <button id="contact-button" class="button is-black is-inverted nav-button" data-menu="contact-dropdown-menu">
-        <div class="icon">
-          <i class="far fa-comment"></i>
-        </div>
-      </button>
-      <div id="contact-dropdown-menu" class="nav-drop is-hidden">
-        <p class="menu-label">Contact Us</p>
-        <form id="contact-form">
-          <textarea id="contact_message" required class="textarea no-shadow" placeholder="Comments? Questions? Let us know! We're happy to help."></textarea>
-          <button id="contact-submit-button" class="button is-stylish is-fullwidth is-primary" type="submit" form="contact-form">
-            <div class="icon is-small">
-              <i class="far fa-check-circle"></i>
-            </div>
-            <span id="contact-submit-text">Send Message</span>
-          </button>
-        </form>
-      </div>
-    </div>
-    <div class="user-button" title="Check Your Notifications">
-      <button id="notification-dropdown-button" class="button is-black is-inverted nav-button" data-menu="notification-dropdown-menu">
-        <span id="notification-counter" class="is-hidden"></span>
-        <div class="icon">
-          <i class="far fa-bell"></i>
-        </div>
-      </button>
-      <aside id="notification-dropdown-menu" class="nav-drop is-hidden">
-        <ul id="notification-tray" class="menu-list"></ul>
-      </aside>
-    </div>
-    <div class="user-button" title="Other Links">
-      <button id="user-dropdown-button" class="button is-black is-inverted nav-button" data-menu="user-dropdown-menu">
-        <div class="icon">
-          <i class="far fa-user-alt"></i>
-        </div>
-      </button>
-      <aside id="user-dropdown-menu" class="nav-drop is-hidden">
-        <p class="menu-label">Support</p>
-        <ul class="menu-list">
-          <li><a href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
-          <li><a href="/faq" title="FAQ">FAQ</a></li>
-          <li><a href="/features#pricing" title="Pricing">Pricing</a></li>
-        </ul>
-        <p class="menu-label">Company</p>
-        <ul class="menu-list">
-          <li><a href="/terms" title="Terms of Service">Terms of Service</a></li>
-          <li><a href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
-        </ul>
-        <p class="menu-label">Account</p>
-        <ul class="menu-list">
-          <li><a href="/logout" title="Log Out">Log Out</a></li>
-        </ul>
-      </aside>
-    </div>
-  </div>
 </div>
 
 <%- include("../templates/notifications.ejs"); %>
