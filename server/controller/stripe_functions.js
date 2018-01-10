@@ -100,7 +100,9 @@ module.exports = {
       console.log("SF: Getting Stripe customer upcoming invoice for an account...");
 
       stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
-        if (err) { error.log(err, "Failed to get upcoming Stripe customer invoice."); }
+        if (err && err.message.indexOf("No upcoming invoices") == -1) {
+          error.log(err, "Failed to get upcoming Stripe customer invoice.");
+        }
         else {
           updateUserStripeCustomerUpcomingInvoice(req.user, upcoming);
         }
