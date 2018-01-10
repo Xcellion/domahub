@@ -730,6 +730,9 @@ module.exports = {
           return a + c.amount_off;
         }, 0);
       }
+      else {
+        delete req.user.existing_code_amount_off;
+      }
       next();
     });
   },

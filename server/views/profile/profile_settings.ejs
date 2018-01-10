@@ -224,34 +224,29 @@
 	        <div id="premium" class="columns is-hidden drop-tab">
 	          <div class="column">
 		          <div class="card is-fullwidth">
-								<% if (!user.stripe_subscription_id) { %>
-	          		<div class="card-header">
-								<% } else { %>
-								<div class="card-header">
-								<% } %>
+	          		<div id="premium-card-header" class="card-header">
 		          		<h3 id="upgrade-tab-header" class="card-header-title">
 		          			<span>Premium Status</span>
 		          		</h3>
 		          	</div>
-								<div class="card-image">
-                  <div class="basic-elem card-image">
-    								<div class="notification no-shadow has-icon is-primary">
-    									<div class="icon-box">
-    										<div class="icon is-white">
-    											<i class="far fa-trophy-alt"></i>
-    										</div>
-    									</div>
-    									<div class="content">
-    										<small class="is-white">
-    											Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
-    											<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
-    												Click here to learn more.
-    											</a>
-    										</small>
-    									</div>
-    								</div>
-    							</div>
-                  <div id="premium-expire-notification" class="is-hidden card-image">
+                <div class="basic-elem card-image">
+  								<div class="notification no-shadow has-icon is-primary">
+  									<div class="icon-box">
+  										<div class="icon is-white">
+  											<i class="far fa-trophy-alt"></i>
+  										</div>
+  									</div>
+  									<div class="content">
+  										<small class="is-white">
+  											Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
+  											<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
+  												Click here to learn more.
+  											</a>
+  										</small>
+  									</div>
+  								</div>
+  							</div>
+                <div id="premium-expire-notification" class="is-hidden card-image">
                     <div class="notification no-shadow has-icon is-danger">
                       <div class="icon-box">
                         <div class="icon is-white">
@@ -268,7 +263,6 @@
                       </div>
                     </div>
                   </div>
-								</div>
 		          	<div class="card-content">
 		          		<div class="control is-spaced">
 		          			<div class="control-left">
