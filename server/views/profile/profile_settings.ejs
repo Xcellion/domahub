@@ -412,27 +412,27 @@
 	          			<thead>
 										<tr>
 											<th colspan="4">
-												Total free months redeemed: <span id="total-months-redeemed"></span>
+												Total redeemed: <span id="total-amount-redeemed"></span>
 											</th>
 										</tr>
 	          				<tr>
 	          					<th>Type</th>
-	          					<th>Months</th>
+                      <th class="is-hidden-456px">
+                        Status
+                        <div class="icon is-tooltip is-small" data-balloon="The current status of the referred account or free months earned from this coupon or referral." data-balloon-pos="up" data-balloon-length="large">
+                          <i class="far fa-question-circle"></i>
+                        </div>
+                      </th>
+	          					<th>Amount</th>
 	          					<th>Date Redeemed</th>
-	          					<th class="is-hidden-456px">
-	                      Status
-	                      <div class="icon is-tooltip is-small" data-balloon="The current status of the referred account or free months earned from this coupon or referral." data-balloon-pos="up" data-balloon-length="large">
-	                        <i class="far fa-question-circle"></i>
-	                      </div>
-	                    </th>
 	          				</tr>
 	          			</thead>
 	          			<tbody>
 	          				<tr id="referral-clone" class="is-hidden referral-row no-hover-effect">
 	          					<td class="referral-type"></td>
+                      <td class="referral-redeemed is-hidden-456px"></td>
 	          					<td class="referral-months"></td>
 	                    <td class="referral-created"></td>
-	                    <td class="referral-redeemed is-hidden-456px"></td>
 	          				</tr>
 	          			</tbody>
 	              </table>

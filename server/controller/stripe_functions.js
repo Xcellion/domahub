@@ -916,9 +916,10 @@ function newStripeAccount(req, res, next, legal_entity){
     if (account){
       updateUserStripeAccount(req.user, account);
 
-      //update our database with new stripe account ID
+      //update our database with new stripe account ID and type = 2
       req.session.new_account_info = {
         stripe_account_id : account.id,
+        type : 2
       }
 
       next();
