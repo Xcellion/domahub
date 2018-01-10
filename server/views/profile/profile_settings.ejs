@@ -106,7 +106,7 @@
 	        </div>
 
         <!-- ACCOUNT SETTINGS TAB -->
-					<div id="account" class="columns is-laptop is-hidden drop-tab">
+					<div id="account" class="columns is-hidden drop-tab">
 
 	          <!-- ACCOUNT INFORMATION (EMAIL, USERNAME, PW) -->
 						<div class="column">
@@ -221,34 +221,36 @@
 	        </div>
 
         <!-- PREMIUM / REFERRAL / PROMO CODE TAB -->
-	        <div id="premium" class="columns is-laptop is-hidden drop-tab">
+	        <div id="premium" class="columns is-hidden drop-tab">
 	          <div class="column">
 		          <div class="card is-fullwidth">
 								<% if (!user.stripe_subscription_id) { %>
-	          		<div class="card-header no-border-bottom">
+	          		<div class="card-header">
 								<% } else { %>
-								<div class="card-header no-border-bottom">
+								<div class="card-header">
 								<% } %>
 		          		<h3 id="upgrade-tab-header" class="card-header-title">
 		          			<span>Premium Status</span>
 		          		</h3>
 		          	</div>
-                <div class="basic-elem card-image">
-  								<div class="notification no-shadow has-icon is-primary">
-  									<div class="icon-box">
-  										<div class="icon is-white">
-  											<i class="far fa-trophy-alt"></i>
-  										</div>
-  									</div>
-  									<div class="content">
-  										<small class="is-white">
-  											Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
-  											<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
-  												Click here to learn more.
-  											</a>
-  										</small>
-  									</div>
-  								</div>
+								<div class="card-image">
+                  <div class="basic-elem card-image">
+    								<div class="notification no-shadow has-icon is-primary">
+    									<div class="icon-box">
+    										<div class="icon is-white">
+    											<i class="far fa-trophy-alt"></i>
+    										</div>
+    									</div>
+    									<div class="content">
+    										<small class="is-white">
+    											Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
+    											<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
+    												Click here to learn more.
+    											</a>
+    										</small>
+    									</div>
+    								</div>
+    							</div>
                   <div id="premium-expire-notification" class="is-hidden card-image">
                     <div class="notification no-shadow has-icon is-danger">
                       <div class="icon-box">
@@ -295,7 +297,7 @@
 		          						</div>
 		          						<span>Cancel Premium</span>
 		          					</a>
-		          					<a id="renew-premium-button" class="is-hidden is-inverted button is-primary is-stylish is-small">
+		          					<a id="renew-premium-button" class="is-hidden is-outlined button is-primary is-stylish is-small">
 		          						<div class="icon is-small">
 		          							<i class="far fa-repeat"></i>
 		          						</div>
@@ -490,7 +492,7 @@
 	        </div>
 
 	        <!-- PAYMENTS INFORMATION TAB -->
-	        <div id="payment" class="columns is-laptop is-hidden drop-tab">
+	        <div id="payment" class="columns is-hidden drop-tab">
 	          <div class="column">
 	            <form id="stripe-personal-form">
 
@@ -813,7 +815,7 @@
 					</div>
 
 	        <!-- TRANSACTIONS TAB -->
-	        <div id="transactions" class="columns is-laptop is-hidden drop-tab">
+	        <div id="transactions" class="columns is-hidden drop-tab">
 	          <div class="column is-narrow">
 	            <div class="card is-fullwidth-mobile">
 	              <div class="card-header">
