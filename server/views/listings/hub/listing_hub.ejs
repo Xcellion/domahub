@@ -6,21 +6,22 @@
     <%- include("../../templates/head_links", {user: user});%>
 	</head>
 
-	<body>
+	<body id="page-contents" class="is-hidden">
 
     <script src="/js/lib/moment.min.js" type="text/javascript"></script>
     <script src="/js/lib/wNumb.js" type="text/javascript"></script>
     <script type="text/javascript">
       var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
       var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
+      var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
     </script>
 
-    <section class="hero is-primary is-small gradient-left-right">
+    <section class="hero is-small gradient-left-right">
 
       <div class="hero-body min-height">
         <div class="container">
           <div class="content">
-            <h1 class="title is-1"><%= listing_info.domain_name %></h1>
+            <h1 class="title is-1 is-primary"><%= listing_info.domain_name %></h1>
 						<p class="subtitle is-5" style="max-width: 500px;">
 							<%= listing_info.description %>
 						</p>
@@ -35,30 +36,30 @@
 				<div class="control has-addons" style="max-width:500px;margin-left:auto;margin-right:auto;">
 					<input id="search-domain-main" class="input is-medium" type="text" placeholder="Search domains..."/>
 					<input id="search-domain-tld" class="input is-medium" type="text" value=".com" style="max-width:100px;color:#3cbc8d"/>
-					<button class="button is-primary is-medium">
-						<span>Submit</span>
-					</button>
 				</div>
 				<div class="control is-spaced is-mobile">
 					<div class="control-left">
 						<p id="total-domain-count"></p>
 					</div>
 					<div class="control-right">
-						<div class="select no-borders">
-							<select>
-								<option>All Categories</option>
-								<option>Automotive</option>
-								<option>Start-Up</option>
-								<option>Medical</option>
-								<option>Marijuana</option>
-							</select>
+						<div class="select is-stylish no-borders">
+							<select id="categories-select">
+                <option value="" selected>
+                  All Categories
+                </option>
+              </select>
 						</div>
-						<button id="prev-page" data-val="-10" class="is-disabled page-button button is-icon">
+            <button id="layout-button" class="button is-icon">
+              <div class="icon">
+                <i class="far fa-align-justify"></i>
+              </div>
+            </button>
+						<button id="prev-page" class="is-disabled page-button button is-icon">
 							<div class="icon">
 								<i class="far fa-angle-left"></i>
 							</div>
 						</button>
-						<button id="next-page" data-val="10" class="is-disabled page-button button is-icon">
+						<button id="next-page" class="is-disabled page-button button is-icon">
 							<div class="icon">
 								<i class="far fa-angle-right"></i>
 							</div>
@@ -104,13 +105,13 @@
 							</td>
 							<td colspan="1" class="bin-col">
 								<div class="control-item">
-									<span class="tag is-success is-dot"></span>
+									<span class="tag is-primary is-dot"></span>
 									<p class="domain-row-bin"></p>
 								</div>
 							</td>
 							<td colspan="1" class="min-col">
 								<div class="control-item">
-									<span class="tag is-warning is-dot"></span>
+									<span class="tag is-accent is-dot"></span>
 									<p class="domain-row-min"></p>
 								</div>
 							</td>
@@ -126,10 +127,9 @@
 								</button>
 								<div class="misc-options is-hidden">
 									<ul>
-										<li><i class="far fa-facebook"></i></li>
-										<li><i class="far fa-search"></i></li>
-										<li><i class="far fa-adjust"></i></li>
-										<li><i class="far fa-bell"></i></li>
+                    <li><i class="far fa-comment"></i></li>
+										<li><i class="far fa-share"></i></li>
+										<li><i class="far fa-info-circle"></i></li>
 									</ul>
 								</div>
 							</td>

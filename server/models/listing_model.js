@@ -290,7 +290,10 @@ module.exports = {
     var query = "SELECT \
           listings.domain_name, \
           listings.status, \
+          listings.categories, \
+          listings.rentable, \
           listings.buy_price, \
+          listings.min_price, \
           listings.price_type, \
           listings.price_rate \
         FROM listings \
@@ -299,7 +302,8 @@ module.exports = {
         AND listings.status = 1 \
         AND listings.verified = 1 \
         AND listings.hub IS NULL \
-        AND listings.deleted IS NULL "
+        AND listings.deleted IS NULL \
+        ORDER BY listings.id"
     database.query(query, "Failed to get other listings by the same owner!", callback, [domain_name_exclude, owner_id]);
   },
 

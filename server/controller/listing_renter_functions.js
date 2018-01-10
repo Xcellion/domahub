@@ -1133,7 +1133,7 @@ module.exports = {
       listing_info: req.session.listing_info,
       compare : (!req.session.listing_info.premium && req.query.compare == "true") ? true : false,
       fonts : Fonts.all(),
-      categories : Categories.front()
+      categories : Categories.all()
     });
   },
 
