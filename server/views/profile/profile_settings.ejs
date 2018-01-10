@@ -334,7 +334,6 @@
 	          			<span>My Referrals and Promo Codes</span>
 	          		</h3>
 	          	</div>
-
 	            <div class="card-content">
 	              <div id="promo-control" class="control is-spaced is-mobile">
 	                <div class="control-left">
@@ -1110,8 +1109,11 @@
 						</div>
           </div>
           <div id="premium-cancel-disable-wrapper" class="content">
+            <p class="delete-card-description is-hidden">
+              By deleting your default payment method, your Premium account will <strong>not be renewed</strong>.
+            </p>
             <p>
-              The following <strong>will be disabled</strong> for your account.
+              The following <strong>will be disabled</strong> when your Premium subscription ends<span id="subscription-end-date"></span>.
             </p>
             <ul class="has-disc">
 							<li>
@@ -1130,14 +1132,16 @@
           </div>
         </div>
         <div class="control">
-          <label class="label" for="cancel-confirmation-input">Please type <strong>CANCEL</strong> to confirm cancellation.</label>
+          <label class="label cancel-premium-description" for="cancel-confirmation-input">Please type <strong>CANCEL</strong> to confirm cancellation.</label>
+          <label class="label delete-card-description is-hidden" for="cancel-confirmation-input">Please type <strong>DELETE</strong> to confirm deletion.</label>
           <input id="cancel-confirmation-input" type="text" name="cancel-confirmation-input" class="modal-input input"/>
         </div>
         <div class="control is-grouped">
             <div class="control is-expanded">
               <a id="cancel-premium-button" tabindex="0" class='is-disabled button is-fullwidth is-stylish is-small is-danger'>
                 <div class="icon is-small"><i class="far fa-ban"></i></div>
-                <span>Cancel Premium</span>
+                <span class="cancel-premium-description is-hidden">Cancel Premium</span>
+                <span class="delete-card-description is-hidden">Remove Card & Cancel Premium</span>
               </a>
             </div>
             <div class="control is-expanded">

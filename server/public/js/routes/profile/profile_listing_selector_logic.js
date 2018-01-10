@@ -139,7 +139,7 @@ $(document).ready(function(){
   //replace URL tab if not a good tab
   var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
   var url_tab = getParameterByName("tab");
-  if (["verify", "info", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
+  if (["verify", "info", "hub", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
     removeURLParameter("tab");
     url_tab = "";
   }
@@ -162,7 +162,7 @@ $(document).ready(function(){
   }
 
   //requested specific tab
-  if (url_selected_listings != "" && ["info", "design"].indexOf(url_tab) != -1){
+  if (url_selected_listings != "" && ["info", "design", "hub"].indexOf(url_tab) != -1){
     viewDomainDetails(url_tab);
   }
   else if (url_selected_listings != "" && url_tab == "verify"){
@@ -314,6 +314,11 @@ function createRow(now, listing_info, rownum, selected){
 
   //update row specifics and add handlers
   tempRow.removeClass('is-hidden clone-row').attr("id", "row-listing_id" + listing_info.id);
+
+  //update checkbox label click
+  tempRow.find(".select-button").attr("id", "row-listing_id" + listing_info.id + "-select");
+  tempRow.find(".select-label").attr("for", "row-listing_id" + listing_info.id + "-select");
+
   updateDomainRow(tempRow, listing_info, now);
   updateRowData(tempRow, listing_info);
 

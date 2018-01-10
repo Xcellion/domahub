@@ -712,7 +712,7 @@ module.exports = {
     if (req.session.listing_info.unlisted){
       next();
     }
-    else {
+    else if (process.env.NODE_ENV != "dev"){
       console.log("F: Checking to see if domain is still pointed to DomaHub...");
 
       dns.resolve(domain_name, "A", function (err, address, family) {
@@ -773,6 +773,9 @@ module.exports = {
           });
         }
       });
+    }
+    else {
+      next();
     }
   },
 
@@ -1014,27 +1017,36 @@ module.exports = {
     console.log("F: Finding other listings by same owner...");
     var owner_id = req.body.owner_id;
     var domain_name_exclude = req.body.domain_name_exclude;
+    var sort_by = req.body.sort_by;
+    var starting_id = req.body.starting_id;
+    var total = req.body.total;
 
     //make sure owner and domain exclude are legit
-    if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id)){
-      listing_model.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
+    if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id) && validator.isInt(total)){
+      listing_model.getListingsByOwner(domain_name_exclude, owner_id, function(result){
         if (!result.info.length || result.state == "error"){
-          res.send({
-            state: "error"
-          });
+          error.handler(req, res, "Failed to get other listings by the same owner!", "json");
         }
         else {
+          var listings = result.info;
+
+          //figure out sort
+          if (sort_by == "random"){
+            listings = listings.sort(function(a, b){return 0.5 - Math.random()}).slice(0, total);
+          }
+          else if (sort_by = "id"){
+            listings = listings;
+          }
+
           res.send({
             state: "success",
-            listings: result.info
+            listings: listings
           });
         }
       });
     }
     else {
-      res.send({
-        state: "error"
-      });
+      error.handler(req, res, "Failed to get other listings by the same owner!", "json");
     }
   },
 
@@ -1115,11 +1127,13 @@ module.exports = {
   renderListing : function(req, res, next){
     console.log("F: Rendering listing...");
 
-    res.render("listings/listing.ejs", {
+    var listing_hub = (req.session.listing_info.hub == 1 && req.session.listing_info.premium) ? "/hub/listing_hub.ejs" : "/listing.ejs";
+    res.render("listings" + listing_hub, {
       user: req.user,
       listing_info: req.session.listing_info,
       compare : (!req.session.listing_info.premium && req.query.compare == "true") ? true : false,
-      fonts : Fonts.all()
+      fonts : Fonts.all(),
+      categories : Categories.all()
     });
   },
 

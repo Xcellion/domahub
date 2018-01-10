@@ -4,6 +4,7 @@ var data_model = require('../models/data_model.js');
 var account_model = require('../models/account_model.js');
 
 var mailer = require('../lib/mailer.js');
+var profile_functions = require('../controller/profile_functions.js');
 
 //</editor-fold>
 
@@ -58,7 +59,7 @@ module.exports = function(app){
   //create coupon codes
   app.post("/admin/createcodes/:number", [
     checkAdmin,
-    createCouponCodes
+    createPromoCodes
   ]);
 
   //</editor-fold>
@@ -152,76 +153,12 @@ function analyzeData(req, res, next){
 
 //<editor-fold>-------------------------------CREATE COUPON CODE-------------------------------
 
-//create X sign up codes
-function createCouponCodes(req, res, next){
-  console.log("SF: Creating " + req.params.number + " coupon codes...");
-  insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
-    var stripe_promises = [];
-    for (var x = 0 ; x < codes.length ; x++){
-      var promise = (function(code){
-        var deferred = Q.defer();
-        stripe.coupons.create({
-          id: code,
-          duration: "repeating",
-          percent_off: 100,
-          duration_in_months: 1,
-          max_redemptions : 1
-        }, function(err, coupon) {
-          if (err){
-            deferred.reject(err);
-          }
-          else {
-            deferred.resolve(coupon);
-          }
-        });
-        return deferred.promise;
-      })(codes[x][0]);
-      stripe_promises.push(promise);
-    }
-
-    Q.allSettled(stripe_promises).then(function(results) {
-      var success_codes = []
-      for (var x = 0 ; x < results.length; x++){
-        if (results[x].state == "fulfilled"){
-          success_codes.push(results[x].value.id);
-        }
-      }
-
-      //all successful!
-      if (success_codes.length == parseFloat(req.params.number)){
-        res.send(success_codes.join("</br>"));
-      }
-    });
-
+//create req.params.number amount of codes for $5.00 off, no referer
+function createPromoCodes(req, res, next){
+  profile_functions.createPromoCodes(req.params.number, 500, null, function(codes){
+    res.send(codes.join("</br>"));
   });
 };
-
-//create unique coupon codes
-function createUniqueCoupons(number, referrer){
-  var codes = [];
-
-  if (validator.isInt(number)){
-    for (var x = 0; x < number; x++){
-      var random_string = randomstring.generate(10);
-      codes.push([random_string, null, 1]);
-    }
-  }
-
-  return codes;
-}
-
-//insert the coupon codes
-function insertCoupons(codes, number, cb){
-  account_model.createCouponCodes(codes, function(result){
-    if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
-      console.log("Duplicate coupon!");
-      insertCoupons(createUniqueCoupons(number), number);
-    }
-    else if (result.state != "error"){
-      cb(codes);
-    }
-  });
-}
 
 //</editor-fold>
 
@@ -233,6 +170,8 @@ function renderAdminDashboard(req, res, next){
 }
 
 //</editor-fold>
+
+//<editor-fold>-------------------------------REMIND UNVERIFIED EMAIL-------------------------------
 
 //remind all unverified users to verify their emails
 function remindVerifyEmail(req, res, next){
@@ -284,3 +223,5 @@ function send_remind_email_promise(email, username){
 
   return deferred.promise;
 }
+
+//</editor-fold>
