@@ -11,6 +11,14 @@ $(document).ready(function() {
 
   if (listing_info.status == 1){
 
+    //<editor-fold>-----------------------------------------------------------------------------------OTHER DOMAINS
+
+    if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){
+      findOtherDomains();
+    }
+
+    //</editor-fold>
+
     //<editor-fold>-----------------------------------------------------------------------------------BUY NOW
 
     //if it's available
@@ -437,7 +445,7 @@ function errorHandler(message){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------CALENDAR SET UP>-------------------------------
+//<editor-fold>-------------------------------CALENDAR SET UP-------------------------------
 
 //get times from the server
 function getTimes(calendar_elem){
@@ -707,6 +715,95 @@ function anyFreeDayOverlap(starttime, endtime){
   }
   else {
     return 0;
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------OTHER DOMAINS-------------------------------
+
+//other domains by same owner
+function findOtherDomains(){
+  if (compare && listing_info.unlisted){
+    createTestOtherDomains();
+  }
+  else if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
+    $.ajax({
+      url: "/listing/otherowner",
+      method: "POST",
+      data: {
+        owner_id: listing_info.owner_id,
+        domain_name_exclude: listing_info.domain_name,
+        sort_by : "random",
+        total : 10,
+        starting_id : false
+      }
+    }).done(function(data){
+      if (data.state == "success"){
+        createOtherDomains(data.listings);
+      }
+      else {
+        $("#domainlist-tab").addClass('is-hidden');
+      }
+    });
+  }
+}
+
+//create the other domain
+function createOtherDomains(other_listings){
+  $("#otherowner-domains").removeClass('is-hidden');
+  for (var x = 0; x < other_listings.length; x++){
+    var cloned_similar_listing = $("#otherowner-domain-clone").clone();
+    cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+
+    //edit it based on new listing info
+    if (other_listings[x].domain_name.length > 25){
+      var sliced_domain = other_listings[x].domain_name.slice(0,16) + "..." + other_listings[x].domain_name.slice(other_listings[x].domain_name.length - 6, other_listings[x].domain_name.length);
+    }
+    else {
+      var sliced_domain = other_listings[x].domain_name;
+    }
+
+    //available to buy now
+    if (other_listings[x].buy_price > 0){
+      var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
+      cloned_similar_listing.find(".otherowner-domain-price").text("Buy Now: " + buy_price);
+    }
+    //available to buy at a specific minimum price
+    else if (other_listings[x].min_price > 0){
+      var min_price = moneyFormat.to(parseFloat(other_listings[x].min_price));
+      cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
+    }
+    //else available for rent
+    else if (other_listings[x].rentable && other_listings[x].price_rate > 0){
+      cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + other_listings[x].price_rate + " / " + other_listings[x].price_type);
+    }
+    //else available for rent
+    else if (other_listings[x].rentable && other_listings[x].price_rate <= 0){
+      cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
+    }
+    //just available (no minimum price, no BIN)
+    else if (other_listings[x].status > 0){
+      cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
+    }
+
+    //if compare tool
+    if (other_listings[x].compare && listing_info.unlisted){
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+      cloned_similar_listing.attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
+    }
+    else {
+      //premium or basic link
+      if (listing_info.premium){
+        var link_to_domain = "https://" + other_listings[x].domain_name;
+      }
+      else {
+        var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
+      }
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+      cloned_similar_listing.attr("href", link_to_domain);
+    }
+    $("#otherowner-domain-table").append(cloned_similar_listing);
   }
 }
 

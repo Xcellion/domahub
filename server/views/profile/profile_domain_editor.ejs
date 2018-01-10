@@ -50,6 +50,12 @@
               <span class="">Design</span>
             </a>
           </li>
+          <!--<li id="hub-tab" class="verified-elem unpurchased-elem tab">
+            <a tabindex="0" class="">
+              <%# <span class="icon is-hidden-tablet"><i class="far fa-magic"></i></span>%>
+              <span class="">Hub</span>
+            </a>
+          </li>-->
           <div class="button-wrapper is-mobile control">
             <div class="control is-grouped">
               <div class="control is-marginless">
@@ -653,6 +659,67 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-hidden">
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-parent is-6">
+          <div class="card is-fullwidth tile is-child">
+            <div class="card-header">
+              <h3 class="card-header-title">
+                Hub Details
+                <% if (!user.stripe_subscription_id) { %>
+                  <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
+                    <i class="far fa-trophy-alt"></i>
+                  </div>
+                <% } %>
+              </h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label" for="hub-title-input">
+                  <span>Hub Name</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">Main text that will appear at the top of your listings hub.</small>
+                <input id="hub-title-input" data-name="hub_title" tabindex="0" class="premium-input input changeable-input" placeholder="Welcome to my domain hub!" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tile is-vertical is-parent is-6">
+          <div class="card is-fullwidth tile is-child">
+            <div class="card-header">
+              <h3 class="card-header-title">
+                Hub Design
+              </h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label" for="hub-layout-count-input">
+                  <span>Default Layout</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a whole number. Default size is 10." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">The number of domains shown in either a tiled or table layout.</small>
+                <div class="control has-addons">
+                  <input id="hub-layout-count-input" data-name="hub_layout_count" type="number" min="10" step="1" class="input changeable-input" />
+                  <span class="select no-shadow">
+                    <div class="drop-form">
+                      <select id="hub-layout-type-input" data-name="hub_layout_type" class="changeable-input">
+                        <option value="tile">Tiled</option>
+                        <option value="table">Table</option>
+                      </select>
+                    </div>
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>

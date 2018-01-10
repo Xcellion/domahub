@@ -43,7 +43,7 @@ $(document).ready(function() {
     var listing_filters = user.listings.map(function(listing){
       return listing.domain_name.toLowerCase();
     }).join("|");
-    var listing_regex = new RegExp("^(" + listing_filters + ")");
+    var listing_regex = (user.listings.length > 0) ? new RegExp("^(" + listing_filters + ")") : new RegExp("(?!)");
 
     buildCharts(listing_regex);
 

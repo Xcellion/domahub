@@ -284,13 +284,16 @@ module.exports = {
     database.query(query, "Failed to get related 3 random listings!", callback, domain_name_exclude);
   },
 
-  //gets 10 random listings by the same owner
-  getTenRandomListingsByOwner : function(domain_name_exclude, owner_id, callback){
-    console.log("DB: Attempting to get 10 random listings by the same owner...");
+  //gets listings owned by the same owner
+  getListingsByOwner : function(domain_name_exclude, owner_id, callback){
+    console.log("DB: Attempting to get other listings by the same owner...");
     var query = "SELECT \
           listings.domain_name, \
           listings.status, \
+          listings.categories, \
+          listings.rentable, \
           listings.buy_price, \
+          listings.min_price, \
           listings.price_type, \
           listings.price_rate \
         FROM listings \
@@ -298,10 +301,10 @@ module.exports = {
         AND listings.owner_id = ? \
         AND listings.status = 1 \
         AND listings.verified = 1 \
+        AND listings.hub IS NULL \
         AND listings.deleted IS NULL \
-        ORDER BY RAND() \
-        LIMIT 10"
-    database.query(query, "Failed to get 10 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);
+        ORDER BY listings.id"
+    database.query(query, "Failed to get other listings by the same owner!", callback, [domain_name_exclude, owner_id]);
   },
 
   //gets listings related to specific categories

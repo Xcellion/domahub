@@ -100,7 +100,8 @@ module.exports = function(app){
     stripe_functions.getStripeAccount,
     stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
-    stripe_functions.getStripeCustomerCharges,
+    stripe_functions.getStripeCustomerInvoices,
+    profile_functions.getUnredeemedPromoCodes,
     stripe_functions.getStripeCustomerNextInvoice,
     stripe_functions.getStripeSubscription,
     profile_functions.updateAccountSettingsGet,
@@ -149,19 +150,17 @@ module.exports = function(app){
   app.post("/profile/getreferrals", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
+    profile_functions.getUnredeemedPromoCodes,
+    stripe_functions.getStripeCustomerNextInvoice,
     profile_functions.getCouponsAndReferralsForUser,
   ]);
 
-  //posting a new promo code
+  //posting a new promo code or referral
   app.post("/profile/promocode", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     profile_functions.checkPromoCode,
-    stripe_functions.getExistingDiscount,
-    profile_functions.checkExistingPromoCode,
-    stripe_functions.deletePromoCode,
-    profile_functions.applyPromoCode,
-    stripe_functions.applyPromoCode,
+    profile_functions.applyPromoCode
   ]);
 
   //</editor-fold>
@@ -176,13 +175,21 @@ module.exports = function(app){
     profile_functions.updateAccountSettingsPost
   ]);
 
+  //remove existing card for user (stripe customer)
+  app.post("/profile/deletecard", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    stripe_functions.deleteCustomerCard,
+    stripe_functions.cancelStripeSubscription
+  ]);
+
   //upgrade account to premium
   app.post("/profile/upgrade", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    profile_functions.getExistingCoupon,
     stripe_functions.createStripeSubscription,
-    stripe_functions.getStripeCustomerCharges,
+    stripe_functions.getStripeCustomerInvoices,
+    profile_functions.getUnredeemedPromoCodes,
     stripe_functions.getStripeCustomerNextInvoice,
     profile_functions.updateAccountSettingsPost
   ]);
@@ -191,8 +198,7 @@ module.exports = function(app){
   app.post("/profile/downgrade", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    stripe_functions.cancelStripeSubscription,
-    profile_functions.getAccountListings
+    stripe_functions.cancelStripeSubscription
   ]);
 
   //</editor-fold>
@@ -239,6 +245,7 @@ module.exports = function(app){
     "/premium"
   ], [
     function(req, res, next){
+      console.log("F: Redirecting to appropriate Premium link...");
       if (req.isAuthenticated()){
         res.redirect("/profile/settings#premium");
       }

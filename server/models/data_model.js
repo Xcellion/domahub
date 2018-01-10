@@ -120,8 +120,13 @@ module.exports = {
       listings.domain_name, \
       listings.status, \
       listings.owner_id, \
+      listings.min_price, \
+      listings.buy_price, \
+      listings.price_type, \
+      listings.price_rate, \
       accounts.username, \
-      accounts.email \
+      accounts.email, \
+      accounts.stripe_subscription_id \
      FROM listings \
      INNER JOIN accounts \
      ON accounts.id = listings.owner_id \
