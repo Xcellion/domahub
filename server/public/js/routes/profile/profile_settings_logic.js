@@ -557,6 +557,7 @@ function showSectionByURL(){
 
         //show notification that premium is expiring
         $("#premium-expire-notification").removeClass('is-hidden');
+        $("#premium-card-header").addClass('no-border-bottom');
 
         //left nav and tab text
         $("#upgrade-to-premium-text, #upgrade-tab-header").text("Upgrade to Premium");
@@ -586,6 +587,7 @@ function showSectionByURL(){
       else {
         //hide notification that premium is expiring
         $("#premium-expire-notification").addClass('is-hidden');
+        $("#premium-card-header").removeClass('no-border-bottom');
 
         //left nav and tab text
         $("#upgrade-to-premium-text, #upgrade-tab-header").text("Premium Status");
@@ -614,6 +616,7 @@ function showSectionByURL(){
 
       //hide notification that premium is expiring
       $("#premium-expire-notification").addClass('is-hidden');
+      $("#premium-card-header").addClass('no-border-bottom');
 
       //has a credit card on file, but no premium
       if (user.stripe_customer && user.stripe_customer.brand && user.stripe_customer.last4){
