@@ -69,15 +69,18 @@ a.nav-item
     background-color: $white
     display: none
     position: absolute
-    right: 0
     top: 100%
     .nav-item
       padding: 10px
       width: 100%
+    &:not(.is-left)
+      right: 0
     &.is-active
       display: flex
       flex-direction: column
-      align-items: center
+      justify-content: center
+    &.is-left
+      left: 20px
 
 .nav-left
   align-items: stretch

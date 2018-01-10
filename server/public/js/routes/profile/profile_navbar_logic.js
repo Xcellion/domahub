@@ -26,6 +26,9 @@ $(document).ready(function() {
     }
   });
 
+  //update page view name in navbar
+  getCurrentView();
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------MODAL--------------------------------
@@ -110,6 +113,25 @@ function leftMenuActive(){
   else {
     $("#" + window.location.pathname.split("/")[2] + "-left-tab").addClass('is-active');
   }
+}
+
+//get current page view name
+function getCurrentView() {
+  var path = window.location.pathname;
+  path = path.split("/");
+  var newPath = path[2].charAt(0).toUpperCase() + path[2].slice(1);
+
+  if (newPath == "Mylistings") {
+    newPath = "My Listings";
+  }
+  if (newPath == "Create") {
+    newPath = "Create Listings";
+  }
+  if (newPath == "Settings") {
+    newPath = "Account Settings";
+  }
+
+  $("#current-view-name").html(newPath);
 }
 
 //get a URL query param by name
@@ -207,7 +229,7 @@ function showNotifications() {
 function calcNotificationCounter() {
   var notification_length = $("#notification-tray li").length;
   if (notification_length > 0) {
-    $("#notification-dropdown-menu").prepend("<p class='menu-label'>Notifications<span class='is-pulled-right'>" + notification_length + "</span></p>");
+    $("#notification-number").html(notification_length);
     $("#notification-counter").removeClass("is-hidden").text(notification_length);
     var page_title = document.title.split(" - ");
     if (page_title){
@@ -215,8 +237,8 @@ function calcNotificationCounter() {
     }
   }
   else {
-    $("#notification-tray").append(
-      "<div class='smile-text'><figure class='smile'><img src='/images/lib/smile.png'></img></figure><p>No notifications - you're all set!</p></div>");
+    $("#notification-number").html("");
+    $("#notification-tray").append("<div class='content'><p>None - you're all set!</p></div>");
   }
 }
 

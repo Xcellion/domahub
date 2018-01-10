@@ -12,20 +12,21 @@
 
 <body>
 
-	<%- include("profile_navbar_mobile.ejs"); %>
-
 	<section class="section is-fullscreen">
 		<div class="wrapper">
 
 			<%- include("profile_navbar.ejs"); %>
 
 			<div class="right-content">
+				<%- include("profile_navbar_mobile.ejs"); %>
 
-        <!-- DOMAINS SELECTOR -->
-        <%- include("profile_domain_selector.ejs"); %>
+        <div class="right-content-items">
+					<!-- DOMAINS SELECTOR -->
+	        <%- include("profile_domain_selector.ejs"); %>
 
-        <!-- DOMAINS EDITOR -->
-        <%- include("profile_domain_editor.ejs"); %>
+	        <!-- DOMAINS EDITOR -->
+	        <%- include("profile_domain_editor.ejs"); %>
+				</div>
 
 			</div>
 		</div>

@@ -4,6 +4,7 @@
 @import '../bulma/components/modal.sass';
 @import '../bulma/components/nav.sass';
 @import '../bulma/components/card.sass';
+@import '../bulma/elements/alert.sass';
 @import '../bulma/elements/form.sass';
 @import '../bulma/elements/image.sass';
 @import '../bulma/elements/delete.sass';
@@ -13,7 +14,9 @@
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/hamburger.sass';
+@import '../bulma/elements/table.sass';
 @import '../bulma/elements/title.sass';
+@import '../bulma/elements/switch.sass';
 @import '../bulma/elements/icon.sass';
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
@@ -143,15 +146,109 @@
   max-height:400px;
 }
 
+.price-card-wrapper {
+  margin: auto;
+  width: 680px;
+  position: relative;
+  @include mobile {
+    width: 100%;
+  }
+}
+
 .price-card {
   @include transition(translate 0.25s ease);
   border-radius: $radius;
+  display: inline-block;
+  &:first-child {
+    border-radius: $radius 0 0 0;
+    margin-bottom: 0;
+    @include mobile {
+      margin-bottom: 40px;
+    }
+  }
+  &:last-child {
+    border-radius: 0 $radius $radius 0;
+  }
   .card-title {
     border-bottom: 1px solid $border;
     padding: 15px 20px;
   }
+  .card-footer {
+    padding: 0;
+  }
   &:hover {
     @include translate(0,-5px);
+  }
+  @include mobile {
+    display: block;
+    width: 85%;
+  }
+  @include mobile-456px {
+    width: 100%;
+  }
+}
+
+.heading {
+  display: none;
+  color: $black-disabled;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 5px;
+  @media screen and (max-width: 1215px) {
+    display: block;
+  }
+}
+
+#premium-price-month {
+  display: inline-block;
+  position: relative;
+  &::before {
+    @include rotate(45);
+    background: transparent;
+    content: '';
+    width: 5px;
+    position: absolute;
+    top: 0;
+    right: -10px;
+    height: 5px;
+  }
+  &.is-active {
+    color: $black-disabled;
+    &::before {
+      @include transition(all 0.2s ease);
+      background: $black-disabled;
+      height: 100%;
+      right: 14px;
+    }
+  }
+}
+
+#premium-price-annual {
+
+}
+
+.features-table {
+  @include box-shadow(0,2px,4px,$border,0);
+  display: flex;
+  position: absolute;
+  top: 461px;
+  left: 76px;
+  background-color: $pastel;
+  @media screen and (max-width: 1215px) {
+    display: none;
+  }
+}
+
+.list-table {
+  width: 100%;
+  li {
+    border-bottom: 1px solid $border;
+    height: 51px;
+    padding: 12px 20px;
+    text-align: center;
+    @media screen and (max-width: 1215px) {
+      height: auto;
+    }
   }
 }
 
