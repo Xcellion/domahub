@@ -16,13 +16,42 @@
       var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
     </script>
 
-    <section class="hero is-small gradient-left-right">
+    <section class="hero is-medium gradient-left-right">
+
+			<div class="hero-head">
+        <nav class="nav">
+          <div class="nav-left">
+						<a class="nav-item">
+							<figure class="image is-32x32">
+								<img src="/images/dh-assets/circle-logo/dh-circle-logo-white.png" />
+							</figure>
+						</a>
+          </div>
+          <div class="nav-center">
+
+          </div>
+          <div class="nav-right nav-menu">
+            <a class="nav-item" href="mailto:<%= listing_info.owner_email %>">
+              <%= listing_info.owner_email %>
+            </a>
+            <a class="nav-item">
+              212-503-6773
+            </a>
+            <span class="nav-item">
+              <a class="button is-primary is-inverted is-stylish is-small">
+								<span class="icon"><i class="far fa-shopping-cart"></i></span>
+                <span>Checkout</span>
+              </a>
+            </span>
+          </div>
+        </nav>
+      </div>
 
       <div class="hero-body min-height">
         <div class="container">
-          <div class="content">
-            <h1 class="title is-1 is-primary"><%= listing_info.domain_name %></h1>
-						<p class="subtitle is-5" style="max-width: 500px;">
+          <div class="content has-text-centered">
+            <h1 class="title is-1 is-primary">Hot, fresh domains</h1>
+						<p class="subtitle is-5">
 							<%= listing_info.description %>
 						</p>
           </div>
@@ -31,35 +60,50 @@
 
     </section>
 
-    <section class="section is-small" style="background-color:#f2f5f7;">
+    <section class="section is-small is-pastel">
       <div class="container">
 				<div class="control has-addons" style="max-width:500px;margin-left:auto;margin-right:auto;">
-					<input id="search-domain-main" class="input is-medium" type="text" placeholder="Search domains..."/>
-					<input id="search-domain-tld" class="input is-medium" type="text" value=".com" style="max-width:100px;color:#3cbc8d"/>
+					<input id="search-domain-main" class="input is-stylish has-shadow is-medium" type="text" placeholder="Search domains..."/>
+					<input id="search-domain-tld" class="input is-stylish has-shadow is-medium" type="text" value=".com" style="max-width:100px;"/>
 				</div>
 				<div class="control is-spaced is-mobile">
 					<div class="control-left">
 						<p id="total-domain-count"></p>
 					</div>
 					<div class="control-right">
-						<div class="select is-stylish no-borders">
+						<div class="select is-stylish has-shadow no-borders">
 							<select id="categories-select">
                 <option value="" selected>
                   All Categories
                 </option>
               </select>
 						</div>
-            <button id="layout-button" class="button is-icon">
-              <div class="icon">
-                <i class="far fa-align-justify"></i>
-              </div>
-            </button>
-						<button id="prev-page" class="is-disabled page-button button is-icon">
+						<div class="select is-stylish has-shadow no-borders">
+							<select id="views-select">
+								<option value="" selected disabled>
+                  Select View
+                </option>
+                <option value="">
+                  Table View
+                </option>
+								<option value="">
+                  Grid View
+                </option>
+              </select>
+						</div>
+						<div class="is-inline is-hidden-tablet" data-balloon="Switch View" data-balloon-pos="up">
+	            <button id="layout-button" class="button is-icon">
+	              <div class="icon">
+	                <i class="far fa-list"></i>
+	              </div>
+	            </button>
+						</div>
+						<button id="prev-page" class="is-disabled page-button button is-black is-inverted is-icon">
 							<div class="icon">
 								<i class="far fa-angle-left"></i>
 							</div>
 						</button>
-						<button id="next-page" class="is-disabled page-button button is-icon">
+						<button id="next-page" class="is-disabled page-button button is-black is-inverted is-icon">
 							<div class="icon">
 								<i class="far fa-angle-right"></i>
 							</div>
@@ -69,7 +113,7 @@
       </div>
     </section>
 
-		<section class="section is-small" style="background-color:#f2f5f7;min-height:800px;">
+		<section class="section is-medium-top is-pastel">
 			<div class="container">
 				<table id="domains-table" class="domains-table is-hidden table is-transparent-head">
 					<thead>
@@ -94,7 +138,7 @@
 						</tr>
 					</thead>
 					<tbody id="domain-table-body">
-						<tr id="clone-row" class="is-hidden table-row no-hover-effect">
+						<tr id="clone-row" class="is-hidden table-row">
 							<td colspan="1" class="img-col">
 								<figure class="image is-48x48 left-aligned">
 									<img class="domain-row-logo" alt="Domain Logo"/>
@@ -127,9 +171,21 @@
 								</button>
 								<div class="misc-options is-hidden">
 									<ul>
-                    <li><i class="far fa-comment"></i></li>
-										<li><i class="far fa-share"></i></li>
-										<li><i class="far fa-info-circle"></i></li>
+                    <li>
+											<div class="icon is-white is-small">
+												<i class="far fa-comment"></i>
+											</div>
+										</li>
+										<li>
+											<div class="icon is-white is-small">
+												<i class="far fa-share"></i>
+											</div>
+										</li>
+										<li>
+											<div class="icon is-white is-small">
+												<i class="far fa-exclamation-circle"></i>
+											</div>
+										</li>
 									</ul>
 								</div>
 							</td>
@@ -165,6 +221,87 @@
             </tr>
           </tbody>
         </table>
+			</div>
+		</section>
+
+		<section class="section is-pastel is-medium">
+			<div class="container">
+				<div id="domains-grid" class="columns">
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="/images/dh-assets/dh-features-twitter.png" />
+								</figure>
+							</div>
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									$2,500
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="http://via.placeholder.com/300x150" />
+								</figure>
+							</div>
+							<div class="card-content">
+								<div class="control is-spaced">
+									<div class="control-left">
+
+									</div>
+									<div class="control-right">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="http://via.placeholder.com/300x150" />
+								</figure>
+							</div>
+							<div class="card-content">
+								<div class="control is-spaced">
+									<div class="control-left">
+
+									</div>
+									<div class="control-right">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="http://via.placeholder.com/300x150" />
+								</figure>
+							</div>
+							<div class="card-content">
+								<div class="control is-spaced">
+									<div class="control-left">
+
+									</div>
+									<div class="control-right">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 
