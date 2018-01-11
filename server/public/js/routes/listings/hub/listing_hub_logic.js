@@ -97,7 +97,7 @@ function setupHandlers(){
 
   //layout handler
   $("#layout-button").off().on("click", function(){
-    var this_svg = ($(this).find("svg").attr("data-icon") == "th-large") ? "align-justify" : "th-large";
+    var this_svg = ($(this).find("svg").attr("data-icon") == "th") ? "list" : "th";
     $(this).find("svg").attr("data-icon", this_svg);
   });
 
