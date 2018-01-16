@@ -680,13 +680,13 @@ function multiSelectButtons(clicked_row){
       $("#selector-edit-button").addClass("is-hidden");
     }
 
-    //add to hub (show hub dropdown only if no hubs are selected)
-    if (user.stripe_subscription_id && hub_rows.length == 0){
-      $("#hub-select-button").removeClass("is-hidden");
-    }
-    else {
-      $("#hub-select-button").addClass("is-hidden");
-    }
+    // //add to hub (show hub dropdown only if no hubs are selected)
+    // if (user.stripe_subscription_id && hub_rows.length == 0){
+    //   $("#hub-select-button").removeClass("is-hidden");
+    // }
+    // else {
+    //   $("#hub-select-button").addClass("is-hidden");
+    // }
 
     //accepted selections (show offer)
     if (offer_selected_rows.length == selected_rows.length){
