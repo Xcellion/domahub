@@ -93,6 +93,7 @@ $(document).ready(function() {
     var domain_names = $("#domain-names").val().replace(/\s/g,'').replace(/^[,\s]+|[,\s]+$/g, '').replace(/,[,\s]*,/g, ',').split(",");
     submit_elem.addClass('is-loading');
     clearNotification();
+    infoMessage("Now creating listings...this process could take a long time. Do not refresh the page or close the browser when creating a large set of listings.")
     $.ajax({
       url: "/listings/create/table",
       method: "POST",
@@ -436,7 +437,7 @@ function lookupRegistrars(){
       if (data.state == "success"){
         if (data.good_listings.length > 0){
           var total_good_domains = (data.good_listings.length == 1) ? "an unlisted domain" : data.good_listings.length + " unlisted domains"
-          var excess_hundred = (data.good_listings.length > 100) ? " Now showing the first 100 listings. </br></br><strong>This process could take a long time. Do not refresh the page or close the browser when creating a large set of listings.</strong>" : "";
+          var excess_hundred = (data.good_listings.length > 100) ? " Now showing the first 100 listings." : "";
           successMessage("Successfully found " + total_good_domains + " from your connected registrars!" + excess_hundred);
           createDomainsTable(data.bad_listings, data.good_listings.slice(0, 100));
         }
