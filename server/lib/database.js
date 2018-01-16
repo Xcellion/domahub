@@ -24,7 +24,7 @@ var mysql_options = {
 
 //</editor-fold>
 
-//scp -r wonmin@208.68.37.82homewonmin.pm2logsDomaHub-Server--Prod--out-0.log lol.text
+//scp -r wonmin@208.68.37.82:/home/wonmin/.pm2/logs/DomaHub-Server--Prod--out-0.log lol.txt
 
 //<editor-fold>-------------------------------PROD INSTRUCTIONS ON MYSQL SETUP-------------------------------
 

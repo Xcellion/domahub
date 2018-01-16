@@ -241,7 +241,7 @@ module.exports = {
         //all whois data received!
         var limit = qlimit(2);     //limit parallel promises (throttle)
         Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
-          return registrar_domain_promises[index];
+          return registrar_domain_promises[index]();
         }))).then(function(results) {
           console.log("F: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
           for (var y = 0; y < results.length ; y++){
@@ -1621,7 +1621,8 @@ function check_whois_promise(domain_name, index){
 
 //returns a promise to set DNS for godaddy domains
 function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
-  return Q.Promise(function(resolve, reject, notify){
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
     console.log("F: Setting DNS for GoDaddy domain - " + registrar_domain_name + "...");
 
     //A record change
@@ -1687,11 +1688,13 @@ function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
     });
 
   });
+  }
 }
 
 //returns a promise to set DNS for namecheap domains
 function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
-  return Q.Promise(function(resolve, reject, notify){
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
     console.log("F: Setting DNS for Namecheap domain - " + registrar_domain_name + "...");
     var username = encryptor.decryptText(registrar_info.username)
     var domain_name_split = registrar_domain_name.split(".");
@@ -1757,11 +1760,13 @@ function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
     });
 
   });
+  }
 }
 
 //returns a promise to set DNS for namesilo domains
 function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
-  return Q.Promise(function(resolve, reject, notify){
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
     console.log("F: Setting DNS for NameSilo domain - " + registrar_domain_name + "...");
     var namesilo_api_key = encryptor.decryptText(registrar_info.api_key);
 
@@ -1850,6 +1855,7 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
       }
     });
   });
+  }
 }
 
 //return a promise to delete a single DNS record on namesilo
