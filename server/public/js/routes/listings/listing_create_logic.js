@@ -304,6 +304,7 @@ $(document).ready(function() {
       }).done(function(data){
         $("#domains-submit").removeClass('is-loading');
         clearNotification();
+        console.log(data);
 
         if (data.state == "error"){
           if (data.message == "max-domains-reached"){
