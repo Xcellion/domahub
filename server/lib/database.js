@@ -24,6 +24,8 @@ var mysql_options = {
 
 //</editor-fold>
 
+//scp -r wonmin@208.68.37.82homewonmin.pm2logsDomaHub-Server--Prod--out-0.log lol.text
+
 //<editor-fold>-------------------------------PROD INSTRUCTIONS ON MYSQL SETUP-------------------------------
 
 ////////////////////////////////////////////////////////OPEN UFW PORT

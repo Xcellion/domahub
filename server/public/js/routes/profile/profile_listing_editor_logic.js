@@ -2,7 +2,8 @@ var current_listing = {};
 var referer_chart = false;
 var traffic_chart = false;
 var completed_domains = 0;
-var premium_blackscreen = $("#premium-blackscreen").clone();
+var premium_blackscreen_design = $("#premium-blackscreen-design").clone();
+var premium_blackscreen_hub = $("#premium-blackscreen-hub").clone();
 
 $(document).ready(function(){
 
@@ -39,6 +40,7 @@ $(document).ready(function(){
 
 //return to domain selector
 function showSelector(keep_message){
+  refreshSubmitButtons();
   removeURLParameter("tab");
   multiSelectButtons();
   leftMenuActive();
@@ -71,7 +73,7 @@ function updateEditorDomains(selected_domain_ids){
       for (var x = 0 ; x < selected_domain_names.length ; x++){
         domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
       }
-      $(".title-wrapper").append('<span class="current-domain-list icon is-tooltip" data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" data-balloon-pos="down"> <i class="far fa-question-circle"></i> </span> ');
+      $(".title-wrapper").append('<span class="current-domain-list icon is-small is-tooltip" data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" data-balloon-pos="down"> <i class="far fa-question-circle"></i> </span> ');
     }
   }
 }
@@ -142,8 +144,6 @@ function updateEditorEditing(selected_domain_ids){
     //plural "this domain"
     $(".this-domain").text("this domain");
 
-    //view listing button link
-
     //if demo
     if (!user.id){
       var listing_href = ((window.location.hostname.indexOf("domahub") != -1) ? "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() : "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase()) + "?compare=true&theme=Random";
@@ -166,6 +166,7 @@ function updateEditorEditing(selected_domain_ids){
   updateInfoTab(current_listing);
   updateDesignTab(current_listing);
   updateRentalTab(current_listing);
+  updateHubTab(current_listing, selected_domain_ids);
   updateBindings(current_listing, selected_domain_ids);
 }
 
@@ -258,7 +259,7 @@ function checkBox(module_value, elem, child){
     $("#description").val(listing_info.description);
     $("#description-hook").val(listing_info.description_hook);
     $("#description-footer").val(listing_info.description_footer);
-    $("#domain-name-input").val(listing_info.domain_name).attr("placeholder", listing_info.domain_name);
+    $("#domain-name-input").attr("placeholder", listing_info.domain_name).val(listing_info.domain_name);
 
     //categories
     $("#categories-input").val(listing_info.categories);
@@ -385,20 +386,21 @@ function checkBox(module_value, elem, child){
   function updatePremiumNotification(){
     //if premium, remove the notification / disabled inputs
     if (user.stripe_subscription_id){
-      $("#premium-only-notification").addClass("is-hidden");
       $(".premium-input").removeClass("is-disabled");
-      $("#premium-blackscreen").addClass("is-hidden");
+      $(".blackscreen").addClass("is-hidden");
     }
     else {
-      $("#premium-only-notification").removeClass("is-hidden");
       $(".premium-input").addClass("is-disabled");
+      $(".blackscreen").removeClass("is-hidden");
 
-      //premium blackscreen exists (not deleted by user)
-      if ($("#premium-blackscreen").length != 0){
-        $("#premium-blackscreen").removeClass("is-hidden");
+      //premium blackscreen deleted
+      if ($("#premium-blackscreen-design").length == 0){
+        $("#design-tab-drop").prepend(premium_blackscreen_design);
       }
-      else {
-        $("#design-tab-drop").prepend(premium_blackscreen);
+
+      //premium blackscreen deleted
+      if ($("#premium-blackscreen-hub").length == 0){
+        $("#hub-tab-drop").prepend(premium_blackscreen_hub);
       }
     }
   }
@@ -546,6 +548,79 @@ function checkBox(module_value, elem, child){
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------HUB EDITS-------------------------------
+
+  function updateHubTab(listing_info, selected_domain_ids){
+    //hub details
+    checkBox(listing_info.hub, $("#hub-input"));
+    checkBox(listing_info.hub_email, $("#hub-email-input"));
+    $("#hub-title-input").val(listing_info.hub_title);
+
+    //phone number
+    if (listing_info.hub_phone){
+      $("#hub-phone-input").intlTelInput("setNumber", listing_info.hub_phone).val(listing_info.hub_phone);
+    }
+
+    $("#hub-phone-input").intlTelInput("destroy").intlTelInput({
+      utilsScript : "/js/jquery/utils.js"
+    });
+
+    //hub design
+    $("#hub-layout-count-input").val(listing_info.hub_layout_count);
+    $("#hub-layout-type-input").val(listing_info.hub_layout_type);
+
+    if (selected_domain_ids.length > 1){
+      $("#multiple-edit-hub").removeClass('is-hidden');
+    }
+    else {
+      $("#multiple-edit-hub").addClass('is-hidden');
+
+      //make the list of sortable domains
+      if (listing_info.hub_listing_ids){
+        $("#no-domains-in-hub").addClass('is-hidden');
+        var domains_in_hub = listing_info.hub_listing_ids.split(",");
+        var domain_names_in_hub = listing_info.hub_listing_domain_names.split(",");
+        var categories_in_hub = listing_info.hub_listing_categories.split("|");
+        $("#sortable-wrapper").find(".ui-sortable-handle").remove();
+
+        for (var x = 0 ; x < domains_in_hub.length ; x++){
+          var domain_clone = $("#sortable-clone").clone().removeAttr("id").removeClass('is-hidden');
+          domain_clone.find(".domain_name").text(domain_names_in_hub[x]);
+          domain_clone.find(".categories").text(categories_in_hub[x]);
+          $("#sortable-wrapper").append(domain_clone);
+        }
+        $("#sortable-wrapper").sortable({
+          cursor: "pointer"
+        });
+        $("#sortable-wrapper").disableSelection();
+      }
+      else if (listing_info.hub) {
+        $("#no-domains-in-hub").removeClass('is-hidden');
+      }
+
+      //not a hub!
+      if (!listing_info.hub){
+        $("#not-a-hub").removeClass('is-hidden');
+      }
+      else {
+        $("#not-a-hub").addClass('is-hidden');
+      }
+    }
+
+
+    updateHubInputsDisabled(listing_info.hub);
+  }
+  function updateHubInputsDisabled(hub){
+    if (hub == 1){
+      $(".hub-input").removeClass('is-disabled');
+    }
+    else {
+      $(".hub-input").addClass('is-disabled');
+    }
+  }
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------BINDINGS-------------------------------
 
   //update change bindings (category, changeable-input, status)
@@ -616,6 +691,11 @@ function checkBox(module_value, elem, child){
     //allow rentals checkbox
     $("#rentable-input").on("change", function(){
       updateRentalInputsDisabled($(this).val());
+    });
+
+    //allow hub checkbox
+    $("#hub-input").on("change", function(){
+      updateHubInputsDisabled($(this).val());
     });
 
     //change domain name font
@@ -806,6 +886,13 @@ function checkBox(module_value, elem, child){
         else if (input_name == "logo_image_link"){
           var listing_comparison = current_listing["logo"];
         }
+        else if (input_name == "hub_phone"){
+          var input_val = $(this).intlTelInput("getNumber", intlTelInputUtils.numberFormat.INTERNATIONAL);
+          var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
+        }
+        else if (input_name == "date_expire"){
+          var listing_comparison = (current_listing.date_expire) ? moment(current_listing.date_expire).format('YYYY-MM-DDTHH:mm') : "";
+        }
         else {
           var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
         }
@@ -860,6 +947,9 @@ function checkBox(module_value, elem, child){
         //not premium but tried to update premium stuff
         if (data.message == "not-premium"){
           var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
+        }
+        else if (data.message == "dns-pending"){
+          var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
         }
         else {
           //listing is no longer pointed to domahub, revert to verify tab
@@ -2022,16 +2112,22 @@ function getCommonListingInfo(listing_ids){
   return listings.reduce(function(arr, item){
     if (listing_ids.indexOf(item.id) != -1){
       for (var x in item){
+
+        //first object, set it
         if (!arr){
           arr = Object.assign({}, item);
         }
+
+        //equal! set it
         else if (x == "categories" && item[x] && arr[x]){
           arr[x] = arr[x].split(" ").filter(function(n){
             return item[x].split(" ").indexOf(n) != -1
           }).join(" ");
         }
+
+        //different, make it null
         else if (item[x] != arr[x]){
-          delete arr[x];
+          arr[x] = null;
         }
       }
     }

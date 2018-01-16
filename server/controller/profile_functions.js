@@ -113,263 +113,441 @@ module.exports = {
 
   //<editor-fold>-------------------------------------MULTI-------------------------------
 
-  //check that the requesting user owns the domain to be deleted
-  checkPostedDeletionRows : function(req, res, next){
-    console.log("F: Checking posted IDs for deletion...");
-    var to_delete_formatted = [];
-    var listing_or_rental = (req.path.indexOf("mylistings") != -1) ? req.user.listings : req.user.rentals;
-    var listing_or_rental_id = (req.path.indexOf("mylistings") != -1) ? "id" : "rental_id";
+  //check that the requesting user owns the domains posted
+  checkPostedRowOwnership : function(req, res, next){
+    if (req.body.ids && Array.isArray(req.body.ids)){
+      console.log("F: Checking posted IDs for ownership...");
+      var total_owned = 0;
+      for (var x = 0 ; x < req.body.ids.length ; x++){
+        var owns_this = false;
+        for (var y = 0; y < req.user.listings.length; y++){
+          if (parseFloat(req.user.listings[y].id) == parseFloat(req.body.ids[x])){
+            owns_this = true;
+            break;
+          }
+        }
 
-    if (req.body.ids){
-      for (var x = 0; x < req.body.ids.length; x++){
-        for (var y = 0; y < listing_or_rental.length; y++){
+        if (owns_this){
+          total_owned++;
+        }
+      }
 
-          //check if user owns the listing / rental
-          if (listing_or_rental[y][listing_or_rental_id] == req.body.ids[x]){
-            //only if not currently rented or a rental
-            if ((listing_or_rental_id == "id" && !listing_or_rental[y].rented) || listing_or_rental_id == "rental_id"){
-              to_delete_formatted.push([listing_or_rental[y][listing_or_rental_id]]);
+      if (total_owned == req.body.ids.length){
+        next();
+      }
+      else {
+        error.handler(req, res, "You are not the owner of the selected listings! Please refresh the page and try again!", "json");
+      }
+    }
+    else {
+      error.handler(req, res, "Something went wrong with the listings you have selected! Please refresh the page and try again!", "json");
+    }
+  },
+
+    //<editor-fold>-------------------------------------HUB-------------------------------
+
+    //check that the posted hubs are actually hubs, check premium, check arrays
+    checkPostedHubs : function(req, res, next){
+      if (req.user.stripe_subscription_id){
+        console.log("F: Checking posted hub IDs for validity...");
+
+        var selected_hubs = req.body.selected_hubs || [];
+        var not_selected_hubs = req.body.not_selected_hubs || [];
+
+        //if posted hub IDs are arrays
+        if (Array.isArray(selected_hubs) && Array.isArray(not_selected_hubs)){
+          var total_hub = 0;
+          var total_hub_ids = selected_hubs.concat(not_selected_hubs);
+          var hub_listings_hash = {};    //hash table for all hubs and how many listings inside
+
+          for (var x = 0 ; x < total_hub_ids.length ; x++){
+            var is_hub = false;
+            for (var y = 0; y < req.user.listings.length; y++){
+              if (req.user.listings[y].hub == 1 && req.user.listings[y].id == total_hub_ids[x]){
+                is_hub = true;
+                hub_listings_hash[req.user.listings[y].id] = req.user.listings[y].hub_listing_ids;
+                break;
+              }
+            }
+
+            if (is_hub){
+              total_hub++;
+            }
+          }
+
+          //everything is a hub!
+          if (total_hub == total_hub_ids.length){
+            req.session.hub_listings_hash = hub_listings_hash;
+            next();
+          }
+          else {
+            error.handler(req, res, "You have selected invalid listing hubs! Please refresh the page and try again!", "json");
+          }
+        }
+        else {
+          error.handler(req, res, "You have selected invalid listing hubs! Please refresh the page and try again!", "json");
+        }
+      }
+      else {
+        error.handler(req, res, "not-premium", "json");
+      }
+    },
+
+    //format the posted listing ids to be added/removed to hub
+    formatPostedHubRows : function(req, res, next){
+      console.log("F: Checking posted IDs for listing hub addition/removal...");
+      var formatted_hub_additions = [];
+      var formatted_hub_deletions = [];
+
+      //use this hash to look up a string of all listing_ids inside that hub
+      var hub_listings_hash = req.session.hub_listings_hash;
+
+      //format deletions
+      if (req.body.not_selected_hubs){
+        for (var z = 0 ; z < req.body.not_selected_hubs.length ; z++){
+          var hub_being_removed_from = req.body.not_selected_hubs[z];
+
+          //format to delete everything in this hub
+          formatted_hub_deletions.push([hub_being_removed_from]);
+
+          var current_listings_in_hub = (hub_listings_hash[hub_being_removed_from]) ? hub_listings_hash[hub_being_removed_from].split(",") : [];
+
+          //recreate hub with any leftover listings + ranks
+          var total_exists = 0;
+          for (var t = 0 ; t < current_listings_in_hub.length ; t++){
+            //if this current listing is not the one being removed
+            if (req.body.ids.indexOf(current_listings_in_hub[t]) == -1){
+              //listing_id, listing_hub_id, rank
+              formatted_hub_additions.push([current_listings_in_hub[t], hub_being_removed_from, t - total_exists]);
+            }
+            else {
+              total_exists++;
+            }
+          }
+        }
+      }
+
+      //loop through all posted
+      var total_exists = 0;
+      for (var x = 0 ; x < req.body.ids.length ; x++){
+
+        //format additions
+        if (req.body.selected_hubs){
+          for (var y = 0 ; y < req.body.selected_hubs.length ; y++){
+            var hub_being_added_to = req.body.selected_hubs[y];
+            var current_listings_in_hub = (hub_listings_hash[hub_being_added_to]) ? hub_listings_hash[hub_being_added_to].split(",") : [];
+            var last_rank = current_listings_in_hub.length;
+
+            //only if it doesnt already exist
+            if (current_listings_in_hub.indexOf(req.body.ids[x]) == -1){
+              //listing_id, listing_hub_id, rank
+              formatted_hub_additions.push([req.body.ids[x], hub_being_added_to, last_rank + x - total_exists]);
+            }
+            else {
+              total_exists++;
+            }
+          }
+        }
+
+      }
+
+      //go next if there is anything to add/remove
+      if (formatted_hub_deletions.length > 0 || formatted_hub_additions.length > 0){
+        req.session.formatted_hub_additions = formatted_hub_additions;
+        req.session.formatted_hub_deletions = formatted_hub_deletions;
+        next();
+      }
+      else {
+        error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+      }
+    },
+
+    //added/remove to hub (need promises because not always going to be deleting things first)
+    addRemoveHubRows : function(req, res, next){
+      console.log("adding", req.session.formatted_hub_additions);
+      console.log("removing", req.session.formatted_hub_deletions);
+
+      //first see if theres anything to delete
+      delete_from_hub_promise(req.session.formatted_hub_deletions).then(function(){
+
+        //then add back existing + new
+        add_to_hub_promise(req.session.formatted_hub_additions).then(function(){
+          //success!
+          updateListingsHubReq(req.user.listings, req.session.formatted_hub_additions, req.session.formatted_hub_deletions);
+          delete req.session.formatted_hub_additions;
+          delete req.session.formatted_hub_deletions;
+          delete req.session.hub_listings_hash;
+          res.send({
+            state : "success",
+            listings : req.user.listings
+          });
+
+        //failed to add
+        }, function(){
+          error.log("Oh no, failed to add to this hub...should rebuild it");
+          error.handler(req, res, "Something went wrong! Please refresh the page and re-add your listings to their respective hubs.", "json");
+        });
+
+      //failed to delete
+      }, function(){
+        error.log("Oh no, failed to delete from this hub...should rebuild it");
+        error.handler(req, res, "Something went wrong! Please refresh the page and re-add your listings to their respective hubs.", "json");
+      });
+    },
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------------DELETE-------------------------------
+
+    //format the posted ids to be deleted
+    formatPostedDeletionRows : function(req, res, next){
+      console.log("F: Checking posted IDs for deletion...");
+      var to_delete_formatted = req.body.ids.map(function(elem){
+        return [elem];
+      });
+
+      if (to_delete_formatted.length > 0){
+        req.session.deletion_object = to_delete_formatted;
+        next();
+      }
+      else {
+        error.handler(req, res, "Something went wrong with the deletion! Please refresh the page and try again!", "json");
+      }
+    },
+
+    //multi-delete listings
+    deleteListings : function(req, res, next){
+      console.log("F: Deactivating listings...");
+      listing_model.deleteListings(req.session.deletion_object, function(result){
+        if (result.state == "success"){
+          updateUserListingsObjectDelete(req.user.listings, req.session.deletion_object);
+          delete req.session.deletion_object;
+          res.send({
+            state: "success",
+            rows: req.user.listings
+          });
+        }
+        else {
+          error.handler(req, res, "Failed to delete listings! Please refresh the page and try again.", "json");
+        }
+      });
+    },
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------------VERIFY-------------------------------
+
+    //format the posted domain ids to be verified
+    formatPostedVerificationRows : function(req, res, next){
+      console.log("F: Checking posted IDs for verification...");
+      var to_verify_formatted = [];
+      var to_verify_promises = [];
+      var unverified_listings = [];
+      var verified_listings = [];
+
+      //create the array of promises to lookup the IPs for all posted domains
+      if (req.body.ids){
+        for (var x = 0; x < req.body.ids.length; x++){
+          for (var y = 0; y < req.user.listings.length; y++){
+            //user object has the same listing id as the listing being verified
+            if (req.user.listings[y].id == req.body.ids[x]){
+              if (req.user.listings[y].verified != 1){
+                to_verify_promises.push(getDomainIPPromise({
+                  domain_name : req.user.listings[y].domain_name,
+                  listing_id : req.user.listings[y].id
+                }));
+              }
               break;
             }
           }
         }
       }
-    }
-    if (to_delete_formatted.length > 0){
-      req.session.deletion_object = to_delete_formatted;
-      next();
-    }
-    else {
-      res.send({
-        state: "error",
-        message: "Nothing was deleted!"
-      });
-    }
-  },
-
-  //check that the requesting user owns the domain to be verified
-  checkPostedVerificationRows : function(req, res, next){
-    console.log("F: Checking posted IDs for verification...");
-    var to_verify_formatted = [];
-    var to_verify_promises = [];
-    var unverified_listings = [];
-    var verified_listings = [];
-
-    //create the array of promises to lookup the IPs for all posted domains
-    if (req.body.ids){
-      for (var x = 0; x < req.body.ids.length; x++){
-        for (var y = 0; y < req.user.listings.length; y++){
-          //user object has the same listing id as the listing being verified
-          if (req.user.listings[y].id == req.body.ids[x]){
-            if (req.user.listings[y].verified != 1){
-              to_verify_promises.push(getDomainIPPromise({
-                domain_name : req.user.listings[y].domain_name,
-                listing_id : req.user.listings[y].id
-              }));
-            }
-            break;
-          }
-        }
-      }
-    }
-    if (to_verify_promises.length > 0){
-      console.log("F: Checking domain name IP addresses...");
-      dns.resolve("domahub.com", "A", function (err, address, family) {
-        if (err){
-          error.log(err, "Failed to check DomaHub IP address.");
-          res.send({
-            state: "error",
-            unverified_listings : req.body.ids
-          });
-        }
-        else {
-          var doma_ip = address[0];
-
-          //wait for all promises to finish
-          Q.allSettled(to_verify_promises)
-          .then(function(results) {
-            for (var x = 0; x < results.length; x++){
-              if (results[x].state == "fulfilled"){
-                if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
-                  to_verify_formatted.push([results[x].value.listing_id, 1, 1]);
-                  verified_listings.push(results[x].value.listing_id);
-                }
-                else {
-                  unverified_listings.push(results[x].value.listing_id);
-                }
-              }
-            }
-
-            if (to_verify_formatted.length > 0){
-              req.session.verification_object = {
-                to_verify_formatted : to_verify_formatted,
-                unverified_listings : unverified_listings,
-                verified_listings : verified_listings
-              }
-              next();
-            }
-            else {
-              res.send({
-                state: "error",
-                unverified_listings : unverified_listings
-              });
-            }
-          });
-        }
-      });
-    }
-    else {
-      error.handler(req, res, "Something went wrong in verifying your domains. Please refresh the page and try again!", "json");
-    }
-  },
-
-  //multi-delete listings
-  deleteListings : function(req, res, next){
-    console.log("F: Deactivating listings...");
-    listing_model.deleteListings(req.session.deletion_object, function(result){
-      if (result.state == "success"){
-        updateUserListingsObjectDelete(req.user.listings, req.session.deletion_object);
-        delete req.session.deletion_object;
-        res.send({
-          state: "success",
-          rows: req.user.listings
-        });
-      }
-      else {
-        error.handler(req, res, "Failed to delete listings! Please refresh the page and try again.", "json");
-      }
-    });
-  },
-
-  //multi-verify listings
-  verifyListings : function(req, res, next){
-    console.log("F: Updating verified listings...");
-    listing_model.verifyListings(req.session.verification_object.to_verify_formatted, function(result){
-      if (result.state == "success"){
-        updateUserListingsObjectVerify(req.user.listings, req.session.verification_object.to_verify_formatted);
-        var unverified_listings =  req.session.verification_object.unverified_listings;
-        var verified_listings =  req.session.verification_object.verified_listings;
-        delete req.session.verification_object;
-        res.send({
-          state: "success",
-          listings: req.user.listings,
-          unverified_listings: unverified_listings,
-          verified_listings: verified_listings
-        });
-      }
-      else {
-        error.handler(req, res, "Failed to verify listings! Please check your DNS details and try again.", "json");
-      }
-    });
-  },
-
-  //get DNS settings for multiple domains
-  getDNSRecordsMulti : function(req, res, next){
-    console.log("F: Finding the existing DNS records for the posted domains...");
-
-    var dns_record_promises = [];
-    if (req.body.selected_listings){
-      for (var x = 0; x < req.body.selected_listings.length; x++){
-        for (var y = 0; y < req.user.listings.length; y++){
-          //user object has the same listing id as the posted listing
-          if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
-          && req.user.listings[y].id == req.body.selected_listings[x].id){
-            //add to list of promises
-            dns_record_promises.push(getDomainDNSPromise({
-              domain_name : req.user.listings[y].domain_name,
-              id : req.user.listings[y].id
-            }));
-            break;
-          }
-        }
-      }
-    }
-
-    if (dns_record_promises.length == 0){
-      error.handler(req, res, "Something went wrong with the domains you have selected! Please refresh the page and try again!", "json");
-    }
-    else {
-      //wait for all promises to finish
-      Q.allSettled(dns_record_promises)
-      .then(function(results) {
-        console.log("F: Finished looking up DNS records! Now parsing for info...");
-
-        //update req.user.listings
-        var temp_listing_objs_for_db = [];      //object for DB updating
-        for (var x = 0; x < results.length; x++){
-          if (results[x].state == "fulfilled"){
-            var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
-            if (!temp_listing_obj.verified){
-              temp_listing_obj.whois = results[x].value.whois;
-              temp_listing_obj.a_records = results[x].value.a_records;
-            }
-            temp_listing_obj.date_expire = moment(results[x].value.whois["Registry Expiry Date"]).valueOf();
-            temp_listing_obj.registrar_name = results[x].value.whois["Registrar"];
-
-            //temp object for DB insertion
-            temp_listing_objs_for_db.push([
-              results[x].value.id,
-              results[x].value.whois["Registrar"],
-              moment(results[x].value.whois["Registry Expiry Date"]).valueOf()
-            ]);
+      if (to_verify_promises.length > 0){
+        console.log("F: Checking domain name IP addresses...");
+        dns.resolve("domahub.com", "A", function (err, address, family) {
+          if (err){
+            error.log(err, "Failed to check DomaHub IP address.");
+            res.send({
+              state: "error",
+              unverified_listings : req.body.ids
+            });
           }
           else {
-            var temp_listing_obj = getListingByID(req.user.listings, results[x].reason.listing_obj.id);
-            temp_listing_obj.whois = false;
-            temp_listing_obj.a_records = false;
+            var doma_ip = address[0];
+
+            //wait for all promises to finish
+            Q.allSettled(to_verify_promises)
+            .then(function(results) {
+              for (var x = 0; x < results.length; x++){
+                if (results[x].state == "fulfilled"){
+                  if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
+                    to_verify_formatted.push([results[x].value.listing_id, 1, 1]);
+                    verified_listings.push(results[x].value.listing_id);
+                  }
+                  else {
+                    unverified_listings.push(results[x].value.listing_id);
+                  }
+                }
+              }
+
+              if (to_verify_formatted.length > 0){
+                req.session.verification_object = {
+                  to_verify_formatted : to_verify_formatted,
+                  unverified_listings : unverified_listings,
+                  verified_listings : verified_listings
+                }
+                next();
+              }
+              else {
+                res.send({
+                  state: "error",
+                  unverified_listings : unverified_listings
+                });
+              }
+            });
           }
-        }
-
-        //go next to update DB
-        if (temp_listing_objs_for_db.length > 0){
-          req.session.new_listing_info = temp_listing_objs_for_db;
-          next();
-        }
-        else {
-          res.send({
-            state: "success",
-            listings: req.user.listings
-          });
-        }
-      });
-    }
-  },
-
-  //gets all offers for multiple listings
-  getOffersMulti : function(req, res, next){
-    console.log("F: Finding the all verified offers for the posted domains...");
-
-    var listing_ids = [];
-    for (var x = 0; x < req.body.selected_listings.length; x++){
-      for (var y = 0; y < req.user.listings.length; y++){
-        //user object has the same listing id as the listing being verified
-        if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
-        && req.user.listings[y].id == req.body.selected_listings[x].id){
-          listing_ids.push(req.body.selected_listings[x].id);
-          break;
-        }
+        });
       }
-    }
-    data_model.getOffersMulti(listing_ids, function(result){
+      else {
+        error.handler(req, res, "Something went wrong in verifying your domains. Please refresh the page and try again!", "json");
+      }
+    },
 
-      //update req.user.listings
-      if (result.state == "success"){
-        for (var x = 0 ; x < req.user.listings.length ; x++){
-          req.user.listings[x].offers = [];
-          for (var y = 0; y < result.info.length; y++){
-            if (req.user.listings[x].id == result.info[y].listing_id){
-              req.user.listings[x].offers.push(result.info[y]);
+    //get DNS settings for multiple domains
+    getDNSRecordsMulti : function(req, res, next){
+      console.log("F: Finding the existing DNS records for the posted domains...");
+
+      var dns_record_promises = [];
+      if (req.body.selected_listings){
+        for (var x = 0; x < req.body.selected_listings.length; x++){
+          for (var y = 0; y < req.user.listings.length; y++){
+            //user object has the same listing id as the posted listing
+            if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
+            && req.user.listings[y].id == req.body.selected_listings[x].id){
+              //add to list of promises
+              dns_record_promises.push(getDomainDNSPromise({
+                domain_name : req.user.listings[y].domain_name,
+                id : req.user.listings[y].id
+              }));
+              break;
             }
           }
         }
       }
 
-      res.send({
-        state: "success",
-        listings: req.user.listings
+      if (dns_record_promises.length == 0){
+        error.handler(req, res, "Something went wrong with the domains you have selected! Please refresh the page and try again!", "json");
+      }
+      else {
+        //wait for all promises to finish
+        Q.allSettled(dns_record_promises)
+        .then(function(results) {
+          console.log("F: Finished looking up DNS records! Now parsing for info...");
+
+          //update req.user.listings
+          var temp_listing_objs_for_db = [];      //object for DB updating
+          for (var x = 0; x < results.length; x++){
+            if (results[x].state == "fulfilled"){
+              var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
+              if (!temp_listing_obj.verified){
+                temp_listing_obj.whois = results[x].value.whois;
+                temp_listing_obj.a_records = results[x].value.a_records;
+              }
+              temp_listing_obj.date_expire = moment(results[x].value.whois["Registry Expiry Date"]).valueOf();
+              temp_listing_obj.registrar_name = results[x].value.whois["Registrar"];
+
+              //temp object for DB insertion
+              temp_listing_objs_for_db.push([
+                results[x].value.id,
+                results[x].value.whois["Registrar"],
+                moment(results[x].value.whois["Registry Expiry Date"]).valueOf()
+              ]);
+            }
+            else {
+              var temp_listing_obj = getListingByID(req.user.listings, results[x].reason.listing_obj.id);
+              temp_listing_obj.whois = false;
+              temp_listing_obj.a_records = false;
+            }
+          }
+
+          //go next to update DB
+          if (temp_listing_objs_for_db.length > 0){
+            req.session.new_listing_info = temp_listing_objs_for_db;
+            next();
+          }
+          else {
+            res.send({
+              state: "success",
+              listings: req.user.listings
+            });
+          }
+        });
+      }
+    },
+
+    //multi-verify listings
+    verifyListings : function(req, res, next){
+      console.log("F: Updating verified listings...");
+      listing_model.verifyListings(req.session.verification_object.to_verify_formatted, function(result){
+        if (result.state == "success"){
+          updateUserListingsObjectVerify(req.user.listings, req.session.verification_object.to_verify_formatted);
+          var unverified_listings =  req.session.verification_object.unverified_listings;
+          var verified_listings =  req.session.verification_object.verified_listings;
+          delete req.session.verification_object;
+          res.send({
+            state: "success",
+            listings: req.user.listings,
+            unverified_listings: unverified_listings,
+            verified_listings: verified_listings
+          });
+        }
+        else {
+          error.handler(req, res, "Failed to verify listings! Please check your DNS details and try again.", "json");
+        }
       });
-    });
-  },
+    },
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------------OFFERS-------------------------------
+
+    //gets all offers for multiple listings
+    getOffersMulti : function(req, res, next){
+      console.log("F: Finding the all verified offers for the posted domains...");
+
+      var listing_ids = [];
+      for (var x = 0; x < req.body.selected_listings.length; x++){
+        for (var y = 0; y < req.user.listings.length; y++){
+          //user object has the same listing id as the listing being verified
+          if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
+          && req.user.listings[y].id == req.body.selected_listings[x].id){
+            listing_ids.push(req.body.selected_listings[x].id);
+            break;
+          }
+        }
+      }
+      data_model.getOffersMulti(listing_ids, function(result){
+
+        //update req.user.listings
+        if (result.state == "success"){
+          for (var x = 0 ; x < req.user.listings.length ; x++){
+            req.user.listings[x].offers = [];
+            for (var y = 0; y < result.info.length; y++){
+              if (req.user.listings[x].id == result.info[y].listing_id){
+                req.user.listings[x].offers.push(result.info[y]);
+              }
+            }
+          }
+        }
+
+        res.send({
+          state: "success",
+          listings: req.user.listings
+        });
+      });
+    },
+
+    //</editor-fold>
 
   //</editor-fold>
 
@@ -420,8 +598,8 @@ module.exports = {
     }
   },
 
-  //update account settings on a get
-  updateAccountSettingsGet : function(req, res, next){
+  //update account settings and go next (if possible)
+  updateAccountSettingsPassthrough : function(req, res, next){
 
     //any changes from other routes (stripe upgrade)
     if (req.session.new_account_info){
@@ -644,7 +822,7 @@ module.exports = {
         res.send({
           state : "success",
           bad_listings : total_bad_domains,
-          good_listings : total_good_domains
+          good_listings : total_good_domains.slice(0, 100)
         });
       });
     }
@@ -1359,6 +1537,83 @@ function insertPromoCodes(codes, number, amount_off, referrer, cb){
       cb(codes_only);
     }
   });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------------HUB HELPERS-------------------------------
+
+//delete from hub promise
+function delete_from_hub_promise(formatted_hub_deletions){
+  return Q.Promise(function(resolve, reject){
+    console.log("F: Deleting listings from hubs...");
+    if (formatted_hub_deletions && formatted_hub_deletions.length > 0){
+      listing_model.deleteHubGroupings(formatted_hub_deletions, function(result){
+        if (result.state != "success"){
+          reject();
+        }
+        else {
+          resolve();
+        }
+      });
+    }
+    else {
+      resolve();
+    }
+  });
+}
+
+//add to hub promise
+function add_to_hub_promise(formatted_hub_additions){
+  return Q.Promise(function(resolve, reject){
+    if (formatted_hub_additions && formatted_hub_additions.length > 0){
+      console.log("F: Adding listings to hubs...");
+      listing_model.addListingHubGrouping(formatted_hub_additions, function(result){
+        if (result.state == "success"){
+          resolve();
+        }
+        else {
+          reject();
+        }
+      });
+    }
+    else {
+      resolve();
+    }
+  });
+}
+
+//update req.user after changing hubs
+function updateListingsHubReq(listings, formatted_hub_additions, formatted_hub_deletions){
+  //loop through all listings
+  for (var x = 0 ; x < listings.length ; x++){
+
+    //find the hub that was deleted, remove all hub_listing_ids
+    for (var y = 0 ; y < formatted_hub_deletions.length ; y++){
+      if (listings[x].id == formatted_hub_deletions[y][0]){
+        delete listings[x].hub_listing_ids;
+      }
+    }
+
+    //add back new ones
+    var temp_string = false;
+    //listing_id, listing_hub_id, rank
+    for (var z = 0 ; z < formatted_hub_additions.length ; z++){
+      if (listings[x].id == formatted_hub_additions[z][1]){
+        if (temp_string != false){
+          temp_string += "," + formatted_hub_additions[z][0];
+        }
+        else {
+          temp_string = (listings[x].hub_listing_ids) ? listings[x].hub_listing_ids + "," + formatted_hub_additions[z][0] : formatted_hub_additions[z][0];
+        }
+      }
+    }
+
+    //change hub_listing_ids to the temp string
+    if (temp_string != false){
+      listings[x].hub_listing_ids = temp_string;
+    }
+  }
 }
 
 //</editor-fold>

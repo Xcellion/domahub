@@ -30,12 +30,17 @@ var moment = require('moment');
 var multer = require("multer");
 var parseDomain = require("parse-domain");
 var Q = require('q');
+var qlimit = require("qlimit");
 var fs = require('fs');
 
 //registrar info
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
 var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.com/api" : "https://www.namesilo.com/api";
 var parseString = require('xml2js').parseString;
+
+//phone
+var PNF = require('google-libphonenumber').PhoneNumberFormat;
+var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
 //</editor-fold>
 
@@ -93,14 +98,14 @@ module.exports = {
       console.log("F: Checking all posted domain names...");
       var posted_domain_names = req.body.domain_names;
 
-      if (posted_domain_names.length + req.user.listings.length > 100 && !req.user.stripe_subscription_id){
+      if ((posted_domain_names.length + req.user.listings.length > 100) && !req.user.stripe_subscription_id){
         error.handler(req, res, "max-domains-reached", "json");
       }
       else if (!posted_domain_names || posted_domain_names.length <= 0){
         error.handler(req, res, "You can't create listings without any domain names!", "json");
       }
-      else if (posted_domain_names.length > 500){
-        error.handler(req, res, "You can only create up to 500 domains at a time!", "json");
+      else if (posted_domain_names.length > 100){
+        error.handler(req, res, "You can only create up to 100 domain listings at a time!", "json");
       }
       else {
         //loop through and check all posted domain names
@@ -233,29 +238,31 @@ module.exports = {
           }
         }
 
-        //wait for all promises to finish
-        Q.allSettled(registrar_domain_promises)
-         .then(function(results) {
-           console.log("F: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
-           for (var y = 0; y < results.length ; y++){
-             //if there was an error, then add it to bad reasons
-             if (results[y].state != "fulfilled"){
-               req.session.new_listings.bad_listings.push({
-                 domain_name : results[y].reason.domain_name,
-                 reasons : results[y].reason.reasons
-               });
-             }
-             //successfully changed DNS!
-             else {
-               req.session.new_listings.good_listings.push({
-                 domain_name : results[y].value.domain_name,
-                 reasons : results[y].value.reasons
-               });
-             }
-           }
+        //all whois data received!
+        var limit = qlimit(10);     //limit parallel promises (throttle)
+        Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
+          return registrar_domain_promises[index]();
+        }))).then(function(results) {
+          console.log("F: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
+          for (var y = 0; y < results.length ; y++){
+            //if there was an error, then add it to bad reasons
+            if (results[y].state != "fulfilled"){
+              req.session.new_listings.bad_listings.push({
+                domain_name : results[y].reason.domain_name,
+                reasons : results[y].reason.reasons
+              });
+            }
+            //successfully changed DNS!
+            else {
+              req.session.new_listings.good_listings.push({
+                domain_name : results[y].value.domain_name,
+                reasons : results[y].value.reasons
+              });
+            }
+          }
 
-           next();
-         });
+          next();
+        });
       }
 
       //not using registrar tool! go next to manual creation
@@ -274,7 +281,10 @@ module.exports = {
       }
 
       //all whois data received!
-      Q.allSettled(whois_promises).then(function(results){
+      var limit = qlimit(10);     //limit parallel promises (throttle)
+      Q.allSettled(whois_promises.map(limit(function(item, index, collection){
+        return whois_promises[index]();
+      }))).then(function(results) {
         console.log("F: Finished looking up domain expiration dates!");
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
@@ -312,54 +322,58 @@ module.exports = {
 
               //some DNS changes were made! check them now to see if we should auto-verify some listings
               if (req.session.new_listings.check_dns_promises.length > 0){
-                Q.allSettled(req.session.new_listings.check_dns_promises)
-                 .then(function(results) {
-                   console.log("F: Finished checking DNS changes for newly created domains!");
+                //all whois data received!
+                var limit = qlimit(10);     //limit parallel promises (throttle)
+                var check_dns_promises = req.session.new_listings.check_dns_promises;
+                Q.allSettled(check_dns_promises.map(limit(function(item, index, collection){
+                  return check_dns_promises[index]();
+                }))).then(function(results) {
+                  console.log("F: Finished checking DNS changes for newly created domains!");
 
-                   //remove from the inserted_ids list
-                   var pending_dns_ids = [];
-                   var verified_ids = [];
-                   for (var x = 0; x < results.length; x++){
+                  //remove from the inserted_ids list
+                  var pending_dns_ids = [];
+                  var verified_ids = [];
+                  for (var x = 0; x < results.length; x++){
 
-                     //should we remove from the array of to be verified reverted?
-                     var index_of_dns_to_remove = false;
-                     var dns_changed_domain_id = ((results[x].state == "fulfilled") ? results[x].value[0] : results[x].reason[0]);
-                     for (var y = 0 ; y < inserted_ids.length ; y++){
-                       if (inserted_ids[y][0] == dns_changed_domain_id){
-                         index_of_dns_to_remove = y;
-                       }
-                     }
-                     if (Number.isInteger(index_of_dns_to_remove)) {
-                       inserted_ids.splice(index_of_dns_to_remove, 1);
-                     }
+                    //should we remove from the array of to be verified reverted?
+                    var index_of_dns_to_remove = false;
+                    var dns_changed_domain_id = ((results[x].state == "fulfilled") ? results[x].value[0] : results[x].reason[0]);
+                    for (var y = 0 ; y < inserted_ids.length ; y++){
+                      if (inserted_ids[y][0] == dns_changed_domain_id){
+                        index_of_dns_to_remove = y;
+                      }
+                    }
+                    if (Number.isInteger(index_of_dns_to_remove)) {
+                      inserted_ids.splice(index_of_dns_to_remove, 1);
+                    }
 
-                     //DNS changes are propagated already so insert into an array of legit verified domains (status = 1)
-                     if (results[x].state == "fulfilled"){
-                       verified_ids.push(results[x].value.toString());
-                     }
-                     //insert into array of pending DNS domains (status = 3)
-                     else {
-                       pending_dns_ids.push(results[x].reason.toString());
-                     }
-                   }
+                    //DNS changes are propagated already so insert into an array of legit verified domains (status = 1)
+                    if (results[x].state == "fulfilled"){
+                      verified_ids.push(results[x].value.toString());
+                    }
+                    //insert into array of pending DNS domains (status = 3)
+                    else {
+                      pending_dns_ids.push(results[x].reason.toString());
+                    }
+                  }
 
-                   //object wrapper for the various IDs
-                   var various_ids = {
-                     verified_ids : verified_ids,
-                     pending_dns_ids : pending_dns_ids,
-                     inserted_ids : inserted_ids
-                   }
+                  //object wrapper for the various IDs
+                  var various_ids = {
+                    verified_ids : verified_ids,
+                    pending_dns_ids : pending_dns_ids,
+                    inserted_ids : inserted_ids
+                  }
 
-                   //waterfall to make verified / pending DNS updates to the listings
-                   Q.fcall(verified_dns_promise, various_ids)      //function to call, and the parameter
-                    .then(pending_dns_promise, pending_dns_promise)   //function on success, function on error
-                    .done(function(various_ids){
-                     //see if we inserted anything and revert to unverified if necessary
-                     checkInsertedIDs(req, res, various_ids.inserted_ids);
-                   }, function(err){
-                     error.handler(req, res, err.info, "json");
-                   });
-                 });
+                  //waterfall to make verified / pending DNS updates to the listings
+                  Q.fcall(verified_dns_promise, various_ids)      //function to call, and the parameter
+                  .then(pending_dns_promise, pending_dns_promise)   //function on success, function on error
+                  .done(function(various_ids){
+                    //see if we inserted anything and revert to unverified if necessary
+                    checkInsertedIDs(req, res, various_ids.inserted_ids);
+                  }, function(err){
+                    error.handler(req, res, err.info, "json");
+                  });
+                });
               }
               else {
                 //see if we inserted anything and revert to unverified if necessary
@@ -688,14 +702,16 @@ module.exports = {
                 reject({
                   err: err,
                   domain_name : listing_obj.domain_name,
-                  listing_id : listing_obj.id
+                  listing_id : listing_obj.id,
+                  status : listing_obj.status,
                 });
               }
               else {
                 resolve({
                   address : address,
                   domain_name : listing_obj.domain_name,
-                  listing_id : listing_obj.id
+                  listing_id : listing_obj.id,
+                  status : listing_obj.status,
                 });
               }
             });
@@ -724,6 +740,7 @@ module.exports = {
              .then(function(results) {
                var still_pointing = [];
                var not_pointing = [];
+               var still_pending = [];
 
                //figure out if any failed, push to new promise array
                for (var x = 0; x < results.length; x++){
@@ -731,12 +748,18 @@ module.exports = {
                    if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
                      still_pointing.push(x);
                    }
-                   else {
+                   else if (results[x].value.status != 3){
                      not_pointing.push(results[x].value.listing_id.toString());
                    }
+                   else {
+                     still_pending.push(results[x].value.listing_id.toString());
+                   }
+                 }
+                 else if (results[x].value.status != 3){
+                   not_pointing.push(results[x].value.listing_id.toString());
                  }
                  else {
-                   not_pointing.push(results[x].reason.listing_id.toString());
+                   still_pending.push(results[x].value.listing_id.toString());
                  }
                }
 
@@ -763,6 +786,10 @@ module.exports = {
                      });
                    }
                  });
+               }
+               //some domains are still pending changes
+               else if (still_pending.length > 0){
+                 error.handler(req, res, "dns-pending", "json");
                }
                //all good
                else {
@@ -807,6 +834,20 @@ module.exports = {
 
         var placeholder = parseFloat(req.body.placeholder);
 
+        //hub stuff
+        var hub = parseFloat(req.body.hub);
+        var hub_email = req.body.hub_email;
+        var hub_phone = req.body.hub_phone;
+        if (req.body.hub_phone || hub_phone != ""){
+          try {
+            hub_phone = phoneUtil.format(phoneUtil.parse(req.body.hub_phone), PNF.INTERNATIONAL)
+          }
+          catch(err){
+            hub_phone = false;
+          }
+        }
+        var hub_layout_type = parseFloat(req.body.hub_layout_type);
+
         //invalid footer description
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
@@ -817,87 +858,111 @@ module.exports = {
         }
         //invalid primary color
         else if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
-          error.handler(req, res, "Invalid primary color! Please choose a different color!", "json");
+          error.handler(req, res, "That's an invalid primary color! Please choose a different color and try again!", "json");
         }
         //invalid secondary color
         else if (req.body.secondary_color && !validator.isHexColor(req.body.secondary_color)){
-          error.handler(req, res, "Invalid secondary color! Please choose a different color!", "json");
+          error.handler(req, res, "That's an invalid secondary color! Please choose a different color and try again!", "json");
         }
         //invalid tertiary color
         else if (req.body.tertiary_color && !validator.isHexColor(req.body.tertiary_color)){
-          error.handler(req, res, "Invalid tertiary color! Please choose a different color!", "json");
+          error.handler(req, res, "That's an invalid tertiary color! Please choose a different color and try again!", "json");
         }
         //invalid font color
         else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
-          error.handler(req, res, "Invalid text color! Please choose a different color!", "json");
+          error.handler(req, res, "That's an invalid text color! Please choose a different color and try again!", "json");
         }
         //invalid font name
         else if (req.body.font_name && Fonts.all().indexOf(req.body.font_name) == -1){
-          error.handler(req, res, "Invalid font name! Please choose a different font!", "json");
+          error.handler(req, res, "That's an invalid font name! Please choose a different font and try again!", "json");
         }
         //invalid background color
         else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
-          error.handler(req, res, "Invalid background color! Please choose a different color!", "json");
+          error.handler(req, res, "That's an invalid background color! Please choose a different color and try again!", "json");
         }
         //invalid footer background color
         else if (req.body.footer_background_color && !validator.isHexColor(req.body.footer_background_color)){
-          error.handler(req, res, "Invalid footer background color! Please choose a different color!", "json");
+          error.handler(req, res, "That's an invalid footer background color! Please choose a different color and try again!", "json");
         }
         //invalid footer font color
         else if (req.body.footer_color && !validator.isHexColor(req.body.footer_color)){
-          error.handler(req, res, "Invalid footer text color! Please choose a different color!", "json");
+          error.handler(req, res, "That's an invalid footer text color! Please choose a different color and try again!", "json");
         }
         //invalid background link
         else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
-          error.handler(req, res, "Invalid background URL! Please enter a different URL!", "json");
+          error.handler(req, res, "That's an invalid background URL! Please enter a different URL and try again!", "json");
         }
         //invalid logo link
         else if (req.body.logo_image_link && !validator.isURL(req.body.logo_image_link)){
-          error.handler(req, res, "Invalid logo URL! Please enter a different URL!", "json");
+          error.handler(req, res, "That's an invalid logo URL! Please enter a different URL and try again!", "json");
         }
         //invalid domain owner
         else if (req.body.domain_owner && (domain_owner != 0 && domain_owner != 1)){
-          error.handler(req, res, "Invalid domain owner selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid domain owner selection! Please refresh the page and try again!", "json");
         }
         //invalid domain age
         else if (req.body.domain_age && (domain_age != 0 && domain_age != 1)){
-          error.handler(req, res, "Invalid domain age selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid domain age selection! Please refresh the page and try again!", "json");
         }
         //invalid domain list
         else if (req.body.domain_list && (domain_list != 0 && domain_list != 1)){
-          error.handler(req, res, "Invalid domain list selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid domain list selection! Please refresh the page and try again!", "json");
         }
         //invalid domain appraisal
         else if (req.body.domain_appraisal && (domain_appraisal != 0 && domain_appraisal != 1)){
-          error.handler(req, res, "Invalid domain appraisal selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid domain appraisal selection! Please refresh the page and try again!", "json");
         }
         //invalid social sharing
         else if (req.body.social_sharing && (social_sharing != 0 && social_sharing != 1)){
-          error.handler(req, res, "Invalid social sharing selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid social sharing selection! Please refresh the page and try again!", "json");
         }
         //invalid traffic module
         else if (req.body.traffic_module && (traffic_module != 0 && traffic_module != 1)){
-          error.handler(req, res, "Invalid traffic tab selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid traffic tab selection! Please refresh the page and try again!", "json");
         }
         //invalid traffic graph module
         else if (req.body.traffic_graph && (traffic_graph != 0 && traffic_graph != 1)){
-          error.handler(req, res, "Invalid traffic graph selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid traffic graph selection! Please refresh the page and try again!", "json");
         }
         //invalid Alexa stats module
         else if (req.body.alexa_stats && (alexa_stats != 0 && alexa_stats != 1)){
-          error.handler(req, res, "Invalid Alexa stats selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid Alexa stats selection! Please refresh the page and try again!", "json");
         }
         //invalid history module
         else if (req.body.history_module && (history_module != 0 && history_module != 1)){
-          error.handler(req, res, "Invalid history tab selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid history tab selection! Please refresh the page and try again!", "json");
         }
         //invalid info module
         else if (req.body.info_module && (info_module != 0 && info_module != 1)){
-          error.handler(req, res, "Invalid info tab selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid info tab selection! Please refresh the page and try again!", "json");
         }
         //invalid placeholder
         else if (req.body.placeholder && (placeholder != 0 && placeholder != 1)){
-          error.handler(req, res, "Invalid placeholder selection! Please refresh the page and try again!", "json");
+          error.handler(req, res, "That's an invalid placeholder selection! Please refresh the page and try again!", "json");
+        }
+        //invalid hub
+        else if (req.body.hub && (hub != 0 && hub != 1)){
+          error.handler(req, res, "That's an invalid hub selection! Please refresh the page and try again!", "json");
+        }
+        //invalid hub title
+        if (req.body.hub_title && (req.body.hub_title.length < 0 || req.body.hub_title.length > 75)){
+          error.handler(req, res, "The listing hub name cannot be more than 75 characters!", "json");
+        }
+        //invalid hub email selection
+        else if (req.body.hub_email && (hub_email != 0 && hub_email != 1)){
+          error.handler(req, res, "That's an invalid hub email selection! Please refresh the page and try again!", "json");
+        }
+        //invalid hub phone
+        else if (req.body.hub_phone && req.body.hub_phone != "" && !hub_phone){
+          error.handler(req, res, "That's an invalid phone number! Please enter a valid phone number and try again!", "json");
+        }
+        //invalid hub layout count
+        else if (req.body.hub_layout_count && !validator.isInt(req.body.hub_layout_count)){
+          error.handler(req, res, "That's an invalid amount of domains! Please enter a valid number and try again!", "json");
+        }
+        //invalid hub layout
+        else if (req.body.hub_layout_type && hub_layout_type != 0 && hub_layout_type != 1){
+          error.handler(req, res, "That's an invalid layout type! Please refresh the page and try again!", "json");
         }
         //all good!
         else {
@@ -938,6 +1003,14 @@ module.exports = {
 
           req.session.new_listing_info.placeholder = placeholder;
 
+          //hub
+          req.session.new_listing_info.hub = hub;
+          req.session.new_listing_info.hub_title = req.body.hub_title;
+          req.session.new_listing_info.hub_email = hub_email;
+          req.session.new_listing_info.hub_phone = hub_phone;
+          req.session.new_listing_info.hub_layout_count = parseFloat(req.body.hub_layout_count);
+          req.session.new_listing_info.hub_layout_type = hub_layout_type;
+
           //posted a URL for background image, not upload
           if (req.body.background_image_link){
             req.session.new_listing_info.background_image = req.body.background_image_link;
@@ -953,7 +1026,10 @@ module.exports = {
       }
       else {
         //not premium but tried to do premium updates
-        if (req.body.primary_color ||
+        if (
+          req.body.domain_name ||
+          req.body.description_footer ||
+          req.body.primary_color ||
           req.body.secondary_color ||
           req.body.tertiary_color ||
           req.body.font_name ||
@@ -974,8 +1050,12 @@ module.exports = {
           req.body.alexa_stats ||
           req.body.history_module ||
           req.body.placeholder ||
-          req.body.domain_name ||
-          req.body.description_footer
+          req.body.hub ||
+          req.body.hub_title ||
+          req.body.hub_email ||
+          req.body.hub_phone ||
+          req.body.hub_layout_count ||
+          req.body.hub_layout_type
         ){
           error.handler(req, res, "not-premium", "json");
         }
@@ -1058,7 +1138,7 @@ module.exports = {
       else if (req.body.registrar_name && req.body.registrar_name.length <= 0){
         error.handler(req, res, "You have entered an invalid registrar name! Please try something else.", "json");
       }
-      else if (req.body.date_expire && date_expire && !date_expire._isAMomentObject){
+      else if (req.body.date_expire != "" && !date_expire.isValid()){
         error.handler(req, res, "You have entered an invalid expiration date! Please try a different date.", "json");
       }
       else if (req.body.registrar_cost && !validator.isFloat(registrar_cost)){
@@ -1081,7 +1161,7 @@ module.exports = {
         req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
         req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
         req.session.new_listing_info.rentable = rentable;
-        req.session.new_listing_info.date_expire = date_expire.valueOf();
+        req.session.new_listing_info.date_expire = (req.body.date_expire == "" || !date_expire.isValid()) ? null : date_expire.valueOf();
         req.session.new_listing_info.registrar_name = registrar_name;
         req.session.new_listing_info.registrar_cost = registrar_cost;
 
@@ -1514,7 +1594,7 @@ function check_whois_promise(domain_name, index){
     //look up whois info
     whois.lookup(domain_name, function(err, data){
       if (err){
-        error.log(err, "Failed to lookup WHOIS information");
+        error.log(err, "Failed to lookup WHOIS information for domain " + domain_name);
         reject(false);
       }
       else if (data){
@@ -1683,7 +1763,7 @@ function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
 function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
   return Q.Promise(function(resolve, reject, notify){
     console.log("F: Setting DNS for NameSilo domain - " + registrar_domain_name + "...");
-    var namesilo_api_key = encryptor.decryptText(registrar_info.api_key)
+    var namesilo_api_key = encryptor.decryptText(registrar_info.api_key);
 
     //get existing DNS records
     request({

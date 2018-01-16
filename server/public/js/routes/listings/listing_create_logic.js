@@ -107,10 +107,15 @@ $(document).ready(function() {
         createDomainsTable(data.bad_listings, data.good_listings);
       }
       else {
-        errorMessage(data.message);
+        if (data.message == "max-domains-reached"){
+          errorMessage("You cannot exceed 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
+        }
+        else {
+          errorMessage(data.message);
+        }
       }
     }).error(function(){
-      errorMessage("You can only create up to 500 domains at a time!");
+      errorMessage("You can only create up to 100 domains at a time!");
     });
   }
 
@@ -302,7 +307,7 @@ $(document).ready(function() {
 
         if (data.state == "error"){
           if (data.message == "max-domains-reached"){
-            errorMessage("You have reached the maximum 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
+            errorMessage("You cannot exceed 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
           }
           else {
             errorMessage(data.message);
@@ -431,7 +436,6 @@ function lookupRegistrars(){
         if (data.good_listings.length > 0){
           var total_good_domains = (data.good_listings.length == 1) ? "an unlisted domain" : data.good_listings.length + " unlisted domains"
           successMessage("Successfully found " + total_good_domains + " from your connected registrars!");
-          console.log(data);
           createDomainsTable(data.bad_listings, data.good_listings);
         }
         else if (data.bad_listings.length == 0){
