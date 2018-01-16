@@ -239,7 +239,7 @@ module.exports = {
         }
 
         //all whois data received!
-        var limit = qlimit(5);     //limit parallel promises (throttle)
+        var limit = qlimit(4);     //limit parallel promises (throttle)
         Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
           return registrar_domain_promises[index]();
         }))).then(function(results) {
