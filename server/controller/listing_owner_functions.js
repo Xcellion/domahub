@@ -239,11 +239,10 @@ module.exports = {
         }
 
         //all whois data received!
-        var limit = qlimit(10);     //limit parallel promises (throttle)
+        var limit = qlimit(2);     //limit parallel promises (throttle)
         Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
           return registrar_domain_promises[index];
         }))).then(function(results) {
-          console.log(results);
           console.log("F: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
           for (var y = 0; y < results.length ; y++){
             //if there was an error, then add it to bad reasons
