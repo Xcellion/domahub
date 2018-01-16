@@ -93,7 +93,6 @@ $(document).ready(function() {
     var domain_names = $("#domain-names").val().replace(/\s/g,'').replace(/^[,\s]+|[,\s]+$/g, '').replace(/,[,\s]*,/g, ',').split(",");
     submit_elem.addClass('is-loading');
     clearNotification();
-    infoMessage("Now creating listings...this process could take a long time. Do not refresh the page or close the browser when creating a large set of listings.")
     $.ajax({
       url: "/listings/create/table",
       method: "POST",
@@ -292,6 +291,9 @@ $(document).ready(function() {
   function submitDomains(submit_elem){
     deleteEmptyTableRows();
     var domains = getTableListingInfo(".domain-name-input");
+    
+    infoMessage("Now creating listings...this process could take a long time. Do not refresh the page or close the browser when creating a large set of listings.")
+
     if (domains.length > 0){
       $("#domains-submit").addClass('is-loading');
       deleteGoodTableRows();
