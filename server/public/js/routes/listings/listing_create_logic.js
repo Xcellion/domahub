@@ -291,13 +291,11 @@ $(document).ready(function() {
   function submitDomains(submit_elem){
     deleteEmptyTableRows();
     var domains = getTableListingInfo(".domain-name-input");
-    
-    infoMessage("Now creating listings...this process could take a long time. Do not refresh the page or close the browser when creating a large set of listings.")
-
     if (domains.length > 0){
       $("#domains-submit").addClass('is-loading');
       deleteGoodTableRows();
       clearNotification();
+      infoMessage("Now creating listings...this process could take a long time. Do not refresh the page or close the browser when creating a large set of listings.")
       $.ajax({
         url: "/listings/create",
         method: "POST",
