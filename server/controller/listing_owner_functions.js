@@ -281,10 +281,7 @@ module.exports = {
       }
 
       //all whois data received!
-      var limit = qlimit(10);     //limit parallel promises (throttle)
-      Q.allSettled(whois_promises.map(limit(function(item, index, collection){
-        return whois_promises[index];
-      }))).then(function(results) {
+      Q.allSettled(whois_promises).then(function(results) {
         console.log("F: Finished looking up domain expiration dates!");
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
