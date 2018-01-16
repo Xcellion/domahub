@@ -97,6 +97,9 @@ module.exports = {
           IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
           IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
           IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
+          hub_grouping_table.hub_listing_ids, \
+          hub_grouping_table.hub_listing_domain_names, \
+          hub_grouping_table.hub_listing_categories, \
           rented_table.rented, \
           offers_table.deposited, \
           offers_table_accepted.accepted, \
@@ -142,6 +145,19 @@ module.exports = {
           GROUP BY stats_contact_history.listing_id \
         ) as offers_table_count \
         ON offers_table_count.listing_id = listings.id \
+        LEFT JOIN \
+          (SELECT \
+              listing_hub_grouping.listing_hub_id, \
+              GROUP_CONCAT(listing_hub_grouping.listing_id ORDER BY listing_hub_grouping.rank ASC) as hub_listing_ids, \
+              GROUP_CONCAT(listing_hub_grouping.rank ORDER BY listing_hub_grouping.rank ASC) as hub_ranks, \
+              GROUP_CONCAT(listings.domain_name ORDER BY listing_hub_grouping.rank ASC) as hub_listing_domain_names, \
+              GROUP_CONCAT(listings.categories ORDER BY listing_hub_grouping.rank ASC SEPARATOR '|') as hub_listing_categories \
+            FROM listing_hub_grouping \
+            INNER JOIN listings \
+            ON listing_id = listings.id \
+            GROUP BY listing_hub_id \
+        ) as hub_grouping_table \
+        ON hub_grouping_table.listing_hub_id = listings.id \
         WHERE owner_id = ? \
         AND listings.deleted IS NULL \
         ORDER BY listings.id ASC";

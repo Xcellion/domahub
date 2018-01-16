@@ -54,6 +54,10 @@ $(document).ready(function() {
   //hide upgrade link on left nav if already premium
   if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
     $("#nav-premium-link").removeClass('is-hidden');
+
+    if (user.stripe_subscription && user.stripe_subscription.cancel_at_period_end == true){
+      $("#nav-premium-link").find("small").text("Renew Premium");
+    }
   }
 
   //</editor-fold>

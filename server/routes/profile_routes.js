@@ -19,7 +19,7 @@ module.exports = function(app){
     stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
-    profile_functions.updateAccountSettingsGet,
+    profile_functions.updateAccountSettingsPassthrough,
     profile_functions.getAccountListings,
     profile_functions.authWithGoogle,
     profile_functions.renderDashboard
@@ -58,7 +58,8 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
-    profile_functions.checkPostedDeletionRows,
+    profile_functions.checkPostedRowOwnership,
+    profile_functions.formatPostedDeletionRows,
     profile_functions.deleteListings
   ]);
 
@@ -84,8 +85,22 @@ module.exports = function(app){
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
-    profile_functions.checkPostedVerificationRows,
+    profile_functions.checkPostedRowOwnership,
+    profile_functions.formatPostedVerificationRows,
     profile_functions.verifyListings
+  ]);
+
+  //mylistings add to/remove from hub
+  app.post("/profile/mylistings/hub", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.getAccountListings,
+    profile_functions.checkPostedRowOwnership,
+    stripe_functions.checkStripeSubscriptionForOwner,
+    profile_functions.updateAccountSettingsPassthrough,
+    profile_functions.checkPostedHubs,
+    profile_functions.formatPostedHubRows,
+    profile_functions.addRemoveHubRows
   ]);
 
   //</editor-fold>
@@ -104,7 +119,7 @@ module.exports = function(app){
     profile_functions.getUnredeemedPromoCodes,
     stripe_functions.getStripeCustomerNextInvoice,
     stripe_functions.getStripeSubscription,
-    profile_functions.updateAccountSettingsGet,
+    profile_functions.updateAccountSettingsPassthrough,
     profile_functions.renderSettings
   ]);
 

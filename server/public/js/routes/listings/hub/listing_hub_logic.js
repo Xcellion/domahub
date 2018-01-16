@@ -1,4 +1,4 @@
-//<editor-fold>-----------------------------------------------------------------------------------VARIABLES
+//<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var moneyFormat = wNumb({
   thousand: ',',
@@ -11,7 +11,7 @@ var listings_per_page = 10;
 
 $(document).ready(function() {
 
-  //<editor-fold>-----------------------------------------------------------------------------------DOMAIN TABLE
+  //<editor-fold>-------------------------------DOMAIN TABLE-------------------------------
 
   findOtherDomains();
 
@@ -26,7 +26,7 @@ $(document).ready(function() {
 
 });
 
-//<editor-fold>-----------------------------------------------------------------------------------PAGE SETUP
+//<editor-fold>-------------------------------PAGE SETUP-------------------------------
 
 //search, sort, pagination, category, change layout handlers
 function setupHandlers(){
@@ -135,7 +135,7 @@ function findOtherDomains(){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------TABLE SETUP
+//<editor-fold>-------------------------------TABLE SETUP-------------------------------
 
 //create the table of domains owned (depending on sort and search)
 function createDomaintable(){
@@ -175,7 +175,7 @@ function createDomaintable(){
 
   //filter by categories
   listings_to_show = listings_to_show.filter(function(listing){
-    if (listing.categories.indexOf($("#categories-select").val()) != -1){
+    if (listing.categories && listing.categories.indexOf($("#categories-select").val()) != -1){
       return true;
     }
   });
@@ -192,6 +192,7 @@ function createDomaintable(){
 
     for (var x = 0; x < listings_to_show.slice(start_at, start_at + listings_per_page).length; x++){
       var clone_row = $("#clone-row").clone().removeAttr("id");
+      console.log(listings_to_show[start_at + x].logo);
       if (listings_to_show[start_at + x].logo){
         clone_row.find(".domain-row-logo").attr("src", listings_to_show[start_at + x].logo);
       }
@@ -257,7 +258,7 @@ function createDomaintable(){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------HELPERS
+//<editor-fold>-------------------------------HELPERS-------------------------------
 
 //makes an array unique
 function arrayUnique(array) {

@@ -31,17 +31,6 @@ var fs = require('fs');
 var path = require("path");
 var safe_browse_key = "AIzaSyDjjsGtrO_4QwFDBA1cq9rCweeO4v3YLfs";
 
-//contact for buy now requirements
-var PNF = require('google-libphonenumber').PhoneNumberFormat;
-var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
-var randomstring = require("randomstring");
-var wNumb = require("wnumb");
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 0
-});
-
 //</editor-fold>
 
 module.exports = {
@@ -1014,7 +1003,6 @@ module.exports = {
 
   //returns three listing belonging to same person
   getOtherListings : function(req, res, next){
-    console.log("F: Finding other listings by same owner...");
     var owner_id = req.body.owner_id;
     var domain_name_exclude = req.body.domain_name_exclude;
     var sort_by = req.body.sort_by;
@@ -1023,6 +1011,7 @@ module.exports = {
 
     //make sure owner and domain exclude are legit
     if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id) && validator.isInt(total)){
+      console.log("F: Finding other listings by same owner...");
       listing_model.getListingsByOwner(domain_name_exclude, owner_id, function(result){
         if (!result.info.length || result.state == "error"){
           error.handler(req, res, "Failed to get other listings by the same owner!", "json");

@@ -18,6 +18,7 @@
           <a class="select-drop-button" data-type="unverified" data-value=true>Unverified</a>
           <a class="select-drop-button" data-type="status" data-value=true>Active (Verified)</a>
           <a class="select-drop-button" data-type="status" data-value=false>Inactive (Verified)</a>
+          <a class="select-drop-button" data-type="hub" data-value=1>Listing Hubs</a>
           <a class="select-drop-button" data-type="rented" data-value=1>Rented Now</a>
           <a class="select-drop-button" data-type="accepted" data-value=1>Accepted An Offer</a>
           <a class="select-drop-button" data-type="deposited" data-value=1>Sold (Not Transferred)</a>
@@ -55,6 +56,28 @@
         </div>
         <span>View Statistics</span>
       </a>%>
+      <div id="hub-selector-wrapper">
+        <a id="hub-select-button" class="is-hidden selector-button button is-stylish is-small is-purple is-inverted" tabindex="0" title="Add to a listing hub">
+          <div class="icon is-small">
+            <i class="far fa-object-group"></i>
+          </div>
+          <span class="is-hidden-mobile">Add To A Hub</span>
+          <div class="icon"><i class="far fa-angle-down"></i></div>
+        </a>
+        <div id="hub-drop" class="is-hidden domain-tooltip">
+          <div id="hub-drop-clone" class="is-hidden">
+            <div class="control is-grouped">
+              <form class="control checkbox-form is-marginless">
+                <input class="select-button" type="checkbox" tabindex="0"/>
+                <label class="hub-drop-label"></label>
+              </form>
+              <div class="hub-drop-domain-name control"></div>
+            </div>
+          </div>
+          <div id="hub-drop-domains-wrapper"></div>
+          <a id="hub-drop-apply" class="button is-primary is-fullwidth is-hidden">Apply</a>
+        </div>
+      </div>
       <a class="button is-black is-inverted is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
         <div class="icon is-small">
           <i class="far fa-plus-circle"></i>
@@ -73,6 +96,7 @@
               <option value="unverified">Unverified</option>
               <option value="status">Active (Verified)</option>
               <option value="inactive">Inactive (Verified)</option>
+              <option value="hub">Listing Hubs</option>
               <option value="rented">Rented Now</option>
               <option value="accepted">Accepted An Offer</option>
               <option value="deposited">Sold (Not Transferred)</option>
@@ -102,13 +126,15 @@
   <table id="listings-table" class="table is-fixed has-shadow">
     <thead class="yes-listings-elem has-hover-effect">
       <tr>
-        <th class="checkbox-col"></th>
+        <th class="checkbox-col">
+          <span id="current-selected-count"></span>
+        </th>
         <th data-value="domain_name" class="td-domain listing-header-sort">
           <span>Domain Name</span>
           <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="status" class="td-status listing-header-sort">
-          <span>Status</span>
+          <span>Status/Type</span>
           <div class="listing-header-sort icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="date_created" class="is-hidden-mobile listing-header-sort">
