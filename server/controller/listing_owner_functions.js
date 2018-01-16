@@ -239,7 +239,7 @@ module.exports = {
         }
 
         //all whois data received!
-        var limit = qlimit(4);     //limit parallel promises (throttle)
+        var limit = qlimit(5);     //limit parallel promises (throttle)
         Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
           return registrar_domain_promises[index]();
         }))).then(function(results) {
@@ -323,11 +323,7 @@ module.exports = {
               //some DNS changes were made! check them now to see if we should auto-verify some listings
               if (req.session.new_listings.check_dns_promises.length > 0){
                 //all whois data received!
-                var limit = qlimit(10);     //limit parallel promises (throttle)
-                var check_dns_promises = req.session.new_listings.check_dns_promises;
-                Q.allSettled(check_dns_promises.map(limit(function(item, index, collection){
-                  return check_dns_promises[index];
-                }))).then(function(results) {
+                Q.allSettled(req.session.new_listings.check_dns_promises).then(function(results) {
                   console.log("F: Finished checking DNS changes for newly created domains!");
 
                   //remove from the inserted_ids list
