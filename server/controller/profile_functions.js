@@ -822,7 +822,7 @@ module.exports = {
         res.send({
           state : "success",
           bad_listings : total_bad_domains,
-          good_listings : total_good_domains.slice(0, 100)
+          good_listings : total_good_domains
         });
       });
     }

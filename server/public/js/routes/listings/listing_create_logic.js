@@ -435,8 +435,9 @@ function lookupRegistrars(){
       if (data.state == "success"){
         if (data.good_listings.length > 0){
           var total_good_domains = (data.good_listings.length == 1) ? "an unlisted domain" : data.good_listings.length + " unlisted domains"
-          successMessage("Successfully found " + total_good_domains + " from your connected registrars!");
-          createDomainsTable(data.bad_listings, data.good_listings);
+          var excess_hundred = (data.good_listings.length > 100) ? " Now showing the first 100 listings." : "";
+          successMessage("Successfully found " + total_good_domains + " from your connected registrars!" + excess_hundred);
+          createDomainsTable(data.bad_listings, data.good_listings.slice(0, 100));
         }
         else if (data.bad_listings.length == 0){
           errorMessage("You don't have any domains in your connected registrars! If there is something wrong, please <a class='is-underlined contact-link' href='/contact'>contact us</a> for assistance!");
