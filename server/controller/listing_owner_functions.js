@@ -241,7 +241,7 @@ module.exports = {
         //all whois data received!
         var limit = qlimit(10);     //limit parallel promises (throttle)
         Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
-          return registrar_domain_promises[index]();
+          return registrar_domain_promises[index];
         }))).then(function(results) {
           console.log(results);
           console.log("F: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
@@ -284,7 +284,7 @@ module.exports = {
       //all whois data received!
       var limit = qlimit(10);     //limit parallel promises (throttle)
       Q.allSettled(whois_promises.map(limit(function(item, index, collection){
-        return whois_promises[index]();
+        return whois_promises[index];
       }))).then(function(results) {
         console.log("F: Finished looking up domain expiration dates!");
         for (var y = 0 ; y < results.length ; y++){
@@ -327,7 +327,7 @@ module.exports = {
                 var limit = qlimit(10);     //limit parallel promises (throttle)
                 var check_dns_promises = req.session.new_listings.check_dns_promises;
                 Q.allSettled(check_dns_promises.map(limit(function(item, index, collection){
-                  return check_dns_promises[index]();
+                  return check_dns_promises[index];
                 }))).then(function(results) {
                   console.log("F: Finished checking DNS changes for newly created domains!");
 
