@@ -613,9 +613,6 @@ var parseString = require('xml2js').parseString;
 var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.com/api" : "https://www.namesilo.com/api";
 var namesilo_api = (process.env.NODE_ENV == "dev") ? "aaa3f4cfdcd5faf386a8b" : "1bcd579c7d457db62657ebee";
 
-//prod db api key for namesilo for wonmin
-// c16509f546161d60dd8a75ca6811ecee113d3d477d6e3f9e
-
 function godaddy(req, res, next){
   request({
     url: "https://api.godaddy.com/v1/domains/cALEntopia.com/records/A",
