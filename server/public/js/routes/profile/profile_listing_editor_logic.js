@@ -426,9 +426,12 @@ function checkBox(module_value, elem, child){
       swatches: ["#3CBC8D", "#FF5722", "#2196F3"]
     }
 
-    $("#primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#primary-color-input").val(listing_info.primary_color);
+    $("#primary-color-input").minicolors("destroy").minicolors(minicolor_options);
+    $("#secondary-color-input").val(listing_info.secondary_color);
+    $("#secondary-color-input").minicolors("destroy").minicolors(minicolor_options);
+    $("#tertiary-color-input").val(listing_info.tertiary_color);
+    $("#tertiary-color-input").minicolors("destroy").minicolors(minicolor_options);
 
     //update the preview
     $("#example-domain-name").css("color", listing_info.primary_color);
@@ -450,7 +453,8 @@ function checkBox(module_value, elem, child){
       swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
     }
 
-    $("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#font-color-input").val(listing_info.font_color);
+    $("#font-color-input").minicolors("destroy").minicolors(minicolor_options);
     $("#font-name-input").val(listing_info.font_name);
 
     //update the preview
@@ -463,8 +467,10 @@ function checkBox(module_value, elem, child){
       swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
     }
 
-    $("#footer-background-color-input").val(listing_info.footer_background_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#footer-color-input").val(listing_info.footer_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#footer-background-color-input").val(listing_info.footer_background_color)
+    $("#footer-background-color-input").minicolors("destroy").minicolors(minicolor_options);
+    $("#footer-color-input").val(listing_info.footer_color);
+    $("#footer-color-input").minicolors("destroy").minicolors(minicolor_options);
 
     //update the preview
     $("#example-footer-background").css("background-color", listing_info.footer_background_color);
@@ -492,7 +498,8 @@ function checkBox(module_value, elem, child){
       $("#example-wrapper").css('background-image', "");
     }
 
-    $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#background-color-input").val(listing_info.background_color);
+    $("#background-color-input").minicolors("destroy").minicolors(minicolor_options);
     $("#example-wrapper").css({"background-color" : listing_info.background_color});
   }
   function updateLogo(listing_info){

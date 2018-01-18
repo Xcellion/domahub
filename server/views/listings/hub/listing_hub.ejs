@@ -18,11 +18,40 @@
 
     <section class="hero is-small gradient-left-right">
 
+			<div class="hero-head">
+        <nav class="nav">
+          <div class="nav-left">
+						<a class="nav-item">
+							<figure class="image is-32x32">
+								<img src="/images/dh-assets/circle-logo/dh-circle-logo-white.png" />
+							</figure>
+						</a>
+          </div>
+          <div class="nav-center">
+
+          </div>
+          <div class="nav-right nav-menu">
+            <a class="nav-item" href="mailto:<%= listing_info.owner_email %>">
+              <%= listing_info.owner_email %>
+            </a>
+            <a class="nav-item">
+              212-503-6773
+            </a>
+            <span class="nav-item">
+              <a class="button is-primary is-inverted is-stylish is-small">
+								<span class="icon"><i class="far fa-shopping-cart"></i></span>
+                <span>Checkout</span>
+              </a>
+            </span>
+          </div>
+        </nav>
+      </div>
+
       <div class="hero-body min-height">
         <div class="container">
-          <div class="content">
-            <h1 class="title is-1 is-primary"><%= listing_info.domain_name %></h1>
-						<p class="subtitle is-5" style="max-width: 500px;">
+          <div class="content has-text-centered">
+            <h1 class="title is-1 is-primary">Hot, fresh domains</h1>
+						<p class="subtitle is-5">
 							<%= listing_info.description %>
 						</p>
           </div>
@@ -31,35 +60,50 @@
 
     </section>
 
-    <section class="section is-small" style="background-color:#f2f5f7;">
+    <section class="section is-small is-pastel">
       <div class="container">
 				<div class="control has-addons" style="max-width:500px;margin-left:auto;margin-right:auto;">
-					<input id="search-domain-main" class="input is-medium" type="text" placeholder="Search domains..."/>
-					<input id="search-domain-tld" class="input is-medium" type="text" value=".com" style="max-width:100px;color:#3cbc8d"/>
+					<input id="search-domain-main" class="input is-stylish has-shadow is-medium" type="text" placeholder="Search domains..."/>
+					<input id="search-domain-tld" class="input is-stylish has-shadow is-medium" type="text" value=".com" style="max-width:100px;"/>
 				</div>
 				<div class="control is-spaced is-mobile">
 					<div class="control-left">
 						<p id="total-domain-count"></p>
 					</div>
 					<div class="control-right">
-						<div class="select is-stylish no-borders">
+						<div class="select is-stylish has-shadow no-borders">
 							<select id="categories-select">
                 <option value="" selected>
                   All Categories
                 </option>
               </select>
 						</div>
-            <button id="layout-button" class="button is-icon">
-              <div class="icon">
-                <i class="far fa-align-justify"></i>
-              </div>
-            </button>
-						<button id="prev-page" class="is-disabled page-button button is-icon">
+						<div class="select is-stylish has-shadow no-borders is-hidden-mobile">
+							<select id="views-select">
+								<option value="" disabled>
+                  Select View
+                </option>
+                <option value="" selected>
+                  Table View
+                </option>
+								<option value="">
+                  Grid View
+                </option>
+              </select>
+						</div>
+						<div class="is-inline is-hidden-tablet" data-balloon="Switch View" data-balloon-pos="up">
+	            <button id="layout-button" class="button is-icon">
+	              <div class="icon">
+	                <i class="far fa-list"></i>
+	              </div>
+	            </button>
+						</div>
+						<button id="prev-page" class="is-disabled page-button button is-black is-inverted is-icon">
 							<div class="icon">
 								<i class="far fa-angle-left"></i>
 							</div>
 						</button>
-						<button id="next-page" class="is-disabled page-button button is-icon">
+						<button id="next-page" class="is-disabled page-button button is-black is-inverted is-icon">
 							<div class="icon">
 								<i class="far fa-angle-right"></i>
 							</div>
@@ -69,22 +113,25 @@
       </div>
     </section>
 
-		<section class="section is-small" style="background-color:#f2f5f7;min-height:800px;">
+		<section class="section is-medium-top is-pastel">
 			<div class="container">
 				<table id="domains-table" class="domains-table is-hidden table is-transparent-head">
 					<thead>
 						<tr>
-							<th colspan="1"></th>
+							<th colspan="1" class="is-hidden-mobile"></th>
 							<th class="sort-header" data-sort-by="domain_name" colspan="2">
-                <span>Domain Name</span>
+								<span class="is-hidden-mobile">Domain Name</span>
+								<span class="is-hidden-tablet">Domain</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="buy_price" colspan="1">
-                <span>Buy It Now Price</span>
+                <span class="is-hidden-mobile">Buy It Now Price</span>
+								<span class="is-hidden-tablet">BIN $</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="min_price" colspan="1">
-                <span>Minimum Price</span>
+								<span class="is-hidden-mobile">Minimum Price</span>
+								<span class="is-hidden-tablet">MIN $</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="price_rate" colspan="1">
@@ -94,8 +141,8 @@
 						</tr>
 					</thead>
 					<tbody id="domain-table-body">
-						<tr id="clone-row" class="is-hidden table-row no-hover-effect">
-							<td colspan="1" class="img-col">
+						<tr id="clone-row" class="is-hidden table-row">
+							<td colspan="1" class="img-col is-hidden-mobile">
 								<figure class="image is-48x48 left-aligned">
 									<img class="domain-row-logo" alt="Domain Logo"/>
 								</figure>
@@ -127,9 +174,21 @@
 								</button>
 								<div class="misc-options is-hidden">
 									<ul>
-                    <li><i class="far fa-comment"></i></li>
-										<li><i class="far fa-share"></i></li>
-										<li><i class="far fa-info-circle"></i></li>
+                    <li>
+											<div class="icon is-white is-small">
+												<i class="far fa-comment"></i>
+											</div>
+										</li>
+										<li>
+											<div class="icon is-white is-small">
+												<i class="far fa-share"></i>
+											</div>
+										</li>
+										<li>
+											<div class="icon is-white is-small">
+												<i class="far fa-exclamation-circle"></i>
+											</div>
+										</li>
 									</ul>
 								</div>
 							</td>
@@ -142,7 +201,9 @@
               <td>
                 <div>
                   <div class="nothing-exists-row has-text-centered">
-                    <img src="/images/lib/ggface.png">
+                    <div class="icon is-dark is-large">
+											<i class="far fa-exclamation-circle"></i>
+										</div>
                     <p>Oh, no! There are no matching domains!</p>
                   </div>
                 </div>
@@ -167,6 +228,225 @@
         </table>
 			</div>
 		</section>
+
+		<section class="section is-pastel is-medium">
+			<div class="container">
+				<div id="domains-grid" class="columns">
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="/images/dh-assets/dh-features-twitter.png" />
+								</figure>
+							</div>
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									<small>$2,500</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="http://via.placeholder.com/300x150" />
+								</figure>
+							</div>
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									<small>$2,500</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="http://via.placeholder.com/300x150" />
+								</figure>
+							</div>
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									<small>$2,500</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-3">
+						<div class="card has-shadow-effect cursor-pointer">
+							<div class="card-image">
+								<figure class="image is-2by1">
+									<img src="http://via.placeholder.com/300x150" />
+								</figure>
+							</div>
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									<small>$2,500</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="section is-white is-medium">
+			<div class="container">
+				<div class="columns is-laptop">
+					<div class="column is-8">
+						<div class="content">
+							<p class="tag is-medium is-primary">$2,500</p>
+							<h1>DomaHub.com</h1>
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+							</p>
+						</div>
+						<figure class="image is-2by1">
+							<img src="http://via.placeholder.com/600x300" />
+						</figure>
+					</div>
+					<div class="column is-4">
+						<div class="card is-fullwidth">
+							<div class="card-content">
+								<div class="control is-spaced has-wrap is-aligned-start">
+									<div class="control-left">
+										<p class="is-bold">
+											Registrar
+										</p>
+									</div>
+									<div class="control-right">
+										<p>
+											GoDaddy
+										</p>
+									</div>
+								</div>
+								<div class="control is-spaced has-wrap is-aligned-start">
+									<div class="control-left">
+										<p class="is-bold">
+											Registered
+										</p>
+									</div>
+									<div class="control-right">
+										<p>
+											April 20, 2015
+										</p>
+									</div>
+								</div>
+								<div class="control is-spaced has-wrap is-aligned-start">
+									<div class="control-left">
+										<p class="is-bold">
+											Categories
+										</p>
+									</div>
+									<div class="control-right">
+										<p class="has-text-right">
+											SAAS, Start Up, Business, Branding, Company, Fun, Leisure, Domains, Healthcare
+										</p>
+									</div>
+								</div>
+								<div class="control is-grouped">
+									<div id="make-offer-button" class="control is-expanded">
+										<a class="button is-stylish is-fullwidth is-primary">Make Offer</a>
+									</div>
+									<div class="control is-expanded">
+										<a class="button is-stylish is-fullwidth is-accent">Buy Now</a>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="control is-grouped">
+									<div class="control">
+										<a class="">
+											<i class="far fa-facebook-f fa-fw"></i>
+										</a>
+									</div>
+									<div class="control">
+										<a class="">
+											<i class="far fa-twitter fa-fw"></i>
+										</a>
+									</div>
+									<div class="control">
+										<a class="">
+											<i class="far fa-linkedin-in fa-fw"></i>
+										</a>
+									</div>
+									<div class="control">
+										<a class="">
+											<i class="far fa-envelope fa-fw"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div id="offer-modal" class="modal">
+		  <div class="modal-background"></div>
+		  <div class="modal-container">
+		    <div class="modal-content is-small">
+		      <div class="content has-text-centered">
+		        <p class="is-bold">Make Offer</p>
+		      </div>
+					<div class="control">
+						<form id="buy-now-form" autocomplete="off" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
+							<label class="error_message label" for="contact_name">Name</label>
+				      <div class="control has-icon">
+				        <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
+				        <div class="icon">
+				          <i class="far fa-user-alt"></i>
+				        </div>
+				      </div>
+							<label class="error_message label" for="contact_email">Email Address</label>
+				      <div class="control has-icon">
+				        <input id="contact_email" placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email">
+				        <div class="icon">
+				          <i class="far fa-envelope"></i>
+				        </div>
+				      </div>
+							<label class="error_message label" for="contact_phone">Phone</label>
+				      <div class="control has-icon">
+				        <input id="contact_phone" required class="contact-input input phone-number" name="contact_phone" type="tel">
+				      </div>
+							<label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
+				      <div class="control has-icon">
+				        <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" placeholder="<%= (listing_info.min_price == 0) ? "" : listing_info.min_price %>" min="<%= (listing_info.min_price == 0) ? "" : listing_info.min_price %>">
+				        <div class="icon">
+				          <i class="far fa-usd-circle"></i>
+				        </div>
+				      </div>
+							<label class="error_message label" for="contact_message">Message</label>
+				      <div class="control">
+				        <textarea id="contact_message" required class="contact-input textarea" name="contact_message" placeholder="Hey! I'm interested in buying <%= listing_info.domain_name %>. Let's chat."></textarea>
+				      </div>
+				    </form>
+					</div>
+		      <div class="control is-expanded">
+	          <a id="submit-offer-button" tabindex="0" class="button is-fullwidth is-primary is-stylish">
+	            <div class="icon is-small"><i class="far fa-check-circle"></i></div>
+	            <span>Submit Offer</span>
+	          </a>
+		      </div>
+		    </div>
+		  </div>
+		  <button class="modal-close"></button>
+		</div>
 
 		<%- include("../listing_footer.ejs") %>
 
