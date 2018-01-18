@@ -38,7 +38,7 @@ function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'').toLowerCase();
 
   if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("listing") != -1){
-    console.log("AF: Forwarding to the next route...");
+    console.log("APF: Forwarding to the next route...");
     next("route");
   }
   else if (req.headers.host){
@@ -81,16 +81,16 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name, path, next){
   //requesting something besides main page, pipe the request
   if (req.session.rented_info && req.session.rented_info.path == path){
-    console.log("AF: Proxying rental request for an existing session for " + domain_name + "!");
+    console.log("APF: Proxying rental request for an existing session for " + domain_name + "!");
     searchAndDirect(req.session.rented_info, req, res);
   }
   else {
-    console.log("AF: Attempting to check current rental status for " + domain_name + "!");
+    console.log("APF: Attempting to check current rental status for " + domain_name + "!");
     listing_model.getCurrentRental(domain_name, path, function(result){
 
       //not rented! check if it's premium to see if we should use domahub URL or custom URL
       if (result.state != "success" || result.info.length == 0){
-        console.log("AF: Not rented! Redirecting to listing page...");
+        console.log("APF: Not rented! Redirecting to listing page...");
         delete req.session.rented_info;
 
         //used to replace req.params domain name variable since there is none coming from API
@@ -112,7 +112,7 @@ function checkForBasicRedirect(req, res, next){
 
   //premium! go ahead and display listings on this URL
   if (req.session.listing_info && req.session.listing_info.premium){
-    console.log("AF: Premium domain! Display listing on custom URL...");
+    console.log("APF: Premium domain! Display listing on custom URL...");
 
     //redirect to base path if it's requesting something weird
     if (req.originalUrl != "/" || req.originalUrl == "/listing/" + req.session.listing_info.domain_name){
@@ -126,7 +126,7 @@ function checkForBasicRedirect(req, res, next){
 
   //basic domain! redirect to /listings
   else {
-    console.log("AF: Basic domain! Redirecting to DomaHub...");
+    console.log("APF: Basic domain! Redirecting to DomaHub...");
     var path = req.originalUrl.substr(1, req.originalUrl.length);
     res.redirect("https://domahub.com/listing/" + req.session.listing_info.domain_name + "?wanted=" + path);
   }
@@ -134,22 +134,22 @@ function checkForBasicRedirect(req, res, next){
 
 //rented! add to search and decide where to proxy
 function searchAndDirect(rental_info, req, res){
-  console.log("AF: Currently rented!");
+  console.log("APF: Currently rented!");
 
   //proxy the request
   if (rental_info.address){
     if (rental_info.type == 0){
-      console.log("AF: Displaying content from " + rental_info.address + "...");
+      console.log("APF: Displaying content from " + rental_info.address + "...");
       req.session.rented_info = rental_info;
       requestProxy(req, res, rental_info);
     }
     else {
-      console.log("AF: Forwarding website to " + rental_info.address + "...");
+      console.log("APF: Forwarding website to " + rental_info.address + "...");
       res.redirect(rental_info.address);
     }
   }
   else {
-    console.log("AF: No address associated with rental! Displaying default empty page...");
+    console.log("APF: No address associated with rental! Displaying default empty page...");
     var image_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs');
     res.render(image_path, {
       image: "",
@@ -173,7 +173,7 @@ function requestProxy(req, res, rental_info){
   }, function (err, response, body) {
     //an image/PDF was requested
     if (response.headers['content-type'].indexOf("image") != -1 || response.headers['content-type'].indexOf("pdf") != -1){
-      console.log("AF: Requested rental address was an image/PDF!");
+      console.log("APF: Requested rental address was an image/PDF!");
       var image_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs');
 
       res.render(image_path, {
@@ -185,7 +185,7 @@ function requestProxy(req, res, rental_info){
       });
     }
     else {
-      console.log("AF: Requested rental address was a website!");
+      console.log("APF: Requested rental address was a website!");
 
       //pathes for the domahub overlay
       var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');

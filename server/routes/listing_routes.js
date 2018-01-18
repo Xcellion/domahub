@@ -25,7 +25,7 @@ module.exports = function(app){
       stripe_functions.getStripeAccount,
       stripe_functions.getStripeCustomer,
       stripe_functions.getStripeSubscription,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       owner_functions.renderCreateListing
     ]);
 
@@ -68,7 +68,7 @@ module.exports = function(app){
       owner_functions.checkListingVerified,
       owner_functions.checkListingPurchased,
       stripe_functions.checkStripeSubscriptionForOwner,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       owner_functions.checkImageUploadSize,
       owner_functions.checkListingImage,
       owner_functions.checkListingStatus,
@@ -87,7 +87,7 @@ module.exports = function(app){
       profile_functions.getAccountListings,
       owner_functions.checkPostedListingInfoMulti,
       stripe_functions.checkStripeSubscriptionForOwner,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       owner_functions.checkListingImage,
       owner_functions.checkListingStatus,
       owner_functions.checkListingPremiumDetails,
@@ -126,7 +126,7 @@ module.exports = function(app){
       renter_functions.checkSessionListingInfoPost,
       buyer_functions.checkContactInfo,
       stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       buyer_functions.createOfferContactRecord,
       buyer_functions.sendContactVerificationEmail
     ]);
@@ -138,7 +138,7 @@ module.exports = function(app){
       buyer_functions.checkContactVerificationCode,
       renter_functions.getListingInfo,
       stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       buyer_functions.verifyContactHistory
     ]);
 
@@ -168,7 +168,7 @@ module.exports = function(app){
       buyer_functions.checkOfferAccepted,
       renter_functions.getListingInfo,
       stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       buyer_functions.getContactInfo,
       buyer_functions.renderCheckout
     ]);
@@ -192,7 +192,7 @@ module.exports = function(app){
       buyer_functions.checkListingPurchaseVerificationCode,
       renter_functions.getListingInfo,
       stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       buyer_functions.renderVerificationPage
     ]);
 
@@ -215,7 +215,7 @@ module.exports = function(app){
       listing_general_functions.checkDomainListed,
       renter_functions.checkSessionListingInfoPost,
       stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       stripe_functions.chargeMoneyBuy,
       buyer_functions.createBuyContactRecord,
       buyer_functions.alertOwnerBIN,
@@ -232,7 +232,7 @@ module.exports = function(app){
       renter_functions.checkSessionListingInfoPost,
       buyer_functions.checkContactInfo,
       stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       buyer_functions.redirectToCheckout
     ]);
 
@@ -261,7 +261,7 @@ module.exports = function(app){
       renter_functions.getListingInfo,
       renter_functions.checkStillVerified,
       stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsGet,
+      profile_functions.updateAccountSettingsPassthrough,
       // renter_functions.getListingFreeTimes,
       renter_functions.redirectPremium,
       renter_functions.renderListing

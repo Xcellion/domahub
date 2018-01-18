@@ -57,3 +57,9 @@
   content: url(/images/lib/material/checked-box.svg);
   opacity: 1;
 }
+
+.checkbox-form input[type="checkbox"]:indeterminate + label::before,
+.checkbox-form input[type="radio"]:indeterminate + label::before {
+  content: url(/images/lib/material/indeterminate-box.svg);
+  opacity: 1;
+}

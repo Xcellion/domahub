@@ -111,6 +111,7 @@ var demo_domahub_user = {
       buy_price : 25000,
       date_created : moment().add(6, "day").subtract(1, "year").valueOf(),
       date_expire : moment().add(6, "day").valueOf(),
+      date_registered : moment().subtract(5, "month").valueOf(),
       categories : "hightraffic industry other startup",
       description : Descriptions.random(),
       registrar_cost : 12.00,
@@ -148,6 +149,7 @@ var demo_domahub_user = {
       rented : 1,
       date_created : moment().add(1, "month").subtract(1, "year").valueOf(),
       date_expire : moment().add(1, "month").valueOf(),
+      date_registered : moment().subtract(4, "day").valueOf(),
       categories : "industry other startup",
       description : Descriptions.random(),
       registrar_cost : 12.00,
@@ -184,6 +186,7 @@ var demo_domahub_user = {
       buy_price : 0,
       date_created : moment().valueOf(),
       date_expire : moment().add(1, "year").valueOf(),
+      date_registered : moment().subtract(2, "year").valueOf(),
       categories : "brandable business career industry keywords other promotion startup technology",
       description : Descriptions.random(),
       registrar_cost : 12.00,
@@ -250,6 +253,7 @@ var demo_domahub_user = {
       buy_price : 0,
       date_created : moment().add(5, "month").subtract(1, "year").valueOf(),
       date_expire : moment().add(5, "month").valueOf(),
+      date_registered : moment().subtract(6, "week").valueOf(),
       categories : "event hightraffic holiday kids lifestyle niche other personal promotion shopping toys travel",
       description : Descriptions.random(),
       registrar_cost : 9.99,
@@ -275,6 +279,7 @@ var demo_domahub_user = {
       },
       date_created : moment(),
       date_expire : moment().add(1, "year").valueOf(),
+      date_registered : moment().subtract(2, "month").valueOf(),
       categories : "hightraffic industry other startup",
       description : Descriptions.random(),
       registrar_cost : 9.99,
@@ -298,6 +303,7 @@ var demo_domahub_user = {
       buy_price : 25000,
       date_created : moment(),
       date_expire : moment().add(1, "year").valueOf(),
+      date_registered : moment().subtract(8, "year").valueOf(),
       categories : "hightraffic industry other startup",
       description : Descriptions.random(),
       registrar_cost : 9.99,
@@ -369,7 +375,7 @@ module.exports = {
 
   //check promo code for referral
   checkReferralCode : function(req, res, next){
-    console.log("F: Checking referral code validity...");
+    console.log("AUF: Checking referral code validity...");
 
     //if no promo code or if it's the demo username
     if (!req.params.promo_code || req.params.promo_code == "domahubdemo"){
@@ -380,7 +386,7 @@ module.exports = {
       //check if code exists and is unused
       account_model.checkPromoCodeUnused(req.params.promo_code, function(result){
         if (result.state == "success" && result.info.length > 0){
-          console.log("F: Promo code exists!");
+          console.log("AUF: Promo code exists!");
           delete req.session.referer_id;
           req.session.promo_code_signup = req.params.promo_code;
           req.session.message = "Successfully applied promo code! Sign up below to get started.";
@@ -393,7 +399,7 @@ module.exports = {
           //get the username ID so we can create a referral code
           account_model.getAccountIDByUsername(req.params.promo_code, function(result){
             if (result.state == "success" && result.info.length > 0){
-              console.log("F: Username referral code exists!");
+              console.log("AUF: Username referral code exists!");
               delete req.session.promo_code_signup;
               req.session.referer_id = result.info[0].id;
               req.session.message = "Successfully applied promo code! Sign up below to get started.";
@@ -502,7 +508,7 @@ module.exports = {
 
               //sign up on mailchimp
               if (process.env.NODE_ENV != "dev"){
-                console.log("F: Adding to Mailchimp list...");
+                console.log("AUF: Adding to Mailchimp list...");
                 request({
                   url : monkey_url,
                   method : "POST",
@@ -519,7 +525,7 @@ module.exports = {
                 }, function(err, response, body){
                   if (err || body.errors || body.status == 400){
                     //send email to notify
-                    console.log("F: Failed to add to Mailchimp list! Notifying...");
+                    console.log("AUF: Failed to add to Mailchimp list! Notifying...");
                     mailer.sendBasicMail({
                       to: "general@domahub.com",
                       from: 'general@domahub.com',
@@ -529,7 +535,7 @@ module.exports = {
                   }
                   else {
                     //send email to notify
-                    console.log("F: Successfully added to Mailchimp list! Notifying...");
+                    console.log("AUF: Successfully added to Mailchimp list! Notifying...");
                     mailer.sendBasicMail({
                       to: "general@domahub.com",
                       from: 'general@domahub.com',
@@ -561,7 +567,7 @@ module.exports = {
   //logout demo
   logoutDemo : function(req, res, next){
     if (req.isAuthenticated() && !req.user.id){
-      console.log("F: Logging out as the Domahub demo user...");
+      console.log("AUF: Logging out as the Domahub demo user...");
       req.logout();
     }
     next();
@@ -572,12 +578,12 @@ module.exports = {
 
     //if user is authenticated, log them out first
     if (req.isAuthenticated()){
-      console.log("F: Logging out existing user before DomaHub demo...");
+      console.log("AUF: Logging out existing user before DomaHub demo...");
       req.logout();
       delete req.user;
     }
 
-    console.log("F: Attempting to log in as the DomaHub demo user...");
+    console.log("AUF: Attempting to log in as the DomaHub demo user...");
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     res.header('Expires', '-1');
     res.header('Pragma', 'no-cache');
@@ -588,7 +594,7 @@ module.exports = {
 
   //check if account exists on domahub (for password reset)
   checkAccountExists : function(req, res, next){
-    console.log("F: Checking if account exists...");
+    console.log("AUF: Checking if account exists...");
 
     account_model.checkAccountEmail(req.body["email"], function(result){
       if (!result.info.length || result.state == "error"){
@@ -602,7 +608,7 @@ module.exports = {
 
   //make sure user is logged in before doing anything
   checkLoggedIn : function(req, res, next) {
-    console.log("F: Checking if authenticated...");
+    console.log("AUF: Checking if authenticated...");
 
     //if user is authenticated in the session, carry on
     if (req.isAuthenticated()){
@@ -650,7 +656,7 @@ module.exports = {
   //log out of the session
   logout: function(req, res) {
     if (req.isAuthenticated()){
-      console.log("F: " + req.user.username + " is logging out...");
+      console.log("AUF: " + req.user.username + " is logging out...");
       req.logout();
       req.session.destroy();
       delete req.session;
@@ -692,7 +698,7 @@ module.exports = {
             var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
             //update account last accessed and removing any existing tokens
-            console.log("F: Updating last accessed for account with email: " + req.body.email);
+            console.log("AUF: Updating last accessed for account with email: " + req.body.email);
             account_model.updateAccount({
               date_accessed : now_utc,
               token: null,
@@ -745,7 +751,7 @@ module.exports = {
               subject: "Hi, " + username + '. Welcome to DomaHub!',
             }, function(state){
               if (state == "success"){
-                console.log("F: Successfully sent email!");
+                console.log("AUF: Successfully sent email!");
               }
             });
 
@@ -773,7 +779,7 @@ module.exports = {
 
     //already requested and token still good
     if (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp).getTime())){
-      console.log("F: Sending existing token!");
+      console.log("AUF: Sending existing token!");
 
       //email verify email
       mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
@@ -941,7 +947,7 @@ function messageReset(req){
 
 //helper function to verify account
 function generateVerify(req, res, email, username, cb){
-  console.log("F: Creating a new verification link...");
+  console.log("AUF: Creating a new verification link...");
   //generate token to email to user
   crypto.randomBytes(5, function(err, buf) {
     var verify_token = buf.toString('hex');
