@@ -6,7 +6,7 @@
   justify-content: space-between
   min-height: 60px
   padding: 15px 20px
-  border-radius: $radius $radius 0 0
+  border-radius: $radius-large $radius-large 0 0
   &.is-block
     display: block
   &.no-border-bottom
@@ -51,7 +51,7 @@
     margin-bottom: 0 !important
   &:first-child
     .notification
-      border-radius: $radius $radius 0 0
+      border-radius: $radius-large $radius-large 0 0
 
 .card-content
   padding: 20px
@@ -93,9 +93,9 @@
 
 
 .card
-  +box-shadow(0,2px,4px,$border,0)
+  +box-shadow(0,2px,8px,$border,0)
   background-color: $white
-  border-radius: $radius
+  border-radius: $radius-large
   max-width: 100%
   position: relative
   width: 325px
@@ -111,15 +111,12 @@
     +mobile
       width: 100%
   &.no-shadow
-    border: 1px solid $border
     +box-shadow(0,0,0,$black,0)
   &.is-fullwidth
     width: 100%
   &.is-centered
     margin-left: auto
     margin-right: auto
-  &.is-rounded
-    border-radius: $radius-large
   &.cursor-pointer
     cursor: pointer
   &.has-shadow-effect

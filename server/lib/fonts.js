@@ -8,7 +8,7 @@ var all_fonts = [
   "Helvetica",
   "Impact",
   "Palatino",
-  "Rubik",
+  "Nunito Sans",
   "Trebuchet MS",
   "Times New Roman",
   "Tahoma",
