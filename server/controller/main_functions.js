@@ -47,7 +47,7 @@ module.exports = {
 
   //handle contact us form submission
   contactUs : function(req, res, next){
-    console.log("F: Checking posted message for contact us form...");
+    console.log("MF: Checking posted message for contact us form...");
 
     var contact_name = req.body.contact_name;
     var contact_email = req.body.contact_email;

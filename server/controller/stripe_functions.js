@@ -170,7 +170,7 @@ module.exports = {
           error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
         }
         else {
-          console.log("F: Deleting Stripe customer default card...");
+          console.log("SF: Deleting Stripe customer default card...");
           stripe.customers.deleteCard(
             customer.id,
             customer.default_source,
@@ -884,7 +884,7 @@ function newStripeSubscription(req, res, next){
               subject: "Awesome! " + req.user.username + " Let's sell more domains with your Premium DomaHub account!",
             }, function(state){
               if (state == "success"){
-                console.log("F: Successfully sent email!");
+                console.log("SF: Successfully sent email!");
               }
             });
           }

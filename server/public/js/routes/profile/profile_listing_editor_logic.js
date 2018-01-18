@@ -268,6 +268,7 @@ function checkBox(module_value, elem, child){
     //registrar info
     $("#registrar-name-input").val(listing_info.registrar_name);
     $("#date-expire-input").val((listing_info.date_expire) ? moment(listing_info.date_expire).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
+    $("#date-registered-input").val((listing_info.date_registered) ? moment(listing_info.date_registered).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
     $("#annual-cost-input").val(listing_info.registrar_cost);
   }
   function updateCategoryInputDropdown(listing_info){
@@ -636,25 +637,34 @@ function checkBox(module_value, elem, child){
       submitListingChanges($(this), true);
     });
 
-    //lookup DNS button
-    var selected_listings = [];
-    for (var x = 0; x < selected_domain_ids.length; x++){
-      var listing_info = getDomainByID(selected_domain_ids[x]);
+    $("#lookup-dns-button").off().on("click", function(e){
+      clearNotification();
 
-      //get whois and A record data if we haven't yet
-      if (listing_info.a_records == undefined || listing_info.whois == undefined){
+      //lookup DNS button
+      var selected_listings = [];
+      for (var x = 0; x < selected_domain_ids.length; x++){
+        var listing_info = getDomainByID(selected_domain_ids[x]);
         selected_listings.push({
           domain_name : listing_info.domain_name,
           id : selected_domain_ids[x],
           client_index : x
         });
       }
-    }
-    $("#lookup-dns-button").off().on("click", function(e){
+
       $(this).addClass('is-loading');
-      getDNSRecords(selected_listings, selected_domain_ids, function(data){
+      getDNSRecords(selected_listings, selected_domain_ids, false, function(data){
         $("#lookup-dns-button").removeClass('is-loading');
-        if (data.state == "success"){
+        if (data.no_whois && data.no_whois == selected_domain_ids.length){
+          listings = data.listings;
+          var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
+          errorMessage("Failed to look up registrar information for " + plural_success_msg + "! Please enter the information manually.");
+        }
+        else if (data.no_whois && data.no_whois > 0){
+          listings = data.listings;
+          var plural_success_msg = (data.no_whois == 1) ? "a listing" : data.no_whois + " listings";
+          errorMessage("Failed to look up registrar information for " + plural_success_msg + "! Please enter the information manually.");
+        }
+        else if (data.state == "success"){
           listings = data.listings;
           var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
           successMessage("Successfully changed registrar information for " + plural_success_msg + "!");
@@ -892,6 +902,9 @@ function checkBox(module_value, elem, child){
         }
         else if (input_name == "date_expire"){
           var listing_comparison = (current_listing.date_expire) ? moment(current_listing.date_expire).format('YYYY-MM-DDTHH:mm') : "";
+        }
+        else if (input_name == "date_registered"){
+          var listing_comparison = (current_listing.date_registered) ? moment(current_listing.date_registered).format('YYYY-MM-DDTHH:mm') : "";
         }
         else {
           var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
@@ -1828,7 +1841,7 @@ function createDNSRecordRows(selected_domain_ids, force){
 
   //if we need to get any DNS records, get them in one call
   if (selected_listings.length > 0){
-    getDNSRecords(selected_listings, selected_domain_ids, function(data){
+    getDNSRecords(selected_listings, selected_domain_ids, true, function(data){
       if (data.state == "success"){
         listings = data.listings;
       }
@@ -1852,12 +1865,13 @@ function createDNSRecordRows(selected_domain_ids, force){
 }
 
 //get DNS settings at once for all selected domains (and unknown DNS)
-function getDNSRecords(selected_listings, selected_domain_ids, cb){
+function getDNSRecords(selected_listings, selected_domain_ids, get_a, cb){
   $.ajax({
     url: "/profile/mylistings/dnsrecords",
     method: "POST",
     data: {
-      selected_listings : selected_listings
+      selected_listings : selected_listings,
+      get_a : get_a
     }
   }).done(function(data){
     cb(data);

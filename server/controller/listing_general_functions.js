@@ -19,7 +19,7 @@ module.exports = {
 
   //check validity of domain name
   checkDomainValid : function(req, res, next){
-    console.log("F: Checking domain FQDN validity...");
+    console.log("LGF: Checking domain FQDN validity...");
     var domain_name = req.params.domain_name || req.body["domain-name"];
     if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
       error.handler(req, res, "Invalid domain name!");
@@ -42,7 +42,7 @@ module.exports = {
 
   //check if listing is listed on domahub
   checkDomainListed : function(req, res, next){
-    console.log("F: Checking if domain is listed...");
+    console.log("LGF: Checking if domain is listed...");
     var domain_name = req.params.domain_name || req.body["domain-name"];
     listing_model.checkListing(domain_name, function(result){
       if (!result.info.length || result.state == "error"){
@@ -56,7 +56,7 @@ module.exports = {
 
   //check if listing is NOT listed on domahub
   checkDomainNotListed : function(req, res, next){
-    console.log("F: Checking if domain is NOT listed...");
+    console.log("LGF: Checking if domain is NOT listed...");
     var domain_name = req.params.domain_name || req.body["domain-name"];
     listing_model.checkListing(domain_name, function(result){
       if (!result.info.length || result.state == "error"){
@@ -96,7 +96,7 @@ module.exports = {
 
   //returns a random listing by category
   getRandomListingByCategory : function(req, res, next){
-    console.log("F: Finding a random listing based on category...");
+    console.log("LGF: Finding a random listing based on category...");
     var category = req.params.category.toLowerCase();
 
     //make sure the category is legit
@@ -119,7 +119,7 @@ module.exports = {
 
   //returns three related listing by category
   getRelatedListings : function(req, res, next){
-    console.log("F: Finding related listings...");
+    console.log("LGF: Finding related listings...");
     var categories = req.body.categories.split(" ");
     var domain_name_exclude = req.body.domain_name_exclude;
 
@@ -269,7 +269,7 @@ module.exports = {
         referer: req.header("Referer") || req.headers.referer,                    //when they searched for it
         user_ip : user_ip                            //their ip address
       }
-      console.log("F: Adding to rental view stats...");
+      console.log("LGF: Adding to rental view stats...");
 
       data_model.newRentalHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});          //async
     }

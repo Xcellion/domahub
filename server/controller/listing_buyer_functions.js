@@ -34,7 +34,7 @@ module.exports = {
 
   //check buy-now contact details
   checkContactInfo : function(req, res, next){
-    console.log("F: Checking posted contact details for offer...");
+    console.log("LBF: Checking posted contact details for offer...");
 
     if (!req.body.contact_name){
       error.handler(req, res, "Please enter your name!", "json");
@@ -59,7 +59,7 @@ module.exports = {
 
   //record the contact message (with verification code)
   createOfferContactRecord : function(req, res, next){
-    console.log("F: Creating a new contact offer record...");
+    console.log("LBF: Creating a new contact offer record...");
 
     var contact_details = {
       listing_id : req.session.listing_info.id,
@@ -79,7 +79,7 @@ module.exports = {
 
   //send the verification email
   sendContactVerificationEmail : function(req, res, next){
-    console.log("F: Sending email to offerer to verify email...");
+    console.log("LBF: Sending email to offerer to verify email...");
 
     var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
@@ -128,7 +128,7 @@ module.exports = {
 
   //okay! verify the contact history entry
   verifyContactHistory : function(req, res, next){
-    console.log("F: Verifying offer email...");
+    console.log("LBF: Verifying offer email...");
 
     data_model.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
 
@@ -138,7 +138,7 @@ module.exports = {
         if (owner_result){
           getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
             if (offer_result){
-              console.log("F: Emailing owner about new verified offer...");
+              console.log("LBF: Emailing owner about new verified offer...");
               var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
 
               //email the owner
@@ -181,7 +181,7 @@ module.exports = {
 
   //check if already accepted an offer for a listing
   checkAlreadyAccepted : function(req, res, next){
-    console.log("F: Checking if listing has an existing accepted offer...");
+    console.log("LBF: Checking if listing has an existing accepted offer...");
     var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
     if (listing_info.accepted){
@@ -194,7 +194,7 @@ module.exports = {
 
   //accept or reject an offer
   acceptOrRejectOffer : function(req, res, next){
-    console.log("F: Accepting or rejecting an offer...");
+    console.log("LBF: Accepting or rejecting an offer...");
     var accepted = req.path.indexOf("/accept") != -1;
     var contact_item = {
       accepted : accepted,
@@ -228,7 +228,7 @@ module.exports = {
 
         //send a transfer verify email
         if (offer_result.deposited){
-          console.log("F: Sending email to the buyer for transfer verification / next steps!");
+          console.log("LBF: Sending email to the buyer for transfer verification / next steps!");
           var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
           var price_formatted = moneyFormat.to(parseFloat(offer_result.offer));
           listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
@@ -264,7 +264,7 @@ module.exports = {
 
         //send accept/reject email
         else {
-          console.log("F: Sending email to offerer to notify of accept/reject status...");
+          console.log("LBF: Sending email to offerer to notify of accept/reject status...");
           var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
           var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
@@ -323,14 +323,14 @@ module.exports = {
 
   //check the posted offer to see if it was accepted
   checkOfferAccepted : function(req, res, next){
-    console.log("F: Checking if offer has been accepted by the owner...");
+    console.log("LBF: Checking if offer has been accepted by the owner...");
 
     data_model.checkOfferAccepted(req.params.domain_name, req.params.offer_id, function(result){
       if (result.state == "success" && result.info.length > 0){
         next();
       }
       else {
-        console.log("F: This offer hasn't been accepted!");
+        console.log("LBF: This offer hasn't been accepted!");
         res.redirect("/listing/" + req.params.domain_name);
       }
     });
@@ -359,7 +359,7 @@ module.exports = {
         req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
         req.session.new_buying_info.domain_name.toLowerCase() == domain_name.toLowerCase()
       ){
-      console.log("F: Rendering listing checkout page for purchasing...");
+      console.log("LBF: Rendering listing checkout page for purchasing...");
 
       res.render("listings/listing_checkout_buy.ejs", {
         user: req.user,
@@ -370,7 +370,7 @@ module.exports = {
       });
     }
     else {
-      console.log("F: Not checking out! Redirecting to listings page...");
+      console.log("LBF: Not checking out! Redirecting to listings page...");
       res.redirect("/listing/" + domain_name.toLowerCase());
     }
   },
@@ -382,7 +382,7 @@ module.exports = {
   //create a record for this purchase
   createBuyContactRecord : function(req, res, next){
     if (req.session.new_buying_info.id){
-      console.log("F: Updating contact record with deposited...");
+      console.log("LBF: Updating contact record with deposited...");
       data_model.depositedOffer({
         deposited : true,
         deadline : moment().add(2, "week")._d.getTime()
@@ -396,7 +396,7 @@ module.exports = {
       });
     }
     else {
-      console.log("F: Creating a new contact buy record...");
+      console.log("LBF: Creating a new contact buy record...");
       req.session.new_buying_info.verification_code = randomstring.generate(10);
       var contact_details = {
         listing_id : req.session.listing_info.id,
@@ -423,7 +423,7 @@ module.exports = {
 
   //alert the owner that a new BIN came through
   alertOwnerBIN : function(req, res, next){
-    console.log("F: Alerting the owner of a new BIN purchase!");
+    console.log("LBF: Alerting the owner of a new BIN purchase!");
 
     //get the listing owner contact information to email
     var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs');
@@ -451,7 +451,7 @@ module.exports = {
 
   //alert the buyer of next steps
   alertBuyerNextSteps : function(req, res, next){
-    console.log("F: Sending email to the buyer for transfer verification / next steps!");
+    console.log("LBF: Sending email to the buyer for transfer verification / next steps!");
 
     //get the listing owner contact information to email
     var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
@@ -512,7 +512,7 @@ module.exports = {
 
   //check the posted verification code
   checkContactVerified : function(req, res, next){
-    console.log("F: Checking if specified offer is verified...");
+    console.log("LBF: Checking if specified offer is verified...");
 
     data_model.checkContactVerified(req.params.domain_name, req.params.offer_id, function(result){
       if (result.state == "success" && result.info.length > 0){
@@ -526,14 +526,14 @@ module.exports = {
 
   //check the posted verification code
   checkContactVerificationCode : function(req, res, next){
-    console.log("F: Checking if verification code for offer is not yet verified...");
+    console.log("LBF: Checking if verification code for offer is not yet verified...");
 
     data_model.checkContactVerificationCode(req.params.domain_name, req.params.verification_code, function(result){
       if (result.state == "success" && result.info.length > 0){
         next();
       }
       else {
-        console.log("F: Invalid verification code for offer!");
+        console.log("LBF: Invalid verification code for offer!");
         res.redirect("/listing/" + req.params.domain_name);
       }
     });

@@ -19,6 +19,7 @@ module.exports = {
 
   //send json success
   sendSuccess : function(req, res, next){
+    console.log("GF: Sending success...");
     res.send({
       state: "success"
     });
@@ -26,6 +27,7 @@ module.exports = {
 
   //send json success and go next
   sendSuccessNext : function(req, res, next){
+    console.log("GF: Sending success and then going next...");
     res.send({
       state: "success"
     });
@@ -35,6 +37,7 @@ module.exports = {
 
   //send json error
   sendError : function(req, res, next){
+    console.log("GF: Sending error...");
     res.send({
       state: "error"
     });
@@ -42,6 +45,7 @@ module.exports = {
 
   //check dev or not
   ifNotDev : function(req, res, next){
+    console.log("GF: Checking if development...");
     if (process.env.NODE_ENV != "dev"){
       next();
     }
