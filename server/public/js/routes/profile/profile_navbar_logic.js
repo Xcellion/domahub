@@ -6,6 +6,7 @@ $(document).ready(function() {
 
   //toggle user drop down menu on icon button click
   $(".nav-button").on("click", function() {
+    $(".nav-menu").removeClass('is-active');
     $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
     $("#" + $(this).data("menu")).toggleClass("is-hidden").find("textarea").focus();
   });
@@ -53,6 +54,10 @@ $(document).ready(function() {
   //hide upgrade link on left nav if already premium
   if (!user.stripe_subscription_id || !user.stripe_subscription || user.stripe_subscription.cancel_at_period_end == true){
     $("#nav-premium-link").removeClass('is-hidden');
+
+    if (user.stripe_subscription && user.stripe_subscription.cancel_at_period_end == true){
+      $("#nav-premium-link").find("small").text("Renew Premium");
+    }
   }
 
   //</editor-fold>
@@ -220,6 +225,10 @@ function showNotifications() {
   //if not premium
   if (!user.stripe_subscription){
     appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
+  }
+  //if premium expiring
+  else if (user.stripe_subscription.cancel_at_period_end){
+    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Premium is expiring!</a>");
   }
 
   calcNotificationCounter();

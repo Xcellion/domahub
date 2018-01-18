@@ -40,20 +40,23 @@
         <ul>
           <li id="info-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <%# <span class="icon is-hidden-tablet"><i class="far fa-info"></i></span>%>
               <span class="">Information</span>
             </a>
           </li>
           <li id="design-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <%# <span class="icon is-hidden-tablet"><i class="far fa-magic"></i></span>%>
               <span class="">Design</span>
+              <% if (!user.stripe_subscription_id) { %>
+                <span class="icon is-small"><i class="far fa-trophy-alt"></i></span>
+              <% } %>
             </a>
           </li>
           <!--<li id="hub-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <%# <span class="icon is-hidden-tablet"><i class="far fa-magic"></i></span>%>
               <span class="">Hub</span>
+              <% if (!user.stripe_subscription_id) { %>
+                <span class="icon is-small"><i class="far fa-trophy-alt"></i></span>
+              <% } %>
             </a>
           </li>-->
           <div class="button-wrapper is-mobile control">
@@ -180,6 +183,15 @@
               <div class="control">
                 <div class="control">
                   <label class="label" for="date-expire-input">
+                    Domain Registration Date
+                  </label>
+                  <small class="tip">When <span class="this-domain">this domain</span> was first registered with your registrar.</small>
+                  <input id="date-registered-input" class="input changeable-input" data-name="date_registered" type="datetime-local">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="date-expire-input">
                     Domain Expiration Date
                   </label>
                   <small class="tip">When <span class="this-domain">this domain</span> will expire with your registrar.</small>
@@ -257,19 +269,21 @@
       </div>
     </div>
     <div id="design-tab-drop" data-title="Edit Design Details" class="tab-drop is-relative is-hidden">
-      <div id="premium-blackscreen" class="blackscreen">
+      <div id="premium-blackscreen-design" class="blackscreen">
         <div id="premium-only-notification" class="box is-medium">
           <div class="content has-text-centered">
             <p>
-              Please upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to customize the look and feel of the listing page!
+              A customized landing page helps to <strong>differentiate and legitimize your brand</strong> to customers. You must upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to change the design of your listing page!
             </p>
-            <div class="control has-text-centered">
-              <a href="/profile/settings#premium" class="button is-primary is-stylish">
-                <div class="icon is-small">
-                  <i class="far fa-trophy-alt"></i>
-                </div>
-                <span>Upgrade Now</span>
-              </a>
+            <div class="control is-grouped has-text-centered">
+              <div class="control is-expanded">
+                <a href="/profile/settings#premium" class="button is-fullwidth is-small is-primary is-stylish">
+                  <div class="icon is-small">
+                    <i class="far fa-trophy-alt"></i>
+                  </div>
+                  <span>Upgrade Now</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -661,21 +675,57 @@
         </div>
       </div>
     </div>
-    <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-hidden">
+    <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-relative is-hidden">
+      <div id="premium-blackscreen-hub" class="blackscreen">
+        <div id="premium-only-notification" class="box is-medium">
+          <div class="content has-text-centered">
+            <p>
+              A listing hub is a single landing page that <strong>showcases your entire portfolio</strong> of domain names. You must upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to create and manage listing hubs.
+            </p>
+            <div class="control has-text-centered is-grouped">
+              <div class="control is-expanded">
+                <a href="/profile/settings#premium" class="button is-small is-fullwidth is-primary is-stylish">
+                  <div class="icon is-small">
+                    <i class="far fa-trophy-alt"></i>
+                  </div>
+                  <span>Upgrade Now</span>
+                </a>
+              </div>
+              <div class="control is-expanded">
+                <a href="" class="button is-small is-fullwidth is-accent is-stylish">
+                  <div class="icon is-small">
+                    <i class="far fa-eye"></i>
+                  </div>
+                  <span>See An Example</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-parent is-6">
           <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">
-                Hub Details
-                <% if (!user.stripe_subscription_id) { %>
-                  <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
-                    <i class="far fa-trophy-alt"></i>
-                  </div>
-                <% } %>
+                Listing Hub Details
               </h3>
             </div>
             <div class="card-content">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label" for="hub-input">
+                    <span>Enable Hub</span>
+                  </label>
+                  <small class="tip">Changes this listing into a domain hub for displaying multiple domain names.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="hub-input" data-name="hub" type="checkbox" class="hub-input checkbox-input changeable-input" tabindex="0" />
+                    <label for="hub-input"></label>
+                  </form>
+                </div>
+              </div>
               <div class="control">
                 <label class="label" for="hub-title-input">
                   <span>Hub Name</span>
@@ -683,43 +733,133 @@
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
-                <small class="tip">Main text that will appear at the top of your listings hub.</small>
-                <input id="hub-title-input" data-name="hub_title" tabindex="0" class="premium-input input changeable-input" placeholder="Welcome to my domain hub!" />
+                <small class="tip">Main text that will appear as the page title and at the top of your listings hub.</small>
+                <input id="hub-title-input" data-name="hub_title" tabindex="0" class="hub-input input changeable-input" placeholder="Welcome to my domain hub!" />
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label" for="hub-email-input">
+                    <span>Display email</span>
+                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Uses the same email as your DomaHub email." data-balloon-pos="top">
+                      <i class="far fa-question-circle"></i>
+                    </div>
+                  </label>
+                  <small class="tip">Displays your email address at the top of the page.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="hub-email-input" data-name="hub_email" type="checkbox" class="hub-input checkbox-input changeable-input" tabindex="0" />
+                    <label for="hub-email-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control">
+                <label class="label" for="hub-phone-input">
+                  <span>Phone Number</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave blank for no phone number." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">Displays a phone number at the top of the page.</small>
+                <div class="control">
+                  <input id="hub-phone-input" data-name="hub_phone" class="hub-input input changeable-input" />
+                </div>
+              </div>
+              <div class="control">
+                <label class="label" for="hub-layout-count-input">
+                  <span>Default Layout</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a whole number greater than 10." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">The number of domains shown in either a tiled or table layout.</small>
+                <div class="control has-addons">
+                  <input id="hub-layout-count-input" data-name="hub_layout_count" placeholder="10" type="number" min="10" step="1" class="input changeable-input premium-input hub-input" />
+                  <span class="select no-shadow">
+                    <div class="drop-form">
+                      <select id="hub-layout-type-input" data-name="hub_layout_type" class="hub-input changeable-input">
+                        <option value="0">Tiled</option>
+                        <option value="1">Table</option>
+                      </select>
+                    </div>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div class="tile is-vertical is-parent is-6">
           <div class="card is-fullwidth tile is-child">
-            <div class="card-header">
-              <h3 class="card-header-title">
-                Hub Design
-              </h3>
+            <div class="card-header is-block">
+              <h3 class="card-header-title">Domain List Order</h3>
+              <small class="tip">Change the default order of domains that belong to this listing hub.</small>
             </div>
             <div class="card-content">
-              <div class="control">
-                <label class="label" for="hub-layout-count-input">
-                  <span>Default Layout</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a whole number. Default size is 10." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+              <div id="sortable-clone" class="is-hidden">
+                <div class="control is-grouped hub-domain-wrapper">
+                  <div class="icon divider-right is-small is-black">
+                    <i class="far fa-bars"></i>
                   </div>
-                </label>
-                <small class="tip">The number of domains shown in either a tiled or table layout.</small>
-                <div class="control has-addons">
-                  <input id="hub-layout-count-input" data-name="hub_layout_count" type="number" min="10" step="1" class="input changeable-input" />
-                  <span class="select no-shadow">
-                    <div class="drop-form">
-                      <select id="hub-layout-type-input" data-name="hub_layout_type" class="changeable-input">
-                        <option value="tile">Tiled</option>
-                        <option value="table">Table</option>
-                      </select>
-                    </div>
-                  </span>
+                  <div class="domain_name divider-right"></div>
+                  <div class="categories"></div>
+                </div>
+              </div>
+              <div id="sortable-wrapper">
+              </div>
+              <div id="no-domains-in-hub" class="is-hidden has-text-centered">
+                <div class="control has-text-centered">
+                  <div class="icon is-large is-primary">
+                    <i class="far fa-exclamation-circle"></i>
+                  </div>
+                </div>
+                <p class="control has-text-centered">
+                  You have no domains in this listing hub!
+                </p>
+                <p class="control has-text-centered">
+                  Click the button below to go back and add some domains.
+                </p>
+                <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
+                  <div class="icon is-small">
+                    <i class="far fa-long-arrow-left"></i>
+                  </div>
+                  <span>Go Back To My Listings</span>
+                </a>
+              </div>
+              <div id="multiple-edit-hub" class="is-hidden has-text-centered">
+                <div class="control has-text-centered">
+                  <div class="icon is-large is-primary">
+                    <i class="far fa-exclamation-circle"></i>
+                  </div>
+                </div>
+                <p class="control has-text-centered">
+                  You cannot edit or change the domain list order for multiple hubs at the same time.
+                </p>
+                <p class="control has-text-centered">
+                  Click the button below to go back and select a single listing hub to edit.
+                </p>
+                <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
+                  <div class="icon is-small">
+                    <i class="far fa-long-arrow-left"></i>
+                  </div>
+                  <span>Go Back To My Listings</span>
+                </a>
+              </div>
+              <div id="not-a-hub" class="is-hidden has-text-centered">
+                <div class="control has-text-centered">
+                  <div class="icon is-large is-primary">
+                    <i class="far fa-exclamation-circle"></i>
+                  </div>
+                </div>
+                <p class="control has-text-centered">
+                  This domain is not enabled as a listing hub!
+                </p>
+                <p class="control has-text-centered">
+                  You must first change this domain listing into a hub before you can add other domains to it.
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -911,6 +1051,9 @@
           <td colspan="5">
             <div class="nothing-exists-row has-text-centered">
               <div class="offer-table-no-listings is-hidden">
+                <div class="icon is-large is-primary">
+                  <i class="far fa-exclamation-circle"></i>
+                </div>
                 <p class="control has-text-centered">
                   You need listings before you can get offers! Let's go make some!
                 </p>
@@ -922,6 +1065,9 @@
                 </a>
               </div>
               <div class="offer-table-no-verified content has-text-centered is-hidden">
+                <div class="icon is-large is-primary">
+                  <i class="far fa-exclamation-circle"></i>
+                </div>
                 <p>
                   You must verify your domains before you can receive offers!
                 </p>
@@ -946,6 +1092,7 @@
                 <i class="far fa-exclamation-circle"></i>
               </div>
               <p>Oh, no! There are no existing/matching offers!</p>
+              <p>Let's go out there and get some offers!</p>
             </div>
           </td>
         </tr>

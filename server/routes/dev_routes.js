@@ -3,6 +3,7 @@
 var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
+var encryptor = require('../lib/encryptor.js');
 
 //</editor-fold>
 
@@ -664,41 +665,41 @@ function namecheap(req, res, next){
 function namesilo(req, res, next){
   console.log("F: namesilo...");
 
-  //get list of DNS records
-  request({
-    url: namesilo_url + "/dnsListRecords",
-    method: "GET",
-    timeout: 10000,
-    qs : {
-      version : 1,
-      type : "xml",
-      key : namesilo_api,
-      domain : "testdomainwoohoohoohoo.com",
-    }
-  }, function(err, response, body){
-    parseString(body, {
-      trim: true,
-      explicitRoot : false,
-      explicitArray : false,
-    }, function (err, result) {
+  // //get list of DNS records
+  // request({
+  //   url: namesilo_url + "/dnsListRecords",
+  //   method: "GET",
+  //   timeout: 10000,
+  //   qs : {
+  //     version : 1,
+  //     type : "xml",
+  //     key : namesilo_api,
+  //     domain : "testdomainwoohoohoohoo.com",
+  //   }
+  // }, function(err, response, body){
+  //   parseString(body, {
+  //     trim: true,
+  //     explicitRoot : false,
+  //     explicitArray : false,
+  //   }, function (err, result) {
+  //
+  //     //delete all DNS records
+  //     // var delete_dns_promises = [];
+  //     // for (var x = 0 ; x < result.namesilo.reply[0].resource_record.length ; x++){
+  //     //   delete_dns_promises.push(deleteNameSiloDNSRecord("testdomainwoohoohoohoo.com", result.namesilo.reply[0].resource_record[x].record_id[0]));
+  //     // }
+  //     //
+  //     // //deleted all DNS records, now create the two we need
+  //     // Q.allSettled(delete_dns_promises).then(function(results){
+  //     //   res.send(result);
+  //     // });
+  //
+  //     //just see the DNS records
+  //     res.send(result);
+  //   });
+  // });
 
-      //delete all DNS records
-      // var delete_dns_promises = [];
-      // for (var x = 0 ; x < result.namesilo.reply[0].resource_record.length ; x++){
-      //   delete_dns_promises.push(deleteNameSiloDNSRecord("testdomainwoohoohoohoo.com", result.namesilo.reply[0].resource_record[x].record_id[0]));
-      // }
-      //
-      // //deleted all DNS records, now create the two we need
-      // Q.allSettled(delete_dns_promises).then(function(results){
-      //   res.send(result);
-      // });
-
-      //just see the DNS records
-      res.send(result);
-    });
-  });
-
-  // //get all domains
+  // // //get all domains
   // request({
   //   url: namesilo_url + "/listDomains",
   //   method: "GET",
@@ -718,23 +719,27 @@ function namesilo(req, res, next){
   //   });
   // });
 
-  // //register a new domain
-  // request({
-  //   url: namesilo_url + "/registerDomain",
-  //   method: "GET",
-  //   timeout: 10000,
-  //   qs : {
-  //     version : 1,
-  //     type : "xml",
-  //     key : namesilo_api,
-  //     domain : "testdomahub1.com",
-  //     years : 1
-  //   }
-  // }, function(err, response, body){
-  //   parseString(body, {trim: true}, function (err, result) {
-  //     res.json(result);
-  //   });
-  // });
+  // for (var x = 0 ; x < 200 ; x++){
+    //register a new domain
+    // request({
+    //   url: namesilo_url + "/registerDomain",
+    //   method: "GET",
+    //   timeout: 10000,
+    //   qs : {
+    //     version : 1,
+    //     type : "xml",
+    //     key : namesilo_api,
+    //     domain : "testdomahub.com",
+    //     years : 1
+    //   }
+    // }, function(err, response, body){
+    //   parseString(body, {trim: true}, function (err, result) {
+    //     res.json(result);
+    //   });
+    // });
+  // }
+  // res.send("okay");
+
 
   // //add A record for 208
   // request({

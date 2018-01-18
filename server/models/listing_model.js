@@ -289,6 +289,7 @@ module.exports = {
     console.log("DB: Attempting to get other listings by the same owner...");
     var query = "SELECT \
           listings.domain_name, \
+          listings.logo, \
           listings.status, \
           listings.categories, \
           listings.rentable, \
@@ -301,7 +302,7 @@ module.exports = {
         AND listings.owner_id = ? \
         AND listings.status = 1 \
         AND listings.verified = 1 \
-        AND listings.hub IS NULL \
+        AND listings.hub = 0 \
         AND listings.deleted IS NULL \
         ORDER BY listings.id"
     database.query(query, "Failed to get other listings by the same owner!", callback, [domain_name_exclude, owner_id]);
@@ -403,6 +404,7 @@ module.exports = {
           buy_price, \
           description, \
           date_expire, \
+          date_registered, \
           registrar_name \
         )\
          VALUES ? \
@@ -441,6 +443,16 @@ module.exports = {
     database.query(query, "Failed to add new rental times for rental #" + rental_id + "!", callback, [rental_times]);
   },
 
+  //insert new listings into listing hubs
+  addListingHubGrouping : function(formatted_hub_additions, callback){
+    console.log("DB: Attempting to insert listings into listing hub...");
+    var query = "INSERT INTO listing_hub_grouping (listing_id, listing_hub_id, rank) VALUES ? ON DUPLICATE KEY UPDATE \
+      listing_id = VALUES(listing_id), \
+      listing_hub_id = VALUES(listing_hub_id), \
+      rank = VALUES(rank)"
+    database.query(query, "Failed to insert listings into listing hub!", callback, [formatted_hub_additions]);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------UPDATES-------------------------------
@@ -470,11 +482,12 @@ module.exports = {
   updateListingsRegistrarInfo : function(listing_info, callback){
     console.log("DB: Attempting to update registrar info for domain(s)...");
     var query = "INSERT INTO listings \
-        (id, registrar_name, date_expire) \
+        (id, registrar_name, date_expire, date_registered) \
         VALUES ? \
         ON DUPLICATE KEY UPDATE \
           registrar_name = VALUES(registrar_name), \
-          date_expire = VALUES(date_expire)"
+          date_expire = VALUES(date_expire), \
+          date_registered = VALUES(date_registered)"
     database.query(query, "Failed to update registrar info for domain(s)!", callback, [listing_info]);
   },
 
@@ -580,6 +593,14 @@ module.exports = {
       deleted = 1, \
       status = NULL "
     database.query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
+  },
+
+  //deletes all listings from multiple hubs
+  deleteHubGroupings : function(listing_hub_ids, callback){
+    console.log("DB: Attempting to delete all listings from multiple hubs...");
+    var query = "DELETE FROM listing_hub_grouping \
+        WHERE listing_hub_id IN (?)"
+    database.query(query, "Failed to delete all listings for multiple hubs!", callback, [listing_hub_ids]);
   },
 
   //</editor-fold>
