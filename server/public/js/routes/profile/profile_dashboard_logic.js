@@ -213,16 +213,31 @@ function updatePortfolioOverviewCounters(){
         var chart_data1 = splitDataToWeekly(days_to_go_back, parsed_data_1, average);
         var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
         var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
-
+        //declare some global font styling
+        Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Nunito', 'Helvetica', sans-serif";
+        Chart.defaults.global.defaultFontSize = 14;
         //make chart
         var chartOptions = {
           type : "line",
           options: {
+            layout: {
+              padding: {
+                top: 20,
+                bottom: 20,
+                left: 0,
+                right: 0
+              }
+            },
             legend: {
               display: false
             },
             tooltips: {
               mode: 'x-axis',
+              backgroundColor: 'rgba(17, 17, 17, 0.9)',
+              xPadding: 12,
+              yPadding: 12,
+              bodySpacing: 10,
+              titleMarginBottom: 10,
               callbacks : {
                 title : function(tooltipItem, data){
                   return data.labels[tooltipItem[0].index]
@@ -259,6 +274,9 @@ function updatePortfolioOverviewCounters(){
                     display : false
                 },
                 ticks: {
+                  fontStyle: 700,
+                  fontColor: 'rgba(0,0,0,0.66)',
+                  padding: 20,
                   // only return month axis ticks
                   callback: function(value, index, values){
                     return (value.split(" - ")[0]);
@@ -267,9 +285,13 @@ function updatePortfolioOverviewCounters(){
               }],
               yAxes: [{
                 gridLines : {
-                    display : false
+                  drawBorder: false,
+                  drawTicks: false
                 },
                 ticks: {
+                  fontStyle: 700,
+                  fontColor: 'rgba(0,0,0,0.66)',
+                  padding: 40,
                   suggestedMax: 5,
                   beginAtZero: true,   // minimum value will be 0.
                   callback: function(value, index, values){
@@ -286,17 +308,30 @@ function updatePortfolioOverviewCounters(){
             datasets : [
               {
                 label: stat_to_get_desc,
-                // lineTension: 0,
-                backgroundColor : 'rgba(60,188,141,0.65)',
+                backgroundColor : 'rgba(60,188,141,0.3)',
                 borderColor : 'rgba(60,188,141,1)',
+                borderWidth: 4,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: 'rgba(60,188,141,1)',
+                pointBorderWidth: 6,
+                pointHoverRadius: 6,
+                pointHoverBorderWidth: 4,
+                pointRadius: 6,
+                hitRadius: 6,
                 data : chart_data1
               },
               {
                 label: stat_to_get_desc,
-                // lineTension: 0,
-                backgroundColor : 'rgba(220,220,220,0.65)',
-                borderColor : 'rgba(220,220,220,1)',
-                borderDash : [5],
+                backgroundColor: 'rgba(210,210,210,0.3)',
+                borderColor : 'rgba(210,210,210,1)',
+                borderWidth: 4,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: 'rgba(210,210,210,1)',
+                pointBorderWidth: 6,
+                pointHoverRadius: 6,
+                pointHoverBorderWidth: 4,
+                pointRadius: 6,
+                hitRadius: 6,
                 data : chart_data2
               }
             ]
@@ -638,6 +673,11 @@ function updatePortfolioOverviewCounters(){
               maintainAspectRatio : false,
               legend : {
                 position: "bottom"
+              },
+              tooltips: {
+                backgroundColor: 'rgba(17, 17, 17, 0.9)',
+                xPadding: 10,
+                yPadding: 10
               }
             },
             data : {
@@ -646,7 +686,7 @@ function updatePortfolioOverviewCounters(){
                 {
                   data : data,
                   backgroundColor : backgroundColors,
-                  borderColor : borderColors
+                  borderWidth: 0
                 }
               ]
             }
@@ -764,6 +804,11 @@ function updatePortfolioOverviewCounters(){
               maintainAspectRatio : false,
               legend : {
                 position: "bottom"
+              },
+              tooltips: {
+                backgroundColor: 'rgba(17, 17, 17, 0.9)',
+                xPadding: 10,
+                yPadding: 10
               }
             },
             data : {
@@ -772,7 +817,7 @@ function updatePortfolioOverviewCounters(){
                 {
                   data : data,
                   backgroundColor : backgroundColors,
-                  borderColor : borderColors
+                  borderWidth: 0
                 }
               ]
             }
@@ -888,6 +933,12 @@ function updatePortfolioOverviewCounters(){
               maintainAspectRatio : false,
               legend : {
                 display: false
+              },
+              tooltips: {
+                backgroundColor: 'rgba(17, 17, 17, 0.9)',
+                xPadding: 10,
+                yPadding: 10,
+                titleMarginBottom: 10
               },
               scales: {
                 xAxes: [{

@@ -22,6 +22,10 @@ $(document).ready(function() {
     }
   });
 
+  $("#make-offer-button").on("click", function() {
+    $("#offer-modal").addClass('is-active');
+  });
+
   //</editor-fold>
 
 });

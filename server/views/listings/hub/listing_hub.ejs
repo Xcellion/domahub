@@ -16,7 +16,7 @@
       var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
     </script>
 
-    <section class="hero is-medium gradient-left-right">
+    <section class="hero is-small gradient-left-right">
 
 			<div class="hero-head">
         <nav class="nav">
@@ -78,12 +78,12 @@
                 </option>
               </select>
 						</div>
-						<div class="select is-stylish has-shadow no-borders">
+						<div class="select is-stylish has-shadow no-borders is-hidden-mobile">
 							<select id="views-select">
-								<option value="" selected disabled>
+								<option value="" disabled>
                   Select View
                 </option>
-                <option value="">
+                <option value="" selected>
                   Table View
                 </option>
 								<option value="">
@@ -118,17 +118,20 @@
 				<table id="domains-table" class="domains-table is-hidden table is-transparent-head">
 					<thead>
 						<tr>
-							<th colspan="1"></th>
+							<th colspan="1" class="is-hidden-mobile"></th>
 							<th class="sort-header" data-sort-by="domain_name" colspan="2">
-                <span>Domain Name</span>
+								<span class="is-hidden-mobile">Domain Name</span>
+								<span class="is-hidden-tablet">Domain</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="buy_price" colspan="1">
-                <span>Buy It Now Price</span>
+                <span class="is-hidden-mobile">Buy It Now Price</span>
+								<span class="is-hidden-tablet">BIN $</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="min_price" colspan="1">
-                <span>Minimum Price</span>
+								<span class="is-hidden-mobile">Minimum Price</span>
+								<span class="is-hidden-tablet">MIN $</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="price_rate" colspan="1">
@@ -139,7 +142,7 @@
 					</thead>
 					<tbody id="domain-table-body">
 						<tr id="clone-row" class="is-hidden table-row">
-							<td colspan="1" class="img-col">
+							<td colspan="1" class="img-col is-hidden-mobile">
 								<figure class="image is-48x48 left-aligned">
 									<img class="domain-row-logo" alt="Domain Logo"/>
 								</figure>
@@ -198,7 +201,9 @@
               <td>
                 <div>
                   <div class="nothing-exists-row has-text-centered">
-                    <img src="/images/lib/ggface.png">
+                    <div class="icon is-dark is-large">
+											<i class="far fa-exclamation-circle"></i>
+										</div>
                     <p>Oh, no! There are no matching domains!</p>
                   </div>
                 </div>
@@ -239,7 +244,7 @@
 									DomaHub.com
 								</p>
 								<div class="price-tag">
-									$2,500
+									<small>$2,500</small>
 								</div>
 							</div>
 						</div>
@@ -251,14 +256,12 @@
 									<img src="http://via.placeholder.com/300x150" />
 								</figure>
 							</div>
-							<div class="card-content">
-								<div class="control is-spaced">
-									<div class="control-left">
-
-									</div>
-									<div class="control-right">
-
-									</div>
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									<small>$2,500</small>
 								</div>
 							</div>
 						</div>
@@ -270,14 +273,12 @@
 									<img src="http://via.placeholder.com/300x150" />
 								</figure>
 							</div>
-							<div class="card-content">
-								<div class="control is-spaced">
-									<div class="control-left">
-
-									</div>
-									<div class="control-right">
-
-									</div>
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									<small>$2,500</small>
 								</div>
 							</div>
 						</div>
@@ -289,13 +290,104 @@
 									<img src="http://via.placeholder.com/300x150" />
 								</figure>
 							</div>
-							<div class="card-content">
-								<div class="control is-spaced">
-									<div class="control-left">
+							<div class="card-content is-relative">
+								<p class="break-all">
+									DomaHub.com
+								</p>
+								<div class="price-tag">
+									<small>$2,500</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
+		<section class="section is-white is-medium">
+			<div class="container">
+				<div class="columns is-laptop">
+					<div class="column is-8">
+						<div class="content">
+							<p class="tag is-medium is-primary">$2,500</p>
+							<h1>DomaHub.com</h1>
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+							</p>
+						</div>
+						<figure class="image is-2by1">
+							<img src="http://via.placeholder.com/600x300" />
+						</figure>
+					</div>
+					<div class="column is-4">
+						<div class="card is-fullwidth">
+							<div class="card-content">
+								<div class="control is-spaced has-wrap is-aligned-start">
+									<div class="control-left">
+										<p class="is-bold">
+											Registrar
+										</p>
 									</div>
 									<div class="control-right">
-
+										<p>
+											GoDaddy
+										</p>
+									</div>
+								</div>
+								<div class="control is-spaced has-wrap is-aligned-start">
+									<div class="control-left">
+										<p class="is-bold">
+											Registered
+										</p>
+									</div>
+									<div class="control-right">
+										<p>
+											April 20, 2015
+										</p>
+									</div>
+								</div>
+								<div class="control is-spaced has-wrap is-aligned-start">
+									<div class="control-left">
+										<p class="is-bold">
+											Categories
+										</p>
+									</div>
+									<div class="control-right">
+										<p class="has-text-right">
+											SAAS, Start Up, Business, Branding, Company, Fun, Leisure, Domains, Healthcare
+										</p>
+									</div>
+								</div>
+								<div class="control is-grouped">
+									<div id="make-offer-button" class="control is-expanded">
+										<a class="button is-stylish is-fullwidth is-primary">Make Offer</a>
+									</div>
+									<div class="control is-expanded">
+										<a class="button is-stylish is-fullwidth is-accent">Buy Now</a>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="control is-grouped">
+									<div class="control">
+										<a class="">
+											<i class="far fa-facebook-f fa-fw"></i>
+										</a>
+									</div>
+									<div class="control">
+										<a class="">
+											<i class="far fa-twitter fa-fw"></i>
+										</a>
+									</div>
+									<div class="control">
+										<a class="">
+											<i class="far fa-linkedin-in fa-fw"></i>
+										</a>
+									</div>
+									<div class="control">
+										<a class="">
+											<i class="far fa-envelope fa-fw"></i>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -304,6 +396,57 @@
 				</div>
 			</div>
 		</section>
+
+		<div id="offer-modal" class="modal">
+		  <div class="modal-background"></div>
+		  <div class="modal-container">
+		    <div class="modal-content is-small">
+		      <div class="content has-text-centered">
+		        <p class="is-bold">Make Offer</p>
+		      </div>
+					<div class="control">
+						<form id="buy-now-form" autocomplete="off" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
+							<label class="error_message label" for="contact_name">Name</label>
+				      <div class="control has-icon">
+				        <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
+				        <div class="icon">
+				          <i class="far fa-user-alt"></i>
+				        </div>
+				      </div>
+							<label class="error_message label" for="contact_email">Email Address</label>
+				      <div class="control has-icon">
+				        <input id="contact_email" placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email">
+				        <div class="icon">
+				          <i class="far fa-envelope"></i>
+				        </div>
+				      </div>
+							<label class="error_message label" for="contact_phone">Phone</label>
+				      <div class="control has-icon">
+				        <input id="contact_phone" required class="contact-input input phone-number" name="contact_phone" type="tel">
+				      </div>
+							<label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
+				      <div class="control has-icon">
+				        <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" placeholder="<%= (listing_info.min_price == 0) ? "" : listing_info.min_price %>" min="<%= (listing_info.min_price == 0) ? "" : listing_info.min_price %>">
+				        <div class="icon">
+				          <i class="far fa-usd-circle"></i>
+				        </div>
+				      </div>
+							<label class="error_message label" for="contact_message">Message</label>
+				      <div class="control">
+				        <textarea id="contact_message" required class="contact-input textarea" name="contact_message" placeholder="Hey! I'm interested in buying <%= listing_info.domain_name %>. Let's chat."></textarea>
+				      </div>
+				    </form>
+					</div>
+		      <div class="control is-expanded">
+	          <a id="submit-offer-button" tabindex="0" class="button is-fullwidth is-primary is-stylish">
+	            <div class="icon is-small"><i class="far fa-check-circle"></i></div>
+	            <span>Submit Offer</span>
+	          </a>
+		      </div>
+		    </div>
+		  </div>
+		  <button class="modal-close"></button>
+		</div>
 
 		<%- include("../listing_footer.ejs") %>
 

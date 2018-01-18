@@ -4,7 +4,7 @@ var listing_themes = [
     primary_color : "#3CBC8D",
     secondary_color : "#FF5722",
     tertiary_color : "#777",
-    font_name : "Rubik",
+    font_name : "Nunito Sans",
     font_color : "#1b2733",
     background_color : "#FFFFFF",
     background_image : ""
@@ -24,7 +24,7 @@ var listing_themes = [
     primary_color : "#0033FF",
     secondary_color : "#FF2626",
     tertiary_color : "#1CC788",
-    font_name : "Rubik",
+    font_name : "Nunito Sans",
     font_color : "#222222",
     background_color : "#FFFFFF",
     background_image : ""
@@ -74,7 +74,7 @@ var listing_themes = [
     primary_color : "#85D6FF",
     secondary_color : "#FFAE84",
     tertiary_color : "#85D6FF",
-    font_name : "Rubik",
+    font_name : "Nunito Sans",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
     background_image : "https://images.unsplash.com/photo-1500111609242-145a52dcc944?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"
@@ -84,7 +84,7 @@ var listing_themes = [
     primary_color : "#222222",
     secondary_color : "#878787",
     tertiary_color : "#0645AD",
-    font_name : "Rubik",
+    font_name : "Nunito Sans",
     font_color : "#222222",
     background_color : "#FFFFFF",
     background_image : ""
@@ -104,7 +104,7 @@ var listing_themes = [
     primary_color : "#D53C1B",
     secondary_color : "#211B14",
     tertiary_color : "#D53C1B",
-    font_name : "Rubik",
+    font_name : "Nunito Sans",
     font_color : "#FFFFFF",
     background_color : "#FFFFFF",
     background_image : "https://images.unsplash.com/photo-1504344977555-430929e2c4ba?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20"

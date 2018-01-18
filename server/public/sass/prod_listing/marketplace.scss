@@ -3,7 +3,9 @@
 @import '../bulma/base/base.sass';
 @import '../bulma/components/card.sass';
 @import '../bulma/components/grid.sass';
+@import '../bulma/components/modal.sass';
 @import '../bulma/components/nav.sass';
+@import '../bulma/elements/box.sass';
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/delete.sass';
@@ -24,17 +26,12 @@
 }
 
 .table-row {
-  @include transition(all 0.2s ease);
+  @include transition(all 0.3s ease);
   background-color: #fff;
   padding: 15px;
   &:hover {
     @include box-shadow(1px,1px,20px,$border,0);
-    @include scale(1.02);
   }
-}
-
-.sort-header {
-  cursor:pointer;
 }
 
 .nothing-exists-row {
@@ -116,9 +113,42 @@
 
 .price-tag {
   position: absolute;
-  top: -28px;
+  top: -38px;
   background-color: $white;
   padding: 5px;
-  right: 10px;
-  border-radius: $radius $radius 0 0;
+  right: 7px;
+  border-radius: 0 10px;
+}
+
+.card-content {
+  .is-spaced {
+    @include tablet-only {
+      flex-direction: column;
+      .control-left {
+        margin-right: 0;
+      }
+      .control-right {
+        .has-text-right {
+          text-align: left;
+        }
+      }
+    }
+  }
+  .is-grouped {
+    @include tablet-only {
+      flex-direction: column;
+      .control {
+        &:not(:last-child) {
+          margin-right: 0;
+        }
+        &:first-child {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+.modal-content {
+  width: 400px;
 }
