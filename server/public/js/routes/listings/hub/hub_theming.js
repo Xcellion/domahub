@@ -58,10 +58,12 @@ function stylize(color, element, style, calculateluminance) {
 //setup any custom premium colors
 function setupCustomColors(){
   console.log("Setting up custom theme...");
-  stylize(listing_info.primary_color, "#page-contents #search-domain-tld", "background-color", true);
+  stylize(listing_info.background_color, "#page-contents .hero", "background-color");
+  stylize(listing_info.primary_color, "#page-contents #search-domain-tld", "color");
   stylize(listing_info.primary_color, "#page-contents .is-primary:not(.notification)", "color");
   stylize(listing_info.primary_color, "#page-contents .is-primary.button", "background-color", true);
   stylize(listing_info.primary_color, "#page-contents .is-primary.tag", "background-color", true);
+  stylize(listing_info.primary_color, "#page-contents .sort-header .icon", "color");
   stylize(listing_info.secondary_color, "#page-contents .is-accent.tag", "background-color", true);
   stylize(listing_info.tertiary_color, "#page-contents .is-info.tag", "background-color", true);
   stylize(listing_info.font_color, "#page-contents .subtitle", "color");

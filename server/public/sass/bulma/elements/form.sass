@@ -38,8 +38,13 @@ input:-webkit-autofill
   // Modifiers
   &.is-stylish
     font-size: 12px
-    font-weight: 500
+    font-weight: 700
     max-width: 200px
+    &.is-medium
+      font-size: 16px
+      max-width: none
+      &:focus
+        max-width: none
     &:focus
       max-width: 400px
   &.has-shadow
@@ -141,11 +146,9 @@ input:-webkit-autofill
   &.is-stylish
     select
       font-size: 12px
-      font-weight: 500
+      font-weight: 700
     option
       font-size: 16px
-      font-weight: 400
-      letter-spacing: normal
       text-transform: capitalize
   &.is-small
     height: 26px

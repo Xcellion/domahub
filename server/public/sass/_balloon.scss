@@ -15,12 +15,14 @@ button[data-balloon] {
   -webkit-transform-origin: top;
   -webkit-transform: translate(-50%, 10px);
   -webkit-transition: all 0.18s ease-out 0.18s;
+  border: none !important;
   bottom: 100%;
   font-weight: 400;
   left: 50%;
-  line-height: 1.5;
   letter-spacing: normal;
+  line-height: 1.5;
   opacity: 0;
+  outline: none;
   pointer-events: none;
   position: absolute;
   text-transform: none;
@@ -29,6 +31,9 @@ button[data-balloon] {
   transition: all 0.18s ease-out 0.18s;
   word-break: normal;
   z-index: 10;
+  &:focus {
+    outline: none !important;
+  }
 }
 [data-balloon]:after {
   background: rgba(17, 17, 17, 0.9);
