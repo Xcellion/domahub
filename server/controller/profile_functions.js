@@ -55,7 +55,7 @@ module.exports = {
 
   //google embed analytics authentication
   authWithGoogle : function(req, res, next){
-    console.log("F: Authenticating with Google Analytics API...");
+    console.log("PF: Authenticating with Google Analytics API...");
     jwtClient.authorize(function (err, tokens) {
       if (err) {
         error.log(err, "Failed to authenticate with Google for the GA API");
@@ -116,7 +116,7 @@ module.exports = {
   //check that the requesting user owns the domains posted
   checkPostedRowOwnership : function(req, res, next){
     if (req.body.ids && Array.isArray(req.body.ids)){
-      console.log("F: Checking posted IDs for ownership...");
+      console.log("PF: Checking posted IDs for ownership...");
       var total_owned = 0;
       for (var x = 0 ; x < req.body.ids.length ; x++){
         var owns_this = false;
@@ -149,7 +149,7 @@ module.exports = {
     //check that the posted hubs are actually hubs, check premium, check arrays
     checkPostedHubs : function(req, res, next){
       if (req.user.stripe_subscription_id){
-        console.log("F: Checking posted hub IDs for validity...");
+        console.log("PF: Checking posted hub IDs for validity...");
 
         var selected_hubs = req.body.selected_hubs || [];
         var not_selected_hubs = req.body.not_selected_hubs || [];
@@ -195,7 +195,7 @@ module.exports = {
 
     //format the posted listing ids to be added/removed to hub
     formatPostedHubRows : function(req, res, next){
-      console.log("F: Checking posted IDs for listing hub addition/removal...");
+      console.log("PF: Checking posted IDs for listing hub addition/removal...");
       var formatted_hub_additions = [];
       var formatted_hub_deletions = [];
 
@@ -301,7 +301,7 @@ module.exports = {
 
     //format the posted ids to be deleted
     formatPostedDeletionRows : function(req, res, next){
-      console.log("F: Checking posted IDs for deletion...");
+      console.log("PF: Checking posted IDs for deletion...");
       var to_delete_formatted = req.body.ids.map(function(elem){
         return [elem];
       });
@@ -317,7 +317,7 @@ module.exports = {
 
     //multi-delete listings
     deleteListings : function(req, res, next){
-      console.log("F: Deactivating listings...");
+      console.log("PF: Deactivating listings...");
       listing_model.deleteListings(req.session.deletion_object, function(result){
         if (result.state == "success"){
           updateUserListingsObjectDelete(req.user.listings, req.session.deletion_object);
@@ -339,7 +339,7 @@ module.exports = {
 
     //format the posted domain ids to be verified
     formatPostedVerificationRows : function(req, res, next){
-      console.log("F: Checking posted IDs for verification...");
+      console.log("PF: Checking posted IDs for verification...");
       var to_verify_formatted = [];
       var to_verify_promises = [];
       var unverified_listings = [];
@@ -363,7 +363,7 @@ module.exports = {
         }
       }
       if (to_verify_promises.length > 0){
-        console.log("F: Checking domain name IP addresses...");
+        console.log("PF: Checking domain name IP addresses...");
         dns.resolve("domahub.com", "A", function (err, address, family) {
           if (err){
             error.log(err, "Failed to check DomaHub IP address.");
@@ -415,9 +415,16 @@ module.exports = {
 
     //get DNS settings for multiple domains
     getDNSRecordsMulti : function(req, res, next){
-      console.log("F: Finding the existing DNS records for the posted domains...");
+      console.log("PF: Finding the existing DNS records for the posted domains...");
 
       var dns_record_promises = [];
+
+      //bool to get A records as well or just WHOIS
+      var get_a = req.body.get_a;
+      if (req.body.get_a != true || req.body.get_a != false){
+        get_a = true;
+      }
+
       if (req.body.selected_listings){
         for (var x = 0; x < req.body.selected_listings.length; x++){
           for (var y = 0; y < req.user.listings.length; y++){
@@ -428,13 +435,12 @@ module.exports = {
               dns_record_promises.push(getDomainDNSPromise({
                 domain_name : req.user.listings[y].domain_name,
                 id : req.user.listings[y].id
-              }));
+              }, get_a));
               break;
             }
           }
         }
       }
-
       if (dns_record_promises.length == 0){
         error.handler(req, res, "Something went wrong with the domains you have selected! Please refresh the page and try again!", "json");
       }
@@ -442,43 +448,46 @@ module.exports = {
         //wait for all promises to finish
         Q.allSettled(dns_record_promises)
         .then(function(results) {
-          console.log("F: Finished looking up DNS records! Now parsing for info...");
+          console.log("PF: Finished looking up DNS records! Now parsing for info...");
 
           //update req.user.listings
           var temp_listing_objs_for_db = [];      //object for DB updating
+          var no_whois = 0;      //count of how many whois failed
           for (var x = 0; x < results.length; x++){
-            if (results[x].state == "fulfilled"){
-              var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
-              if (!temp_listing_obj.verified){
-                temp_listing_obj.whois = results[x].value.whois;
-                temp_listing_obj.a_records = results[x].value.a_records;
-              }
+            var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
+            temp_listing_obj.whois = results[x].value.whois;
+            temp_listing_obj.a_records = results[x].value.a_records;
+
+            //whois exists! update our DB
+            if (results[x].value.whois){
               temp_listing_obj.date_expire = moment(results[x].value.whois["Registry Expiry Date"]).valueOf();
+              temp_listing_obj.date_registered = moment(results[x].value.whois["Creation Date"]).valueOf();
               temp_listing_obj.registrar_name = results[x].value.whois["Registrar"];
 
               //temp object for DB insertion
               temp_listing_objs_for_db.push([
                 results[x].value.id,
                 results[x].value.whois["Registrar"],
-                moment(results[x].value.whois["Registry Expiry Date"]).valueOf()
+                moment(results[x].value.whois["Registry Expiry Date"]).valueOf(),
+                moment(results[x].value.whois["Creation Date"]).valueOf()
               ]);
             }
             else {
-              var temp_listing_obj = getListingByID(req.user.listings, results[x].reason.listing_obj.id);
-              temp_listing_obj.whois = false;
-              temp_listing_obj.a_records = false;
+              no_whois++;
             }
           }
 
           //go next to update DB
           if (temp_listing_objs_for_db.length > 0){
             req.session.new_listing_info = temp_listing_objs_for_db;
+            req.session.no_whois = no_whois;
             next();
           }
           else {
             res.send({
               state: "success",
-              listings: req.user.listings
+              listings: req.user.listings,
+              no_whois : no_whois
             });
           }
         });
@@ -487,7 +496,7 @@ module.exports = {
 
     //multi-verify listings
     verifyListings : function(req, res, next){
-      console.log("F: Updating verified listings...");
+      console.log("PF: Updating verified listings...");
       listing_model.verifyListings(req.session.verification_object.to_verify_formatted, function(result){
         if (result.state == "success"){
           updateUserListingsObjectVerify(req.user.listings, req.session.verification_object.to_verify_formatted);
@@ -513,7 +522,7 @@ module.exports = {
 
     //gets all offers for multiple listings
     getOffersMulti : function(req, res, next){
-      console.log("F: Finding the all verified offers for the posted domains...");
+      console.log("PF: Finding the all verified offers for the posted domains...");
 
       var listing_ids = [];
       for (var x = 0; x < req.body.selected_listings.length; x++){
@@ -697,7 +706,7 @@ module.exports = {
 
   //check if registrar info is properly formatted
   checkRegistrarInfo : function(req, res, next){
-    console.log("F: Checking posted registrar information...");
+    console.log("PF: Checking posted registrar information...");
     var valid_registrars = ["godaddy", "namecheap", "namesilo"];
 
     //not a valid registrar
@@ -721,7 +730,7 @@ module.exports = {
 
   //update an accounts registrar information
   updateAccountRegistrar : function(req, res, next){
-    console.log("F: Creating new or updating registrar API keys...");
+    console.log("PF: Creating new or updating registrar API keys...");
 
     account_model.newRegistrar(req.session.registrar_array, function(result){
       delete req.session.registrar_array;
@@ -742,7 +751,7 @@ module.exports = {
       error.handler(req, res, "You don't have any registrars to look up! Please click a connect button to add specific registrars.", "json");
     }
     else {
-      console.log("F: Getting all connected registrar API keys...");
+      console.log("PF: Getting all connected registrar API keys...");
 
       //get the registrar API keys
       account_model.getAccountRegistrars(req.user.id, function(result){
@@ -761,29 +770,29 @@ module.exports = {
       error.handler(req, res, "You don't have any registrars to look up! Please click a connect button to add specific registrars.", "json");
     }
     else {
-      console.log("F: Retrieving domain names list via registrar API keys...");
+      console.log("PF: Retrieving domain names list via registrar API keys...");
 
       //loop through and get domain names for each registrar
       var registrar_domain_promises = [];
       for (var x = 0 ; x < req.session.registrar_info.length ; x++){
         switch (req.session.registrar_info[x].registrar_name){
           case "godaddy":
-            console.log("F: Adding GoDaddy promise for getting registrar domains...");
+            console.log("PF: Adding GoDaddy promise for getting registrar domains...");
             registrar_domain_promises.push(get_domains_godaddy_promise(req.session.registrar_info[x]));
             break;
           case "namecheap":
-            console.log("F: Adding Namecheap promise for getting registrar domains...");
+            console.log("PF: Adding Namecheap promise for getting registrar domains...");
             registrar_domain_promises.push(get_domains_namecheap_promise(req.session.registrar_info[x]));
             break;
           case "namesilo":
-            console.log("F: Adding NameSilo promise for getting registrar domains...");
+            console.log("PF: Adding NameSilo promise for getting registrar domains...");
             registrar_domain_promises.push(get_domains_namesilo_promise(req.session.registrar_info[x]));
             break;
         }
       }
 
       Q.allSettled(registrar_domain_promises).then(function(results){
-        console.log("F: Finished querying " + registrar_domain_promises.length + " registrars for domains! - ");
+        console.log("PF: Finished querying " + registrar_domain_promises.length + " registrars for domains! - ");
         var total_good_domains = [];
         var total_bad_domains = [];
 
@@ -833,7 +842,7 @@ module.exports = {
   //<editor-fold>-------------------------------------RENDERS-------------------------------
 
   renderDashboard : function(req, res, next){
-    console.log("F: Rendering profile dashboard...");
+    console.log("PF: Rendering profile dashboard...");
     res.render("profile/profile_dashboard.ejs", {
       user: req.user,
       listings: req.user.listings
@@ -841,7 +850,7 @@ module.exports = {
   },
 
   renderMyListings: function(req, res){
-    console.log("F: Rendering profile my listings...");
+    console.log("PF: Rendering profile my listings...");
     res.render("profile/profile_mylistings.ejs", {
       user: req.user,
       listings: req.user.listings,
@@ -851,7 +860,7 @@ module.exports = {
   },
 
   renderSettings: function(req, res){
-    console.log("F: Rendering profile settings...");
+    console.log("PF: Rendering profile settings...");
     res.render("profile/profile_settings.ejs", {
       user: req.user,
       listings: req.user.listings
@@ -860,7 +869,7 @@ module.exports = {
 
   //redirect to appropriate profile page
   redirectProfile : function(req, res, next){
-    console.log("F: Redirecting to appropriate profile page...");
+    console.log("PF: Redirecting to appropriate profile page...");
     if (req.path.indexOf("mylistings") != -1){
       res.redirect("/profile/mylistings");
     }
@@ -881,7 +890,7 @@ module.exports = {
 
   //get all referrals for a user
   getCouponsAndReferralsForUser : function(req, res, next){
-    console.log("F: Getting all referrals made by user...");
+    console.log("PF: Getting all referrals made by user...");
     account_model.getCouponsAndReferralsForUser(req.user.id, function(result){
       if (result.state == "success"){
         req.user.referrals = result.info;
@@ -899,7 +908,7 @@ module.exports = {
 
   //get any existing promo code to apply to a new stripe subscription
   getUnredeemedPromoCodes : function(req, res, next){
-    console.log("F: Getting any existing coupons for user...");
+    console.log("PF: Getting any existing coupons for user...");
 
     //get the total amount off of all existing unredeemed promo codes
     account_model.getUnredeemedPromoCodesForUser(req.user.id, function(result){
@@ -917,7 +926,7 @@ module.exports = {
 
   //check if the promo code exists in our database
   checkPromoCode : function(req, res, next){
-    console.log("F: Checking coupon code validity...");
+    console.log("PF: Checking coupon code validity...");
 
     if (!req.body.code){
       error.handler(req, res, "That's an invalid promo code!", "json");
@@ -927,7 +936,7 @@ module.exports = {
       //check if code exists and is unclaimed
       account_model.checkPromoCodeUnused(req.body.code, function(result){
         if (result.state == "success" && result.info.length > 0){
-          console.log("F: Promo code exists!");
+          console.log("PF: Promo code exists!");
           req.user.promo_code = req.body.code;
           next();
         }
@@ -938,7 +947,7 @@ module.exports = {
           //get the username ID so we can create a referral code
           account_model.getAccountIDByUsername(req.body.code, function(result){
             if (result.state == "success" && result.info.length > 0){
-              console.log("F: Username exists!");
+              console.log("PF: Username exists!");
               var referer_id = result.info[0].id;
 
               //cant refer yourself
@@ -953,7 +962,7 @@ module.exports = {
                   }
                   //all good! create a single local coupon
                   else {
-                    console.log("F: User doesn't have any existing referrals! Creating coupon...");
+                    console.log("PF: User doesn't have any existing referrals! Creating coupon...");
                     createPromoCodes(1, 500, referer_id, function(codes){
                       req.user.promo_code = codes[0];
                       next();
@@ -981,7 +990,7 @@ module.exports = {
 
   //attach this user to the promo code
   applyPromoCode : function(req, res, next){
-    console.log("F: Applying promo code to user in our database...");
+    console.log("PF: Applying promo code to user in our database...");
     //remove coupon code ID and mark it as redeemed by account in domahub database
     account_model.updatePromoCode(req.user.promo_code, {
       code : null,
@@ -1007,41 +1016,36 @@ module.exports = {
 //<editor-fold>-------------------------------------VERIFICATION HELPERS (promises)-------------------------------
 
 //promise function to look up the existing DNS records for a domain name
-function getDomainDNSPromise(listing_obj){
+function getDomainDNSPromise(listing_obj, get_a){
   return Q.Promise(function(resolve, reject, notify){
-    console.log("F: Now looking up DNS records for " + listing_obj.domain_name + "...");
+    console.log("PF: Now looking up WHOIS info for " + listing_obj.domain_name + "...");
     whois.lookup(listing_obj.domain_name, function(err, data){
+      var whoisObj = {};
       if (err){
         error.log(err, "Failed to look up whois information for table building during verification.");
-        reject({
-          info : err,
-          listing_obj : listing_obj
-        });
       }
       else {
-        var whoisObj = {};
         var array = parser.parseWhoIsData(data);
         for (var x = 0; x < array.length; x++){
           whoisObj[array[x].attribute.trim()] = array[x].value;
         }
-        listing_obj.whois = whoisObj;
+      }
+      listing_obj.whois = (whoisObj["Registrar"]) ? whoisObj : false;
 
+      //get A records as well
+      if (get_a){
         //look up any existing DNS A Records
+        console.log("PF: Now looking up DNS A records for " + listing_obj.domain_name + "...");
         dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
-          if (err){
-            if (err.code != "ENODATA"){
-              error.log(err, "Failed to look up A record information for table building during verification.");
-            }
-            reject({
-              info : err,
-              listing_obj : listing_obj
-            });
+          if (err && err.code != "ENOTFOUND" && err.code != "ENODATA"){
+            error.log(err, "Failed to look up A record information for table building during verification.");
           }
-          else {
-            listing_obj.a_records = addresses || false;
-            resolve(listing_obj);
-          }
+          listing_obj.a_records = (addresses) ? addresses : false;
+          resolve(listing_obj);
         });
+      }
+      else {
+        resolve(listing_obj);
       }
     });
   });
@@ -1086,7 +1090,7 @@ function getDomainIPPromise(listing_obj){
       error.handler(req, res, "That's an invalid API key secret! Please enter a valid GoDaddy product API key secret.", "json");
     }
     else {
-      console.log("F: Validating posted registrar information with GoDaddy...");
+      console.log("PF: Validating posted registrar information with GoDaddy...");
       request({
         url: "https://api.godaddy.com/v1/domains",
         method: "GET",
@@ -1137,7 +1141,7 @@ function getDomainIPPromise(listing_obj){
       error.handler(req, res, "That's an invalid username! Please enter a valid Namecheap username.", "json");
     }
     else {
-      console.log("F: Validating posted registrar information with Namecheap...");
+      console.log("PF: Validating posted registrar information with Namecheap...");
       request({
         url: namecheap_url,
         method: "GET",
@@ -1190,7 +1194,7 @@ function getDomainIPPromise(listing_obj){
       error.handler(req, res, "That's an invalid API key! Please enter a valid NameSilo API key.", "json");
     }
     else {
-      console.log("F: Validating posted registrar information with NameSilo...");
+      console.log("PF: Validating posted registrar information with NameSilo...");
       request({
         url: namesilo_url + "/listDomains",
         method: "GET",
@@ -1247,7 +1251,7 @@ function getDomainIPPromise(listing_obj){
   function get_domains_godaddy_promise(registrar_info){
     //custom promise creation, get list of domains from registrar
     return Q.Promise(function(resolve, reject, notify){
-      console.log("F: Getting list of GoDaddy domains...");
+      console.log("PF: Getting list of GoDaddy domains...");
       request({
         url: "https://api.godaddy.com/v1/domains",
         method: "GET",
@@ -1298,7 +1302,7 @@ function getDomainIPPromise(listing_obj){
 
   //get a page of namecheap domains
   function get_domain_page_namecheap_promise(resolve, reject, registrar_info, current_page, good_domains){
-    console.log("F: Getting a page of Namecheap domains...");
+    console.log("PF: Getting a page of Namecheap domains...");
     var decrypted_username = encryptor.decryptText(registrar_info.username);
     request({
       url: namecheap_url,
@@ -1364,7 +1368,7 @@ function getDomainIPPromise(listing_obj){
   function get_domains_namesilo_promise(registrar_info){
     //custom promise creation, get list of domains from registrar
     return Q.Promise(function(resolve, reject, notify){
-      console.log("F: Getting list of NameSilo domains...");
+      console.log("PF: Getting list of NameSilo domains...");
       request({
         url: namesilo_url + "/listDomains",
         method: "GET",
@@ -1504,7 +1508,7 @@ function updateUserRegistrar(user, registrars){
 
 //create local coupon codes (only domahub database)
 function createPromoCodes(number, amount_off, referer_id, cb){
-  console.log("F: Creating " + number + " coupon codes...");
+  console.log("PF: Creating " + number + " coupon codes...");
   insertPromoCodes(createUniqueCoupons(number, amount_off, referer_id), number, amount_off, referer_id, cb);
 }
 
@@ -1523,7 +1527,7 @@ function createUniqueCoupons(number, amount_off, referer_id){
 
 //insert the coupon codes into domahub database
 function insertPromoCodes(codes, number, amount_off, referrer, cb){
-  console.log("F: Inserting newly created coupon codes into DomaHub database...");
+  console.log("PF: Inserting newly created coupon codes into DomaHub database...");
   account_model.createCouponCodes(codes, function(result){
     if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
       console.log("Duplicate coupon!");
@@ -1546,7 +1550,7 @@ function insertPromoCodes(codes, number, amount_off, referrer, cb){
 //delete from hub promise
 function delete_from_hub_promise(formatted_hub_deletions){
   return Q.Promise(function(resolve, reject){
-    console.log("F: Deleting listings from hubs...");
+    console.log("PF: Deleting listings from hubs...");
     if (formatted_hub_deletions && formatted_hub_deletions.length > 0){
       listing_model.deleteHubGroupings(formatted_hub_deletions, function(result){
         if (result.state != "success"){
@@ -1567,7 +1571,7 @@ function delete_from_hub_promise(formatted_hub_deletions){
 function add_to_hub_promise(formatted_hub_additions){
   return Q.Promise(function(resolve, reject){
     if (formatted_hub_additions && formatted_hub_additions.length > 0){
-      console.log("F: Adding listings to hubs...");
+      console.log("PF: Adding listings to hubs...");
       listing_model.addListingHubGrouping(formatted_hub_additions, function(result){
         if (result.state == "success"){
           resolve();

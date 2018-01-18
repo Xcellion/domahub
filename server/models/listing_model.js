@@ -404,6 +404,7 @@ module.exports = {
           buy_price, \
           description, \
           date_expire, \
+          date_registered, \
           registrar_name \
         )\
          VALUES ? \
@@ -481,11 +482,12 @@ module.exports = {
   updateListingsRegistrarInfo : function(listing_info, callback){
     console.log("DB: Attempting to update registrar info for domain(s)...");
     var query = "INSERT INTO listings \
-        (id, registrar_name, date_expire) \
+        (id, registrar_name, date_expire, date_registered) \
         VALUES ? \
         ON DUPLICATE KEY UPDATE \
           registrar_name = VALUES(registrar_name), \
-          date_expire = VALUES(date_expire)"
+          date_expire = VALUES(date_expire), \
+          date_registered = VALUES(date_registered)"
     database.query(query, "Failed to update registrar info for domain(s)!", callback, [listing_info]);
   },
 

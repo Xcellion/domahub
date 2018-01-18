@@ -68,7 +68,7 @@ module.exports = {
 
   //gets all statistics for a specific domain
   getListingStats : function(req, res, next){
-    console.log("F: Finding the all verified statistics for " + req.params.domain_name + "...");
+    console.log("LOF: Finding the all verified statistics for " + req.params.domain_name + "...");
     var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
     data_model.getListingStats(req.params.domain_name, function(result){
 
@@ -95,7 +95,7 @@ module.exports = {
 
     //check all posted domain names
     checkPostedDomainNames : function(req, res, next){
-      console.log("F: Checking all posted domain names...");
+      console.log("LOF: Checking all posted domain names...");
       var posted_domain_names = req.body.domain_names;
 
       if ((posted_domain_names.length + req.user.listings.length > 100) && !req.user.stripe_subscription_id){
@@ -140,7 +140,7 @@ module.exports = {
 
     //check all posted listing info
     checkPostedListingInfoForCreate : function(req, res, next){
-      console.log("F: Checking all posted listing info...");
+      console.log("LOF: Checking all posted listing info...");
 
       var posted_domain_names = req.body.domains;
       var bad_listings = [];
@@ -173,6 +173,7 @@ module.exports = {
             parseFloat(posted_domain_names[x].buy_price) || 0,
             Descriptions.random(),    //random default description
             null,
+            null,
             null
           ]);
         }
@@ -202,7 +203,7 @@ module.exports = {
     //if creating via registrar tool, set the DNS to point to domahub
     setDNSViaRegistrar : function(req, res, next){
       if (req.session.registrar_info){
-        console.log("F: Using registrar APIs to automatically verify listings!");
+        console.log("LOF: Using registrar APIs to automatically verify listings!");
         var registrar_domain_promises = [];
 
         //loop through all registrars
@@ -243,7 +244,7 @@ module.exports = {
         Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
           return registrar_domain_promises[index]();
         }))).then(function(results) {
-          console.log("F: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
+          console.log("LOF: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
           for (var y = 0; y < results.length ; y++){
             //if there was an error, then add it to bad reasons
             if (results[y].state != "fulfilled"){
@@ -273,7 +274,7 @@ module.exports = {
 
     //find out the registrar expiration date and set it (if it exists)
     setDNSExpiration : function(req, res, next){
-      console.log("F: Attempting to find out domain expiration dates for new listings...");
+      console.log("LOF: Attempting to find out domain expiration dates for new listings...");
 
       var whois_promises = [];
       for (var x = 0 ; x < req.session.new_listings.db_object.length ; x++){
@@ -282,11 +283,12 @@ module.exports = {
 
       //all whois data received!
       Q.allSettled(whois_promises).then(function(results) {
-        console.log("F: Finished looking up domain expiration dates!");
+        console.log("LOF: Finished looking up domain expiration dates!");
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
             req.session.new_listings.db_object[results[y].value.index][7] = moment(results[y].value.whois["Registry Expiry Date"]).valueOf();
-            req.session.new_listings.db_object[results[y].value.index][8] = results[y].value.whois["Registrar"];
+            req.session.new_listings.db_object[results[y].value.index][8] = moment(results[y].value.whois["Creation Date"]).valueOf();
+            req.session.new_listings.db_object[results[y].value.index][9] = results[y].value.whois["Registrar"];
           }
         }
         next();
@@ -295,7 +297,7 @@ module.exports = {
 
     //create listings
     createListings : function(req, res, next){
-      console.log("F: Attempting to create listings...");
+      console.log("LOF: Attempting to create listings...");
 
       listing_model.newListings(req.session.new_listings.db_object, function(result){
         if (result.state=="error"){error.handler(req, res, result.info, "json");}
@@ -321,7 +323,7 @@ module.exports = {
               if (req.session.new_listings.check_dns_promises.length > 0){
                 //all whois data received!
                 Q.allSettled(req.session.new_listings.check_dns_promises).then(function(results) {
-                  console.log("F: Finished checking DNS changes for newly created domains!");
+                  console.log("LOF: Finished checking DNS changes for newly created domains!");
 
                   //remove from the inserted_ids list
                   var pending_dns_ids = [];
@@ -388,7 +390,7 @@ module.exports = {
 
     //check if posted selected IDs are numbers
     checkSelectedIDs : function(req, res, next){
-      console.log("F: Checking posted domain IDs...");
+      console.log("LOF: Checking posted domain IDs...");
       var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
       if (!selected_ids || selected_ids.length <= 0){
         error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
@@ -430,7 +432,7 @@ module.exports = {
 
         //to check for file type
         fileFilter: function (req, file, cb) {
-          console.log("F: " + req.user.username + " is uploading an image file for parsing...");
+          console.log("LOF: " + req.user.username + " is uploading an image file for parsing...");
 
           var allowedMimeTypes = [
             "image/jpeg",
@@ -480,7 +482,7 @@ module.exports = {
         //custom image upload promise function
         var q_function = function(formData){
           return Q.Promise(function(resolve, reject, notify){
-            console.log("F: " + req.user.username + " is uploading image(s) to Imgur...");
+            console.log("LOF: " + req.user.username + " is uploading image(s) to Imgur...");
             request.post({
               url: "https://imgur-apiv3.p.mashape.com/3/image",
               headers: {
@@ -549,7 +551,7 @@ module.exports = {
 
     //check for verified, ownership, and purchased for multi listing edit
     checkPostedListingInfoMulti : function(req, res, next){
-      console.log("F: Checking listings for ownership, verification, or sold...");
+      console.log("LOF: Checking listings for ownership, verification, or sold...");
 
       var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
       var owned_domains = 0;
@@ -611,7 +613,7 @@ module.exports = {
 
     //check that the listing is verified
     checkListingVerified : function(req, res, next){
-      console.log("F: Checking if listing is a verified listing...");
+      console.log("LOF: Checking if listing is a verified listing...");
       if (getUserListingObjByName(req.user.listings, req.params.domain_name).verified != 1){
         error.handler(req, res, "Please verify that you own this domain!", "json");
       }
@@ -622,7 +624,7 @@ module.exports = {
 
     //check that the user owns the listing
     checkListingOwnerPost : function(req, res, next){
-      console.log("F: Checking if current user is the owner...");
+      console.log("LOF: Checking if current user is the owner...");
       if (getUserListingObjByName(req.user.listings, req.params.domain_name).owner_id != req.user.id){
         error.handler(req, res, "You do not own this domain! Please refresh the page and try again!", "json");
       }
@@ -633,7 +635,7 @@ module.exports = {
 
     //check that the user owns the listing
     checkListingOwnerGet : function(req, res, next){
-      console.log("F: Checking if current user is listing owner...");
+      console.log("LOF: Checking if current user is listing owner...");
       listing_model.checkListingOwner(req.user.id, req.params.domain_name, function(result){
         if (result.state == "error" || result.info.length <= 0){
           res.redirect("/listing/" + req.params.domain_name);
@@ -646,7 +648,7 @@ module.exports = {
 
     //check if listing has been purchased
     checkListingPurchased : function(req, res, next){
-      console.log("F: Checking if the listing was already purchased or accepted...");
+      console.log("LOF: Checking if the listing was already purchased or accepted...");
       var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
       if (listing_obj.accepted){
         error.handler(req, res, "You have already accepted an offer for this domain! Please wait for the offerer to complete the payment process.", "json");
@@ -661,7 +663,7 @@ module.exports = {
 
     //check the posted status change of a listing
     checkListingStatus : function(req, res, next){
-      console.log("F: Checking posted listing status...");
+      console.log("LOF: Checking posted listing status...");
 
       var status = parseFloat(req.body.status);
 
@@ -671,7 +673,7 @@ module.exports = {
       }
       //check to see if its currently rented
       else if (req.body.status == 0){
-        console.log("F: Checking to see if domain(s) are currently rented...");
+        console.log("LOF: Checking to see if domain(s) are currently rented...");
         var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
 
         listing_model.checkCurrentlyRented(domain_names, function(result){
@@ -723,7 +725,7 @@ module.exports = {
         }
 
         if (to_verify_promises.length > 0){
-          console.log("F: Checking to see if domain(s) are still pointed to DomaHub...");
+          console.log("LOF: Checking to see if domain(s) are still pointed to DomaHub...");
 
           dns.resolve("domahub.com", "A", function (err, address, family) {
             var doma_ip = address[0];
@@ -748,17 +750,18 @@ module.exports = {
                      still_pending.push(results[x].value.listing_id.toString());
                    }
                  }
-                 else if (results[x].value.status != 3){
-                   not_pointing.push(results[x].value.listing_id.toString());
+                 else if (results[x].reason.status != 3){
+                   not_pointing.push(results[x].reason.listing_id.toString());
                  }
                  else {
-                   still_pending.push(results[x].value.listing_id.toString());
+                   still_pending.push(results[x].reason.listing_id.toString());
                  }
                }
 
+               console.log("LOF: Checking...", still_pointing.length, not_pointing.length, still_pending.length);
                //some of the domains aren't pointing anymore
                if (not_pointing.length > 0){
-                 console.log("F: Some domain(s) are not pointing to DomaHub! Reverting...");
+                 console.log("LOF: Some domain(s) are not pointing to DomaHub! Reverting...");
                  //update not pointing domains
                  listing_model.updateListingsInfo(not_pointing, {
                    verified : null,
@@ -786,6 +789,7 @@ module.exports = {
                }
                //all good
                else {
+                 console.log("all good???");
                  next();
                }
              });
@@ -808,7 +812,7 @@ module.exports = {
     checkListingPremiumDetails : function(req, res, next){
       //premium design checks
       if (req.user.stripe_subscription_id){
-        console.log("F: Checking posted premium listing details...");
+        console.log("LOF: Checking posted premium listing details...");
 
         //info module bools
         var info_module = parseFloat(req.body.info_module);
@@ -1060,7 +1064,7 @@ module.exports = {
 
     //check and reformat new listings details excluding image
     checkListingDetails : function(req, res, next){
-      console.log("F: Checking posted listing details...");
+      console.log("LOF: Checking posted listing details...");
 
       var status = parseFloat(req.body.status);
       var description = req.body.description;
@@ -1076,6 +1080,7 @@ module.exports = {
       var registrar_cost = parseFloat(req.body.registrar_cost).toFixed(2);
       var registrar_name = req.body.registrar_name;
       var date_expire = moment(req.body.date_expire);
+      var date_registered = moment(req.body.date_registered);
 
       //rentable?
       var rentable = parseFloat(req.body.rentable);
@@ -1134,6 +1139,9 @@ module.exports = {
       else if (req.body.date_expire != "" && !date_expire.isValid()){
         error.handler(req, res, "You have entered an invalid expiration date! Please try a different date.", "json");
       }
+      else if (req.body.date_registered != "" && !date_registered.isValid()){
+        error.handler(req, res, "You have entered an invalid registration date! Please try a different date.", "json");
+      }
       else if (req.body.registrar_cost && !validator.isFloat(registrar_cost)){
         error.handler(req, res, "You have entered an invalid annual renewal cost! Please try a different price.", "json");
       }
@@ -1155,6 +1163,7 @@ module.exports = {
         req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
         req.session.new_listing_info.rentable = rentable;
         req.session.new_listing_info.date_expire = (req.body.date_expire == "" || !date_expire.isValid()) ? null : date_expire.valueOf();
+        req.session.new_listing_info.date_registered = (req.body.date_registered == "" || !date_registered.isValid()) ? null : date_registered.valueOf();
         req.session.new_listing_info.registrar_name = registrar_name;
         req.session.new_listing_info.registrar_cost = registrar_cost;
 
@@ -1170,7 +1179,7 @@ module.exports = {
 
     //turn off specific modules if it's contents are all hidden (and vice versa)
     checkListingModules : function(req, res, next){
-      console.log("F: Checking if we should turn off specific modules if contents are empty...");
+      console.log("LOF: Checking if we should turn off specific modules if contents are empty...");
       var current_listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
 
       //info module
@@ -1215,7 +1224,7 @@ module.exports = {
         });
       }
       else {
-        console.log("F: Updating domain details...");
+        console.log("LOF: Updating domain details...");
         var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
 
         listing_model.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
@@ -1233,14 +1242,17 @@ module.exports = {
 
     //update a listing based on user object
     updateListingsRegistrarInfo: function(req, res, next){
-      console.log("F: Updating domain registrar details...");
+      console.log("LOF: Updating domain registrar details...");
       listing_model.updateListingsRegistrarInfo(req.session.new_listing_info, function(result){
         if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
         else {
+          var no_whois = req.session.no_whois || 0;
           delete req.session.new_listing_info;
+          delete req.session.no_whois;
           res.json({
             state: "success",
-            listings: req.user.listings
+            listings: req.user.listings,
+            no_whois : no_whois
           });
         }
       });
@@ -1263,7 +1275,7 @@ module.exports = {
 
     //verify ownership of a listing
     verifyListing: function(req, res, next){
-      console.log("F: Attempting to verify this listing...");
+      console.log("LOF: Attempting to verify this listing...");
 
       var domain_name = req.params.domain_name;
       dns.resolve(domain_name, "A", function (err, address, family) {
@@ -1423,7 +1435,7 @@ function findNewlyMadeListings(before_user_listings, after_user_listings){
 
 //see what domains were successfully created (to check for duplicates with other owners)
 function checkForCreatedListings(new_listings, inserted_domains, inserted_ids){
-  console.log("F: Checking successfully created listings...");
+  console.log("LOF: Checking successfully created listings...");
 
   var formatted_listings = new_listings.db_object;
   var bad_listings = new_listings.bad_listings;
@@ -1493,7 +1505,7 @@ function checkForCreatedListings(new_listings, inserted_domains, inserted_ids){
 
 //check the inserted IDs and revert verification if necessary
 function checkInsertedIDs(req, res, inserted_ids){
-  console.log("F: Checking if we should revert verification status...");
+  console.log("LOF: Checking if we should revert verification status...");
 
   //delete user object listings so we can get a refreshed unverified version
   delete req.user.listings;
@@ -1527,7 +1539,7 @@ function checkInsertedIDs(req, res, inserted_ids){
 function verified_dns_promise(various_ids){
   var verified_dns_promise = Q.defer();
   if (various_ids.verified_ids.length > 0){
-    console.log("F: Now setting status for successful DNS changes...");
+    console.log("LOF: Now setting status for successful DNS changes...");
     listing_model.updateListingsInfo(various_ids.verified_ids, {
       status : 1,
       verified : 1
@@ -1557,7 +1569,7 @@ function pending_dns_promise(various_ids){
   var various_ids = (various_ids.info) ? various_ids.various_ids : various_ids;
 
   if (various_ids.pending_dns_ids.length > 0){
-    console.log("F: Now setting status to pending DNS changes...");
+    console.log("LOF: Now setting status to pending DNS changes...");
     listing_model.updateListingsInfo(various_ids.pending_dns_ids, {
       status : 3,
       verified : 1
@@ -1582,7 +1594,7 @@ function pending_dns_promise(various_ids){
 //returns a promise to figure out domain name whois
 function check_whois_promise(domain_name, index){
   return Q.Promise(function(resolve, reject, notify){
-    console.log("F: Looking up WHOIS info for domain - " + domain_name + "...");
+    console.log("LOF: Looking up WHOIS info for domain - " + domain_name + "...");
 
     //look up whois info
     whois.lookup(domain_name, function(err, data){
@@ -1590,19 +1602,23 @@ function check_whois_promise(domain_name, index){
         error.log(err, "Failed to lookup WHOIS information for domain " + domain_name);
         reject(false);
       }
-      else if (data){
+      else {
         var whoisObj = {};
         var array = parser.parseWhoIsData(data);
         for (var x = 0; x < array.length; x++){
           whoisObj[array[x].attribute.trim()] = array[x].value;
         }
-        resolve({
-          whois : whoisObj,
-          index : index
-        });
-      }
-      else {
-        reject(false);
+
+        //only if the WHOIS object is legit
+        if (whoisObj["Registrar"]){
+          resolve({
+            whois : whoisObj,
+            index : index
+          });
+        }
+        else {
+          reject(false);
+        }
       }
     });
   });
@@ -1616,7 +1632,7 @@ function check_whois_promise(domain_name, index){
 function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
   return function(){
     return Q.Promise(function(resolve, reject, notify){
-    console.log("F: Setting DNS for GoDaddy domain - " + registrar_domain_name + "...");
+    console.log("LOF: Setting DNS for GoDaddy domain - " + registrar_domain_name + "...");
 
     //A record change
     request({
@@ -1688,7 +1704,7 @@ function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
 function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
   return function(){
     return Q.Promise(function(resolve, reject, notify){
-    console.log("F: Setting DNS for Namecheap domain - " + registrar_domain_name + "...");
+    console.log("LOF: Setting DNS for Namecheap domain - " + registrar_domain_name + "...");
     var username = encryptor.decryptText(registrar_info.username)
     var domain_name_split = registrar_domain_name.split(".");
 
@@ -1760,7 +1776,7 @@ function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
 function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
   return function(){
     return Q.Promise(function(resolve, reject, notify){
-    console.log("F: Setting DNS for NameSilo domain - " + registrar_domain_name + "...");
+    console.log("LOF: Setting DNS for NameSilo domain - " + registrar_domain_name + "...");
     var namesilo_api_key = encryptor.decryptText(registrar_info.api_key);
 
     //get existing DNS records
@@ -1806,7 +1822,7 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
             //got the list of DNS records
             else {
               var delete_dns_promises = [];
-              console.log("F: Checking to see if there are any DNS records to delete for NameSilo domain - " + registrar_domain_name + "...");
+              console.log("LOF: Checking to see if there are any DNS records to delete for NameSilo domain - " + registrar_domain_name + "...");
               if (result.reply.resource_record){
 
                 for (var x = 0 ; x < result.reply.resource_record.length ; x++){
@@ -1816,7 +1832,7 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
 
               //deleted all DNS records, now create the two we need
               Q.allSettled(delete_dns_promises).then(function(results){
-                console.log("F: Deleted all DNS records for NameSilo domain - " + registrar_domain_name + "...");
+                console.log("LOF: Deleted all DNS records for NameSilo domain - " + registrar_domain_name + "...");
 
                 //check if everything deleted successfully
                 var deleted_all_dns_records = true;
@@ -1854,7 +1870,7 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
 //return a promise to delete a single DNS record on namesilo
 function delete_dns_record_namesilo_promise(namesilo_api_key, registrar_domain_name, record_id){
   return Q.Promise(function(resolve, reject, notify){
-    console.log("F: Deleting DNS record for NameSilo domain - " + registrar_domain_name + "..." + " - Record ID: " + record_id);
+    console.log("LOF: Deleting DNS record for NameSilo domain - " + registrar_domain_name + "..." + " - Record ID: " + record_id);
 
     //delete an existing DNS record
     request({
@@ -1897,7 +1913,7 @@ function delete_dns_record_namesilo_promise(namesilo_api_key, registrar_domain_n
 
 //add an A record for namesilo
 function addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, rrtype, rrhost, rrvalue, reject, cb){
-  console.log("F: Adding DNS record for NameSilo domain - " + registrar_domain_name + "...");
+  console.log("LOF: Adding DNS record for NameSilo domain - " + registrar_domain_name + "...");
 
   //add A record for domahub
   request({
@@ -1944,7 +1960,7 @@ function addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, rrtype, r
 
 //check a domain name to see if the DNS changes are good yet
 function check_domain_dns_promise(domain_name, inserted_id){
-  console.log("F: Checking to see if domain is still pointed to DomaHub...");
+  console.log("LOF: Checking to see if domain is still pointed to DomaHub...");
   return Q.Promise(function(resolve, reject, notify){
     dns.resolve(domain_name, "A", function (err, address, family) {
       var domain_ip = address;

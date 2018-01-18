@@ -24,7 +24,7 @@ $(document).ready(function(){
 
     //sort the rows
     $(".table-row:not(.clone-row)").sort(function(a,b){
-      if (sort_value == "date_expire" || sort_value == "date_created" || sort_value == "min_price" || sort_value == "buy_price"){
+      if (sort_value == "date_registered" || sort_value == "date_expire" || sort_value == "date_created" || sort_value == "min_price" || sort_value == "buy_price"){
         var a_sort = $(a).data("listing_info")[sort_value];
         var b_sort = $(b).data("listing_info")[sort_value];
       }
@@ -407,13 +407,23 @@ function updateDomainRow(tempRow, listing_info, now){
   }
 
   tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
-  tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mmA"));
+  tempRow.find(".td-registrar").text((listing_info.registrar_name) ? listing_info.registrar_name : "-");
+
+  if (listing_info.date_registered){
+    tempRow.find(".td-date").text(moment(listing_info.date_registered).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_registered).format("MMMM DD, YYYY - hh:mmA"));
+  }
+  else {
+    tempRow.find(".td-date").text("-");
+  }
 
   //registrar expiration date
   if (listing_info.date_expire){
     var moment_expire = moment(listing_info.date_expire);
-    var humanized = moment.duration(moment_expire.diff(now)).humanize(true);
-    tempRow.find(".td-date-expire").text(humanized.substr(0,1).toUpperCase() + humanized.substr(1, humanized.length)).attr("title", "Expires on " +  moment_expire.format("MMMM DD, YYYY - hh:mmA"));
+    var humanized = Math.round(moment.duration(moment_expire.diff(now)).asDays());
+    var expired_already = humanized < 0;
+    var days_plural = (humanized == 1) ? "day" : "days";
+    var expired_text = (expired_already) ? "Expired " + Math.abs(humanized) + " " + days_plural + " ago" : "In " + humanized + " " + days_plural;
+    tempRow.find(".td-date-expire").text(expired_text).attr("title", moment_expire.format("MMMM DD, YYYY - h:mmA"));
   }
   else {
     tempRow.find(".td-date-expire").text("-").removeAttr("title");
