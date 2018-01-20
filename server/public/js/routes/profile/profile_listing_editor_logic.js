@@ -4,6 +4,11 @@ var traffic_chart = false;
 var completed_domains = 0;
 var premium_blackscreen_design = $("#premium-blackscreen-design").clone();
 var premium_blackscreen_hub = $("#premium-blackscreen-hub").clone();
+//hash table for categories
+var categories_hash = {};
+for (var x = 0 ; x < categories.length ; x++){
+  categories_hash[categories[x].back] = categories[x].front;
+}
 
 $(document).ready(function(){
 
@@ -49,6 +54,7 @@ function showSelector(keep_message){
   }
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
+  updateMarqueeHandlers($(".td-domain"));
 }
 
 //show domain names for multiple selected
@@ -214,6 +220,11 @@ function setupEditingButtons(){
 function showTab(new_tab){
   $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
   $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
+
+  //update marquee if showing hub
+  if (new_tab == "hub"){
+    updateMarqueeHandlers($(".sortable-marquee"));
+  }
 }
 
 function updateStatus(listing_info){
@@ -235,8 +246,10 @@ function updateStatus(listing_info){
 
 //handle checkboxes
 function checkBox(module_value, elem, child){
-  module_value = (module_value) ? module_value : 0;
-  elem.val(module_value).prop("checked", module_value);
+  if (typeof module_value != "null" && typeof module_value != "undefined"){
+    elem.val(module_value).prop("checked", module_value);
+  }
+
   if (child){
     if (module_value){
       $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
@@ -568,6 +581,9 @@ function checkBox(module_value, elem, child){
     if (listing_info.hub_phone){
       $("#hub-phone-input").intlTelInput("setNumber", listing_info.hub_phone).val(listing_info.hub_phone);
     }
+    else {
+      $("#hub-phone-input").val("");
+    }
 
     $("#hub-phone-input").intlTelInput("destroy").intlTelInput({
       utilsScript : "/js/jquery/utils.js"
@@ -584,23 +600,61 @@ function checkBox(module_value, elem, child){
       $("#multiple-edit-hub").addClass('is-hidden');
 
       //make the list of sortable domains
+      $("#sortable-wrapper").empty();
       if (listing_info.hub_listing_ids){
         $("#no-domains-in-hub").addClass('is-hidden');
         var domains_in_hub = listing_info.hub_listing_ids.split(",");
-        var domain_names_in_hub = listing_info.hub_listing_domain_names.split(",");
-        var categories_in_hub = listing_info.hub_listing_categories.split("|");
-        $("#sortable-wrapper").find(".ui-sortable-handle").remove();
+        var domain_names_in_hub = [];
+        var categories_in_hub = [];
+        domains_in_hub.map(function(elem){
+          var listing_id = elem;
+          var listing_info = listings.find(function(elem){
+            return elem.id == listing_id
+          });
 
+          domain_names_in_hub.push(listing_info.domain_name);
+          categories_in_hub.push(listing_info.categories);
+        });
+
+        //create the rows
         for (var x = 0 ; x < domains_in_hub.length ; x++){
           var domain_clone = $("#sortable-clone").clone().removeAttr("id").removeClass('is-hidden');
-          domain_clone.find(".domain_name").text(domain_names_in_hub[x]);
-          domain_clone.find(".categories").text(categories_in_hub[x]);
+          domain_clone.find(".domain_name").addClass("sortable-marquee").text(domain_names_in_hub[x]);
+          domain_clone.data("listing_id", domains_in_hub[x]);
+
+          //get front-end categories
+          if (categories_in_hub[x]){
+            categories_for_sortable = categories_in_hub[x].split(" ").map(function(elem){
+              return "<span class='marquee-category-tag'>" + categories_hash[elem] + "<span>";
+            }).join(" ");
+          }
+          else {
+            categories_for_sortable = "";
+          }
+
+          domain_clone.find(".categories").addClass("sortable-marquee").html(categories_for_sortable);
           $("#sortable-wrapper").append(domain_clone);
         }
+
+        //make them sortable
         $("#sortable-wrapper").sortable({
-          cursor: "pointer"
+          cursor: "pointer",
+          stop : function(){
+            var ranked_ids = "";
+            $("#sortable-wrapper > div").each(function(){
+              ranked_ids += $(this).data("listing_id") + ",";
+            });
+            ranked_ids = ranked_ids.slice(0, -1);
+            $("#hub-listing-ids-input").val(ranked_ids);
+            changedValue($("#hub-listing-ids-input"), listing_info);
+          }
         });
         $("#sortable-wrapper").disableSelection();
+
+        //marquee when necessary
+        $(document).ready(function () {
+          updateMarqueeHandlers($(".sortable-marquee"));
+        });
       }
       else if (listing_info.hub) {
         $("#no-domains-in-hub").removeClass('is-hidden');
@@ -615,7 +669,6 @@ function checkBox(module_value, elem, child){
       }
     }
 
-
     updateHubInputsDisabled(listing_info.hub);
   }
   function updateHubInputsDisabled(hub){
@@ -626,6 +679,32 @@ function checkBox(module_value, elem, child){
       $(".hub-input").addClass('is-disabled');
     }
   }
+  //make marquees move if necessary (function needed for resize)
+  function updateMarqueeHandlers(elem){
+    elem.marquee("destroy").each(function(){
+      if (this.offsetWidth < this.scrollWidth){
+        updateMarqueeHandler($(this));
+      }
+    });
+  }
+  //start a marquee on an element (handle destroy when mouseleave)
+  function updateMarqueeHandler(elem){
+    elem.marquee("destroy").marquee({
+      startVisible : true,
+      delayBeforeStart : 0,
+      speed : 100
+    }).marquee("pause").on("mouseenter", function(){
+      $(this).marquee("resume");
+    }).on("mouseleave", function(){
+      updateMarqueeHandler(elem);
+    });
+  }
+
+  //resize marquee
+  $(window).resize(function(){
+    updateMarqueeHandlers($(".sortable-marquee"));
+    updateMarqueeHandlers($(".td-domain"));
+  });
 
   //</editor-fold>
 
@@ -928,10 +1007,10 @@ function checkBox(module_value, elem, child){
       });
     }
 
-    // // Display the key/value pairs
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0]+ ', ' + pair[1]);
-    // }
+    // Display the key/value pairs
+    for (var pair of formData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]);
+    }
 
     $.ajax({
       url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",

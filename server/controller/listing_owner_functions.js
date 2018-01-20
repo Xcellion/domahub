@@ -789,7 +789,6 @@ module.exports = {
                }
                //all good
                else {
-                 console.log("all good???");
                  next();
                }
              });
@@ -813,6 +812,8 @@ module.exports = {
       //premium design checks
       if (req.user.stripe_subscription_id){
         console.log("LOF: Checking posted premium listing details...");
+
+        var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
 
         //info module bools
         var info_module = parseFloat(req.body.info_module);
@@ -844,7 +845,14 @@ module.exports = {
           }
         }
         var hub_layout_type = parseFloat(req.body.hub_layout_type);
-
+        var hub_listing_ids = (req.body.hub_listing_ids) ? req.body.hub_listing_ids.split(",") : ["false"];
+        var hub_listing_ids_all_good = true;
+        for (var x = 0 ; x < hub_listing_ids.length ; x++){
+          if (!validator.isInt(hub_listing_ids[x])){
+            hub_listing_ids_all_good = false;
+            break;
+          }
+        }
         //invalid footer description
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
@@ -961,6 +969,14 @@ module.exports = {
         else if (req.body.hub_layout_type && hub_layout_type != 0 && hub_layout_type != 1){
           error.handler(req, res, "That's an invalid layout type! Please refresh the page and try again!", "json");
         }
+        //invalid hub ranking order
+        else if (req.body.hub_listing_ids && !hub_listing_ids_all_good){
+          error.handler(req, res, "That's an invalid domain list order! Please refresh the page and try again!", "json");
+        }
+        //hub ranking order when multiple hubs selected
+        else if (req.body.hub_listing_ids && (!selected_ids || selected_ids.length > 1)){
+          error.handler(req, res, "You cannot edit the domain list order for multiple hubs at the same time! Please go back and select a single hub to edit!", "json");
+        }
         //all good!
         else {
 
@@ -1052,7 +1068,8 @@ module.exports = {
           req.body.hub_email ||
           req.body.hub_phone ||
           req.body.hub_layout_count ||
-          req.body.hub_layout_type
+          req.body.hub_layout_type ||
+          req.body.hub_listing_ids
         ){
           error.handler(req, res, "not-premium", "json");
         }
@@ -1240,7 +1257,7 @@ module.exports = {
       }
     },
 
-    //update a listing based on user object
+    //update a listing's registrar info
     updateListingsRegistrarInfo: function(req, res, next){
       console.log("LOF: Updating domain registrar details...");
       listing_model.updateListingsRegistrarInfo(req.session.new_listing_info, function(result){
@@ -1297,6 +1314,42 @@ module.exports = {
           }
         });
       });
+    },
+
+    //update a listing hub's listind_id ranks
+    updateListingHubRanks : function(req, res, next){
+
+      //if we're updating hub ranks
+      if (req.body.hub_listing_ids && req.body.hub_listing_ids.split(",") && req.body.hub_listing_ids.split(",").length > 1){
+        console.log("LOF: Attempting to update listing hub ranks...");
+        var formatted_hub_deletions = [req.body.selected_ids.split(",")];
+        listing_model.deleteHubGroupings(formatted_hub_deletions, function(result){
+          if (result.state != "success"){
+            error.handler(req, res, "Something went wrong! Please refresh the page and re-add your listings to their respective hubs.", "json");
+          }
+          else {
+            //listing_id, listing_hub_id, rank
+            var formatted_hub_additions = req.body.hub_listing_ids.split(",").map(function(elem, i){
+              return [elem, req.body.selected_ids, i];
+            });
+
+            listing_model.addListingHubGrouping(formatted_hub_additions, function(result){
+              if (result.state != "success"){
+                error.handler(req, res, "Something went wrong! Please refresh the page and re-add your listings to their respective hubs.", "json");
+              }
+              else {
+                //update object
+                var current_listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
+                current_listing_info.hub_listing_ids = req.body.hub_listing_ids;
+                next();
+              }
+            });
+          }
+        });
+      }
+      else {
+        next();
+      }
     },
 
     //</editor-fold>

@@ -33,10 +33,6 @@
   margin-bottom:0 !important;
 }
 
-.delete-modal-cloned-domain {
-  word-break: break-all;
-}
-
 #delete-modal-domains {
   max-height: 250px;
   overflow-y: auto;
@@ -113,10 +109,6 @@
   margin-left:2px;
 }
 
-.current-domain-name {
-  word-break: break-all;
-}
-
 // design tab blackout !premium
 #premium-only-notification {
   @include translate(-50%,50%);
@@ -132,6 +124,10 @@
   left: 0;
   background-color: $black-secondary;
   z-index: 5;
+}
+
+.td-domain a {
+  word-break:keep-all !important;
 }
 
 // edit listing tabs
@@ -393,9 +389,17 @@
   }
 }
 
-.ui-sortable-handle {
-  &:not(:last-child) {
-    border-bottom: 1px solid $border;
+.sortable-marquee {
+  overflow:hidden;
+  width: 45%;
+  white-space:nowrap;
+}
+
+#sortable-wrapper {
+  > div {
+    &:not(:last-child) {
+      border-bottom: 1px solid $border;
+    }
   }
 }
 

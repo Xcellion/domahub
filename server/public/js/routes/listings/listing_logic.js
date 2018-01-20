@@ -1,15 +1,25 @@
 var traffic_chart = false;
+//hash table for categories
+var categories_hash = {};
+for (var x = 0 ; x < categories.length ; x++){
+  categories_hash[categories[x].back] = categories[x].front;
+}
 
 $(document).ready(function() {
+  if (listing_info){
+    setupListingLogic();
+  }
+});
 
+//<editor-fold>-----------------------------------------------------------------------------------SET UP THE PAGE
+
+function setupListingLogic(){
   //add active to the first appearing tab (maybe some tabs are disabled)
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
 
-  //date registered for info module
-  if (listing_info.date_registered){
-    $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
-  }
+  //domain name
+  $(".domain-title").text(listing_info.domain_name);
 
   //<editor-fold>-----------------------------------------------------------------------------------TABS
 
@@ -25,17 +35,10 @@ $(document).ready(function() {
     $(".module").addClass('is-hidden');
     $("#" + which_tab + "-module").removeClass('is-hidden');
 
-    if (!(which_tab == "calendar")) {
-      //this will get rid of the slash
-      $("#path-input").addClass("is-hidden");
-      $("#domain-title").text(listing_info.domain_name);
-    }
-
-    if (!(which_tab == "traffic")) {
-      $(".listing-wrapper").removeClass("is-active");
-    }
-    else {
-      $(".listing-wrapper").addClass("is-active");
+    //stylize
+    if (listing_info.premium){
+      stylize(listing_info.font_color, ".page-contents .module-tab:not(.is-active) a", "color");
+      stylize(listing_info.primary_color, ".page-contents .module-tab.is-active a", "color");
     }
   });
 
@@ -71,15 +74,11 @@ $(document).ready(function() {
     }
   }
 
-  $("#ticker-tab").on("click", function() {
-    //hide the slash input
-    $("#path-input").addClass("is-hidden");
-
-  });
-
   //</editor-fold>
 
-});
+}
+
+//</editor-fold>
 
 //<editor-fold>-----------------------------------------------------------------------------------RENTAL TICKER MODULE
 
@@ -399,13 +398,14 @@ function createEmptyChart(){
   }
 
   //create the chart
-  myChart = new Chart($("#traffic-chart-module"), {
+  myChart = new Chart($("#traffic-chart"), {
     type: 'line',
     data: {
       labels: monthly_labels,
       datasets: []
     },
     options: {
+      maintainAspectRatio: false,
       legend: {
         display: false
       },
@@ -426,12 +426,6 @@ function createEmptyChart(){
       }
     }
   });
-
-  //unhide the overlay
-  $("#traffic-overlay").css({
-    "height" : $("#traffic-chart-module").height(),
-    "width" : $("#traffic-chart-module").width()
-  }).removeClass('is-hidden');
 }
 
 //format the stats to the required format
@@ -508,7 +502,7 @@ function createTrafficChart(compare){
     traffic_chart.destroy();
   }
 
-  traffic_chart = new Chart($("#traffic-chart-module"), {
+  traffic_chart = new Chart($("#traffic-chart"), {
     type: 'line',
     data: {
       labels: formatted_dataset.traffic_labels,
@@ -605,16 +599,16 @@ function createAlexa(alexa){
   if (alexa){
     listing_info.alexa = alexa;
 
-    var globalrank = (alexa.globalRank == "-") ? "Not enough data!" : alexa.globalRank;
+    var globalrank = (alexa.globalRank == "-") ? "No data!" : alexa.globalRank;
     $("#alexa-globalrank").text(globalrank);
 
-    var bouncerate = (alexa.engagement && alexa.engagement.bounceRate == "-") ? "Not enough data!" : alexa.engagement.bounceRate;
+    var bouncerate = (alexa.engagement && alexa.engagement.bounceRate == "-") ? "No data!" : alexa.engagement.bounceRate;
     $("#alexa-bouncerate").text(bouncerate);
 
-    var timeonsite = (alexa.engagement && alexa.engagement.dailyTimeOnSite == "-") ? "Not enough data!" : alexa.engagement.dailyTimeOnSite;
+    var timeonsite = (alexa.engagement && alexa.engagement.dailyTimeOnSite == "-") ? "No data!" : alexa.engagement.dailyTimeOnSite;
     $("#alexa-timeonsite").text(timeonsite);
 
-    var pageviews = (alexa.engagement && alexa.engagement.dailyPageViewPerVisitor == "-") ? "Not enough data!" : alexa.engagement.dailyPageViewPerVisitor;
+    var pageviews = (alexa.engagement && alexa.engagement.dailyPageViewPerVisitor == "-") ? "No data!" : alexa.engagement.dailyPageViewPerVisitor;
     $("#alexa-pageviews").text(pageviews);
   }
 }
