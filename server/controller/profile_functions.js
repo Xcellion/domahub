@@ -264,8 +264,6 @@ module.exports = {
 
     //added/remove to hub (need promises because not always going to be deleting things first)
     addRemoveHubRows : function(req, res, next){
-      console.log("adding", req.session.formatted_hub_additions);
-      console.log("removing", req.session.formatted_hub_deletions);
 
       //first see if theres anything to delete
       delete_from_hub_promise(req.session.formatted_hub_deletions).then(function(){

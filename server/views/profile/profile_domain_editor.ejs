@@ -1,3 +1,4 @@
+
 <div id="domain-editor" class="is-hidden">
 
   <!-- EDIT LISTING DETAILS -->
@@ -51,14 +52,14 @@
               <% } %>
             </a>
           </li>
-          <!--<li id="hub-tab" class="verified-elem unpurchased-elem tab">
+          <li id="hub-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
               <span class="">Hub</span>
               <% if (!user.stripe_subscription_id) { %>
                 <span class="icon is-small"><i class="far fa-trophy-alt"></i></span>
               <% } %>
             </a>
-          </li>-->
+          </li>
           <div class="button-wrapper is-mobile control">
             <div class="control is-grouped">
               <div class="control is-marginless">
@@ -465,7 +466,7 @@
                       <i class="far fa-question-circle"></i>
                     </div>
                   </label>
-                  <small class="tip">Displays a list of other listings you own on DomaHub.</small>
+                  <small class="tip">Displays a list of other active listings you own on DomaHub.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
@@ -778,8 +779,8 @@
                   <span class="select no-shadow">
                     <div class="drop-form">
                       <select id="hub-layout-type-input" data-name="hub_layout_type" class="hub-input changeable-input">
-                        <option value="0">Tiled</option>
-                        <option value="1">Table</option>
+                        <option value="0">Table</option>
+                        <option value="1">Tiled</option>
                       </select>
                     </div>
                   </span>
@@ -804,6 +805,7 @@
                   <div class="categories"></div>
                 </div>
               </div>
+              <input id="hub-listing-ids-input" data-name="hub_listing_ids" type="hidden" class="input changeable-input premium-input hub-input" />
               <div id="sortable-wrapper">
               </div>
               <div id="no-domains-in-hub" class="is-hidden has-text-centered">
@@ -1312,7 +1314,7 @@
                 <td class="next_step is-danger"></td>
                 <td class="td-dns-host">www</td>
                 <td class="td-record">CNAME</td>
-                <td class='required_data'>208.68.37.82</td>
+                <td class='required_data'>@</td>
                 <td class="existing_data is-hidden-mobile"></td>
               </tr>
               <tr class='existing-dns-row needs-action-row no-hover-effect'>

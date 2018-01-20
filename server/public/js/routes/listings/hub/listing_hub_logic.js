@@ -1,11 +1,12 @@
 //<editor-fold>-------------------------------VARIABLES-------------------------------
 
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$'
-});
 var start_at = 0;
-var listings_per_page = 10;
+var listings_per_page = listing_hub_info.hub_layout_count || 10;
+//hash table for categories
+var categories_hash = {};
+for (var x = 0 ; x < categories.length ; x++){
+  categories_hash[categories[x].back] = categories[x].front;
+}
 
 //</editor-fold>
 
@@ -22,8 +23,24 @@ $(document).ready(function() {
     }
   });
 
+  //make an offer modal
   $("#make-offer-button").on("click", function() {
     $("#offer-modal").addClass('is-active');
+  });
+
+  //close modal
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    $(".modal").find("input, textarea, select").val("");
+    $(".modal").removeClass('is-active');
+  });
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------DETAILED VIEW SETUP-------------------------------
+
+  //leave detailed view
+  $("#back-to-list-button").on("click", function(){
+    showDomainListView();
   });
 
   //</editor-fold>
@@ -54,12 +71,12 @@ function setupHandlers(){
     else {
       $(this).find("svg").attr("data-icon", "sort-down");
     }
-    createDomaintable(listing_info.listings);
+    createDomainView();
   });
 
   //search handler
   $("#search-domain-main, #search-domain-tld").off().on("input", function(){
-    createDomaintable(listing_info.listings);
+    createDomainView(listing_hub_info.listings);
   });
 
   //set pagnination buttons values
@@ -69,7 +86,7 @@ function setupHandlers(){
   //pagination handler
   $(".page-button").off().on('click', function(){
     start_at += parseFloat($(this).val());
-    createDomaintable();
+    createDomainView();
   });
 
   //build hash table for all categories (front v back)
@@ -81,7 +98,7 @@ function setupHandlers(){
   });
 
   //build categories dropdown
-  var categories_array = listing_info.listings.reduce(function(a, c, i){
+  var categories_array = listing_hub_info.listings.reduce(function(a, c, i){
     if (c.categories){
       return a.concat(c.categories.split(" "));
     }
@@ -90,51 +107,60 @@ function setupHandlers(){
     }
   }, []);
   categories_array = arrayUnique(categories_array).sort();
-  for (var x = 0 ; x < categories_array.length ; x++){
-    $("#categories-select").append("<option value=" + categories_array[x] + ">" + all_categories[categories_array[x]] + "</option>");
+  if (categories_array.length > 0){
+    for (var x = 0 ; x < categories_array.length ; x++){
+      $("#categories-select").append("<option value=" + categories_array[x] + ">" + all_categories[categories_array[x]] + "</option>");
+    }
+  }
+  else {
+    $("#categories-select").closest(".select").addClass('is-hidden');
   }
 
   //categories handler
   $("#categories-select").off().on('input', function(){
-    createDomaintable();
+    createDomainView();
   });
 
   //layout handler
   $("#layout-button").off().on("click", function(){
     var this_svg = ($(this).find("svg").attr("data-icon") == "th") ? "list" : "th";
     $(this).find("svg").attr("data-icon", this_svg);
+    var view_value = ($("#views-select").val() == 0) ? 1 : 0;
+    $("#views-select").val(view_value);
+    createDomainView();
+  });
+
+  //layout selector
+  $("#views-select").val(listing_hub_info.hub_layout_type).on("change", function(){
+    createDomainView();
   });
 
 }
 
 //other domains by same owner
 function findOtherDomains(){
-  if (!listing_info.listings){
-    $.ajax({
-      url: "/listing/otherowner",
-      method: "POST",
-      data: {
-        owner_id: listing_info.owner_id,
-        domain_name_exclude: listing_info.domain_name,
-        sort_by : "id",
-        total : listings_per_page,
-        starting_id : false
-      }
-    }).done(function(data){
-      if (data.state == "success"){
-        listing_info.listings = data.listings;
-      }
-      else {
-        listing_info.listings = [];
-      }
+  $.ajax({
+    url: "/listing/otherowner",
+    method: "POST",
+    data: {
+      owner_id: listing_hub_info.owner_id,
+      exclude_id: listing_hub_info.id,
+      hub_id: listing_hub_info.id,
+      sort_by : "rank",
+      total : listings_per_page,
+      starting_id : false
+    }
+  }).done(function(data){
+    if (data.state == "success"){
+      listing_hub_info.listings = data.listings;
+    }
+    else {
+      listing_hub_info.listings = [];
+    }
 
-      setupHandlers();
-      createDomaintable();
-    });
-  }
-  else {
-    createDomaintable();
-  }
+    setupHandlers();
+    createDomainView();
+  });
 }
 
 //</editor-fold>
@@ -142,13 +168,13 @@ function findOtherDomains(){
 //<editor-fold>-------------------------------TABLE SETUP-------------------------------
 
 //create the table of domains owned (depending on sort and search)
-function createDomaintable(){
+function createDomainView(){
 
   //sort the listings by sort_by
   var sort_by = $(".sort-header.is-active").data('sort-by');
   var sort_direction = $(".sort-header.is-active").data('sort-direction');
   if (typeof sort_by != "undefined" && typeof sort_direction != "undefined"){
-    var listings_to_show = listing_info.listings.sort(function(a, b){
+    var listings_to_show = listing_hub_info.listings.sort(function(a, b){
       if (sort_by == "price_rate"){
         var a_sort = a[sort_by];
         var b_sort = b[sort_by];
@@ -166,20 +192,23 @@ function createDomaintable(){
     });
   }
   else {
-    var listings_to_show = listing_info.listings
+    var listings_to_show = listing_hub_info.listings
   }
 
   //filter by search
   listings_to_show = listings_to_show.filter(function(listing){
     var domain_name_split = listing.domain_name.split(".");
-    if (listing.domain_name.toLowerCase().indexOf($("#search-domain-main").val().toLowerCase()) != -1 && "." + domain_name_split[domain_name_split.length - 1].toLowerCase() == $("#search-domain-tld").val().toLowerCase()){
-      return true;
-    }
+    var domain_name_ok = listing.domain_name.toLowerCase().indexOf($("#search-domain-main").val().toLowerCase()) != -1;
+    var tld_ok = ("." + domain_name_split[domain_name_split.length - 1].toLowerCase() == $("#search-domain-tld").val().toLowerCase()) || $("#search-domain-tld").val() == "";
+    return domain_name_ok && tld_ok;
   });
 
   //filter by categories
   listings_to_show = listings_to_show.filter(function(listing){
     if (listing.categories && listing.categories.indexOf($("#categories-select").val()) != -1){
+      return true;
+    }
+    else if (listing.categories == "" || listing.categories == null){
       return true;
     }
   });
@@ -191,51 +220,12 @@ function createDomaintable(){
 
   //create table
   if (listings_to_show.length > 0){
-
-    $(".table-row:not(#clone-row)").remove();
-
-    for (var x = 0; x < listings_to_show.slice(start_at, start_at + listings_per_page).length; x++){
-      var clone_row = $("#clone-row").clone().removeAttr("id");
-      console.log(listings_to_show[start_at + x].logo);
-      if (listings_to_show[start_at + x].logo){
-        clone_row.find(".domain-row-logo").attr("src", listings_to_show[start_at + x].logo);
-      }
-      else {
-        clone_row.find(".domain-row-logo").remove();
-      }
-      clone_row.find(".domain-row-domain").text(listings_to_show[start_at + x].domain_name);
-
-      if (listings_to_show[start_at + x].buy_price){
-        clone_row.find(".domain-row-bin").text(moneyFormat.to(listings_to_show[start_at + x].buy_price));
-      }
-      else {
-        clone_row.find(".bin-col .control-item").addClass('is-hidden');
-      }
-      if (listings_to_show[start_at + x].min_price){
-        clone_row.find(".domain-row-min").text(moneyFormat.to(listings_to_show[start_at + x].min_price));
-      }
-      else {
-        clone_row.find(".min-col .control-item").addClass('is-hidden');
-      }
-
-      if (listings_to_show[start_at + x].price_rate && listings_to_show[start_at + x].price_type && listings_to_show[start_at + x].rentable){
-        clone_row.find(".domain-row-rent").text(moneyFormat.to(listings_to_show[start_at + x].price_rate) + " / " + listings_to_show[start_at + x].price_type);
-      }
-      else {
-        clone_row.find(".rent-col .control-item").addClass('is-hidden');
-      }
-
-      clone_row.find(".misc-button").on("click", function(){
-        $(".misc-options").addClass('is-hidden');
-        $(this).next(".misc-options").toggleClass("is-hidden");
-      });
-
-      $("#domain-table-body").append(clone_row);
+    if ($("#views-select").val() == 0){
+      createDomainTable(listings_to_show, start_at, listings_per_page);
     }
-
-    //show table
-    $(".domains-table").addClass('is-hidden');
-    $("#domains-table, .table-row:not(#clone-row)").removeClass('is-hidden');
+    else {
+      createDomainTiles(listings_to_show, start_at, listings_per_page);
+    }
 
     //how many domains text
     $("#total-domain-count").text("Showing " + (start_at + 1) + " - " + (start_at + listings_to_show.slice(start_at, start_at + listings_per_page).length) + " of " + listings_to_show.length + " domains");
@@ -254,10 +244,161 @@ function createDomaintable(){
 
   //no matching domains!
   else {
+    $("#domains-grid").addClass('is-hidden');
     $(".domains-table").addClass('is-hidden');
     $("#no-domains-table").removeClass('is-hidden');
     $("#total-domain-count").text("");
   }
+}
+
+//create table view of domains owned
+function createDomainTable(listings_to_show, start_at, listings_per_page){
+  $("#domains-grid").addClass('is-hidden');
+  $(".table-row:not(#clone-row)").remove();
+
+  for (var x = 0; x < listings_to_show.slice(start_at, start_at + listings_per_page).length; x++){
+    var clone_row = $("#clone-row").clone().removeAttr("id");
+    clone_row.data("listing_info", listings_to_show[start_at + x]);
+    if (listings_to_show[start_at + x].logo){
+      clone_row.find(".domain-row-logo").attr("src", listings_to_show[start_at + x].logo);
+    }
+    else {
+      clone_row.find(".domain-row-logo").remove();
+    }
+    clone_row.find(".domain-row-domain").text(listings_to_show[start_at + x].domain_name);
+
+    if (listings_to_show[start_at + x].buy_price){
+      clone_row.find(".domain-row-bin").text(moneyFormat.to(listings_to_show[start_at + x].buy_price));
+    }
+    else {
+      clone_row.find(".bin-col .control-item").addClass('is-hidden');
+    }
+    if (listings_to_show[start_at + x].min_price){
+      clone_row.find(".domain-row-min").text(moneyFormat.to(listings_to_show[start_at + x].min_price));
+    }
+    else {
+      clone_row.find(".min-col .control-item").addClass('is-hidden');
+    }
+
+    if (listings_to_show[start_at + x].price_rate && listings_to_show[start_at + x].price_type && listings_to_show[start_at + x].rentable){
+      clone_row.find(".domain-row-rent").text(moneyFormat.to(listings_to_show[start_at + x].price_rate) + " / " + listings_to_show[start_at + x].price_type);
+    }
+    else {
+      clone_row.find(".rent-col .control-item").addClass('is-hidden');
+    }
+
+    clone_row.find(".misc-button").on("click", function(e){
+      $(".misc-options").addClass('is-hidden');
+      $(this).next(".misc-options").toggleClass("is-hidden");
+    });
+
+    //click to see details
+    clone_row.on("click", function(){
+      showDetails($(this).data("listing_info"));
+    });
+
+    $("#domain-table-body").append(clone_row);
+  }
+
+  //show table
+  $(".domains-table").addClass('is-hidden');
+  $("#domains-table, .table-row:not(#clone-row)").removeClass('is-hidden');
+  $("#domain-table-body").removeClass('is-hidden');
+}
+
+//create tiled view of domains owned
+function createDomainTiles(listings_to_show, start_at, listings_per_page){
+  $(".domains-table, #domain-table-body").addClass("is-hidden");
+  $("#domains-grid").removeClass('is-hidden');
+
+  //remove any existing tiles
+  $(".domain-tile-cols").remove();
+
+  var cols_per_row = 4;
+  var cur_col = 0;
+  var cols_to_append_to = $("#domains-grid-clone-cols").clone().removeAttr("id").removeClass('is-hidden').addClass("domain-tile-cols");
+  for (var x = 0; x < listings_to_show.slice(start_at, start_at + listings_per_page).length; x++){
+
+    //create new clone columns to append column to
+    if (cur_col >= cols_per_row){
+      $("#domains-grid").append(cols_to_append_to);
+      cur_col = 0;
+      cols_to_append_to = $("#domains-grid-clone-cols").clone().removeAttr("id").removeClass('is-hidden').addClass("domain-tile-cols");
+    }
+    else {
+      cur_col++;
+    }
+
+    //clone column
+    var clone_col = $("#domains-grid-clone-col").clone().removeAttr("id").removeClass('is-hidden').addClass("is-" + Math.round(12 / cols_per_row)).addClass("domain-tile-col");
+    clone_col.data("listing_info", listings_to_show[start_at + x]);
+
+    if (listings_to_show[start_at + x].logo){
+      clone_col.find(".logo-image").attr("src", listings_to_show[start_at + x].logo);
+    }
+    else {
+      clone_col.find(".logo-image").attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=" + listings_to_show[start_at + x].domain_name + "&w=255&h=128");
+    }
+
+    //domain name
+    clone_col.find(".domain-name").text(listings_to_show[start_at + x].domain_name);
+
+    //price tag
+    if (listings_to_show[start_at + x].buy_price){
+      var price_tag = "Buy now - " + moneyFormat.to(listings_to_show[start_at + x].buy_price);
+    }
+    else if (listings_to_show[start_at + x].min_price){
+      var price_tag = "Make offer - " + moneyFormat.to(listings_to_show[start_at + x].min_price);
+    }
+    else if (listings_to_show[start_at + x].price_rate && listings_to_show[start_at + x].rentable){
+      var price_tag = "Rent now - " + moneyFormat.to(listings_to_show[start_at + x].price_rate) + " / " + listings_to_show[start_at + x].price_type;
+    }
+    else {
+      var price_tag = "Available now!";
+    }
+    clone_col.find(".price-text").text(price_tag);
+
+    //click to see details
+    clone_col.on("click", function(){
+      showDetails($(this).data("listing_info"));
+    });
+
+    cols_to_append_to.append(clone_col);
+  }
+
+  //append last if necessary
+  if (cur_col <= cols_per_row){
+    $("#domains-grid").append(cols_to_append_to);
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------DETAIL VIEW SETUP-------------------------------
+
+//show the detailed view
+function showDetails(listing_info_local){
+  $("#detailed-view-section").removeClass("is-hidden");
+  $("#domain-list-section, #domain-search-section").addClass("is-hidden");
+
+  listing_info = listing_info_local;
+  listing_info.premium = true;
+  setupListingLogic();
+  setupListingListedLogic();
+  setupTheming();
+
+  //remove stuff that doesnt work from a hub perspective
+  $("#domainlist-tab").remove();
+  $("#domainlist-module").remove();
+  stylize(listing_info.font_color, "#back-to-list-button", "color");
+  $("#back-to-list-button").prependTo(".page-contents .listing-left");
+  $(".page-contents .min-height").removeClass('min-height');
+}
+
+//show domain list
+function showDomainListView(){
+  $("#detailed-view-section").addClass("is-hidden");
+  $("#domain-list-section, #domain-search-section").removeClass("is-hidden");
 }
 
 //</editor-fold>

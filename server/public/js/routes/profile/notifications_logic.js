@@ -95,3 +95,10 @@ function contactLinkHandler(){
 }
 
 //</editor-fold>
+
+//delete notifications button
+$(document).ready(function(){
+  $(".delete").on("click", function(e){
+    $(this).parent(".notification").addClass('is-hidden');
+  });
+});
