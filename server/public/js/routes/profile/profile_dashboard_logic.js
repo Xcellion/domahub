@@ -5,6 +5,7 @@ var channels_chart;
 
 $(document).ready(function() {
 
+
   //<editor-fold>-------------------------------PORTFOLIO OVERVIEW / LATEST OFFERS-------------------------------
 
   updatePortfolioOverviewCounters();
