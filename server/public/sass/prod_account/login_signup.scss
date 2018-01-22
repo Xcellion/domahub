@@ -41,10 +41,19 @@ html {
   }
 }
 
-.remember-text {
-  position: absolute;
-  left: 25px;
-  top: 1px;
+.checkbox-form {
+  position: relative;
+  height: 100%;
+  width: 135px;
+  label::before {
+    top: 3px !important;
+    left: 0 !important;
+  }
+  label {
+    padding: 5px 0 5px 25px !important;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .account-form {
