@@ -24,8 +24,6 @@
 
 <body>
 
-  <%- include("profile_navbar_mobile.ejs"); %>
-
   <section class="section is-fullscreen">
     <div class="wrapper">
 
@@ -33,428 +31,417 @@
 
       <div class="right-content">
 
-        <div class="content">
-          <h2 class="is-bold">Dashboard</h2>
-        </div>
-
-        <div class="columns">
-          <div class="column is-8">
-            <div class="card is-fullwidth">
-              <div class="card-header">
-                <h3 class="card-header-title">Traffic Overview</h3>
-                <div class="control is-grouped">
-                  <div class="control">
-                    <button id="refresh-tables-button" class="button is-stylish is-small" title="Refresh Tables" tabindex="0">
-                      <div class="icon is-small">
-                        <i class="far fa-sync-alt"></i>
-                      </div>
-                      <span class="is-hidden-mobile">Refresh</span>
-                    </button>
-                  </div>
-                  <div class="control">
-                    <span class="select has-shadow is-stylish">
-                      <select id="last-days-select">
-                        <option value="7">Last 7 Days</option>
-                        <option selected value="30">Last 30 Days</option>
-                        <option value="90">Last 90 Days</option>
-                        <option value="180">Last 180 Days</option>
-                      </select>
-                    </span>
+        <%- include("profile_navbar_mobile.ejs"); %>
+        <div class="right-content-items">
+          <div class="columns is-laptop">
+            <div id="dashboard-traffic-card" class="column is-8">
+              <div class="card is-fullwidth">
+                <div class="card-header">
+                  <h3 class="card-header-title">Traffic Overview</h3>
+                  <div class="control is-grouped">
+                    <div class="control">
+                      <button id="refresh-tables-button" class="button is-stylish is-small" title="Refresh Tables" tabindex="0">
+                        <div class="icon is-small">
+                          <i class="far fa-sync-alt"></i>
+                        </div>
+                        <span class="is-hidden-mobile">Refresh</span>
+                      </button>
+                    </div>
+                    <div class="control">
+                      <span class="select has-shadow is-stylish">
+                        <select id="last-days-select">
+                          <option value="7">Last 7 Days</option>
+                          <option selected value="30">Last 30 Days</option>
+                          <option value="90">Last 90 Days</option>
+                          <option value="180">Last 180 Days</option>
+                        </select>
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="card-content">
-                <div class="columns">
-                  <div class="column is-12">
-                    <!-- chart tabs -->
-                    <div class="chart-tabs">
-                      <a tabindex="0" data-additive="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active">
-                        <p class="heading">
-                          Unique Visitors
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="users-counter">Loading...</p>
+                <div class="card-content">
+                  <div class="columns">
+                    <div class="column is-12">
+                      <!-- chart tabs -->
+                      <div class="chart-tabs">
+                        <a tabindex="0" data-additive="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active">
+                          <p class="heading">
+                            Unique Visitors
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="users-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                        <a tabindex="0" data-additive="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper">
+                          <p class="heading">
+                            Unique Sessions
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="sessions-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                        <a tabindex="0" data-additive="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper">
+                          <p class="heading">
+                            New Visitors
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="new-users-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                        <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions,ga:sessions" data-stat-desc="% New Sessions" class="stat-wrapper">
+                          <p class="heading">
+                            % New Sessions
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="new-sessions-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                        <a tabindex="0" data-additive="false" data-tooltip-type="sessionsPerUser" data-stat="ga:sessionsPerUser,ga:users" data-stat-desc="Sessions Per User" class="stat-wrapper">
+                          <p class="heading">
+                            Sessions Per User
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="sessions-per-user-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                        <a tabindex="0" data-additive="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper">
+                          <p class="heading">
+                            Session Duration
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="session-duration-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                        <a tabindex="0" data-additive="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper">
+                          <p class="heading">
+                            Total Pageviews
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="pageviews-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                        <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:bounceRate,ga:sessions" data-stat-desc="Bounce Rate" class="stat-wrapper">
+                          <p class="heading">
+                            Bounce Rate
+                          </p>
+                          <h1 class="counter">
+                            <div class="counter-link">
+                              <p id="bounce-rate-counter">Loading...</p>
+                            </div>
+                          </h1>
+                        </a>
+                      </div>
+                      <!-- sessions chart -->
+                      <div class="content">
+                        <div class="content has-text-centered">
+                          <h3 class="is-hidden">
+                            <span id="current-stat-name">Unique Users</span> Over Time
+                          </h3>
+                        </div>
+                        <div class="traffic-chart-wrapper">
+                          <canvas id="time-chart" class="traffic-chart"></canvas>
+                          <div id="time-chart-overlay" class="traffic-overlay content">
+                            <div id="time-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
+                              <figure class="image is-48x48">
+                                <img src="/images/lib/ggface.png">
+                              </figure>
+                              <p>
+                                There is not enough data!
+                              </p>
+                              <p>
+                                Please try changing the date range.
+                              </p>
+                            </div>
+                            <div id="time-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                              <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
+                              <p>Now loading <span id="current-stat-name-loading">unique users</span> data.</p>
+                            </div>
                           </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-additive="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper">
-                        <p class="heading">
-                          Unique Sessions
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="sessions-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-additive="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper">
-                        <p class="heading">
-                          New Visitors
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="new-users-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions,ga:sessions" data-stat-desc="% New Sessions" class="stat-wrapper">
-                        <p class="heading">
-                          % New Sessions
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="new-sessions-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-additive="false" data-tooltip-type="sessionsPerUser" data-stat="ga:sessionsPerUser,ga:users" data-stat-desc="Sessions Per User" class="stat-wrapper">
-                        <p class="heading">
-                          Sessions Per User
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="sessions-per-user-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-additive="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper">
-                        <p class="heading">
-                          Session Duration
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="session-duration-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-additive="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper">
-                        <p class="heading">
-                          Total Pageviews
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="pageviews-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
-                      <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:bounceRate,ga:sessions" data-stat-desc="Bounce Rate" class="stat-wrapper">
-                        <p class="heading">
-                          Bounce Rate
-                        </p>
-                        <h1 class="counter">
-                          <div class="counter-link">
-                            <p id="bounce-rate-counter">Loading...</p>
-                          </div>
-                        </h1>
-                      </a>
+                        </div>
+                      </div>
                     </div>
-                    <!-- sessions chart -->
-                    <div class="content">
+                  </div>
+
+                  <div class="columns is-laptop">
+
+                    <!-- channels chart -->
+                    <div class="column is-4">
                       <div class="content has-text-centered">
-                        <h3 class="is-hidden">
-                          <span id="current-stat-name">Unique Users</span> Over Time
-                        </h3>
-                      </div>
-                      <div class="traffic-chart-wrapper">
-                        <canvas id="time-chart" class="traffic-chart"></canvas>
-                        <div id="time-chart-overlay" class="traffic-overlay content">
-                          <div id="time-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
-                            <figure class="image is-48x48">
-                              <img src="/images/lib/ggface.png">
-                            </figure>
-                            <p>
-                              There is not enough data!
-                            </p>
-                            <p>
-                              Please try changing the date range.
-                            </p>
-                          </div>
-                          <div id="time-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                            <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
-                            <p>Now loading <span id="current-stat-name-loading">unique users</span> data.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns">
-
-                  <!-- channels chart -->
-                  <div class="column is-4">
-                    <div class="content has-text-centered">
-                      <p>
-                        How are users finding your listings?
-                      </p>
-                      <div class="traffic-chart-wrapper">
-                        <canvas id="channels-chart" class="traffic-chart"></canvas>
-                        <div id="channels-chart-overlay" class="traffic-overlay content">
-                          <div id="channels-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
-                            <figure class="image is-48x48">
-                              <img src="/images/lib/ggface.png">
-                            </figure>
-                            <p>
-                              There is not enough data!
-                            </p>
-                            <p>
-                              Please try changing the date range.
-                            </p>
-                          </div>
-                          <div id="channels-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                            <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
-                            <p>Now loading channel data.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- countries chart -->
-                  <div class="column is-4">
-                    <div class="content has-text-centered">
-                      <p>
-                        What countries are your users in?
-                      </p>
-                      <div class="traffic-chart-wrapper">
-                        <canvas id="countries-chart" class="traffic-chart"></canvas>
-                        <div id="countries-chart-overlay" class="traffic-overlay content">
-                          <div id="countries-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
-                            <figure class="image is-48x48">
-                              <img src="/images/lib/ggface.png">
-                            </figure>
-                            <p>
-                              There is not enough data!
-                            </p>
-                            <p>
-                              Please try changing the date range.
-                            </p>
-                          </div>
-                          <div id="countries-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                            <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
-                            <p>Now loading country data.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- popular chart -->
-                  <div class="column is-4">
-                    <div class="content has-text-centered">
-                      <p>
-                        Which listings are the most popular?
-                      </p>
-                      <div class="traffic-chart-wrapper">
-                        <canvas id="popular-chart" class="traffic-chart"></canvas>
-                        <div id="popular-chart-overlay" class="traffic-overlay content">
-                          <div id="popular-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
-                            <figure class="image is-48x48">
-                              <img src="/images/lib/ggface.png">
-                            </figure>
-                            <p>
-                              There is not enough data!
-                            </p>
-                            <p>
-                              Please try changing the date range.
-                            </p>
-                          </div>
-                          <div id="popular-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                            <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
-                            <p>Now loading listing data.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column">
-            <div class="card is-fullwidth">
-              <div class="card-header">
-                <h3 class="card-header-title">Portfolio Overview</h3>
-              </div>
-              <div class="card-content">
-                <div class="portfolio-table">
-                  <div class="content">
-                    <p class="heading">
-                      Domains
-                    </p>
-                    <a title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
-                      <div class="level is-mobile">
-                        <div class="level-item">
-                          <div class="fac">
-                            <div class="icon is-small">
-                              <i class="far fa-folder"></i>
-                            </div>
-                            <p>
-                              Total Listings
-                            </p>
-                          </div>
-                        </div>
-                        <p class="level-item has-text-right">
-                          <%= user.listings.length %>
+                        <p>
+                          How are users finding your listings?
                         </p>
-                      </div>
-                    </a>
-                    <a title="View Sold" href="/profile/mylistings?tab=offers">
-                      <div class="level is-mobile">
-                        <div class="level-item">
-                          <div class="fac">
-                            <div class="icon is-small">
-                              <i class="far fa-usd-circle"></i>
+                        <div class="traffic-chart-wrapper">
+                          <canvas id="channels-chart" class="traffic-chart"></canvas>
+                          <div id="channels-chart-overlay" class="traffic-overlay content">
+                            <div id="channels-chart-overlay-none" class='content has-text-centered traffic-overlay-text is-hidden'>
+                              <div class="icon is-medium is-danger">
+                                <i class="far fa-exclamation-circle"></i>
+                              </div>
+                              <p>
+                                There is not enough data!
+                              </p>
                             </div>
-                            <p>
-                              Domains Sold
-                            </p>
+                            <div id="channels-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                              <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
+                              <p>Now loading channel data.</p>
+                            </div>
                           </div>
                         </div>
-                        <p id="sold-counter" class="level-item has-text-right"></p>
                       </div>
-                    </a>
-                    <a title="View Unverified" href="/profile/mylistings?tab=verify">
-                      <div class="level is-mobile">
-                        <div class="level-item">
-                          <div class="fac">
-                            <div class="icon is-small">
-                              <i class="far fa-exclamation-triangle"></i>
+                    </div>
+
+                    <!-- countries chart -->
+                    <div class="column is-4">
+                      <div class="content has-text-centered">
+                        <p>
+                          What countries are your users in?
+                        </p>
+                        <div class="traffic-chart-wrapper">
+                          <canvas id="countries-chart" class="traffic-chart"></canvas>
+                          <div id="countries-chart-overlay" class="traffic-overlay content">
+                            <div id="countries-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
+                              <div class="icon is-medium is-danger">
+                                <i class="far fa-exclamation-circle"></i>
+                              </div>
+                              <p>
+                                There is not enough data!
+                              </p>
                             </div>
-                            <p>
-                              Unverified Listings
-                            </p>
+                            <div id="countries-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                              <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
+                              <p>Now loading country data.</p>
+                            </div>
                           </div>
                         </div>
-                        <p id="unverified-counter" class="level-item has-text-right"></p>
                       </div>
-                    </a>
-                    <a title="View Expiring" href="/profile/mylistings">
-                      <div class="level is-mobile">
-                        <div class="level-item">
-                          <div class="fac">
-                            <div class="icon is-small">
-                              <i class="far fa-alarm-clock"></i>
+                    </div>
+
+                    <!-- popular chart -->
+                    <div class="column is-4">
+                      <div class="content has-text-centered">
+                        <p>
+                          Which listings are the most popular?
+                        </p>
+                        <div class="traffic-chart-wrapper">
+                          <canvas id="popular-chart" class="traffic-chart"></canvas>
+                          <div id="popular-chart-overlay" class="traffic-overlay content">
+                            <div id="popular-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
+                              <div class="icon is-medium is-danger">
+                                <i class="far fa-exclamation-circle"></i>
+                              </div>
+                              <p>
+                                There is not enough data!
+                              </p>
                             </div>
-                            <p>
-                              Expiring Domains
-                            </p>
+                            <div id="popular-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                              <p class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></p>
+                              <p>Now loading listing data.</p>
+                            </div>
                           </div>
                         </div>
-                        <p id="expiring-counter" class="level-item has-text-right"></p>
                       </div>
-                    </a>
-                  </div>
-                  <div class="content">
-                    <p class="heading">
-                      Revenue
-                    </p>
-                    <a title="View Profit" href="/profile/settings#transactions">
-                      <div class="level is-mobile">
-                        <div class="level-item">
-                          <div class="fac">
-                            <div class="icon is-small">
-                              <i class="far fa-plus-circle"></i>
-                            </div>
-                            <p>
-                              Profit YTD
-                            </p>
-                          </div>
-                        </div>
-                        <p id="profit-counter" class="level-item has-text-right"></p>
-                      </div>
-                    </a>
-                    <a title="View Expenses" href="/profile/settings#transactions">
-                      <div class="level is-mobile">
-                        <div class="level-item">
-                          <div class="fac">
-                            <div class="icon is-small">
-                              <i class="far fa-minus-circle"></i>
-                            </div>
-                            <p>
-                              Expenses YTD
-                            </p>
-                          </div>
-                        </div>
-                        <p id="expenses-counter" class="level-item has-text-right"></p>
-                      </div>
-                    </a>
-                    <a title="View Offers" href="/profile/mylistings?tab=offers">
-                      <div class="level is-mobile">
-                        <div class="level-item">
-                          <div class="fac">
-                            <div class="icon is-small">
-                              <i class="far fa-shopping-basket"></i>
-                            </div>
-                            <p>
-                              Offers
-                            </p>
-                          </div>
-                        </div>
-                        <p id="offers-counter" class="level-item has-text-right"></p>
-                      </div>
-                    </a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="card is-fullwidth is-hidden">
-              <div class="card-header">
-                <h3 class="card-header-title">Outstanding Offers</h3>
-              </div>
-              <div class="card-content">
-                <div class="content">
-                  <div id="no-offers" class="is-hidden media">
-                    You don't have any outstanding offers!
-                  </div>
-                  <div id="offers-clone" class="is-hidden offers media">
-                    <li>
-                      <span class="offers-domain-name"></span>
-                      <a class="offers-count is-primary is-underlined is-pulled-right"></a>
-                    </li>
+            <div class="column">
+              <div id="dashboard-portfolio-card" class="card is-fullwidth">
+                <div class="card-header">
+                  <h3 class="card-header-title">Portfolio Overview</h3>
+                </div>
+                <div class="card-content">
+                  <div class="portfolio-table">
+                    <div class="content">
+                      <p class="heading">
+                        Domains
+                      </p>
+                      <a title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
+                        <div class="level is-mobile">
+                          <div class="level-item">
+                            <div class="fac">
+                              <div class="icon is-small">
+                                <i class="far fa-folder"></i>
+                              </div>
+                              <p>
+                                Total Listings
+                              </p>
+                            </div>
+                          </div>
+                          <p class="level-item has-text-right">
+                            <%= user.listings.length %>
+                          </p>
+                        </div>
+                      </a>
+                      <a title="View Sold" href="/profile/mylistings?tab=offers">
+                        <div class="level is-mobile">
+                          <div class="level-item">
+                            <div class="fac">
+                              <div class="icon is-small">
+                                <i class="far fa-usd-circle"></i>
+                              </div>
+                              <p>
+                                Domains Sold
+                              </p>
+                            </div>
+                          </div>
+                          <p id="sold-counter" class="level-item has-text-right"></p>
+                        </div>
+                      </a>
+                      <a title="View Unverified" href="/profile/mylistings?tab=verify">
+                        <div class="level is-mobile">
+                          <div class="level-item">
+                            <div class="fac">
+                              <div class="icon is-small">
+                                <i class="far fa-exclamation-triangle"></i>
+                              </div>
+                              <p>
+                                Unverified Listings
+                              </p>
+                            </div>
+                          </div>
+                          <p id="unverified-counter" class="level-item has-text-right"></p>
+                        </div>
+                      </a>
+                      <a title="View Expiring" href="/profile/mylistings">
+                        <div class="level is-mobile">
+                          <div class="level-item">
+                            <div class="fac">
+                              <div class="icon is-small">
+                                <i class="far fa-alarm-clock"></i>
+                              </div>
+                              <p>
+                                Expiring Domains
+                              </p>
+                            </div>
+                          </div>
+                          <p id="expiring-counter" class="level-item has-text-right"></p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="content">
+                      <p class="heading">
+                        Revenue
+                      </p>
+                      <a title="View Profit" href="/profile/settings#transactions">
+                        <div class="level is-mobile">
+                          <div class="level-item">
+                            <div class="fac">
+                              <div class="icon is-small">
+                                <i class="far fa-plus-circle"></i>
+                              </div>
+                              <p>
+                                Profit YTD
+                              </p>
+                            </div>
+                          </div>
+                          <p id="profit-counter" class="level-item has-text-right"></p>
+                        </div>
+                      </a>
+                      <a title="View Expenses" href="/profile/settings#transactions">
+                        <div class="level is-mobile">
+                          <div class="level-item">
+                            <div class="fac">
+                              <div class="icon is-small">
+                                <i class="far fa-minus-circle"></i>
+                              </div>
+                              <p>
+                                Expenses YTD
+                              </p>
+                            </div>
+                          </div>
+                          <p id="expenses-counter" class="level-item has-text-right"></p>
+                        </div>
+                      </a>
+                      <a title="View Offers" href="/profile/mylistings?tab=offers">
+                        <div class="level is-mobile">
+                          <div class="level-item">
+                            <div class="fac">
+                              <div class="icon is-small">
+                                <i class="far fa-shopping-basket"></i>
+                              </div>
+                              <p>
+                                Offers
+                              </p>
+                            </div>
+                          </div>
+                          <p id="offers-counter" class="level-item has-text-right"></p>
+                        </div>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="card is-fullwidth">
-              <div class="card-header no-border-bottom">
-                <h3 class="card-header-title">Get Free Months of Premium</h3>
-              </div>
-              <div class="card-image">
-                <div class="notification no-shadow has-icon is-lighter">
-                  <div class="icon-box">
-                    <a tabindex="0" href="/features#pricing" title="Learn More">
-                      <div class="icon">
-                        <i class="far fa-trophy-alt"></i>
-                      </div>
-                    </a>
-                  </div>
+              <div class="card is-fullwidth is-hidden">
+                <div class="card-header">
+                  <h3 class="card-header-title">Outstanding Offers</h3>
+                </div>
+                <div class="card-content">
                   <div class="content">
-                    <p>
-                      Invite a friend to join Premium and you’ll each receive a free month when they sign up!
-                    </p>
+                    <div id="no-offers" class="is-hidden media">
+                      You don't have any outstanding offers!
+                    </div>
+                    <div id="offers-clone" class="is-hidden offers media">
+                      <li>
+                        <span class="offers-domain-name"></span>
+                        <a class="offers-count is-primary is-underlined is-pulled-right"></a>
+                      </li>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="card-content">
-                <div class="content">
-                  <div class="control has-addons">
-                    <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input has-shadow" placeholder="Invite your friends!"/>
-                    <button id="referral-link-copy" class="button is-stylish is-small" tabindex="0">
-                      <div class="icon is-small"><i class="far fa-clipboard" data-fa-transform="up-1"></i></div>
-                      <span id="referral-link-text">Copy Link</span>
-                    </button>
+              <div class="card is-fullwidth">
+                <div class="card-header no-border-bottom">
+                  <h3 class="card-header-title">Get Free Months of Premium</h3>
+                </div>
+                <div class="card-image">
+                  <div class="notification no-shadow has-icon is-lighter">
+                    <div class="icon-box">
+                      <a tabindex="0" href="/features#pricing" title="Learn More">
+                        <div class="icon">
+                          <i class="far fa-trophy-alt"></i>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="content">
+                      <p>
+                        Invite a friend to join Premium and you’ll each receive a free month when they sign up!
+                      </p>
+                    </div>
                   </div>
-                  <small class="tip">
-                    Check the status of your existing invites in <a class="is-primary is-underlined" href="/profile/settings#premium" tabindex="0">Account Settings</a>.
-                  </small>
+                </div>
+                <div class="card-content">
+                  <div class="content">
+                    <div class="control has-addons">
+                      <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input has-shadow" placeholder="Invite your friends!"/>
+                      <button id="referral-link-copy" class="button is-stylish is-small" tabindex="0">
+                        <div class="icon is-small"><i class="far fa-clipboard" data-fa-transform="up-1"></i></div>
+                        <span id="referral-link-text">Copy Link</span>
+                      </button>
+                    </div>
+                    <small class="tip">
+                      Check the status of your existing invites in <a class="is-primary is-underlined" href="/profile/settings#premium" tabindex="0">Account Settings</a>.
+                    </small>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>

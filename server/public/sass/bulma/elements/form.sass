@@ -9,8 +9,8 @@
         border-color: darken($color, 6%)
 
 input:-webkit-autofill
-  -webkit-box-shadow: 0 0 0px 1000px white inset
-  box-shadow: 0 0 0px 1000px white inset
+  -webkit-box-shadow: 0 0 0 100px white inset
+  box-shadow: 0 0 0px 100px white inset
 
 .form
   margin: 10px 0
@@ -37,10 +37,16 @@ input:-webkit-autofill
     +control-large
   // Modifiers
   &.is-stylish
-    font-size: 10px
-    font-weight: 500
-    letter-spacing: 1px
-    text-transform: uppercase
+    font-size: 12px
+    font-weight: 700
+    max-width: 200px
+    &.is-medium
+      font-size: 16px
+      max-width: none
+      &:focus
+        max-width: none
+    &:focus
+      max-width: 400px
   &.has-shadow
     +box-shadow(0,1px,3px,$border,0)
   &.no-border
@@ -139,14 +145,10 @@ input:-webkit-autofill
   // Sizes
   &.is-stylish
     select
-      font-size: 10px
-      font-weight: 500
-      letter-spacing: 1px
-      text-transform: uppercase
+      font-size: 12px
+      font-weight: 700
     option
       font-size: 16px
-      font-weight: 400
-      letter-spacing: normal
       text-transform: capitalize
   &.is-small
     height: 26px
@@ -240,6 +242,8 @@ input:-webkit-autofill
             margin-left: 5px
           &:not(:last-child)
             margin-right: 10px
+    &.is-aligned-start
+      align-items: flex-start
     &.is-mobile
       +mobile
         align-items: flex-start

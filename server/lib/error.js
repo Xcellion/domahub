@@ -67,16 +67,16 @@ module.exports = {
     console.log("\x1b[31m", "ERROR: " + error + " INFO : " + info, '\x1b[0m');
 
     //notify via email of any errors
-    if (process.env.NODE_ENV != "dev"){
-      if (error.code != "ECONNREFUSED"){
-        mailer.sendBasicMail({
-          to: "general@domahub.com",
-          from: 'general@domahub.com',
-          subject: "There was an error on DomaHub production servers!",
-          html: JSON.stringify(error) + JSON.stringify(info)
-        });
-      }
-    }
+    // if (process.env.NODE_ENV != "dev"){
+    //   if (error.code != "ECONNREFUSED"){
+    //     mailer.sendBasicMail({
+    //       to: "general@domahub.com",
+    //       from: 'general@domahub.com',
+    //       subject: "There was an error on DomaHub production servers!",
+    //       html: JSON.stringify(error) + JSON.stringify(info)
+    //     });
+    //   }
+    // }
   }
 
   //</editor-fold>

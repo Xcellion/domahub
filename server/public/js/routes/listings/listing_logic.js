@@ -1,15 +1,25 @@
 var traffic_chart = false;
+//hash table for categories
+var categories_hash = {};
+for (var x = 0 ; x < categories.length ; x++){
+  categories_hash[categories[x].back] = categories[x].front;
+}
 
 $(document).ready(function() {
+  if (listing_info){
+    setupListingLogic();
+  }
+});
 
+//<editor-fold>-----------------------------------------------------------------------------------SET UP THE PAGE
+
+function setupListingLogic(){
   //add active to the first appearing tab (maybe some tabs are disabled)
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
 
-  //date registered for info module
-  if (listing_info.date_registered){
-    $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
-  }
+  //domain name
+  $(".domain-title").text(listing_info.domain_name);
 
   //<editor-fold>-----------------------------------------------------------------------------------TABS
 
@@ -25,9 +35,10 @@ $(document).ready(function() {
     $(".module").addClass('is-hidden');
     $("#" + which_tab + "-module").removeClass('is-hidden');
 
-    if (!(which_tab == "calendar")) {
-      //this will get rid of the slash
-      $("#domain-title").text(listing_info.domain_name);
+    //stylize
+    if (listing_info.premium){
+      stylize(listing_info.font_color, ".page-contents .module-tab:not(.is-active) a", "color");
+      stylize(listing_info.primary_color, ".page-contents .module-tab.is-active a", "color");
     }
   });
 
@@ -42,13 +53,11 @@ $(document).ready(function() {
   if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){
     getTickerData();
   }
-  if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){
-    findOtherDomains();
-  }
 
   //only get traffic if it's visible due to chartjs responsive endless loop
   if ((listing_info.premium && listing_info.traffic_graph) || !listing_info.premium){
     if ($(".module").eq(0).attr("id") == "traffic-module"){
+      $(".listing-wrapper").addClass("is-active");
       getTrafficData();
     }
     else {
@@ -65,15 +74,11 @@ $(document).ready(function() {
     }
   }
 
-  $("#ticker-tab").on("click", function() {
-    //hide the slash input
-    $("#path-input").addClass("is-hidden");
-
-  });
-
   //</editor-fold>
 
-});
+}
+
+//</editor-fold>
 
 //<editor-fold>-----------------------------------------------------------------------------------RENTAL TICKER MODULE
 
@@ -393,15 +398,16 @@ function createEmptyChart(){
   }
 
   //create the chart
-  myChart = new Chart($("#traffic-chart-module"), {
+  myChart = new Chart($("#traffic-chart"), {
     type: 'line',
     data: {
       labels: monthly_labels,
       datasets: []
     },
     options: {
+      maintainAspectRatio: false,
       legend: {
-        display:false
+        display: false
       },
       scales: {
         xAxes: [{
@@ -420,12 +426,6 @@ function createEmptyChart(){
       }
     }
   });
-
-  //unhide the overlay
-  $("#traffic-overlay").css({
-    "height" : $("#traffic-chart-module").height(),
-    "width" : $("#traffic-chart-module").width()
-  }).removeClass('is-hidden');
 }
 
 //format the stats to the required format
@@ -493,7 +493,7 @@ function formatDataset(stats) {
 
 //initiate chart only if uninitiated
 function createTrafficChart(compare){
-  formatted_dataset = formatDataset(listing_info.traffic);
+  var formatted_dataset = formatDataset(listing_info.traffic);
 
   //hide any overlay
   $("#traffic-overlay").addClass('is-hidden');
@@ -502,7 +502,7 @@ function createTrafficChart(compare){
     traffic_chart.destroy();
   }
 
-  traffic_chart = new Chart($("#traffic-chart-module"), {
+  traffic_chart = new Chart($("#traffic-chart"), {
     type: 'line',
     data: {
       labels: formatted_dataset.traffic_labels,
@@ -514,6 +514,7 @@ function createTrafficChart(compare){
       }]
     },
     options: {
+      maintainAspectRatio: false,
       legend: {
         display: false
       },
@@ -564,10 +565,14 @@ function createTrafficChart(compare){
           type: "category"
         }],
         yAxes: [{
+          gridLines: {
+            drawTicks: false
+          },
           display: true,
           type: 'linear',
           ticks: {
-            beginAtZero: true   // minimum value will be 0.
+            beginAtZero: true,   // minimum value will be 0.
+            maxTicksLimit: 5
           }
         }]
       }
@@ -594,100 +599,17 @@ function createAlexa(alexa){
   if (alexa){
     listing_info.alexa = alexa;
 
-    var globalrank = (alexa.globalRank == "-") ? "Not enough data!" : alexa.globalRank;
+    var globalrank = (alexa.globalRank == "-") ? "No data!" : alexa.globalRank;
     $("#alexa-globalrank").text(globalrank);
 
-    var bouncerate = (alexa.engagement && alexa.engagement.bounceRate == "-") ? "Not enough data!" : alexa.engagement.bounceRate;
+    var bouncerate = (alexa.engagement && alexa.engagement.bounceRate == "-") ? "No data!" : alexa.engagement.bounceRate;
     $("#alexa-bouncerate").text(bouncerate);
 
-    var timeonsite = (alexa.engagement && alexa.engagement.dailyTimeOnSite == "-") ? "Not enough data!" : alexa.engagement.dailyTimeOnSite;
+    var timeonsite = (alexa.engagement && alexa.engagement.dailyTimeOnSite == "-") ? "No data!" : alexa.engagement.dailyTimeOnSite;
     $("#alexa-timeonsite").text(timeonsite);
 
-    var pageviews = (alexa.engagement && alexa.engagement.dailyPageViewPerVisitor == "-") ? "Not enough data!" : alexa.engagement.dailyPageViewPerVisitor;
+    var pageviews = (alexa.engagement && alexa.engagement.dailyPageViewPerVisitor == "-") ? "No data!" : alexa.engagement.dailyPageViewPerVisitor;
     $("#alexa-pageviews").text(pageviews);
-  }
-}
-
-//</editor-fold>
-
-//<editor-fold>-----------------------------------------------------------------------------------INFO MODULE
-
-//other domains by same owner
-function findOtherDomains(){
-  if (compare && listing_info.unlisted){
-    createTestOtherDomains();
-  }
-  else if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
-    $.ajax({
-      url: "/listing/otherowner",
-      method: "POST",
-      data: {
-        owner_id: listing_info.owner_id,
-        domain_name_exclude: listing_info.domain_name
-      }
-    }).done(function(data){
-      if (data.state == "success"){
-        createOtherDomains(data.listings);
-      }
-    });
-  }
-}
-
-//create the other domain
-function createOtherDomains(other_listings){
-  $("#otherowner-domains").removeClass('is-hidden');
-  for (var x = 0; x < other_listings.length; x++){
-    var cloned_similar_listing = $("#otherowner-domain-clone").clone();
-    cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
-
-    //edit it based on new listing info
-    if (other_listings[x].domain_name.length > 23){
-      var sliced_domain = other_listings[x].domain_name.slice(0,20) + "...";
-    }
-    else {
-      var sliced_domain = other_listings[x].domain_name;
-    }
-
-    //available to buy now
-    if (other_listings[x].buy_price > 0){
-      var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
-      cloned_similar_listing.find(".otherowner-domain-price").text("Buy now - " + buy_price);
-    }
-    //available to buy at a specific minimum price
-    else if (other_listings[x].min_price > 0){
-      var min_price = moneyFormat.to(parseFloat(other_listings[x].min_price));
-      cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
-    }
-    //else available for rent
-    else if (other_listings[x].rentable && other_listings[x].price_rate > 0){
-      cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + other_listings[x].price_rate + " / " + other_listings[x].price_type);
-    }
-    //else available for rent
-    else if (other_listings[x].rentable && other_listings[x].price_rate <= 0){
-      cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
-    }
-    //just available (no minimum price, no BIN)
-    else if (other_listings[x].status > 0){
-      cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
-    }
-
-    //if compare tool
-    if (other_listings[x].compare && listing_info.unlisted){
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
-      cloned_similar_listing.attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
-    }
-    else {
-      //premium or basic link
-      if (listing_info.premium){
-        var link_to_domain = "https://" + other_listings[x].domain_name;
-      }
-      else {
-        var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
-      }
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
-      cloned_similar_listing.attr("href", link_to_domain);
-    }
-    $("#otherowner-domain-table").append(cloned_similar_listing);
   }
 }
 

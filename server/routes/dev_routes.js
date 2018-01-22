@@ -3,6 +3,7 @@
 var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
+var encryptor = require('../lib/encryptor.js');
 
 //</editor-fold>
 
@@ -21,11 +22,6 @@ module.exports = function(app){
   app.get("/emailviews/:email_template", emailViews);
   app.get("/viewstest/:path/:view_name", showView);
 
-  // //create coupon codes
-  // app.get("/createcodes/:number", [
-  //   createCouponCodes
-  // ]);
-
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
   app.get("/parsejsons/:date/", parseJSON);
@@ -36,6 +32,7 @@ module.exports = function(app){
   //registrar tests
   app.get("/godaddy", godaddy);
   app.get("/namecheap", namecheap);
+  app.get("/namesilo", namesilo);
   app.get("/dns/:domain_name", dnsCheck);
 
   //google embed analytics
@@ -44,92 +41,6 @@ module.exports = function(app){
   //</editor-fold>
 
 }
-
-//<editor-fold>-------------------------------COUPON-------------------------------------
-
-//coupon
-var randomstring = require("randomstring");
-var stripe_key = (process.env.NODE_ENV == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
-var stripe = require("stripe")(stripe_key);
-
-//create X sign up codes
-function createCouponCodes(req, res, next){
-  console.log("F: Creating " + req.params.number + " coupon codes...");
-
-  var createUniqueCoupons = function(number, referrer){
-    var codes = [];
-
-    if (validator.isInt(number)){
-      for (var x = 0; x < number; x++){
-        var random_string = randomstring.generate(10);
-        codes.push([random_string, null, 1]);
-      }
-    }
-
-    return codes;
-  }
-
-  var insertCoupons = function(codes, number, cb){
-    account_model.createCouponCodes(codes, function(result){
-      if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
-        console.log("Duplicate coupon!");
-        insertCoupons(createUniqueCoupons(number), number);
-      }
-      else if (result.state != "error"){
-        cb(codes);
-      }
-    });
-  }
-
-  insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
-    var stripe_promises = [];
-    for (var x = 0 ; x < codes.length ; x++){
-      var promise = (function(code){
-        var deferred = Q.defer();
-        stripe.coupons.create({
-          id: code,
-          duration: "repeating",
-          percent_off: 100,
-          duration_in_months: 1,
-          max_redemptions : 1
-        }, function(err, coupon) {
-          if (err){
-            deferred.reject(err);
-          }
-          else {
-            deferred.resolve(coupon);
-          }
-        });
-        return deferred.promise;
-      })(codes[x][0]);
-      stripe_promises.push(promise);
-    }
-
-    Q.allSettled(stripe_promises).then(function(results) {
-      var success_codes = []
-      for (var x = 0 ; x < results.length; x++){
-        if (results[x].state == "fulfilled"){
-          success_codes.push(results[x].value.id);
-        }
-        else {
-          console.log(results[x]);
-        }
-      }
-
-      //all successful!
-      if (success_codes.length == parseFloat(req.params.number)){
-        res.send(success_codes.join("</br>"));
-      }
-      else {
-        res.send("Something went wrong with Stripe coupons!");
-      }
-    });
-
-  });
-
-}
-
-//</editor-fold>
 
 //<editor-fold>-------------------------------MONKEY-------------------------------------
 
@@ -161,6 +72,7 @@ function monkey(req, res, next){
 
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+var randomstring = require("randomstring");
 
 //show a specific view
 function showView(req, res, next){
@@ -168,7 +80,7 @@ function showView(req, res, next){
     user: "Wonkyu",
     listing_info : {
       domain_name : "testdomain.com",
-      primary_color : "#e86666",
+      primary_color : "#3cbc8d",
       premium: true,
       logo: "",
       compare: false
@@ -196,7 +108,7 @@ function emailViews(req, res, next){
   var data = {
     domain_name: "fuck.com",
     premium: false,
-    response: "Hey fuck yourself",
+    response: "Fuck you",
     listing_info: {
       primary_color: "#000"
     },
@@ -208,14 +120,15 @@ function emailViews(req, res, next){
     owner_name : "OWNERFUCK",
     offerer_name: "BUYERTWAT",
     offerer_email: "test@email.com",
+    price: "$5034",
     offer_id: 1,
     username: "fuck",
     email: "test@email.com",
-    accepted: false,
+    accepted: true,
     offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     offer: moneyFormat.to(parseFloat("1231324")),
-    verification_code: randomstring.generate(10),
+    verification_code: "Fjj380bnD",
     message: "djkljakljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
   }
 
@@ -657,7 +570,11 @@ function toTitleCase(str){
 //<editor-fold>-------------------------------DNS CHECK-------------------------------
 
 var dns = require('dns');
-
+//use google servers
+dns.setServers([
+  "8.8.8.8",
+  "8.8.4.4"
+]);
 function dnsCheck(req, res, next){
   var domain_name = req.params.domain_name;
   dns.resolve(domain_name, "A", function (err, address, family) {
@@ -692,6 +609,9 @@ var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namec
 var namecheap_api_key = "90ecfcb1d49e4204a69af26efc6d854a";
 var namecheap_username = "domahub";
 var parseString = require('xml2js').parseString;
+
+var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.com/api" : "https://www.namesilo.com/api";
+var namesilo_api = (process.env.NODE_ENV == "dev") ? "aaa3f4cfdcd5faf386a8b" : "1bcd579c7d457db62657ebee";
 
 function godaddy(req, res, next){
   request({
@@ -738,6 +658,138 @@ function namecheap(req, res, next){
     console.log(response.statusCode);
     parseString(body, {trim: true}, function (err, result) {
       res.json(result);
+    });
+  });
+}
+
+function namesilo(req, res, next){
+  console.log("F: namesilo...");
+
+  // //get list of DNS records
+  // request({
+  //   url: namesilo_url + "/dnsListRecords",
+  //   method: "GET",
+  //   timeout: 10000,
+  //   qs : {
+  //     version : 1,
+  //     type : "xml",
+  //     key : namesilo_api,
+  //     domain : "testdomainwoohoohoohoo.com",
+  //   }
+  // }, function(err, response, body){
+  //   parseString(body, {
+  //     trim: true,
+  //     explicitRoot : false,
+  //     explicitArray : false,
+  //   }, function (err, result) {
+  //
+  //     //delete all DNS records
+  //     // var delete_dns_promises = [];
+  //     // for (var x = 0 ; x < result.namesilo.reply[0].resource_record.length ; x++){
+  //     //   delete_dns_promises.push(deleteNameSiloDNSRecord("testdomainwoohoohoohoo.com", result.namesilo.reply[0].resource_record[x].record_id[0]));
+  //     // }
+  //     //
+  //     // //deleted all DNS records, now create the two we need
+  //     // Q.allSettled(delete_dns_promises).then(function(results){
+  //     //   res.send(result);
+  //     // });
+  //
+  //     //just see the DNS records
+  //     res.send(result);
+  //   });
+  // });
+
+  // // //get all domains
+  // request({
+  //   url: namesilo_url + "/listDomains",
+  //   method: "GET",
+  //   timeout: 10000,
+  //   qs : {
+  //     version : 1,
+  //     type : "xml",
+  //     key : namesilo_api
+  //   }
+  // }, function(err, response, body){
+  //   parseString(body, {
+  //     trim: true,
+  //     explicitRoot : false,
+  //     explicitArray : false,
+  //   }, function (err, result) {
+  //     res.json(result);
+  //   });
+  // });
+
+  // for (var x = 0 ; x < 200 ; x++){
+    //register a new domain
+    // request({
+    //   url: namesilo_url + "/registerDomain",
+    //   method: "GET",
+    //   timeout: 10000,
+    //   qs : {
+    //     version : 1,
+    //     type : "xml",
+    //     key : namesilo_api,
+    //     domain : "testdomahub.com",
+    //     years : 1
+    //   }
+    // }, function(err, response, body){
+    //   parseString(body, {trim: true}, function (err, result) {
+    //     res.json(result);
+    //   });
+    // });
+  // }
+  // res.send("okay");
+
+
+  // //add A record for 208
+  // request({
+  //   url: namesilo_url + "/dnsAddRecord",
+  //   method: "GET",
+  //   timeout: 10000,
+  //   qs : {
+  //     version : 1,
+  //     type : "xml",
+  //     key : namesilo_api,
+  //     domain : "testdomainwoohoohoohoo.com",
+  //     rrtype : "CNAME",
+  //     rrhost : "www",
+  //     rrvalue : "testdomainwoohoohoohoo.com",
+  //   }
+  // }, function(err, response, body){
+  //   parseString(body, {trim: true}, function (err, result) {
+  //     res.json(result);
+  //   });
+  // });
+}
+
+function deleteNameSiloDNSRecord(domain_name, record_id){
+  return Q.Promise(function(resolve, reject, notify){
+    console.log("F: Setting DNS for NameSilo domain - " + domain_name + "..." + "record " + record_id);
+
+    //delete an existing DNS record
+    request({
+      url: namesilo_url + "/dnsDeleteRecord",
+      method: "GET",
+      timeout: 10000,
+      qs : {
+        version : 1,
+        type : "xml",
+        key : namesilo_api,
+        domain : domain_name,
+        rrid : record_id
+      }
+    }, function(err, response, body){
+      parseString(body, function (err, result) {
+        if (err){
+          reject(err);
+        }
+        else if (!result || !result.namesilo || !result.namesilo.reply || result.namesilo.reply[0].code != "300"){
+          reject();
+        }
+        else {
+          resolve();
+        }
+      });
     });
   });
 }

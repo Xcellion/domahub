@@ -33,10 +33,6 @@
   margin-bottom:0 !important;
 }
 
-.delete-modal-cloned-domain {
-  word-break: break-all;
-}
-
 #delete-modal-domains {
   max-height: 250px;
   overflow-y: auto;
@@ -113,10 +109,6 @@
   margin-left:2px;
 }
 
-.current-domain-name {
-  word-break: break-all;
-}
-
 // design tab blackout !premium
 #premium-only-notification {
   @include translate(-50%,50%);
@@ -132,6 +124,10 @@
   left: 0;
   background-color: $black-secondary;
   z-index: 5;
+}
+
+.td-domain a {
+  word-break:keep-all !important;
 }
 
 // edit listing tabs
@@ -212,16 +208,7 @@
 }
 
 .dns-status {
-  padding:5px;
   margin-right:10px;
-  color: $white;
-  border-radius:3px;
-  &.is-incomplete {
-    background-color: $danger;
-  }
-  &.is-complete {
-    background-color: $primary;
-  }
 }
 
 .cloned-dns-table {
@@ -249,8 +236,6 @@
   z-index:99;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height:325px;
-  max-width:250px;
   a {
     word-wrap: break-word;
   }
@@ -355,6 +340,67 @@
 #example-wrapper {
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+#hub-selector-wrapper {
+  position: relative;
+}
+
+#hub-drop-apply {
+  border-radius: 0;
+}
+
+#hub-drop {
+  @include box-shadow(1px,2px,4px,$border,0);
+  background-color: $white;
+  border-radius: 0 $radius-small $radius-small $radius-small;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  @include desktop {
+    left: 0;
+  }
+  top: 38px;
+  width: 300px;
+}
+
+.hub-drop-row {
+  padding: 7px;
+  .hub-drop-domain-name {
+    line-height :150%;
+    padding-left:5px;
+  }
+}
+
+.hub-domain-wrapper{
+  padding: 7px 7px 7px 0;
+  cursor: pointer;
+  &:hover {
+    background-color:$lighter;
+    cursor:move;
+  }
+  .icon {
+    padding-left : 15px;
+  }
+  .divider-right {
+    margin-right : 5px;
+    border-right: 1px solid $border;
+    padding-right: 15px;
+  }
+}
+
+.sortable-marquee {
+  overflow:hidden;
+  width: 45%;
+  white-space:nowrap;
+}
+
+#sortable-wrapper {
+  > div {
+    &:not(:last-child) {
+      border-bottom: 1px solid $border;
+    }
+  }
 }
 
 #select-all-drop {

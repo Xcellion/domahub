@@ -1,134 +1,128 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Congratulations, someone has purchased your domain name!</title>
-        <style type="text/css" >
-        #bodyTable {
-          font-family: Verdana, sans-serif;
-        }
-        #emailBody {
-          padding: 20px;
-        }
-        #emailFooter {
-          background-color:#eee;padding:20px 30px;
-        }
-        a {
-          cursor:pointer;text-decoration:none;
-        }
-        .list-item {
-          border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
-        }
-        .message {
-          word-wrap:break-word;padding-left:20px;white-space:pre-wrap;
-        }
-        .button {
-          padding:10px 20px;box-sizing:border-box;border-radius:5px;
-        }
-        </style>
-    </head>
-    <body>
-        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="font-family: Verdana, sans-serif;">
-            <tr>
-                <td align="center" valign="top">
-                    <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
-                        <tr>
-                            <td align="center" valign="top">
-                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:#3cbc8d">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Congratulations, someone has purchased <%= domain_name %>!</title>
+</head>
+<body style="margin:0;">
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="background-color:#f2f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',Verdana,sans-serif;">
+        <tr>
+            <td align="center" valign="top">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:40px 0 0;background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <table border="0" cellspacing="0" cellpadding="0" width="600" id="emailHeader" style="border-radius:8px 8px 0 0;border-collapse:collapse!important;margin:0 auto;">
+                            <tbody>
+                              <tr>
+                                  <td align="center" valign="top" style="padding-bottom:40px;">
+                                    <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
+                                      <img alt height="72" width="72" alt="Logo" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                    </a>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td align="center" style="background-color:#fff;border-radius:8px 8px 0 0;">
+                                    <div style="border:0;margin:0;font-size:24px;line-height:2;padding:20px;margin:0 20px;border-bottom:1px solid #ddd;">
+                                      Congratulations, someone has purchased <a href="<%= domain_name %>" style="color:#000;text-decoration:none;"><%= domain_name %></a>!
+                                    </div>
+                                  </td>
+                              </tr>
+                            </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+                <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer" style="background-color:#fff;border-radius:0 0 8px 8px;">
+                  <tbody>
+                      <tr>
+                          <td align="center" valign="top">
+                              <table border="0" cellpadding="0" cellspacing="0" id="emailBody" style="padding:20px 40px;">
+                                  <tbody>
                                     <tr>
-                                        <td align="center" valign="top">
-                                            <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
-                                              <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" alt="Logo"/>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="center" style="color:#fff;border:0;margin:0;padding-bottom:25px;font-size:24px;font-weight:700;line-height:2;">
-                                        Congratulations, someone has purchased <a href="<%= domain_name %>" style="color:#fff;text-decoration:none;"><%= domain_name %></a>!
-                                      </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" valign="top">
-                                <table border="0" cellpadding="0" cellspacing="0" id="emailBody">
-                                    <tr>
-                                      <td align="center" valign="top" colspan="5" style="line-height:1.5;font-size:18px;padding-bottom:20px;">
+                                      <td align="center" valign="top" colspan="2" style="font-size:18px;padding-bottom:20px;">
                                         Hello <%= owner_name %>!
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" valign="top" colspan="5" style="line-height:1.5;padding-bottom:20px;">
+                                      <td align="left" valign="top" colspan="2" style="line-height:1.5;padding-bottom:20px;">
                                         This email confirms the sale of <%= domain_name %>! Please see below for more details:
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" colspan="1" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Name
                                       </td>
-                                      <td aling="right" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td aling="right" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
                                         <%= offerer_name %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Email
                                       </td>
-                                      <td align="left" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
                                         <%= offerer_email %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Phone
                                       </td>
-                                      <td align="left" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
                                         <%= offerer_phone %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Sale Price
                                       </td>
-                                      <td align="left" class="list-item" style="line-height:1.5;padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;padding:10px 0 10px 20px;border-bottom:1px solid #ddd;">
                                         <%= price %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" valign="top" class="list-item" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
+                                      <td align="left" valign="top" style="line-height:1.5;border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Message
                                       </td>
-                                      <td align="left" valign="top" class="list-item message" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0;white-space:pre-wrap;"><%= message %></td>
+                                      <td align="left" style="line-height:1.5;border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding:10px 0 10px 20px;white-space:pre-wrap;"><%= message %></td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" align="center" style="line-height:1.5;padding:20px 0;line-height:1.5;">
+                                      <td colspan="2" style="line-height:1.5;padding-top:20px;">
                                         You have <strong>two weeks</strong> from today to transfer the domain ownership to <%= offerer_name %>. Please email the buyer (<%= offerer_email %>) to start the ownership transfer process.
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" align="center" style="line-height:1.5;padding-top:30px;line-height:1.5;">
+                                      <td colspan="2" align="left" style="padding-top:20px;">
                                         NOTE: Failure to transfer the domain within the next 14 days will result in a refund for the buyer and your account will be flagged for review.
                                         You cannot withdraw the money for this domain until the buyer has verified that you have transferred the domain.
                                       </td>
                                     </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" valign="top">
-                                <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter" style="background-color:#eee;padding:20px 30px;">
-                                      <tr>
-                                        <td align="center" valign="top" style="line-height:1.5;">
-                                          Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
-                                        </td>
-                                      </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </body>
+                                  </tbody>
+                              </table>
+                          </td>
+                      </tr>
+                  </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top">
+              <table border="0" cellpadding="10" cellspacing="0" width="600" id="emailFooter" style="padding:40px;">
+                  <tr>
+                    <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                      Have questions? <a href="https://www.domahub.com/contact">Contact us</a>!
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" valign="top" style="color:#676767;line-height:1.5;font-size:12px;">
+                      &#169; DomaHub.com <%= (new Date()).getFullYear() %>
+                    </td>
+                  </tr>
+              </table>
+          </td>
+        </tr>
+    </table>
+</body>
 </html>

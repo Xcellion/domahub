@@ -24,6 +24,7 @@ $switch-paddle-transition: all 0.25s ease-out !default
     cursor: pointer
 
     &::before
+      +box-shadow(0,2px,12px,$border,1px)
       position: absolute
       display: block
       top: 0
@@ -37,6 +38,7 @@ $switch-paddle-transition: all 0.25s ease-out !default
 
 
     &::after
+      +box-shadow(0,4px,12px,$black-disabled,0)
       display: block
       position: absolute
       top: ( $switch-height / 2 ) - ( $paddle-height / 2 )

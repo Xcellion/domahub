@@ -16,6 +16,11 @@ var error = require('../lib/error.js');
 var validator = require("validator");
 var whois = require("whois");
 var dns = require("dns");
+//use google servers
+dns.setServers([
+  "8.8.4.4",
+  "8.8.8.8"
+]);
 
 var alexaData = require('alexa-traffic-rank');
 var parser = require('parse-whois');
@@ -26,17 +31,6 @@ var fs = require('fs');
 var path = require("path");
 var safe_browse_key = "AIzaSyDjjsGtrO_4QwFDBA1cq9rCweeO4v3YLfs";
 
-//contact for buy now requirements
-var PNF = require('google-libphonenumber').PhoneNumberFormat;
-var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
-var randomstring = require("randomstring");
-var wNumb = require("wnumb");
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 0
-});
-
 //</editor-fold>
 
 module.exports = {
@@ -46,11 +40,11 @@ module.exports = {
   //delete session rental info if it exists
   deleteRentalInfo : function(req, res, next){
     if (req.session.rental_info && req.params.owner_hash_id != req.session.rental_info.owner_hash_id){
-      console.log("F: Deleting any previous editable rental info...");
+      console.log("LRF: Deleting any previous editable rental info...");
       delete req.session.proxy_edit;
     }
     if (req.session.rental_info && req.session.rental_info.domain_name != req.params.domain_name){
-      console.log("F: Deleting any previous existing rental info...");
+      console.log("LRF: Deleting any previous existing rental info...");
       delete req.session.rental_info;
     }
     next();
@@ -59,7 +53,7 @@ module.exports = {
   //delete pipe to DH session variable so we can redirect to DH.com now
   deletePipeToDH : function(req, res, next){
     if (typeof req.session.pipe_to_dh != "undefined"){
-      console.log("F: Deleting the pipe to DH session variable...");
+      console.log("LRF: Deleting the pipe to DH session variable...");
       delete req.session.pipe_to_dh;
     }
     next();
@@ -80,7 +74,7 @@ module.exports = {
 
   //check the rental info posted (for creating a new rental)
   checkRentalInfoNew : function(req, res, next){
-    console.log("F: Checking posted rental info...");
+    console.log("LRF: Checking posted rental info...");
 
     var address = addProtocol(req.body.address);
     var rental_type = parseFloat(req.body.rental_type);
@@ -124,7 +118,7 @@ module.exports = {
       if (req.body.address){
         //check against google safe browsing
         googleSafeCheck(req, res, address, function () {
-          console.log("F: Checking if its a valid HTTP address and that theres a response...");
+          console.log("LRF: Checking if its a valid HTTP address and that theres a response...");
           //check if its a valid HTTP address and that theres a response
           request(address, function (err, response, body) {
             if (!err) {
@@ -144,7 +138,7 @@ module.exports = {
 
   //check times
   checkRentalTimes : function(req, res, next){
-    console.log("F: Checking posted rental times...");
+    console.log("LRF: Checking posted rental times...");
 
     var starttime = parseFloat(req.body.starttime);
     var endtime = parseFloat(req.body.endtime);
@@ -213,7 +207,7 @@ module.exports = {
   //calculate and check for the price
   checkRentalPrice : function(req, res, next){
     if (req.session.listing_info.price_rate != 0){
-      console.log("F: Checking rental price...");
+      console.log("LRF: Checking rental price...");
       var overlapped_time = anyFreeDayOverlap(req.body.starttime, req.body.endtime, req.session.listing_info.freetimes);
       var price = calculatePrice(req.body.starttime, req.body.endtime, overlapped_time, req.session.listing_info);
 
@@ -235,7 +229,7 @@ module.exports = {
   //get the stripe id of the listing owner if it exists
   getOwnerStripe : function(req, res, next){
     if (req.session.new_rental_info.price != 0){
-      console.log("F: Getting all Stripe info for a listing...");
+      console.log("LRF: Getting all Stripe info for a listing...");
 
       //get the stripe id of the listing owner
       account_model.getStripeAndType(req.params.domain_name, function(result){
@@ -255,7 +249,7 @@ module.exports = {
 
   //time check was successful! redirect to checkout
   redirectToCheckout : function(req, res, next){
-    console.log("F: Redirecting the user to the checkout page for final confirmation of rental...")
+    console.log("LRF: Redirecting the user to the checkout page for final confirmation of rental...")
     res.send({
       state: "success"
     });
@@ -270,7 +264,7 @@ module.exports = {
         req.session.new_rental_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
         req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase()
       ){
-      console.log("F: Rendering listing checkout page for renting...");
+      console.log("LRF: Rendering listing checkout page for renting...");
 
       res.render("listings/listing_checkout_rent.ejs", {
         user: req.user,
@@ -281,14 +275,14 @@ module.exports = {
       });
     }
     else {
-      console.log("F: Not checking out! Redirecting to listings page...");
+      console.log("LRF: Not checking out! Redirecting to listings page...");
       res.redirect("/listing/" + domain_name.toLowerCase());
     }
   },
 
   //create a new rental
   createRental : function(req, res, next){
-    console.log("F: Creating a new rental...");
+    console.log("LRF: Creating a new rental...");
 
     //helper function, create a new rental
     newListingRental(req, res, req.session.new_rental_info.rental_db_info, function(rental_id){
@@ -308,7 +302,7 @@ module.exports = {
 
   //activate the rental once its good
   toggleActivateRental : function(req, res, next){
-    console.log("F: Toggling rental activation...");
+    console.log("LRF: Toggling rental activation...");
 
     var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
     var domain_name = req.params.domain_name;
@@ -354,7 +348,7 @@ module.exports = {
 
   //gets the rental/listing info
   getRental : function(req, res, next){
-    console.log("F: Getting all rental info...");
+    console.log("LRF: Getting all rental info...");
 
     var rental_id = req.params.rental_id;
 
@@ -380,7 +374,7 @@ module.exports = {
 
   //gets the rental times info
   getRentalRentalTimes : function(req, res, next){
-    console.log("F: Getting all rental times for a rental...");
+    console.log("LRF: Getting all rental times for a rental...");
 
     var rental_id = req.params.rental_id;
 
@@ -404,7 +398,7 @@ module.exports = {
 
   //check domain name for rental
   checkRentalDomain : function(req, res, next){
-    console.log("F: Checking if rental belongs to the correct domain...");
+    console.log("LRF: Checking if rental belongs to the correct domain...");
     var domain_name = req.params.domain_name;
 
     if (req.session.rental_info.domain_name.toLowerCase() != domain_name.toLowerCase()){
@@ -417,7 +411,7 @@ module.exports = {
 
   //check if rental belongs to account
   checkRentalOwner : function(req, res, next){
-    console.log("F: Checking rental owner...");
+    console.log("LRF: Checking rental owner...");
     var owner_hash_id = req.params.owner_hash_id;
     //correct hash
     if (req.session.proxy_edit){
@@ -446,7 +440,7 @@ module.exports = {
 
   //check if domain belongs to account (for refunding a rental)
   checkDomainOwner : function(req, res, next){
-    console.log("F: Checking domain owner...");
+    console.log("LRF: Checking domain owner...");
 
     listing_model.checkListingOwner(req.user.id, req.params.domain_name, function(result){
       //incorrect owner!
@@ -461,7 +455,7 @@ module.exports = {
 
   //check posted rental address or type (for editing rental address)
   checkRentalInfoEdit : function(req, res, next){
-    console.log("F: Checking posted rental information...");
+    console.log("LRF: Checking posted rental information...");
 
     var address = addProtocol(req.body.address);
     var rental_type = parseFloat(req.body.type);
@@ -516,7 +510,7 @@ module.exports = {
 
   //deactivate a rental
   deactivateRental : function(req, res, next){
-    console.log("F: Deactivating rental...");
+    console.log("LRF: Deactivating rental...");
     req.session.rental_object.db_object.status = 0;
     next();
   },
@@ -525,7 +519,7 @@ module.exports = {
   updateRentalOwner : function(req, res, next){
     //if we're actually updating the owner of the rental
     if (req.user && req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
-      console.log("F: Updating the rental owner...");
+      console.log("LRF: Updating the rental owner...");
       req.session.proxy_edit = true;
       delete req.session.rental_info.owner_hash_id;
       req.session.rental_object = {
@@ -545,7 +539,7 @@ module.exports = {
 
   //redirect to rental page after updating its owner
   redirectToRental: function(req, res, next){
-    console.log("F: Redirecting to rental page...");
+    console.log("LRF: Redirecting to rental page...");
 
     delete req.session.rental_object.db_object;
     delete req.rental_info;
@@ -554,14 +548,14 @@ module.exports = {
 
   //check to make sure we should display edit overlay
   checkForPreview : function(req, res, next){
-    console.log("F: Checking if preview is defined...");
+    console.log("LRF: Checking if preview is defined...");
     if (!req.session.rental_info){
       res.redirect("/");
     }
     else {
       //coming from /rentalpreview (endless loop)
       if (!req.session.rental_editted && req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
-        console.log("F: Something went wrong and triggered an endless loop!");
+        console.log("LRF: Something went wrong and triggered an endless loop!");
         res.render("proxy/proxy-error.ejs", {
           image: "",
           preview: req.session.proxy_edit,
@@ -576,13 +570,13 @@ module.exports = {
 
   //redirect to rental preview route
   redirectToPreview : function(req, res, next){
-    console.log("F: Redirecting to rental preview...");
+    console.log("LRF: Redirecting to rental preview...");
     res.redirect('/rentalpreview');
   },
 
   //render a rental edit page
   renderRental : function(req, res, next){
-    console.log("F: Rendering rental...");
+    console.log("LRF: Rendering rental...");
 
     //now rendering rental, delete any sensitive stuff
     if (!req.session.proxy_edit){
@@ -600,7 +594,7 @@ module.exports = {
       }, function (err, response, body) {
         //not an image requested
         if (response.headers['content-type'].indexOf("image") == -1 && response.headers['content-type'].indexOf("pdf") == -1){
-          console.log("F: Requested rental address was a website!");
+          console.log("LRF: Requested rental address was a website!");
 
           var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');
           var preview_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs');
@@ -631,7 +625,7 @@ module.exports = {
           }
         }
         else {
-          console.log("F: Requested rental address was an image/PDF!");
+          console.log("LRF: Requested rental address was an image/PDF!");
 
           res.render("proxy/proxy-image.ejs", {
             image: req.session.rental_info.address,
@@ -661,7 +655,7 @@ module.exports = {
   //edit the rental (update the database)
   editRental : function(req, res, next){
     if (req.session.rental_object && req.session.rental_object.db_object){
-      console.log("F: Updating rental...");
+      console.log("LRF: Updating rental...");
 
       listing_model.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
         if (result.state != "success"){error.handler(req, res, result.info, "json");}
@@ -707,13 +701,13 @@ module.exports = {
     if (req.session.listing_info.unlisted){
       next();
     }
-    else {
-      console.log("F: Checking to see if domain is still pointed to DomaHub...");
+    else if (process.env.NODE_ENV != "dev"){
+      console.log("LRF: Checking to see if domain is still pointed to DomaHub...");
 
       dns.resolve(domain_name, "A", function (err, address, family) {
         //something went wrong in looking up DNS, just mark it inactive
         if (err){
-          console.log("F: DNS error! Setting listing to inactive...");
+          console.log("LRF: DNS error! Setting listing to inactive...");
           req.session.listing_info.status = 0;
           next();
         }
@@ -722,7 +716,7 @@ module.exports = {
           dns.resolve("domahub.com", "A", function (err, address, family) {
             //not pointed to DH anymore!
             if (!domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
-              console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+              console.log("LRF: Listing is not pointed to DomaHub anymore! Reverting verification...");
               req.session.listing_info.status = 0;
 
               listing_model.updateListingsInfo(domain_name, {
@@ -741,14 +735,14 @@ module.exports = {
 
             //something went wrong in looking up DNS, just mark it inactive
             else if (err){
-              console.log("F: DNS error! Setting listing to inactive...");
+              console.log("LRF: DNS error! Setting listing to inactive...");
               req.session.listing_info.status = 0;
               next();
             }
             else {
               //if pending DNS changes, mark it active
               if (req.session.listing_info.status == 3){
-                console.log("F: Listing is now pointed to DomaHub! Marking as active...");
+                console.log("LRF: Listing is now pointed to DomaHub! Marking as active...");
                 req.session.listing_info.status = 1;
                 listing_model.updateListingsInfo(domain_name, {
                   status: 1
@@ -768,6 +762,9 @@ module.exports = {
           });
         }
       });
+    }
+    else {
+      next();
     }
   },
 
@@ -797,7 +794,7 @@ module.exports = {
         req.session.camefrom = req.query.camefrom;
       }
 
-      console.log("F: Adding to search history...");
+      console.log("LRF: Adding to search history...");
       data_model.newListingHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding new history for listing.")}});  //async
       delete req.session.from_api;
     }
@@ -817,7 +814,7 @@ module.exports = {
         rental_id: req.session.camefrom || null                                   //what rental they came from
       }
 
-      console.log("F: Adding to search history...");
+      console.log("LRF: Adding to search history...");
       data_model.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding new availability check history.")}});  //async
     }
     next();
@@ -839,7 +836,7 @@ module.exports = {
         rental_id: req.session.camefrom || null                                 //what rental they came from
       }
 
-      console.log("F: Adding to search history...");
+      console.log("LRF: Adding to search history...");
       data_model.newCheckoutHistory(history_info, function(result){if (result.state == "error") {error.log(result, "Something went wrong with adding a new checkout history item.")}});  //async
     }
     next();
@@ -915,14 +912,14 @@ module.exports = {
 
   //check if session listing_info exists and get listing info if it doesnt match with current domain_name
   checkSessionListingInfoPost : function(req, res, next){
-    console.log("F: Checking if session listing info domain is same as posted domain...");
+    console.log("LRF: Checking if session listing info domain is same as posted domain...");
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
     if (req.session.listing_info && req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase()){
       next();
     }
     else {
-      console.log("F: Not the correct domain! Getting new session listing info...");
+      console.log("LRF: Not the correct domain! Getting new session listing info...");
       getVerifiedListing(req, res, domain_name, function(result){
         error.handler(req, res, "Something went wrong with this domain! Please refresh the page and try again.", "json");
       }, function(result){
@@ -938,7 +935,7 @@ module.exports = {
 
     //skip listed check if we've already determined it's unlisted and got redirected to domahub from custom URL
     if (req.session.skip_listed_check == domain_name){
-      console.log("F: Skipping database check for unlisted domain");
+      console.log("LRF: Skipping database check for unlisted domain");
       var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
       if (hostname != "domahub.com" && hostname != "localhost:8080" && hostname != "localhost"){
         delete req.session.skip_listed_check;
@@ -950,7 +947,7 @@ module.exports = {
       }
     }
     else {
-      console.log("F: Checking if " + domain_name + " is listed on DomaHub...");
+      console.log("LRF: Checking if " + domain_name + " is listed on DomaHub...");
 
       getVerifiedListing(req, res, domain_name, function(result){
         //if unlisted and hostname isn't domahub, redirect to domahub
@@ -972,7 +969,7 @@ module.exports = {
 
   //gets the next year's events for calendar
   getListingTimes : function(req, res, next){
-    console.log("F: Getting all time slot information for domain: " + req.params.domain_name + "...");
+    console.log("LRF: Getting all time slot information for domain: " + req.params.domain_name + "...");
 
     //invalid path!
     if (req.body.path == undefined || (req.body.path != "" && !validator.isAlphanumeric(req.body.path))){
@@ -1006,36 +1003,59 @@ module.exports = {
 
   //returns three listing belonging to same person
   getOtherListings : function(req, res, next){
-    console.log("F: Finding other listings by same owner...");
     var owner_id = req.body.owner_id;
-    var domain_name_exclude = req.body.domain_name_exclude;
+    var hub_id = req.body.hub_id;
+    var exclude_id = req.body.exclude_id;
+    var sort_by = req.body.sort_by;
+    var starting_id = req.body.starting_id;
+    var total = req.body.total;
 
     //make sure owner and domain exclude are legit
-    if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id)){
-      listing_model.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
+    if (validator.isInt(exclude_id) && validator.isInt(owner_id) && validator.isInt(total)){
+      console.log("LRF: Finding other listings by same owner...");
+      listing_model.getListingsByOwner(exclude_id, owner_id, function(result){
         if (!result.info.length || result.state == "error"){
-          res.send({
-            state: "error"
-          });
+          error.handler(req, res, "Failed to get other listings by the same owner!", "json");
         }
         else {
+          var listings = result.info;
+
+          //if we're getting for a specific hub
+          if (hub_id){
+            listings = listings.filter(function(elem){
+              return elem.listing_hub_id == hub_id;
+            });
+          }
+
+          //figure out sort
+          if (sort_by == "random"){
+            listings = listings.sort(function(a, b){return 0.5 - Math.random()});
+          }
+          else if (sort_by == "id"){
+            listings = listings;
+          }
+          else if (sort_by == "rank"){
+            listings = listings.sort(function(a, b){return (a.rank > b.rank) ? 1 : (a.rank < b.rank) ? -1 : 0; });
+          }
+
+          //only send first X amount
+          listings = listings.slice(0, total);
+
           res.send({
             state: "success",
-            listings: result.info
+            listings: listings
           });
         }
       });
     }
     else {
-      res.send({
-        state: "error"
-      });
+      error.handler(req, res, "Failed to get other listings by the same owner!", "json");
     }
   },
 
   //gets X ticker rows per call
   getListingTicker : function(req, res, next){
-    console.log("F: Getting ticker data for " + req.params.domain_name + "...");
+    console.log("LRF: Getting ticker data for " + req.params.domain_name + "...");
 
     //check to see that the posted old rental date is valid
     if (!moment(parseFloat(req.body.oldest_rental_date)).isValid()){
@@ -1067,7 +1087,7 @@ module.exports = {
 
   //get the traffic of the listing
   getListingTraffic : function(req, res, next){
-    console.log("F: Getting all traffic information for domain: " + req.params.domain_name + "...");
+    console.log("LRF: Getting all traffic information for domain: " + req.params.domain_name + "...");
 
     data_model.getListingStats(req.params.domain_name, function(result){
       if (result.state=="error"){error.handler(req, res, "Invalid traffic!", 'json');}
@@ -1082,7 +1102,7 @@ module.exports = {
 
   //get alexa traffic info
   getListingAlexa : function(req, res, next){
-    console.log("F: Getting all Alexa information for domain: " + req.params.domain_name + "...");
+    console.log("LRF: Getting all Alexa information for domain: " + req.params.domain_name + "...");
 
     alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
       if (error){error.handler(req, res, "Invalid Alexa!", 'json');}
@@ -1098,7 +1118,7 @@ module.exports = {
   //redirect to the root domain if premium (prevent domain/listing/domain)
   redirectPremium : function(req, res, next){
     if (process.env.NODE_ENV != "dev" && req.session.listing_info.premium && req.path != "/"){
-      console.log("F: Redirecting premium domain to root domain...");
+      console.log("LRF: Redirecting premium domain to root domain...");
       res.redirect('https://' + req.session.listing_info.domain_name);
     }
     else {
@@ -1108,13 +1128,15 @@ module.exports = {
 
   //render a listing that is listed on domahub
   renderListing : function(req, res, next){
-    console.log("F: Rendering listing...");
+    console.log("LRF: Rendering listing...");
 
-    res.render("listings/listing.ejs", {
+    var listing_hub = (req.session.listing_info.hub == 1 && req.session.listing_info.premium) ? "/hub/listing_hub.ejs" : "/listing.ejs";
+    res.render("listings" + listing_hub, {
       user: req.user,
       listing_info: req.session.listing_info,
       compare : (!req.session.listing_info.premium && req.query.compare == "true") ? true : false,
-      fonts : Fonts.all()
+      fonts : Fonts.all(),
+      categories : Categories.all()
     });
   },
 
@@ -1128,7 +1150,7 @@ module.exports = {
       var domain_url = parseDomain(req.session.rented_info.address);
       var protocol = url.parse(req.session.rented_info.address).protocol;
 
-      console.log("F: Proxying future request for " + req.originalUrl + " along to " + protocol + "//www." + domain_url.domain + "." + domain_url.tld);
+      console.log("LRF: Proxying future request for " + req.originalUrl + " along to " + protocol + "//www." + domain_url.domain + "." + domain_url.tld);
       req.pipe(request({
         url: protocol + "//www." + domain_url.domain + "." + domain_url.tld + req.originalUrl
       })).pipe(res);
@@ -1189,11 +1211,11 @@ function getVerifiedListing(req, res, domain_name, callback_error, callback_succ
   listing_model.getVerifiedListing(domain_name, function(result){
     if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
     else if (result.state=="success" && result.info.length <= 0){
-      console.log("F: " + domain_name + " is NOT listed on DomaHub...");
+      console.log("LRF: " + domain_name + " is NOT listed on DomaHub...");
       callback_error(result);
     }
     else {
-      console.log("F: " +domain_name + " is listed on DomaHub!");
+      console.log("LRF: " +domain_name + " is listed on DomaHub!");
       callback_success(result);
     }
   });
@@ -1222,7 +1244,7 @@ function newListingRental(req, res, raw_info, callback){
 
 //helper function to check against google safe browsing
 function googleSafeCheck(req, res, address, callback){
-  console.log("F: Checking against Google Safe Browsing...");
+  console.log("LRF: Checking against Google Safe Browsing...");
 
   request({
     url: "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=" + safe_browse_key,
@@ -1286,7 +1308,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       //COMPARE TOOL VARIABLES
       //comparing, so make fake listing info
       if (req.query.compare == "true"){
-        console.log("F: Rendering the comparison tool!");
+        console.log("LRF: Rendering the comparison tool!");
 
         listing_info.username = "The Domain Master";
         listing_info.owner_id = "compare";
@@ -1304,7 +1326,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.secondary_color = "#FF5722";
         listing_info.tertiary_color = "#2196F3";
         listing_info.font_color = "#000000";
-        listing_info.font_name = "Rubik";
+        listing_info.font_name = "Nunito Sans";
         listing_info.background_color = "#FFFFFF";
         listing_info.background_image = "";
         listing_info.logo = "";

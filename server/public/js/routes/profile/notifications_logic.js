@@ -2,14 +2,14 @@
 
 var times_errored = 0;
 
-//display/hide error messages per listing
+//display/hide error messages
 function errorMessage(message){
   //hide success
-  $("#error-notification").addClass('is-hidden').removeClass("is-active");
+  $("#error-notification, #success-notification, #info-notification").addClass('is-hidden').removeClass("is-active");
 
   //domahub demo
   if (message == "demo-error"){
-    successMessage("Oops! You cannot do that in the DomaHub demo! Click here to <a class='is-underlined' href='/signup'>sign up</a> for a new account.");
+    infoMessage("Oops! You cannot do that in the DomaHub demo! Click here to <a class='is-underlined' href='/signup'>sign up</a> for a new account.");
   }
   else if (message){
 
@@ -32,10 +32,10 @@ function errorMessage(message){
   }
 }
 
-//display success messages per listing
+//display success messages
 function successMessage(message){
   //hide any error
-  $("#error-notification").addClass('is-hidden').removeClass("is-active");
+  $("#error-notification, #success-notification, #info-notification").addClass('is-hidden').removeClass("is-active");
 
   if (message){
     $("#success-notification").removeClass('is-hidden').addClass("is-active");
@@ -43,6 +43,20 @@ function successMessage(message){
   }
   else if (!message){
     $("#success-notification").addClass('is-hidden').removeClass("is-active");
+  }
+}
+
+//display informational messages
+function infoMessage(message){
+  //hide any error
+  $("#error-notification, #success-notification, #info-notification").addClass('is-hidden').removeClass("is-active");
+
+  if (message){
+    $("#info-notification").removeClass('is-hidden').addClass("is-active");
+    $("#info-message").html(message);
+  }
+  else if (!message){
+    $("#info-notification").addClass('is-hidden').removeClass("is-active");
   }
 }
 
@@ -54,7 +68,7 @@ function clearNotification(){
 
 //check if we should display a success or error msg (for login)
 function loadNotification() {
-  if (message.substring(0,5) == "Promo") {
+  if (message.toLowerCase().indexOf("success") != -1) {
     successMessage(message);
   }
   else if (typeof message != "undefined") {
@@ -81,3 +95,10 @@ function contactLinkHandler(){
 }
 
 //</editor-fold>
+
+//delete notifications button
+$(document).ready(function(){
+  $(".delete").on("click", function(e){
+    $(this).parent(".notification").addClass('is-hidden');
+  });
+});

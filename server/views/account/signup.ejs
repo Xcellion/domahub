@@ -9,11 +9,7 @@
 		<%- include("../templates/notifications.ejs"); %>
 
   	<div class="content has-text-centered clear-nav">
-			<h2>
-        <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-          <div class='is-inline-block flat-logo is-primary'></div>
-        </a>
-      </h2>
+      <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/"></a>
     </div>
 	  <div id="signup-form" class="account-form">
   		<form id="target" method="post" autocomplete="off">
@@ -57,7 +53,7 @@
 				</div>
   			<label class="label" for="verify-pw">Confirm Password</label>
 				<div class="control has-icon has-icon-right">
-					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="verify-pw" type="password" id="verify-pw" value="" />
+					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="verify-pw" type="password" id="verify-pw" value="" autocomplete="off"/>
           <div class="icon is-hidden is-success">
             <i class="far fa-check is-success"></i>
           </div>

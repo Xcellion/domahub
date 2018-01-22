@@ -24,6 +24,8 @@ var mysql_options = {
 
 //</editor-fold>
 
+//scp -r wonmin@208.68.37.82:/home/wonmin/.pm2/logs/DomaHub-Server--Prod--out-0.log lol.txt
+
 //<editor-fold>-------------------------------PROD INSTRUCTIONS ON MYSQL SETUP-------------------------------
 
 ////////////////////////////////////////////////////////OPEN UFW PORT
@@ -48,6 +50,11 @@ var mysql_options = {
 // if (process.env.NODE_ENV == "dev"){
 //   mysql_options.host = "domahub.com";
 // }
+
+////////////////////////////////////////////////////////ACCESS TO PHPMY ADMIN ON PRODUCTION SERVER
+//mysqldump -u root -p domahub > domahub.SQL
+//enter password from keepbase database (MYSQL root)
+//scp -r wonmin@208.68.37.82:/home/wonmin/domahub.sql other/Technical/MySQL\ Backups/domahub.sql
 
 //</editor-fold>
 
