@@ -51,6 +51,13 @@ module.exports = {
 
   //<editor-fold>-------------------------------GETS-------------------------------
 
+  //get unverified account emails
+  getUnverifiedAccount : function(callback){
+    console.log("DB: Attempting to get all unverified account information...");
+    var query = "SELECT username, email FROM accounts WHERE type = 0"
+    database.query(query, "Failed to get all unverified account information!", callback);
+  },
+
   //gets all account info
   getAccount : function(email, username, callback){
     if (email){
@@ -82,6 +89,15 @@ module.exports = {
     console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
     var query = "SELECT \
           listings.*, \
+          IF(listings.background_color IS NULL, '#FFFFFF', listings.background_color) as background_color, \
+          IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
+          IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
+          IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
+          IF(listings.font_name IS NULL, 'Nunito Sans', listings.font_name) as font_name, \
+          IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
+          IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
+          IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
+          hub_grouping_table.hub_listing_ids, \
           rented_table.rented, \
           offers_table.deposited, \
           offers_table_accepted.accepted, \
@@ -127,6 +143,17 @@ module.exports = {
           GROUP BY stats_contact_history.listing_id \
         ) as offers_table_count \
         ON offers_table_count.listing_id = listings.id \
+        LEFT JOIN \
+          (SELECT \
+              listing_hub_grouping.listing_hub_id, \
+              GROUP_CONCAT(listing_hub_grouping.listing_id ORDER BY listing_hub_grouping.rank ASC) as hub_listing_ids, \
+              GROUP_CONCAT(listing_hub_grouping.rank ORDER BY listing_hub_grouping.rank ASC) as hub_ranks \
+            FROM listing_hub_grouping \
+            INNER JOIN listings \
+            ON listing_id = listings.id \
+            GROUP BY listing_hub_id \
+        ) as hub_grouping_table \
+        ON hub_grouping_table.listing_hub_id = listings.id \
         WHERE owner_id = ? \
         AND listings.deleted IS NULL \
         ORDER BY listings.id ASC";
@@ -154,20 +181,16 @@ module.exports = {
     database.query(query, "Failed to get the Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
   },
 
-  //gets all coupon codes
-  getCouponCodes : function(callback){
-    console.log("DB: Attempting to get all coupon codes...");
-    var query = "SELECT code FROM coupon_codes"
-    database.query(query, "Failed to get all coupon codes!", callback);
-  },
-
-  //gets all referrals/existing coupons for a user
+  //gets all referrals/existing coupons for a user (for front-end table building)
   getCouponsAndReferralsForUser : function(account_id, callback){
     console.log("DB: Attempting to get all referrals/coupons for user #" + account_id + "...");
     var query = "SELECT \
+          coupon_codes.id, \
           coupon_codes.date_created, \
           coupon_codes.date_accessed, \
-          coupon_codes.duration_in_months, \
+          coupon_codes.date_redeemed, \
+          coupon_codes.date_redeemed_r, \
+          coupon_codes.amount_off, \
           accounts.stripe_subscription_id, \
           coupon_codes.referer_id \
             FROM accounts \
@@ -177,18 +200,16 @@ module.exports = {
     database.query(query, "Failed to get all coupon codes!", callback, [account_id, account_id]);
   },
 
-  //gets any existing coupon code for a user
-  getExistingPromoCodeByUser : function(account_id, callback){
-    console.log("DB: Attempting to get the existing coupon code for user #" + account_id + "...");
+  //gets all existing unredeemed coupon codes for a user (for creating new coupons)
+  getUnredeemedPromoCodesForUser : function(account_id, callback){
+    console.log("DB: Attempting to get all unredeemed coupon codes for user #" + account_id + "...");
     var query = "SELECT \
-          coupon_codes.code, \
-          coupon_codes.referer_id, \
-          coupon_codes.duration_in_months, \
-          accounts.stripe_subscription_id \
-            FROM accounts \
-          LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
-          WHERE accounts.id = ? "
-  database.query(query, "Failed to get an existing coupon code!", callback, account_id);
+          coupon_codes.id, \
+          coupon_codes.account_id, \
+          coupon_codes.amount_off \
+          FROM coupon_codes \
+          WHERE (coupon_codes.account_id = ? && coupon_codes.date_redeemed IS NULL) OR (coupon_codes.referer_id = ? && coupon_codes.date_redeemed IS NOT NULL && coupon_codes.date_redeemed_r IS NULL)"
+    database.query(query, "Failed to get unredeemed coupon codes!", callback, [account_id, account_id]);
   },
 
   //</editor-fold>
@@ -209,7 +230,7 @@ module.exports = {
     var query = "INSERT INTO coupon_codes (\
           code, \
           referer_id, \
-          duration_in_months \
+          amount_off \
         )\
         VALUES ? "
     database.query(query, "Failed to create coupon codes!", callback, [codes]);
@@ -248,13 +269,35 @@ module.exports = {
     database.query(query, "Failed to update account!", callback, [account_info, email]);
   },
 
-  //attaches a user to a promo code
+  //updates a specific promo code
   updatePromoCode : function(code, account_info, callback){
     console.log("DB: Updating coupon " + code + " code details...");
     var query = "UPDATE coupon_codes \
           SET ? \
         WHERE code = ? "
     database.query(query, "Failed to apply coupon code!", callback, [account_info, code]);
+  },
+
+  //marks as redeemed used promo codes
+  redeemUsedPromoCodes : function(used_codes, callback){
+    console.log("DB: Redeeming used coupons...");
+    var query = "INSERT INTO coupon_codes \
+            (id) \
+          VALUES ? \
+          ON DUPLICATE KEY UPDATE \
+            date_redeemed = NOW() "
+    database.query(query, "Failed to redeemed used coupon codes!", callback, [used_codes]);
+  },
+
+  //marks as redeemed used referral codes
+  redeemUsedReferralCodes : function(used_codes, callback){
+    console.log("DB: Redeeming used coupons...");
+    var query = "INSERT INTO coupon_codes \
+            (id) \
+          VALUES ? \
+          ON DUPLICATE KEY UPDATE \
+            date_redeemed_r = NOW() "
+    database.query(query, "Failed to redeemed used coupon codes!", callback, [used_codes]);
   },
 
   //cancels a user's premium subscription
@@ -264,6 +307,15 @@ module.exports = {
           SET stripe_subscription_id = null \
         WHERE stripe_subscription_id = ? "
     database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_subscription_id);
+  },
+
+  //cancels a user's premium customer
+  cancelStripeCustomer : function(stripe_customer_id, callback){
+    console.log("DB: Cancelling Stripe customer...");
+    var query = "UPDATE accounts \
+          SET stripe_customer_id = null \
+        WHERE stripe_customer_id = ? "
+    database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_customer_id);
   },
 
   //</editor-fold>

@@ -1,33 +1,32 @@
 $(document).ready(function() {
+  if (typeof listing_info != "undefined"){
+    setupTheming();
+  }
+});
 
+function setupTheming(){
   //remove class to prevent screen flash DH green
-  $("#page-contents").removeClass('is-hidden');
+  $(".page-contents").removeClass('is-hidden');
   $("#dh-footer").removeClass('is-hidden');
 
   //if it's premium, check if theres any customization in the design
   if (listing_info.premium){
-    setupCustomColors();
+    setupCustomColorsListing();
 
     //show background image
     if (listing_info.background_image){
-      $("#page-contents:not(.no-background)").css("background-image", "url(" + listing_info.background_image + ")");
-      $("#page-contents:not(.no-background)").css("background-repeat", "no-repeat");
-      $("#page-contents:not(.no-background)").css("background-position", "center");
-      $("#page-contents:not(.no-background)").css("background-size", "cover");
+      $(".page-contents:not(.no-background)").css({
+        "background-image" : "url(" + listing_info.background_image + ")",
+        "background-repeat" : "no-repeat",
+        "background-position" : "center",
+        "background-size" : "cover"
+      });
     }
-
-    //show custom logo
-    if (listing_info.logo){
-      $("#custom_logo").attr("src", listing_info.logo);
+    else {
+      $(".page-contents:not(.no-background)").removeAttr("style");
     }
   }
-});
-
-var primaryColor = "#3CBC8D";
-var secondaryColor = "0f0";
-var tertiaryColor = "00f";
-var whiteText = "#fff";
-var blackText = "#1b2733";
+}
 
 //return white or black text based on luminance
 function calculateLuminance(rgb) {
@@ -64,26 +63,44 @@ function stylize(color, element, style, calculateluminance) {
 }
 
 //setup any custom premium colors
-function setupCustomColors(){
+function setupCustomColorsListing(){
   console.log("Setting up custom theme...");
-  stylize(listing_info.primary_color, "#page-contents .is-primary:not(.notification)", "color");
-  stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color", true);
-  stylize(listing_info.primary_color, "#page-contents .is-primary.button", "background-color", true);
-  stylize(listing_info.primary_color, ".tag:not(.category-tag)", "background-color", true);
-  stylize(listing_info.primary_color, ".social-share", "color");
-  stylize(listing_info.font_color, ".subtitle", "color");
-  stylize(listing_info.font_color, ".regular-font", "color");
-  stylize(listing_info.font_color, "#page-contents .tabs li a", "color");
-  stylize(listing_info.font_color, "small.heading", "color");
-  stylize(listing_info.secondary_color, ".category-tag", "background-color", true);
-  stylize(listing_info.secondary_color, ".is-accent:not(.tag)", "color");
-  stylize(listing_info.secondary_color, ".is-accent.button", "background-color", true);
-  stylize(listing_info.secondary_color, "#typed-slash", "color");
-  stylize(listing_info.tertiary_color, "a.is-info", "color");
-  stylize(listing_info.tertiary_color, "ul.is-vertical li", "color");
-  stylize(listing_info.background_color, "#page-contents:not(.no-background)", "background-color");
-  stylize(listing_info.font_name, "#domain-title", "font-family");
-  stylize(listing_info.font_name, "#typed-slash", "font-family");
-  stylize(listing_info.footer_color, ".footer-item", "color");
-  stylize(listing_info.footer_background_color, ".footer", "background-color");
+
+  //primary color
+  stylize(listing_info.primary_color, ".page-contents .is-primary:not(.notification)", "color");
+  stylize(listing_info.primary_color, ".page-contents .is-primary.button", "background-color", true);
+
+  //secondary color
+  stylize(listing_info.secondary_color, ".page-contents .is-accent:not(.notification)", "color");
+  stylize(listing_info.secondary_color, ".page-contents .is-accent.button", "background-color", true);
+
+  //tertiary color (links)
+  stylize(listing_info.tertiary_color, ".page-contents .is-info:not(.notification)", "color");
+
+  //price tags
+  stylize(listing_info.primary_color, ".page-contents .tag", "color");
+  stylize(listing_info.primary_color, ".page-contents .tag", "border-color");
+  stylize("transparent", ".page-contents .tag", "background-color");
+
+  //basic font on page
+  stylize(listing_info.primary_color, ".page-contents #listing-description", "border-color");
+  stylize(listing_info.font_color, ".page-contents .regular-font", "color");
+
+  //module tabs
+  stylize(listing_info.font_color, ".page-contents .module-tab:not(.is-active) a", "color");
+  stylize(listing_info.primary_color, ".page-contents .module-tab.is-active a", "color");
+
+  //social icons
+  stylize(listing_info.primary_color, ".page-contents .social-share .icon", "color", true);
+  stylize("transparent", ".page-contents .social-share .icon", "background-color");
+
+  //background
+  stylize(listing_info.background_color, ".page-contents:not(.no-background)", "background-color");
+
+  //font
+  stylize(listing_info.font_name, ".page-contents h1.domain-title", "font-family");
+
+  //footer
+  stylize(listing_info.footer_color, ".page-contents .footer-item", "color");
+  stylize(listing_info.footer_background_color, ".page-contents .footer", "background-color");
 }

@@ -1,136 +1,382 @@
+<link rel="stylesheet" href="/css/lib/intlTelInput.css" type="text/css">
 <script src="/js/routes/main/random_characters.js" type="text/javascript"></script>
 <script src="/js/lib/typed.js" type="text/javascript"></script>
 <script src="/js/lib/daterangepicker.js" type="text/javascript"></script>
 <script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
+<script src="/js/jquery/intlTelInput.min.js" type="text/javascript"></script>
+<script src="/js/lib/chart.min.js" type="text/javascript"></script>
+<script src="/js/lib/randomColor.js" type="text/javascript"></script>
 
-<div id="page-contents" class="min-height is-hidden">
-  <div class="listing-page">
-    <div class="listing-left">
-      <div class="listing-left-content">
-        <div class="control-wrapper">
-          <%# BUYABLE TAG %>
-          <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
-            <span id="price-tag" class="tag is-primary is-stylish has-shadow is-medium is-hidden"></span>
-          <% } else if (listing_info.status == 1){ %>
-            <span id="price-tag" class="tag is-primary is-stylish has-shadow is-medium">Now available!</span>
-          <% } else { %>
-            <span class="tag is-danger is-stylish has-shadow is-medium">Unavailable</span>
-          <% } %>
+<div class="page-contents is-hidden">
+  <div class="listing-page min-height">
+    <section class="section is-medium">
+      <div class="listing-wrapper">
 
-          <%# RENTABLE TAG %>
-          <% if (listing_info.status == 1 && listing_info.rentable) { %>
-            <span id="rent-price-tag" class="tag is-primary is-stylish has-shadow is-medium">
-              <% if (listing_info.price_rate > 0){ %>
-                For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
-              <% } else { %>
-                For rent - Free
-              <% } %>
-            </span>
-          <% } %>
-          <span id="free-until" class='is-hidden tag is-stylish has-shadow is-medium'></span>
-        </div>
-        <div id="domain-display" class="content">
-          <% if (listing_info.rentable) { %>
-            <h1 id="domain-title" class="title is-primary is-inline-block"><%= listing_info.domain_name %></h1>
-            <form id="path-input" class="is-hidden is-inline-block">
-              <div class="control">
-                <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off">
-                <label id="input-tooltip" style="display:none;" class="input-tooltip" for="typed-slash">Click here to edit.</label>
-                <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
+        <!-- LISTING LEFT SIDE -->
+        <div class="listing-left">
+
+          <!-- DOMAIN NAME & PRICE TAGS -->
+          <div class="control">
+            <h1 class="domain-title title is-1 is-primary"></h1>
+            <div class="control">
+
+              <!-- PRICE TAG -->
+              <div class="tag is-primary is-outlined">
+                <span id="price-tag"></span>
               </div>
-            </form>
-          <% } else { %>
-            <h1 class="title is-primary is-inline-block"><%= listing_info.domain_name %></h1>
-          <% } %>
-            <h2 class="subtitle is-4 is-blacklight">
-              <% if (listing_info.status == 1) { %>
-                is available for purchase.
-              <% } else { %>
-                is unavailable for purchase.
-              <% } %>
-            </h2>
+
+              <!-- RENT TAG -->
+              <div id="rent-price-tag" class="is-hidden tag is-primary is-outlined">
+                <span>Rent now - </span><span id="rent-price-text"></span>
+                <span id="free-until" class='is-hidden'></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div class="control">
+            <p id="listing-description" class="regular-font"></p>
+          </div>
+
+          <!-- MOBILE CLICK TO SHOW MORE DETAILS -->
+          <div class="control is-hidden-tablet has-text-centered">
+            <a id="show-more-details" class="is-primary">Click for details...</a>
+          </div>
+
+          <div id="more-details-wrapper" class="is-hidden-mobile">
+            <div class="control">
+
+              <!-- DOMAIN REGISTRAR -->
+              <div id="listing-domain-registrar" class="control is-grouped">
+                <div class="control">
+                  <p class="heading is-bold is-small regular-font">
+                    Registrar:
+                  </p>
+                </div>
+                <div class="control">
+                  <p class="listing-detail-text regular-font"></p>
+                </div>
+              </div>
+
+              <!-- DATE REGISTERED -->
+              <div id="listing-date-registered" class="control is-grouped">
+                <div class="control">
+                  <p class="heading is-bold is-small regular-font">
+                    Registered:
+                  </p>
+                </div>
+                <div class="control">
+                  <p class="listing-detail-text regular-font"></p>
+                </div>
+              </div>
+
+              <!-- CATEGORIES -->
+              <div id="listing-categories" class="control is-grouped">
+                <div class="control">
+                  <div class="content">
+                    <p class="heading is-bold is-small regular-font">Categories:</p>
+                  </div>
+                </div>
+                <div class="content is-flex-wrap">
+                  <p class="listing-detail-text regular-font"></p>
+                </div>
+              </div>
+
+            </div>
+            <div class="control">
+
+              <!-- APPRAISAL LINKS -->
+              <div id="listing-appraisal" class="control is-grouped">
+                <div class="control">
+                  <p class="heading is-bold is-small regular-font" data-balloon="We are not affiliated with the below appraisal sites. These evaluation tools may not be accurate representations of the domain's true value." data-balloon-length="large" data-balloon-pos="up">
+                    Appraisal Sites:
+                  </p>
+                </div>
+                <div class="control">
+                  <a class="listing-detail-text is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check GoDaddy Domain Appraisal" href="https://www.godaddy.com/domain-value-appraisal/appraisal/?checkAvail=1&tmskey=&domainToCheck=">GoDaddy</a>
+                  <a class="listing-detail-text is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check Domain Index" href="http://domainindex.com/domains/">Domain Index</a>
+                  <a class="listing-detail-text is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check Free Valuator" href="http://www.freevaluator.com/?domain=">Free Valuator</a>
+                  <a class="listing-detail-text is-underlined is-info" target="_blank" rel="noreferrer noopener" title="Check EstiBot" href="https://www.estibot.com/verify.php?type=normal&data=">EstiBot</a>
+                </div>
+              </div>
+
+              <!-- SOCIAL SHARING -->
+              <div id="listing-social" class="control is-grouped">
+                <div class="control">
+                  <p class="heading is-bold is-small regular-font">Share:</p>
+                </div>
+                <div class="control">
+                  <a class="listing-detail-text social-share" title="Share on Facebook!" target="_blank" href="http://www.facebook.com/sharer/sharer.php?title=Check%20out%20this%20awesome%20domain!&u=https://">
+                    <div class="icon is-small is-primary is-outlined is-circle no-borders">
+                      <i class="far fa-facebook-f fa-fw"></i>
+                    </div>
+                  </a>
+                  <a class="listing-detail-text social-share" title="Share on Twitter!" target="_blank" href="http://twitter.com/intent/tweet?status=Check%20out%20this%20awesome%20domain!+https://">
+                    <div class="icon is-small is-primary is-outlined is-circle no-borders">
+                      <i class="far fa-twitter fa-fw"></i>
+                    </div>
+                  </a>
+                  <a class="listing-detail-text social-share" title="Share on LinkedIn!" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&title=Check%20out%20this%20awesome%20domain!&url=https://">
+                    <div class="icon is-small is-primary is-outlined is-circle no-borders">
+                      <i class="far fa-linkedin-in fa-fw"></i>
+                    </div>
+                  </a>
+                  <a class="listing-detail-text social-share" title="Share via email!" target="_blank" href="mailto:?subject=Check%20out%20this%20awesome%20domain!&body=https://">
+                    <div class="icon is-small is-primary is-outlined is-circle no-borders">
+                      <i class="far fa-envelope fa-fw"></i>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
 
         </div>
 
-        <%# INFO MODULE %>
-        <%- include("modules/info_module.ejs", {
-          listing_info : listing_info
-        }); %>
+        <div class="listing-right">
 
+          <!-- CLICK TO CHANGE MODULE TABS -->
+          <div id="buy-rent-tabs" class="tabs is-boxed is-medium">
+            <ul>
+              <li id="contact-form-tab" data-position="1" class="tab module-tab is-active">
+                <a tabindex="0">Purchase</a>
+              </li>
+              <li id="rental-tab" data-position="2" class="tab module-tab">
+                <a tabindex="0">Rent</a>
+              </li>
+              <li id="traffic-tab" data-position="3" class='tab module-tab'>
+                <a tabindex="0">Traffic</a>
+              </li>
+              <li id="ticker-tab" data-position="4" class="tab module-tab">
+                <a tabindex="0">History</a>
+              </li>
+              <li id="domainlist-tab" data-position="5" class="tab module-tab">
+                <a tabindex="0">More Domains</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- CONTACT FORM MODULE -->
+          <div id="contact-form-module" class="box module">
+            <form id="buy-now-form" autocomplete="off" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
+                <div class="control has-icon">
+                  <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
+                  <label class="error_message label" for="contact_name">Name</label>
+                  <div class="icon">
+                    <i class="far fa-user-alt"></i>
+                  </div>
+                </div>
+                <div class="control has-icon">
+                  <input id="contact_email" placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email">
+                  <label class="error_message label" for="contact_email">Email Address</label>
+                  <div class="icon">
+                    <i class="far fa-envelope"></i>
+                  </div>
+                </div>
+                <div class="control has-icon">
+                  <input id="contact_phone" required class="contact-input input phone-number" name="contact_phone" type="tel">
+                  <label class="error_message label" for="contact_phone">Phone</label>
+                </div>
+                <div class="control has-icon">
+                  <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" />
+                  <label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
+                  <div class="icon">
+                    <i class="far fa-usd-circle"></i>
+                  </div>
+                </div>
+                <div class="control">
+                  <textarea id="contact_message" required class="contact-input textarea" name="contact_message" placeholder="Hey! I'm interested in buying <%= listing_info.domain_name %>. Let's chat."></textarea>
+                </div>
+
+                <div class="control is-grouped">
+                  <div class="control is-expanded">
+                    <button id="send-offer-button" name="offer" type="submit" class="contact-input is-fullwidth button is-primary is-stylish">
+                      <div class="icon is-small">
+                        <i class="far fa-check-circle"></i>
+                      </div>
+                      <span>Send Offer</span>
+                    </button>
+                  </div>
+                  <div class="control is-expanded">
+                    <button id="buy-now-button" name="buy" type="submit" class='is-accent is-fullwidth button is-stylish contact-input'>
+                      <div class="icon is-small"><i class="far fa-shopping-cart"></i></div>
+                      <span id="buy-button-text">Buy Now</span>
+                    </button>
+                  </div>
+                </div>
+
+              </form>
+          </div>
+
+          <!-- RENTAL MODULE -->
+          <div id="rental-module" class="box module is-hidden">
+            <div class="content">
+              <h3 class='is-bold'>
+                <span class='total-price'>Total Cost of Rental - </span>
+                <span id="orig-price" class='is-linethrough is-hidden'></span>
+                <span class="actual-price">$0.00</span>
+              </h3>
+            </div>
+            <div class="content">
+              <p>
+                You can rent this domain or any subpage on it and use it to display any web content like another website, an image, or a video.
+              </p>
+              <p class="no-margin">
+                Enter your desired path or subpage:
+              </p>
+              <div class="input">
+                <span class="is-inline-block"><span class="domain-title"></span>/</span>
+                <form id="path-input" class="is-inline-block">
+                  <div class="control">
+                    <input id="typed-slash" tabindex="0" type="text" autocomplete="off">
+                    <label id="input-tooltip" class="input-tooltip" for="typed-slash">Click to edit.</label>
+                    <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div id="calendar" class="control">
+              <p id="calendar-regular-message">
+                Select your desired dates:
+              </p>
+              <p id="calendar-error-message" class='is-danger is-hidden'></p>
+              <input id="calendar-input" class="input is-disabled" placeholder="Anytime">
+            </div>
+            <div class="control">
+              <a id="checkout-button" tabindex="0" class="is-disabled is-fullwidth button is-primary is-stylish">
+                <div class="icon is-small"><i class="far fa-shopping-cart"></i></div>
+                <span>Checkout<span class="total-price is-hidden"> - </span><span class="actual-price"></span></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- TRAFFIC MODULE -->
+          <div id="traffic-module" class="is-hidden box module">
+
+            <div id="traffic-chart-description" class="content">
+              <p>
+                This chart shows total requests for this domain name. Capture this traffic instantly the moment you start utilizing this domain!
+              </p>
+            </div>
+
+            <div id="listing-traffic-chart" class="traffic-chart is-relative control">
+
+              <canvas id="traffic-chart"></canvas>
+
+              <div id="traffic-overlay" class="content">
+                <p id="traffic-overlay-text" class='traffic-overlay-text is-hidden is-bold'>
+                  There is not enough data!
+                </p>
+                <div id="traffic-overlay-load" class='traffic-overlay-text has-text-centered'>
+                  <div class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></div>
+                  <p>Now loading traffic information.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ALEXA -->
+            <div id="alexa-stats-module" class="has-text-centered control">
+              <div class="alexa-data-wrapper">
+                <p class="heading is-blacklight is-inline-block" data-balloon-length="medium"
+                 data-balloon="Rank is calculated using a combination of average daily visitors to this site and pageviews on this site over the past 3 months."
+                 data-balloon-pos="up">
+                  Global Rank
+                </p>
+                <p id="alexa-globalrank">Loading...</p>
+              </div>
+              <div class="alexa-data-wrapper">
+                <p class="heading is-blacklight is-inline-block" data-balloon-length="medium"
+                data-balloon="Estimated daily time on site (mm:ss) per visitor to the site." data-balloon-pos="up">
+                  Time on Site
+                </p>
+                <p id="alexa-timeonsite">Loading...</p>
+              </div>
+              <div class="alexa-data-wrapper">
+                <p class="heading is-blacklight is-inline-block" data-balloon-length="medium"
+                 data-balloon="Estimated daily unique pageviews per visitor on the site." data-balloon-pos="up">
+                  Page Views
+                </p>
+                <p id="alexa-pageviews">Loading...</p>
+              </div>
+              <div class="alexa-data-wrapper">
+                <p class="heading is-blacklight is-inline-block" data-balloon-length="medium"
+                data-balloon="Percentage of visits to the site that consist of a single pageview." data-balloon-pos="up">
+                  Bounce Rate
+                </p>
+                <p id="alexa-bouncerate">Loading...</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- DOMAINS LIST MODULE -->
+          <div id="domainlist-module" class="box is-hidden module">
+            <div id="otherowner-domains" class="content">
+              <ul id="otherowner-domain-table">
+                <a tabindex="0" id="otherowner-domain-clone" class="other-domain is-hidden">
+                  <li class="control is-spaced">
+                    <span class="otherowner-domain-name control-left"></span>
+                    <span class="tag is-outlined is-primary control-right otherowner-domain-price"></span>
+                  </li>
+                </a>
+              </ul>
+            </div>
+          </div>
+
+          <!-- HISTORY TICKER MODULE -->
+          <div id="ticker-module" class="is-hidden box is-paddingless module">
+            <li id='ticker-clone' class='ticker-row ticker-rental is-hidden'>
+              <div class='ticker-icon-color icon'><i class="far ticker-icon"></i></div>
+              <div class="ticker-text">
+                <p class='is-bold ticker-user is-inline'></p>
+                <p class='ticker-type is-inline'></p>
+                <p class='ticker-reach is-inline'></p>
+                <p class='ticker-time is-inline'></p>
+              </div>
+            </li>
+            <li id="ticker-loadmore" class='ticker-row is-hidden'>
+              <a id="ticker-loadmore-message" class="is-underlined ticker-text">Click here to load more</a>
+            </li>
+            <ul id="ticker-wrapper">
+              <li id="ticker-views" class='ticker-row is-hidden'>
+                <div class='ticker-icon-color icon is-dark'><i class="far fa-users ticker-icon"></i></div>
+                <div class="ticker-text">
+                  <p>
+                    <span id="views-total" class="is-inline">0</span>
+                    <span id="views-plural"></span> viewed the various rented websites that used this domain in the past
+                    <span id="views-time">day</span>.
+                    <a href="https://domahub.com/faq#renting" class="is-underlined">What does this mean?</a>
+                  </p>
+                </div>
+              </li>
+              <li id="ticker-updated" class='ticker-row is-hidden'>
+                <div class='ticker-icon-color icon is-purple'><i class="far fa-star ticker-icon"></i></div>
+                <div class="ticker-text">
+                  <p id="ticker-updated-date"></p>
+                </div>
+              </li>
+              <li id="ticker-created" class='ticker-row is-hidden'>
+                <div class='ticker-icon-color icon is-danger'><i class="far fa-heart ticker-icon"></i></div>
+                <div class="ticker-text">
+                  <p id="ticker-created-date"></p>
+                </div>
+              </li>
+              <li id="ticker-registered" class='ticker-row is-hidden'>
+                <div class='ticker-icon-color icon is-danger'><i class="far fa-thumbs-up ticker-icon"></i></div>
+                <div class="ticker-text">
+                  <p id="ticker-registered-date"></p>
+                </div>
+              </li>
+              <li id="ticker-loading" class='ticker-row'>
+                <div class='icon is-small margin-right-5'><i class="far fa-spin fa-sync"></i></div>
+                <span>Now loading recent rental history...</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
       </div>
-    </div>
-    <div class="listing-right">
-      <div id="buy-rent-tabs" class="tabs is-boxed is-medium is-centered">
-        <ul>
-          <li id="buy-tab" data-position="1" class="tab module-tab is-active">
-            <a tabindex="0">Purchase</a>
-          </li>
-          <% if (listing_info.rentable && listing_info.status == 1){ %>
-            <li id="calendar-tab" data-position="2" class="tab module-tab">
-              <a tabindex="0">Rent</a>
-            </li>
-          <% } %>
-
-          <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium || listing_info.unlisted){ %>
-            <li id="traffic-tab" data-position="3" class='tab module-tab'>
-              <a tabindex="0">Traffic</a>
-            </li>
-          <% } %>
-
-          <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium || listing_info.unlisted){ %>
-            <li id="ticker-tab" data-position="4" class="tab module-tab">
-              <a tabindex="0">History</a>
-            </li>
-          <% } %>
-
-          <% if (listing_info.domain_list) { %>
-            <li id="domainlist-tab" data-position="5" class="tab module-tab">
-              <a tabindex="0">More</a>
-            </li>
-          <% } %>
-
-        </ul>
-      </div>
-
-      <%# SOLD MODULE %>
-      <% if (listing_info.deposited) { %>
-        <%- include("modules/sold_module.ejs"); %>
-      <% } else { %>
-
-        <% if (listing_info.status == 1) { %>
-          <%# BUY NOW MODULE %>
-          <%- include("modules/buy_now_module.ejs"); %>
-
-        <% if (listing_info.rentable) { %>
-          <%# CALENDAR MODULE %>
-          <%- include("modules/calendar_module.ejs"); %>
-        <% } %>
-        <% } %>
-
-      <% } %>
-
-      <%# TRAFFIC MODULE %>
-      <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
-      <%- include("modules/traffic_module.ejs", {
-        listing_info : listing_info
-      }); %>
-      <% } %>
-
-      <%# OTHER DOMAINS MODULE %>
-      <% if ((listing_info.premium && listing_info.domain_list) || !listing_info.premium){ %>
-      <%- include("modules/domain_list_module.ejs", {
-        listing_info : listing_info
-      }); %>
-      <% } %>
-
-      <%# HISTORY MODULE %>
-      <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
-        <%- include("modules/ticker_module.ejs", {
-          listing_info : listing_info
-        }); %>
-      <% } %>
-
-    </div>
-
+    </section>
   </div>
 </div>

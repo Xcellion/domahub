@@ -9,11 +9,7 @@
     <%- include("../templates/notifications.ejs"); %>
 
     <div class="content has-text-centered clear-nav">
-      <h2>
-        <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-          <div class='is-inline-block flat-logo is-primary'></div>
-        </a>
-      </h2>
+      <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/"></a>
     </div>
     <div class="account-form">
       <form id="login-form" action="/login" method="post">
@@ -55,9 +51,9 @@
           <small>
             Don't have an account?
           </small>
-          <a tabindex="0" class="is-primary is-block is-underlined" href="/signup">
-            <small>Sign Up</small>
-          </a>
+          <small class="is-block">
+            <a tabindex="0" class="is-primary is-underlined" href="/signup">Sign Up</a>
+          </small>
         </div>
       </form>
     </div>

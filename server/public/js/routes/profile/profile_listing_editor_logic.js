@@ -2,7 +2,13 @@ var current_listing = {};
 var referer_chart = false;
 var traffic_chart = false;
 var completed_domains = 0;
-var premium_blackscreen = $("#premium-blackscreen").clone();
+var premium_blackscreen_design = $("#premium-blackscreen-design").clone();
+var premium_blackscreen_hub = $("#premium-blackscreen-hub").clone();
+//hash table for categories
+var categories_hash = {};
+for (var x = 0 ; x < categories.length ; x++){
+  categories_hash[categories[x].back] = categories[x].front;
+}
 
 $(document).ready(function(){
 
@@ -39,6 +45,7 @@ $(document).ready(function(){
 
 //return to domain selector
 function showSelector(keep_message){
+  refreshSubmitButtons();
   removeURLParameter("tab");
   multiSelectButtons();
   leftMenuActive();
@@ -47,6 +54,7 @@ function showSelector(keep_message){
   }
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
+  updateMarqueeHandlers($(".td-domain"));
 }
 
 //show domain names for multiple selected
@@ -71,7 +79,7 @@ function updateEditorDomains(selected_domain_ids){
       for (var x = 0 ; x < selected_domain_names.length ; x++){
         domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
       }
-      $(".title-wrapper").append('<span class="current-domain-list icon is-tooltip" data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" data-balloon-pos="down"> <i class="far fa-question-circle"></i> </span> ');
+      $(".title-wrapper").append('<span class="current-domain-list icon is-small is-tooltip" data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" data-balloon-pos="down"> <i class="far fa-question-circle"></i> </span> ');
     }
   }
 }
@@ -128,7 +136,7 @@ function updateEditorEditing(selected_domain_ids){
       }
       //testing
       else {
-        var listing_href = "https://localhost:8080/listing/" + domain_names_list[x].toLowerCase();
+        var listing_href = "http://localhost:8080/listing/" + domain_names_list[x].toLowerCase();
       }
 
       var clipped_domain_name = (domain_names_list[x].length > 25) ? domain_names_list[x].substr(0, 15) + "..." + domain_names_list[x].substr(domain_names_list[x].length - 7, domain_names_list[x].length - 1) : domain_names_list[x];
@@ -142,10 +150,18 @@ function updateEditorEditing(selected_domain_ids){
     //plural "this domain"
     $(".this-domain").text("this domain");
 
-    //view listing button link
-    var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
-    listing_href = (window.location.hostname == "domahub.com" && user.id) ? listing_href : "http://localhost:8080/listing/" + listing_info.domain_name;
-    listing_href = (!user.id) ? listing_href += "?compare=true&theme=Random" : listing_href;
+    //if demo
+    if (!user.id){
+      var listing_href = ((window.location.hostname.indexOf("domahub") != -1) ? "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() : "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase()) + "?compare=true&theme=Random";
+    }
+    //if production
+    else if (window.location.hostname.indexOf("domahub") != -1){
+      var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name.toLowerCase();
+    }
+    //testing
+    else {
+      var listing_href = "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase();
+    }
     $("#view-listings-button").off().attr("href", listing_href);
 
     //show domain capitalization
@@ -156,6 +172,7 @@ function updateEditorEditing(selected_domain_ids){
   updateInfoTab(current_listing);
   updateDesignTab(current_listing);
   updateRentalTab(current_listing);
+  updateHubTab(current_listing, selected_domain_ids);
   updateBindings(current_listing, selected_domain_ids);
 }
 
@@ -192,12 +209,22 @@ function setupEditingButtons(){
       $(".tab.verified-elem").removeClass('is-active');
       $(this).addClass('is-active');
 
-      //show specific tab
-      $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
-      $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
+      //show this new tab
+      showTab(new_tab);
     }
   });
 
+}
+
+//show specific tab
+function showTab(new_tab){
+  $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
+  $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
+
+  //update marquee if showing hub
+  if (new_tab == "hub"){
+    updateMarqueeHandlers($(".sortable-marquee"));
+  }
 }
 
 function updateStatus(listing_info){
@@ -219,8 +246,10 @@ function updateStatus(listing_info){
 
 //handle checkboxes
 function checkBox(module_value, elem, child){
-  module_value = (module_value) ? module_value : 0;
-  elem.val(module_value).prop("checked", module_value);
+  if (typeof module_value != "null" && typeof module_value != "undefined"){
+    elem.val(module_value).prop("checked", module_value);
+  }
+
   if (child){
     if (module_value){
       $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
@@ -243,7 +272,7 @@ function checkBox(module_value, elem, child){
     $("#description").val(listing_info.description);
     $("#description-hook").val(listing_info.description_hook);
     $("#description-footer").val(listing_info.description_footer);
-    $("#domain-name-input").val(listing_info.domain_name).attr("placeholder", listing_info.domain_name);
+    $("#domain-name-input").attr("placeholder", listing_info.domain_name).val(listing_info.domain_name);
 
     //categories
     $("#categories-input").val(listing_info.categories);
@@ -252,6 +281,7 @@ function checkBox(module_value, elem, child){
     //registrar info
     $("#registrar-name-input").val(listing_info.registrar_name);
     $("#date-expire-input").val((listing_info.date_expire) ? moment(listing_info.date_expire).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
+    $("#date-registered-input").val((listing_info.date_registered) ? moment(listing_info.date_registered).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
     $("#annual-cost-input").val(listing_info.registrar_cost);
   }
   function updateCategoryInputDropdown(listing_info){
@@ -370,20 +400,21 @@ function checkBox(module_value, elem, child){
   function updatePremiumNotification(){
     //if premium, remove the notification / disabled inputs
     if (user.stripe_subscription_id){
-      $("#premium-only-notification").addClass("is-hidden");
       $(".premium-input").removeClass("is-disabled");
-      $("#premium-blackscreen").addClass("is-hidden");
+      $(".blackscreen").addClass("is-hidden");
     }
     else {
-      $("#premium-only-notification").removeClass("is-hidden");
       $(".premium-input").addClass("is-disabled");
+      $(".blackscreen").removeClass("is-hidden");
 
-      //premium blackscreen exists (not deleted by user)
-      if ($("#premium-blackscreen").length != 0){
-        $("#premium-blackscreen").removeClass("is-hidden");
+      //premium blackscreen deleted
+      if ($("#premium-blackscreen-design").length == 0){
+        $("#design-tab-drop").prepend(premium_blackscreen_design);
       }
-      else {
-        $("#design-tab-drop").prepend(premium_blackscreen);
+
+      //premium blackscreen deleted
+      if ($("#premium-blackscreen-hub").length == 0){
+        $("#hub-tab-drop").prepend(premium_blackscreen_hub);
       }
     }
   }
@@ -408,9 +439,12 @@ function checkBox(module_value, elem, child){
       swatches: ["#3CBC8D", "#FF5722", "#2196F3"]
     }
 
-    $("#primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#primary-color-input").val(listing_info.primary_color);
+    $("#primary-color-input").minicolors("destroy").minicolors(minicolor_options);
+    $("#secondary-color-input").val(listing_info.secondary_color);
+    $("#secondary-color-input").minicolors("destroy").minicolors(minicolor_options);
+    $("#tertiary-color-input").val(listing_info.tertiary_color);
+    $("#tertiary-color-input").minicolors("destroy").minicolors(minicolor_options);
 
     //update the preview
     $("#example-domain-name").css("color", listing_info.primary_color);
@@ -432,7 +466,8 @@ function checkBox(module_value, elem, child){
       swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
     }
 
-    $("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#font-color-input").val(listing_info.font_color);
+    $("#font-color-input").minicolors("destroy").minicolors(minicolor_options);
     $("#font-name-input").val(listing_info.font_name);
 
     //update the preview
@@ -445,8 +480,10 @@ function checkBox(module_value, elem, child){
       swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
     }
 
-    $("#footer-background-color-input").val(listing_info.footer_background_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#footer-color-input").val(listing_info.footer_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#footer-background-color-input").val(listing_info.footer_background_color)
+    $("#footer-background-color-input").minicolors("destroy").minicolors(minicolor_options);
+    $("#footer-color-input").val(listing_info.footer_color);
+    $("#footer-color-input").minicolors("destroy").minicolors(minicolor_options);
 
     //update the preview
     $("#example-footer-background").css("background-color", listing_info.footer_background_color);
@@ -474,7 +511,8 @@ function checkBox(module_value, elem, child){
       $("#example-wrapper").css('background-image', "");
     }
 
-    $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#background-color-input").val(listing_info.background_color);
+    $("#background-color-input").minicolors("destroy").minicolors(minicolor_options);
     $("#example-wrapper").css({"background-color" : listing_info.background_color});
   }
   function updateLogo(listing_info){
@@ -531,6 +569,145 @@ function checkBox(module_value, elem, child){
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------HUB EDITS-------------------------------
+
+  function updateHubTab(listing_info, selected_domain_ids){
+    //hub details
+    checkBox(listing_info.hub, $("#hub-input"));
+    checkBox(listing_info.hub_email, $("#hub-email-input"));
+    $("#hub-title-input").val(listing_info.hub_title);
+
+    //phone number
+    if (listing_info.hub_phone){
+      $("#hub-phone-input").intlTelInput("setNumber", listing_info.hub_phone).val(listing_info.hub_phone);
+    }
+    else {
+      $("#hub-phone-input").val("");
+    }
+
+    $("#hub-phone-input").intlTelInput("destroy").intlTelInput({
+      utilsScript : "/js/jquery/utils.js"
+    });
+
+    //hub design
+    $("#hub-layout-count-input").val(listing_info.hub_layout_count);
+    $("#hub-layout-type-input").val(listing_info.hub_layout_type);
+
+    if (selected_domain_ids.length > 1){
+      $("#multiple-edit-hub").removeClass('is-hidden');
+    }
+    else {
+      $("#multiple-edit-hub").addClass('is-hidden');
+
+      //make the list of sortable domains
+      $("#sortable-wrapper").empty();
+      if (listing_info.hub_listing_ids){
+        $("#no-domains-in-hub").addClass('is-hidden');
+        var domains_in_hub = listing_info.hub_listing_ids.split(",");
+        var domain_names_in_hub = [];
+        var categories_in_hub = [];
+        domains_in_hub.map(function(elem){
+          var listing_id = elem;
+          var listing_info = listings.find(function(elem){
+            return elem.id == listing_id
+          });
+
+          domain_names_in_hub.push(listing_info.domain_name);
+          categories_in_hub.push(listing_info.categories);
+        });
+
+        //create the rows
+        for (var x = 0 ; x < domains_in_hub.length ; x++){
+          var domain_clone = $("#sortable-clone").clone().removeAttr("id").removeClass('is-hidden');
+          domain_clone.find(".domain_name").addClass("sortable-marquee").text(domain_names_in_hub[x]);
+          domain_clone.data("listing_id", domains_in_hub[x]);
+
+          //get front-end categories
+          if (categories_in_hub[x]){
+            categories_for_sortable = categories_in_hub[x].split(" ").map(function(elem){
+              return "<span class='marquee-category-tag'>" + categories_hash[elem] + "<span>";
+            }).join(" ");
+          }
+          else {
+            categories_for_sortable = "";
+          }
+
+          domain_clone.find(".categories").addClass("sortable-marquee").html(categories_for_sortable);
+          $("#sortable-wrapper").append(domain_clone);
+        }
+
+        //make them sortable
+        $("#sortable-wrapper").sortable({
+          cursor: "pointer",
+          stop : function(){
+            var ranked_ids = "";
+            $("#sortable-wrapper > div").each(function(){
+              ranked_ids += $(this).data("listing_id") + ",";
+            });
+            ranked_ids = ranked_ids.slice(0, -1);
+            $("#hub-listing-ids-input").val(ranked_ids);
+            changedValue($("#hub-listing-ids-input"), listing_info);
+          }
+        });
+        $("#sortable-wrapper").disableSelection();
+
+        //marquee when necessary
+        $(document).ready(function () {
+          updateMarqueeHandlers($(".sortable-marquee"));
+        });
+      }
+      else if (listing_info.hub) {
+        $("#no-domains-in-hub").removeClass('is-hidden');
+      }
+
+      //not a hub!
+      if (!listing_info.hub){
+        $("#not-a-hub").removeClass('is-hidden');
+      }
+      else {
+        $("#not-a-hub").addClass('is-hidden');
+      }
+    }
+
+    updateHubInputsDisabled(listing_info.hub);
+  }
+  function updateHubInputsDisabled(hub){
+    if (hub == 1){
+      $(".hub-input").removeClass('is-disabled');
+    }
+    else {
+      $(".hub-input").addClass('is-disabled');
+    }
+  }
+  //make marquees move if necessary (function needed for resize)
+  function updateMarqueeHandlers(elem){
+    elem.marquee("destroy").each(function(){
+      if (this.offsetWidth < this.scrollWidth){
+        updateMarqueeHandler($(this));
+      }
+    });
+  }
+  //start a marquee on an element (handle destroy when mouseleave)
+  function updateMarqueeHandler(elem){
+    elem.marquee("destroy").marquee({
+      startVisible : true,
+      delayBeforeStart : 0,
+      speed : 100
+    }).marquee("pause").on("mouseenter", function(){
+      $(this).marquee("resume");
+    }).on("mouseleave", function(){
+      updateMarqueeHandler(elem);
+    });
+  }
+
+  //resize marquee
+  $(window).resize(function(){
+    updateMarqueeHandlers($(".sortable-marquee"));
+    updateMarqueeHandlers($(".td-domain"));
+  });
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------BINDINGS-------------------------------
 
   //update change bindings (category, changeable-input, status)
@@ -546,25 +723,34 @@ function checkBox(module_value, elem, child){
       submitListingChanges($(this), true);
     });
 
-    //lookup DNS button
-    var selected_listings = [];
-    for (var x = 0; x < selected_domain_ids.length; x++){
-      var listing_info = getDomainByID(selected_domain_ids[x]);
+    $("#lookup-dns-button").off().on("click", function(e){
+      clearNotification();
 
-      //get whois and A record data if we haven't yet
-      if (listing_info.a_records == undefined || listing_info.whois == undefined){
+      //lookup DNS button
+      var selected_listings = [];
+      for (var x = 0; x < selected_domain_ids.length; x++){
+        var listing_info = getDomainByID(selected_domain_ids[x]);
         selected_listings.push({
           domain_name : listing_info.domain_name,
           id : selected_domain_ids[x],
           client_index : x
         });
       }
-    }
-    $("#lookup-dns-button").off().on("click", function(e){
+
       $(this).addClass('is-loading');
-      getDNSRecords(selected_listings, selected_domain_ids, function(data){
+      getDNSRecords(selected_listings, selected_domain_ids, false, function(data){
         $("#lookup-dns-button").removeClass('is-loading');
-        if (data.state == "success"){
+        if (data.no_whois && data.no_whois == selected_domain_ids.length){
+          listings = data.listings;
+          var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
+          errorMessage("Failed to look up registrar information for " + plural_success_msg + "! Please enter the information manually.");
+        }
+        else if (data.no_whois && data.no_whois > 0){
+          listings = data.listings;
+          var plural_success_msg = (data.no_whois == 1) ? "a listing" : data.no_whois + " listings";
+          errorMessage("Failed to look up registrar information for " + plural_success_msg + "! Please enter the information manually.");
+        }
+        else if (data.state == "success"){
           listings = data.listings;
           var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
           successMessage("Successfully changed registrar information for " + plural_success_msg + "!");
@@ -601,6 +787,11 @@ function checkBox(module_value, elem, child){
     //allow rentals checkbox
     $("#rentable-input").on("change", function(){
       updateRentalInputsDisabled($(this).val());
+    });
+
+    //allow hub checkbox
+    $("#hub-input").on("change", function(){
+      updateHubInputsDisabled($(this).val());
     });
 
     //change domain name font
@@ -791,6 +982,16 @@ function checkBox(module_value, elem, child){
         else if (input_name == "logo_image_link"){
           var listing_comparison = current_listing["logo"];
         }
+        else if (input_name == "hub_phone"){
+          var input_val = $(this).intlTelInput("getNumber", intlTelInputUtils.numberFormat.INTERNATIONAL);
+          var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
+        }
+        else if (input_name == "date_expire"){
+          var listing_comparison = (current_listing.date_expire) ? moment(current_listing.date_expire).format('YYYY-MM-DDTHH:mm') : "";
+        }
+        else if (input_name == "date_registered"){
+          var listing_comparison = (current_listing.date_registered) ? moment(current_listing.date_registered).format('YYYY-MM-DDTHH:mm') : "";
+        }
         else {
           var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
         }
@@ -806,10 +1007,10 @@ function checkBox(module_value, elem, child){
       });
     }
 
-    // // Display the key/value pairs
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0]+ ', ' + pair[1]);
-    // }
+    // Display the key/value pairs
+    for (var pair of formData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]);
+    }
 
     $.ajax({
       url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
@@ -846,6 +1047,9 @@ function checkBox(module_value, elem, child){
         if (data.message == "not-premium"){
           var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
         }
+        else if (data.message == "dns-pending"){
+          var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
+        }
         else {
           //listing is no longer pointed to domahub, revert to verify tab
           if (data.message == "verification-error"){
@@ -876,9 +1080,9 @@ function checkBox(module_value, elem, child){
             var error_msg = data.message;
           }
 
-          errorMessage(error_msg);
         }
 
+        errorMessage(error_msg);
       }
 
       updateEditorEditing(selected_ids);
@@ -899,7 +1103,7 @@ function updateEditorOffers(selected_domain_ids){
 
   //change domain name header
   if (selected_domain_ids.length == 0){
-    $(".editor-title").text("My Listing Offers");
+    $(".editor-title").text("My Offers");
   }
   else {
     $(".editor-title").text("Viewing Offers - ");
@@ -1024,7 +1228,15 @@ function refreshOfferRows(search_term, show_rejected){
 
 //show loading offers row
 function showLoadingOffers(){
+  $("#refresh-offers-button").addClass('is-loading');
   $("#loading-offers-table").removeClass('is-hidden');
+  $(".hidden-while-loading-offers, .whats-next-offer").addClass('is-hidden');
+}
+
+//hide loading offers row
+function hideLoadingOffers(){
+  $("#refresh-offers-button").removeClass('is-loading');
+  $("#loading-offers-table").addClass('is-hidden');
   $(".hidden-while-loading-offers, .whats-next-offer").addClass('is-hidden');
 }
 
@@ -1167,8 +1379,7 @@ function updateOffersTable(listing_info, total_domains){
 
 //finish creating offers table
 function finishedOfferTable(total_domains, listing_info){
-  $("#loading-offers-table").addClass('is-hidden');
-  $(".hidden-while-loading-offers").removeClass('is-hidden');
+  hideLoadingOffers();
   $("#offer-response-wrapper").removeClass('remove-margin-bottom-content');
   refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
   if (total_domains == 1){
@@ -1654,7 +1865,6 @@ function updateEditorUnverified(selected_domain_ids){
     $(".current-domain-name").text(verifying_domain.domain_name);
     $(".verification-plural").text("");
     $(".verification-domains-plural").text("this domain");
-    $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
   }
 
   //create all tables for each unverified listing
@@ -1688,9 +1898,13 @@ function setupVerificationButtons(selected_domain_ids){
 function createDNSRecordRows(selected_domain_ids, force){
   //show loading
   $("#loading-dns-table").removeClass('is-hidden');
-  $("#verify-toolbar").addClass("is-hidden");
-  $("#verification-left").addClass('is-hidden');
-  $("#required-assistance").addClass("remove-margin-bottom-content");
+  $(".verify-hidden-while-loading").addClass("is-hidden");
+  $("#refresh-dns-button").addClass('is-loading');
+
+  $("#verification-left").addClass('is-lighter').removeClass('is-primary is-danger');
+  $("#verification-left-danger, #verification-left-success").addClass('is-hidden');
+  $("#verification-left-load").removeClass('is-hidden');
+  $("#verification-left-text").removeClass('is-white').text("Now loading existing DNS records.");
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-table").remove();
@@ -1713,7 +1927,7 @@ function createDNSRecordRows(selected_domain_ids, force){
 
   //if we need to get any DNS records, get them in one call
   if (selected_listings.length > 0){
-    getDNSRecords(selected_listings, selected_domain_ids, function(data){
+    getDNSRecords(selected_listings, selected_domain_ids, true, function(data){
       if (data.state == "success"){
         listings = data.listings;
       }
@@ -1737,12 +1951,13 @@ function createDNSRecordRows(selected_domain_ids, force){
 }
 
 //get DNS settings at once for all selected domains (and unknown DNS)
-function getDNSRecords(selected_listings, selected_domain_ids, cb){
+function getDNSRecords(selected_listings, selected_domain_ids, get_a, cb){
   $.ajax({
     url: "/profile/mylistings/dnsrecords",
     method: "POST",
     data: {
-      selected_listings : selected_listings
+      selected_listings : selected_listings,
+      get_a : get_a
     }
   }).done(function(data){
     cb(data);
@@ -1804,11 +2019,11 @@ function createDNSTable(listing_info, total_unverified, row_index){
 
   //incomplete
   if (cloned_table.find(".is-danger").length > 1){
-    table_header_text = "<span class='is-incomplete dns-status'>Incomplete</span>" + table_header_text;
+    table_header_text = "<span class='tag is-small is-danger dns-status'>Incomplete</span>" + table_header_text;
   }
   //complete
   else {
-    table_header_text = "<span class='is-complete dns-status'>Completed</span>" + table_header_text;
+    table_header_text = "<span class='tag is-small is-primary dns-status'>Completed</span>" + table_header_text;
   }
 
   cloned_table.find(".existing-dns-row").remove();
@@ -1833,7 +2048,17 @@ function createDomaRecords(cloned_a_row, cloned_www_row){
 function checkDNSAllDone(total_unverified){
   //remove loading from refresh, remove loading row, show all cloned rows
   if ($(".cloned-dns-table").length == total_unverified) {
-    $("#verify-toolbar").removeClass('is-hidden');
+    $(".verify-hidden-while-loading").removeClass('is-hidden');
+
+    //figure out hiding or show next/prev buttons
+    if (total_unverified > 1){
+      $("#prev-dns-table-button, #next-dns-table-button").removeClass('is-hidden');
+    }
+    else {
+      $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
+    }
+
+    $("#refresh-dns-button").removeClass('is-loading');
     $("#loading-dns-table").addClass('is-hidden');
 
     //sort by selected index
@@ -1849,16 +2074,20 @@ function checkDNSAllDone(total_unverified){
     }
 
     //all DNS settings are good
-    $("#required-assistance").removeClass("remove-margin-bottom-content");
+    $("#verification-left-load").addClass('is-hidden');
     if ($(".cloned-dns-table .needs-action-row").length == 0){
       $("#verify-button").removeClass('is-hidden');
       $("#refresh-dns-button").addClass('is-hidden');
-      $("#verification-left").addClass('is-primary').removeClass('is-danger is-hidden').text("All DNS settings look good! Click the button below to verify your domains.");
+      $("#verification-left").addClass('is-primary').removeClass('is-danger');
+      $("#verification-left-success").removeClass('is-hidden');
+      $("#verification-left-text").addClass('is-white').text("All DNS settings look good! Click the verify now button to verify your domains.");
     }
     else {
       $("#verify-button").addClass('is-hidden');
       $("#refresh-dns-button").removeClass('is-hidden');
-      $("#verification-left").addClass('is-danger').removeClass('is-primary is-hidden').text("You have " + $(".cloned-dns-table .needs-action-row").length + " entries left to modify.");
+      $("#verification-left").addClass('is-danger').removeClass('is-primary');
+      $("#verification-left-danger").removeClass('is-hidden');
+      $("#verification-left-text").addClass('is-white').text("You have " + $(".cloned-dns-table .needs-action-row").length + " entries left to modify.");
     }
   }
 }
@@ -1983,16 +2212,22 @@ function getCommonListingInfo(listing_ids){
   return listings.reduce(function(arr, item){
     if (listing_ids.indexOf(item.id) != -1){
       for (var x in item){
+
+        //first object, set it
         if (!arr){
           arr = Object.assign({}, item);
         }
+
+        //equal! set it
         else if (x == "categories" && item[x] && arr[x]){
           arr[x] = arr[x].split(" ").filter(function(n){
             return item[x].split(" ").indexOf(n) != -1
           }).join(" ");
         }
+
+        //different, make it null
         else if (item[x] != arr[x]){
-          delete arr[x];
+          arr[x] = null;
         }
       }
     }

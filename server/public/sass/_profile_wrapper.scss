@@ -2,14 +2,12 @@
   display: flex;
   height: 100%;
   width: 100%;
-  @include mobile {
-    padding-top: 40px;
-  }
 }
 
 .left-menu {
   @include transition(all 0.2s ease);
-  background-color: $grey-darker;
+  @include box-shadow(1px,0,5px,$border,1px);
+  background-color: $white;
   height: 100%;
   min-width: 250px;
   width: 250px;
@@ -37,23 +35,30 @@
     }
     a {
       &.primary-theme {
-        border-left: 5px solid transparent;
+        border-right: 3px solid transparent;
         padding: 10px;
         @include laptop {
           padding: 10px 20px;
         }
         &:hover {
-          background-color: $grey-dark;
+          background-color: $pastel;
         }
         &.is-active {
-          background-color: $primary-light;
-          border-color: $primary-darker;
-          p {
-            font-weight: 500;
+          background-color: rgba(60,188,141,0.15);
+          border-color: $primary;
+          .icon {
+            color: $primary;
+          }
+          p,small {
+            color: $primary;
+            font-weight: 700;
           }
         }
         &.is-sublink {
-          padding: 5px;
+          padding: 10px;
+          small {
+            margin-top: 0 !important;
+          }
           @include laptop {
             padding: 10px 20px;
           }
@@ -70,16 +75,16 @@
     width: 0;
   }
   @include laptop {
-    min-width: 80px;
-    width: 80px;
+    min-width: 70px;
+    width: 70px;
   }
 }
 
 .menu-info {
-  margin: 40px 20px;
+  margin: 30px 20px;
   p {
     font-size: 10px;
-    font-weight: 500;
+    font-weight: 700;
     letter-spacing: 1px;
     margin-top: 10px;
     text-transform: uppercase;
@@ -100,32 +105,63 @@
   height: 100%;
   left: 250px;
   overflow-x: hidden;
-  padding: 40px 40px;
   position: absolute;
   width: calc(100% - 250px);
   .tabs {
     min-height: 36px;
   }
   @include laptop {
-    left: 80px;
-    width: calc(100% - 80px);
+    left: 70px;
+    width: calc(100% - 70px);
   }
   @include mobile {
     left: 0;
-    padding: 40px 20px 20px;
     position: relative;
     width: 100%;
   }
 }
 
+.right-content-items {
+  padding: 20px 60px 20px;
+  @include mobile {
+    padding: 10px 20px 20px;
+  }
+}
+
 .user-panel {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
+  @include mobile {
+    display: flex;
+  }
+}
+
+.nav {
+  &.is-profile {
+    padding: 20px 50px 0;
+    position: relative;
+    @include mobile {
+      padding: 20px 20px 0;
+    }
+    .nav-toggle {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+.nav-item {
+  &.is-toggle {
+    padding: 10px 0;
+  }
+}
+
+.user-button {
+  padding: 10px 5px;
+  &:last-child {
+    padding-left: 10px;
+  }
 }
 
 .nav-button {
-  @include box-shadow(0,3px,5px,$border,5px);
   border-radius: 100%;
   font-size: 22px;
   height: auto;
@@ -133,67 +169,71 @@
   .icon {
     margin: 0 !important;
   }
-  &:hover {
-    @include box-shadow(0,3px,3px,$border,3px);
-  }
   &:focus {
     @include box-shadow(0,0,4px,#5E9ED6,0);
     outline: none;
-    border: 1px solid #5E9ED6;
-  }
-  &.is-active {
-    @include box-shadow(0,0,0,#fff,0);
-    background-color: $primary-dark;
-    color: $white;
-  }
-  &.is-mobile {
-    @include box-shadow(0,2px,4px,$border,0);
-  }
-}
-
-.user-button {
-  &:not(:last-child) {
-    position:relative;
-    margin-bottom: 10px;
+    border-color: $blue !important;
   }
 }
 
 .nav-drop {
   @include box-shadow(0,3px,15px,$border,2px);
   background-color: $white;
-  border-radius: 5px 5px 5px 0;
-  padding: 5px 8px;
+  border-radius: $radius;
   position: absolute;
-  left: 50px;
-  bottom: 16px;
+  top: 100%;
+  .menu-label {
+    color: $primary;
+    padding: 8px 5px;
+  }
 }
 
 #notification-counter {
   background-color: $danger;
   border-radius: 100%;
   color: $white;
-  font-size: 12px;
-  height: 18px;
+  font-size: 10px;
+  height: 16px;
   line-height: 18px;
   position: absolute;
-  right: -8px;
-  top: -6px;
-  width: 18px;
+  right: -5px;
+  top: -2px;
+  width: 16px;
 }
 
 #contact-dropdown-menu {
+  right: -87px;
   width: 350px;
+  .control {
+    padding: 8px;
+  }
   textarea {
-    margin-bottom: 5px;
+    @include box-shadow(0,0,0,$border,0);
+    border-radius: $radius $radius 0 0;
+    border: none;
+  }
+  @include mobile {
+    right: -97px;
   }
 }
 
 #notification-dropdown-menu {
+  right: -41px;
   width: 250px;
+  .content {
+    padding: 5px 12px;
+  }
+  @include mobile {
+    right: -52px;
+  }
 }
 
 #user-dropdown-menu {
-  width: 150px;
+  right: 10px;
+  width: 200px;
+  @include mobile {
+    right: 0;
+  }
 }
 
 .menu-label {
@@ -201,22 +241,22 @@
   margin-bottom:0;
 }
 
-.smile-text {
-  padding: 5px;
-  p {
-    line-height: 1.5;
-    margin-right: 2px;
-  }
-  img {
-    height: 36px;
-    vertical-align: top;
-    width: 36px;
-  }
-}
-
 .smile {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
   width: 36px;
+}
+
+.columns {
+  &.is-laptop {
+    @include laptop {
+      display: block;
+      .column {
+        flex: auto;
+        padding: 20px;
+        width: 100%;
+      }
+    }
+  }
 }

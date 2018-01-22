@@ -5,7 +5,6 @@
   border-spacing: 0px
   border: 1px solid $border
   box-shadow: none
-  margin-bottom: 20px
   width: 100%
   &.is-fixed
     table-layout: fixed
@@ -36,11 +35,9 @@
       font-size: 14px
   th
     border-bottom: none
-    font-size: $size-8
-    font-weight: 500
-    letter-spacing: 1px
+    font-size: $size-7
+    font-weight: 700
     padding: 15px 12px
-    text-transform: uppercase
     &.is-400
       font-weight: 400
   td
@@ -61,6 +58,9 @@
           cursor: pointer
   tbody
     tr
+      &:last-child
+        td
+          border-bottom: none
       &:hover
         cursor: pointer
       &.is-active
@@ -70,9 +70,7 @@
           cursor: auto
   // Modifiers
   &.has-shadow
-    border: none
-    tbody
-      +box-shadow(1px,1px,1px,$border,0)
+    +box-shadow(0,2px,4px,$border,0)
     thead
       background-color: #e5ecf1
   &.is-bordered

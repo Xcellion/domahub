@@ -252,7 +252,7 @@ module.exports = {
     return back_array;
   },
 
-  //categories that are formatted for the back-end
+  //categories that are formatted for the front-end
   front : function(){
     var front_array = [];
     all_categories.map(function(v){

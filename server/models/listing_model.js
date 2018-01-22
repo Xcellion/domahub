@@ -96,6 +96,14 @@ module.exports = {
     console.log("DB: Attempting to get active listing information for " + domain_name + "...");
     var query = "SELECT \
           listings.*, \
+          IF(listings.background_color IS NULL, '#FFFFFF', listings.background_color) as background_color, \
+          IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
+          IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
+          IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
+          IF(listings.font_name IS NULL, 'Nunito Sans', listings.font_name) as font_name, \
+          IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
+          IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
+          IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
           accounts.username, \
           accounts.email AS owner_email, \
           accounts.stripe_subscription_id, \
@@ -276,26 +284,23 @@ module.exports = {
     database.query(query, "Failed to get related 3 random listings!", callback, domain_name_exclude);
   },
 
-  //gets 10 random listings by the same owner
-  getTenRandomListingsByOwner : function(domain_name_exclude, owner_id, callback){
-    console.log("DB: Attempting to get 10 random listings by the same owner...");
+  //gets listings owned by the same owner
+  getListingsByOwner : function(hub_id, owner_id, callback){
+    console.log("DB: Attempting to get other listings by the same owner...");
     var query = "SELECT \
-          listings.domain_name, \
-          listings.background_image, \
-          listings.status, \
-          listings.buy_price, \
-          listings.price_type, \
-          listings.price_rate \
+          listings.*, \
+          listing_hub_grouping.rank, \
+          listing_hub_grouping.listing_hub_id \
         FROM listings \
-        WHERE listings.domain_name != ? \
+        LEFT JOIN listing_hub_grouping \
+        ON listing_hub_grouping.listing_id = listings.id \
+        WHERE listings.id != ? \
         AND listings.owner_id = ? \
         AND listings.status = 1 \
         AND listings.verified = 1 \
         AND listings.deleted IS NULL \
-        AND (listings.categories NOT LIKE '%adult%' OR listings.categories IS NULL) \
-        ORDER BY RAND() \
-        LIMIT 10"
-    database.query(query, "Failed to get 10 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);
+        ORDER BY listings.id"
+    database.query(query, "Failed to get other listings by the same owner!", callback, [hub_id, owner_id]);
   },
 
   //gets listings related to specific categories
@@ -394,6 +399,7 @@ module.exports = {
           buy_price, \
           description, \
           date_expire, \
+          date_registered, \
           registrar_name \
         )\
          VALUES ? \
@@ -432,6 +438,16 @@ module.exports = {
     database.query(query, "Failed to add new rental times for rental #" + rental_id + "!", callback, [rental_times]);
   },
 
+  //insert new listings into listing hubs
+  addListingHubGrouping : function(formatted_hub_additions, callback){
+    console.log("DB: Attempting to insert listings into listing hub...");
+    var query = "INSERT INTO listing_hub_grouping (listing_id, listing_hub_id, rank) VALUES ? ON DUPLICATE KEY UPDATE \
+      listing_id = VALUES(listing_id), \
+      listing_hub_id = VALUES(listing_hub_id), \
+      rank = VALUES(rank)"
+    database.query(query, "Failed to insert listings into listing hub!", callback, [formatted_hub_additions]);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------UPDATES-------------------------------
@@ -461,11 +477,12 @@ module.exports = {
   updateListingsRegistrarInfo : function(listing_info, callback){
     console.log("DB: Attempting to update registrar info for domain(s)...");
     var query = "INSERT INTO listings \
-        (id, registrar_name, date_expire) \
+        (id, registrar_name, date_expire, date_registered) \
         VALUES ? \
         ON DUPLICATE KEY UPDATE \
           registrar_name = VALUES(registrar_name), \
-          date_expire = VALUES(date_expire)"
+          date_expire = VALUES(date_expire), \
+          date_registered = VALUES(date_registered)"
     database.query(query, "Failed to update registrar info for domain(s)!", callback, [listing_info]);
   },
 
@@ -571,6 +588,14 @@ module.exports = {
       deleted = 1, \
       status = NULL "
     database.query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
+  },
+
+  //deletes all listings from multiple hubs
+  deleteHubGroupings : function(listing_hub_ids, callback){
+    console.log("DB: Attempting to delete all listings from multiple hubs...");
+    var query = "DELETE FROM listing_hub_grouping \
+        WHERE listing_hub_id IN (?)"
+    database.query(query, "Failed to delete all listings for multiple hubs!", callback, [listing_hub_ids]);
   },
 
   //</editor-fold>

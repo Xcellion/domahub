@@ -2,30 +2,12 @@
   <div class="container">
     <div class="footer-bar">
       <div class="bar-left">
-        <% if (!listing_info.premium) { %>
-          <a id="custom_logo" tabindex="0" class="circle-logo footer-item" href="/" title="Go to DomaHub"></a>
-        <% } else { %>
-          <% if (listing_info.logo) { %>
-            <img id="custom_logo" class="footer-item" />
-          <% } %>
-        <% } %>
+        <figure class="image is-48x48">
+          <img id="listing-footer-logo" class="logo-item footer-item">
+        </figure>
       </div>
       <div class="bar-right">
-        <% if (listing_info.premium) { %>
-          <p id="dh_footer-right-text" class="footer-item"><%= listing_info.description_footer %></p>
-        <% } else { %>
-          <p id="dh-footer-right-text" class="footer-item has-text-centered">
-            Sell your domains faster and easier with DomaHub Landing Pages.
-          </p>
-        <% } %>
-        <% if (listing_info.social_sharing) { %>
-
-          <%# SOCIAL SHARING MODULE %>
-          <%- include("modules/info/social_share_module.ejs", {
-            listing_info : listing_info
-          }); %>
-
-        <% } %>
+        <p id="listing-footer" class="footer-item">Sell more domains with DomaHub landing pages.</p>
       </div>
     </div>
   </div>

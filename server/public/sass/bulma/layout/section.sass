@@ -1,11 +1,12 @@
 .section
-  background-color: $white
   padding: 40px 20px
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     &.is-#{$name}
       background-color: $color
   // Sizes
+  &.is-pastel
+    background-color: $pastel
   &.is-small
     padding: 20px
   &.is-medium
@@ -15,16 +16,14 @@
       padding: 95px 20px
     &-top
       +tablet
-        padding: 160px 0 0
-      +mobile
-        padding: 85px 20px 0px
+        padding: 40px 0 130px
   &.is-large
     +desktop
       padding: 200px 0
     +tablet-only
       padding: 150px 0
     +mobile
-      padding: 125px 20px
+      padding: 95px 20px
   &.is-fullscreen
     padding: 0
     height: 100vh

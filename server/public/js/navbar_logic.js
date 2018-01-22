@@ -56,18 +56,38 @@ $(document).ready(function() {
     navbarChange($(this));
   });
 
+  //change navbar based on resize
+  window.onresize = function(event) {
+    navbarChange($(this));
+  };
+
   //</editor-fold>
 
 });
 
 //change navbar on scroll
 function navbarChange(windowelem){
-  //before the top
+  //at the top
   if (windowelem.scrollTop() <= 0) {
-    $(".nav").removeClass("has-shadow");
+    $("#nav-logo").removeClass('is-primary').addClass('is-white');
+    $(".nav").removeClass("has-shadow is-white");
+    $(".nav-toggle").removeClass("is-black").addClass("is-white");
+    $(".nav-center .button").addClass('is-hidden');
+
+    //only if desktop
+    if ($("#nav-logo").is(":visible")){
+      $(".nav-link").addClass('is-white');
+    }
+    else {
+      $(".nav-link").removeClass('is-white');
+    }
   }
   //past the top
   else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
-    $(".nav").addClass("has-shadow");
+    $("#nav-logo").addClass('is-primary').removeClass('is-white');
+    $(".nav").addClass("has-shadow is-white");
+    $(".nav-link").removeClass('is-white');
+    $(".nav-toggle").addClass("is-black").removeClass("is-white");
+    $(".nav-center .button").removeClass('is-hidden');
   }
 }
