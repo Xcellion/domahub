@@ -4,8 +4,6 @@
 <head>
   <title>Features - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/main_features.min.css" />
-  <link rel="stylesheet" type="text/css" href="/css/lib/slick.min.css"/>
-  <link rel="stylesheet" type="text/css" href="/css/lib/slick-theme.min.css"/>
   <meta name="description" content="Simple, clean landing pages for your domains." />
   <%- include("../templates/head_links"); %>
 </head>
@@ -28,77 +26,39 @@
   </div>
 </section>
 
-
-<section class="section is-medium">
+<section class="section" style="border-bottom: 1px solid rgba(0,0,0,0.12);">
   <div class="container">
-    <div class="content">
-      <h1 class="title has-text-centered is-bold">Your All-In-One Domain Management Solution</h1>
-    </div>
     <div class="columns">
-      <div class="column is-4">
-        <div class="card is-fullwidth no-shadow">
-          <div class="card-header no-border-bottom">
-            <h1 class="hiw-num">
-              1
-            </h1>
-          </div>
-          <div class="card-image">
-            <figure class="image is-128x128">
-              <img src="images/lib/inipagi/desktop.svg" />
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="content has-text-centered">
-              <h2 class="is-bold">Create Landing Pages</h2>
-              <p>
-                Upload your domains in bulk! Connect your registrar to DomaHub and we'll automatically fetch your domains!
-              </p>
-            </div>
-          </div>
+      <div class="column is-3">
+        <div class="content">
+          <h2>Landing Pages</h2>
+          <p>
+            Cash in on all inbound traffic on your domain with a landing page.
+          </p>
         </div>
       </div>
-      <div class="column is-4">
-        <div class="card is-fullwidth no-shadow">
-          <div class="card-header no-border-bottom">
-            <h1 class="hiw-num">
-              2
-            </h1>
-          </div>
-          <div class="card-image">
-            <figure class="image is-128x128">
-              <img src="images/lib/inipagi/presentation.svg" />
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="content has-text-centered">
-              <h2 class="is-bold">Analyze Traffic</h2>
-              <p>
-                Delve deeper into your domains to understand who your users are, where they're coming from, and much more!
-              </p>
-            </div>
-          </div>
+      <div class="column is-3">
+        <div class="content">
+          <h2>Marketplace</h2>
+          <p>
+            Create a marketplace that showcases your entire domain portfolio.
+          </p>
         </div>
       </div>
-      <div class="column is-4">
-        <div class="card is-fullwidth no-shadow">
-          <div class="card-header no-border-bottom">
-            <h1 class="hiw-num">
-              3
-            </h1>
-          </div>
-          <div class="card-image">
-            <figure class="image is-128x128">
-              <img src="images/lib/inipagi/receipt.svg" />
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="content has-text-centered">
-              <h2 class="is-bold">Manage Offers</h2>
-              <p>
-                Respond to and manage offers directly from your DomaHub interface. We'll handle securing your payments for you!
-              </p>
-            </div>
-          </div>
+      <div class="column is-3">
+        <div class="content">
+          <h2>Payments</h2>
+          <p>
+            Secure payments system ensures you get paid fast and safe.
+          </p>
+        </div>
+      </div>
+      <div class="column is-3">
+        <div class="content">
+          <h2>Communications</h2>
+          <p>
+            Easily communicate with customers and manage your offers.
+          </p>
         </div>
       </div>
     </div>
@@ -108,638 +68,182 @@
 <section id="features-section" class="section is-medium">
   <div class="container">
     <div class="content has-text-centered">
-      <h1 id="features-title" class="title is-bold">Features</h1>
-    </div>
-    <div id="carousel">
-
-      <!--stats-->
-      <div class="columns">
-        <div class="column is-6">
-          <div id="stats" class="blurb">
-            <div class="content">
-              <h2 class="is-bold">Analytics to understand your target market</h2>
-              <p class="is-hidden-mobile">
-                Knowing is half the battle and understanding your traffic and audience can help you make educated decisions on how to market and sell your domains.
-              </p>
-            </div>
-            <div class="feature">
-              <div class="icon"><i class="far fa-chart-bar fa-fw"></i></div>
-              <div class="content">
-                <p><span class="is-bold">Traffic</span> - How large is your audience?</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="icon"><i class="far fa-users fa-fw"></i></span>
-              <div class="content">
-                <p><span class="is-bold">Referers</span> - How do people find your domains?</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="icon"><i class="far fa-globe fa-fw"></i></span>
-              <div class="content">
-                <p><span class="is-bold">Demographics</span> - Where is your traffic coming from?</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="icon"><i class="far fa-fire fa-fw"></i></span>
-              <div class="content">
-                <p><span class="is-bold">Trending</span> - Which domain in your portfolio is trending?</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="column is-6">
-          <figure class="image has-shadow is-hidden-tablet">
-            <img src="/images/main/feature-1-stats.png" alt="DomaHub Traffic Statistics"/>
-          </figure>
-          <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-1-stats.webm"></video>
-        </div>
-      </div>
-
-      <!--sales-->
-      <div class="columns is-hidden">
-        <div class="column is-6">
-          <div id="offers" class="blurb">
-          <div class="content">
-            <h2 class="is-bold">Streamlined sales process</h2>
-            <p class="is-hidden-mobile">
-              Offer forms are included with every listing page, helping you streamline
-              your sales channel without any unwanted spam from bots or other malicious parties.
-            </p>
-          </div>
-          <div class="feature">
-            <div class="icon"><i class="far fa-shield-check fa-fw"></i></div>
-            <div class="content">
-              <p><span class="is-bold">Verified Buyers</span> - No more spam offers from bots.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <div class="icon"><i class="far fa-money-bill fa-fw"></i></div>
-            <div class="content">
-              <p><span class="is-bold">Min. Price</span> - Never receive low-ball offers.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <div class="icon"><i class="far fa-handshake fa-fw"></i></div>
-            <div class="content">
-              <p><span class="is-bold">Buy It Now</span> - Remove the hassle of negotiating.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <div class="icon"><i class="far fa-credit-card fa-fw"></i></div>
-            <div class="content">
-              <p><span class="is-bold">Payments</span> - Don't stress over processing payments.</p>
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="column is-6">
-          <figure class="image has-shadow is-hidden-tablet">
-            <img src="/images/main/feature-2-offers.png" alt="DomaHub Offer Form"/>
-          </figure>
-          <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-2-offers.webm"></video>
-        </div>
-      </div>
-
-      <!--design-->
-      <div class="columns is-hidden">
-        <div class="column is-6">
-          <div id="design" class="blurb">
-          <div class="content">
-            <h2 class="is-bold">Stand out with a customized brand identity</h2>
-            <p class="is-hidden-mobile">
-              Fully customize the look and feel of your landing page from the texts
-              to the images and everything else in between. Make your domain brand stand out!
-            </p>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-lock fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">HTTPS</span> - SSL certificates for all domain names.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-image fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Custom Design</span> - Create your own unique domain name brand.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-archive fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Bulk Editing</span> - Update your entire portfolio at the same time.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-code fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">No Coding Necessary</span> - Easy to use interface for editing details.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-th-large fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Modular Layout</span> - Add / remove specific sections of the listing page.</p>
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="column is-6">
-          <figure class="image has-shadow is-hidden-tablet">
-            <img src="/images/main/feature-3-design.png" alt="DomaHub Landing Page Design"/>
-          </figure>
-          <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-3-design.webm"></video>
-        </div>
-      </div>
-
-      <!--advertisement-->
-      <div class="columns is-hidden">
-        <div class="column is-6">
-          <div id="emails" class="blurb">
-          <div class="content">
-            <h2 class="is-bold">Don't be someone else's advertisement</h2>
-            <p class="is-hidden-mobile">
-              Your domain name listing page should not mention other products or services. Control your domain brand identity and communications with your potential buyers.
-            </p>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-ban fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">No Third Party</span> - It's your professional brand - not their's.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-minus-circle fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">No DomaHub</span> - No mention of the word "DomaHub" anywhere.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-envelope-open fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Professional Email</span> - All emails are sent from your domain name.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-link fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Custom URLs</span> - Use your own domain URL - not their's.</p>
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="column is-6">
-          <figure class="image has-shadow">
-            <img src="/images/main/feature-4-email.png" alt="DomaHub Emails"/>
-          </figure>
-        </div>
-      </div>
-
-      <!--rentals-->
-      <div class="columns is-hidden">
-        <div class="column is-6">
-          <div id="rentals" class="blurb">
-          <div class="content">
-            <h2 class="is-bold">Try it before you buy it</h2>
-            <p class="is-hidden-mobile">
-              Optionally rent out your domains by the day, week, or month.
-              Increase your revenue stream by allowing your customer to try it before they buy it!
-            </p>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-calendar-check fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Automatic</span> - Never worry about manually scheduling a rental.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-folder-open fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Flexible</span> - Rent a subdirectory or the whole domain name.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-unlink fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">Security</span> - Ownership of the domain never leaves your hands.</p>
-            </div>
-          </div>
-          <div class="feature">
-            <span class="icon"><i class="far fa-shield-check fa-fw"></i></span>
-            <div class="content">
-              <p><span class="is-bold">No Malicious Content</span> - Secure your domain content with <a class="is-primary is-underlined" href="https://safebrowsing.google.com/">Google Safe Browsing</a>.</p>
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="column is-6">
-          <figure class="image has-shadow is-hidden-tablet">
-            <img src="/images/main/feature-5-rent.png" alt="DomaHub Rentals"/>
-          </figure>
-          <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-5-rent.webm"></video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section is-primary">
-  <div class="container">
-    <div class="content has-text-centered">
-      <figure class="image is-128x128">
-        <img src="/images/lib/inipagi/investment.svg" alt="Invest in your domains!" />
-      </figure>
-      <h2 class="title is-bold is-white">Don't just own domains, invest in them.</h2>
-      <h3 class="is-white">
-        Sell more domains with powerful and streamlined professional tools.
+      <h1 class="title is-bold">Everything You Need To Go Pro</h1>
+      <h3 id="features-subtitle" class=" is-blacklight">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       </h3>
     </div>
-    <div class="content has-text-centered">
-      <a class="button is-stylish is-primary is-inverted" href="/signup">
-        <span class="icon">
-          <i class="far fa-user-circle"></i>
-        </span>
-        <span>Sign Up For Free Now</span>
-      </a>
-      <small class="is-block is-white">No risk. Cancel at any time.</small>
+    <div class="level is-mobile">
+      <div class="feature-tab level-item has-text-centered is-active" data-feature="stats" data-balloon="Domain Analytics" data-balloon-pos="up">
+        <figure class="image is-64x64">
+          <img src="/images/lib/inipagi/graph.svg" />
+        </figure>
+        <p class="is-hidden-mobile">Domain Analytics</p>
+      </div>
+      <div class="feature-tab level-item has-text-centered" data-feature="offers" data-balloon="Automated Sales" data-balloon-pos="up">
+        <figure class="image is-64x64">
+          <img src="/images/lib/inipagi/payments.svg" />
+        </figure>
+        <p class="is-hidden-mobile">Automated Sales</p>
+      </div>
+      <div class="feature-tab level-item has-text-centered" data-feature="design" data-balloon="Brand Identity" data-balloon-pos="up">
+        <figure class="image is-64x64">
+          <img src="/images/lib/inipagi/store.svg" />
+        </figure>
+        <p class="is-hidden-mobile">Brand Identity</p>
+      </div>
+      <div class="feature-tab level-item has-text-centered" data-feature="rentals" data-balloon="Domain Rentals" data-balloon-pos="up">
+        <figure class="image is-64x64">
+          <img src="/images/lib/inipagi/calendar.svg" />
+        </figure>
+        <p class="is-hidden-mobile">Domain Rentals</p>
+      </div>
+      <div class="feature-tab level-item has-text-centered" data-feature="emails" data-balloon="No Advertisements" data-balloon-pos="up">
+        <figure class="image is-64x64">
+          <img src="/images/lib/inipagi/view.svg" />
+        </figure>
+        <p class="is-hidden-mobile">No Advertisements</p>
+      </div>
+    </div>
+
+      <!--stats-->
+    <div id="stats" class="columns blurb">
+      <div class="column is-5">
+        <div class="content feature">
+          <h2 class="is-bold">Understand better with analytics and make smarter decisions.</h2>
+          <p>
+            Use traffic analytics to better understand your visitors and potential customers.
+            Learn how many people visit your domains, where they come from, and how they get here.
+          </p>
+          <p>
+            Have access to real-time statistics at your fingertips. Utilize these measurements to improve your marketing strategy and sell more domains!
+          </p>
+        </div>
+      </div>
+      <div class="column is-7">
+        <figure class="image has-shadow is-hidden-tablet">
+          <img src="/images/main/feature-1-stats.png" alt="DomaHub Traffic Statistics"/>
+        </figure>
+        <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-1-stats.webm"></video>
+      </div>
+    </div>
+
+    <!--sales-->
+    <div id="offers" class="columns blurb is-hidden">
+      <div class="column is-5">
+        <div class="content feature">
+          <h2 class="is-bold">Automate and simplify your sales process.</h2>
+          <p>
+            Our offer forms are embedded in every landing page you create. We filter and verify all inbound offers
+            before you receive them. Buy-It-Now and minimum price options ensure you don't get low-ball offers.
+          </p>
+          <p>
+            Respond and manage your offers directly through our interface.
+            Once a domain has been purchased, we'll make sure your payment is delivered securely and quickly.
+          </p>
+        </div>
+      </div>
+      <div class="column is-7">
+        <figure class="image has-shadow is-hidden-tablet">
+          <img src="/images/main/feature-2-offers.png" alt="DomaHub Offer Form"/>
+        </figure>
+        <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-2-offers.webm"></video>
+      </div>
+    </div>
+
+    <!--design-->
+    <div id="design" class="columns blurb is-hidden">
+      <div class="column is-5">
+        <div class="content feature">
+          <h2 class="is-bold">Create your unique brand identity.</h2>
+          <p>
+            Legitimize your domain store's brand identity by customizing each
+            landing page's design. Change the texts, fonts, colors, logos, and images
+            with just a click of a button!
+          </p>
+          <p>
+            Our interface makes it simple to add and remove different modules from your
+            landing pages. Utilize bulk editing to make changes to many domains at once!
+          </p>
+        </div>
+      </div>
+      <div class="column is-7">
+        <figure class="image has-shadow is-hidden-tablet">
+          <img src="/images/main/feature-3-design.png" alt="DomaHub Landing Page Design"/>
+        </figure>
+        <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-3-design.webm"></video>
+      </div>
+    </div>
+
+    <!--rentals-->
+    <div id="rentals" class="columns blurb is-hidden">
+      <div class="column is-5">
+        <div class="content">
+          <h2 class="is-bold">Rent out your domains for more profit.</h2>
+          <p>
+            Optionally rent out your domains by the day, week, or month.
+            Increase your revenue stream by allowing your customers to try it before they buy it!
+          </p>
+          <p>
+            We'll automatically schedule rentals with your customers. Content displayed on your domains is protected by the
+            <a class="is-primary is-underlined" href="https://safebrowsing.google.com/">Google Safe Browsing</a> protocol.
+          </p>
+        </div>
+      </div>
+      <div class="column is-7">
+        <figure class="image has-shadow is-hidden-tablet">
+          <img src="/images/main/feature-5-rent.png" alt="DomaHub Rentals"/>
+        </figure>
+        <video class="feature-video is-hidden-mobile" autoplay loop muted src="/images/main/feature-5-rent.webm"></video>
+      </div>
+    </div>
+
+    <!--advertisement-->
+    <div id="emails" class="columns blurb is-hidden">
+      <div class="column is-5">
+        <div class="content">
+          <h2 class="is-bold">Don't be someone else's advertisement.</h2>
+          <p>
+            Your domain name listing page should not mention other products or services. Control your domain brand identity and communications with your potential buyers.
+          </p>
+          <p>
+            No DomaHub logos or branding and no third-party ads. Use your own logos, colors, and email address for
+            all emails and communications.
+          </p>
+        </div>
+      </div>
+      <div class="column is-7">
+        <figure class="image has-shadow">
+          <img src="/images/main/feature-4-email.png" alt="DomaHub Emails"/>
+        </figure>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="pricing" class="section is-medium">
+<section class="section is-pastel">
   <div class="container">
-    <div class="control is-grouped is-grouped-center">
-      <a tabindex="0" href="https://medium.com/domahub/new-year-new-price-d909164707db" class="alert is-pastel has-arrow">
-        <div class="tag is-primary is-uppercase">
-          New
-        </div>
-        <p>
-          Limited one-time annual price! Get 16% off now!
-        </p>
-      </a>
-    </div>
-    <div class="content has-text-centered">
-      <h1 class="title is-bold">Pricing</h1>
-    </div>
-    <div class="control is-grouped is-grouped-center">
-      <div class="control">
-        <p>
-          Billed Monthly
-        </p>
-      </div>
-      <div class="control">
-        <input id="price-toggle" type="checkbox" name="price-toggle" class="switch is-rounded" checked="checked">
-        <label for="price-toggle"></label>
-      </div>
-      <div class="control">
-        <p>
-          Billed Annually
-        </p>
-      </div>
-    </div>
-    <div class="price-card-wrapper">
-      <div class="price-card card has-shadow-effect">
-        <div class="card-content">
-          <div class="content">
-            <div class="content has-text-centered">
-              <div class="icon is-circle is-medium is-accent">
-                <i class="far fa-trophy"></i>
-              </div>
-              <h2 class="is-accent">Basic</h2>
-              <p class="title is-2 is-bold">Free</p>
-              <p>
-                Pay nothing.
-              </p>
-            </div>
-          </div>
-          <div class="control is-expanded">
-            <a href="/signup" tabindex="0" class="button is-stylish is-fullwidth is-accent">
-              <span class="icon">
-                <i class="far fa-check-circle"></i>
-              </span>
-              <span>Choose Basic</span>
-            </a>
-          </div>
-        </div>
-        <div class="card-footer">
-          <ul class="list-table">
-            <li>
-              <p class="heading">
-                Domains
-              </p>
-              <p>
-                Up to 100
-              </p>
-            </li>
-            <li>
-              <p class="heading">
-                Commission
-              </p>
-              <p>
-                10%<sup>2</sup>
-              </p>
-            </li>
-            <li>
-              <p class="heading">
-                Landing Pages
-              </p>
-              <div class="icon is-accent">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Traffic Analysis
-              </p>
-              <div class="icon is-accent">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Domain Rentals
-              </p>
-              <div class="icon is-accent">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                SSL Certificate
-              </p>
-              <div class="icon is-light">
-                <i class="far fa-times"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom Design
-              </p>
-              <div class="icon is-light">
-                <i class="far fa-times"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom URL
-              </p>
-              <div class="icon is-light">
-                <i class="far fa-times"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom Email
-              </p>
-              <div class="icon is-light">
-                <i class="far fa-times"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                No Advertisements
-              </p>
-              <div class="icon is-light">
-                <i class="far fa-times"></i>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="price-card card has-shadow-effect">
-        <div class="card-content">
-          <div class="content">
-            <div class="content has-text-centered">
-              <div class="icon is-circle is-medium is-primary">
-                <i class="far fa-trophy-alt"></i>
-              </div>
-              <h2 class="is-primary">Premium</h2>
-              <p id="premium-price-month" class="title is-2 is-bold is-active">$5</p>
-              <p id="premium-price-annual" class="title is-2 is-inline-block is-bold">$4.17</p>
-              <p id="premium-price-text">
-                Per month ($50 / year).
-              </p>
-            </div>
-          </div>
-          <div class="control">
-            <% if (user) { %>
-            <a href="/profile/settings#premium" tabindex="0" class="button is-stylish is-fullwidth is-primary">
-            <% } else { %>
-            <a href="/signup" tabindex="0" class="button is-stylish is-fullwidth is-primary">
-            <% } %>
-              <span class="icon">
-                <i class="far fa-check-circle"></i>
-              </span>
-              <span>Choose Premium</span>
-            </a>
-          </div>
-        </div>
-        <div class="card-footer">
-          <ul class="list-table">
-            <li>
-              <p class="heading">
-                Domains
-              </p>
-              <p class="is-bold">
-                Unlimited
-              </p>
-            </li>
-            <li>
-              <p class="heading">
-                Commission
-              </p>
-              <p class="is-bold">
-                None
-              </p>
-            </li>
-            <li>
-              <p class="heading">
-                Landing Pages
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Traffic Analysis
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Domain Rentals
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                SSL Certificate
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom Design
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom URL
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom Email
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                No Advertisements
-              </p>
-              <div class="icon is-primary">
-                <i class="far fa-check"></i>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="features-table">
-      <div class="list-table">
-        <ul>
-          <li>
-            Domains
-          </li>
-          <li>
-            Commission<sup>1</sup>
-          </li>
-          <li>
-            Landing Pages
-          </li>
-          <li>
-            Traffic Analysis
-          </li>
-          <li>
-            Domain Rentals
-          </li>
-          <li>
-            SSL Certificate
-          </li>
-          <li>
-            Custom Design
-          </li>
-          <li>
-            Custom URL
-          </li>
-          <li>
-            Custom Email
-          </li>
-          <li>
-            No Advertisements
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="content has-text-centered" style="margin-top:20px;">
-      <small class="is-block">
-        <sup>1</sup> All domain sales/rentals are subject to a 2.9% + $0.30 (per transaction) payments processing fee.
-      </small>
-      <small class="is-block">
-        <sup>2</sup> This number does not include the aforementioned processing fee.
-      </small>
-    </div>
-  </div>
-</section>
-
-<section class="section is-medium">
-  <div class="container">
-    <div class="content has-text-centered">
-      <h1 class="title is-bold">Q & A</h1>
-    </div>
-    <div class="columns">
-      <div class="column is-4 is-offset-2">
+    <div class="control is-spaced is-mobile">
+      <div class="control-left">
         <div class="content">
-          <h3>How do I get paid?</h3>
-          <p>
-            You must link a bank account with DomaHub. Once a transaction has been confirmed, we will deposit the money directly into your account
-            after a few business days.
-          </p>
+          <h1 class="title is-bold ">Ready to get started?</h1>
+          <h2 class="subtitle ">Try the demo or create an account now!</h2>
         </div>
       </div>
-      <div class="column is-4">
-        <div class="content">
-          <h3>What payment options does DomaHub accept?</h3>
-          <p>
-            We accept payments from all major credit and debit cards in more than 130 currencies.
-          </p>
-        </div>
+      <div class="control-right">
+        <a tabindex="0" class="button is-primary is-stylish is-large" href="/signup">
+          <div class="icon">
+            <i class="far fa-user-circle"></i>
+          </div>
+          <span>Create Account</span>
+        </a>
+        <a tabindex="0" class="button is-primary is-inverted is-stylish is-large" href="/demo">
+          <div class="icon">
+            <i class="far fa-desktop"></i>
+          </div>
+          <span>Try Free Demo</span>
+        </a>
       </div>
-    </div>
-    <div class="columns">
-      <div class="column is-4 is-offset-2">
-        <div class="content">
-          <h3>How are offers verified?</h3>
-          <p>
-            Firstly, users cannot submit any offers that are below your domain's minimum asking price.
-            Secondly, all users must confirm their offers by email. Offers that are not confirmed
-            will not be sent to you.
-          </p>
-        </div>
-      </div>
-      <div class="column is-4">
-        <div class="content">
-          <h3>Can I cancel my Premium subscription?</h3>
-          <p>
-            You can cancel your Premium subscription at any time. Your account will still remain active and your Premium status will last
-            until the end of the current billing cycle (1 month).
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="content has-text-centered">
-      <p>
-        Have other questions? Visit our <a tabindex="0" class="is-underlined is-primary" href="/faq">FAQ</a> or
-        <a tabindex="0" class="is-underlined is-primary" href="/contact">contact us</a>.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="section is-accent">
-  <div class="container">
-    <div class="content has-text-centered">
-      <figure class="image is-128x128">
-        <img src="/images/lib/inipagi/money-hand.svg" alt="Invest in your domains!" />
-      </figure>
-      <h2 class="title is-white is-bold">Not completely convinced?</h2>
-      <h3 class="is-white">Try our demo right now without signing up!</h3>
-    </div>
-    <div class="content has-text-centered">
-      <a class="button is-stylish is-accent is-inverted" href="/demo">
-        <span class="icon">
-          <i class="far fa-desktop"></i>
-        </span>
-        <span>Try Free Demo</span>
-      </a>
-      <small class="is-white is-block">
-        Don't be shy!
-      </small>
     </div>
   </div>
 </section>

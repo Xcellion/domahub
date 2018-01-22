@@ -13,41 +13,41 @@
   <aside class="menu">
     <ul class="menu-list">
       <li class="menu-item has-icon">
-        <a id="dashboard-left-tab" title="View My Dashboard" href="/profile/dashboard" class="left-tab primary-theme">
-          <div class="icon"><i class="far fa-window-maximize"></i></div>
+        <a id="dashboard-left-tab" href="/profile/dashboard" class="left-tab primary-theme">
+          <div class="icon" data-balloon="Dashboard" data-balloon-pos="right"><i class="far fa-window-maximize"></i></div>
           <p class="is-hidden-laptop">Dashboard</p>
         </a>
       </li>
       <li class="menu-item has-icon">
-        <a id="mylistings-left-tab" title="View My Listings" href="/profile/mylistings" class="left-tab primary-theme">
-          <div class="icon"><i class="far fa-list-alt"></i></div>
+        <a id="mylistings-left-tab" href="/profile/mylistings" class="left-tab primary-theme">
+          <div class="icon" data-balloon="My Listings" data-balloon-pos="right"><i class="far fa-list-alt"></i></div>
           <p class="is-hidden-laptop">My Listings</p>
         </a>
         <ul id="collapse-submenu">
           <% if (user.listings.length > 0 ){ %>
             <li class="menu-item has-icon">
-              <a id="offers-left-tab" href="/profile/mylistings?tab=offers" title="View Listing Offers" class="left-tab primary-theme is-sublink">
-                <div class="icon is-hidden-widescreen"><i class="far fa-money-bill"></i></div>
+              <a id="offers-left-tab" href="/profile/mylistings?tab=offers" class="left-tab primary-theme is-sublink">
+                <div class="icon is-hidden-widescreen" data-balloon="My Offers" data-balloon-pos="right"><i class="far fa-money-bill"></i></div>
                 <small class="is-hidden-laptop">My Offers</small>
               </a>
             </li>
           <% } %>
           <%# <li>
-            <a id="stats-left-tab" href="/profile/mylistings?tab=stats" title="View Listing Statistics" class="left-tab primary-theme">
+            <a id="stats-left-tab" href="/profile/mylistings?tab=stats" class="left-tab primary-theme">
               <small class="is-white">View Statistics</small>
             </a>
           </li>%>
           <li class="menu-item has-icon">
-            <a id="create-left-tab"  title="Create New Listings" href="/listings/create" class="left-tab primary-theme is-sublink">
-              <div class="icon is-hidden-widescreen"><i class="far fa-plus"></i></div>
+            <a id="create-left-tab"  href="/listings/create" class="left-tab primary-theme is-sublink">
+              <div class="icon is-hidden-widescreen" data-balloon="Create Listings" data-balloon-pos="right"><i class="far fa-plus"></i></div>
               <small class="is-hidden-laptop">Create Listings</small>
             </a>
           </li>
         </ul>
       </li>
       <li class="menu-item has-icon">
-        <a id="settings-left-tab" title="Change Account Settings" href="/profile/settings" class="left-tab primary-theme">
-          <div class="icon"><i class="far fa-cogs"></i></div>
+        <a id="settings-left-tab" href="/profile/settings" class="left-tab primary-theme">
+          <div class="icon" data-balloon="Account Settings" data-balloon-pos="right"><i class="far fa-cogs"></i></div>
           <p class="is-hidden-laptop">Account Settings</p>
         </a>
         <ul class="is-hidden-laptop">
