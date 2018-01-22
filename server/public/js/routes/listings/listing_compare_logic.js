@@ -117,8 +117,8 @@ $(document).ready(function() {
           </div> \
         </div> \
         </div>",
-        title: "Welcome to the DomaHub demo",
-        content: "This demo will guide you through creating and customizing a DomaHub landing page.",
+        title: "Welcome to the DomaHub listing page demo",
+        content: "This demo will guide you through a DomaHub landing page and all of its features.",
       },
 
       //show menu button step - 1
