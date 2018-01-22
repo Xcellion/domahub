@@ -121,6 +121,14 @@ var demo_domahub_user = {
       price_type : "month",
       price_rate : 200,
       paths : "",
+      primary_color : "#B35A00",
+      secondary_color : "#007866",
+      tertiary_color : "#D9D9D9",
+      font_color : "#FFFFFF",
+      background_color : "#FFFFFF",
+      footer_background_color : "#1B2733",
+      footer_color : "#F1F1F1",
+      background_image : "https://images.unsplash.com/photo-1504890231393-71b0d15a05f4?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
       offers : [
         {
           accepted : null,
@@ -159,6 +167,13 @@ var demo_domahub_user = {
       price_type : "month",
       price_rate : 250,
       paths : "",
+      primary_color : "#E8CF61",
+      secondary_color : "#FF6600",
+      tertiary_color : "#898989",
+      font_color : "#FFFFFF",
+      background_color : "#222222",
+      footer_background_color : "#1B2733",
+      footer_color : "#F1F1F1",
       offers : [
         {
           accepted : 0,
@@ -195,7 +210,14 @@ var demo_domahub_user = {
       offers_count : 3,
       price_type : "month",
       price_rate : 5000,
+      primary_color : "#222222",
+      secondary_color : "#878787",
+      tertiary_color : "#0645AD",
+      font_color : "#222222",
+      background_color : "#FFFFFF",
       paths : "",
+      footer_background_color : "#F1F1F1",
+      footer_color : "#1B2733",
       offers : [
         {
           accepted : 0,
@@ -257,12 +279,19 @@ var demo_domahub_user = {
       categories : "event hightraffic holiday kids lifestyle niche other personal promotion shopping toys travel",
       description : Descriptions.random(),
       registrar_cost : 9.99,
-      registrar_name : "Namecheap, LLC",
+      registrar_name : "NameSilo",
       rentable : 0,
       offers_count : 0,
       price_type : "day",
       price_rate : 50,
       paths : "",
+      primary_color : "#3CBC8D",
+      secondary_color : "#FF5722",
+      tertiary_color : "#777777",
+      font_color : "#1B2733",
+      background_color : "#FFFFFF",
+      footer_background_color : "#f1f1f1",
+      footer_color : "#1B2733",
       offers : []
     },
     {
@@ -289,6 +318,13 @@ var demo_domahub_user = {
       price_type : "month",
       price_rate : 200,
       paths : "",
+      primary_color : "#3CBC8D",
+      secondary_color : "#FF5722",
+      tertiary_color : "#777777",
+      font_color : "#1B2733",
+      background_color : "#FFFFFF",
+      footer_background_color : "#f1f1f1",
+      footer_color : "#1B2733",
       offers : []
     },
     {
@@ -313,6 +349,13 @@ var demo_domahub_user = {
       price_type : "month",
       price_rate : 200,
       paths : "",
+      primary_color : "#3CBC8D",
+      secondary_color : "#FF5722",
+      tertiary_color : "#777777",
+      font_color : "#1B2733",
+      background_color : "#FFFFFF",
+      footer_background_color : "#f1f1f1",
+      footer_color : "#1B2733",
       offers : [
         {
           accepted : 1,
