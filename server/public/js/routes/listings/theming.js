@@ -23,7 +23,9 @@ function setupTheming(){
       });
     }
     else {
-      $(".page-contents:not(.no-background)").removeAttr("style");
+      $(".page-contents:not(.no-background)").css({
+        "background-image" : "",
+      });
     }
   }
 }
@@ -60,35 +62,46 @@ function stylize(color, element, style, calculateluminance) {
       $(element).css("color", calculateLuminance(color));
     }
   }
+  else {
+    $(element).removeAttr("style");
+  }
 }
 
 //setup any custom premium colors
 function setupCustomColorsListing(){
   console.log("Setting up custom theme...");
 
-  //primary color
-  stylize(listing_info.primary_color, ".page-contents .is-primary:not(.notification)", "color");
-  stylize(listing_info.primary_color, ".page-contents .is-primary.button", "background-color", true);
+  //title
+  stylize(listing_info.primary_color, ".page-contents .domain-title.title.is-1", "color");
 
-  //secondary color
-  stylize(listing_info.secondary_color, ".page-contents .is-accent:not(.notification)", "color");
+  //button
+  stylize(listing_info.primary_color, ".page-contents .is-primary.button", "background-color", true);
   stylize(listing_info.secondary_color, ".page-contents .is-accent.button", "background-color", true);
 
   //tertiary color (links)
-  stylize(listing_info.tertiary_color, ".page-contents .is-info:not(.notification)", "color");
+  stylize(listing_info.tertiary_color, ".page-contents a.is-info", "color");
 
   //price tags
-  stylize(listing_info.primary_color, ".page-contents .tag", "color");
-  stylize(listing_info.primary_color, ".page-contents .tag", "border-color");
-  stylize("transparent", ".page-contents .tag", "background-color");
+  stylize(listing_info.primary_color, ".page-contents .price-tag", "color");
+  stylize(listing_info.primary_color, ".page-contents .price-tag", "border-color");
+  stylize("transparent", ".page-contents .price-tag", "background-color");
 
   //basic font on page
   stylize(listing_info.primary_color, ".page-contents #listing-description", "border-color");
   stylize(listing_info.font_color, ".page-contents .regular-font", "color");
 
-  //module tabs
+  //tabs
   stylize(listing_info.font_color, ".page-contents .module-tab:not(.is-active) a", "color");
   stylize(listing_info.primary_color, ".page-contents .module-tab.is-active a", "color");
+
+  //other domains tags
+  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents .otherowner-domain-price", "color");
+  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents .otherowner-domain-price", "border-color");
+
+  //ticker
+  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents #ticker-wrapper .is-primary", "color");
+  stylize(hexToRgbA(listing_info.secondary_color, 1, true), ".page-contents #ticker-wrapper .is-accent", "color");
+  stylize(hexToRgbA(listing_info.tertiary_color, 1, true), ".page-contents #ticker-wrapper .is-info", "color");
 
   //social icons
   stylize(listing_info.primary_color, ".page-contents .social-share .icon", "color", true);

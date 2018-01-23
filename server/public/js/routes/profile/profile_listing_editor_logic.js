@@ -249,15 +249,6 @@ function checkBox(module_value, elem, child){
   if (typeof module_value != "null" && typeof module_value != "undefined"){
     elem.val(module_value).prop("checked", module_value);
   }
-
-  if (child){
-    if (module_value){
-      $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
-    }
-    else {
-      $("." + elem.attr("id").replace("input", "child")).addClass('is-disabled');
-    }
-  }
 }
 
   //<editor-fold>-------------------------------INFORMATION TAB EDITS-------------------------------
@@ -532,38 +523,26 @@ function checkBox(module_value, elem, child){
     $("#example-logo").attr('src', logo);
   }
   function updateContentDesign(listing_info){
-    checkBox(listing_info.placeholder, $("#placeholder-input"));
+    checkBox(listing_info.show_placeholder, $("#placeholder-input"));
+    checkBox(listing_info.show_domain_list, $("#domain-list-input"));
+    checkBox(listing_info.show_traffic_graph, $("#traffic-graph-input"));
+    checkBox(listing_info.show_alexa_stats, $("#alexa-stats-input"));
+    checkBox(listing_info.show_history_ticker, $("#show-history-ticker-input"));
   }
   function updateModules(listing_info){
     //info module
-    checkBox(listing_info.info_module, $("#info-module-input"), true);
-    checkBox(listing_info.domain_owner, $("#domain-owner-input"));
-    checkBox(listing_info.domain_age, $("#domain-age-input"));
-    checkBox(listing_info.domain_list, $("#domain-list-input"));
-    checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
-    checkBox(listing_info.social_sharing, $("#social-sharing-input"));
-
-    //traffic module
-    checkBox(listing_info.traffic_module, $("#traffic-module-input"), true);
-    checkBox(listing_info.traffic_graph, $("#traffic-graph-input"));
-    checkBox(listing_info.alexa_stats, $("#alexa-stats-input"));
-
-    checkBox(listing_info.history_module, $("#history-module-input"));
+    checkBox(listing_info.show_registrar, $("#show-registrar-input"));
+    checkBox(listing_info.show_registration_date, $("#show-registration-date-input"));
+    checkBox(listing_info.show_appraisal, $("#show-appraisal-input"));
+    checkBox(listing_info.show_social_sharing, $("#show-social-sharing-input"));
+    checkBox(listing_info.show_categories, $("#show-categories-input"));
 
     //alexa link
-    if (listing_info){
+    if (listing_info.domain_name){
       $("#alexa_link").attr("href", "https://www.alexa.com/siteinfo/" + listing_info.domain_name);
     }
     else {
       $("#alexa_link").attr("href", "https://www.alexa.com");
-    }
-  }
-  function updateModuleChildren(elem){
-    if (elem.val() == 1){
-      $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
-    }
-    else {
-      $("." + elem.attr("id").replace("input", "child")).addClass('is-disabled');
     }
   }
 
@@ -768,11 +747,6 @@ function checkBox(module_value, elem, child){
       var new_checkbox_val = ($(this).val() == "1") ? 0 : 1;
       $(this).val(new_checkbox_val);
       changedValue($(this), listing_info);
-
-      //parent module
-      if ($(this).hasClass('parent-module')){
-        updateModuleChildren($(this));
-      }
     });
 
     //category dropdown

@@ -1290,14 +1290,15 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
       var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Unknown";
 
+      var array_of_registrars = ["GoDaddy", "Google", "NameSilo", "NameCheap", "Bluehost", "HostGator", "Hover", "Gandi"];
       var listing_info = {
         domain_name: domain_name,
         email: email,
         username: owner_name,
         unlisted: true,
-        date_registered: whoisObj["Creation Date"],
+        date_registered: whoisObj["Creation Date"] || moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm"),
         date_updated: whoisObj["Updated Date"],
-        registrar: whoisObj["Registrar"],
+        registrar: whoisObj["Registrar"] || array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)],
       }
 
       //development troubleshooting for whoisobj
@@ -1310,18 +1311,24 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       if (req.query.compare == "true"){
         console.log("LRF: Rendering the comparison tool!");
 
+        //info
+        listing_info.status = 1;
+        listing_info.premium = true;
         listing_info.username = "The Domain Master";
         listing_info.owner_id = "compare";
-        listing_info.categories = Categories.randomFrontAsString();
+        listing_info.categories = Categories.randomBackAsString();
         listing_info.date_created = new Date().getTime();
         listing_info.description = Descriptions.random();
         listing_info.description_footer = "The greatest domains in the industry.";
-        listing_info.status = 1;
-        listing_info.price_rate = Math.round(Math.random() * 250);
-        listing_info.price_type = "day";
         listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000)*1000;
         listing_info.buy_price = listing_info.min_price * 2;
+
+        //rental
         listing_info.rentable = 1;
+        listing_info.price_rate = Math.round(Math.random() * 250);
+        listing_info.price_type = "day";
+
+        //design
         listing_info.primary_color = "#3CBC8D";
         listing_info.secondary_color = "#FF5722";
         listing_info.tertiary_color = "#2196F3";
@@ -1330,16 +1337,19 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.background_color = "#FFFFFF";
         listing_info.background_image = "";
         listing_info.logo = "";
-        listing_info.domain_owner = 1;
-        listing_info.domain_age = 1;
-        listing_info.domain_list = 1;
-        listing_info.domain_appraisal = 1;
-        listing_info.social_sharing = 1;
-        listing_info.traffic_module = 1;
-        listing_info.traffic_graph = 1;
-        listing_info.alexa_stats = 1;
-        listing_info.history_module = 1;
-        listing_info.info_module = 1;
+
+        //left side
+        listing_info.show_registrar = 1;
+        listing_info.show_registration_date = 1;
+        listing_info.show_categories = 1;
+        listing_info.show_appraisal = 1;
+        listing_info.show_placeholder = 1;
+        //right side
+        listing_info.show_social_sharing = 1;
+        listing_info.show_traffic_graph = 1;
+        listing_info.show_alexa_stats = 1;
+        listing_info.show_history_ticker = 1;
+        listing_info.show_domain_list = 1;
       }
 
       //nobody owns it!
@@ -1354,7 +1364,8 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         user: req.user,
         listing_info: listing_info,
         compare : (req.query.compare == "true") ? true : false,
-        fonts : Fonts.all()
+        fonts : Fonts.all(),
+        categories : Categories.all()
       });
     }
 
