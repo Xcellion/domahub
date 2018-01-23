@@ -19,7 +19,8 @@ function setupTheming(){
         "background-image" : "url(" + listing_info.background_image + ")",
         "background-repeat" : "no-repeat",
         "background-position" : "center",
-        "background-size" : "cover"
+        "background-size" : "cover",
+        "background-attachment" : "fixed"
       });
     }
     else {
@@ -74,6 +75,9 @@ function setupCustomColorsListing(){
   //title
   stylize(listing_info.primary_color, ".page-contents .domain-title.title.is-1", "color");
 
+  //click for more details
+  stylize(listing_info.primary_color, ".page-contents #show-more-details", "color");
+
   //button
   stylize(listing_info.primary_color, ".page-contents .is-primary.button", "background-color", true);
   stylize(listing_info.secondary_color, ".page-contents .is-accent.button", "background-color", true);
@@ -82,9 +86,9 @@ function setupCustomColorsListing(){
   stylize(listing_info.tertiary_color, ".page-contents a.is-info", "color");
 
   //price tags
-  stylize(listing_info.primary_color, ".page-contents .price-tag", "color");
-  stylize(listing_info.primary_color, ".page-contents .price-tag", "border-color");
-  stylize("transparent", ".page-contents .price-tag", "background-color");
+  stylize(listing_info.primary_color, ".page-contents .main-price-tag", "color");
+  stylize(listing_info.primary_color, ".page-contents .main-price-tag", "border-color");
+  stylize("transparent", ".page-contents .main-price-tag", "background-color");
 
   //basic font on page
   stylize(listing_info.primary_color, ".page-contents #listing-description", "border-color");

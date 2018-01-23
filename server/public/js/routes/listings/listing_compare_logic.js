@@ -1101,24 +1101,24 @@ function testSubmitRentHandler(checkout_button){
 //handle submit calendar handler
 function testCalendarHandler(){
   $("#calendar-regular-message").removeClass('is-hidden');
+  if (!listing_info.rental_moments){
+    listing_info.rental_moments = [];
+    var random_rentals_count = 24;
+    for (var x = 0; x < random_rentals_count; x++){
+      var start_of_month = moment().add(x, "months").startOf("month")._d.getTime();
+      var end_of_month = moment().add(x, "months").endOf("month")._d.getTime();
 
-  listing_info.rental_moments = [];
-  var random_rentals_count = 24;
-  for (var x = 0; x < random_rentals_count; x++){
-    var start_of_month = moment().add(x, "months").startOf("month")._d.getTime();
-    var end_of_month = moment().add(x, "months").endOf("month")._d.getTime();
+      var random_start = randomIntFromInterval(start_of_month, end_of_month);
+      var random_duration = 86400000 * randomIntFromInterval(5, 7);
 
-    var random_start = randomIntFromInterval(start_of_month, end_of_month);
-    var random_duration = 86400000 * randomIntFromInterval(5, 7);
-
-    var temp_rental = {
-      start : moment(random_start),
-      end : moment(random_start + random_duration)
+      var temp_rental = {
+        start : moment(random_start),
+        end : moment(random_start + random_duration)
+      }
+      listing_info.rental_moments.push(temp_rental);
     }
-    listing_info.rental_moments.push(temp_rental);
+    setUpCalendar(listing_info);
   }
-
-  setUpCalendar(listing_info);
 }
 
 //</editor-fold>

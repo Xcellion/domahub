@@ -735,11 +735,11 @@ function setupRightHalf(){
 
     //to figure out what events are already existing in given view
     $("#calendar-input").data('daterangepicker').hide = function () {};
+    $(".daterangepicker").appendTo("#calendar");
 
     //only show if the calendar input is visible
     if ($("#calendar-input").is(":visible")){
       $("#calendar-input").data('daterangepicker').show();
-      $(".daterangepicker").appendTo("#calendar");
       $("#calendar-input").addClass('is-hidden');
     }
 
