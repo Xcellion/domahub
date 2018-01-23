@@ -1,5 +1,6 @@
 @import '../bulma/utilities/utilities.sass';
 @import '../bulma/base/base.sass';
+@import '../bulma/components/card.sass';
 @import '../bulma/components/grid.sass';
 @import '../bulma/components/modal.sass';
 @import '../bulma/components/nav.sass';
@@ -13,6 +14,7 @@
 @import '../bulma/elements/image.sass';
 @import '../bulma/elements/icon.sass';
 @import '../bulma/elements/notification.sass';
+@import '../bulma/elements/switch.sass';
 @import '../bulma/elements/tag.sass';
 @import '../bulma/elements/title.sass';
 @import '../bulma/layout/footer.sass';
@@ -52,22 +54,6 @@
   }
 }
 
-#attention {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-image: linear-gradient($primary, $primary-light);
-  border-radius: $radius-large;
-  padding: 20px;
-  @include mobile {
-    flex-direction: column;
-    h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-  }
-}
-
 #tryit-form {
   margin-left: auto;
   margin-right: auto;
@@ -82,12 +68,57 @@
   100% {@include translate(3px,0);}
 }
 
-#foo {
+#features-section {
+  position: relative;
+  overflow: hidden;
+  padding-top: 250px;
+  &::before {
+    @include skew(0,-6);
+    content:"";
+    position: absolute;
+    top: 75px;
+    background: $pastel;
+    left: -85%;
+    width: 300%;
+    height: 120%;
+  }
+  .card {
+    padding: 20px 0;
+  }
+}
+
+.hiw-num {
+  @include box-shadow(0,2px,8px,$border,1px);
+  @extend .unselectable;
+  align-items: center;
+  background-color: $primary;
+  border-radius: 100%;
+  color: $white;
   display: flex;
+  font-size: 18px;
+  font-weight: 700;
+  height: 35px;
   justify-content: center;
-  .image {
-    margin-left: 5px;
-    margin-right: 0;
+  position: relative;
+  margin: 0 auto;
+  width: 35px;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    height: 3px;
+    background: $primary;
+    width: 40px;
+  }
+  &::before {
+    right: 40px;
+  }
+  &::after {
+    left: 40px;
+  }
+  @include mobile {
+    margin: 0 auto 10px;
   }
 }
 
@@ -113,6 +144,115 @@
         margin-right: 0;
         margin-bottom: 10px;
       }
+    }
+  }
+}
+
+.price-card-wrapper {
+  margin: auto;
+  width: 605px;
+  position: relative;
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.price-card {
+  @include transition(translate 0.25s ease);
+  border-radius: $radius;
+  display: inline-block;
+  width: 300px;
+  &:first-child {
+    border-radius: $radius 0 0 0;
+    margin-bottom: 0;
+    @include mobile {
+      margin-bottom: 40px;
+    }
+  }
+  &:last-child {
+    border-radius: 0 $radius $radius 0;
+  }
+  .card-title {
+    border-bottom: 1px solid $border;
+    padding: 15px 20px;
+  }
+  .card-footer {
+    padding: 0;
+  }
+  &:hover {
+    @include translate(0,-5px);
+  }
+  @include mobile {
+    display: block;
+    width: 85%;
+  }
+  @include mobile-456px {
+    width: 100%;
+  }
+}
+
+.card {
+  &.is-pastel {
+    background-color: $pastel;
+  }
+}
+
+.list-table {
+  width: 100%;
+  li {
+    border-bottom: 1px solid $border;
+    height: 51px;
+    padding: 12px 20px;
+    text-align: center;
+    @media screen and (max-width: 1215px) {
+      height: auto;
+    }
+  }
+}
+
+.features-table {
+  @include box-shadow(0,2px,4px,$border,0);
+  display: flex;
+  position: absolute;
+  top: 472px;
+  left: 115px;
+  background-color: $pastel;
+  @media screen and (max-width: 1215px) {
+    display: none;
+  }
+}
+
+.heading {
+  display: none;
+  color: $black-disabled;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 5px;
+  @media screen and (max-width: 1215px) {
+    display: block;
+  }
+}
+
+#premium-price-month {
+  display: inline-block;
+  position: relative;
+  &::before {
+    @include rotate(45);
+    background: transparent;
+    content: '';
+    width: 5px;
+    position: absolute;
+    top: 0;
+    right: -10px;
+    height: 5px;
+  }
+  &.is-active {
+    color: $black-disabled;
+    &::before {
+      @include transition(all 0.2s ease);
+      background: $black-disabled;
+      height: 100%;
+      right: 14px;
     }
   }
 }
