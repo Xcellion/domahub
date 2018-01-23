@@ -247,10 +247,7 @@
 .listing-page {
   margin: 0 auto;
   max-width: 1200px;
-  padding: 0 40px;
-  @include mobile-456px {
-    padding: 0 20px;
-  }
+  padding: 0 20px;
 }
 
 .listing-wrapper {
