@@ -1,14 +1,16 @@
 <link rel="stylesheet" href="/css/lib/intlTelInput.css" type="text/css">
 <link rel="stylesheet" href="/css/lib/daterangepicker.css" type="text/css" />
-<script src="/js/routes/main/random_characters.js" type="text/javascript"></script>
+<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 <script src="/js/lib/typed.js" type="text/javascript"></script>
 <script src="/js/lib/daterangepicker.js" type="text/javascript"></script>
-<script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
-<script src="/js/jquery/intlTelInput.min.js" type="text/javascript"></script>
 <script src="/js/lib/chart.min.js" type="text/javascript"></script>
 <script src="/js/lib/randomColor.js" type="text/javascript"></script>
+<script src="/js/jquery/intlTelInput.min.js" type="text/javascript"></script>
+<script src="/js/routes/main/random_characters.js" type="text/javascript"></script>
+<script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
 
-<div class="page-contents is-hidden">
+<div id="listed-page" class="page-contents is-hidden">
   <div class="listing-page min-height">
     <section class="section is-medium">
       <div class="listing-wrapper">
@@ -22,12 +24,12 @@
             <div class="control">
 
               <!-- PRICE TAG -->
-              <div class="tag is-primary is-outlined">
+              <div class="price-tag tag is-primary is-outlined">
                 <span id="price-tag"></span>
               </div>
 
               <!-- RENT TAG -->
-              <div id="rent-price-tag" class="is-hidden tag is-primary is-outlined">
+              <div id="rent-price-tag" class="price-tag is-hidden tag is-primary is-outlined">
                 <span>Rent now - </span><span id="rent-price-text"></span>
                 <span id="free-until" class='is-hidden'></span>
               </div>
@@ -138,7 +140,7 @@
         <div class="listing-right">
 
           <!-- CLICK TO CHANGE MODULE TABS -->
-          <div id="buy-rent-tabs" class="tabs is-boxed is-medium">
+          <div class="tabs is-boxed is-medium">
             <ul>
               <li id="contact-form-tab" data-position="1" class="tab module-tab is-active">
                 <a tabindex="0">Purchase</a>
@@ -160,7 +162,7 @@
 
           <!-- CONTACT FORM MODULE -->
           <div id="contact-form-module" class="box module">
-            <form id="buy-now-form" autocomplete="off" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
+            <form id="buy-now-form" autocomplete="off" method="post">
                 <div class="control has-icon">
                   <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
                   <label class="error_message label" for="contact_name">Name</label>
@@ -187,7 +189,7 @@
                   </div>
                 </div>
                 <div class="control">
-                  <textarea id="contact_message" required class="contact-input textarea" name="contact_message" placeholder="Hey! I'm interested in buying <%= listing_info.domain_name %>. Let's chat."></textarea>
+                  <textarea id="contact_message" required class="contact-input textarea" name="contact_message"></textarea>
                 </div>
 
                 <div class="control is-grouped">
@@ -255,29 +257,31 @@
           <!-- TRAFFIC MODULE -->
           <div id="traffic-module" class="is-hidden box module">
 
-            <div id="traffic-chart-description" class="content">
-              <p>
-                This chart shows total requests for this domain name. Capture this traffic instantly the moment you start utilizing this domain!
-              </p>
-            </div>
-
-            <div id="listing-traffic-chart" class="traffic-chart is-relative control">
-
-              <canvas id="traffic-chart"></canvas>
-
-              <div id="traffic-overlay" class="content">
-                <p id="traffic-overlay-text" class='traffic-overlay-text is-hidden is-bold'>
-                  There is not enough data!
+            <div id="traffic-chart-wrapper">
+              <div id="traffic-chart-description" class="content">
+                <p>
+                  This chart shows total requests for this domain name. Capture this traffic instantly the moment you start utilizing this domain!
                 </p>
-                <div id="traffic-overlay-load" class='traffic-overlay-text has-text-centered'>
-                  <div class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></div>
-                  <p>Now loading traffic information.</p>
+              </div>
+
+              <div id="listing-traffic-chart" class="traffic-chart is-relative control">
+
+                <canvas id="traffic-chart"></canvas>
+
+                <div id="traffic-overlay" class="content">
+                  <p id="traffic-overlay-text" class='traffic-overlay-text is-hidden is-bold'>
+                    There is not enough data!
+                  </p>
+                  <div id="traffic-overlay-load" class='traffic-overlay-text has-text-centered'>
+                    <div class='icon is-medium'><i class="far fa-spin fa-sync-alt"></i></div>
+                    <p>Now loading traffic information.</p>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- ALEXA -->
-            <div id="alexa-stats-module" class="has-text-centered control">
+            <div id="alexa-stats-wrapper" class="has-text-centered control">
               <div class="alexa-data-wrapper">
                 <p class="heading is-blacklight is-inline-block" data-balloon-length="medium"
                  data-balloon="Rank is calculated using a combination of average daily visitors to this site and pageviews on this site over the past 3 months."
@@ -352,19 +356,19 @@
                 </div>
               </li>
               <li id="ticker-updated" class='ticker-row is-hidden'>
-                <div class='ticker-icon-color icon is-purple'><i class="far fa-star ticker-icon"></i></div>
+                <div class='ticker-icon-color icon is-info'><i class="far fa-star ticker-icon"></i></div>
                 <div class="ticker-text">
                   <p id="ticker-updated-date"></p>
                 </div>
               </li>
               <li id="ticker-created" class='ticker-row is-hidden'>
-                <div class='ticker-icon-color icon is-danger'><i class="far fa-heart ticker-icon"></i></div>
+                <div class='ticker-icon-color icon is-accent'><i class="far fa-heart ticker-icon"></i></div>
                 <div class="ticker-text">
                   <p id="ticker-created-date"></p>
                 </div>
               </li>
               <li id="ticker-registered" class='ticker-row is-hidden'>
-                <div class='ticker-icon-color icon is-danger'><i class="far fa-thumbs-up ticker-icon"></i></div>
+                <div class='ticker-icon-color icon is-primary'><i class="far fa-thumbs-up ticker-icon"></i></div>
                 <div class="ticker-text">
                   <p id="ticker-registered-date"></p>
                 </div>

@@ -7,9 +7,6 @@
 	</head>
 
 	<body>
-
-    <script src="/js/lib/moment.min.js" type="text/javascript"></script>
-    <script src="/js/lib/wNumb.js" type="text/javascript"></script>
     <script type="text/javascript">
       var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
       var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
@@ -38,7 +35,6 @@
     </div>
 
     <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
-		<script src="/js/routes/listings/listing_logic.js" type="text/javascript"></script>
 
 	</body>
 

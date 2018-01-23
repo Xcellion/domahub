@@ -29,7 +29,7 @@
   min-height: 100vh;
 }
 
-#page-contents {
+#listed-page {
   @include transition(width 0.2s ease, transform 0.2s ease);
   background-attachment: fixed;
   background-color: $white;
@@ -131,11 +131,6 @@
       .box {
         margin-left: auto;
         margin-right: auto;
-      }
-      #buy-rent-tabs {
-        ul {
-          justify-content: center;
-        }
       }
     }
   }

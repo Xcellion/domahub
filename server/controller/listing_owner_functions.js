@@ -815,22 +815,19 @@ module.exports = {
 
         var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
 
-        //info module bools
-        var info_module = parseFloat(req.body.info_module);
-        var domain_owner = parseFloat(req.body.domain_owner);
-        var domain_age = parseFloat(req.body.domain_age);
-        var domain_list = parseFloat(req.body.domain_list);
-        var domain_appraisal = parseFloat(req.body.domain_appraisal);
-        var social_sharing = parseFloat(req.body.social_sharing);
+        //left side
+        var show_registrar = parseFloat(req.body.show_registrar);
+        var show_registration_date = parseFloat(req.body.show_registration_date);
+        var show_categories = parseFloat(req.body.show_categories);
+        var show_appraisal = parseFloat(req.body.show_appraisal);
+        var show_social_sharing = parseFloat(req.body.show_social_sharing);
 
-        //traffic module bools
-        var traffic_module = parseFloat(req.body.traffic_module);
-        var traffic_graph = parseFloat(req.body.traffic_graph);
-        var alexa_stats = parseFloat(req.body.alexa_stats);
-
-        var history_module = parseFloat(req.body.history_module);
-
-        var placeholder = parseFloat(req.body.placeholder);
+        //right side
+        var show_placeholder = parseFloat(req.body.show_placeholder);
+        var show_traffic_graph = parseFloat(req.body.show_traffic_graph);
+        var show_alexa_stats = parseFloat(req.body.show_alexa_stats);
+        var show_history_ticker = parseFloat(req.body.show_history_ticker);
+        var show_domain_list = parseFloat(req.body.show_domain_list);
 
         //hub stuff
         var hub = parseFloat(req.body.hub);
@@ -853,6 +850,7 @@ module.exports = {
             break;
           }
         }
+
         //invalid footer description
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
@@ -902,47 +900,43 @@ module.exports = {
           error.handler(req, res, "That's an invalid logo URL! Please enter a different URL and try again!", "json");
         }
         //invalid domain owner
-        else if (req.body.domain_owner && (domain_owner != 0 && domain_owner != 1)){
+        else if (req.body.show_registrar && (show_registrar != 0 && show_registrar != 1)){
           error.handler(req, res, "That's an invalid domain owner selection! Please refresh the page and try again!", "json");
         }
         //invalid domain age
-        else if (req.body.domain_age && (domain_age != 0 && domain_age != 1)){
+        else if (req.body.show_registration_date && (show_registration_date != 0 && show_registration_date != 1)){
           error.handler(req, res, "That's an invalid domain age selection! Please refresh the page and try again!", "json");
         }
         //invalid domain list
-        else if (req.body.domain_list && (domain_list != 0 && domain_list != 1)){
+        else if (req.body.show_domain_list && (show_domain_list != 0 && show_domain_list != 1)){
           error.handler(req, res, "That's an invalid domain list selection! Please refresh the page and try again!", "json");
         }
+        //invalid domain show categories
+        else if (req.body.show_categories && (show_categories != 0 && show_categories != 1)){
+          error.handler(req, res, "That's an invalid show categories selection! Please refresh the page and try again!", "json");
+        }
         //invalid domain appraisal
-        else if (req.body.domain_appraisal && (domain_appraisal != 0 && domain_appraisal != 1)){
+        else if (req.body.show_appraisal && (show_appraisal != 0 && show_appraisal != 1)){
           error.handler(req, res, "That's an invalid domain appraisal selection! Please refresh the page and try again!", "json");
         }
         //invalid social sharing
-        else if (req.body.social_sharing && (social_sharing != 0 && social_sharing != 1)){
+        else if (req.body.show_social_sharing && (show_social_sharing != 0 && show_social_sharing != 1)){
           error.handler(req, res, "That's an invalid social sharing selection! Please refresh the page and try again!", "json");
         }
-        //invalid traffic module
-        else if (req.body.traffic_module && (traffic_module != 0 && traffic_module != 1)){
-          error.handler(req, res, "That's an invalid traffic tab selection! Please refresh the page and try again!", "json");
-        }
         //invalid traffic graph module
-        else if (req.body.traffic_graph && (traffic_graph != 0 && traffic_graph != 1)){
+        else if (req.body.show_traffic_graph && (show_traffic_graph != 0 && show_traffic_graph != 1)){
           error.handler(req, res, "That's an invalid traffic graph selection! Please refresh the page and try again!", "json");
         }
         //invalid Alexa stats module
-        else if (req.body.alexa_stats && (alexa_stats != 0 && alexa_stats != 1)){
+        else if (req.body.show_alexa_stats && (show_alexa_stats != 0 && show_alexa_stats != 1)){
           error.handler(req, res, "That's an invalid Alexa stats selection! Please refresh the page and try again!", "json");
         }
         //invalid history module
-        else if (req.body.history_module && (history_module != 0 && history_module != 1)){
+        else if (req.body.show_history_ticker && (show_history_ticker != 0 && show_history_ticker != 1)){
           error.handler(req, res, "That's an invalid history tab selection! Please refresh the page and try again!", "json");
         }
-        //invalid info module
-        else if (req.body.info_module && (info_module != 0 && info_module != 1)){
-          error.handler(req, res, "That's an invalid info tab selection! Please refresh the page and try again!", "json");
-        }
         //invalid placeholder
-        else if (req.body.placeholder && (placeholder != 0 && placeholder != 1)){
+        else if (req.body.show_placeholder && (show_placeholder != 0 && show_placeholder != 1)){
           error.handler(req, res, "That's an invalid placeholder selection! Please refresh the page and try again!", "json");
         }
         //invalid hub
@@ -999,22 +993,19 @@ module.exports = {
           req.session.new_listing_info.footer_color = req.body.footer_color;
           req.session.new_listing_info.footer_background_color = req.body.footer_background_color;
 
-          //info module
-          req.session.new_listing_info.info_module = info_module;
-          req.session.new_listing_info.domain_owner = domain_owner;
-          req.session.new_listing_info.domain_age = domain_age;
-          req.session.new_listing_info.domain_list = domain_list;
-          req.session.new_listing_info.domain_appraisal = domain_appraisal;
-          req.session.new_listing_info.social_sharing = social_sharing;
+          //left side
+          req.session.new_listing_info.show_registrar = show_registrar;
+          req.session.new_listing_info.show_registration_date = show_registration_date;
+          req.session.new_listing_info.show_categories = show_categories;
+          req.session.new_listing_info.show_appraisal = show_appraisal;
+          req.session.new_listing_info.show_social_sharing = show_social_sharing;
 
-          //traffic module
-          req.session.new_listing_info.traffic_module = traffic_module;
-          req.session.new_listing_info.traffic_graph = traffic_graph;
-          req.session.new_listing_info.alexa_stats = alexa_stats;
-
-          req.session.new_listing_info.history_module = history_module;
-
-          req.session.new_listing_info.placeholder = placeholder;
+          //right side
+          req.session.new_listing_info.show_placeholder = show_placeholder;
+          req.session.new_listing_info.show_traffic_graph = show_traffic_graph;
+          req.session.new_listing_info.show_alexa_stats = show_alexa_stats;
+          req.session.new_listing_info.show_history_ticker = show_history_ticker;
+          req.session.new_listing_info.show_domain_list = show_domain_list;
 
           //hub
           req.session.new_listing_info.hub = hub;
@@ -1052,16 +1043,15 @@ module.exports = {
           req.body.footer_color ||
           req.body.background_image_link ||
           req.body.logo_image_link ||
-          req.body.info_module ||
-          req.body.domain_owner ||
-          req.body.domain_age ||
-          req.body.domain_list ||
-          req.body.domain_appraisal ||
-          req.body.social_sharing ||
-          req.body.traffic_module ||
-          req.body.traffic_graph ||
-          req.body.alexa_stats ||
-          req.body.history_module ||
+          req.body.show_registrar ||
+          req.body.show_registration_date ||
+          req.body.show_domain_list ||
+          req.body.show_categories ||
+          req.body.show_appraisal ||
+          req.body.show_social_sharing ||
+          req.body.show_traffic_graph ||
+          req.body.show_alexa_stats ||
+          req.body.show_history_ticker ||
           req.body.placeholder ||
           req.body.hub ||
           req.body.hub_title ||
@@ -1192,38 +1182,6 @@ module.exports = {
         }
         next();
       }
-    },
-
-    //turn off specific modules if it's contents are all hidden (and vice versa)
-    checkListingModules : function(req, res, next){
-      console.log("LOF: Checking if we should turn off specific modules if contents are empty...");
-      var current_listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
-
-      //info module
-      if ((req.session.new_listing_info.domain_owner == 0 || (!req.body.domain_owner && current_listing_info.domain_owner == 0)) &&
-          (req.session.new_listing_info.domain_age == 0 || (!req.body.domain_age && current_listing_info.domain_age == 0)) &&
-          (req.session.new_listing_info.domain_list == 0 || (!req.body.domain_list && current_listing_info.domain_list == 0)) &&
-          (req.session.new_listing_info.domain_appraisal == 0 || (!req.body.domain_appraisal && current_listing_info.domain_appraisal == 0)) &&
-          (req.session.new_listing_info.social_sharing == 0 || (!req.body.social_sharing && current_listing_info.social_sharing == 0)) &&
-          (req.session.new_listing_info.categories == "" || (!req.body.categories && current_listing_info.categories == ""))
-      ){
-        req.session.new_listing_info.info_module = 0;
-      }
-      else {
-        req.session.new_listing_info.info_module = 1;
-      }
-
-      //traffic module
-      if ((req.session.new_listing_info.traffic_graph == 0 || (!req.body.traffic_graph && current_listing_info.traffic_graph == 0)) &&
-          (req.session.new_listing_info.alexa_stats == 0 || (!req.body.alexa_stats && current_listing_info.alexa_stats == 0))
-      ){
-        req.session.new_listing_info.traffic_module = 0;
-      }
-      else {
-        req.session.new_listing_info.traffic_module = 1;
-      }
-
-      next();
     },
 
     //</editor-fold>
