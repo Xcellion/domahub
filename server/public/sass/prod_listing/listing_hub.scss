@@ -1,11 +1,12 @@
 @import '../balloon';
 @import '../bulma/utilities/utilities.sass';
 @import '../bulma/base/base.sass';
+@import '../bulma/components/card.sass';
 @import '../bulma/components/grid.sass';
+@import '../bulma/components/level.sass';
+@import '../bulma/components/menu.sass';
 @import '../bulma/components/modal.sass';
 @import '../bulma/components/nav.sass';
-@import '../bulma/components/menu.sass';
-@import '../bulma/components/level.sass';
 @import '../bulma/components/tabs.sass';
 @import '../bulma/elements/box.sass';
 @import '../bulma/elements/button.sass';
@@ -16,10 +17,172 @@
 @import '../bulma/elements/icon.sass';
 @import '../bulma/elements/image.sass';
 @import '../bulma/elements/notification.sass';
+@import '../bulma/elements/table.sass';
 @import '../bulma/elements/tag.sass';
 @import '../bulma/elements/title.sass';
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
+@import '../bulma/layout/hero.sass';
+
+.domain-table {
+  background-color: #fff;
+}
+
+.table-row {
+  @include transition(all 0.3s ease);
+  background-color: #fff;
+  padding: 15px;
+  &:hover {
+    @include box-shadow(1px,1px,20px,$border,0);
+  }
+}
+
+.nothing-exists-row {
+  padding:25px;
+  min-height:200px;
+  img {
+    width:100px;
+  }
+  p {
+    margin-top:25px;
+  }
+}
+
+.control-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  .tag + p {
+    margin-left: 10px;
+  }
+}
+
+.img-col,
+.misc-col {
+  width: 50px;
+}
+
+.bin-col,
+.min-col,
+.rent-col {
+  width: 200px;
+}
+
+.misc-col {
+  position: relative;
+}
+
+.logo-image, .domain-row-logo {
+  object-fit: cover;
+}
+
+.misc-options {
+  @include box-shadow(2px,2px,6px,$border,0);
+  background-color: $white;
+  border-radius: 3px;
+  position: absolute;
+  right: 10px;
+  top: -32px;
+  z-index: 10;
+  &::before {
+    @include rotate(45);
+    @include box-shadow(2px,2px,3px,$border,0);
+    content: '';
+    background: $white;
+    bottom: -5px;
+    height: 0;
+    position: absolute;
+    border-left: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-right: 5px solid $white;
+    border-bottom: 5px solid $white;
+    right: 16px;
+    width: 0;
+    z-index: 9;
+  }
+  ul {
+    display: flex;
+    li {
+      padding: 10px;
+      .icon {
+        color: #000;
+        opacity: 0.75;
+      }
+      &:hover {
+        cursor: pointer;
+        .icon {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.price-tag {
+  font-size: $size-8;
+  position: absolute;
+  top: -34px;
+  background-color: $white;
+  padding: 5px;
+  right: 7px;
+  border-radius: $radius;
+}
+
+.card-content {
+  .is-spaced {
+    @include tablet-only {
+      flex-direction: column;
+      .control-left {
+        margin-right: 0;
+      }
+      .control-right {
+        .has-text-right {
+          text-align: left;
+        }
+      }
+    }
+  }
+  .is-grouped {
+    @include tablet-only {
+      flex-direction: column;
+      .control {
+        &:not(:last-child) {
+          margin-right: 0;
+        }
+        &:first-child {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+.modal-content {
+  width: 400px;
+}
+
+.is-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#back-to-list-button {
+  background-color:transparent;
+  border:0;
+  margin-bottom:30px;
+}
+
+.nav-right {
+  flex-grow: 1;
+  @include mobile {
+    align-items: stretch;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+//<editor-fold>---------------------LISTING PAGE STUFF---------------------
 
 .no-margin {
   margin :0 !important;
@@ -77,24 +240,25 @@
   }
 }
 
+//</editor-fold>------------------------------------------
+
 //<editor-fold>---------------------LISTING---------------------
 
 .listing-page {
   margin: 0 auto;
   max-width: 1400px;
   padding: 0 40px;
-  @include mobile-456px {
-    padding: 0 20px;
-  }
 }
 
 .listing-wrapper {
   display: flex;
-  padding: 80px 0;
   @media screen and (max-width: 1070px) {
     flex-direction: column;
-    padding: 40px 0;
   }
+}
+
+.listing-section {
+  padding: 80px 0;
 }
 
 .control-wrapper {
@@ -126,21 +290,33 @@
 
   .listing-left {
     @include transition(all 0.4s ease);
+    padding-right: 40px;
+    position: relative;
     width: 50%;
     @media screen and (max-width: 1070px) {
       border-bottom: 1px solid $border;
-      padding-bottom: 40px;
+      padding-right: 0;
+      padding-bottom: 20px;
       width: 100%;
+      .box {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #buy-rent-tabs {
+        ul {
+          justify-content: center;
+        }
+      }
     }
   }
 
   #listing-description {
-    border-left : 3px solid $primary;
-    margin: 50px 0;
-    padding-left : 8px;
-    position: relative;
-    white-space: pre-wrap;
     word-break: break-word;
+    white-space: pre-wrap;
+    font-style : italic;
+    padding-left : 10px;
+    margin: 50px 0;
+    border-left : 5px solid $primary;
     @include mobile-456px {
       margin: 40px 0;
     }
@@ -166,23 +342,15 @@
 
   .listing-right {
     @include transition(all 0.4s ease);
-    padding-left: 40px;
-    position: relative;
     width: 50%;
     @media screen and (max-width: 1070px) {
       margin-top: 40px;
-      padding-left: 0;
       width: 100%;
-      .box {
-        margin-left: auto;
-        margin-right: auto;
-      }
-      #buy-rent-tabs {
-        ul {
-          justify-content: center;
-        }
-      }
     }
+  }
+
+  .module {
+    min-height: 500px;
   }
 
     //<editor-fold>---------------------CONTACT---------------------
@@ -462,138 +630,6 @@
   height: 45px;
   object-fit:cover;
   width: 45px;
-}
-
-//</editor-fold>-----------------------------------------------
-
-//<editor-fold>---------------------COMPARE/TUTORIAL-----------
-
-#step-1 {
-  left: 20px !important;
-}
-
-#step-4 {
-  left: 105px !important;
-}
-
-#design-tab.tour-step-backdrop {
-  background-color: $primary;
-  border-radius:6px 6px 0px 0px;
-  a {
-    color: $white;
-  }
-}
-
-#rent-now-button.tour-step-backdrop {
-  a {
-    border-radius: 6px 6px 0px 0px;
-    background-color: $primary;
-    color: $white;
-    &:hover {
-      background-color: #309570;
-      border-color: transparent;
-      color: #fff;
-    }
-  }
-}
-
-#compare-msg {
-  position: fixed;
-  bottom: 0;
-  right: 20px;
-  z-index: 10;
-  width: 400px;
-  &.is-footer {
-    border-top: 1px solid $border;
-    box-shadow: none;
-    margin-top: 20px;
-    padding: 20px 0 !important;
-    position: relative;
-    right: 0;
-    width: 100%;
-    .delete {
-      display: none;
-    }
-  }
-  @include mobile {
-    bottom: -20px;
-    width: 100%;
-    right: 0;
-  }
-}
-
-#compare-menu {
-  @include transition(all 0.2s);
-  @include translate(-100%,0);
-  @include box-shadow(0,3px,15px,$border,0);
-  background-color: $white;
-  height: 100vh;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 500px;
-  z-index: 200;
-  &.is-active {
-    @include translate(0,0);
-  }
-  @include mobile-456px {
-    width: 100%;
-  }
-  @media screen and (min-width: 456px) and (max-width: 1400px) {
-    width: 300px;
-  }
-}
-
-#show-menu-wrapper {
-  position: fixed;
-  padding: 20px;
-  margin-bottom: 0;
-  z-index: 99;
-  &.is-dimmed {
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0,0,0,0.75);
-  }
-}
-
-#compare-buttons {
-  border-bottom:1px solid $border;
-  padding: 20px;
-  width:100%;
-  background-color: $white;
-  .control {
-    &.is-spaced {
-      @media screen and (min-width: 457px) and (max-width: 1305px) {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        .control-right {
-          margin-bottom: 10px;
-        }
-      }
-      @include mobile-456px {
-        flex-direction: row;
-      }
-      @media screen and (max-width: 320px) {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        .control-right {
-          margin-bottom: 10px;
-        }
-      }
-    }
-  }
-}
-
-#compare-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: calc(100vh - 74px);
-  @include mobile-456px {
-    height: calc(100vh - 95px);
-  }
-  @media screen and (min-width: 456px) and (max-width: 1305px) {
-    height: calc(100vh - 116px);
-  }
 }
 
 //</editor-fold>-----------------------------------------------

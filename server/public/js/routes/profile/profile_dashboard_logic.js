@@ -214,7 +214,7 @@ function updatePortfolioOverviewCounters(){
         var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
         var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
         //declare some global font styling
-        Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Nunito', 'Helvetica', sans-serif";
+        Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Helvetica', sans-serif";
         Chart.defaults.global.defaultFontSize = 14;
         //make chart
         var chartOptions = {
