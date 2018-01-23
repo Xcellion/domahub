@@ -12,7 +12,7 @@
 
 <div id="listed-page" class="page-contents is-hidden">
   <div class="listing-page min-height">
-    <section class="section is-medium">
+    <section class="listing-section">
       <div class="listing-wrapper">
 
         <!-- LISTING LEFT SIDE -->
@@ -20,16 +20,16 @@
 
           <!-- DOMAIN NAME & PRICE TAGS -->
           <div class="control">
-            <h1 class="domain-title title is-1 is-primary"></h1>
+            <h1 class="domain-title title is-1 is-bold is-primary"></h1>
             <div class="control">
 
               <!-- PRICE TAG -->
-              <div class="price-tag tag is-primary is-outlined">
+              <div class="price-tag tag is-primary is-outlined is-bordered">
                 <span id="price-tag"></span>
               </div>
 
               <!-- RENT TAG -->
-              <div id="rent-price-tag" class="price-tag is-hidden tag is-primary is-outlined">
+              <div id="rent-price-tag" class="price-tag is-hidden tag is-primary is-outlined is-bordered">
                 <span>Rent now - </span><span id="rent-price-text"></span>
                 <span id="free-until" class='is-hidden'></span>
               </div>
@@ -161,8 +161,8 @@
           </div>
 
           <!-- CONTACT FORM MODULE -->
-          <div id="contact-form-module" class="box module">
-            <form id="buy-now-form" autocomplete="off" method="post">
+          <div id="contact-form-module" class="box is-medium module">
+            <form id="buy-now-form" autocomplete="off" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
                 <div class="control has-icon">
                   <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
                   <label class="error_message label" for="contact_name">Name</label>
@@ -316,7 +316,7 @@
           </div>
 
           <!-- DOMAINS LIST MODULE -->
-          <div id="domainlist-module" class="box is-hidden module">
+          <div id="domainlist-module" class="box is-medium is-hidden module">
             <div id="otherowner-domains" class="content">
               <ul id="otherowner-domain-table">
                 <a tabindex="0" id="otherowner-domain-clone" class="other-domain is-hidden">
@@ -330,7 +330,7 @@
           </div>
 
           <!-- HISTORY TICKER MODULE -->
-          <div id="ticker-module" class="is-hidden box is-paddingless module">
+          <div id="ticker-module" class="is-hidden box is-medium is-paddingless module">
             <li id='ticker-clone' class='ticker-row ticker-rental is-hidden'>
               <div class='ticker-icon-color icon'><i class="far ticker-icon"></i></div>
               <div class="ticker-text">
