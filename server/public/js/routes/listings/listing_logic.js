@@ -502,8 +502,14 @@ function createTrafficChart(compare){
     traffic_chart.destroy();
   }
 
+  Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Nunito', 'Helvetica', sans-serif";
+  Chart.defaults.global.defaultFontSize = 14;
+
   traffic_chart = new Chart($("#traffic-chart"), {
     type: 'line',
+    layout: {
+      padding: 20
+    },
     data: {
       labels: formatted_dataset.traffic_labels,
       datasets: [{
@@ -562,15 +568,24 @@ function createTrafficChart(compare){
           gridLines: {
             display: false
           },
-          type: "category"
+          type: "category",
+          ticks: {
+            fontStyle: 700,
+            fontColor: 'rgba(0,0,0,0.66)',
+            padding: 20
+          }
         }],
         yAxes: [{
           gridLines: {
+            drawBorder: false,
             drawTicks: false
           },
           display: true,
           type: 'linear',
           ticks: {
+            fontStyle: 700,
+            fontColor: 'rgba(0,0,0,0.66)',
+            padding: 20,
             beginAtZero: true,   // minimum value will be 0.
             maxTicksLimit: 5
           }

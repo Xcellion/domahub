@@ -23,14 +23,14 @@ $(document).ready(function() {
 //setup any custom premium colors
 function setupCustomColorsHub(){
   console.log("Setting up custom theme for hub...");
-  stylize(listing_hub_info.background_color, ".hub-section .hero", "background-color");
+  stylize(listing_hub_info.background_color, ".hub-section.hero", "background-color");
   stylize(listing_hub_info.primary_color, ".hub-section #search-domain-tld", "color");
   stylize(listing_hub_info.primary_color, ".hub-section .is-primary:not(.notification)", "color");
   stylize(listing_hub_info.primary_color, ".hub-section .is-primary.button", "background-color", true);
-  stylize(listing_hub_info.primary_color, ".hub-section .is-primary.tag", "background-color", true);
+  stylize(listing_hub_info.primary_color, ".hub-section .is-primary.tag.is-dot", "background-color");
   stylize(listing_hub_info.primary_color, ".hub-section .sort-header .icon", "color");
-  stylize(listing_hub_info.secondary_color, ".hub-section .is-accent.tag", "background-color", true);
-  stylize(listing_hub_info.tertiary_color, ".hub-section .is-info.tag", "background-color", true);
+  stylize(listing_hub_info.secondary_color, ".hub-section .is-accent.tag.is-dot", "background-color");
+  stylize(listing_hub_info.tertiary_color, ".hub-section .is-info.tag.is-dot", "background-color");
   stylize(listing_hub_info.font_color, ".hub-section .subtitle", "color");
   stylize(listing_hub_info.font_color, ".hub-section .nav-item", "color");
 
