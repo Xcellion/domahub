@@ -246,19 +246,20 @@
 
 .listing-page {
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: 1200px;
   padding: 0 40px;
+  @include mobile-456px {
+    padding: 0 20px;
+  }
 }
 
 .listing-wrapper {
   display: flex;
+  padding: 80px 0;
   @media screen and (max-width: 1070px) {
     flex-direction: column;
+    padding: 40px 0;
   }
-}
-
-.listing-section {
-  padding: 80px 0;
 }
 
 .control-wrapper {
@@ -290,13 +291,10 @@
 
   .listing-left {
     @include transition(all 0.4s ease);
-    padding-right: 40px;
-    position: relative;
     width: 50%;
     @media screen and (max-width: 1070px) {
       border-bottom: 1px solid $border;
-      padding-right: 0;
-      padding-bottom: 20px;
+      padding-bottom: 40px;
       width: 100%;
       .box {
         margin-left: auto;
@@ -311,12 +309,12 @@
   }
 
   #listing-description {
-    word-break: break-word;
-    white-space: pre-wrap;
-    font-style : italic;
-    padding-left : 10px;
+    border-left : 3px solid $primary;
     margin: 50px 0;
-    border-left : 5px solid $primary;
+    padding-left : 8px;
+    position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
     @include mobile-456px {
       margin: 40px 0;
     }
@@ -334,6 +332,15 @@
     &:not(:last-child) {
       margin-right: 10px;
     }
+    .icon {
+      @include transition(box-shadow 0.25s ease);
+    }
+    &:hover,
+    &:focus {
+      .icon {
+        @include box-shadow(0,2px,4px,$border,0);
+      }
+    }
   }
 
   //</editor-fold>-----------------------------------------------
@@ -342,15 +349,23 @@
 
   .listing-right {
     @include transition(all 0.4s ease);
+    padding-left: 80px;
+    position: relative;
     width: 50%;
     @media screen and (max-width: 1070px) {
       margin-top: 40px;
+      padding-left: 0;
       width: 100%;
+      .box {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .tabs {
+        ul {
+          justify-content: center;
+        }
+      }
     }
-  }
-
-  .module {
-    min-height: 500px;
   }
 
     //<editor-fold>---------------------CONTACT---------------------
