@@ -411,7 +411,7 @@ function updateDomainRow(tempRow, listing_info, now){
   tempRow.find(".td-registrar").text((listing_info.registrar_name) ? listing_info.registrar_name : "-");
 
   if (listing_info.date_registered){
-    tempRow.find(".td-date").text(moment(listing_info.date_registered).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_registered).format("MMMM DD, YYYY - hh:mmA"));
+    tempRow.find(".td-date").text(moment(listing_info.date_registered).format("YYYY-MM-DD")).attr("title", moment(listing_info.date_registered).format("YYYY-MM-DD HH:mm"));
   }
   else {
     tempRow.find(".td-date").text("-");
@@ -424,7 +424,7 @@ function updateDomainRow(tempRow, listing_info, now){
     var expired_already = humanized < 0;
     var days_plural = (humanized == 1) ? "day" : "days";
     var expired_text = (expired_already) ? "Expired " + Math.abs(humanized) + " " + days_plural + " ago" : "In " + humanized + " " + days_plural;
-    tempRow.find(".td-date-expire").text(expired_text).attr("title", moment_expire.format("MMMM DD, YYYY - h:mmA"));
+    tempRow.find(".td-date-expire").text(expired_text).attr("title", moment_expire.format("YYYY-MM-DD HH:mm"));
   }
   else {
     tempRow.find(".td-date-expire").text("-").removeAttr("title");
