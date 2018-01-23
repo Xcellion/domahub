@@ -109,7 +109,6 @@ function setupCustomColorsListing(){
 
   //social icons
   stylize(listing_info.primary_color, ".page-contents .social-share .icon", "color", true);
-  stylize("transparent", ".page-contents .social-share .icon", "background-color");
 
   //background
   stylize(listing_info.background_color, ".page-contents:not(.no-background)", "background-color");
