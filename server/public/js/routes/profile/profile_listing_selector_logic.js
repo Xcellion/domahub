@@ -678,7 +678,6 @@ function multiSelectButtons(clicked_row){
   });
   var offer_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == false });
   var unverified_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == true });
-  var hub_rows = selected_rows.filter(function(){ return $(this).data("hub") == true });
 
   //hide hub drop
   $("#hub-drop").addClass('is-hidden');
@@ -698,7 +697,7 @@ function multiSelectButtons(clicked_row){
     }
 
     //add to hub (show hub dropdown only if no hubs are selected)
-    if (user.stripe_subscription_id && hub_rows.length == 0 && unverified_selected_rows.length == 0){
+    if (user.stripe_subscription_id && unverified_selected_rows.length == 0){
       $("#hub-select-button").removeClass("is-hidden");
     }
     else {

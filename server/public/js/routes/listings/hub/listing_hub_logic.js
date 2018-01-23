@@ -74,6 +74,21 @@ function setupHandlers(){
     createDomainView();
   });
 
+  //build search tld drop down
+  listing_hub_info.listings.reduce(function(a, c, i){
+    var split_domain_name = c.domain_name.split(".");
+    var current_tld = split_domain_name[split_domain_name.length - 1].toLowerCase();
+    if (a.indexOf(current_tld) == -1){
+      a.push(current_tld);
+      $("#search-domain-tld").append("<option value='." + current_tld +  "'>." + current_tld + "</option>");
+    }
+    return a;
+  }, []);
+
+  if ($("#search-domain-tld option").length <= 1){
+    $("#search-domain-tld").closest(".select").addClass('is-hidden');
+  }
+
   //search handler
   $("#search-domain-main, #search-domain-tld").off().on("input", function(){
     createDomainView(listing_hub_info.listings);
@@ -383,8 +398,7 @@ function showDetails(listing_info_local){
 
   listing_info = listing_info_local;
   listing_info.premium = true;
-  setupListingLogic();
-  setupListingListedLogic();
+  setupListedPage();
   setupTheming();
 
   //remove stuff that doesnt work from a hub perspective
@@ -392,7 +406,7 @@ function showDetails(listing_info_local){
   $("#domainlist-module").remove();
   stylize(listing_info.font_color, "#back-to-list-button", "color");
   $("#back-to-list-button").prependTo(".page-contents .listing-left");
-  $(".page-contents .min-height").removeClass('min-height');
+  // $(".page-contents .min-height").removeClass('min-height');
 }
 
 //show domain list
