@@ -1092,18 +1092,26 @@ function setupRightHalf(){
           datasets: [{
             label: "Website Views",
             data: formatted_dataset.traffic_views,
-            pointBorderWidth: 6,
-            pointHoverRadius: 6,
-            pointHoverBorderWidth: 4,
-            pointRadius: 6,
-            hitRadius: 6,
+            pointBorderWidth: 4,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 2,
+            pointRadius: 4,
+            hitRadius: 4,
             pointBackgroundColor: '#fff',
             backgroundColor: ((listing_info.traffic && listing_info.premium && listing_info.primary_color) || compare) ? hexToRgbA(listing_info.primary_color, 0.65, true) : "rgba(60, 188, 141, 0.65)",
-            borderWidth: 4,
+            borderWidth: 2,
             borderColor: ((listing_info.traffic && listing_info.premium && listing_info.primary_color) || compare) ? hexToRgbA(listing_info.primary_color, 1, true) : "#3CBC8D",
           }]
         },
         options: {
+          layout: {
+            padding: {
+              top: 20,
+              bottom: 20,
+              left: 0,
+              right: 0
+            }
+          },
           maintainAspectRatio: false,
           legend: {
             display: false
@@ -1156,7 +1164,7 @@ function setupRightHalf(){
               ticks: {
                 fontStyle: 700,
                 fontColor: 'rgba(0,0,0,0.66)',
-                padding: 20,
+                padding: 10,
               }
             }],
             yAxes: [{
@@ -1167,7 +1175,7 @@ function setupRightHalf(){
               ticks: {
                 fontStyle: 700,
                 fontColor: 'rgba(0,0,0,0.66)',
-                padding: 40,
+                padding: 20,
                 suggestedMax: 5,
                 beginAtZero: true,   // minimum value will be 0.
               }
