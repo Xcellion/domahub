@@ -33,6 +33,7 @@ function setupCustomColorsHub(){
   stylize(listing_hub_info.tertiary_color, ".hub-section .is-info.tag.is-dot", "background-color");
   stylize(listing_hub_info.font_color, ".hub-section .subtitle", "color");
   stylize(listing_hub_info.font_color, ".hub-section .nav-item", "color");
+  stylize(listing_hub_info.font_name, ".hub-section .title.is-1", "font-family");
 
   //listing hub footer
   stylize(listing_hub_info.footer_color, ".hub-section .footer-item", "color");

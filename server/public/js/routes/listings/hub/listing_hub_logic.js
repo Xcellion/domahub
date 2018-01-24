@@ -14,7 +14,7 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------DOMAIN TABLE-------------------------------
 
-  findOtherDomains();
+  findOtherDomainsHub();
 
   //close ellipsis more menu
   $(document).on("click", function(event) {
@@ -75,6 +75,7 @@ function setupHandlers(){
   });
 
   //build search tld drop down
+  $("#search-domain-tld").append("<option value=''>All TLDs</option>");
   listing_hub_info.listings.reduce(function(a, c, i){
     var split_domain_name = c.domain_name.split(".");
     var current_tld = split_domain_name[split_domain_name.length - 1].toLowerCase();
@@ -153,7 +154,7 @@ function setupHandlers(){
 }
 
 //other domains by same owner
-function findOtherDomains(){
+function findOtherDomainsHub(){
   $.ajax({
     url: "/listing/otherowner",
     method: "POST",
@@ -398,6 +399,18 @@ function showDetails(listing_info_local){
 
   listing_info = listing_info_local;
   listing_info.premium = true;
+
+  //make the detailed listing look like hub styling
+  listing_info.primary_color = listing_hub_info.primary_color;
+  listing_info.secondary_color = listing_hub_info.secondary_color;
+  listing_info.tertiary_color = listing_hub_info.tertiary_color;
+  listing_info.font_color = listing_hub_info.font_color;
+  listing_info.font_name = listing_hub_info.font_name;
+  delete listing_info.background_image;
+  listing_info.background_color = listing_hub_info.background_color;
+  listing_info.footer_color = listing_hub_info.footer_color;
+  listing_info.footer_background_color = listing_hub_info.footer_background_color;
+
   setupListedPage();
   setupTheming();
 

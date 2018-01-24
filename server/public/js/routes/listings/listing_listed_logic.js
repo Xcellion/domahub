@@ -130,7 +130,7 @@ function setupDateRegistered(){
 //<editor-fold>-------------------------------CATEGORIES-------------------------------
 
 function setupCategories(){
-  if (listing_info.categories == "" || (listing_info.premium && listing_info.show_categories == 0)){
+  if (!listing_info.categories || listing_info.categories == "" || (listing_info.premium && listing_info.show_categories == 0)){
     $("#listing-categories").addClass('is-hidden');
   }
   else {
@@ -1253,7 +1253,7 @@ function setupRightHalf(){
           //how many to get
           max_count: max_count,
           //the oldest displayed rental on the ticker
-          oldest_rental_date: (listing_info.rentals) ? listing_info.rentals[listing_info.rentals.length - 1].date : new Date().getTime()
+          oldest_rental_date: (listing_info.rentals && listing_info.rentals.length > 0) ? listing_info.rentals[listing_info.rentals.length - 1].date : new Date().getTime()
         }
       }).done(function(data){
         //remove the loading message
@@ -1480,14 +1480,14 @@ function setupRightHalf(){
 
   function setupOtherDomainsTab(){
     if ((listing_info.premium && listing_info.show_domain_list) || !listing_info.premium){
-      findOtherDomains();
+      findOtherDomainsListing();
     }
   }
 
   //<editor-fold>-------------------------------OTHER DOMAINS-------------------------------
 
   //other domains by same owner
-  function findOtherDomains(){
+  function findOtherDomainsListing(){
     if (compare && listing_info.unlisted){
       createTestOtherDomains();
     }

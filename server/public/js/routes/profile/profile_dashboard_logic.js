@@ -5,6 +5,17 @@ var channels_chart;
 
 $(document).ready(function() {
 
+  //<editor-fold>-------------------------------ANNOUNCEMENT-------------------------------
+
+  //close announcement if already closed it
+  if (readCookie("announcement")){
+    $("#announcement-modal").removeClass('is-active');
+  }
+  else {
+    $("#announcement-modal").addClass('is-active');
+  }
+
+  //</editor-fold>
 
   //<editor-fold>-------------------------------PORTFOLIO OVERVIEW / LATEST OFFERS-------------------------------
 
@@ -1011,5 +1022,16 @@ function updatePortfolioOverviewCounters(){
   }
 
   //</editor-fold>
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------ANNOUNCEMENT COOKIE-------------------------------
+
+//helper function to read a cookie
+function readCookie(name) {
+  var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+  result && (result = JSON.parse(result[1]));
+  return result;
+}
 
 //</editor-fold>
