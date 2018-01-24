@@ -163,7 +163,6 @@ function findOtherDomainsHub(){
       exclude_id: listing_hub_info.id,
       hub_id: listing_hub_info.id,
       sort_by : "rank",
-      total : listings_per_page,
       starting_id : false
     }
   }).done(function(data){
@@ -338,8 +337,8 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
     //create new clone columns to append column to
     if (cur_col >= cols_per_row){
       $("#domains-grid").append(cols_to_append_to);
-      cur_col = 0;
       cols_to_append_to = $("#domains-grid-clone-cols").clone().removeAttr("id").removeClass('is-hidden').addClass("domain-tile-cols");
+      cur_col = 1;
     }
     else {
       cur_col++;
