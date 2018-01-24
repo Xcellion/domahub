@@ -57,7 +57,7 @@ function calculateLuminance(rgb) {
 }
 
 function stylize(color, element, style, calculateluminance) {
-  if (color){
+  if (typeof color != "undefined" || typeof color != "null"){
     $(element).css(style, color);
     if (style == "background-color" && calculateluminance) {
       $(element).css("color", calculateLuminance(color));
@@ -109,6 +109,8 @@ function setupCustomColorsListing(){
 
   //social icons
   stylize(listing_info.primary_color, ".page-contents .social-share .icon", "color", true);
+  stylize(listing_info.primary_color, ".page-contents .social-share .icon", "border-color");
+  stylize("transparent", ".page-contents .social-share .icon", "background-color");
 
   //background
   stylize(listing_info.background_color, ".page-contents:not(.no-background)", "background-color");
