@@ -253,7 +253,8 @@ module.exports = {
 
   //time check was successful! redirect to checkout
   redirectToCheckout : function(req, res, next){
-    console.log("LRF: Redirecting the user to the checkout page for final confirmation of rental...")
+    console.log("LRF: Redirecting the user to the checkout page for final confirmation of rental...");
+    console.log("WTF", req.session.new_rental_info);
     res.send({
       state: "success"
     });
