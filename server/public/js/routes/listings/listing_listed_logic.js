@@ -1641,27 +1641,4 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function hexToRgbA(hex, alpha, limit_white){
-  if (hex){
-    hex   = hex.replace('#', '');
-    var r = parseInt(hex.length == 3 ? hex.slice(0, 1).repeat(2) : hex.slice(0, 2), 16);
-    var g = parseInt(hex.length == 3 ? hex.slice(1, 2).repeat(2) : hex.slice(2, 4), 16);
-    var b = parseInt(hex.length == 3 ? hex.slice(2, 3).repeat(2) : hex.slice(4, 6), 16);
-
-    //prevent all white
-    if (limit_white && r > 170 && g > 170 && b > 170){
-      r = (r > 170) ? 170 : r;
-      g = (g > 170) ? 170 : g;
-      b = (b > 170) ? 170 : b;
-    }
-
-    if ( alpha ) {
-      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
-    }
-    else {
-      return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-    }
-  }
-}
-
 //</editor-fold>
