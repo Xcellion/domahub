@@ -428,6 +428,9 @@ function showDetails(listing_info_local){
 function showDomainListView(){
   $("#detailed-view-section").addClass("is-hidden");
   $("#domain-list-section, #domain-search-section").removeClass("is-hidden");
+
+  //remove disabled from contact form if we submitted an offer
+  $(".contact-input").removeAttr('disabled');
 }
 
 //</editor-fold>
