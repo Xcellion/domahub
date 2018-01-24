@@ -89,7 +89,7 @@ function setupHandlers(){
     return a;
   }, []);
 
-  if ($("#search-domain-tld option").length <= 1){
+  if ($("#search-domain-tld option").length <= 2){
     $("#search-domain-tld").closest(".select").addClass('is-hidden');
   }
 
