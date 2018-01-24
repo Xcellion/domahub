@@ -252,7 +252,7 @@ module.exports = {
   //time check was successful! redirect to checkout
   redirectToCheckout : function(req, res, next){
     console.log("LRF: Redirecting the user to the checkout page for final confirmation of rental...");
-    console.log("WTF", req.session.new_rental_info);
+    console.log("WTF", req.session.id);
     res.send({
       state: "success"
     });
@@ -261,7 +261,7 @@ module.exports = {
   //renders the checkout page for creating a new rental
   renderCheckout : function(req, res, next){
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-    console.log("finally",req.session.new_rental_info);
+    console.log("finally", req.session.id);
 
     if (req.session.listing_info &&
         req.session.new_rental_info &&
