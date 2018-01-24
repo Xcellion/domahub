@@ -260,7 +260,6 @@ module.exports = {
   //renders the checkout page for creating a new rental
   renderCheckout : function(req, res, next){
     var domain_name = (typeof req.session.pipe_to_dh != "undefined" && typeof req.params.domain_name == "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-    console.log(req.session.listing_info, req.session.new_rental_info, domain_name, "JKFADFKLJ");
     if (req.session.listing_info &&
         req.session.new_rental_info &&
         req.session.new_rental_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
