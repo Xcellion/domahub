@@ -1011,7 +1011,7 @@ module.exports = {
     var total = req.body.total;
 
     //make sure owner and domain exclude are legit
-    if (validator.isInt(exclude_id) && validator.isInt(owner_id) && validator.isInt(total)){
+    if (validator.isInt(exclude_id) && validator.isInt(owner_id)){
       console.log("LRF: Finding other listings by same owner...");
       listing_model.getListingsByOwner(exclude_id, owner_id, function(result){
         if (!result.info.length || result.state == "error"){
@@ -1039,7 +1039,9 @@ module.exports = {
           }
 
           //only send first X amount
-          listings = listings.slice(0, total);
+          if (total && validator.isInt(total)){
+            listings = listings.slice(0, total);
+          }
 
           res.send({
             state: "success",
