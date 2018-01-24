@@ -66,12 +66,10 @@ module.exports = {
   //create a rental object for checking (for new)
   createNewRentalObject : function(req, res, next){
     console.log("LRF: Creating new rental info object...");
-    console.log("what it was",req.session.new_rental_info);
     delete req.session.new_rental_info;
     req.session.new_rental_info = {
       domain_name : req.params.domain_name
     };
-    console.log("what it became",req.session.new_rental_info);
 
     next();
   },
