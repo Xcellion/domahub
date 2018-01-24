@@ -575,12 +575,7 @@ function setupRightHalf(){
         }).done(function(data){
           checkout_button.removeClass('is-loading');
           if (data.state == "success"){
-            if (listing_info.premium){
-              window.location.assign("https://" + listing_info.domain_name + "/listing/" + listing_info.domain_name + "/checkout/rent");
-            }
-            else {
-              window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
-            }
+            window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
           }
           else if (data.state == "error"){
             $("#calendar-regular-message").addClass('is-hidden');
