@@ -380,8 +380,8 @@ function setupRightHalf(){
                 }
               }
               else {
-                clearNotification();
                 $(".contact-input").removeAttr('disabled');
+                clearNotification();
                 errorMessage(data.message);
               }
             });
