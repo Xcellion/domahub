@@ -913,7 +913,7 @@ module.exports = {
   //check if session listing_info exists and get listing info if it doesnt match with current domain_name
   checkSessionListingInfoPost : function(req, res, next){
     console.log("LRF: Checking if session listing info domain is same as posted domain...");
-    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined" && typeof req.params.domain_name == "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
     if (req.session.listing_info && req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase()){
       next();
