@@ -704,7 +704,7 @@ function multiSelectButtons(clicked_row){
     }
 
     //add to hub (show hub dropdown only if no hubs are selected)
-    if (user.stripe_subscription_id && hub_rows.length == 0 && unverified_selected_rows.length == 0){
+    if ($(".hub-drop-select-button").length > 0 && user.stripe_subscription_id && hub_rows.length == 0 && unverified_selected_rows.length == 0){
       $("#hub-select-button").removeClass("is-hidden");
     }
     else {
