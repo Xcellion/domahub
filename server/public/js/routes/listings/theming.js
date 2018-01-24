@@ -73,7 +73,7 @@ function setupCustomColorsListing(){
   console.log("Setting up custom theme...");
 
   //title
-  stylize(listing_info.primary_color, ".page-contents .domain-title.title.is-1", "color");
+  stylize(listing_info.primary_color, ".page-contents h1", "color");
 
   //click for more details
   stylize(listing_info.primary_color, ".page-contents #show-more-details", "color");
