@@ -66,10 +66,12 @@ module.exports = {
   //create a rental object for checking (for new)
   createNewRentalObject : function(req, res, next){
     console.log("LRF: Creating new rental info object...");
+    console.log(req.session.new_rental_info);
     delete req.session.new_rental_info;
     req.session.new_rental_info = {
       domain_name : req.params.domain_name
     };
+    console.log(req.session.new_rental_info);
 
     next();
   },
@@ -260,7 +262,6 @@ module.exports = {
   //renders the checkout page for creating a new rental
   renderCheckout : function(req, res, next){
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-    console.log(req.session.id);
     if (req.session.listing_info &&
         req.session.new_rental_info &&
         req.session.new_rental_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
