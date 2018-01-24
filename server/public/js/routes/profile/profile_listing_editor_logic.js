@@ -981,10 +981,10 @@ function checkBox(module_value, elem, child){
       });
     }
 
-    // Display the key/value pairs
-    for (var pair of formData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]);
-    }
+    // // Display the key/value pairs
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0]+ ', ' + pair[1]);
+    // }
 
     $.ajax({
       url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",

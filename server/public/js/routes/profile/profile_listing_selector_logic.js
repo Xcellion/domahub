@@ -320,9 +320,9 @@ function createRows(selected_ids){
     }
 
     //create add to hub dropdown
+    $(".hub-drop-row").remove();
     if (listing_hubs.length > 0){
       $("#hub-selector-wrapper").removeClass('is-hidden');
-      $(".hub-drop-row").remove();
       for (var y = 0; y < listing_hubs.length; y++){
         createHubRow(listing_hubs[y]);
       }
@@ -704,7 +704,7 @@ function multiSelectButtons(clicked_row){
     }
 
     //add to hub (show hub dropdown only if no hubs are selected)
-    if ($(".hub-drop-select-button").length > 0 && user.stripe_subscription_id && hub_rows.length == 0 && unverified_selected_rows.length == 0){
+    if ($(".hub-drop-row").length > 0 && user.stripe_subscription_id && hub_rows.length == 0 && unverified_selected_rows.length == 0){
       $("#hub-select-button").removeClass("is-hidden");
     }
     else {
