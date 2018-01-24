@@ -291,7 +291,7 @@
     width: 50%;
     @media screen and (max-width: 1070px) {
       border-bottom: 1px solid $border;
-      padding-bottom: 40px;
+      padding-bottom: 20px;
       width: 100%;
     }
   }
@@ -341,7 +341,7 @@
     position: relative;
     width: 50%;
     @media screen and (max-width: 1070px) {
-      margin-top: 40px;
+      margin-top: 20px;
       padding-left: 0;
       width: 100%;
       .box {
@@ -606,6 +606,7 @@
     @include mobile {
       flex-wrap: nowrap;
       flex-direction: column;
+      text-align: center;
       .footer-item {
         &:not(:last-child) {
           margin-right: 0;
