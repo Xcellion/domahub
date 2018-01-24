@@ -5,9 +5,6 @@ $(document).ready(function() {
 
   //<editor-fold>---------------------------------COMPARE TOOL SETUP--------------------------------------------------
 
-  //overflow x-hidden to prevent scroll appearing when hiding menu
-  $("body").css("overflow-x", "hidden");
-
   //hide bottom right notification button
   $("#compare-msg .delete").on("click", function(e){
     $("#compare-msg").appendTo('#compare-content').removeClass("is-hidden").addClass("is-footer");
@@ -49,6 +46,7 @@ $(document).ready(function() {
   loadBackgroundHandlers();
   loadColorSchemeHandlers();
   loadFontStyleHandlers();
+  loadFooterStylingHandlers();
   updateModules();
 
   loadPremiumAndBasicHandler();
@@ -187,7 +185,7 @@ $(document).ready(function() {
                       </button> \
                     </div> \
                   </div>",
-        backdropContainer: "#page-contents",
+        backdropContainer: ".page-contents",
         content: "You can use this menu to quickly test the look and feel of your DomaHub domain listing.",
       },
 
@@ -201,13 +199,13 @@ $(document).ready(function() {
         onShow: function(){
           toggleMenu(true);
           $("#info-edit-tab").click();
-          $("#page-contents").append("<div class='tour-backdrop'></div>");
+          $(".page-contents").append("<div class='tour-backdrop'></div>");
         },
         onHide: function(){
           if (listing_description_tour && !listing_description_tour.ended()){
             listing_description_tour.end();
           }
-          $("#page-contents").find(".tour-backdrop").remove();
+          $(".page-contents").find(".tour-backdrop").remove();
         },
         template: "<div class='popover tour'> \
                     <div class='popover-content margin-top-0 content'></div> \
@@ -244,10 +242,10 @@ $(document).ready(function() {
         placement: "bottom",
         onShow: function(){
           toggleMenu(true);
-          $("#page-contents").append("<div class='tour-backdrop'></div>");
+          $(".page-contents").append("<div class='tour-backdrop'></div>");
         },
         onHide: function(){
-          $("#page-contents").find(".tour-backdrop").remove();
+          $(".page-contents").find(".tour-backdrop").remove();
         },
         template: "<div class='popover tour'> \
                     <div class='popover-content margin-top-0 content'></div> \
@@ -278,10 +276,10 @@ $(document).ready(function() {
         placement: "bottom",
         onShow: function(){
           toggleMenu(true);
-          $("#page-contents").append("<div class='tour-backdrop'></div>");
+          $(".page-contents").append("<div class='tour-backdrop'></div>");
         },
         onHide: function(){
-          $("#page-contents").find(".tour-backdrop").remove();
+          $(".page-contents").find(".tour-backdrop").remove();
         },
         template: "<div class='popover tour'> \
                     <div class='popover-content margin-top-0 content'></div> \
@@ -312,7 +310,7 @@ $(document).ready(function() {
       //contact offer form - 6
       {
         element: "#buy-module",
-        backdropContainer: "#page-contents",
+        backdropContainer: ".page-contents",
         placement: (window.mobilecheck()) ? "top" : "right",
         onShow: function(){
           toggleMenu(false);
@@ -324,7 +322,7 @@ $(document).ready(function() {
       //click rentable tab - 7
       {
         element: "#calendar-tab",
-        backdropContainer: "#page-contents",
+        backdropContainer: ".page-contents",
         placement: "bottom",
         onShow: function(){
           showBuyStuff($("#buy-now-button"));
@@ -356,7 +354,7 @@ $(document).ready(function() {
       //rental tab - 8
       {
         element: "#calendar-module",
-        backdropContainer: "#page-contents",
+        backdropContainer: ".page-contents",
         placement: (window.mobilecheck()) ? "top" : "right",
         onShow: function(){
           $("#compare-menu").append("<div class='tour-backdrop'></div>");
@@ -371,7 +369,7 @@ $(document).ready(function() {
       //click traffic tab - 9
       {
         element: "#traffic-tab",
-        backdropContainer: "#page-contents",
+        backdropContainer: ".page-contents",
         placement: "bottom",
         onShow: function(){
           $("#compare-menu").append("<div class='tour-backdrop'></div>");
@@ -402,7 +400,7 @@ $(document).ready(function() {
       //traffic module - 10
       {
         element: "#traffic-module",
-        backdropContainer: "#page-contents",
+        backdropContainer: ".page-contents",
         placement: "top",
         onShow: function(){
           $("#compare-menu").append("<div class='tour-backdrop'></div>");
@@ -504,14 +502,14 @@ function menuButtonHandlers() {
 function toggleMenu(show){
   if (show){
     $("#compare-menu").addClass("is-active");
-    $("#page-contents").addClass("is-active");
+    $(".page-contents").addClass("is-active");
     $("#modules-wrapper").addClass("is-active");
     $("#dh-footer").addClass("is-active");
     $("#show-menu-button").fadeIn(100).removeAttr("style").addClass("is-hidden");
   }
   else {
     $("#compare-menu").removeClass("is-active");
-    $("#page-contents").removeClass("is-active");
+    $(".page-contents").removeClass("is-active");
     $("#modules-wrapper").removeClass("is-active");
     $("#dh-footer").removeClass("is-active");
     $("#show-menu-button").fadeIn(100).removeAttr("style").removeClass("is-hidden");
@@ -527,7 +525,7 @@ function switchTheme(theme_name){
   var theme_to_load = findTheme(theme_name);
 
   //changing theme during tutorial
-  $("#page-contents").find(".tour-backdrop").remove();
+  $(".page-contents").find(".tour-backdrop").remove();
 
   //if there wasnt a theme, load domahub theme
   if (!theme_to_load && theme_name != "Custom"){
@@ -562,6 +560,7 @@ function switchTheme(theme_name){
   loadColorSchemeHandlers();
   loadFontStyleHandlers();
   loadPremiumAndBasicHandler();
+  loadFooterStylingHandlers();
 
   $("#theme-input").val(theme_to_load.theme_name);
   updateQueryStringParam("theme", theme_to_load.theme_name);
@@ -574,8 +573,8 @@ function switchTheme(theme_name){
 //update the description / description footer
 function updateDescription(){
   $("#description").val(listing_info.description).on("input", function(){
-    $("#description-text").text($(this).val());
     listing_info.description = $(this).val();
+    setupDescription();
 
     if (!!window.mobilecheck()){
       //tutorial tour is still going on!
@@ -590,7 +589,7 @@ function updateDescription(){
             <div class='popover-content margin-top-0'></div> \
             </div>",
             onStart: function(){
-              $("#page-contents").find(".tour-backdrop").remove();
+              $(".page-contents").find(".tour-backdrop").remove();
             },
             steps: [
               //description is edited! - 4
@@ -599,7 +598,7 @@ function updateDescription(){
                 placement: "right",
                 backdrop: true,
                 animation: false,
-                backdropContainer: "#page-contents",
+                backdropContainer: ".page-contents",
                 backdropPadding: 15,
                 content: "The listing description will update automatically as you type. </br> </br> A well-written description can help your audience understand the full potential of your domain name!",
               },
@@ -622,8 +621,8 @@ function updateDescription(){
   });
   $("#description-footer").val(listing_info.description_footer).on("input", function(e){
     if ($(this).val().length < 100){
-      $("#doma_logo").text($(this).val());
       listing_info.description_footer = $(this).val();
+      setupFooter();
     }
   });
 }
@@ -744,6 +743,7 @@ function loadBackgroundHandlers(){
   });
 
   //load background color handler
+  $("#background-color-input").val(listing_info.background_color);
   $("#background-color-input").minicolors("destroy").minicolors({
     letterCase: "uppercase",
     swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
@@ -757,10 +757,10 @@ function updateBackgroundImage(background_image){
   listing_info.background_image = background_image;
   $("#background-image-input").val(background_image);
   if (background_image == ""){
-    $("#page-contents").css("background", "");
+    $(".page-contents").css("background", "");
   }
   else {
-    $("#page-contents").css("background", "url(" + background_image + ") center/cover no-repeat");
+    $(".page-contents").css("background", "url(" + background_image + ") center/cover no-repeat");
   }
 }
 
@@ -797,11 +797,30 @@ function updateFooter(premium){
   }
 }
 
+function loadFooterStylingHandlers(){
+  var minicolor_options = {
+    letterCase: "uppercase",
+    swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
+  }
+
+  $("#footer-background-color-input").val(listing_info.footer_background_color);
+  $("#footer-background-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
+    listing_info.footer_background_color = $(this).val();
+    setupCustomColorsListing();
+  });
+
+  $("#footer-color-input").val(listing_info.footer_color);
+  $("#footer-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
+    listing_info.footer_color = $(this).val();
+    setupCustomColorsListing();
+  });
+}
+
 //input to update background color and the page
 function updateBackgroundColor(background_color){
   listing_info.background_color = background_color;
   $("#background-color-input").val(background_color);
-  $("#page-contents").css("background-color", background_color);
+  $(".page-contents").css("background-color", background_color);
 }
 
 //load color scheme handlers
@@ -811,13 +830,15 @@ function loadColorSchemeHandlers(destroy){
     swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
   }
 
-
+  $("#primary-color-input").val(listing_info.primary_color)
   $("#primary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme($(this).val(), false, false);
   });
+  $("#secondary-color-input").val(listing_info.secondary_color)
   $("#secondary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme(false, $(this).val(), false);
   });
+  $("#tertiary-color-input").val(listing_info.tertiary_color)
   $("#tertiary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme(false, false, $(this).val());
   });
@@ -827,30 +848,28 @@ function loadColorSchemeHandlers(destroy){
 function updateColorScheme(primary_color, secondary_color, tertiary_color){
   if (primary_color != false){
     listing_info.primary_color = primary_color;
-    $("#primary-color-input").val(primary_color);
-    setupCustomColors();
+    setupCustomColorsListing();
 
     if (traffic_chart){
-      traffic_chart.data.datasets[0].backgroundColor = hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)");
-      traffic_chart.data.datasets[0].borderColor = primary_color;
+      traffic_chart.data.datasets[0].borderColor = hexToRgbA(listing_info.primary_color, 1, true);
+      traffic_chart.data.datasets[0].backgroundColor = hexToRgbA(listing_info.primary_color, 0.65, true);
       traffic_chart.update();
     }
   }
   if (secondary_color != false){
     listing_info.secondary_color = secondary_color;
-    $("#secondary-color-input").val(secondary_color);
-    setupCustomColors();
+    setupCustomColorsListing();
   }
   if (tertiary_color != false){
     listing_info.tertiary_color = tertiary_color;
-    $("#tertiary-color-input").val(tertiary_color);
-    setupCustomColors();
+    setupCustomColorsListing();
   }
 }
 
 //load the font styling handlers
 function loadFontStyleHandlers(){
   //font color
+  $("#font-color-input").val(listing_info.font_color)
   $("#font-color-input").minicolors("destroy").minicolors({
     letterCase: "uppercase",
     swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
@@ -868,104 +887,49 @@ function loadFontStyleHandlers(){
 function updateFontColor(font_color){
   listing_info.font_color = font_color;
   $("#font-color-input").val(font_color);
-  setupCustomColors();
+  setupCustomColorsListing();
 }
 
 //update font name
 function updateFontName(font_name){
   listing_info.font_name = font_name;
   $("#font-name-input").val(font_name)
-  setupCustomColors();
+  setupCustomColorsListing();
 }
 
 //update modules
 function updateModules(){
-  checkBox(listing_info.info_module, $("#info-module-input"));
-  checkBox(listing_info.rentable, $("#calendar-input"));
-  checkBox(listing_info.domain_owner, $("#domain-owner-input"));
-  checkBox(listing_info.domain_age, $("#domain-age-input"));
-  checkBox(listing_info.domain_list, $("#domainlist-input"));
-  checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
-  checkBox(listing_info.social_sharing, $("#social-sharing-input"));
-  checkBox(listing_info.traffic_module, $("#traffic-module-input"));
-  checkBox(listing_info.alexa_stats, $("#alexa-stats-input"));
-  checkBox(listing_info.traffic_graph, $("#traffic-graph-input"));
-  checkBox(listing_info.history_module, $("#ticker-module-input"));
+  checkBox(listing_info.rentable, $("#rentable-input"));
+
+  //left
+  checkBox(listing_info.show_registrar, $("#show-registrar-input"));
+  checkBox(listing_info.show_registration_date, $("#show-registration-date-input"));
+  checkBox(listing_info.show_categories, $("#show-categories-input"));
+  checkBox(listing_info.show_appraisal, $("#show-appraisal-input"));
+  checkBox(listing_info.show_social_sharing, $("#show-social-sharing-input"));
+
+  //right
+  checkBox(listing_info.show_placeholder, $("#placeholder-input"));
+  checkBox(listing_info.show_alexa_stats, $("#alexa-stats-input"));
+  checkBox(listing_info.show_traffic_graph, $("#traffic-graph-input"));
+  checkBox(listing_info.show_history_ticker, $("#show-history-ticker-input"));
+  checkBox(listing_info.show_domain_list, $("#domain-list-input"));
 
   //toggleable things (domain age, appraisal sites, social media)
-  $(".toggle-input").on("change", function(){
-    $("#" + $(this).data('target') + "-module").toggleClass('is-hidden');
+  $(".checkbox-input").on("change", function(){
+    listing_info[$(this).data("name")] = (listing_info[$(this).data("name")] == 1) ? 0 : 1;
+    setupLeftHalf();
+    setupRightHalf();
   });
-
-  //turn off or on modules
-  $(".module-input").on("change", function(){
-    var which_module = $(this).attr("id").split("-")[0];
-    var selected_position = $("#" + which_module + "-tab").data('position');
-    var current_position = $(".module-tab.is-active").data('position');
-
-    //selected position is current position
-    if (selected_position == current_position || current_position == undefined){
-      console.log("Current position undefined or same as selected.");
-      $(".module").addClass('is-active');
-      $(".module-tab").removeClass('is-active');
-      hideShowModules(which_module, $(this).prop("checked"), false);
-
-      //show next one if nothing is showing
-      var next_visible = $(".module-tab:not(.is-hidden)").first();
-      if (next_visible.attr("id")){
-        console.log("Showing next visible module.");
-        var next_visible_id = next_visible.attr("id").split("-")[0];
-        //add is-active to the tab
-        $("#" + next_visible.attr("id")).addClass("is-active");
-        //display respective module
-        $("#" + next_visible_id + "-module").removeClass('is-hidden');
-
-        //create test chart if it's the next visible
-        if (next_visible_id == "traffic"){
-          getTrafficData();
-        }
-
-        if (next_visible_id == "calendar"){
-          showBuyStuff($("#buy-now-button"));
-        }
-      }
-    }
-    else {
-      hideShowModules(which_module, $(this).prop("checked"), true);
-    }
-  });
-}
-
-//handle showing modules
-function hideShowModules(which_module, checked, tabOnly){
-  if (checked){
-    if (!tabOnly){
-      $("#" + which_module + "-module").removeClass('is-hidden');
-    }
-    if (which_module == "calendar") {
-      $("#rent-price-tag").removeClass('is-hidden');
-    }
-    $("#" + which_module + "-tab").removeClass('is-hidden');
-  }
-  else {
-    if (!tabOnly){
-      $("#" + which_module + "-module").addClass('is-hidden');
-    }
-    if (which_module == "calendar") {
-      $("#rent-price-tag").addClass('is-hidden');
-    }
-    $("#" + which_module + "-tab").addClass('is-hidden');
-  }
 }
 
 //check the module boxes according to value
 function checkBox(module_value, elem){
-  if (module_value){
-    elem.val(module_value).prop("checked", true);
+  if (module_value == 1){
+    elem.val(1).prop("checked", true);
   }
   else {
-    elem.val(module_value).prop("checked", false);
-    $("#" + elem.data('target') + "-module").addClass('is-hidden');
+    elem.val(0).prop("checked", false);
   }
 }
 
@@ -1068,12 +1032,10 @@ function createTestRentals(){
     //80% of the time it's a random char, 20% anonymous
     if (Math.random() > 0.2){
       var random_char_index = Math.floor(Math.random() * random_characters.length);
-      var random_char = random_characters[random_char_index];
-      random_characters.splice(random_char_index, 1);
-
-      temp_rental.username = random_char.name;
-      temp_rental.path = random_char.email.split("@")[0];
-      temp_rental.address = "http://www." + random_char.email.split("@")[1];
+      var random_char_from = random_characters[random_char_index];
+      temp_rental.username = random_char_from.name;
+      temp_rental.path = random_char_from.email.split("@")[0];
+      temp_rental.address = "http://www." + random_char_from.email.split("@")[1];
     }
     else {
       temp_rental.address = "https://domahub.com";
@@ -1138,11 +1100,8 @@ function testSubmitRentHandler(checkout_button){
 
 //handle submit calendar handler
 function testCalendarHandler(){
-  setTimeout(function(){
-    $("#calendar").removeClass('is-disabled');
-    $("#calendar-loading-message").addClass('is-hidden');
-    $("#calendar-regular-message").removeClass('is-hidden');
-
+  $("#calendar-regular-message").removeClass('is-hidden');
+  if (!listing_info.rental_moments){
     listing_info.rental_moments = [];
     var random_rentals_count = 24;
     for (var x = 0; x < random_rentals_count; x++){
@@ -1158,9 +1117,8 @@ function testCalendarHandler(){
       }
       listing_info.rental_moments.push(temp_rental);
     }
-
     setUpCalendar(listing_info);
-  }, 500);
+  }
 }
 
 //</editor-fold>

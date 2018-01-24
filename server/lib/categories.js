@@ -237,9 +237,9 @@ module.exports = {
   },
 
   //return random 5-10 categories as a string
-  randomFrontAsString : function(){
+  randomBackAsString : function(){
     return getUnique(Math.round(Math.random(5) + 5)).map(function(a) {
-      return a["front"];
+      return a["back"];
     }).join(" ");
   },
 

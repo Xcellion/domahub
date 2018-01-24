@@ -1,3 +1,4 @@
+
 <div id="domain-editor" class="is-hidden">
 
   <!-- EDIT LISTING DETAILS -->
@@ -51,14 +52,14 @@
               <% } %>
             </a>
           </li>
-          <!--<li id="hub-tab" class="verified-elem unpurchased-elem tab">
+          <li id="hub-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
               <span class="">Hub</span>
               <% if (!user.stripe_subscription_id) { %>
                 <span class="icon is-small"><i class="far fa-trophy-alt"></i></span>
               <% } %>
             </a>
-          </li>-->
+          </li>
           <div class="button-wrapper is-mobile control">
             <div class="control is-grouped">
               <div class="control is-marginless">
@@ -110,7 +111,7 @@
           </div>
           <div class="card is-fullwidth">
             <div class="card-header">
-              <h3 class="card-header-title">Descriptions</h3>
+              <h3 class="card-header-title">Listing Descriptions</h3>
             </div>
             <div class="card-content">
               <div class="control">
@@ -416,95 +417,76 @@
           </div>
           <div class="card is-fullwidth">
             <div class="card-header">
-              <h3 class="card-header-title">Information Tab</h3>
-              <form class="checkbox-form">
-                <input id="info-module-input" data-name="info_module" type="checkbox" class="parent-module checkbox-input premium-input changeable-input" tabindex="0" />
-                <label for="info-module-input" class="premium-input"></label>
-              </form>
+              <h3 class="card-header-title">Display Listing Information</h3>
             </div>
             <div class="card-content">
-              <div class="control info-module-child child-module is-spaced">
+              <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label">
-                    <span>Domain Owner</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
+                    <span>Show Registrar Name</span>
                   </label>
-                  <small class="tip">Displays a small sentence showing your username and when the listing page was created.</small>
+                  <small class="tip">Displays the name of this domain name's registrar.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="domain-owner-input" data-name="domain_owner" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="domain-owner-input" class="premium-input"></label>
+                    <input id="show-registrar-input" data-name="show_registrar" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-registrar-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
-              <div class="control info-module-child child-module is-spaced">
+              <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label">
-                    <span>Domain Age</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
+                    <span>Show Registration Date</span>
                   </label>
-                  <small class="tip">Displays a small sentence showing the registration date of <span class="this-domain">this domain</span>.</small>
+                  <small class="tip">Displays the original registration date of <span class="this-domain">this domain</span>.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="domain-age-input" data-name="domain_age" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="domain-age-input" class="premium-input"></label>
+                    <input id="show-registration-date-input" data-name="show_registration_date" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-registration-date-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
-              <div class="control info-module-child child-module is-spaced">
+              <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label">
-                    <span>Show Other Listings</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
-                  </label>
-                  <small class="tip">Displays a list of other listings you own on DomaHub.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="domain-list-input" data-name="domain_list" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="domain-list-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control info-module-child child-module is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Appraisal Sites</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
+                    <span>Show Appraisal Sites</span>
                   </label>
                   <small class="tip">Displays links to various domain appraisal sites.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="domain-appraisal-input" data-name="domain_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="domain-appraisal-input" class="premium-input"></label>
+                    <input id="show-appraisal-input" data-name="show_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-appraisal-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
-              <div class="control info-module-child child-module is-spaced">
+              <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label">
-                    <span>Social Media Sharing Buttons</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
+                    <span>Show Categories</span>
+                  </label>
+                  <small class="tip">Displays a list of your listing categories.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="show-categories-input" data-name="show_categories" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-categories-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Social Media Sharing Buttons</span>
                   </label>
                   <small class="tip">Displays buttons to share the listing on various social media sites.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="social-sharing-input" data-name="social_sharing" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="social-sharing-input" class="premium-input"></label>
+                    <input id="show-social-sharing-input" data-name="show_social_sharing" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-social-sharing-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
@@ -600,73 +582,65 @@
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="placeholder-input" data-name="placeholder" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <input id="placeholder-input" data-name="show_placeholder" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
                     <label for="placeholder-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Traffic and History Tabs</h3>
-            </div>
-            <div class="card-content">
               <div class="control is-spaced">
                 <div class="control-left">
-                  <label class="label">Traffic Tab</label>
-                  <small class="tip">Displays detailed traffic information about the listing.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="parent-module checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="traffic-module-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control traffic-module-child child-module is-spaced">
-                <div class="control-left">
                   <label class="label">
-                    <span>Traffic Graph</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
+                    <span>Show Traffic Graph</span>
                   </label>
                   <small class="tip">Displays a graph of the listing traffic.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="traffic-graph-input" data-name="traffic_graph" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <input id="traffic-graph-input" data-name="show_traffic_graph" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
                     <label for="traffic-graph-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
-              <div class="control traffic-module-child child-module is-spaced">
+              <div class="control is-spaced">
                 <div class="control-left">
                   <label class="label">
-                    <span>Alexa Statistics</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
-                    </div>
+                    <span>Show Alexa Statistics</span>
                   </label>
                   <small class="tip">Displays <a class="is-primary is-underlined" id="alexa_link">Alexa</a> traffic statistics.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="alexa-stats-input" data-name="alexa_stats" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <input id="alexa-stats-input" data-name="show_alexa_stats" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
                     <label for="alexa-stats-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
               <div class="control is-spaced">
                 <div class="control-left">
-                  <label class="label">History Tab</label>
+                  <label class="label">Show History Ticker</label>
                   <small class="tip">Displays a table of recent activity - useful if you have rentals enabled.</small>
                 </div>
                 <div class="control-right">
                   <form class="checkbox-form">
-                    <input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="history-module-input" class="premium-input"></label>
+                    <input id="show-history-ticker-input" data-name="show_history_ticker" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-history-ticker-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Other Listings</span>
+                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="There will be nothing to display if you do not have any active or unsold listings." data-balloon-pos="up">
+                      <i class="far fa-question-circle"></i>
+                    </div>
+                  </label>
+                  <small class="tip">Displays a list of other <span class="is-bold">active</span> listings you own on DomaHub.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="domain-list-input" data-name="show_domain_list" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="domain-list-input" class="premium-input"></label>
                   </form>
                 </div>
               </div>
@@ -703,8 +677,8 @@
           </div>
         </div>
       </div>
-      <div class="tile is-ancestor">
-        <div class="tile is-vertical is-parent is-6">
+      <div class="columns">
+        <div class="column is-6">
           <div class="card is-fullwidth tile is-child">
             <div class="card-header">
               <h3 class="card-header-title">
@@ -768,7 +742,7 @@
               <div class="control">
                 <label class="label" for="hub-layout-count-input">
                   <span>Default Layout</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a whole number greater than 10." data-balloon-pos="top">
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number greater than 10. There are 4 columns per row in the grid layout." data-balloon-pos="top">
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
@@ -778,8 +752,8 @@
                   <span class="select no-shadow">
                     <div class="drop-form">
                       <select id="hub-layout-type-input" data-name="hub_layout_type" class="hub-input changeable-input">
-                        <option value="0">Tiled</option>
-                        <option value="1">Table</option>
+                        <option value="0">Table</option>
+                        <option value="1">Tiled</option>
                       </select>
                     </div>
                   </span>
@@ -788,7 +762,7 @@
             </div>
           </div>
         </div>
-        <div class="tile is-vertical is-parent is-6">
+        <div class="column is-6">
           <div class="card is-fullwidth tile is-child">
             <div class="card-header is-block">
               <h3 class="card-header-title">Domain List Order</h3>
@@ -804,6 +778,7 @@
                   <div class="categories"></div>
                 </div>
               </div>
+              <input id="hub-listing-ids-input" data-name="hub_listing_ids" type="hidden" class="input changeable-input premium-input hub-input" />
               <div id="sortable-wrapper">
               </div>
               <div id="no-domains-in-hub" class="is-hidden has-text-centered">
@@ -1312,7 +1287,7 @@
                 <td class="next_step is-danger"></td>
                 <td class="td-dns-host">www</td>
                 <td class="td-record">CNAME</td>
-                <td class='required_data'>208.68.37.82</td>
+                <td class='required_data'>@</td>
                 <td class="existing_data is-hidden-mobile"></td>
               </tr>
               <tr class='existing-dns-row needs-action-row no-hover-effect'>

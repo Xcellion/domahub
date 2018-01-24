@@ -1,149 +1,444 @@
+//<editor-fold>-------------------------------VARIABLES-------------------------------
+
 var myPath;
-//to format a number for $$$$
 var moneyFormat = wNumb({
   thousand: ',',
   prefix: '$',
   decimals: 0
 });
+var traffic_chart = false;
+var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
 
+//hash table for categories
+var categories_hash = {};
+for (var x = 0 ; x < categories.length ; x++){
+  categories_hash[categories[x].back] = categories[x].front;
+}
+
+//</editor-fold>
+
+//use a set up function for the whole page so we can re-use in hub
 $(document).ready(function() {
-  $("#date_created").text(moment(listing_info.date_created).format("MMMM DD, YYYY"));
+  if (listing_info){
+    setupListedPage();
+  }
+});
 
-  if (listing_info.status == 1){
+//<editor-fold>-------------------------------SET UP THE PAGE-------------------------------
 
-    //<editor-fold>-----------------------------------------------------------------------------------OTHER DOMAINS
+function setupListedPage(){
 
-    if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){
-      findOtherDomains();
-    }
+  //click to show on mobile
+  $("#show-more-details").off().on("click", function(){
+    $("#more-details-wrapper").toggleClass('is-hidden-mobile');
+    $(this).text(($(this).text() == "Click for details...") ? "Hide details..." : "Click for details...");
+  });
 
-    //</editor-fold>
+  setupLeftHalf();
+  setupRightHalf();
+  setupFooter();
+}
 
-    //<editor-fold>-----------------------------------------------------------------------------------BUY NOW
+//</editor-fold>
 
-    //if it's available
-    if (listing_info.status == 1){
+//<editor-fold>-------------------------------LEFT HALF-------------------------------
 
-      //show minimum price if it's defined
-      if (listing_info.min_price > 0){
-        $("#price-tag").text("For sale - " + moneyFormat.to(listing_info.min_price));
-        $("#min-price").text(" (Min. " + moneyFormat.to(listing_info.min_price) + ")");
-        $("#price-tag").removeClass('is-hidden');
-      }
+function setupLeftHalf(){
+  //domain name
+  $(".domain-title").text(listing_info.domain_name);
 
-      //can buy now
-      if (listing_info.buy_price > 0){
-        var buy_text = "Buy Now: " + moneyFormat.to(listing_info.buy_price);
-        $("#price-tag").text(buy_text).removeClass('is-hidden');
+  setupPriceTags();
+  setupDescription();
+  setupRegistrar();
+  setupDateRegistered();
+  setupCategories();
+  setupAppraisal();
+  setupSocial();
+}
 
-        $("#buy-now-button").on('click', function(){
-          //dont need the min offer input if you're just buying now
-          $("#contact_offer").removeAttr("required");
-        }).find("#buy-button-text").text(buy_text);
+//<editor-fold>-------------------------------PRICE TAGS-------------------------------
 
-        //need the min offer input if you're just offering
-        $("#buy-now-submit").on('click', function(){
-          $("#contact_offer").attr("required", true);
-        });
-      }
+function setupPriceTags(){
+  //buy now
+  if (listing_info.status == 0) {
+    var price_tag_text = "Unavailable";
+  }
+  else if (listing_info.buy_price > 0){
+    var price_tag_text = "Buy now - " + moneyFormat.to(listing_info.buy_price);
 
-      showBuyStuff($("#buy-now-button"));
-    }
+    //dont need to require the offer part when buying now
+    $("#buy-now-button").off().on('click', function(){
+      $("#contact_offer").removeAttr("required");
+    }).find("#buy-button-text").text(price_tag_text);
+  }
+  //minimum price
+  else if (listing_info.min_price > 0){
+    var price_tag_text = "Available - " + moneyFormat.to(listing_info.min_price);
+  }
+  //neither min or bin
+  else {
+    var price_tag_text = "Now available";
+  }
+  $("#price-tag").text(price_tag_text);
 
-    if (!listing_info.deposited) {
-      $("#contact_phone").intlTelInput({
-        utilsScript: "/js/jquery/utils.js"
-      });
-    }
+  //rental price tag
+  if (listing_info.rentable && listing_info.status == 1){
+    $("#rent-price-tag").removeClass('is-hidden');
+    $("#rent-price-text").text(moneyFormat.to(listing_info.price_rate) + " / " + listing_info.price_type);
+  }
+  else {
+    $("#rent-price-tag").addClass('is-hidden');
+  }
+}
 
-    //click buy now button or unavailable description
-    $("#buy-tab").on("click", function(e){
-      //doing the tutorial!
-      if (compare && tutorial_tour && !tutorial_tour.ended()){
-        tutorial_tour.goTo(6);
-      }
-      showBuyStuff($(this));
+//</editor-fold>
+
+//<editor-fold>-------------------------------DESCRIPTION-------------------------------
+
+function setupDescription(){
+  $("#listing-description").text(listing_info.description);
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------REGISTRAR-------------------------------
+
+function setupRegistrar(){
+  if ((!listing_info.premium || (listing_info.show_registrar == 1 && listing_info.registrar)) && listing_info.registrar){
+    $("#listing-domain-registrar").removeClass('is-hidden').find(".listing-detail-text").text(listing_info.registrar);
+  }
+  else {
+    $("#listing-domain-registrar").addClass('is-hidden');
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------DATE REGISTERED-------------------------------
+
+function setupDateRegistered(){
+  if ((!listing_info.premium || (listing_info.show_registration_date == 1 && listing_info.date_registered)) && listing_info.date_registered){
+    $("#listing-date-registered").removeClass('is-hidden').find(".listing-detail-text").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
+  }
+  else {
+    $("#listing-date-registered").addClass('is-hidden');
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------CATEGORIES-------------------------------
+
+function setupCategories(){
+  if (!listing_info.categories || listing_info.categories == "" || (listing_info.premium && listing_info.show_categories == 0)){
+    $("#listing-categories").addClass('is-hidden');
+  }
+  else {
+    $("#listing-categories").removeClass('is-hidden').find(".listing-detail-text").text(listing_info.categories.split(" ").map(function(elem){
+      return categories_hash[elem]
+    }).join(", "));
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------APPRAISAL-------------------------------
+
+function setupAppraisal(){
+  if (!listing_info.premium || (listing_info.show_appraisal == 1)){
+    $("#listing-appraisal").removeClass('is-hidden').find(".listing-detail-text").each(function(){
+      $(this).attr("href", $(this).attr("href") + listing_info.domain_name);
     });
+  }
+  else {
+    $("#listing-appraisal").addClass('is-hidden');
+  }
+}
 
-    $("#buy-now-form").on("submit", function(e){
-      var type_of_submit = $("button[type=submit][clicked=true]").attr("name");
-      e.preventDefault();
+//</editor-fold>
 
-      if (checkPhone()){
-        $("button[type=submit][clicked=true]").addClass('is-loading');
-        $(".notification").addClass('is-hidden').removeClass('is-active');
-        $(".contact-input").attr('disabled', true);
+//<editor-fold>-------------------------------SOCIAL SHARE-------------------------------
 
-        //comparison only, no need for AJAX
-        if (compare){
-          testSubmitBuyHandler();
+function setupSocial(){
+  if (!listing_info.premium || (listing_info.show_social_sharing == 1)){
+    var link_to_domain = (listing_info.premium) ? "" : "domahub.com/listing/"
+    $("#listing-social").removeClass('is-hidden').find(".listing-detail-text").each(function(){
+      $(this).attr("href", $(this).attr("href") + link_to_domain + listing_info.domain_name);
+    });
+  }
+  else {
+    $("#listing-social").addClass('is-hidden');
+  }
+}
+
+//</editor-fold>
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------RIGHT HALF-------------------------------
+
+function setupRightHalf(){
+  setupContactTab();
+  setupRentalTab();
+  setupOtherDomainsTab();
+  setupTrafficTab();
+  setUpTabs();
+}
+
+  //<editor-fold>-------------------------------TABS-------------------------------
+
+  function setUpTabs(){
+
+    //<editor-fold>-------------------------------TABS HANDLER-------------------------------
+
+    //switch tabs
+    $(".tab").off().on("click", function(){
+      var which_tab = $(this).attr("id").replace("-tab", "");
+
+      //show the tab
+      $(".tab").removeClass('is-active');
+      $(this).addClass('is-active');
+
+      //show the module
+      $(".module").addClass('is-hidden');
+      $("#" + which_tab + "-module").removeClass('is-hidden');
+
+      //stylize if premium or compare
+      if (listing_info.premium || compare){
+        stylize(listing_info.font_color, ".page-contents .module-tab:not(.is-active) a", "color");
+        stylize(listing_info.primary_color, ".page-contents .module-tab.is-active a", "color");
+      }
+
+      if (which_tab == "traffic"){
+        //if tutorial, go to the traffic module step
+        if (compare && tutorial_tour && !tutorial_tour.ended()){
+          tutorial_tour.goTo(10);
         }
-        else {
-          //send an offer / or buy it now request
-          $.ajax({
-            url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + type_of_submit,
-            method: "POST",
-            data: {
-              contact_email: $("#contact_email").val(),
-              contact_name: $("#contact_name").val(),
-              contact_phone: $("#contact_phone").intlTelInput("getNumber"),
-              contact_offer: $("#contact_offer").val(),
-              contact_message: $("#contact_message").val()
-            }
-          }).done(function(data){
-            $("button[type=submit][clicked=true]").removeClass('is-loading');
-
-            if (data.state == "success"){
-              if (type_of_submit == "offer"){
-                clearNotification();
-                successMessage("Success! Please check your email for further instructions.");
-                $("#buy-now-form").off();
-              }
-              else {
-                window.location.assign("/listing/" + listing_info.domain_name + "/checkout/buy");
-              }
-            }
-            else {
-              clearNotification();
-              $(".contact-input").removeAttr('disabled');
-              errorMessage(data.message);
-            }
-          });
-        }
+        getTrafficData();
       }
-    });
-
-    //set the clicked attribute so we know which type of submit
-    $("form button[type=submit]").on("click", function(e){
-      $("form button[type=submit][clicked=true]").attr("clicked", false);
-      $(this).attr('clicked', true);
-    });
-
-    //</editor-fold>
-
-    //<editor-fold>-----------------------------------------------------------------------------------RENTAL
-
-    if (listing_info.rentable){
-
-      //click rent now or unavailable description
-      $("#calendar-tab").on("click", function(e) {
+      else if (which_tab == "rental"){
         //doing the tutorial!
         if (compare && tutorial_tour && !tutorial_tour.ended()){
           tutorial_tour.goTo(8);
         }
-        showRentalStuff($(this));
+
+        getTimes();
+      }
+
+    });
+
+    //</editor-fold>
+
+    //rental tab
+    if (!listing_info.rentable || listing_info.status == 0){
+      $("#rental-module").addClass("is-hidden");
+      $("#rental-tab").addClass("is-hidden");
+    }
+    else {
+      $("#rental-tab").removeClass("is-hidden");
+      if ($("#rental-tab").hasClass('is-active')){
+        $("#rental-module").removeClass("is-hidden");
+      }
+    }
+
+    //traffic tab
+    if (listing_info.premium && listing_info.show_traffic_graph == 0 && listing_info.show_alexa_stats == 0){
+      $("#traffic-module").addClass("is-hidden");
+      $("#traffic-tab").addClass("is-hidden");
+    }
+    else {
+      $("#traffic-tab").removeClass("is-hidden");
+      if ($("#traffic-tab").hasClass('is-active')){
+        $("#traffic-module").removeClass("is-hidden");
+      }
+    }
+
+    //ticker history tab
+    if (listing_info.premium && listing_info.show_history_ticker == 0){
+      $("#ticker-module").addClass("is-hidden");
+      $("#ticker-tab").addClass("is-hidden");
+    }
+    else {
+      $("#ticker-tab").removeClass("is-hidden");
+      if ($("#ticker-tab").hasClass('is-active')){
+        $("#ticker-module").removeClass("is-hidden");
+      }
+    }
+
+    //ticker history tab
+    if (listing_info.premium && listing_info.show_domain_list == 0){
+      $("#domainlist-tab").addClass("is-hidden");
+      $("#domainlist-module").addClass("is-hidden");
+    }
+    else {
+      $("#domainlist-tab").removeClass("is-hidden");
+      if ($("#domainlist-tab").hasClass('is-active')){
+        $("#domainlist-module").removeClass("is-hidden");
+      }
+    }
+
+    //if the active is hidden
+    if ($(".module-tab.is-active").hasClass("is-hidden")){
+      $(".module-tab.is-active").removeClass("is-active");
+    }
+
+    //add active to the first appearing tab (if some tabs are disabled)
+    if ($(".module-tab.is-active").length == 0){
+      $(".tab").eq(0).addClass('is-active');
+      $(".module").eq(0).removeClass('is-hidden');
+    }
+
+    //hide all tabs if only 1 left
+    if ($(".module-tab:not(.is-hidden)").length == 1){
+      $(".module-tab").addClass('is-hidden');
+    }
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------CONTACT FORM-------------------------------
+
+  function setupContactTab(){
+    if (listing_info.status == 1){
+      //set up phone
+      $("#contact_phone").intlTelInput({
+        utilsScript: "/js/jquery/utils.js"
       });
 
-      //<editor-fold>-----------------------------------------------------------------------------------TYPED PATH
+      //get a random char phrase
+      if (!listing_info.premium || (listing_info.premium && listing_info.show_placeholder == 1)){
+        $("#contact_name").attr("placeholder", random_char.name);
+        $("#contact_email").attr("placeholder", random_char.email);
+        $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+      }
+      else {
+        $("#contact_name").attr("placeholder", "John Smith");
+        $("#contact_email").attr("placeholder", "john@smith.com");
+        $("#contact_message").attr("placeholder", "Hey! I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+      }
+
+      //placeholder + minimum on contact form
+      if (listing_info.min_price > 0){
+        $("#contact_offer").attr("min", listing_info.min_price).attr("placeholder", listing_info.min_price);
+      }
+
+      //need the min offer input if you're offering
+      $("#send-offer-button").off().on('click', function(){
+        $("#contact_offer").attr("required", true);
+      });
+
+      //click buy tab (tutorial / focus)
+      $("#contact-form-tab").off().on("click", function(e){
+        //doing the tutorial!
+        if (compare && tutorial_tour && !tutorial_tour.ended()){
+          tutorial_tour.goTo(6);
+        }
+
+        //focus the contact name
+        if ($("#contact_name").is(":visible")){
+          $("#contact_name").focus();
+        }
+      });
+
+      //submit the contact form
+      $("#buy-now-form").off().on("submit", function(e){
+        var type_of_submit = $("button[type=submit][clicked=true]").attr("name");
+        e.preventDefault();
+
+        if ($("#contact_phone").intlTelInput("isValidNumber")){
+          $("button[type=submit][clicked=true]").addClass('is-loading');
+          $(".notification").addClass('is-hidden').removeClass('is-active');
+          $(".contact-input").attr('disabled', true);
+
+          //comparison only, no need for AJAX
+          if (compare){
+            testSubmitBuyHandler();
+          }
+          else {
+            //send an offer / or buy it now request
+            $.ajax({
+              url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + type_of_submit,
+              method: "POST",
+              data: {
+                contact_email: $("#contact_email").val(),
+                contact_name: $("#contact_name").val(),
+                contact_phone: $("#contact_phone").intlTelInput("getNumber"),
+                contact_offer: $("#contact_offer").val(),
+                contact_message: $("#contact_message").val()
+              }
+            }).done(function(data){
+              $("button[type=submit][clicked=true]").removeClass('is-loading');
+
+              if (data.state == "success"){
+                if (type_of_submit == "offer"){
+                  clearNotification();
+                  successMessage("Success! Please check your email for further instructions.");
+                  $("#buy-now-form").off();
+                }
+                else {
+                  window.location.assign("/listing/" + listing_info.domain_name + "/checkout/buy");
+                }
+              }
+              else {
+                clearNotification();
+                $(".contact-input").removeAttr('disabled');
+                errorMessage(data.message);
+              }
+            });
+          }
+        }
+        else {
+          clearNotification();
+          errorMessage("Please enter a real phone number! Did you select the correct country for your phone number?");
+        }
+      });
+
+      //set the clicked attribute so we know which type of submit
+      $("form button[type=submit]").off().on("click", function(e){
+        $("form button[type=submit][clicked=true]").attr("clicked", false);
+        $(this).attr('clicked', true);
+      });
+    }
+    else {
+      $("#contact-form-tab").addClass("is-hidden");
+      $("#contact-form-module").addClass("is-hidden");
+    }
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------RENTAL-------------------------------
+
+  function setupRentalTab(){
+    if (listing_info.rentable && listing_info.status == 1){
+      //submit times (redirect to rental checkout)
+      $("#checkout-button").off().on("click", function(){
+        submitTimes($(this));
+      });
+
+      //<editor-fold>-------------------------------TYPED PATH-------------------------------
+
+      //initiate typed JS
+      $("#typed-slash").typed({
+        typeSpeed: 40,
+        attr: "placeholder",
+        loop : true,
+        shuffle : true,
+        strings : (listing_info.paths == "" || !listing_info.paths) ? [
+          "thing",
+          "something",
+          "anything"
+        ] : listing_info.paths.split(",")
+      });
 
       //focus to hide the click me message
-      $("#typed-slash").on("focus", function(){
+      $("#typed-slash").off().on("focus", function(){
         $("#input-tooltip").addClass('is-hidden');
         $(this).addClass('is-active');
 
         //select all on existing path
         $("#typed-slash").select();
-      }).on("focusout", function(){
+      }).off().on("focusout", function(){
         if ($("#typed-slash").val() == ""){
           $("#input-tooltip").removeClass('is-hidden');
         }
@@ -151,22 +446,17 @@ $(document).ready(function() {
 
         //re-add the calendar event handler if path changed
         if (myPath != undefined && myPath != $("#typed-slash").val()){
-          //remove any existing date range pickers
-          if ($("#calendar").data('daterangepicker')){
-            $("#calendar").data('daterangepicker').remove();
-          }
-
-          $("#calendar").val("");
+          $("#calendar-input").val("");
           $("#checkout-button").addClass('is-disabled');
 
-          $("#calendar").off("click").on("click", function(){
+          $("#calendar-input").off("click").off().on("click", function(){
             getTimes($(this));
           });
         }
       });
 
       //function for input text validation and tooltip change
-      $("#typed-slash").on("keypress onkeypress", function(e) {
+      $("#typed-slash").off().on("keypress onkeypress", function(e) {
         var code = e.charCode || e.keyCode;
         var inp = String.fromCharCode(code);
         //regex for alphanumeric
@@ -184,7 +474,7 @@ $(document).ready(function() {
         else {
           $("#input-tooltip-error").addClass("is-hidden");
         }
-      }).on('keyup', function(e){
+      }).off().on('keyup', function(e){
         var code = e.charCode || e.keyCode;
 
         var validChar = /^[0-9a-zA-Z]+$/;
@@ -201,20 +491,20 @@ $(document).ready(function() {
           }
 
           //show if mypath is the same
-          else if ($("#calendar").is(":visible")){
-            $("#calendar").data('daterangepicker').show();
+          else if ($("#calendar-input").is(":visible")){
+            $("#calendar-input").data('daterangepicker').show();
           }
         }
       });
 
-      //pre-fill the path input
+      //pre-fill the path input if theres a wanted path
       if (getParameterByName("wanted")){
         $("#typed-slash").val(getParameterByName("wanted"));
       }
 
       //</editor-fold>
 
-      //<editor-fold>-----------------------------------------------------------------------------------CALENDAR AND TIMES
+      //<editor-fold>-------------------------------RENTAL FREE TIMES-------------------------------
 
       //if and any free times
       if (listing_info.freetimes && listing_info.freetimes.length > 0){
@@ -232,578 +522,1140 @@ $(document).ready(function() {
         if (freetime_now){
           var until_date = moment(freetime_now.date + freetime_now.duration).format("MMM, DD");
           $("#free-until").removeClass('is-hidden').text("Free until " + until_date);
-          $("#price").addClass('is-linethrough');
+          $("#rent-price-text").addClass('is-linethrough');
         }
       }
 
-      //submit times (redirect to checkout)
-      $("#checkout-button").on("click", function(){
-        submitTimes($(this));
-      });
+      //</editor-fold>
 
-      //prevent typing on calendar
-      $("#calendar").on("keydown", function(e){
-        e.preventDefault();
-      });
     }
-
-    //</editor-fold>
-
-    //</editor-fold>
-  }
-});
-
-//<editor-fold>-------------------------------BUY NOW-------------------------------
-
-//show buy now module
-function showBuyStuff(buy_now_button){
-
-  //hide the slash input
-  $("#path-input").addClass("is-hidden");
-
-  //hide calendar if switching back to buy tab
-  if (listing_info.rentable && $("#calendar").data('daterangepicker')){
-    $("#calendar").data('daterangepicker').hide();
   }
 
-  if (listing_info.status == 1){
-    $("#unavailable-module").addClass('is-hidden');
+  //<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
 
-    //show buy related stuff
-    $(".post-buy-module").removeClass('is-hidden');
-    $(".post-rent-module").addClass('is-hidden');
-    $("#contact_name").focus();
+  //helper function to check if everything is legit
+  function checkTimes(){
+    var startDate = $("#calendar-input").data('daterangepicker').startDate;
+    var endDate = $("#calendar-input").data('daterangepicker').endDate.clone().add(1, "millisecond");
 
-    if (!listing_info.premium || (listing_info.premium && listing_info.placeholder == 1)){
-      //get a random char phrase
-      var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
-      $("#contact_name").attr("placeholder", random_char.name);
-      $("#contact_email").attr("placeholder", random_char.email);
-      $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+    if (!startDate.isValid() || !endDate.isValid()){
+      $("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
     }
-    //revert domain title to get rid of the slash at the end
-    $("#domain-title").text(listing_info.domain_name);
-  }
-  else {
-    $("#unavailable-module").removeClass('is-hidden');
-  }
-
-}
-
-//show rental module
-function showRentalStuff(rent_now_button){
-
-  //show rental related stuff
-  $(".post-rent-module").removeClass('is-hidden');
-  $(".post-buy-module").addClass('is-hidden');
-
-  //only if rentable
-  if (listing_info.rentable){
-    $("#unavailable-module").addClass('is-hidden');
-    $("#path-input").removeClass("is-hidden");
-
-    //get calendar times
-    if (listing_info.status == 1){
-      getTimes();
-    }
-
-    //add a / to end of domain
-    $("#domain-title").text(listing_info.domain_name + "/");
-
-    //tooltip appears too fast, fade it in
-    $("#input-tooltip").fadeIn('slow');
-    $("#typed-slash").attr("placeholder", "");
-
-    //initiate typed JS
-    $(function(){
-      var typed_options = {
-        typeSpeed: 40,
-        attr: "placeholder"
+    else {
+      return {
+        starttime : startDate._d.getTime(),
+        endtime : endDate._d.getTime()
       };
-      if (listing_info.paths == "" || !listing_info.paths){
-        typed_options.strings = [
-          "thing",
-          "something",
-          "ANYTHING"
-        ]
+    }
+  }
+
+  function submitTimes(checkout_button){
+    //remove event handler
+    checkout_button.off();
+    checkout_button.addClass('is-loading');
+    var newEvent = checkTimes();
+
+    if (newEvent.starttime && newEvent.endtime){
+
+      //test rental submit (for compare tool)
+      if (compare){
+        testSubmitRentHandler(checkout_button);
       }
       else {
-        typed_options.strings = listing_info.paths.split(",");
-        typed_options.loop = true;
-        typed_options.shuffle = true;
+        //redirect to checkout page
+        $.ajax({
+          type: "POST",
+          url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkoutrent",
+          data: {
+            starttime: newEvent.starttime,
+            endtime: newEvent.endtime,
+            path: $("#typed-slash").val()
+          },
+          xhrFields: { withCredentials: true }
+        }).done(function(data){
+          checkout_button.removeClass('is-loading');
+          if (data.state == "success"){
+            window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
+          }
+          else if (data.state == "error"){
+            $("#calendar-regular-message").addClass('is-hidden');
+            errorHandler(data.message);
+            checkout_button.on('click', function(){
+              submitTimes(checkout_button);
+            });
+
+            //re-add calendar event handler to fetch new events
+            $("#calendar-input").off('click').off().on("click", function(){
+              getTimes($(this));
+            });
+          }
+        });
       }
-      $("#typed-slash").typed(typed_options);
-    });
+    }
   }
-  else {
-    $("#unavailable-module").removeClass('is-hidden');
+
+  //handler for various error messages
+  function errorHandler(message){
+    $("#calendar-regular-message").addClass('is-hidden');
+
+    switch (message){
+      case "Dates are unavailable!":
+      $("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
+      break;
+      case "Invalid dates!":
+      case "Invalid dates! No times posted!":
+      case "Invalid dates! Not valid dates!":
+      case "Not divisible by hour blocks!":
+      case "Start time in the past!":
+      case "Invalid end time!":
+      case "Invalid start time!":
+      $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
+      break;
+      default:
+      $("#calendar-error-message").removeClass('is-hidden').text("Oh no, something went wrong! Please refresh the page and try again.");
+      break;
+    }
   }
-}
 
-//check phone number
-function checkPhone(){
-  if ($("#contact_phone").intlTelInput("isValidNumber")){
-    return true;
-  }
-  else {
-    clearNotification();
-    errorMessage("Please enter a real phone number! Did you select the correct country for your phone number?")
-  }
-}
+  //</editor-fold>
 
-//</editor-fold>
+  //<editor-fold>-------------------------------CALENDAR SET UP-------------------------------
 
-//<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
+  //get times from the server
+  function getTimes(calendar_elem){
+    //now loading messages
+    $("#calendar-input").addClass('is-disabled');
+    $("#calendar-regular-message").addClass('is-hidden');
+    $("#calendar-error-message").addClass('is-hidden');
 
-//helper function to check if everything is legit
-function checkTimes(){
-  var startDate = $("#calendar").data('daterangepicker').startDate;
-  var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
+    //loading dates message
+    if (calendar_elem){
+      calendar_elem.off("click");
+    }
 
-  if (!startDate.isValid() || !endDate.isValid()){
-    $("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
-  }
-  else {
-    return {
-      starttime : startDate._d.getTime(),
-      endtime : endDate._d.getTime()
-    };
-  }
-}
-
-function submitTimes(checkout_button){
-  //remove event handler
-  checkout_button.off();
-  checkout_button.addClass('is-loading');
-  var newEvent = checkTimes();
-
-  if (newEvent.starttime && newEvent.endtime){
-
-    //test rental submit (for compare tool)
+    //comparison only, no need for AJAX
     if (compare){
-      testSubmitRentHandler(checkout_button);
+      testCalendarHandler();
     }
     else {
-      //redirect to checkout page
       $.ajax({
-        type: "POST",
-        url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkoutrent",
+        url: "/listing/" + listing_info.domain_name.toLowerCase() + "/times",
+        method: "POST",
         data: {
-          starttime: newEvent.starttime,
-          endtime: newEvent.endtime,
           path: $("#typed-slash").val()
-        },
-        xhrFields: { withCredentials: true }
-      }).done(function(data){
-        checkout_button.removeClass('is-loading');
-        if (data.state == "success"){
-          window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
         }
-        else if (data.state == "error"){
-          $("#calendar-regular-message").addClass('is-hidden');
-          errorHandler(data.message);
-          checkout_button.on('click', function(){
-            submitTimes(checkout_button);
-          });
+      }).done(function(data){
+        $("#calendar-input").removeClass('is-disabled');
+        $("#calendar-regular-message").removeClass('is-hidden');
 
-          //re-add calendar event handler to fetch new events
-          $("#calendar").off('click').on("click", function(){
-            getTimes($(this));
-          });
+        //got the future events, go ahead and create the calendar
+        if (data.state == "success" && data.times){
+          listing_info.rental_moments = [];
+          for (var x = 0; x < data.times.length; x++){
+            listing_info.rental_moments.push({
+              start : moment(data.times[x].date),
+              end : moment(data.times[x].date + data.times[x].duration),
+            });
+          }
+
+          //only show new calendar if path changed
+          if (myPath != $("#typed-slash").val() || !$("#calendar-input").data('daterangepicker')){
+            myPath = $("#typed-slash").val();
+            setUpCalendar(listing_info);
+          }
+          else if ($("#calendar-input").is(":visible")){
+            $("#calendar-input").focus().data('daterangepicker').show();
+          }
+        }
+        else {
+          errorHandler("");
         }
       });
     }
   }
-}
 
-//handler for various error messages
-function errorHandler(message){
-  $("#calendar-regular-message").addClass('is-hidden');
+  //setup the calendar
+  function setUpCalendar(listing_info){
+    //create a new range picker based on new path rental availability
+    var start_date = moment();
+    var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
 
-  switch (message){
-    case "Dates are unavailable!":
-    //remove any existing date range pickers
-    if ($("#calendar").data('daterangepicker')){
-      $("#calendar").data('daterangepicker').remove();
-    }
-    $("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
-    break;
-    case "Invalid dates!":
-    case "Invalid dates! No times posted!":
-    case "Invalid dates! Not valid dates!":
-    case "Not divisible by hour blocks!":
-    case "Start time in the past!":
-    case "Invalid end time!":
-    case "Invalid start time!":
-    $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
-    break;
-    default:
-    $("#calendar-error-message").removeClass('is-hidden').text("Oh no, something went wrong! Please refresh the page and try again.");
-    break;
-  }
-}
+    $("#calendar-input").daterangepicker({
+      opens: "center",
+      alwaysShowCalendars: true,
+      autoApply: true,
+      keepOpen : true,
+      autoUpdateInput: false,
+      locale: {
+        format: 'MM/DD/YYYY'
+      },
+      // timePicker: true,
+      // timePickerIncrement: 60,
 
-//</editor-fold>
+      minDate: moment().endOf("hour").add(1, "millisecond").add(1, "hour"),
+      maxDate: moment().endOf("hour").add(1, "millisecond").add(1, "year"),
 
-//<editor-fold>-------------------------------CALENDAR SET UP-------------------------------
-
-//get times from the server
-function getTimes(calendar_elem){
-  //now loading messages
-  $("#calendar").addClass('is-disabled');
-  $("#calendar-loading-message").removeClass('is-hidden');
-  $("#calendar-regular-message").addClass('is-hidden');
-  $("#calendar-error-message").addClass('is-hidden');
-
-  //loading dates message
-  if (calendar_elem){
-    calendar_elem.off("click");
-  }
-
-  //comparison only, no need for AJAX
-  if (compare){
-    testCalendarHandler();
-  }
-  else {
-    $.ajax({
-      url: "/listing/" + listing_info.domain_name.toLowerCase() + "/times",
-      method: "POST",
-      data: {
-        path: $("#typed-slash").val()
-      }
-    }).done(function(data){
-      $("#calendar").removeClass('is-disabled');
-      $("#calendar-loading-message").addClass('is-hidden');
-      $("#calendar-regular-message").removeClass('is-hidden');
-
-      //got the future events, go ahead and create the calendar
-      if (data.state == "success" && data.times){
-        listing_info.rental_moments = [];
-        for (var x = 0; x < data.times.length; x++){
-          listing_info.rental_moments.push({
-            start : moment(data.times[x].date),
-            end : moment(data.times[x].date + data.times[x].duration),
-          });
+      isInvalidDate: function(curDate){
+        if (curDate.isAfter(moment())){
+          var bool = checkIfNotOverlapped(curDate);
+          return bool;
         }
-
-        //only show new calendar if path changed
-        if (myPath != $("#typed-slash").val() || !$("#calendar").data('daterangepicker')){
-          myPath = $("#typed-slash").val();
-          setUpCalendar(listing_info);
-        }
-        else if ($("#calendar").is(":visible")){
-          $("#calendar").focus().data('daterangepicker').show();
-        }
-      }
-      else {
-        errorHandler("");
-      }
-    });
-  }
-}
-
-//setup the calendar
-function setUpCalendar(listing_info){
-  //create a new range picker based on new path rental availability
-  var start_date = moment();
-  var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
-
-  $('#calendar').daterangepicker({
-    opens: "center",
-    alwaysShowCalendars: true,
-    autoApply: true,
-    autoUpdateInput: false,
-    locale: {
-      // format: 'MM/DD/YYYY h:mmA'
-      format: 'MM/DD/YYYY'
-    },
-    // timePicker: true,
-    // timePickerIncrement: 60,
-
-    minDate: moment().endOf("hour").add(1, "millisecond").add(1, "hour"),
-    maxDate: moment().endOf("hour").add(1, "millisecond").add(1, "year"),
-
-    isInvalidDate: function(curDate){
-      if (curDate.isAfter(moment())){
-        var bool = checkIfNotOverlapped(curDate);
-        return bool;
-      }
-      else {
-        return true;
-      }
-    },
-
-    //free times on calendar
-    isCustomDate: function(curDate){
-      if (curDate.isAfter(moment())){
-        if (checkIfFree(curDate)){
-          return "free-times";
-        }
-      }
-    }
-  });
-
-  //update when applying new dates
-  $('#calendar').on('apply.daterangepicker', function(ev, picker) {
-    //picked today to start
-    if (picker.startDate.startOf("day").isSame(moment().startOf("day"))){
-      picker.startDate = moment().startOf("hour");
-    }
-
-    if (picker.startDate.isValid() && picker.endDate.isValid()){
-      updatePrices();
-      $(this).val(picker.startDate.format('MMM D, YYYY') + ' - ' + picker.endDate.format('MMM D, YYYY'));
-      $("#checkout-button").removeClass('is-disabled');
-    }
-    else {
-      $(this).val("");
-      $("#checkout-button").addClass('is-disabled');
-    }
-  });
-
-  //to figure out what events are already existing in given view
-  $('#calendar').on('show.daterangepicker', function(ev, picker) {
-    //remove any error messages
-    $("#calendar-regular-message").removeClass('is-hidden');
-    $("#calendar-error-message").addClass('is-hidden');
-    $("#calendar-module").css("margin-bottom", $(".daterangepicker").height());
-  });
-
-  //only show if the calendar input is visible
-  if ($("#calendar").is(":visible")){
-    $("#calendar").data('daterangepicker').show();
-  }
-}
-
-//helper function to make sure theres nothing overlapping this event
-function checkIfNotOverlapped(event){
-  var overlap = 0;
-  if (listing_info.rental_moments){
-    for (var x = 0; x < listing_info.rental_moments.length; x++){
-      var rental_start = listing_info.rental_moments[x].start;
-      var rental_end = listing_info.rental_moments[x].end;
-
-      //include start, exclude end
-      if (event.isBetween(rental_start, rental_end, "day", "[)")){
-        overlap++;
-      }
-    }
-  }
-  return overlap != 0;
-}
-
-//helper function to check if overlaps a free period
-function checkIfFree(event){
-  var overlap = 0;
-  if (listing_info.freetimes){
-    for (var x = 0; x < listing_info.freetimes.length; x++){
-      var freetime_start = moment(listing_info.freetimes[x].date);
-      var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
-
-      //include start, exclude end
-      if (event.isBetween(freetime_start, freetime_end, "day", "[)")){
-        overlap++;
-      }
-    }
-  }
-  return overlap != 0;
-}
-
-//helper function to get correct price of events
-function updatePrices(){
-  if (listing_info.status){
-    var startDate = $("#calendar").data('daterangepicker').startDate;
-    var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
-
-    //calculate the price
-    var totalPrice = moment.duration(endDate.diff(startDate));
-
-    //any overlapped time with free times
-    var overlappedTime = anyFreeDayOverlap(startDate, endDate);
-
-    if (overlappedTime > 0){
-      var origPrice = calculatePrice(totalPrice);
-      var actual_price = totalPrice.subtract(overlappedTime, "milliseconds");
-      var totalPrice = calculatePrice(actual_price);
-    }
-    else {
-      var totalPrice = calculatePrice(totalPrice);
-    }
-
-    //price or price per day
-    if (totalPrice == 0 && listing_info.price_rate != 0 && overlappedTime == 0){
-      $(".total-price").addClass("is-hidden");
-      $("#checkout-button").addClass('is-disabled');
-      $(".actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
-    }
-    else {
-      $(".total-price").removeClass("is-hidden");
-      $("#checkout-button").removeClass('is-disabled');
-
-      if (origPrice){
-        $("#orig-price").removeClass('is-hidden');
-        countPrice($("#orig-price"), origPrice);
-      }
-      else {
-        $("#orig-price").addClass('is-hidden');
-      }
-
-      countPrice($(".actual-price"), totalPrice);
-    }
-  }
-}
-
-//count number for price
-function countPrice(elem, price){
-  elem.prop('Counter', $("#price").prop('Counter')).stop().animate({
-    Counter: price
-  }, {
-    duration: 100,
-    easing: 'swing',
-    step: function (now) {
-      if (now == 0){
-        $(this).text("Free");
-      }
-      else {
-        $(this).text(" $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
-      }
-    }
-  });
-}
-
-//figure out price from milliseconds
-function calculatePrice(totalduration){
-  if (listing_info.price_type == "month"){
-    totalduration = totalduration.asDays() / 30;
-  }
-  else {
-    totalduration = totalduration.as(listing_info.price_type);
-    totalduration = Number(Math.round(totalduration+'e2')+'e-2');
-  }
-  return totalduration * listing_info.price_rate;
-}
-
-//figure out if the start and end dates overlap any free periods
-function anyFreeDayOverlap(starttime, endtime){
-  if (listing_info.freetimes && listing_info.freetimes.length > 0){
-    var overlap_time = 0;
-    for (var x = 0; x < listing_info.freetimes.length; x++){
-      var freetime_start = moment(listing_info.freetimes[x].date);
-      var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
-
-      //there is overlap
-      if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
-        //completely covered by free time
-        if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
-          overlap_time += endtime.diff(starttime);
-        }
-        //completely covers free time
-        else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
-          overlap_time += freetime_end.diff(freetime_start);
-        }
-        //overlap partially in the end of wanted time
-        else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
-          overlap_time += endtime.diff(freetime_start);
-        }
-        //overlap partially at the beginning of wanted time
         else {
-          overlap_time += freetime_end.diff(starttime);
+          return true;
+        }
+      },
+
+      //free times on calendar
+      isCustomDate: function(curDate){
+        if (curDate.isAfter(moment())){
+          if (checkIfFree(curDate)){
+            return "free-times";
+          }
+        }
+      }
+    });
+
+    //update when applying new dates
+    $("#calendar-input").off().on('apply.daterangepicker', function(ev, picker) {
+      //picked today to start
+      if (picker.startDate.startOf("day").isSame(moment().startOf("day"))){
+        picker.startDate = moment().startOf("hour");
+      }
+
+      if (picker.startDate.isValid() && picker.endDate.isValid()){
+        updatePrices();
+        $(this).val(picker.startDate.format('MMM D, YYYY') + ' - ' + picker.endDate.format('MMM D, YYYY'));
+        $("#checkout-button").removeClass('is-disabled');
+      }
+      else {
+        $(this).val("");
+        $("#checkout-button").addClass('is-disabled');
+      }
+    });
+
+    //to figure out what events are already existing in given view
+    $("#calendar-input").data('daterangepicker').hide = function () {};
+    $(".daterangepicker").appendTo("#calendar");
+
+    //only show if the calendar input is visible
+    if ($("#calendar-input").is(":visible")){
+      $("#calendar-input").data('daterangepicker').show();
+      $("#calendar-input").addClass('is-hidden');
+    }
+
+  }
+
+  //helper function to make sure theres nothing overlapping this event
+  function checkIfNotOverlapped(event){
+    var overlap = 0;
+    if (listing_info.rental_moments){
+      for (var x = 0; x < listing_info.rental_moments.length; x++){
+        var rental_start = listing_info.rental_moments[x].start;
+        var rental_end = listing_info.rental_moments[x].end;
+
+        //include start, exclude end
+        if (event.isBetween(rental_start, rental_end, "day", "[)")){
+          overlap++;
         }
       }
     }
-    return overlap_time;
+    return overlap != 0;
+  }
+
+  //helper function to check if overlaps a free period
+  function checkIfFree(event){
+    var overlap = 0;
+    if (listing_info.freetimes){
+      for (var x = 0; x < listing_info.freetimes.length; x++){
+        var freetime_start = moment(listing_info.freetimes[x].date);
+        var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
+
+        //include start, exclude end
+        if (event.isBetween(freetime_start, freetime_end, "day", "[)")){
+          overlap++;
+        }
+      }
+    }
+    return overlap != 0;
+  }
+
+  //helper function to get correct price of events
+  function updatePrices(){
+    if (listing_info.status){
+      var startDate = $("#calendar-input").data('daterangepicker').startDate;
+      var endDate = $("#calendar-input").data('daterangepicker').endDate.clone().add(1, "millisecond");
+
+      //calculate the price
+      var totalPrice = moment.duration(endDate.diff(startDate));
+
+      //any overlapped time with free times
+      var overlappedTime = anyFreeDayOverlap(startDate, endDate);
+
+      if (overlappedTime > 0){
+        var origPrice = calculatePrice(totalPrice);
+        var actual_price = totalPrice.subtract(overlappedTime, "milliseconds");
+        var totalPrice = calculatePrice(actual_price);
+      }
+      else {
+        var totalPrice = calculatePrice(totalPrice);
+      }
+
+      //price or price per day
+      if (totalPrice == 0 && listing_info.price_rate != 0 && overlappedTime == 0){
+        $(".total-price").addClass("is-hidden");
+        $("#checkout-button").addClass('is-disabled');
+        $(".actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
+      }
+      else {
+        $(".total-price").removeClass("is-hidden");
+        $("#checkout-button").removeClass('is-disabled');
+
+        if (origPrice){
+          $("#orig-price").removeClass('is-hidden');
+          countPrice($("#orig-price"), origPrice);
+        }
+        else {
+          $("#orig-price").addClass('is-hidden');
+        }
+
+        countPrice($(".actual-price"), totalPrice);
+      }
+    }
+  }
+
+  //count number for price
+  function countPrice(elem, price){
+    elem.prop('Counter', $("#price").prop('Counter')).stop().animate({
+      Counter: price
+    }, {
+      duration: 100,
+      easing: 'swing',
+      step: function (now) {
+        if (now == 0){
+          $(this).text("Free");
+        }
+        else {
+          $(this).text(" $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+        }
+      }
+    });
+  }
+
+  //figure out price from milliseconds
+  function calculatePrice(totalduration){
+    if (listing_info.price_type == "month"){
+      totalduration = totalduration.asDays() / 30;
+    }
+    else {
+      totalduration = totalduration.as(listing_info.price_type);
+      totalduration = Number(Math.round(totalduration+'e2')+'e-2');
+    }
+    return totalduration * listing_info.price_rate;
+  }
+
+  //figure out if the start and end dates overlap any free periods
+  function anyFreeDayOverlap(starttime, endtime){
+    if (listing_info.freetimes && listing_info.freetimes.length > 0){
+      var overlap_time = 0;
+      for (var x = 0; x < listing_info.freetimes.length; x++){
+        var freetime_start = moment(listing_info.freetimes[x].date);
+        var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
+
+        //there is overlap
+        if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
+          //completely covered by free time
+          if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+            overlap_time += endtime.diff(starttime);
+          }
+          //completely covers free time
+          else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
+            overlap_time += freetime_end.diff(freetime_start);
+          }
+          //overlap partially in the end of wanted time
+          else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+            overlap_time += endtime.diff(freetime_start);
+          }
+          //overlap partially at the beginning of wanted time
+          else {
+            overlap_time += freetime_end.diff(starttime);
+          }
+        }
+      }
+      return overlap_time;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  //</editor-fold>
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------TRAFFIC-------------------------------
+
+  function setupTrafficTab(){
+
+    //show alexa data
+    if (!listing_info.alexa && (listing_info.premium && listing_info.show_alexa_stats) || !listing_info.premium){
+      getAlexaData();
+    }
+    else if (listing_info.premium && !listing_info.show_alexa_stats){
+      $("#alexa-stats-wrapper").addClass("is-hidden");
+    }
+    else {
+      $("#alexa-stats-wrapper").removeClass("is-hidden");
+    }
+
+    //show traffic chart
+    if ((listing_info.premium && listing_info.show_traffic_graph) || !listing_info.premium){
+      $("#traffic-chart-wrapper").removeClass("is-hidden");
+      getTickerData();
+    }
+    else {
+      $("#traffic-chart-wrapper").addClass("is-hidden");
+    }
+
+    //only get traffic if it's visible due to chartjs responsive endless loop
+    if ((listing_info.premium && listing_info.show_traffic_graph) || !listing_info.premium){
+      if ($(".module").eq(0).attr("id") == "traffic-module"){
+        $(".listing-wrapper").addClass("is-active");
+        getTrafficData();
+      }
+    }
+  }
+
+    //<editor-fold>-------------------------------TRAFFIC CHART-------------------------------
+
+    //get traffic data if we havent yet
+    function getTrafficData(){
+      if (compare && listing_info.unlisted){
+        createTestChart();
+      }
+      else if (!listing_info.traffic) {
+
+        //create empty chart while we get traffic data via AJAX
+        createEmptyChart();
+
+        $.ajax({
+          url: "/listing/" + listing_info.domain_name.toLowerCase() + "/traffic",
+          method: "POST"
+        }).done(function(data){
+          //hide the loading overlay
+          $("#traffic-overlay-load").addClass('is-hidden');
+
+          if (data.traffic){
+            listing_info.traffic = data.traffic;
+            createCharts(data.traffic);
+          }
+        });
+      }
+    }
+
+    //create empty or full chart
+    function createCharts(traffic){
+      //create a chart with the traffic data
+      if (traffic && traffic.length > 0){
+        createTrafficChart();
+      }
+      else {
+        createEmptyChart();
+
+        //not enough data overlay
+        $("#traffic-overlay-text").removeClass('is-hidden');
+
+        //hide the loading overlay
+        $("#traffic-overlay-load").addClass('is-hidden');
+      }
+    }
+
+    //create an empty chart
+    function createEmptyChart(){
+
+      //create the monthly x-axis labels array
+      var monthly_labels = [];
+      var months_to_go_back = 12;
+      for (var y = 0; y < months_to_go_back; y++){
+        var temp_month = moment().subtract(y, "month").format("MMM");
+        monthly_labels.unshift(temp_month);
+      }
+
+      //create the chart
+      myChart = new Chart($("#traffic-chart"), {
+        type: 'line',
+        data: {
+          labels: monthly_labels,
+          datasets: []
+        },
+        options: {
+          maintainAspectRatio: false,
+          legend: {
+            display: false
+          },
+          scales: {
+            xAxes: [{
+              gridLines: {
+                display: false
+              },
+              type: "category"
+            }],
+            yAxes: [{
+              display: true,
+              type: 'linear',
+              ticks: {
+                beginAtZero: true   // minimum value will be 0.
+              }
+            }]
+          }
+        }
+      });
+    }
+
+    //format the stats to the required format
+    function formatDataset(stats) {
+
+      //compare tool (not listed)
+      if (compare && listing_info.unlisted){
+        var num_months_since = Math.floor(Math.random() * 6) + 6;   //random between 6 and 12
+      }
+      else {
+        //traffic dataset
+        var earliest_date = stats[stats.length - 1].timestamp;
+        var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
+      }
+
+      var months_since = [];
+      for (var x = 0 ; x < num_months_since ; x++){
+        var temp_month = moment().startOf("month").subtract(x, "month");
+        months_since.push({
+          label : temp_month.format("MMM"),
+          timestamp : temp_month._d.getTime(),
+          views : (compare && listing_info.unlisted) ? Math.round(Math.random() * 5000) + 2500 : 0   //fake traffic numbers if using compare tool
+        });
+      }
+
+      var views_per_month = [];
+
+      //get real traffic numbers
+      if (stats && stats.length > 0){
+        var cur_month_needle = 0;
+        var referer_dataset = stats.reduce(function (rv, cur) {
+          //sort into groups divided by months
+          if (cur_month_needle < num_months_since){
+            if (cur.timestamp > months_since[cur_month_needle].timestamp){
+              months_since[cur_month_needle].views++;
+            }
+            else {
+              cur_month_needle++;
+              if (cur_month_needle < num_months_since){
+                months_since[cur_month_needle].views++;
+              }
+            }
+          }
+        }, []);
+      }
+
+      //to add for views for ticker tab
+      listing_info.months_since = months_since;
+
+      //reverse the dates
+      months_since.reverse();
+
+      var traffic_views = [];
+      var traffic_labels = [];
+      for (var x = 0; x < months_since.length; x++){
+        traffic_views.push(months_since[x].views);
+        traffic_labels.push(months_since[x].label);
+      }
+
+      return {
+        traffic_views : traffic_views,
+        traffic_labels : traffic_labels
+      }
+    }
+
+    //initiate chart only if uninitiated
+    function createTrafficChart(compare){
+      var formatted_dataset = formatDataset(listing_info.traffic);
+
+      //hide any overlay
+      $("#traffic-overlay").addClass('is-hidden');
+
+      if (traffic_chart){
+        traffic_chart.destroy();
+      }
+
+      traffic_chart = new Chart($("#traffic-chart"), {
+        type: 'line',
+        data: {
+          labels: formatted_dataset.traffic_labels,
+          datasets: [{
+            label: "Website Views",
+            data: formatted_dataset.traffic_views,
+            pointBorderWidth: 4,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 2,
+            pointRadius: 4,
+            hitRadius: 4,
+            pointBackgroundColor: '#fff',
+            backgroundColor: ((listing_info.traffic && listing_info.premium && listing_info.primary_color) || compare) ? hexToRgbA(listing_info.primary_color, 0.65, true) : "rgba(60, 188, 141, 0.65)",
+            borderWidth: 2,
+            borderColor: ((listing_info.traffic && listing_info.premium && listing_info.primary_color) || compare) ? hexToRgbA(listing_info.primary_color, 1, true) : "#3CBC8D",
+          }]
+        },
+        options: {
+          layout: {
+            padding: {
+              top: 20,
+              bottom: 20,
+              left: 0,
+              right: 0
+            }
+          },
+          maintainAspectRatio: false,
+          legend: {
+            display: false
+          },
+          hover: {
+            mode: "index"
+          },
+          tooltips: {
+            titleSpacing: 0,
+            callbacks: {
+              label: function(tooltipItems, data) {
+                if (formatted_dataset.traffic_labels.indexOf(tooltipItems.xLabel) != -1){
+                  return tooltipItems.xLabel
+                }
+                else {
+                  return moment(tooltipItems.xLabel).format("MMM DD");
+                }
+              },
+              title: function(tooltipItems, data){
+                if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+                  return false;
+                }
+                else if (formatted_dataset.traffic_labels.indexOf(tooltipItems[0].xLabel) != -1){
+                  return false;
+                }
+                else {
+                  return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
+                }
+              },
+              footer: function(tooltipItems, data){
+                if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+                  return false;
+                }
+                else {
+                  var views_plural = (tooltipItems[0].yLabel == 1) ? " request" : " requests";
+                  var views_formatted = wNumb({
+                    thousand: ','
+                  }).to(tooltipItems[0].yLabel);
+                  return views_formatted + views_plural;
+                }
+              }
+            }
+          },
+          scales: {
+            xAxes: [{
+              type: "category",
+              gridLines : {
+                  display : false
+              },
+              ticks: {
+                fontStyle: 700,
+                fontColor: 'rgba(0,0,0,0.66)',
+                padding: 10,
+              }
+            }],
+            yAxes: [{
+              gridLines : {
+                drawBorder: false,
+                drawTicks: false
+              },
+              ticks: {
+                fontStyle: 700,
+                fontColor: 'rgba(0,0,0,0.66)',
+                padding: 20,
+                suggestedMax: 5,
+                beginAtZero: true,   // minimum value will be 0.
+              }
+            }]
+          }
+        }
+      });
+    }
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------ALEXA STATS-------------------------------
+
+    //get alexa data
+    function getAlexaData(){
+      $.ajax({
+        url: "/listing/" + listing_info.domain_name.toLowerCase() + "/alexa",
+        method: "POST"
+      }).done(function(data){
+        createAlexa(data.alexa);
+      });
+    }
+
+    //edit alexa information
+    function createAlexa(alexa){
+      if (alexa){
+        listing_info.alexa = alexa;
+
+        var globalrank = (alexa.globalRank == "-") ? "No data!" : alexa.globalRank;
+        $("#alexa-globalrank").text(globalrank);
+
+        var bouncerate = (alexa.engagement && alexa.engagement.bounceRate == "-") ? "No data!" : alexa.engagement.bounceRate;
+        $("#alexa-bouncerate").text(bouncerate);
+
+        var timeonsite = (alexa.engagement && alexa.engagement.dailyTimeOnSite == "-") ? "No data!" : alexa.engagement.dailyTimeOnSite;
+        $("#alexa-timeonsite").text(timeonsite);
+
+        var pageviews = (alexa.engagement && alexa.engagement.dailyPageViewPerVisitor == "-") ? "No data!" : alexa.engagement.dailyPageViewPerVisitor;
+        $("#alexa-pageviews").text(pageviews);
+      }
+    }
+
+    //</editor-fold>
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------HISTORY TICKER-------------------------------
+
+  //ajax call to get ticker information
+  function getTickerData(loadmore){
+    //unlisted so no rentals exist
+    if (listing_info.unlisted && !compare){
+
+      //create the X views in past X time
+      listing_info.rentals = [];
+      if (listing_info.rentals){
+        pastViewsTickerRow();
+      }
+      $("#ticker-loading").addClass('is-hidden');
+      editTickerDates();
+    }
+    else if (compare && listing_info.unlisted) {
+      $("#ticker-loading").addClass('is-hidden');
+      createTestRentals();
+      editTickerModule(listing_info.rentals, 10);
+      pastViewsTickerRow();
+      editTickerDates();
+    }
+    else {
+      //remove click handler for load more
+      if (loadmore){
+        $("#ticker-loading").removeClass('is-hidden').appendTo("#ticker-wrapper");
+        loadmore.addClass('is-hidden').off();
+      }
+
+      //how many to load at a time;
+      var max_count = 10;
+
+      $.ajax({
+        url: "/listing/" + listing_info.domain_name + "/ticker",
+        method: "POST",
+        data: {
+          //how many to get
+          max_count: max_count,
+          //the oldest displayed rental on the ticker
+          oldest_rental_date: (listing_info.rentals && listing_info.rentals.length > 0) ? listing_info.rentals[listing_info.rentals.length - 1].date : new Date().getTime()
+        }
+      }).done(function(data){
+        //remove the loading message
+        $("#ticker-loading").addClass('is-hidden');
+
+        if (data.state == "success"){
+          //add to the session listing_info
+          if (listing_info.rentals){
+            listing_info.rentals = listing_info.rentals.concat(data.loaded_rentals);
+          }
+          else if (data.loaded_rentals) {
+            listing_info.rentals = data.loaded_rentals;
+          }
+          else {
+            listing_info.rentals = [];
+          }
+
+          editTickerModule(data.loaded_rentals, max_count);
+        }
+        else {
+          listing_info.rentals = [];
+          editTickerDates();
+        }
+
+        if (listing_info.rentals){
+          pastViewsTickerRow();
+        }
+      });
+    }
+  }
+
+  //edit listing created date / updated date etc.
+  function editTickerDates(){
+    if (listing_info.date_updated){
+      $("#ticker-updated").removeClass('is-hidden').appendTo("#ticker-wrapper");
+      $("#ticker-updated-date").text("This domain was last updated on " + moment(listing_info.date_updated).format("MMMM DD, YYYY") + ".");
+    }
+
+    if (listing_info.date_created){
+      $("#ticker-created").removeClass('is-hidden').appendTo("#ticker-wrapper");
+      $("#ticker-created-date").removeClass('is-hidden').text("This website was created on " + moment(listing_info.date_created).format("MMMM DD, YYYY") + ".");
+    }
+    else {
+      $("#ticker-created").removeClass('is-hidden').appendTo("#ticker-wrapper");
+      $("#ticker-created-date").removeClass('is-hidden').text("This website was created on " + moment(1467345600000).format("MMMM DD, YYYY") + ".");
+    }
+
+    if (listing_info.date_registered){
+      $("#ticker-registered").removeClass('is-hidden').appendTo("#ticker-wrapper");
+      $("#ticker-registered-date").text("This domain was first registered on " + moment(listing_info.date_registered).format("MMMM DD, YYYY") + ".");
+    }
+  }
+
+  //edit ticker module with AJAX data
+  function editTickerModule(loaded_rentals, max_count){
+    //if something was loaded
+    if (loaded_rentals && loaded_rentals.length > 0){
+      var now = moment();
+      for (var x = 0; x < loaded_rentals.length; x++){
+        createTickerRow(loaded_rentals[x], now);
+      }
+
+      //change colors if premium
+      if (listing_info.premium){
+        setupCustomColorsListing();
+      }
+
+      //show load more only if max count returned
+      if (loaded_rentals.length == max_count){
+        $("#ticker-loadmore").removeClass('is-hidden').appendTo("#ticker-wrapper").off().on("click", function(){
+          getTickerData($(this));
+        });
+      }
+    }
+
+    //nothing more to load if less than max_count returned
+    if (!loaded_rentals || loaded_rentals.length < max_count){
+      editTickerDates();
+    }
+  }
+
+  //create ticker row
+  function createTickerRow(rental, now){
+    var start_moment = moment(rental.date);
+    var end_moment = moment(rental.date + rental.duration);
+    var ticker_clone = $("#ticker-clone").clone().removeAttr('id').removeClass('is-hidden');
+
+    //user name or anonymous
+    var ticker_user = (rental.username) ? rental.username : "An anonymous user";
+    ticker_clone.find(".ticker-user").text(ticker_user + " ");
+
+    //views / reach
+    var ticker_time = "<span>" + moment.duration(rental.duration, "milliseconds").humanize() + "</span>";
+    var ticker_reach = "";
+
+    if (rental.views > 0){
+      var ticker_views_plural = (rental.views == 1) ? " person in " : " people in ";
+      var ticker_views_format = wNumb({
+        thousand: ','
+      }).to(rental.views);
+      var ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
+    }
+    else {
+      ticker_time = " for " + ticker_time;
+    }
+
+    //word tense
+    var ticker_pre_tense = "";
+    var ticker_verb_tense = "ed";
+
+    //where have they been sending traffic??
+    var rental_path = (rental.path) ? "/" + rental.path : "";
+    var rental_preview = "http://" + listing_info.domain_name + rental_path;
+
+    //rental is in the past
+    if (end_moment.isBefore(now)){
+      ticker_verb_tense = "ed";
+
+      //where have they sent traffic??
+      var rental_preview = "/listing/" + listing_info.domain_name + "/" + rental.rental_id;
+      var path = (rental.path == "" || !rental.path) ? "this website" : listing_info.domain_name + "<a class='is-accent'>" + "/" + rental.path + '</a>';
+    }
+    //rental ends in the future but started in the past
+    else {
+      ticker_pre_tense = "has been "
+      ticker_verb_tense = "ing";
+      var path = (rental.path == "" || !rental.path) ? "<a href='" + rental_preview + "' class='is-accent'>this website</a>" : listing_info.domain_name + "<a href='" + rental_preview + "' class='is-accent'>" + "/" + rental.path + '</a>';
+
+      if (rental.views > 0){
+        var ticker_time = " in <span>" + moment.duration(start_moment.diff(now)).humanize() + "</span>";
+        var ticker_views_plural = ticker_views_plural.replace("in ", "");
+        ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
+      }
+      else {
+        var ticker_time = " for <span>" + moment.duration(start_moment.diff(now)).humanize() + "</span>";
+      }
+    }
+
+    //update time / reach
+    ticker_clone.find(".ticker-time").html(ticker_time);
+    ticker_clone.find(".ticker-reach").html(ticker_reach);
+
+    var ticker_icon_color = ticker_clone.find(".ticker-icon-color");
+    var ticker_icon = ticker_clone.find(".ticker-icon");
+
+    //redirect content to display on that domain
+    if (rental.type == 0){
+
+      //showing an image
+      if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
+        var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>an image</a>";
+        ticker_icon_color.addClass('is-info');
+        ticker_icon.replaceWith("<i class='far fa-camera-retro'></i>");
+      }
+
+      //showing a GIF
+      else if (rental.address.match(/\.(gif)$/) != null){
+        var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a GIF</a>";
+        ticker_icon_color.addClass('is-dark');
+        ticker_icon.replaceWith("<i class='far fa-video'></i>");
+      }
+
+      //showing a PDF
+      else if (rental.address.match(/\.(pdf)$/) != null){
+        var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a PDF</a>";
+        ticker_icon_color.addClass('is-dark');
+        ticker_icon.replaceWith("<i class='far fa-file-pdf'></i>");
+      }
+
+      //showing a website
+      else if (rental.address){
+        var ticker_address = getHost(rental.address);
+        var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>" + ticker_address + "</a>";
+        ticker_icon_color.addClass('is-primary');
+        ticker_icon.replaceWith("<i class='far fa-desktop'></i>");
+      }
+
+      //showing nothing
+      else {
+        var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display nothing";
+        ticker_icon_color.addClass('is-black');
+        ticker_icon.replaceWith("<i class='far fa-eye-slash'></i>");
+      }
+    }
+    //forward the domain
+    else {
+      var ticker_address = getHost(rental.address);
+      var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='" + rental.address + "' class='is-info is-underlined'>" + ticker_address + "</a>";
+      ticker_icon_color.addClass('is-accent');
+      ticker_icon.replaceWith("<i class='far fa-share'></i>");
+    }
+    ticker_clone.find(".ticker-type").html(ticker_type);
+
+    //add the cloned ticker event
+    $("#ticker-wrapper").append(ticker_clone);
+  }
+
+  //callback function to create past views ticker row
+  function pastViewsTickerRow(){
+    if (listing_info.rentals && listing_info.rentals.length > 0){
+      var last_month_views = 0;
+      var ticker_latest_date_human = "month";
+      if (listing_info.rentals.length > 0){
+        last_month_views = listing_info.rentals.reduce(function(a,b){
+          return {views: a.views + b.views};
+        }).views;
+        var ticker_latest_date = moment.duration(moment(listing_info.rentals[listing_info.rentals.length - 1].date).diff(moment()), "milliseconds");
+        ticker_latest_date_human = ticker_latest_date.humanize().replace("a ", "").replace("an ", "");
+      }
+
+      //how many people in the past month
+      $("#views-total").text(wNumb({
+        thousand: ','
+      }).to(last_month_views));
+      $("#views-plural").text((last_month_views == 1) ? " person has " : " people have ");
+      $("#views-time").text(ticker_latest_date_human);
+      $("#ticker-views").removeClass('is-hidden');
+    }
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------OTHER DOMAINS-------------------------------
+
+  function setupOtherDomainsTab(){
+    if ((listing_info.premium && listing_info.show_domain_list) || !listing_info.premium){
+      findOtherDomainsListing();
+    }
+  }
+
+  //<editor-fold>-------------------------------OTHER DOMAINS-------------------------------
+
+  //other domains by same owner
+  function findOtherDomainsListing(){
+    if (compare && listing_info.unlisted){
+      createTestOtherDomains();
+    }
+    else if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
+      $.ajax({
+        url: "/listing/otherowner",
+        method: "POST",
+        data: {
+          owner_id: listing_info.owner_id,
+          exclude_id: listing_info.id,
+          sort_by : "random",
+          total : 10,
+          starting_id : false
+        }
+      }).done(function(data){
+        if (data.state == "success" && data.listings.length > 0){
+          createOtherDomains(data.listings);
+        }
+        else {
+          $("#domainlist-tab").addClass('is-hidden');
+          $("#domainlist-module").addClass("is-hidden");
+        }
+      });
+    }
+  }
+
+  //create the other domain
+  function createOtherDomains(other_listings){
+    $("#otherowner-domains").removeClass('is-hidden');
+    $(".other-domain:not(#otherowner-domain-clone)").remove();
+    for (var x = 0; x < other_listings.length; x++){
+      var cloned_similar_listing = $("#otherowner-domain-clone").clone();
+      cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+
+      //edit it based on new listing info
+      var sliced_domain = other_listings[x].domain_name;
+
+      //available to buy now
+      if (other_listings[x].buy_price > 0){
+        var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
+        cloned_similar_listing.find(".otherowner-domain-price").text("Buy Now: " + buy_price);
+      }
+      //available to buy at a specific minimum price
+      else if (other_listings[x].min_price > 0){
+        var min_price = moneyFormat.to(parseFloat(other_listings[x].min_price));
+        cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
+      }
+      //else available for rent
+      else if (other_listings[x].rentable && other_listings[x].price_rate > 0){
+        cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + other_listings[x].price_rate + " / " + other_listings[x].price_type);
+      }
+      //else available for rent
+      else if (other_listings[x].rentable && other_listings[x].price_rate <= 0){
+        cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
+      }
+      //just available (no minimum price, no BIN)
+      else if (other_listings[x].status > 0){
+        cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
+      }
+
+      //if compare tool
+      if (other_listings[x].compare && listing_info.unlisted){
+        cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+        cloned_similar_listing.attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
+      }
+      else {
+        //premium or basic link
+        if (listing_info.premium){
+          var link_to_domain = "https://" + other_listings[x].domain_name;
+        }
+        else {
+          var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
+        }
+        cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
+        cloned_similar_listing.attr("href", link_to_domain);
+      }
+      $("#otherowner-domain-table").append(cloned_similar_listing);
+    }
+  }
+
+  //</editor-fold>
+
+  //</editor-fold>
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------FOOTER-------------------------------
+
+function setupFooter(){
+
+  //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
+
+  if (listing_info.premium && listing_info.logo){
+    $(".page-contents #listing-footer-logo").attr("src", listing_info.logo);
+  }
+  else if (listing_info.premium){
+    $(".page-contents #listing-footer-logo").addClass('is-hidden');
   }
   else {
-    return 0;
+    $(".page-contents #listing-footer-logo").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
   }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------FOOTER TEXT-------------------------------
+
+  if (listing_info.premium && listing_info.description_footer){
+    $("#listing-footer").text(listing_info.description_footer)
+  }
+
+  //</editor-fold>
 }
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------OTHER DOMAINS-------------------------------
+//<editor-fold>-------------------------------HELPERS-------------------------------
 
-//other domains by same owner
-function findOtherDomains(){
-  if (compare && listing_info.unlisted){
-    createTestOtherDomains();
-  }
-  else if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
-    $.ajax({
-      url: "/listing/otherowner",
-      method: "POST",
-      data: {
-        owner_id: listing_info.owner_id,
-        domain_name_exclude: listing_info.domain_name,
-        sort_by : "random",
-        total : 10,
-        starting_id : false
-      }
-    }).done(function(data){
-      if (data.state == "success"){
-        createOtherDomains(data.listings);
-      }
-      else {
-        $("#domainlist-tab").addClass('is-hidden');
-      }
-    });
-  }
+//to cap the first letter
+String.prototype.capitalizeFirstLetter = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-//create the other domain
-function createOtherDomains(other_listings){
-  $("#otherowner-domains").removeClass('is-hidden');
-  for (var x = 0; x < other_listings.length; x++){
-    var cloned_similar_listing = $("#otherowner-domain-clone").clone();
-    cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+//get the hostname of a URL
+function getHost(href) {
+  var l = document.createElement("a");
+  l.href = href;
+  return l.hostname.replace("www.", "");
+};
 
-    //edit it based on new listing info
-    if (other_listings[x].domain_name.length > 25){
-      var sliced_domain = other_listings[x].domain_name.slice(0,16) + "..." + other_listings[x].domain_name.slice(other_listings[x].domain_name.length - 6, other_listings[x].domain_name.length);
+//get query string
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+  results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function hexToRgbA(hex, alpha, limit_white){
+  if (hex){
+    hex   = hex.replace('#', '');
+    var r = parseInt(hex.length == 3 ? hex.slice(0, 1).repeat(2) : hex.slice(0, 2), 16);
+    var g = parseInt(hex.length == 3 ? hex.slice(1, 2).repeat(2) : hex.slice(2, 4), 16);
+    var b = parseInt(hex.length == 3 ? hex.slice(2, 3).repeat(2) : hex.slice(4, 6), 16);
+
+    //prevent all white
+    if (limit_white && r > 170 && g > 170 && b > 170){
+      r = (r > 170) ? 170 : r;
+      g = (g > 170) ? 170 : g;
+      b = (b > 170) ? 170 : b;
+    }
+
+    if ( alpha ) {
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
     }
     else {
-      var sliced_domain = other_listings[x].domain_name;
+      return 'rgb(' + r + ', ' + g + ', ' + b + ')';
     }
-
-    //available to buy now
-    if (other_listings[x].buy_price > 0){
-      var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
-      cloned_similar_listing.find(".otherowner-domain-price").text("Buy Now: " + buy_price);
-    }
-    //available to buy at a specific minimum price
-    else if (other_listings[x].min_price > 0){
-      var min_price = moneyFormat.to(parseFloat(other_listings[x].min_price));
-      cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
-    }
-    //else available for rent
-    else if (other_listings[x].rentable && other_listings[x].price_rate > 0){
-      cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + other_listings[x].price_rate + " / " + other_listings[x].price_type);
-    }
-    //else available for rent
-    else if (other_listings[x].rentable && other_listings[x].price_rate <= 0){
-      cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
-    }
-    //just available (no minimum price, no BIN)
-    else if (other_listings[x].status > 0){
-      cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
-    }
-
-    //if compare tool
-    if (other_listings[x].compare && listing_info.unlisted){
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
-      cloned_similar_listing.attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
-    }
-    else {
-      //premium or basic link
-      if (listing_info.premium){
-        var link_to_domain = "https://" + other_listings[x].domain_name;
-      }
-      else {
-        var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
-      }
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain);
-      cloned_similar_listing.attr("href", link_to_domain);
-    }
-    $("#otherowner-domain-table").append(cloned_similar_listing);
   }
 }
 

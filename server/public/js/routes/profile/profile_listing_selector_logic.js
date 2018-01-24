@@ -315,6 +315,7 @@ function createRows(selected_ids){
 
     //create add to hub dropdown
     if (listing_hubs.length > 0){
+      $("#hub-selector-wrapper").removeClass('is-hidden');
       $(".hub-drop-row").remove();
       for (var y = 0; y < listing_hubs.length; y++){
         createHubRow(listing_hubs[y]);
@@ -325,8 +326,14 @@ function createRows(selected_ids){
         submitHubChanges();
       });
     }
+    //hide add to hub button
+    else {
+      $("#hub-selector-wrapper").addClass('is-hidden');
+    }
 
-    multiSelectButtons();
+    $(document).ready(function () {
+      updateMarqueeHandlers($(".td-domain"));
+    });
   }
   //there are no listings to show!
   else {
@@ -392,7 +399,6 @@ function updateRowData(row, listing_info){
 
 //update the clone row with row specifics
 function updateDomainRow(tempRow, listing_info, now){
-  var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
 
   //if demo
   if (!user.id){
@@ -407,7 +413,7 @@ function updateDomainRow(tempRow, listing_info, now){
     var listing_href = "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase();
   }
 
-  tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
+  tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + listing_info.domain_name + "</a>").attr("title", listing_info.domain_name);
   tempRow.find(".td-registrar").text((listing_info.registrar_name) ? listing_info.registrar_name : "-");
 
   if (listing_info.date_registered){
@@ -443,7 +449,7 @@ function updateDomainRow(tempRow, listing_info, now){
   else if (listing_info.rented){
     var status_text = "Currently Rented";
   }
-  else if (listing_info.hub == 1){
+  else if (listing_info.hub == 1 && user.stripe_subscription_id){
     var status_text = "Listing Hub";
   }
   else if (listing_info.verified && listing_info.status == 1){
@@ -691,13 +697,13 @@ function multiSelectButtons(clicked_row){
       $("#selector-edit-button").addClass("is-hidden");
     }
 
-    // //add to hub (show hub dropdown only if no hubs are selected)
-    // if (user.stripe_subscription_id && hub_rows.length == 0){
-    //   $("#hub-select-button").removeClass("is-hidden");
-    // }
-    // else {
-    //   $("#hub-select-button").addClass("is-hidden");
-    // }
+    //add to hub (show hub dropdown only if no hubs are selected)
+    if (user.stripe_subscription_id && hub_rows.length == 0 && unverified_selected_rows.length == 0){
+      $("#hub-select-button").removeClass("is-hidden");
+    }
+    else {
+      $("#hub-select-button").addClass("is-hidden");
+    }
 
     //accepted selections (show offer)
     if (offer_selected_rows.length == selected_rows.length){
