@@ -160,7 +160,7 @@ var listing_themes = [
     tertiary_color : "#FFDD54",
     font_name : "Garamond",
     font_color : "#FFFCD4",
-    background_color : "#FFFFFF",
+    background_color : "#030003",
     background_image : "https://images.unsplash.com/photo-1484151709479-3996843263cf?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
     footer_color : "#FFFCD4",
     footer_background_color : "#030003",

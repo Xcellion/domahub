@@ -189,7 +189,7 @@
 }
 
 .min-height {
-  min-height: 100vh;
+  min-height: calc(100vh - 128px);
 }
 
 #page-contents {
@@ -347,10 +347,6 @@
       margin-top: 40px;
       width: 100%;
     }
-  }
-
-  .module {
-    min-height: 500px;
   }
 
     //<editor-fold>---------------------CONTACT---------------------

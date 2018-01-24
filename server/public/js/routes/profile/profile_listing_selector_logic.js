@@ -449,7 +449,7 @@ function updateDomainRow(tempRow, listing_info, now){
   else if (listing_info.rented){
     var status_text = "Currently Rented";
   }
-  else if (listing_info.hub == 1){
+  else if (listing_info.hub == 1 && user.stripe_subscription_id){
     var status_text = "Listing Hub";
   }
   else if (listing_info.verified && listing_info.status == 1){
@@ -678,6 +678,7 @@ function multiSelectButtons(clicked_row){
   });
   var offer_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == false });
   var unverified_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == true });
+  var hub_rows = selected_rows.filter(function(){ return $(this).data("hub") == true });
 
   //hide hub drop
   $("#hub-drop").addClass('is-hidden');
@@ -697,7 +698,7 @@ function multiSelectButtons(clicked_row){
     }
 
     //add to hub (show hub dropdown only if no hubs are selected)
-    if (user.stripe_subscription_id && unverified_selected_rows.length == 0){
+    if (user.stripe_subscription_id && hub_rows.length == 0 && unverified_selected_rows.length == 0){
       $("#hub-select-button").removeClass("is-hidden");
     }
     else {
