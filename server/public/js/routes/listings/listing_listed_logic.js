@@ -1603,7 +1603,7 @@ function setupFooter(){
   //<editor-fold>-------------------------------FOOTER TEXT-------------------------------
 
   if (listing_info.premium && listing_info.description_footer){
-    $("#listing-footer").text(listing_info.description_footer)
+    $(".page-contents #listing-footer").text(listing_info.description_footer)
   }
 
   //</editor-fold>

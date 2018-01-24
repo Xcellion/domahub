@@ -45,6 +45,9 @@ $(document).ready(function() {
 
   //</editor-fold>
 
+  //footer text
+  $("#listing-footer").text(listing_hub_info.description_footer);
+
 });
 
 //<editor-fold>-------------------------------PAGE SETUP-------------------------------
