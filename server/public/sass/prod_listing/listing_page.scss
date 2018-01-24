@@ -81,11 +81,8 @@
 
 .listing-page {
   margin: 0 auto;
-  max-width: 1400px;
-  padding: 0 40px;
-  @include mobile-456px {
-    padding: 0 20px;
-  }
+  max-width: 1200px;
+  padding: 0 20px;
 }
 
 .listing-wrapper {
@@ -126,7 +123,7 @@
 
   .listing-left {
     @include transition(all 0.4s ease);
-    width: 50%;
+    width: 40%;
     @media screen and (max-width: 1070px) {
       border-bottom: 1px solid $border;
       padding-bottom: 40px;
@@ -158,6 +155,15 @@
     &:not(:last-child) {
       margin-right: 10px;
     }
+    .icon {
+      @include transition(box-shadow 0.25s ease);
+    }
+    &:hover,
+    &:focus {
+      .icon {
+        @include box-shadow(0,2px,4px,$border,0);
+      }
+    }
   }
 
   //</editor-fold>-----------------------------------------------
@@ -166,9 +172,9 @@
 
   .listing-right {
     @include transition(all 0.4s ease);
-    padding-left: 40px;
+    padding-left: 80px;
     position: relative;
-    width: 50%;
+    width: 60%;
     @media screen and (max-width: 1070px) {
       margin-top: 40px;
       padding-left: 0;
@@ -177,7 +183,7 @@
         margin-left: auto;
         margin-right: auto;
       }
-      #buy-rent-tabs {
+      .tabs {
         ul {
           justify-content: center;
         }
