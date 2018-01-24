@@ -100,7 +100,7 @@ module.exports = {
           IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
           IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
           IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
-          IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
+          IF(listings.font_name IS NULL, 'Nunito Sans', listings.font_name) as font_name, \
           IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
           IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
           IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
@@ -285,27 +285,22 @@ module.exports = {
   },
 
   //gets listings owned by the same owner
-  getListingsByOwner : function(domain_name_exclude, owner_id, callback){
+  getListingsByOwner : function(hub_id, owner_id, callback){
     console.log("DB: Attempting to get other listings by the same owner...");
     var query = "SELECT \
-          listings.domain_name, \
-          listings.logo, \
-          listings.status, \
-          listings.categories, \
-          listings.rentable, \
-          listings.buy_price, \
-          listings.min_price, \
-          listings.price_type, \
-          listings.price_rate \
+          listings.*, \
+          listing_hub_grouping.rank, \
+          listing_hub_grouping.listing_hub_id \
         FROM listings \
-        WHERE listings.domain_name != ? \
+        LEFT JOIN listing_hub_grouping \
+        ON listing_hub_grouping.listing_id = listings.id \
+        WHERE listings.id != ? \
         AND listings.owner_id = ? \
         AND listings.status = 1 \
         AND listings.verified = 1 \
-        AND listings.hub = 0 \
         AND listings.deleted IS NULL \
         ORDER BY listings.id"
-    database.query(query, "Failed to get other listings by the same owner!", callback, [domain_name_exclude, owner_id]);
+    database.query(query, "Failed to get other listings by the same owner!", callback, [hub_id, owner_id]);
   },
 
   //gets listings related to specific categories

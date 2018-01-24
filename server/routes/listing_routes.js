@@ -74,7 +74,7 @@ module.exports = function(app){
       owner_functions.checkListingStatus,
       owner_functions.checkListingPremiumDetails,
       owner_functions.checkListingDetails,
-      owner_functions.checkListingModules,
+      owner_functions.updateListingHubRanks,
       owner_functions.updateListingsInfo
     ]);
 

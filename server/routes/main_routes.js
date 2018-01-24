@@ -35,6 +35,11 @@ module.exports = function(app){
     main_functions.contactUs
   ]);
 
+  //blog redirect
+  app.get("/blog", function(req, res){
+    res.redirect("https://medium.com/@domahub");
+  });
+
   //</editor-fold>
 
 }

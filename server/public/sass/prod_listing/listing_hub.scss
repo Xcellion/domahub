@@ -1,0 +1,638 @@
+@import '../balloon';
+@import '../bulma/utilities/utilities.sass';
+@import '../bulma/base/base.sass';
+@import '../bulma/components/card.sass';
+@import '../bulma/components/grid.sass';
+@import '../bulma/components/level.sass';
+@import '../bulma/components/menu.sass';
+@import '../bulma/components/modal.sass';
+@import '../bulma/components/nav.sass';
+@import '../bulma/components/tabs.sass';
+@import '../bulma/elements/box.sass';
+@import '../bulma/elements/button.sass';
+@import '../bulma/elements/content.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/form.sass';
+@import '../bulma/elements/hamburger.sass';
+@import '../bulma/elements/icon.sass';
+@import '../bulma/elements/image.sass';
+@import '../bulma/elements/notification.sass';
+@import '../bulma/elements/table.sass';
+@import '../bulma/elements/tag.sass';
+@import '../bulma/elements/title.sass';
+@import '../bulma/layout/footer.sass';
+@import '../bulma/layout/section.sass';
+@import '../bulma/layout/hero.sass';
+
+.domain-table {
+  background-color: #fff;
+}
+
+.table-row {
+  @include transition(all 0.3s ease);
+  background-color: #fff;
+  padding: 15px;
+  &:hover {
+    @include box-shadow(1px,1px,20px,$border,0);
+  }
+}
+
+.nothing-exists-row {
+  padding:25px;
+  min-height:200px;
+  img {
+    width:100px;
+  }
+  p {
+    margin-top:25px;
+  }
+}
+
+.control-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  .tag + p {
+    margin-left: 10px;
+  }
+}
+
+.img-col,
+.misc-col {
+  width: 50px;
+}
+
+.bin-col,
+.min-col,
+.rent-col {
+  width: 200px;
+}
+
+.misc-col {
+  position: relative;
+}
+
+.logo-image, .domain-row-logo {
+  object-fit: cover;
+}
+
+.misc-options {
+  @include box-shadow(2px,2px,6px,$border,0);
+  background-color: $white;
+  border-radius: 3px;
+  position: absolute;
+  right: 10px;
+  top: -32px;
+  z-index: 10;
+  &::before {
+    @include rotate(45);
+    @include box-shadow(2px,2px,3px,$border,0);
+    content: '';
+    background: $white;
+    bottom: -5px;
+    height: 0;
+    position: absolute;
+    border-left: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-right: 5px solid $white;
+    border-bottom: 5px solid $white;
+    right: 16px;
+    width: 0;
+    z-index: 9;
+  }
+  ul {
+    display: flex;
+    li {
+      padding: 10px;
+      .icon {
+        color: #000;
+        opacity: 0.75;
+      }
+      &:hover {
+        cursor: pointer;
+        .icon {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.price-tag {
+  font-size: $size-8;
+  position: absolute;
+  top: -34px;
+  background-color: $white;
+  padding: 5px;
+  right: 7px;
+  border-radius: $radius;
+}
+
+.card-content {
+  .is-spaced {
+    @include tablet-only {
+      flex-direction: column;
+      .control-left {
+        margin-right: 0;
+      }
+      .control-right {
+        .has-text-right {
+          text-align: left;
+        }
+      }
+    }
+  }
+  .is-grouped {
+    @include tablet-only {
+      flex-direction: column;
+      .control {
+        &:not(:last-child) {
+          margin-right: 0;
+        }
+        &:first-child {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+.modal-content {
+  width: 400px;
+}
+
+.is-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#back-to-list-button {
+  background-color:transparent;
+  border:0;
+  margin-bottom:30px;
+}
+
+.nav-right {
+  flex-grow: 1;
+  @include mobile {
+    align-items: stretch;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+//<editor-fold>---------------------LISTING PAGE STUFF---------------------
+
+.no-margin {
+  margin :0 !important;
+}
+
+.min-height {
+  min-height: calc(100vh - 128px);
+}
+
+#page-contents {
+  @include transition(width 0.2s ease, transform 0.2s ease);
+  background-attachment: fixed;
+  background-color: $white;
+  background-color: $white;
+  min-height: 100vh;
+  width: 100%;
+  &.is-active {
+    @include translate(500px,0);
+    width: calc(100% - 500px);
+
+    @media screen and (min-width: 1200px) and (max-width: 1400px) {
+      @include translate(300px,0);
+      width: calc(100% - 300px);
+    }
+    @media screen and (max-width: 1199px) {
+      @include translate(0,0);
+      width: 100%;
+    }
+  }
+}
+
+.tip {
+  display: block;
+  margin: 5px 0;
+  color: $text-light;
+}
+
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  .tag, .button {
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+  &.is-centered {
+    justify-content: center;
+  }
+  &.is-centered-touch {
+    margin-top: 5px;
+    @include touch {
+      justify-content: center;
+    }
+  }
+}
+
+//</editor-fold>------------------------------------------
+
+//<editor-fold>---------------------LISTING---------------------
+
+.listing-page {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.listing-wrapper {
+  display: flex;
+  padding: 80px 0;
+  @media screen and (max-width: 1070px) {
+    flex-direction: column;
+    padding: 40px 0;
+  }
+}
+
+.control-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  .tag,
+  .button {
+    margin-bottom: 5px;
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+  @include touch {
+    justify-content: center;
+  }
+  @include mobile-456px {
+    flex-direction: column;
+    .tag,
+    .button {
+      flex-grow: 1;
+      &:first-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+  //<editor-fold>---------------------LISTING LEFT---------------------
+
+  .listing-left {
+    @include transition(all 0.4s ease);
+    width: 50%;
+    @media screen and (max-width: 1070px) {
+      border-bottom: 1px solid $border;
+      padding-bottom: 40px;
+      width: 100%;
+    }
+  }
+
+  #listing-description {
+    border-left : 3px solid $primary;
+    margin: 50px 0;
+    padding-left : 8px;
+    position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
+    @include mobile-456px {
+      margin: 40px 0;
+    }
+  }
+
+  #info-module {
+    @media screen and (max-width: 1070px) {
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .social-share {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+    .icon {
+      @include transition(box-shadow 0.25s ease);
+    }
+    &:hover,
+    &:focus {
+      .icon {
+        @include box-shadow(0,2px,4px,$border,0);
+      }
+    }
+  }
+
+  //</editor-fold>-----------------------------------------------
+
+  //<editor-fold>---------------------LISTING RIGHT---------------------
+
+  .listing-right {
+    @include transition(all 0.4s ease);
+    padding-left: 80px;
+    position: relative;
+    width: 50%;
+    @media screen and (max-width: 1070px) {
+      margin-top: 40px;
+      padding-left: 0;
+      width: 100%;
+      .box {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .tabs {
+        ul {
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+    //<editor-fold>---------------------CONTACT---------------------
+
+    #buy-now-form {
+      input {
+        height: auto !important;
+        padding-bottom: 8px;
+        padding-top: 28px;
+        position: relative;
+        border-width: 0 0 1px 0;
+        border-radius: 0;
+        &:focus {
+          box-shadow: none;
+          border-color: $black-secondary;
+          outline: 0;
+        }
+      }
+      textarea {
+        &:focus {
+          outline: 0;
+        }
+      }
+      label {
+        color: $black-disabled;
+        font-size: 12px;
+        font-weight: 700;
+        left: 32px;
+        letter-spacing: 1px;
+        position: absolute;
+        text-transform: uppercase;
+        top: 8px;
+      }
+      .control {
+        &.has-icon {
+          & > .icon {
+            top: 28px;
+          }
+        }
+      }
+      .flag-container {
+        top: 26px;
+        height: 28px;
+      }
+    }
+
+    .phone-number {
+      padding-left: 52px !important;
+    }
+
+    //</editor-fold>-----------------------------------------------
+
+    //<editor-fold>---------------------RENT---------------------
+
+    #typed-slash {
+      border: none;
+      color: $text;
+      margin-right: auto;
+      position: relative;
+      vertical-align: baseline !important;
+      width: auto;
+      background:transparent;
+      &:hover {
+        cursor: pointer;
+        border-color: $black;
+      }
+      &.is-active {
+        outline: none;
+        cursor: auto;
+        border-color: $black;
+        &::-webkit-input-placeholder {
+          /* Chrome/Opera/Safari */
+          color: transparent;
+        }
+        &::-moz-placeholder {
+          /* Firefox 19+ */
+          color: transparent;
+        }
+        &:-ms-input-placeholder {
+          /* IE 10+ */
+          color: transparent;
+        }
+        &:-moz-placeholder {
+          /* Firefox 18- */
+          color: transparent;
+        }
+      }
+    }
+
+    .input-tooltip {
+      background-color: $black;
+      border-radius: 0 $radius-large $radius-large $radius-large;
+      bottom: -25px;
+      box-sizing: border-box;
+      color: $white;
+      cursor: pointer;
+      font-size: $size-8;
+      left: 2px;
+      padding-left: 5px;
+      position: absolute;
+      right: 0;
+      width: 80px;
+      @include mobile-456px {
+        bottom: -26px;
+      }
+      &.is-active {
+        background-color: $danger;
+        width: 225px;
+        &::before {
+          border-bottom-color: $danger;
+          border-left-color: $danger;
+        }
+      }
+      &::before,
+      &::after {
+        content: '';
+        height: 0;
+        position: absolute;
+        width: 0;
+        border: 3px solid transparent;
+      }
+      &::before {
+        border-bottom-color: $black;
+        border-left-color: $black;
+        top: -6px;
+        left: 0;
+      }
+    }
+
+    #calendar {
+      min-height : 270px;
+    }
+
+    //</editor-fold>-----------------------------------------------
+
+    //<editor-fold>---------------------TRAFFIC---------------------
+
+    #traffic-overlay {
+      background-color:rgba(255,255,255,0.5);
+      display:block;
+      left: 0;
+      position:absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index:3;
+    }
+
+    .traffic-overlay-text {
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      margin-right:-50%;
+    }
+
+    .traffic-chart {
+      height: 360px;
+    }
+
+    .alexa-data-wrapper {
+      display: inline-block;
+      text-align: center;
+      padding: 5px;
+      margin: auto;
+      width: 23%;
+    }
+
+    .heading {
+      cursor:pointer;
+      color: $black-secondary;
+      text-transform: capitalize;
+      &.is-small {
+        width: 125px;
+      }
+    }
+
+    //</editor-fold>-----------------------------------------------
+
+    //<editor-fold>---------------------TICKER---------------------
+
+    #ticker-wrapper {
+      display: block;
+      max-height: 606px;
+      overflow-y: auto;
+      width: 100%;
+    }
+
+    .ticker-row {
+      align-items: center;
+      background-color: $white;
+      box-sizing: border-box;
+      display: flex;
+      margin: 0;
+      width: 100%;
+      padding: 10px;
+      border-bottom: 1px solid $border;
+    }
+
+    .ticker-icon-color {
+      margin-right: 15px;
+    }
+
+    //</editor-fold>-----------------------------------------------
+
+    //<editor-fold>---------------------OTHER DOMAINS---------------------
+
+    #otherowner-domain-table {
+      max-height: 506px;
+    }
+
+    .otherowner-domain-name {
+      max-width: 350px;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .other-domain {
+      border-radius: 3px;
+      border: 1px solid transparent;
+      display: block;
+      padding: 10px;
+      width: 100%;
+      &:hover,
+      &:focus {
+        background-color: $pastel;
+      }
+      &:focus {
+        border-color: #007bff;
+        outline: 0;
+      }
+    }
+
+    #ticker-wrapper {
+      border-radius: 5px;
+    }
+
+    //</editor-fold>-----------------------------------------------
+
+  //</editor-fold>-----------------------------------------------
+
+//</editor-fold>-----------------------------------------------
+
+//<editor-fold>---------------------FOOTER---------------------
+
+#dh-footer {
+  height:128px;
+  @include transition(all 0.2s ease);
+  .bar-right {
+    @include mobile {
+      flex-wrap: nowrap;
+      flex-direction: column;
+      .footer-item {
+        &:not(:last-child) {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+  &.is-active {
+    @include translate(500px,0);
+    width: calc(100% - 500px);
+    @media screen and (min-width: 1200px) and (max-width: 1400px) {
+      @include translate(300px,0);
+      width: calc(100% - 300px);
+    }
+    @media screen and (max-width: 1199px) {
+      @include translate(0,0);
+      width: 100%;
+    }
+  }
+}
+
+#custom_logo {
+  border-radius: 10px;
+  height: 45px;
+  object-fit:cover;
+  width: 45px;
+}
+
+//</editor-fold>-----------------------------------------------
