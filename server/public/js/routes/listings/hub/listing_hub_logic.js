@@ -39,7 +39,7 @@ $(document).ready(function() {
   //<editor-fold>-------------------------------DETAILED VIEW SETUP-------------------------------
 
   //leave detailed view
-  $("#back-to-list-button").on("click", function(){
+  $("#back-to-list-button, .logo-item").on("click", function(){
     showDomainListView();
   });
 
