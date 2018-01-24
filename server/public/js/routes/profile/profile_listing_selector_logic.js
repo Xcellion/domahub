@@ -1,5 +1,10 @@
 var last_selected;
 
+//on back button
+window.onpopstate = function(event) {
+  showBasedOnURL();
+};
+
 $(document).ready(function(){
   createRows();
 
@@ -99,12 +104,12 @@ $(document).ready(function(){
 
   //go into edit mode
   $("#selector-edit-button").on('click', function(){
-    viewDomainDetails();
+    viewDomainDetails(true);
   });
 
   //go into offers mode
   $("#selector-offers-button").on('click', function(){
-    viewDomainOffers();
+    viewDomainOffers(true);
   });
 
   // //go into stats mode
@@ -114,7 +119,7 @@ $(document).ready(function(){
 
   //go into verify mode
   $("#selector-verify-button").on("click", function(e){
-    viewDomainDNS();
+    viewDomainDNS(true);
   });
 
   //multiple delete listings
@@ -151,8 +156,48 @@ $(document).ready(function(){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------URL-------------------------------
+  showBasedOnURL();
 
+});
+
+//<editor-fold>-------------------------------SELECTOR FUNCTIONS-------------------------------
+
+//return to domain selector
+function showEditor(url_tab, selected_domain_ids, push){
+  $(".changeable-input").off();
+
+  //hide other tabs and tab-drops
+  $(".tab-drop").addClass('is-hidden');
+  $(".tab.verified-elem").removeClass('is-active');
+
+  //update URL if exists
+  if (url_tab){
+    updateQueryStringParam("tab", url_tab, push);
+    $("#tab-title").text($("#" + url_tab + "-tab-drop").data('title'));
+    $("#" + url_tab + "-tab").addClass('is-active');
+    $("#" + url_tab + "-tab-drop").show().removeClass('is-hidden');
+  }
+  if (selected_domain_ids.length > 0){
+    updateQueryStringParam("listings", selected_domain_ids);
+  }
+  //clear any messages
+  clearNotification();
+  $("#domain-selector").addClass('is-hidden');
+  $("#domain-editor").removeClass('is-hidden');
+
+  //hide secondary left menu if offers
+  if (url_tab != "offers"){
+    $("#second-left-menu, #card-view").removeClass('is-hidden');
+  }
+  else {
+    $("#second-left-menu, #card-view").addClass('is-hidden');
+  }
+
+  leftMenuActive();
+}
+
+//function to determine what to show
+function showBasedOnURL(){
   //replace URL tab if not a good tab
   var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
   var url_tab = getParameterByName("tab");
@@ -180,13 +225,13 @@ $(document).ready(function(){
 
   //requested specific tab
   if (url_selected_listings != "" && ["info", "design", "hub"].indexOf(url_tab) != -1){
-    viewDomainDetails(url_tab);
+    viewDomainDetails(false, url_tab);
   }
   else if (url_selected_listings != "" && url_tab == "verify"){
-    viewDomainDNS();
+    viewDomainDNS(false);
   }
   else if (url_selected_listings != "" && url_tab == "offers"){
-    viewDomainOffers();
+    viewDomainOffers(false);
   }
   // else if (url_selected_listings != "" && url_tab == "stats"){
   //   viewDomainStats();
@@ -194,45 +239,6 @@ $(document).ready(function(){
   else {
     showSelector();
   }
-
-  //</editor-fold>
-
-});
-
-//<editor-fold>-------------------------------SELECTOR FUNCTIONS-------------------------------
-
-//return to domain selector
-function showEditor(url_tab, selected_domain_ids){
-  $(".changeable-input").off();
-
-  //hide other tabs and tab-drops
-  $(".tab-drop").addClass('is-hidden');
-  $(".tab.verified-elem").removeClass('is-active');
-
-  //update URL if exists
-  if (url_tab){
-    updateQueryStringParam("tab", url_tab);
-    $("#tab-title").text($("#" + url_tab + "-tab-drop").data('title'));
-    $("#" + url_tab + "-tab").addClass('is-active');
-    $("#" + url_tab + "-tab-drop").show().removeClass('is-hidden');
-  }
-  if (selected_domain_ids.length > 0){
-    updateQueryStringParam("listings", selected_domain_ids);
-  }
-  //clear any messages
-  clearNotification();
-  $("#domain-selector").addClass('is-hidden');
-  $("#domain-editor").removeClass('is-hidden');
-
-  //hide secondary left menu if offers
-  if (url_tab != "offers"){
-    $("#second-left-menu, #card-view").removeClass('is-hidden');
-  }
-  else {
-    $("#second-left-menu, #card-view").addClass('is-hidden');
-  }
-
-  leftMenuActive();
 }
 
 //show rows based on filter + search
@@ -748,13 +754,13 @@ function multiSelectButtons(clicked_row){
 //<editor-fold>-------------------------------SELECTOR BUTTONS-------------------------------
 
 //view domain details and edit them
-function viewDomainDetails(url_tab){
+function viewDomainDetails(push, url_tab){
   var selected_domain_ids = getSelectedDomains("id", true, true);
   if (selected_domain_ids.length > 0){
     if (!url_tab){
       url_tab = "info";
     }
-    showEditor(url_tab, selected_domain_ids);
+    showEditor(url_tab, selected_domain_ids, push);
     updateEditorEditing(selected_domain_ids);
   }
   else {
@@ -764,9 +770,9 @@ function viewDomainDetails(url_tab){
 }
 
 //view domain offers
-function viewDomainOffers(){
+function viewDomainOffers(push){
   var selected_domain_ids = getSelectedDomains("id", true);
-  showEditor("offers", selected_domain_ids);
+  showEditor("offers", selected_domain_ids, push);
   updateEditorOffers(selected_domain_ids);
 }
 
@@ -784,7 +790,7 @@ function viewDomainOffers(){
 // }
 
 //change domain
-function viewDomainDNS(){
+function viewDomainDNS(push){
   var selected_domain_ids = getSelectedDomains("id", false);
 
   //if nothing selected, select all unverified
@@ -795,7 +801,7 @@ function viewDomainDNS(){
 
   //show unverified tab
   if (selected_domain_ids.length > 0){
-    showEditor("verify", selected_domain_ids);
+    showEditor("verify", selected_domain_ids, push);
     updateEditorUnverified(selected_domain_ids);
   }
   //if nothing still selected, then there are no unverified listings to verify

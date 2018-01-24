@@ -10,11 +10,16 @@ for (var x = 0 ; x < categories.length ; x++){
 
 //</editor-fold>
 
+//on back button
+window.onpopstate = function(event) {
+  findOtherDomainsHub(false);
+};
+
 $(document).ready(function() {
 
   //<editor-fold>-------------------------------DOMAIN TABLE-------------------------------
 
-  findOtherDomainsHub();
+  findOtherDomainsHub(false);
 
   //close ellipsis more menu
   $(document).on("click", function(event) {
@@ -40,7 +45,7 @@ $(document).ready(function() {
 
   //leave detailed view
   $("#back-to-list-button, .logo-item").on("click", function(){
-    showDomainListView();
+    showDomainListView(true);
   });
 
   //</editor-fold>
@@ -49,6 +54,21 @@ $(document).ready(function() {
   $("#listing-footer").text(listing_hub_info.description_footer);
 
 });
+
+function showBasedOnURL(push){
+  var domain_name = getParameterByName("listing");
+  if (domain_name){
+    showDetails(listing_hub_info.listings.filter(function(elem){
+      if (elem.domain_name == domain_name){
+        return true;
+      }
+      return false;
+    })[0], push);
+  }
+  else {
+    showDomainListView(push);
+  }
+}
 
 //<editor-fold>-------------------------------PAGE SETUP-------------------------------
 
@@ -157,7 +177,7 @@ function setupHandlers(){
 }
 
 //other domains by same owner
-function findOtherDomainsHub(){
+function findOtherDomainsHub(push){
   $.ajax({
     url: "/listing/otherowner",
     method: "POST",
@@ -178,6 +198,7 @@ function findOtherDomainsHub(){
 
     setupHandlers();
     createDomainView();
+    showBasedOnURL(push);
   });
 }
 
@@ -312,7 +333,7 @@ function createDomainTable(listings_to_show, start_at, listings_per_page){
 
     //click to see details
     clone_row.on("click", function(){
-      showDetails($(this).data("listing_info"));
+      showDetails($(this).data("listing_info"), true);
     });
 
     $("#domain-table-body").append(clone_row);
@@ -355,7 +376,9 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
       clone_col.find(".logo-image").attr("src", listings_to_show[start_at + x].logo);
     }
     else {
-      clone_col.find(".logo-image").attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=" + listings_to_show[start_at + x].domain_name + "&w=255&h=128");
+      var background_color = (listing_hub_info.background_color) ? listing_hub_info.background_color.replace("#", "") : "";
+      var primary_color = (listing_hub_info.primary_color) ? listing_hub_info.primary_color.replace("#", "") : "";
+      clone_col.find(".logo-image").attr("src", "https://placeholdit.imgix.net/~text?txtsize=25&txtclip=end,ellipsis&w=255&h=128&txtfit=max&txt=" + listings_to_show[start_at + x].domain_name + "&bg=" + background_color + "&txtclr=" + primary_color);
     }
 
     //domain name
@@ -378,7 +401,7 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
 
     //click to see details
     clone_col.on("click", function(){
-      showDetails($(this).data("listing_info"));
+      showDetails($(this).data("listing_info"), true);
     });
 
     cols_to_append_to.append(clone_col);
@@ -395,7 +418,7 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
 //<editor-fold>-------------------------------DETAIL VIEW SETUP-------------------------------
 
 //show the detailed view
-function showDetails(listing_info_local){
+function showDetails(listing_info_local, push){
   $("#detailed-view-section").removeClass("is-hidden");
   $("#domain-list-section, #domain-search-section").addClass("is-hidden");
 
@@ -416,21 +439,25 @@ function showDetails(listing_info_local){
   setupListedPage();
   setupTheming();
 
+  //add to history object
+  updateQueryStringParam("listing", listing_info.domain_name, push);
+
   //remove stuff that doesnt work from a hub perspective
   $("#domainlist-tab").remove();
   $("#domainlist-module").remove();
   stylize(listing_info.font_color, "#back-to-list-button", "color");
   $("#back-to-list-button").prependTo(".page-contents .listing-left");
-  // $(".page-contents .min-height").removeClass('min-height');
 }
 
 //show domain list
-function showDomainListView(){
+function showDomainListView(push){
   $("#detailed-view-section").addClass("is-hidden");
   $("#domain-list-section, #domain-search-section").removeClass("is-hidden");
 
   //remove disabled from contact form if we submitted an offer
   $(".contact-input").removeAttr('disabled');
+
+  removeURLParameter("listing", push);
 }
 
 //</editor-fold>
@@ -439,14 +466,14 @@ function showDomainListView(){
 
 //makes an array unique
 function arrayUnique(array) {
-    var a = array.concat();
-    for(var i=0; i<a.length; ++i) {
-        for(var j=i+1; j<a.length; ++j) {
-            if(a[i] === a[j])
-                a.splice(j--, 1);
-        }
+  var a = array.concat();
+  for(var i=0; i<a.length; ++i) {
+    for(var j=i+1; j<a.length; ++j) {
+      if(a[i] === a[j])
+      a.splice(j--, 1);
     }
-    return a;
+  }
+  return a;
 }
 
 //</editor-fold>

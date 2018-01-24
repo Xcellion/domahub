@@ -36,7 +36,6 @@ module.exports = function(app){
 //check if the requested host is not for domahub
 function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'').toLowerCase();
-  console.log(req.session.pipe_to_dh, req.originalUrl);
   if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("listing") != -1){
     console.log("APF: Forwarding to the next route...");
     next("route");

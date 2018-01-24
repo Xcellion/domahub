@@ -203,7 +203,7 @@ function setupEditingButtons(){
       clearNotification();
 
       //update tab URL
-      updateQueryStringParam("tab", new_tab);
+      updateQueryStringParam("tab", new_tab, true);
 
       //hide other tab selectors
       $(".tab.verified-elem").removeClass('is-active');
