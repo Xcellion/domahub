@@ -302,7 +302,9 @@ function createDomainTable(listings_to_show, start_at, listings_per_page){
       clone_row.find(".domain-row-logo").attr("src", listings_to_show[start_at + x].logo);
     }
     else {
-      clone_row.find(".domain-row-logo").remove();
+      var background_color = (listing_hub_info.background_color) ? listing_hub_info.background_color.replace("#", "") : "";
+      var primary_color = (listing_hub_info.primary_color) ? listing_hub_info.primary_color.replace("#", "") : "";
+      clone_row.find(".domain-row-logo").attr("src", "https://placeholdit.imgix.net/~text?txtsize=22&w=48&h=48&txt=" + listings_to_show[start_at + x].domain_name.substr(0, 1).toUpperCase() + "&bg=" + background_color + "&txtclr=" + primary_color);
     }
     clone_row.find(".domain-row-domain").text(listings_to_show[start_at + x].domain_name);
 
