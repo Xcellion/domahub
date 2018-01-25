@@ -5,6 +5,17 @@ var channels_chart;
 
 $(document).ready(function() {
 
+  //<editor-fold>-------------------------------ANNOUNCEMENT-------------------------------
+
+  //close announcement if already closed it
+  if (readCookie("announcement")){
+    $("#announcement-modal").removeClass('is-active');
+  }
+  else {
+    $("#announcement-modal").addClass('is-active');
+  }
+
+  //</editor-fold>
 
   //<editor-fold>-------------------------------PORTFOLIO OVERVIEW / LATEST OFFERS-------------------------------
 
@@ -215,7 +226,7 @@ function updatePortfolioOverviewCounters(){
         var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
         var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
         //declare some global font styling
-        Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Nunito', 'Helvetica', sans-serif";
+        Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Helvetica', sans-serif";
         Chart.defaults.global.defaultFontSize = 14;
         //make chart
         var chartOptions = {
@@ -1011,5 +1022,16 @@ function updatePortfolioOverviewCounters(){
   }
 
   //</editor-fold>
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------ANNOUNCEMENT COOKIE-------------------------------
+
+//helper function to read a cookie
+function readCookie(name) {
+  var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+  result && (result = JSON.parse(result[1]));
+  return result;
+}
 
 //</editor-fold>

@@ -98,7 +98,7 @@
                 '<div class="calendar left">' +
                     '<div class="daterangepicker_input">' +
                       '<input class="input-mini form-control" type="text" name="daterangepicker_start" value="" />' +
-                      '<div class="icon glyphicon glyphicon-calendar"><i class="far fa-calendar-alt"></i></div>' +
+                      '<div class="icon glyphicon glyphicon-calendar"><i class="far fa-calendar-check"></i></div>' +
                       '<div class="calendar-time">' +
                         '<div></div>' +
                         '<div class="icon glyphicon glyphicon-time"><i class="far fa-clock"></i></div>' +
@@ -109,7 +109,7 @@
                 '<div class="calendar right">' +
                     '<div class="daterangepicker_input">' +
                       '<input class="input-mini form-control" type="text" name="daterangepicker_end" value="" />' +
-                      '<div class="icon glyphicon glyphicon-calendar"><i class="far fa-calendar-alt"></i></div>' +
+                      '<div class="icon glyphicon glyphicon-calendar"><i class="far fa-calendar-check"></i></div>' +
                       '<div class="calendar-time">' +
                         '<div></div>' +
                         '<div class="icon glyphicon glyphicon-time"><i class="far fa-clock"></i></div>' +

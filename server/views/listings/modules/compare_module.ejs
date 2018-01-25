@@ -105,14 +105,14 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
 
       <div id="allow-rentals-control" class="control is-spaced">
         <div class="control-left">
-          <label class="label" for="calendar-input">Allow Rentals</label>
+          <label class="label" for="rentable-input">Allow Rentals</label>
           <small class="tip">Allows verified users to rent usage of this domain for short amounts of time.</small>
           <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary is-underlined">Why should I rent my domain out?</a></small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
-            <input id="calendar-input" type="checkbox" class="module-input checkbox-input " tabindex="0" />
-            <label for="calendar-input"></label>
+            <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="rentable-input"></label>
           </form>
         </div>
       </div>
@@ -148,7 +148,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
             </div>
           </div>
           <div class="control">
-            <a id="random-theme-button" class="button is-small is-stylish is-primary is-outlined">
+            <a id="random-theme-button" class="button is-small is-stylish is-outlined">
               <span class="icon is-small">
                 <i class="far fa-random"></i>
               </span>
@@ -228,6 +228,20 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </div>
       </div>
       <div class="control">
+        <label class="label" for="color-scheme">
+          <span>Footer Styling</span>
+          <span class="icon is-small is-tooltip " data-balloon-length="medium" data-balloon="The color of the footer background color and the color of the footer text." data-balloon-pos="up">
+            <i class="far fa-question-circle"></i>
+          </span>
+        </label>
+        <div class="control">
+          <input id="footer-background-color-input" placeholder="#f2f5f7" type="text" class="input theme-changeable-input">
+        </div>
+        <div class="control">
+          <input id="footer-color-input" placeholder="#00000" type="text" class="input theme-changeable-input">
+        </div>
+      </div>
+      <div class="control">
         <label class="label">
           <span>Logo Image URL</span>
           <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
@@ -245,156 +259,145 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label" for="info-module-input">Information Tab</label>
-          <small class="tip">Displays more detailed information about the domain and other related information.</small>
+          <label class="label">
+            <span>Show Registrar Name</span>
+          </label>
+          <small class="tip">Displays the name of this domain name's registrar.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
-            <input id="info-module-input" data-target="info" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
-            <label for="info-module-input"></label>
+            <input id="show-registrar-input" data-name="show_registrar" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="show-registrar-input" class="premium-input"></label>
           </form>
         </div>
       </div>
-      <div class="control is-spaced info-module-child child-module">
+      <div class="control is-spaced">
         <div class="control-left">
           <label class="label">
-            <span>Domain Owner</span>
-            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-              <i class="far fa-question-circle"></i>
-            </span>
+            <span>Show Registration Date</span>
           </label>
-          <small class="tip">Displays a small sentence showing your username and when this listing was created.</small>
+          <small class="tip">Displays the original registration date of <span class="this-domain">this domain</span>.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
-            <input id="domain-owner-input" data-target="domain-owner" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
-            <label for="domain-owner-input"></label>
+            <input id="show-registration-date-input" data-name="show_registration_date" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="show-registration-date-input" class="premium-input"></label>
           </form>
         </div>
       </div>
-      <div class="control is-spaced info-module-child child-module">
+      <div class="control is-spaced">
         <div class="control-left">
           <label class="label">
-            <span>Domain Age</span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
-              <i class="far fa-question-circle"></i>
-            </span>
-          </label>
-          <small class="tip">Displays a small sentence showing when this domain was first registered. Info module must be enabled.</small>
-        </div>
-        <div class="control-right">
-          <form class="checkbox-form">
-            <input id="domain-age-input" data-target="domain-age" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
-            <label for="domain-age-input"></label>
-          </form>
-        </div>
-      </div>
-      <div class="control is-spaced info-module-child child-module">
-        <div class="control-left">
-          <label class="label" for="domainlist-input">
-            <span>Show Other Listings</span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
-              <i class="far fa-question-circle"></i>
-            </span>
-          </label>
-          <small class="tip">Displays a list of other listings you own on DomaHub.</small>
-        </div>
-        <div class="control-right">
-          <form class="checkbox-form">
-            <input id="domainlist-input" data-target="domainlist" type="checkbox" class="module-input checkbox-input" tabindex="0" />
-            <label for="domainlist-input"></label>
-          </form>
-        </div>
-      </div>
-      <div class="control is-spaced info-module-child child-module">
-        <div class="control-left">
-          <label class="label">
-            <span>Appraisal Sites</span>
-            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-              <i class="far fa-question-circle"></i>
-            </span>
+            <span>Show Appraisal Sites</span>
           </label>
           <small class="tip">Displays links to various domain appraisal sites.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
-            <input id="domain-appraisal-input" data-target="domain-appraisal" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
-            <label for="domain-appraisal-input"></label>
-          </form>
-        </div>
-      </div>
-      <div class="control is-spaced info-module-child child-module">
-        <div class="control-left">
-          <label class="label">
-            <span>Social Media Sharing Buttons</span>
-            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
-              <i class="far fa-question-circle"></i>
-            </span>
-          </label>
-          <small class="tip">Displays buttons to share the domain listing on various social media sites.</small>
-        </div>
-        <div class="control-right">
-          <form class="checkbox-form">
-            <input id="social-sharing-input" data-target="social-sharing" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
-            <label for="social-sharing-input"></label>
+            <input id="show-appraisal-input" data-name="show_appraisal" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="show-appraisal-input" class="premium-input"></label>
           </form>
         </div>
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label" for="traffic-module-input">Traffic Tab</label>
-          <small class="tip">Displays detailed traffic information about this listing.</small>
+          <label class="label">
+            <span>Show Categories</span>
+          </label>
+          <small class="tip">Displays a list of your listing categories.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
-            <input id="traffic-module-input" type="checkbox" class="module-input checkbox-input" tabindex="0" />
-            <label for="traffic-module-input"></label>
+            <input id="show-categories-input" data-name="show_categories" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="show-categories-input" class="premium-input"></label>
           </form>
         </div>
       </div>
-      <div class="control is-spaced traffic-module-child child-module">
+      <div class="control is-spaced">
         <div class="control-left">
           <label class="label">
-            <span>Traffic Graph</span>
-            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
+            <span>Show Social Media Sharing Buttons</span>
+          </label>
+          <small class="tip">Displays buttons to share the listing on various social media sites.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="show-social-sharing-input" data-name="show_social_sharing" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="show-social-sharing-input" class="premium-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced">
+        <div class="control-left">
+          <label class="label" for="placeholder-input">
+            Placeholder Text
+            <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The placeholder text is a light-hearted way of letting your users know what information to put in what form." data-balloon-pos="up">
               <i class="far fa-question-circle"></i>
-            </span>
+            </div>
+          </label>
+          <small class="tip">Enables the movie-quote placeholder text on the listing page contact form.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="placeholder-input" data-name="show_placeholder" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="placeholder-input" class="premium-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced">
+        <div class="control-left">
+          <label class="label">
+            <span>Show Traffic Graph</span>
           </label>
           <small class="tip">Displays a graph of the listing traffic.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
-            <input id="traffic-graph-input" data-target="traffic-chart" type="checkbox" class="toggle-input checkbox-input premium-input" tabindex="0" />
-            <label for="traffic-graph-input"></label>
-          </form>
-        </div>
-      </div>
-      <div class="control is-spaced traffic-module-child child-module">
-        <div class="control-left">
-          <label class="label">
-            <span>Alexa Statistics</span>
-            <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
-              <i class="far fa-question-circle"></i>
-            </span>
-          </label>
-          <small class="tip">Displays <a class="is-primary" id="alexa_link">Alexa</a> traffic statistics.</small>
-        </div>
-        <div class="control-right">
-          <form class="checkbox-form">
-            <input id="alexa-stats-input" data-target="alexa-stats" type="checkbox" class="toggle-input checkbox-input premium-input" tabindex="0" />
-            <label for="alexa-stats-input"></label>
+            <input id="traffic-graph-input" data-name="show_traffic_graph" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="traffic-graph-input" class="premium-input"></label>
           </form>
         </div>
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label" for="ticker-module-input">History Tab</label>
-          <small class="tip">Displays recent activity on your listing - useful if you have rentals enabled.</small>
+          <label class="label">
+            <span>Show Alexa Statistics</span>
+          </label>
+          <small class="tip">Displays <a class="is-primary is-underlined" id="alexa_link">Alexa</a> traffic statistics.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
-            <input id="ticker-module-input" type="checkbox" class="module-input checkbox-input " tabindex="0" />
-            <label for="ticker-module-input"></label>
+            <input id="alexa-stats-input" data-name="show_alexa_stats" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="alexa-stats-input" class="premium-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced">
+        <div class="control-left">
+          <label class="label">Show History Ticker</label>
+          <small class="tip">Displays a table of recent activity - useful if you have rentals enabled.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="show-history-ticker-input" data-name="show_history_ticker" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="show-history-ticker-input" class="premium-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced">
+        <div class="control-left">
+          <label class="label">
+            <span>Show Other Listings</span>
+            <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="There will be nothing to display if you do not have any active or unsold listings." data-balloon-pos="up">
+              <i class="far fa-question-circle"></i>
+            </div>
+          </label>
+          <small class="tip">Displays a list of other <span class="is-bold">active</span> listings you own on DomaHub.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="domain-list-input" data-name="show_domain_list" type="checkbox" class="checkbox-input" tabindex="0" />
+            <label for="domain-list-input" class="premium-input"></label>
           </form>
         </div>
       </div>

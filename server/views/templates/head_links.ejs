@@ -57,19 +57,17 @@
   if (window.location.hostname != "domahub.com"){
     ga('set', 'page', "/listing/" + window.location.hostname);
   }
+  else if (typeof user != "undefined" && user.email == "general@domahub.com" && user.username == "DomaHubDemo"){
+    ga('set', 'page', "/demo");
+  }
   //for GA custom dimension tracking
   if (typeof listing_info != "undefined"){
     ga('set', 'dimension1', listing_info.owner_id);
   }
+  //for GA custom user tracking
+  if (typeof user != "undefined"){
+    ga('set', 'dimension2', user);
+  }
   ga('send', 'pageview');
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script>
-  (jQuery);
-  $(document).ready(function(){
-    //delete notifications button
-    $(".delete").on("click", function(e){
-      $(this).parent(".notification").addClass('is-hidden');
-    });
-  });
-</script>
