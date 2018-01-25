@@ -93,13 +93,11 @@ module.exports = {
           IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
           IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
           IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
-          IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
+          IF(listings.font_name IS NULL, 'Nunito Sans', listings.font_name) as font_name, \
           IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
           IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
           IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
           hub_grouping_table.hub_listing_ids, \
-          hub_grouping_table.hub_listing_domain_names, \
-          hub_grouping_table.hub_listing_categories, \
           rented_table.rented, \
           offers_table.deposited, \
           offers_table_accepted.accepted, \
@@ -149,9 +147,7 @@ module.exports = {
           (SELECT \
               listing_hub_grouping.listing_hub_id, \
               GROUP_CONCAT(listing_hub_grouping.listing_id ORDER BY listing_hub_grouping.rank ASC) as hub_listing_ids, \
-              GROUP_CONCAT(listing_hub_grouping.rank ORDER BY listing_hub_grouping.rank ASC) as hub_ranks, \
-              GROUP_CONCAT(listings.domain_name ORDER BY listing_hub_grouping.rank ASC) as hub_listing_domain_names, \
-              GROUP_CONCAT(listings.categories ORDER BY listing_hub_grouping.rank ASC SEPARATOR '|') as hub_listing_categories \
+              GROUP_CONCAT(listing_hub_grouping.rank ORDER BY listing_hub_grouping.rank ASC) as hub_ranks \
             FROM listing_hub_grouping \
             INNER JOIN listings \
             ON listing_id = listings.id \

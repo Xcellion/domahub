@@ -16,7 +16,7 @@
 
 <body>
 
-  <section id="page-contents" class="no-background section is-hidden is-medium min-height">
+  <section class="page-contents no-background section is-hidden is-medium min-height">
     <div class="container">
       <div class="columns">
         <div class="column is-7">
@@ -27,7 +27,7 @@
           </header>
 
           <div id="step-content-site" class="step-content">
-            <div class="notification is-lighter no-shadow has-border">
+            <div class="notification is-pastel no-shadow has-border">
               <p id="site-regular-message" class="regular-message">
                 There are many different ways to create content for your new domain name.
                 See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
@@ -308,7 +308,7 @@
               </div>
 
               <div class="control">
-                <button id="site-cancel" class="checkout-track button is-black is-inverted is-stylish back-button">
+                <button id="site-cancel" class="checkout-track button is-stylish back-button">
                   <div class="icon is-small">
                     <i class="far fa-long-arrow-left"></i>
                   </div>
@@ -377,7 +377,7 @@
               </div>%>
 
               <div class="control">
-                <button id="back-to-address-button" class="checkout-track button is-black is-inverted is-stylish">
+                <button id="back-to-address-button" class="checkout-track button is-stylish">
                   <div class="icon is-small">
                     <i class="far fa-long-arrow-left"></i>
                   </div>
@@ -430,7 +430,7 @@
               </div>
               <div class="control is-grouped">
                 <div class="control">
-                  <button id="payment-cancel" class="checkout-track button is-black is-inverted is-stylish back-button">
+                  <button id="payment-cancel" class="checkout-track button is-stylish back-button">
                     <div class="icon is-small">
                       <i class="far fa-long-arrow-left"></i>
                     </div>
@@ -474,8 +474,8 @@
         <div class="column is-5">
           <div class="card is-checkout">
             <div class="card-image">
-              <figure class="image is-128x128">
-                <img src="<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : '/images/lib/wallet-send.svg'%>" alt="Logo" />
+              <figure class="image is-96x96">
+                <img src="<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : '/images/lib/inipagi/checkout.svg'%>" alt="Logo" />
               </figure>
             </div>
             <div class="card-content">
@@ -527,14 +527,14 @@
             </div>
             <footer id="edit-dates-button" class="card-footer">
               <% if (listing_info.premium){ %>
-                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-black is-inverted is-stylish is-fullwidth">
+                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
                   <div class="icon is-small">
                     <i id="edit-dates-icon" class="far fa-pencil"></i>
                   </div>
                   <span id="edit-dates-text">Edit Dates or Path</span>
                 </a>
               <% } else { %>
-                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-black is-inverted is-stylish is-fullwidth">
+                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
                   <div class="icon is-small">
                     <i id="edit-dates-icon" class="far fa-pencil"></i>
                   </div>
@@ -549,7 +549,9 @@
   </section>
 
   <%# LISTING FOOTER %>
-  <%- include("listing_footer.ejs") %>
+  <div class="page-contents">
+    <%- include("listing_footer.ejs") %>
+  </div>
 
   <script src="/js/lib/moment.min.js" type="text/javascript"></script>
   <script src="/js/lib/wNumb.js" type="text/javascript"></script>
