@@ -944,7 +944,7 @@ module.exports = {
           error.handler(req, res, "That's an invalid hub selection! Please refresh the page and try again!", "json");
         }
         //invalid hub title
-        if (req.body.hub_title && (req.body.hub_title.length < 0 || req.body.hub_title.length > 75)){
+        else if (req.body.hub_title && (req.body.hub_title.length < 0 || req.body.hub_title.length > 75)){
           error.handler(req, res, "The listing hub name cannot be more than 75 characters!", "json");
         }
         //invalid hub email selection
