@@ -437,6 +437,14 @@ function updateDomainRow(tempRow, listing_info, now){
     var days_plural = (humanized == 1) ? "day" : "days";
     var expired_text = (expired_already) ? "Expired " + Math.abs(humanized) + " " + days_plural + " ago" : "In " + humanized + " " + days_plural;
     tempRow.find(".td-date-expire").text(expired_text).attr("title", moment_expire.format("YYYY-MM-DD HH:mm"));
+
+    //click to toggle between
+    tempRow.find(".td-date-expire").on("click", function(){
+      var display_text = $(this).text();
+      var display_title = $(this).attr("title");
+      $(this).text(display_title);
+      $(this).attr("title", display_text);
+    });
   }
   else {
     tempRow.find(".td-date-expire").text("-").removeAttr("title");
