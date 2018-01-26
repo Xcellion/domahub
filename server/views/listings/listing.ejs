@@ -1,7 +1,11 @@
 <html>
 
 	<head>
-		<title><%= listing_info.domain_name %> - DomaHub</title>
+    <% if (listing_info.premium) { %>
+      <title><%= listing_info.domain_name %></title>
+    <% } else { %>
+      <title><%= listing_info.domain_name %> - DomaHub</title>
+    <% } %>
 		<link rel="stylesheet" href="/css/min/listing_page.min.css" type="text/css" />
 		<%- include("../templates/head_links", {user: user});%>
 	</head>
