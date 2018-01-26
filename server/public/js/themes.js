@@ -32,8 +32,8 @@ var listing_themes = [
     font_color : "#FFFFFF",
     background_color : "#222222",
     background_image : "",
-    footer_color : "#222222",
-    footer_background_color : "#FFFFFF",
+    footer_color : "#FFFFFF",
+    footer_background_color : "#222222",
   },
   {
     theme_name : "Canyon",

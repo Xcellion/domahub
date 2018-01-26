@@ -203,7 +203,7 @@ function setupEditingButtons(){
       clearNotification();
 
       //update tab URL
-      updateQueryStringParam("tab", new_tab);
+      updateQueryStringParam("tab", new_tab, true);
 
       //hide other tab selectors
       $(".tab.verified-elem").removeClass('is-active');
@@ -981,10 +981,10 @@ function checkBox(module_value, elem, child){
       });
     }
 
-    // Display the key/value pairs
-    for (var pair of formData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]);
-    }
+    // // Display the key/value pairs
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0]+ ', ' + pair[1]);
+    // }
 
     $.ajax({
       url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
@@ -1297,7 +1297,7 @@ function updateOffersTable(listing_info, total_domains){
       cloned_offer_row.removeAttr("id");
       cloned_offer_row.find(".td-offer-domain").text(listing_info.domain_name);
       cloned_offer_row.find(".td-offer-name").text(listing_info.offers[x].name);
-      cloned_offer_row.find(".td-offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY")).attr("title", moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - hh:mm:A"));
+      cloned_offer_row.find(".td-offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("YYYY-MM-DD")).attr("title", moment(listing_info.offers[x].timestamp).format("YYYY-MM-DD HH:mm"));
       cloned_offer_row.find(".td-offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
       cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
       cloned_offer_row.data("domain_name", listing_info.domain_name).data("offer", listing_info.offers[x]);
@@ -1368,7 +1368,7 @@ function finishedOfferTable(total_domains, listing_info){
 function editOfferModal(offer, listing_info){
   $("#offer-modal").addClass('is-active');
   $("#offer-response").val("");
-  $("#offer-modal-timestamp").text(moment(offer.timestamp).format("MMMM DD, YYYY - h:MMA"));
+  $("#offer-modal-timestamp").text(moment(offer.timestamp).format("YYYY-MM-DD HH:mm"));
   $("#offer-modal-price").text(moneyFormat.to(parseFloat(offer.offer)));
   $("#offer-modal-name").text(offer.name);
   $("#offer-modal-email").text(offer.email);
@@ -1535,7 +1535,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
   else if (listing_info.deposited){
     $("#deposited-offer").removeClass('is-hidden');
     deposit_offer = true;
-    $("#deposited-deadline").text(moment(offer.deadline).format("MMMM DD, YYYY"));
+    $("#deposited-deadline").text(moment(offer.deadline).format("YYYY-MM-DD"));
   }
   else if (listing_info.accepted){
     $("#accepted-offer").removeClass('is-hidden');

@@ -550,7 +550,7 @@ function showSectionByURL(){
       $(".premium-elem").removeClass('is-hidden');
       $("#premium-header").removeClass('no-border-bottom');
 
-      $("#subscription-end-date").text(" on " + moment(user.stripe_subscription.current_period_end).format("MMMM D, YYYY"));
+      $("#subscription-end-date").text(" on " + moment(user.stripe_subscription.current_period_end).format("YYYY-MM-DD"));
 
       //expiring
       if (user.stripe_subscription.cancel_at_period_end == true){
@@ -563,7 +563,7 @@ function showSectionByURL(){
         $("#upgrade-to-premium-text, #upgrade-tab-header").text("Upgrade to Premium");
         $("#nav-premium-link").removeClass('is-hidden');
 
-        var exp_date_text = moment(user.stripe_subscription.current_period_end).format("MMMM D, YYYY")
+        var exp_date_text = moment(user.stripe_subscription.current_period_end).format("YYYY-MM-DD")
         $(".exp-date-text").text(exp_date_text);
         $("#next-charge-tip").text("You will not be charged further for this account.");
 
@@ -665,14 +665,14 @@ function showSectionByURL(){
     if (user.stripe_customer.invoices.length){
       for (var x = 0 ; x < user.stripe_customer.invoices.length ; x++){
         var payment_row = $("#payment-history-clone").clone().removeAttr("id").removeClass('is-hidden');
-        payment_row.find(".payment-history-date").text(moment(user.stripe_customer.invoices[x].created).format("MMMM D, YYYY")).attr("title", moment(user.stripe_customer.invoices[x].created).format("MMMM DD, YYYY - hh:mmA"));
+        payment_row.find(".payment-history-date").text(moment(user.stripe_customer.invoices[x].created).format("YYYY-MM-DD")).attr("title", moment(user.stripe_customer.invoices[x].created).format("YYYY-MM-DD HH:mm"));
         payment_row.find(".payment-history-amount").html((user.stripe_customer.invoices[x].amount) ? moneyFormat.to(user.stripe_customer.invoices[x].amount / 100) : "<del>" + moneyFormat.to(user.stripe_customer.invoices[x].subtotal / 100) + "</del> Free!");
         $("#payment-history-body").append(payment_row);
       }
     }
     else {
       var payment_row = $("#payment-history-clone").clone().removeAttr("id").removeClass('is-hidden');
-      payment_row.find(".payment-history-date").text(moment(user.stripe_subscription.created).format("MMMM D, YYYY")).attr("title", moment(user.stripe_subscription.created).format("MMMM DD, YYYY - hh:mmA"));
+      payment_row.find(".payment-history-date").text(moment(user.stripe_subscription.created).format("YYYY-MM-DD")).attr("title", moment(user.stripe_subscription.created).format("YYYY-MM-DD HH:mm"));
       payment_row.find(".payment-history-amount").text("Free!");
       $("#payment-history-body").append(payment_row);
     }
@@ -741,7 +741,7 @@ function showSectionByURL(){
   //set up next invoice charge
   function setupNextChargeTip(){
     if (user.stripe_customer && user.stripe_customer.upcoming_invoice){
-      var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.subtotal / 100) + " on " + moment(user.stripe_customer.upcoming_invoice.date).format("MMMM D, YYYY");
+      var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.subtotal / 100) + " on " + moment(user.stripe_customer.upcoming_invoice.date).format("YYYY-MM-DD");
       if (user.stripe_customer.upcoming_invoice.amount_due > 0){
         next_charge_text += " will be posted to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."
       }
@@ -927,7 +927,7 @@ function showSectionByURL(){
       for (var x = 0 ; x < user.referrals.length ; x++){
         var referral_clone = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
         referral_clone.find(".referral-months").text(moneyFormat.to(user.referrals[x].amount_off / 100));
-        referral_clone.find(".referral-created").text(moment(user.referrals[x].date_accessed).format("MMMM D, YYYY")).attr("title", moment(user.referrals[x].date_accessed).format("MMMM DD, YYYY - hh:mmA"));
+        referral_clone.find(".referral-created").text(moment(user.referrals[x].date_accessed).format("YYYY-MM-DD")).attr("title", moment(user.referrals[x].date_accessed).format("YYYY-MM-DD HH:mm"));
         referral_clone.find(".referral-redeemed").text((user.referrals[x].date_redeemed) ? "Used!" : "Not used!");
 
         //referred by someone
@@ -1238,7 +1238,7 @@ function createTransactionsRow(stripe_charge){
   temp_row.data("exists", true);
 
   //all other row info
-  temp_row.find(".transactions-row-date").text(moment(stripe_charge.created).format("MMMM D, YYYY")).attr("title", moment(stripe_charge.created).format("MMMM DD, YYYY - hh:mmA"));
+  temp_row.find(".transactions-row-date").text(moment(stripe_charge.created).format("YYYY-MM-DD")).attr("title", moment(stripe_charge.created).format("YYYY-MM-DD HH:mm"));
   temp_row.find(".transactions-row-type").text((stripe_charge.rental_id) ? "Rental" : "Sale");
   var listing_href = (user.stripe_subscription_id) ? "https://" + stripe_charge.domain_name.toLowerCase() : "/listing/" + stripe_charge.domain_name;
   temp_row.find(".transactions-row-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + stripe_charge.domain_name + "</a>");
@@ -1254,7 +1254,7 @@ function createTransactionsRow(stripe_charge){
       temp_row.find(".transactions-row-available").text("Requires Action").append('<div class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="far fa-exclamation-circle"></i></div>');
     }
     else {
-      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("MMMM D, YYYY") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
+      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("YYYY-MM-DD") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
     }
   }
 
@@ -1316,7 +1316,7 @@ function setupTransactionsModal(temp_row, stripe_charge){
   $("#transactions-details-modal").addClass('is-active');
 
   //format the modal
-  $("#transactions-modal-timestamp").text("Received on " + moment(stripe_charge.created).format("MMMM D, YYYY")).attr('title', moment(stripe_charge.created).format("MMMM DD, YYYY - hh:mmA"));
+  $("#transactions-modal-timestamp").text("Received on " + moment(stripe_charge.created).format("YYYY-MM-DD")).attr('title', moment(stripe_charge.created).format("YYYY-MM-DD HH:mm"));
   $("#transactions-modal-domain").text(((stripe_charge.rental_id) ? "Domain rental" : "Domain sale") + " for " + stripe_charge.domain_name);
   $("#transactions-modal-price").text(moneyFormat.to((stripe_charge.amount - stripe_charge.doma_fees - stripe_charge.stripe_fees) / 100) + " " + stripe_charge.currency.toUpperCase());
 
@@ -1325,7 +1325,7 @@ function setupTransactionsModal(temp_row, stripe_charge){
     $("#transactions-modal-available").text("Available for withdrawal!");
   }
   else {
-    $("#transactions-modal-available").text("Available for withdrawal on " + moment(stripe_charge.available_on).format("MMMM D, YYYY"));
+    $("#transactions-modal-available").text("Available for withdrawal on " + moment(stripe_charge.available_on).format("YYYY-MM-DD"));
   }
 
   //hide premium or basic

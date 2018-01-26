@@ -380,8 +380,8 @@ function setupRightHalf(){
                 }
               }
               else {
-                clearNotification();
                 $(".contact-input").removeAttr('disabled');
+                clearNotification();
                 errorMessage(data.message);
               }
             });
@@ -800,14 +800,8 @@ function setupRightHalf(){
         var totalPrice = calculatePrice(totalPrice);
       }
 
-      //price or price per day
-      if (totalPrice == 0 && listing_info.price_rate != 0 && overlappedTime == 0){
-        $(".total-price").addClass("is-hidden");
-        $("#checkout-button").addClass('is-disabled');
-        $(".actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
-      }
-      else {
-        $(".total-price").removeClass("is-hidden");
+      //total price text
+      if (totalPrice > 0){
         $("#checkout-button").removeClass('is-disabled');
 
         if (origPrice){
@@ -1582,41 +1576,7 @@ function setupRightHalf(){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------FOOTER-------------------------------
-
-function setupFooter(){
-
-  //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
-
-  if (listing_info.premium && listing_info.logo){
-    $(".page-contents #listing-footer-logo").attr("src", listing_info.logo);
-  }
-  else if (listing_info.premium){
-    $(".page-contents #listing-footer-logo").addClass('is-hidden');
-  }
-  else {
-    $(".page-contents #listing-footer-logo").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
-  }
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------FOOTER TEXT-------------------------------
-
-  if (listing_info.premium && listing_info.description_footer){
-    $("#listing-footer").text(listing_info.description_footer)
-  }
-
-  //</editor-fold>
-}
-
-//</editor-fold>
-
 //<editor-fold>-------------------------------HELPERS-------------------------------
-
-//to cap the first letter
-String.prototype.capitalizeFirstLetter = function() {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-}
 
 //get the hostname of a URL
 function getHost(href) {
@@ -1636,25 +1596,59 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function hexToRgbA(hex, alpha, limit_white){
-  if (hex){
-    hex   = hex.replace('#', '');
-    var r = parseInt(hex.length == 3 ? hex.slice(0, 1).repeat(2) : hex.slice(0, 2), 16);
-    var g = parseInt(hex.length == 3 ? hex.slice(1, 2).repeat(2) : hex.slice(2, 4), 16);
-    var b = parseInt(hex.length == 3 ? hex.slice(2, 3).repeat(2) : hex.slice(4, 6), 16);
-
-    //prevent all white
-    if (limit_white && r > 170 && g > 170 && b > 170){
-      r = (r > 170) ? 170 : r;
-      g = (g > 170) ? 170 : g;
-      b = (b > 170) ? 170 : b;
+function updateQueryStringParam(key, value, push) {
+  var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
+  urlQueryString = document.location.search,
+  newParam = key + '=' + value,
+  params = '?' + newParam;
+  // If the "search" string exists, then build params from it
+  if (urlQueryString) {
+    updateRegex = new RegExp('([\?&])' + key + '[^&]*');
+    removeRegex = new RegExp('([\?&])' + key + '=[^&;]+[&;]?');
+    if( typeof value == 'undefined' || value == null || value == '' ) { // Remove param if value is empty
+      params = urlQueryString.replace(removeRegex, "$1");
+      params = params.replace( /[&;]$/, "" );
+    } else if (urlQueryString.match(updateRegex) !== null) { // If param exists already, update it
+      params = urlQueryString.replace(updateRegex, "$1" + newParam);
+    } else { // Otherwise, add it to end of query string
+      params = urlQueryString + '&' + newParam;
     }
+  }
+  params = (params == "?") ? "" : params;
+  if (push){
+    window.history.pushState({}, "", baseUrl + params);
+  }
+  else {
+    window.history.replaceState({}, "", baseUrl + params);
+  }
+};
 
-    if ( alpha ) {
-      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+function removeURLParameter(parameter, push) {
+  var url = [location.protocol, '//', location.host, location.pathname].join('');
+  var urlparts= window.location.href.split('?');
+  if (urlparts.length>=2) {
+    var prefix= encodeURIComponent(parameter)+'=';
+    var pars= urlparts[1].split(/[&;]/g);
+    //reverse iteration as may be destructive
+    for (var i= pars.length; i-- > 0;) {
+      //idiom for string.startsWith
+      if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+        pars.splice(i, 1);
+      }
+    }
+    url= urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : "");
+    if (push){
+      window.history.pushState({}, "", url);
     }
     else {
-      return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+      window.history.replaceState({}, "", url);
+    }
+  } else {
+    if (push){
+      window.history.pushState({}, "", url);
+    }
+    else {
+      window.history.replaceState({}, "", url);
     }
   }
 }

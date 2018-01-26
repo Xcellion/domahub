@@ -6,7 +6,8 @@ td.free-times {
 }
 
 .calendar.right, .calendar.left {
-  padding: 10px;
+  padding-top: 10px;
+  width : 50%;
   margin: auto !important;
 }
 
@@ -74,7 +75,7 @@ td.free-times {
     .daterangepicker .calendar th, .daterangepicker .calendar td {
       white-space: nowrap;
       text-align: center;
-      min-width: 32px; }
+      min-width: 25px; }
   .daterangepicker .calendar-table {
     border: 1px solid #fff;
     padding: 4px;
@@ -138,8 +139,8 @@ td.free-times {
     width: 50px;
     margin-bottom: 0; }
   .daterangepicker .input-mini {
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 0;
+    text-align: center;
     color: #555;
     height: 30px;
     line-height: 30px;
@@ -148,14 +149,11 @@ td.free-times {
     margin: 0 0 5px 0;
     padding: 0 6px 0 28px;
     width: 100%; }
-    .daterangepicker .input-mini.active {
-      border: 1px solid #222222;
-      border-radius: 4px; }
   .daterangepicker .daterangepicker_input {
     position: relative; }
     .daterangepicker .daterangepicker_input .icon {
       position: absolute;
-      left: 2px;
+      left: 25px;
       top: 2px; }
   .daterangepicker.rtl .input-mini {
     padding-right: 28px;
