@@ -831,7 +831,7 @@ module.exports = {
 
         //hub stuff
         var hub = parseFloat(req.body.hub);
-        var hub_email = req.body.hub_email;
+        var hub_email = parseFloat(req.body.hub_email);
         var hub_phone = req.body.hub_phone;
         if (req.body.hub_phone || hub_phone != ""){
           try {
