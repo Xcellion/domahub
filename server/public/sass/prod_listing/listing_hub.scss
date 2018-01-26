@@ -148,13 +148,14 @@
 }
 
 .price-tag {
-  font-size: $size-8;
-  position: absolute;
-  top: -34px;
   background-color: $white;
+  border-radius: $radius 0 0 $radius;
+  font-size: 11px;
+  font-weight: 700;
   padding: 5px;
-  right: 7px;
-  border-radius: $radius;
+  position: absolute;
+  right: 0;
+  top: -12px;
 }
 
 .card-content {
