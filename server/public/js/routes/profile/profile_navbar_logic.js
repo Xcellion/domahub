@@ -155,7 +155,7 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function updateQueryStringParam(key, value) {
+function updateQueryStringParam(key, value, push) {
   var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
   urlQueryString = document.location.search,
   newParam = key + '=' + value,
@@ -174,7 +174,12 @@ function updateQueryStringParam(key, value) {
     }
   }
   params = (params == "?") ? "" : params;
-  window.history.replaceState({}, "", baseUrl + params);
+  if (push){
+    window.history.pushState({}, "", baseUrl + params);
+  }
+  else {
+    window.history.replaceState({}, "", baseUrl + params);
+  }
 };
 
 function removeURLParameter(parameter) {

@@ -446,7 +446,7 @@
     </div>
   </section>
 
-  <% if (new Date(user.date_accessed).getTime() < new Date().getTime()){ %>
+  <% if (new Date(user.date_accessed).getTime() < new Date("2018-01-23").getTime()){ %>
     <%- include("templates/announcements.ejs"); %>
   <% } %>
   <script src="/js/routes/profile/profile_dashboard_logic.js" type="text/javascript"></script>

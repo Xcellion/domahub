@@ -24,6 +24,24 @@
 @import '../bulma/layout/section.sass';
 @import '../bulma/layout/hero.sass';
 
+#domain-list-section {
+  @include mobile {
+    padding-top:10px;
+  }
+}
+
+.sort-header{
+  @include mobile {
+    padding-right:0 !important;
+  }
+}
+
+#domain-search-section {
+  @include mobile {
+    padding-bottom:0px;
+  }
+}
+
 .domain-table {
   background-color: #fff;
 }
@@ -52,14 +70,25 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  .tag + p {
-    margin-left: 10px;
+  .tag {
+    margin-right: 10px;
+  }
+}
+
+.table td, .table th {
+  @include mobile {
+    padding: 15px 0 15px 5px;
   }
 }
 
 .img-col,
 .misc-col {
   width: 50px;
+}
+
+.domain-col {
+  word-break:break-word;
+  min-width: 100px;
 }
 
 .bin-col,
@@ -119,6 +148,7 @@
 }
 
 .price-tag {
+  background-color: $white;
   border-radius: $radius 0 0 $radius;
   font-size: 11px;
   font-weight: 700;
@@ -291,7 +321,7 @@
     width: 50%;
     @media screen and (max-width: 1070px) {
       border-bottom: 1px solid $border;
-      padding-bottom: 40px;
+      padding-bottom: 20px;
       width: 100%;
     }
   }
@@ -341,7 +371,7 @@
     position: relative;
     width: 50%;
     @media screen and (max-width: 1070px) {
-      margin-top: 40px;
+      margin-top: 20px;
       padding-left: 0;
       width: 100%;
       .box {
@@ -606,6 +636,7 @@
     @include mobile {
       flex-wrap: nowrap;
       flex-direction: column;
+      text-align: center;
       .footer-item {
         &:not(:last-child) {
           margin-right: 0;

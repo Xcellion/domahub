@@ -1,8 +1,11 @@
 $(document).ready(function() {
   if (typeof listing_info != "undefined"){
     setupTheming();
+    setupFooter();
   }
 });
+
+//<editor-fold>-------------------------------SET UP THEMING-------------------------------
 
 function setupTheming(){
   //remove class to prevent screen flash DH green
@@ -31,49 +34,12 @@ function setupTheming(){
   }
 }
 
-//return white or black text based on luminance
-function calculateLuminance(rgb) {
-  var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
-  var r,g,b;
-  if (hexValue.length === 3) {
-    hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
-  }
-  if (hexValue.length !== 6) {
-    return 0;
-  }
-  r = parseInt(hexValue.substring(0,2), 16) / 255;
-  g = parseInt(hexValue.substring(2,4), 16) / 255;
-  b = parseInt(hexValue.substring(4,6), 16) / 255;
-
-  // calculate the overall luminance of the color
-  var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-  if (luminance > 0.8) {
-    return "#1b2733";
-  }
-  else {
-    return "#fff";
-  }
-}
-
-function stylize(color, element, style, calculateluminance) {
-  if (color){
-    $(element).css(style, color);
-    if (style == "background-color" && calculateluminance) {
-      $(element).css("color", calculateLuminance(color));
-    }
-  }
-  else {
-    $(element).removeAttr("style");
-  }
-}
-
 //setup any custom premium colors
 function setupCustomColorsListing(){
   console.log("Setting up custom theme...");
 
   //title
-  stylize(listing_info.primary_color, ".page-contents .domain-title.title.is-1", "color");
+  stylize(listing_info.primary_color, ".page-contents h1", "color");
 
   //click for more details
   stylize(listing_info.primary_color, ".page-contents #show-more-details", "color");
@@ -103,12 +69,14 @@ function setupCustomColorsListing(){
   stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents .otherowner-domain-price", "border-color");
 
   //ticker
-  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents #ticker-wrapper .is-primary", "color");
-  stylize(hexToRgbA(listing_info.secondary_color, 1, true), ".page-contents #ticker-wrapper .is-accent", "color");
-  stylize(hexToRgbA(listing_info.tertiary_color, 1, true), ".page-contents #ticker-wrapper .is-info", "color");
+  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents .icon.is-primary", "color");
+  stylize(hexToRgbA(listing_info.secondary_color, 1, true), ".page-contents .icon.is-accent", "color");
+  stylize(hexToRgbA(listing_info.tertiary_color, 1, true), ".page-contents .icon.is-info", "color");
 
   //social icons
   stylize(listing_info.primary_color, ".page-contents .social-share .icon", "color", true);
+  stylize(listing_info.primary_color, ".page-contents .social-share .icon", "border-color");
+  stylize("transparent", ".page-contents .social-share .icon", "background-color");
 
   //background
   stylize(listing_info.background_color, ".page-contents:not(.no-background)", "background-color");
@@ -120,3 +88,100 @@ function setupCustomColorsListing(){
   stylize(listing_info.footer_color, ".page-contents .footer-item", "color");
   stylize(listing_info.footer_background_color, ".page-contents .footer", "background-color");
 }
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------SET UP FOOTER-------------------------------
+
+function setupFooter(){
+
+  //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
+
+  if (listing_info.premium && listing_info.logo){
+    $(".page-contents #listing-footer-logo").attr("src", listing_info.logo);
+  }
+  else if (listing_info.premium){
+    $(".page-contents #listing-footer-logo").addClass('is-hidden');
+  }
+  else {
+    $(".page-contents #listing-footer-logo").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------FOOTER TEXT-------------------------------
+
+  if (listing_info.premium && listing_info.description_footer){
+    $(".page-contents #listing-footer").text(listing_info.description_footer)
+  }
+
+  //</editor-fold>
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPERS-------------------------------
+
+//return white or black text based on luminance
+function calculateLuminance(rgb) {
+  var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
+  var r,g,b;
+  if (hexValue.length === 3) {
+    hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+  }
+  if (hexValue.length !== 6) {
+    return 0;
+  }
+  r = parseInt(hexValue.substring(0,2), 16) / 255;
+  g = parseInt(hexValue.substring(2,4), 16) / 255;
+  b = parseInt(hexValue.substring(4,6), 16) / 255;
+
+  // calculate the overall luminance of the color
+  var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  if (luminance > 0.8) {
+    return "#1b2733";
+  }
+  else {
+    return "#fff";
+  }
+}
+
+//hexcode to RGBA function (with built in limiter for white backgrounds)
+function hexToRgbA(hex, alpha, limit_white){
+  if (hex){
+    hex   = hex.replace('#', '');
+    var r = parseInt(hex.length == 3 ? hex.slice(0, 1).repeat(2) : hex.slice(0, 2), 16);
+    var g = parseInt(hex.length == 3 ? hex.slice(1, 2).repeat(2) : hex.slice(2, 4), 16);
+    var b = parseInt(hex.length == 3 ? hex.slice(2, 3).repeat(2) : hex.slice(4, 6), 16);
+
+    //prevent all white
+    if (limit_white && r > 170 && g > 170 && b > 170){
+      r = (r > 170) ? 170 : r;
+      g = (g > 170) ? 170 : g;
+      b = (b > 170) ? 170 : b;
+    }
+
+    if ( alpha ) {
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+    }
+    else {
+      return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    }
+  }
+}
+
+//function to use JS to style an element
+function stylize(color, element, style, calculateluminance) {
+  if (typeof color != "undefined" || typeof color != "null"){
+    $(element).css(style, color);
+    if (style == "background-color" && calculateluminance) {
+      $(element).css("color", calculateLuminance(color));
+    }
+  }
+  else {
+    $(element).removeAttr("style");
+  }
+}
+
+//</editor-fold>

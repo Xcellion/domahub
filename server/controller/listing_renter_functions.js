@@ -65,6 +65,8 @@ module.exports = {
 
   //create a rental object for checking (for new)
   createNewRentalObject : function(req, res, next){
+    console.log("LRF: Creating new rental info object...");
+    delete req.session.new_rental_info;
     req.session.new_rental_info = {
       domain_name : req.params.domain_name
     };
@@ -249,7 +251,7 @@ module.exports = {
 
   //time check was successful! redirect to checkout
   redirectToCheckout : function(req, res, next){
-    console.log("LRF: Redirecting the user to the checkout page for final confirmation of rental...")
+    console.log("LRF: Redirecting the user to the checkout page for final confirmation of rental...");
     res.send({
       state: "success"
     });
@@ -257,8 +259,7 @@ module.exports = {
 
   //renders the checkout page for creating a new rental
   renderCheckout : function(req, res, next){
-    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined" && typeof req.params.domain_name == "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
     if (req.session.listing_info &&
         req.session.new_rental_info &&
         req.session.new_rental_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
@@ -913,7 +914,7 @@ module.exports = {
   //check if session listing_info exists and get listing info if it doesnt match with current domain_name
   checkSessionListingInfoPost : function(req, res, next){
     console.log("LRF: Checking if session listing info domain is same as posted domain...");
-    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined" && typeof req.params.domain_name == "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
     if (req.session.listing_info && req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase()){
       next();

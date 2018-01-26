@@ -48,7 +48,7 @@
       <div class="hero-body">
         <div class="container">
           <div class="content has-text-centered">
-            <h1 class="title is-1 is-primary"><%= listing_info.hub_title || listing_info.domain_name %></h1>
+            <h1 class="title is-1 is-primary is-bold"><%= listing_info.hub_title || listing_info.domain_name %></h1>
 						<p class="subtitle is-5">
 							<%= listing_info.description %>
 						</p>
@@ -121,21 +121,22 @@
 							<th colspan="1" class="is-hidden-mobile"></th>
 							<th class="sort-header" data-sort-by="domain_name" colspan="2">
 								<span class="is-hidden-mobile">Domain Name</span>
-								<span class="is-hidden-tablet">Domain</span>
+								<span class="is-hidden-tablet">Name</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
-							<th class="sort-header is-hidden-mobile" data-sort-by="buy_price" colspan="1">
+							<th class="sort-header" data-sort-by="buy_price" colspan="1">
                 <span class="is-hidden-mobile">Buy It Now Price</span>
-								<span class="is-hidden-tablet">BIN $</span>
+								<span class="is-hidden-tablet">BIN</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
-							<th class="sort-header is-hidden-mobile" data-sort-by="min_price" colspan="1">
+							<th class="sort-header" data-sort-by="min_price" colspan="1">
 								<span class="is-hidden-mobile">Minimum Price</span>
-								<span class="is-hidden-tablet">MIN $</span>
+								<span class="is-hidden-tablet">Min$</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
-							<th class="sort-header is-hidden-mobile" data-sort-by="price_rate" colspan="1">
-                <span>Rental Price</span>
+							<th class="sort-header" data-sort-by="price_rate" colspan="1">
+                <span class="is-hidden-mobile">Rental Price</span>
+								<span class="is-hidden-tablet">Rent$</span>
                 <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 						</tr>
@@ -150,21 +151,21 @@
 							<td colspan="2" class="domain-col">
 								<p class="domain-row-domain"></p>
 							</td>
-							<td colspan="1" class="bin-col is-hidden-mobile">
+							<td colspan="1" class="bin-col">
 								<div class="control-item">
-									<span class="tag is-primary is-dot"></span>
+									<span class="tag is-primary is-dot is-hidden-mobile"></span>
 									<p class="domain-row-bin"></p>
 								</div>
 							</td>
-							<td colspan="1" class="min-col is-hidden-mobile">
+							<td colspan="1" class="min-col">
 								<div class="control-item">
-									<span class="tag is-accent is-dot"></span>
+									<span class="tag is-accent is-dot is-hidden-mobile"></span>
 									<p class="domain-row-min"></p>
 								</div>
 							</td>
-							<td colspan="1" class="rent-col is-hidden-mobile">
+							<td colspan="1" class="rent-col">
                 <div class="control-item">
-                  <span class="tag is-info is-dot"></span>
+                  <span class="tag is-info is-dot is-hidden-mobile"></span>
                   <p class="domain-row-rent"></p>
                 </div>
               </td>
