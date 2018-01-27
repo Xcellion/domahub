@@ -1,3 +1,4 @@
+<%- include("./google_tag_manager", {user: user}); %>
 <script type="text/javascript">
   var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
 </script>
