@@ -1,0 +1,194 @@
+@import '../bulma/utilities/utilities.sass';
+@import '../bulma/base/base.sass';
+@import '../bulma/components/card.sass';
+@import '../bulma/components/grid.sass';
+@import '../bulma/components/modal.sass';
+@import '../bulma/components/nav.sass';
+@import '../bulma/elements/box.sass';
+@import '../bulma/elements/button.sass';
+@import '../bulma/elements/content.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/form.sass';
+@import '../bulma/elements/hamburger.sass';
+@import '../bulma/elements/image.sass';
+@import '../bulma/elements/icon.sass';
+@import '../bulma/elements/notification.sass';
+@import '../bulma/elements/tag.sass';
+@import '../bulma/elements/title.sass';
+@import '../bulma/layout/footer.sass';
+@import '../bulma/layout/section.sass';
+
+#landing {
+  @include transition(all 0.2s ease);
+  background-image: linear-gradient(to bottom, #3cbc8d, rgba(60,188,141,0.66) 50%, rgba(60,188,141,0.33) 100%);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  @media screen and (max-height: 800px) {
+    height: 600px;
+  }
+}
+
+.dashes {
+  border: 2px solid $border;
+  border-radius: 10px 0 0 10px;
+  border-right-width: 0;
+  border-style: dashed;
+  height: 65%;
+  margin-top: 100px;
+  @include mobile {
+    margin-top: 0;
+  }
+}
+
+#features {
+  padding-top: 100px;
+  @include mobile {
+    padding-top: 0;
+  }
+}
+
+.feature {
+  @include transition(all 0.25s ease);
+  &:hover {
+    border-color: $primary;
+    cursor: pointer;
+  }
+  &.is-active {
+    border-color: $primary;
+    .icon {
+      color: $primary;
+    }
+    pointer-events: none;
+  }
+  &.is-inactive {
+    @include scale(0.9);
+    pointer-events: none;
+    h3,p {
+      color: $black-disabled;
+    }
+  }
+}
+
+.offer-form {
+  position: relative;
+  .notification {
+    @include keyframes(effect .1s forwards);
+    @include translate(-50%,-50%);
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    width: 300px;
+    z-index: 10;
+    // animate
+    @keyframes effect {
+      0% {opacity: 0;}
+      100% {opacity: 1}
+    }
+  }
+}
+
+.blackscreen {
+  @include transition(all 0.4s ease);
+  background-color: transparent;
+  border-radius: $radius-large;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 9;
+  &.is-active {
+    background-color: $black-disabled;
+    display: block;
+  }
+}
+
+#checkout-form {
+  margin: 100px auto;
+}
+
+.image {
+  @include transition(all 0.25s ease);
+  &:hover {
+    @include box-shadow(0,10px,30px,$border,2px);
+    @include translate(0,-5px);
+  }
+  &:active {
+    @include translate(0,0);
+    @include box-shadow(0,1px,4px,$border,0);
+  }
+}
+
+.header {
+  margin-bottom: 50px;
+  @include mobile {
+    margin-bottom: 20px;
+  }
+}
+
+//<editor-fold>-------------------------Form Elements----------------------------
+
+#buy-now-form,
+#checkout-form {
+  input,
+  textarea {
+    &[disabled] {
+      background-color: $white;
+      border-color: $border;
+      color: $text;
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 1;
+    }
+  }
+}
+
+#buy-now-form {
+  input {
+    border-radius: 0;
+    border-width: 0 0 1px 0;
+    height: auto !important;
+    padding-bottom: 8px;
+    padding-top: 28px;
+    pointer-events: none;
+    position: relative;
+    &:focus {
+      box-shadow: none;
+      border-color: $black-secondary;
+      outline: 0;
+    }
+  }
+  textarea {
+    &:focus {
+      outline: 0;
+    }
+  }
+  label {
+    color: $black-disabled;
+    font-size: 12px;
+    font-weight: 700;
+    left: 32px;
+    letter-spacing: 1px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 8px;
+  }
+  .control {
+    &.has-icon {
+      & > .icon {
+        top: 28px;
+      }
+    }
+  }
+  .flag-container {
+    top: 26px;
+    height: 28px;
+  }
+}
+
+.shrink {
+  @include scale(.9);
+}
+
+//</editor-fold>---------------------------------------------------------------

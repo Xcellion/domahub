@@ -10,7 +10,7 @@ $(document).ready(function() {
     if ($(this).prop("checked")) {
       $("#premium-price-month").addClass("is-active");
       $("#premium-price-annual").removeClass("is-hidden");
-      $("#premium-price-text").html("Per month ($50 / year).");
+      $("#premium-price-text").html("Per month ($96 / year).");
     }
     else {
       $("#premium-price-month").removeClass("is-active");
