@@ -1271,7 +1271,12 @@
                 <th>Required Action</th>
                 <th class="td-dns-host">Host</th>
                 <th class="td-record">Record</th>
-                <th>Required Data</th>
+                <th>
+                  Required Data
+                  <div class="icon is-small is-danger" data-balloon-length="large" data-balloon="If your registrar doesn't let you input '@' as the required data, try entering in your domain name." data-balloon-pos="top">
+                    <i class="far fa-exclamation-circle"></i>
+                  </div>
+                </th>
                 <th class="is-hidden-mobile">Current Data</th>
               </tr>
             </thead>
@@ -1287,7 +1292,9 @@
                 <td class="next_step is-danger"></td>
                 <td class="td-dns-host">www</td>
                 <td class="td-record">CNAME</td>
-                <td class='required_data'>@</td>
+                <td class='required_data'>
+                  <span>@</span>
+                </td>
                 <td class="existing_data is-hidden-mobile"></td>
               </tr>
               <tr class='existing-dns-row needs-action-row no-hover-effect'>

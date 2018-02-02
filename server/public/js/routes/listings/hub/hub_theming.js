@@ -13,6 +13,7 @@ $(document).ready(function() {
   //show logo
   if (listing_hub_info.logo){
     $(".hub-section .logo-item").attr("src", listing_hub_info.logo).removeClass('is-hidden');
+    $(".hub-section .logo-item").closest("a").attr('title', listing_hub_info.hub_title);
   }
   setupCustomColorsHub();
 
