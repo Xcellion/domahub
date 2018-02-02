@@ -20,7 +20,7 @@
 
 #landing {
   @include transition(all 0.2s ease);
-  background-image: linear-gradient(to bottom, #3cbc8d, rgba(60,188,141,0.66) 50%, rgba(60,188,141,0.33) 100%);
+  background-image: linear-gradient(to bottom, $primary-dark, $primary 50%, rgba(60,188,141,0.33) 100%);
   overflow: hidden;
   position: relative;
   width: 100%;
