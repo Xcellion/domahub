@@ -19,6 +19,10 @@ module.exports = function(app){
   //routes any of the below routes to the appropriate view
   app.get([
     "/features",
+    "/landing-pages",
+    "/domain-marketplace",
+    "/domain-management",
+    "/payments",
     "/privacy",
     "/faq",
     "/contact",
@@ -37,7 +41,7 @@ module.exports = function(app){
 
   //blog redirect
   app.get("/blog", function(req, res){
-    res.redirect("https://medium.com/@domahub");
+    res.redirect("https://medium.com/domahub");
   });
 
   //</editor-fold>
