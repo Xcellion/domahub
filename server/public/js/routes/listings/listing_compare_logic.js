@@ -448,8 +448,13 @@ $(document).ready(function() {
     ]
   });
 
-  tutorial_tour.init();
-  tutorial_tour.start();
+  if (getParameterByName("tutorial") != "false"){
+    tutorial_tour.init();
+    tutorial_tour.start();
+  }
+  else {
+    $("#show-menu-wrapper, #compare-msg").addClass('is-hidden');
+  }
 
   //restart the tutorial (where you left off)
   $(".restart-tutorial-button").on('click', function(){

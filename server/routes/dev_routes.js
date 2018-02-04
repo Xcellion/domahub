@@ -22,6 +22,9 @@ module.exports = function(app){
   app.get("/emailviews/:email_template", emailViews);
   app.get("/viewstest/:path/:view_name", showView);
 
+  //get parked pages and emails
+  app.get("/parked/:date", findParkedDomains);
+
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
   app.get("/parsejsons/:date/", parseJSON);
@@ -33,7 +36,11 @@ module.exports = function(app){
   app.get("/godaddy", godaddy);
   app.get("/namecheap", namecheap);
   app.get("/namesilo", namesilo);
+
+  //general tests for domains
   app.get("/dns/:domain_name", dnsCheck);
+  app.get("/whois/:domain_name", whoisCheck);
+  app.get("/request/:domain_name", requestCheck);
 
   //google embed analytics
   app.get("/google", googleAnalytics);
@@ -41,6 +48,478 @@ module.exports = function(app){
   //</editor-fold>
 
 }
+
+//<editor-fold>-------------------------------CHECK PARKED-------------------------------------
+
+//godaddy production (1min)
+var godaddy_api_prod_1min = "9uBcCfxCjPd_FiwFzPXoaj9ubPzzPpsQVW";
+var godaddy_secret_prod_1min = "FiwHuAgZ13PpiVDvDVpEB2";
+var fs = require("fs");
+var whois = require("whois");
+var parser = require('parse-whois');
+var moment = require('moment');
+
+//filters for bad emails
+var no_bueno_email_strings = [
+  "domain",
+  "private",
+  "privacy",
+  "proxy",
+  "protect",
+  "whois",
+  "admin",
+  "hosting",
+  "hostmaster",
+  "realestate",
+  "registrar",
+  "support@",
+  "service@",
+  "info@",
+  "dns@",
+  "@anonymize.com",
+  "@anonymous.validname.com",
+  "@obscure.me",
+  "@newvcorp.com",
+  "@idshield.tk",
+  "@webnode.com",
+  "@secretregistration.com",
+  "@filteredemailaddress.com",
+  "@eliminatejunkemail.com",
+  "@nojunkemailaddress.com",
+  "@spamfree.bookmyname.com",
+  "@simplesite.com",
+  "@iddp.net",
+  "registry@loopia.se",
+  "forsale@epik.com",
+  "o-w-o.info",
+  "dotcommedia.com",
+  "yummynames.com",
+  "dropcatch.com",
+  "contact.gandi.net",
+  "justhost.com",
+  "xserver.co.jp",
+]
+
+//filters for bad names
+var no_bueno_names = [
+  "domain",
+  "hosting",
+  "internet",
+  "limited",
+  "hostmaster",
+  "hostmonster",
+  "registry",
+  "bluehost",
+  "support",
+  "namesecure",
+  "foundation",
+  "limited",
+  "admin",
+  "@",
+  "inc.",
+]
+
+//filters for parked pages
+var parked_strings = [
+  "mcc.godaddy.com",
+  "www.imena.ua",
+  "parked.easydns.com",
+  "namebrightstatic.com",
+  "onamae.com/parking",
+  "gandi.net",
+  "cdnpark.com",
+  "name.com",
+  "sedoparking",
+  "bluehost - top rated web hosting provider",
+  "parkingcrew",
+  "parkdomain",
+  "domainpark",
+  "domain parking",
+  "domainparking",
+  "domain name is registered and parked",
+  "domain name is parked",
+  "domain parked by europe",
+  "parked free of charge",
+  "parked at loopia",
+  "parked page for domain names",
+  "this domain is parked",
+  "this domain name is parked",
+  "this web page is parked free",
+  "dondominio parking",
+  "web hosting from just host",
+  "courtesy of www.hostmonster.com",
+  "would you like to buy this domain",
+  "sk-logabpstatus.php",
+]
+
+//find parked domains on godaddy
+function findParkedDomains(req, res, next){
+
+  //close connection
+  res.sendStatus(200);
+
+  //hash for already retrieved/seen
+  var domains_seen = JSON.parse(fs.readFileSync("./other/marketing/cold/domains_seen_obj.json", "utf8"));
+  var emails_seen = {};
+  JSON.parse(fs.readFileSync("./other/marketing/cold/emails_seen.json", "utf8")).forEach(function(elem){
+    emails_seen[elem.admin_email] = true;
+    emails_seen[elem.tech_email] = true;
+    emails_seen[elem.registrant_email] = true;
+    domains_seen[elem.domain_name] = true;
+  });
+
+  filterAndSortEmails();
+
+  //word bank + words already used
+  var words = JSON.parse(fs.readFileSync("./other/marketing/cold/words.json", "utf8"));
+  var date_today = (req.params.date) ? moment(req.params.date).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD");
+
+  //build domain list promises
+  var domain_promises = [];
+  for (var x = 0 ; x < words.length ; x++){
+
+    // //godaddy
+    // domain_promises.push(get_godaddy_recommended_domains(
+    //   words[x],
+    //   x,
+    //   words.length,
+    //   domains_seen,
+    //   emails_seen
+    // ));
+
+    //domain scope
+    domain_promises.push(get_domainscope_domains(
+      words[x],
+      x,
+      words.length,
+      domains_seen,
+      emails_seen,
+      date_today
+    ));
+  }
+
+  console.log("--------------------------------------------------------------");
+  console.log("----------------------FINDING DOMAINS-------------------------");
+  console.log("-------------------------" + date_today + "---------------------------");
+  console.log("--------------------------------------------------------------");
+
+  //get all godaddy recommended premium domains
+  var limit = qlimit(2);     //limit parallel promises (throttle)
+  Q.allSettled(domain_promises.map(limit(function(item, index, collection){
+    return domain_promises[index]();
+  }))).then(function(results) {
+    filterAndSortEmails(function(){
+      console.log("Done");
+    });
+  });
+
+}
+
+//check if there are any bad emails and sort the good ones
+function filterAndSortEmails(callback){
+  console.log("Removing bad email domains and sorting...");
+  var emails_done = JSON.parse(fs.readFileSync("./other/marketing/cold/emails.json", "utf8"));
+  emails_done = emails_done.filter(function(email_obj){
+    //find and remove bad emails
+    return no_bueno_email_strings.every(function(bad_email_str){
+      var admin_check = (email_obj.admin_email) ? email_obj.admin_email.indexOf(bad_email_str) == -1 : false;
+      var tech_check = (email_obj.tech_email) ? email_obj.tech_email.indexOf(bad_email_str) == -1 : false;
+      var registrant_check = (email_obj.registrant_email) ? email_obj.registrant_email.indexOf(bad_email_str) == -1 : false;
+
+      //remove if bad
+      if (email_obj.admin_email && !admin_check){
+        email_obj.admin_email = "";
+      }
+      if (email_obj.tech_email && !tech_check){
+        email_obj.tech_email = "";
+      }
+      if (email_obj.registrant_email && !registrant_check){
+        email_obj.registrant_email = "";
+      }
+      return (admin_check || tech_check || registrant_check);
+    });
+  });
+  emails_done.sort(function(a, b){
+    return (a.domain_name == b.domain_name) ? 0 : (a.domain_name > b.domain_name) ? 1 : -1;
+  });
+  fs.writeFileSync("./other/marketing/cold/emails.json", JSON.stringify(emails_done, null, 4));
+
+  if (callback){
+    callback();
+  }
+}
+
+//promise to get godaddy list of premium domains based on a word
+function get_godaddy_recommended_domains(word, index, total, domains_seen, emails_seen){
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
+      console.log("-----------------------------------Word #" + (index + 1) + "/" + total + " - " + word);
+      request({
+        url: "https://find.godaddy.com/domainsapi/v1/search/spins?pagestart=0&tlds=com,co,net&source=premium&pagesize=1000&key=dpp_search&q=" + word,
+        method: "GET",
+        json : true
+      }, function(err, response, body){
+        buildWhoIsPromises(domains_seen, emails_seen, resolve, reject, body["RecommendedDomains"], word, "Fqdn");
+      });
+    });
+  }
+}
+
+//promise to get domains from domainscope
+function get_domainscope_domains(word, index, total, domains_seen, emails_seen, date){
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
+      console.log("-----------------------------------Word #" + (index + 1) + "/" + total + " (" + word + ") - " + date);
+      request({
+        url: "https://domainscope.com/domainview/trending?keywords=" + word + "&startDate=" + date + "&endDate=" + date,
+        method: "GET",
+        json : true
+      }, function(err, response, body){
+        buildWhoIsPromises(domains_seen, emails_seen, resolve, reject, body.domains, word, false);
+      });
+    });
+  }
+}
+
+//function to build whois promises from list of domains
+function buildWhoIsPromises(domains_seen, emails_seen, resolve, reject, domains, word, property_name){
+
+  var whois_promises = [];
+  if (domains){
+    for (var x = 0 ; x < domains.length ; x++){
+      //havent seen this domain before
+      var cur_domain = (property_name) ? domains[x][property_name].toLowerCase() : domains[x].toLowerCase();
+      if (!domains_seen[cur_domain]){
+        whois_promises.push(getwhois_promise(cur_domain, word));
+        domains_seen[cur_domain] = true;
+      }
+    }
+  }
+
+  console.log("-----------------------------------Total domains : " + Object.keys(domains_seen).length);
+  fs.writeFileSync("./other/marketing/cold/domains_seen_obj.json", JSON.stringify(domains_seen, null, 4), "utf8");
+
+  //go ahead and try new domains
+  var limit = qlimit(2);     //limit parallel promises (throttle)
+  Q.allSettled(whois_promises.map(limit(function(item, index, collection){
+    return whois_promises[index]();
+  }))).then(function(results) {
+    var successful_domains = [];
+    for (var y = 0 ; y < results.length ; y++){
+      if (results[y].state == "fulfilled" &&
+      (!emails_seen[results[y].value.admin_email] ||
+        !emails_seen[results[y].value.tech_email] ||
+        !emails_seen[results[y].value.registrant_email])
+      ){
+        console.log("\x1b[33m%s\x1b[0m", "NEW EMAIL ADDED - " + results[y].value.domain_name + " - " + results[y].value.registrant_email);
+        successful_domains.push(results[y].value);
+        if (results[y].value.admin_email){
+          emails_seen[results[y].value.admin_email] = true;
+        }
+        if (results[y].value.tech_email){
+          emails_seen[results[y].value.tech_email] = true;
+        }
+        if (results[y].value.registrant_email){
+          emails_seen[results[y].value.registrant_email] = true;
+        }
+      }
+    }
+
+    //if we got an email
+    if (successful_domains.length > 0){
+      overwriteEmailFile(word, "./other/marketing/cold/emails.json", successful_domains, function(){
+        overwriteEmailFile(false, "./other/marketing/cold/emails_seen.json", successful_domains, resolve);
+      });
+    }
+    else {
+      reject();
+    }
+  });
+}
+
+function overwriteEmailFile(word, file_path, successful_domains, resolve){
+  if (word){
+    console.log("Total emails from '" + word + "' : " + successful_domains.length);
+  }
+  fs.readFile(file_path, function (err, data) {
+    try {
+      var json = JSON.parse(data);
+      json = json.concat(successful_domains);
+    } catch (e) {
+      var json = successful_domains;
+      if (word){
+        console.log("\x1b[41m%s\x1b[0m", "Total emails so far : " + json.length);
+      }
+    } finally {
+      fs.writeFile(file_path, JSON.stringify(json, null, 4), function(){
+        resolve();
+      });
+    }
+  });
+}
+
+function fillInBlank(comparing, target1, target2){
+  return (target1 == "") ? target2 : target1;
+}
+
+function getwhois_promise(domain_name, intial_word){
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
+      console.log("WHOIS - " + domain_name);
+
+      //look up domain owner info
+      whois.lookup(domain_name,{
+        "follow":  10    // number of times to follow redirects
+      }, function(err, data){
+        var whoisObj = {};
+        if (data && !err){
+          var array = parser.parseWhoIsData(data);
+          for (var x = 0; x < array.length; x++){
+            whoisObj[array[x].attribute.trim()] = array[x].value;
+          }
+
+          if (whoisObj["Admin Email"] || whoisObj["Tech Email"] || whoisObj["Registrant Email"]){
+            var admin_email = (whoisObj["Admin Email"]) ? whoisObj["Admin Email"].toLowerCase() : "";
+            var tech_email = (whoisObj["Tech Email"]) ? whoisObj["Tech Email"].toLowerCase() : "";
+            var registrant_email = (whoisObj["Registrant Email"]) ? whoisObj["Registrant Email"].toLowerCase() : "";
+
+            //check if there are any bad emails
+            var any_good = no_bueno_email_strings.every(function(bad_email_str){
+              var admin_check = (admin_email != "") ? admin_email.indexOf(bad_email_str) == -1 : false;
+              var tech_check = (tech_email != "") ? tech_email.indexOf(bad_email_str) == -1 : false;
+              var registrant_check = (registrant_email != "") ? registrant_email.indexOf(bad_email_str) == -1 : false;
+
+              //remove if bad
+              if (!admin_check){
+                admin_email = "";
+              }
+              if (!tech_check){
+                tech_email = "";
+              }
+              if (!registrant_check){
+                registrant_email = "";
+              }
+              return (admin_check || tech_check || registrant_check);
+            });
+
+            if (any_good && (admin_email != "" || tech_email != "" || registrant_email != "")){
+              //check if website is parked
+              // console.log("FOUND EMAIL - " + domain_name + " - " + registrant_email);
+              request.get({
+                url: "http://" + domain_name,
+                timeout: 100000,
+                headers : {
+                  'User-Agent' : "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+                }
+              }, function (err, response, body) {
+                if (!err && body){
+
+                  //why it was marked parked
+                  var strings = [];
+                  var parked = parked_strings.some(function(parked_string){
+                    var exists = response.body.toLowerCase().indexOf(parked_string) != -1;
+                    if (exists){
+                      strings.push(parked_string);
+                    }
+                    return exists;
+                  });
+
+                  //is it potentially parked or parked?
+                  var potentially_parked = false;
+                  var potentially_parked_strings = [];
+                  if (parked){
+                    console.log("\x1b[44m%s\x1b[0m" ,"PARKED!!! - " + domain_name + " - " + JSON.stringify(strings));
+                  }
+                  else {
+                    var park_potential = (response.body.toLowerCase().indexOf("park") != -1) ? "park" : "";
+                    var domain_potential = (response.body.toLowerCase().indexOf("domain") != -1) ? "domain" : "";
+
+                    //why was it potentially parked?
+                    if (park_potential != "" || domain_potential  != ""){
+                      console.log("\x1b[41m%s\x1b[0m", "Potentially parked - " + domain_name + " (" + park_potential + " " + domain_potential + ")");
+                      var potentially_parked = true;
+                      if (park_potential != ""){
+                        potentially_parked_strings.push(park_potential);
+                      }
+                      if (domain_potential != ""){
+                        potentially_parked_strings.push(domain_potential);
+                      }
+                    }
+                  }
+
+                  //figure out names
+                  if (whoisObj["Admin Name"] || whoisObj["Tech Name"] || whoisObj["Registrant Name"]){
+                    var admin_name = (whoisObj["Admin Name"]) ? whoisObj["Admin Name"].toLowerCase() : "";
+                    var tech_name = (whoisObj["Tech Name"]) ? whoisObj["Tech Name"].toLowerCase() : "";
+                    var registrant_name = (whoisObj["Registrant Name"]) ? whoisObj["Registrant Name"].toLowerCase() : "";
+
+                    //check if there are any bad names
+                    no_bueno_names.some(function(bad_name){
+                      var admin_check = (admin_name != "") ? admin_name.indexOf(bad_name) != -1 : false;
+                      var tech_check = (tech_name != "") ? tech_name.indexOf(bad_name) != -1 : false;
+                      var registrant_check = (registrant_name != "") ? registrant_name.indexOf(bad_name) != -1 : false;
+
+                      //remove if bad
+                      if (admin_check){
+                        admin_name = "";
+                      }
+                      if (tech_check){
+                        tech_name = "";
+                      }
+                      if (registrant_check){
+                        registrant_name = "";
+                      }
+                      return (admin_check || tech_check || registrant_check);
+                    });
+                  }
+                  else {
+                    var admin_check = "";
+                    var tech_check = "";
+                    var registrant_check = "";
+                  }
+
+                  var admin_name = toTitleCase(admin_name);
+                  var tech_name = toTitleCase(tech_name);
+                  var registrant_name = toTitleCase(registrant_name);
+
+                  resolve({
+                    domain_name : domain_name.toLowerCase(),
+                    parked : parked,
+                    admin_email : (admin_email == "") ? fillInBlank(admin_email, tech_email, registrant_email) : admin_email,
+                    tech_email : (tech_email == "") ? fillInBlank(tech_email, admin_email, registrant_email) : tech_email,
+                    registrant_email : (registrant_email == "") ? fillInBlank(registrant_email, tech_email, admin_email) : registrant_email,
+                    admin_name : (admin_name == "") ? fillInBlank(admin_name, tech_name, registrant_name) : admin_name,
+                    tech_name : (tech_name == "") ? fillInBlank(tech_name, admin_name, registrant_name) : tech_name,
+                    registrant_name : (registrant_name == "") ? fillInBlank(registrant_name, tech_name, admin_name) : registrant_name,
+                    intial_word : intial_word,
+                    parked_strings : strings,
+                    potentially_parked : potentially_parked,
+                    potentially_parked_strings : potentially_parked_strings,
+                  });
+                }
+                else {
+                  // console.log("\x1b[41m%s\x1b[0m", "Error in request!");
+                  reject();
+                }
+              });
+            }
+            else {
+              reject();
+            }
+          }
+          else {
+            reject();
+          }
+        }
+        else {
+          reject();
+        }
+      });
+    });
+  }
+}
+
+//</editor-fold>
 
 //<editor-fold>-------------------------------MONKEY-------------------------------------
 
@@ -129,7 +608,7 @@ function emailViews(req, res, next){
     phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     offer: moneyFormat.to(parseFloat("1231324")),
     verification_code: "Fjj380bnD",
-    message: "djkljakljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
+    message: "djkljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
   }
 
   res.render("email/" + req.params.email_template + ".ejs", data);
@@ -145,7 +624,6 @@ var Q = require("Q");
 var qlimit = require("qlimit");
 var glob = require("glob");
 var json2csv = require('json2csv');
-var whois = require("whois");
 
 //parse all xlsx files in a folder
 function parseFolder(req, res, next){
@@ -277,7 +755,7 @@ function parseJSON(req, res, next){
           }
         });
 
-        // console.log("\x1b[0m", "Writing to file...");
+        console.log("\x1b[0m", "Writing to file...");
         fs.rename(file, file.replace("/" + req.params.date + "/", "/" + req.params.date + "/raw/"), function(){
           fs.writeFileSync(this_dir + "/" + req.params.date + "-all.json", JSON.stringify(all_contacts, null, 2), {encoding:'utf8',flag:'w'})
           fs.writeFileSync(this_dir + "/" + req.params.date + "-failed.json", JSON.stringify(failed_domains, null, 2), {encoding:'utf8',flag:'w'})
@@ -534,7 +1012,7 @@ function parseCSV(date, file, verbose, cb){
 
 //custom request promise function
 function q_function(domain_name, name, email){
-  // console.log("\x1b[0m", "Querying - " + domain_name);
+  console.log("\x1b[0m", "Querying - " + domain_name);
   var deferred = Q.defer();
   request.get({
     url: "http://" + domain_name,
@@ -567,7 +1045,7 @@ function toTitleCase(str){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------DNS CHECK-------------------------------
+//<editor-fold>-------------------------------DOMAIN CHECKS (WHOIS, DNS, REQUEST)-------------------------------
 
 var dns = require('dns');
 //use google servers
@@ -576,6 +1054,7 @@ dns.setServers([
   "8.8.4.4"
 ]);
 function dnsCheck(req, res, next){
+  console.log("Checking website...");
   var domain_name = req.params.domain_name;
   dns.resolve(domain_name, "A", function (err, address, family) {
     var domain_ip = address;
@@ -588,6 +1067,35 @@ function dnsCheck(req, res, next){
         res.send("<h1>oh yeah</h1></br>" + req.params.domain_name + " - " + domain_ip + "</br>domahub - " + doma_ip);
       }
     });
+  });
+}
+function whoisCheck(req, res, next){
+  console.log("Checking WHOIS...");
+  var domain_name = req.params.domain_name;
+  whois.lookup(domain_name, {
+    // "proxy" : "whois.geektools.com"
+    "follow":  10    // number of times to follow redirects
+  }, function(err, data){
+    var whoisObj = {};
+    if (data && !err){
+      var array = parser.parseWhoIsData(data);
+      for (var x = 0; x < array.length; x++){
+        whoisObj[array[x].attribute.trim()] = array[x].value;
+      }
+      res.send(whoisObj);
+    }
+  });
+}
+function requestCheck(req, res, next){
+  console.log("Checking website...");
+  request.get({
+    url: "http://" + req.params.domain_name,
+    timeout: 100000,
+    headers : {
+      'User-Agent' : "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+    }
+  }, function (err, response, body) {
+    res.send(response);
   });
 }
 
