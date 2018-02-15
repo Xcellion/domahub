@@ -6,13 +6,13 @@
 
 .left-menu {
   @include transition(all 0.2s ease);
-  @include box-shadow(1px,0,5px,$border,1px);
+  @include box-shadow(2px,0,10px,$border,0);
   background-color: $white;
   height: 100%;
   min-width: 250px;
   width: 250px;
   position: fixed;
-  z-index: 1;
+  z-index: 100;
   &.is-active {
     left: -20px;
   }
@@ -22,8 +22,10 @@
   }
   .menu-list {
     .menu-item {
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
       @include laptop {
-        margin-top: 10px;
         &.has-icon {
           a {
             .icon {
@@ -35,8 +37,8 @@
     }
     a {
       &.primary-theme {
-        border-right: 3px solid transparent;
-        padding: 10px;
+        border-left: 5px solid transparent;
+        padding: 10px 0 10px 25px;
         @include laptop {
           padding: 10px 20px;
         }
@@ -44,12 +46,12 @@
           background-color: $pastel;
         }
         &.is-active {
-          background-color: rgba(60,188,141,0.15);
           border-color: $primary;
+          background-color: $white;
           .icon {
             color: $primary;
           }
-          p,small {
+          p {
             color: $primary;
             font-weight: 700;
           }
@@ -81,7 +83,7 @@
 }
 
 .menu-info {
-  margin: 30px 20px;
+  padding: 15px 20px 40px 30px;
   p {
     font-size: 10px;
     font-weight: 700;
@@ -136,14 +138,15 @@
 
 .nav {
   &.is-profile {
-    padding: 20px 50px 0;
+    background-color: transparent;
+    padding: 20px 50px;
     position: relative;
     @include mobile {
-      padding: 20px 20px 0;
+      padding: 0;
     }
     .nav-toggle {
-      width: 30px;
-      height: 30px;
+      width: 60px;
+      height: 60px;
     }
   }
 }
@@ -181,7 +184,10 @@
   background-color: $white;
   border-radius: $radius;
   position: absolute;
-  top: 100%;
+  top: calc(100% + 20px);
+  @include mobile {
+    top: 100%;
+  }
   .menu-label {
     color: $primary;
     padding: 8px 5px;
