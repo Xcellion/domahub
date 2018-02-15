@@ -232,6 +232,7 @@ function updatePortfolioOverviewCounters(){
         var chartOptions = {
           type : "line",
           options: {
+            maintainAspectRatio: false,
             layout: {
               padding: {
                 top: 20,
@@ -283,12 +284,12 @@ function updatePortfolioOverviewCounters(){
             scales: {
               xAxes: [{
                 gridLines : {
-                    display : false
+                    display : false,
                 },
                 ticks: {
-                  fontStyle: 700,
+                  fontStyle: 400,
                   fontColor: 'rgba(0,0,0,0.66)',
-                  padding: 20,
+                  padding: 10,
                   // only return month axis ticks
                   callback: function(value, index, values){
                     return (value.split(" - ")[0]);
@@ -297,13 +298,15 @@ function updatePortfolioOverviewCounters(){
               }],
               yAxes: [{
                 gridLines : {
+                  color: '#f6f9fc',
+                  lineWidth: 2,
                   drawBorder: false,
                   drawTicks: false
                 },
                 ticks: {
-                  fontStyle: 700,
+                  fontStyle: 400,
                   fontColor: 'rgba(0,0,0,0.66)',
-                  padding: 40,
+                  padding: 20,
                   suggestedMax: 5,
                   beginAtZero: true,   // minimum value will be 0.
                   callback: function(value, index, values){
@@ -320,30 +323,31 @@ function updatePortfolioOverviewCounters(){
             datasets : [
               {
                 label: stat_to_get_desc,
-                backgroundColor : 'rgba(60,188,141,0.3)',
+                backgroundColor : 'rgba(60,188,141,0.2)',
                 borderColor : 'rgba(60,188,141,1)',
                 borderWidth: 4,
                 pointBackgroundColor: '#fff',
                 pointBorderColor: 'rgba(60,188,141,1)',
-                pointBorderWidth: 6,
+                pointBorderWidth: 4,
                 pointHoverRadius: 6,
-                pointHoverBorderWidth: 4,
-                pointRadius: 6,
-                hitRadius: 6,
+                pointHoverBorderWidth: 3,
+                pointHoverBackgroundColor: "#fff",
+                pointRadius: 5,
                 data : chart_data1
               },
               {
                 label: stat_to_get_desc,
-                backgroundColor: 'rgba(210,210,210,0.3)',
-                borderColor : 'rgba(210,210,210,1)',
-                borderWidth: 4,
+                backgroundColor: 'rgba(210,210,210,0.1)',
+                borderColor : 'rgba(0,0,0,0.4)',
+                borderWidth: 2,
+                borderDash: [5,5],
                 pointBackgroundColor: '#fff',
-                pointBorderColor: 'rgba(210,210,210,1)',
-                pointBorderWidth: 6,
+                pointBorderColor: 'rgba(0,0,0,0.4)',
+                pointBorderWidth: 4,
                 pointHoverRadius: 6,
-                pointHoverBorderWidth: 4,
-                pointRadius: 6,
-                hitRadius: 6,
+                pointHoverBorderWidth: 3,
+                pointHoverBackgroundColor: "#fff",
+                pointRadius: 5,
                 data : chart_data2
               }
             ]
@@ -621,13 +625,6 @@ function updatePortfolioOverviewCounters(){
         var data = [];
         var labels = [];
         var backgroundColors = [
-          "rgba(60,188,141,0.65)",       //primary
-          "rgba(255,87,34,0.65)",        //accent
-          "rgba(33,150,243,0.65)",       //info
-          "rgba(255,235,59,0.65)",       //yellow
-          "rgba(229,57,53,0.65)"         //red
-        ];
-        var borderColors = [
           "rgba(60,188,141,1)",       //primary
           "rgba(255,87,34,1)",        //accent
           "rgba(33,150,243,1)",       //info
@@ -752,13 +749,6 @@ function updatePortfolioOverviewCounters(){
         var data = [];
         var labels = [];
         var backgroundColors = [
-          "rgba(60,188,141,0.65)",       //primary
-          "rgba(255,87,34,0.65)",        //accent
-          "rgba(33,150,243,0.65)",       //info
-          "rgba(255,235,59,0.65)",       //yellow
-          "rgba(229,57,53,0.65)"         //red
-        ];
-        var borderColors = [
           "rgba(60,188,141,1)",       //primary
           "rgba(255,87,34,1)",        //accent
           "rgba(33,150,243,1)",       //info
@@ -882,13 +872,6 @@ function updatePortfolioOverviewCounters(){
         var data = [];
         var labels = [];
         var backgroundColors = [
-          "rgba(60,188,141,0.65)",       //primary
-          "rgba(255,87,34,0.65)",        //accent
-          "rgba(33,150,243,0.65)",       //info
-          "rgba(255,235,59,0.65)",       //yellow
-          "rgba(229,57,53,0.65)"         //red
-        ];
-        var borderColors = [
           "rgba(60,188,141,1)",       //primary
           "rgba(255,87,34,1)",        //accent
           "rgba(33,150,243,1)",       //info
@@ -972,7 +955,6 @@ function updatePortfolioOverviewCounters(){
                 {
                   data : data,
                   backgroundColor : backgroundColors,
-                  borderColor : borderColors
                 }
               ]
             }

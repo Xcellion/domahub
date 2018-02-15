@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sell more domains with professional tools - DomaHub</title>
+  <title>Domain Landing Pages - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/main_landing.min.css" />
   <meta name="description" content="Simple, clean landing pages for your domains." />
   <%- include("../templates/head_links"); %>
@@ -12,7 +12,7 @@
 
 <%- include("../templates/navbar", {user: user}); %>
 
-<section class="landing section is-large">
+<section class="landing section is-medium">
   <div class="container">
     <div class="content has-text-centered">
       <h1 class="title is-2 is-bold is-white">Don't miss out on sales opportunities</h1>
@@ -23,7 +23,7 @@
     <div class="content has-text-centered">
       <a tabindex="0" class="button is-primary is-inverted is-stylish is-large" href="/signup">
         <div class="icon">
-          <i class="far fa-user-circle"></i>
+          <i class="fal fa-user-circle"></i>
         </div>
         <span>Create Account</span>
       </a>
@@ -49,7 +49,7 @@
 
             </div>
             <div id="loader" class="icon is-large is-white is-hidden" style="position:absolute;top:45%;left:45%;">
-              <i class="far fa-spinner fa-spin"></i>
+              <i class="fal fa-spinner fa-spin"></i>
             </div>
             <div id="checkout-form" class="box is-small demo is-hidden">
               <form autocomplete="off" class="control">
@@ -57,7 +57,7 @@
                 <div class="control has-icon">
                   <input disabled required id="cc-num" data-stripe="number" class="input contact-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
                   <div class="icon">
-                    <i id="cc-icon" class="far fa-credit-card"></i>
+                    <i id="cc-icon" class="fal fa-credit-card"></i>
                   </div>
                 </div>
                 <div class="control is-grouped">
@@ -66,7 +66,7 @@
                     <div class="control has-icon">
                       <input disabled required id="cc-exp" maxlength="7" data-stripe="exp" class="input contact-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                       <div class="icon">
-                        <i class="far fa-calendar-alt"></i>
+                        <i class="fal fa-calendar-alt"></i>
                       </div>
                     </div>
                   </div>
@@ -75,7 +75,7 @@
                     <div class="control has-icon">
                       <input disabled required id="cc-cvc" data-stripe="cvc" class="input contact-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
                       <div class="icon">
-                        <i class="far fa-lock"></i>
+                        <i class="fal fa-lock"></i>
                       </div>
                     </div>
                   </div>
@@ -84,13 +84,13 @@
                 <div class="control has-icon">
                   <input disabled required id="cc-zip" maxlength="6" data-stripe="address_zip" class="input contact-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                   <div class="icon">
-                    <i class="far fa-map-marker-alt"></i>
+                    <i class="fal fa-map-marker-alt"></i>
                   </div>
                 </div>
                 <div class="control is-grouped is-grouped-right">
                   <a id="confirm-purchase-button" class="button is-primary is-stylish send-button">
                     <div class="icon">
-                      <i class="far fa-check-circle"></i>
+                      <i class="fal fa-check-circle"></i>
                     </div>
                     <span>Confirm Purchase</span>
                   </a>
@@ -103,28 +103,28 @@
               <input id="contact_name" disabled placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
               <label class="error_message label">Name</label>
               <div class="icon">
-                <i class="far fa-user-alt"></i>
+                <i class="fal fa-user-alt"></i>
               </div>
             </div>
             <div class="control has-icon">
               <input id="contact_email" disabled placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email">
               <label class="error_message label">Email Address</label>
               <div class="icon">
-                <i class="far fa-envelope"></i>
+                <i class="fal fa-envelope"></i>
               </div>
             </div>
             <div class="control has-icon">
               <input id="contact_phone" disabled placeholder="201-555-0313" required class="contact-input input phone-number" name="contact_phone" type="tel">
               <label class="error_message label">Phone</label>
               <div class="icon">
-                <i class="far fa-phone"></i>
+                <i class="fal fa-phone"></i>
               </div>
             </div>
             <div class="control has-icon">
               <input id="contact_offer" disabled placeholder="$2500" required class="contact-input input" name="contact_offer" type="number" />
               <label class="error_message label">Offer in USD (Min. $2500)</label>
               <div class="icon">
-                <i class="far fa-usd-circle"></i>
+                <i class="fal fa-usd-circle"></i>
               </div>
             </div>
             <div class="control">
@@ -134,14 +134,14 @@
               <div class="control is-expanded">
                 <a id="send-offer-button" name="offer" class="send-button is-fullwidth button is-primary is-stylish">
                   <div class="icon is-small">
-                    <i class="far fa-check-circle"></i>
+                    <i class="fal fa-check-circle"></i>
                   </div>
                   <span>Send Offer</span>
                 </a>
               </div>
               <div class="control is-expanded">
                 <a id="buy-now-button" name="buy" class='is-accent is-fullwidth button is-stylish send-button'>
-                  <div class="icon is-small"><i class="far fa-shopping-cart"></i></div>
+                  <div class="icon is-small"><i class="fal fa-shopping-cart"></i></div>
                   <span id="buy-button-text">Buy Now - $5000</span>
                 </a>
               </div>
@@ -159,7 +159,7 @@
           <div class="control is-grouped">
             <div class="control">
               <div class="icon is-medium">
-                <i class="far fa-play-circle"></i>
+                <i class="fal fa-play-circle"></i>
               </div>
             </div>
             <div class="control">
@@ -174,7 +174,7 @@
           <div class="control is-grouped">
             <div class="control">
               <div class="icon is-medium">
-                <i class="far fa-play-circle"></i>
+                <i class="fal fa-play-circle"></i>
               </div>
             </div>
             <div class="control">
@@ -189,7 +189,7 @@
           <div class="control is-grouped">
             <div class="control">
               <div class="icon is-medium">
-                <i class="far fa-play-circle"></i>
+                <i class="fal fa-play-circle"></i>
               </div>
             </div>
             <div class="control">
@@ -315,25 +315,25 @@
   </div>
 </section>
 
-<section class="section is-pastel">
+<section class="section is-pastel is-medium">
   <div class="container">
     <div class="control is-spaced is-mobile">
       <div class="control-left">
         <div class="content">
-          <h2 class="title is-3 is-bold">See the landing page in action!</h2>
+          <h2 class="title is-3 is-bold is-primary">See the landing page in action!</h2>
           <h2 class="subtitle is-5">Try our free demo or create an account.</h2>
         </div>
       </div>
       <div class="control-right">
         <a tabindex="0" class="button is-primary is-stylish is-large" href="https://domahub.com/listing/Welcome.com?compare=true&theme=Stars">
           <div class="icon">
-            <i class="far fa-desktop"></i>
+            <i class="fal fa-desktop"></i>
           </div>
           <span>Try Free Demo</span>
         </a>
         <a tabindex="0" class="button is-primary is-outlined is-stylish is-large" href="/signup">
           <div class="icon">
-            <i class="far fa-user-circle"></i>
+            <i class="fal fa-user-circle"></i>
           </div>
           <span>Create Account</span>
         </a>

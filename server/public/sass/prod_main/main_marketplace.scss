@@ -20,11 +20,82 @@
 
 .landing {
   @include transition(all 0.2s ease);
-  background-image: linear-gradient(to bottom, #fff, rgba(255,231,110,0.1) 100%);
+  background-color: #3cbc8d;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.9'%3E%3Cpolygon fill='%2360cca5' points='1600%2C160 0%2C460 0%2C350 1600%2C50'/%3E%3Cpolygon fill='%2388d9bb' points='1600%2C260 0%2C560 0%2C450 1600%2C150'/%3E%3Cpolygon fill='%23b0e6d2' points='1600%2C360 0%2C660 0%2C550 1600%2C250'/%3E%3Cpolygon fill='%23d7f2e8' points='1600%2C460 0%2C760 0%2C650 1600%2C350'/%3E%3Cpolygon fill='%23ffffff' points='1600%2C800 0%2C800 0%2C750 1600%2C450'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
   overflow: hidden;
   position: relative;
   width: 100%;
   @media screen and (max-height: 800px) {
     height: 600px;
+  }
+}
+
+.feature {
+  .icon {
+    margin-bottom: 10px;
+  }
+}
+
+.flex-align {
+  display: flex;
+  justify-content: flex-start;
+  .content {
+    margin-left: 20px;
+  }
+}
+
+.hiw-step {
+  &:not(:last-child) {
+    margin-bottom: 40px;
+  }
+}
+
+.hiw-num {
+  color: $white;
+  font-size: 12px;
+  background-color: $dark;
+  height: 24px;
+  width: 24px;
+  border-radius: 25px;
+  text-align: center;
+  line-height: 24px;
+  font-weight: 700;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+}
+
+.header {
+  margin-bottom: 50px;
+}
+
+.control {
+  &.is-spaced {
+    .control-left {
+      margin-right: 20px;
+    }
+  }
+}
+
+.line {
+  height: 100%;
+  width: 50%;
+  border-radius: 5px;
+  &.is-1 {
+    margin-right: auto;
+    border-right: 3px dashed $border;
+    border-top: 3px dashed $border;
+  }
+  &.is-2 {
+    margin: 0 auto;
+    border-right: 3px dashed $border;
+  }
+  &.is-3 {
+    margin-right: auto;
+    border-right: 3px dashed $border;
+    border-bottom: 3px dashed $border;
   }
 }
