@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Domain Landing Pages - DomaHub</title>
+  <link rel="stylesheet" type="text/css" href="/css/min/main_management.min.css" />
+  <meta name="description" content="Simple, clean landing pages for your domains." />
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+<%- include("../templates/navbar", {user: user}); %>
+
+<section class="landing section is-medium">
+  <div class="container">
+    <div class="content has-text-centered">
+      <h1 class="title is-2 is-bold is-white">Domain management made simple</h1>
+      <p class="subtitle is-4 is-white">
+        Use our tools to become the world's greatest domainer.
+      </p>
+    </div>
+    <div class="content has-text-centered">
+      <a tabindex="0" class="button is-primary is-inverted is-stylish is-large" href="/signup">
+        <div class="icon">
+          <i class="fal fa-user-circle"></i>
+        </div>
+        <span>Create Account</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-7">
+        <figure class="image has-shadow">
+          <img src="/images/main/domain-management/traffic-chart.png" alt="DomaHub domain traffic chart and insights."/>
+        </figure>
+      </div>
+      <div class="column is-5">
+        <div class="content">
+          <p class="heading">Domain traffic data and insights.</p>
+          <h1 class="is-bold">Learn more about your domains</h1>
+          <p>
+            Gain meaningful insight into your domain traffic and learn more about how
+            your domains perform. Use this information to make better decisions about
+            which domains to keep, market, or release!
+          </p>
+        </div>
+        <hr />
+        <div class="content is-flex">
+          <div class="icon is-medium">
+            <i class="fal fa-medium"></i>
+          </div>
+          <div class="content-box">
+            <p class="is-grey">
+              Blog highlight
+            </p>
+            <a class="is-primary">
+              Check our blog post for more
+              <div class="icon is-small" href="https://medium.com/domahub/understanding-your-domain-traffic-with-domahub-e60c60c7ce9" rel="noreferrer" target="_blank">
+                <i class="fal fa-arrow-right"></i>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-5">
+        <div class="content">
+          <p class="heading">Domain management tools.</p>
+          <h1 class="is-bold">Manage your domains from one interface</h1>
+          <p>
+            Own domains in multiple registrars? Upload them to DomaHub and manage them
+            from our simple interface.
+          </p>
+          <p>
+            Never forget your domains' registar, re-registration deadlines, purchase prices, etc.
+            Additionally, connect your registrar to DomaHub to manage even more settings!
+          </p>
+        </div>
+        <hr />
+        <div class="notification has-icon is-lighter no-shadow">
+          <div class="icon-box">
+            <div class="icon is-black">
+              <i class="fal fa-exclamation-circle"></i>
+            </div>
+          </div>
+          <div class="content">
+            <p>
+              Need us to support your registrar? <a class="is-primary" href="/contact">Let us know!</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="column is-7">
+        <figure class="image has-shadow has-border">
+          <img src="/images/main/domain-management/domain-table.png" alt="DomaHub domain management tools."/>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-7">
+        <figure class="image has-shadow has-border">
+          <img src="/images/main/domain-management/offer-response.png" alt="DomaHub domain traffic chart and insights."/>
+        </figure>
+      </div>
+      <div class="column is-5">
+        <div class="content">
+          <p class="heading">Offer management system.</p>
+          <h1 class="is-bold">Respond to and manage your offers</h1>
+          <p>
+            Never lose track of incoming offers or inquiries. Use our interface to easily
+            sort, manage, and respond to all of your offers.
+          </p>
+          <p>
+            We will automatically send emails (according to your responses) to your customers.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include("../templates/footer"); %>
+</body>
+</html>

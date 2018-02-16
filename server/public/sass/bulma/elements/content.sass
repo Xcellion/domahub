@@ -1,4 +1,13 @@
 .content
+  &.is-flex
+    display: flex
+    justify-content: flex-start
+    .icon + .content-box
+      margin-left: 20px
+    &.is-spaced
+      justify-content: space-between
+    &.is-centered
+      align-items: center
   @extend .block
   & + .content
     margin-top: 20px
