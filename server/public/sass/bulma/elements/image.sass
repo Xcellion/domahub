@@ -4,6 +4,9 @@ $dimensions: 16 24 32 48 64 96 128 256 512
   display: block
   position: relative
   margin: 0 auto
+  &.has-border
+    & > img
+      border-radius: $radius-large
   &.has-shadow
     & > img
       +box-shadow(0,10px,30px,$border,0)
