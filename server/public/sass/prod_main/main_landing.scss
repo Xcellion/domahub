@@ -25,9 +25,6 @@
   overflow: hidden;
   position: relative;
   width: 100%;
-  @media screen and (max-height: 800px) {
-    height: 600px;
-  }
 }
 
 .dashes {
