@@ -43,7 +43,6 @@
   left: 25px
   top: 1px
 
-
 .nav-item
   align-items: center
   display: flex
@@ -57,6 +56,33 @@
     margin-left: 10px
 
 // Containers
+.hover-menu
+  +box-shadow(0,3px,15px,$border,1px)
+  background-color: $white
+  border-radius: $radius-large
+  display: none
+  position: absolute
+  top: 100%
+  z-index: 10
+  &::before
+    +box-shadow(0,2px,4px,$border,0)
+    content: ''
+    background: $white
+    position: absolute
+    width: 5px
+    height: 5px
+    top: -2px
+    right: 25px
+    z-index: 9
+  &.is-active
+    display: block
+  a
+    display: flex
+    align-items: center
+    padding: 10px 8px
+    .icon
+      margin-right: 10px
+
 .nav-menu
   // Responsiveness
   +mobile

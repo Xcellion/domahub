@@ -10,20 +10,20 @@
 
 <body>
 
-<%- include("../templates/navbar", {user: user}); %>
+<%- include("../templates/navbar_white", {user: user}); %>
 
-<section id="landing" class="section">
+<section id="landing" class="section is-medium">
   <div class="container">
     <div class="content has-text-centered">
-      <h1 class="title is-2 is-white is-bold">
+      <h1 class="title is-1 is-bold">
         Spend less time managing your domains
       </h1>
-      <p class="subtitle is-4 is-lighter">
+      <p class="subtitle is-4">
         Make domain management easier with our automated tools and services.
       </p>
     </div>
     <div class="content has-text-centered">
-      <a href="/signup" tabindex="0" class="button is-stylish is-primary is-inverted is-large">
+      <a href="/signup" tabindex="0" class="button is-stylish is-primary is-large">
         <div class="icon">
           <i class="fal fa-user-circle"></i>
         </div>
@@ -31,113 +31,69 @@
       </a>
     </div>
     <div class="content has-text-centered">
-      <small class="is-whitelight">
-        Try it free - no credit card required
+      <small class="is-grey">
+        Try it free - no credit card required.
       </small>
     </div>
-    <figure class="image has-shadow">
-      <img src="/images/main/marketplace.png" />
-    </figure>
   </div>
 </section>
-
 
 <section class="section is-medium">
   <div class="container">
-    <div class="content" style="margin-bottom:50px;">
-      <h1 class="title is-3 has-text-centered is-bold">Your All-In-One Domain Management Solution</h1>
-      <p class="subtitle has-text-centered is-5">
-        Learn more about what we have to offer.
-      </p>
-    </div>
     <div class="columns">
       <div class="column is-6">
-        <a class="box feature is-primary" href="/landing-pages">
-          <div class="icon is-light">
-            <i class="fal fa-external-link"></i>
+        <div class="content">
+          <div class="icon is-primary is-circle is-medium has-margin">
+            <i class="fal fa-list-alt"></i>
           </div>
-          <div class="control is-spaced">
-            <div class="control-left">
-              <div class="icon is-primary is-circle is-medium">
-                <i class="fal fa-list-alt"></i>
-              </div>
+          <small class="tip">Landing pages</small>
+          <h1 class="title is-3 is-bold">Capture all inbound traffic to your domains</h1>
+          <p>
+            Never miss out on potential sales opportunities when you set up a professional
+            landing page. Our offer form does the hard work of verifying and sending you
+            any and all offers.
+          </p>
+          <a class="is-primary" href="/landing-pages">
+            Learn more about the Landing Page
+            <div class="icon is-primary is-small">
+              <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
             </div>
-            <div class="control-right">
-              <div class="content">
-                <h2 class="is-bold">Landing Pages</h2>
-                <p class="is-grey">
-                  Capture all inbound traffic to your domains with sleek, clean landing pages.
-                </p>
-              </div>
-            </div>
-          </div>
-        </a>
+          </a>
+        </div>
       </div>
       <div class="column is-6">
-        <a class="box feature is-accent" href="/domain-marketplace">
-          <div class="icon is-light">
-            <i class="fal fa-external-link"></i>
-          </div>
-          <div class="control is-spaced">
-            <div class="control-left">
-              <div class="icon is-warning is-circle is-medium">
-                <i class="fal fa-building"></i>
-              </div>
-            </div>
-            <div class="control-right">
-              <div class="content">
-                <h2 class="is-bold">Domain Marketplace</h2>
-                <p class="is-grey">
-                  Showcase and market your entire domain portfolio within one website.
-                </p>
-              </div>
-            </div>
-          </div>
-        </a>
+        <figure class="image has-shadow">
+          <img src="/images/main/listing-page/normal_theme.png" alt="" />
+        </figure>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="section is-medium">
+  <div class="container">
     <div class="columns">
       <div class="column is-6">
-        <a class="box feature is-blue" href="/domain-management">
-          <div class="icon is-light">
-            <i class="fal fa-external-link"></i>
-          </div>
-          <div class="control is-spaced">
-            <div class="control-left">
-              <div class="icon is-info is-circle is-medium">
-                <i class="fal fa-chart-bar"></i>
-              </div>
-            </div>
-            <div class="control-right">
-              <div class="content">
-                <h2 class="is-bold">Management Tools</h2>
-                <p class="is-grey">
-                  Manage, track, and analyze your domains and offers all in one simple interface.
-                </p>
-              </div>
-            </div>
-          </div>
-        </a>
+        <figure class="image has-shadow">
+          <img src="/images/main/marketplace.png" alt="" />
+        </figure>
       </div>
       <div class="column is-6">
-        <a class="box feature is-red">
-          <div class="icon is-light">
-            <i class="fal fa-external-link"></i>
+        <div class="content">
+          <div class="icon is-primary is-circle is-medium has-margin">
+            <i class="fal fa-building"></i>
           </div>
-          <div class="control is-spaced">
-            <div class="control-left">
-              <div class="icon is-danger is-circle is-medium">
-                <i class="fal fa-credit-card"></i>
-              </div>
-            </div>
-            <div class="control-right">
-              <div class="content">
-                <h2 class="is-bold">Payments Processing</h2>
-                <p class="is-grey">
-                  Get paid securely and seamlessly. DomaHub doesn't take commission.
-                </p>
-              </div>
-            </div>
+          <small class="tip">Domain marketplace</small>
+          <h1 class="title is-3 is-bold">Your entire domain portfolio on one website</h1>
+          <p>
+            Showcase and market all of your domains by creating a marketplace. Called the Hub,
+            our marketplace page allows you to instantly create a brandable online store for your portfolio.
+          </p>
+        </div>
+        <a class="is-primary" href="/domain-marketplace">
+          Learn more about the Hub
+          <div class="icon is-primary is-small">
+            <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
           </div>
         </a>
       </div>
@@ -145,20 +101,120 @@
   </div>
 </section>
 
-<section class="section is-pastel">
+<section id="cta" class="section is-pastel">
   <div class="container">
     <div class="columns">
-      <div class="column is-8">
+      <div class="column is-6">
         <div class="content">
-          <h2 class="title is-3">Hundreds of professional domainers use DomaHub to manage their domain portfolio.</h2>
-          <p class="subtitle is-5 is-grey">
-            What are you waiting for? Sign up now!
+          <h1 class="title is-3 is-bold">Hundreds of professional domainers use DomaHub to manage their domains.</h1>
+          <p class="subtitle is-5">
+            Join them now, for free!
+          </p>
+        </div>
+      </div>
+      <div class="column is-4 is-offset-2">
+        <a tabindex="0" class="button is-accent is-stylish is-large" href="/signup">
+          <div class="icon">
+            <i class="fal fa-user-circle"></i>
+          </div>
+          <span>Sign Up Free</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="content has-text-centered">
+      <h1 class="title is-3 is-bold">Domain management made easy</h1>
+      <p>
+        Manage, track, and analyze your domains and offers all in one simple interface.
+      </p>
+    </div>
+    <div class="columns">
+      <div class="column is-4">
+        <div class="content has-text-centered">
+          <div class="icon is-primary is-circle is-medium has-margin">
+            <i class="fal fa-folder-open"></i>
+          </div>
+          <h3 class="is-bold">Portfolio Management</h3>
+          <p>
+            Never lose track of expiring domains. Record registration and expiration dates, purchase prices, registrar, and much more!
           </p>
         </div>
       </div>
       <div class="column is-4">
+        <div class="content has-text-centered">
+          <div class="icon is-primary is-circle is-medium has-margin">
+            <i class="fal fa-chart-bar"></i>
+          </div>
+          <h3 class="is-bold">Traffic Analysis</h3>
+          <p>
+            Analyze your domain traffic. Understand where you visitors are coming from and which domains are performing well!
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="content has-text-centered">
+          <div class="icon is-primary is-circle is-medium has-margin">
+            <i class="fal fa-credit-card"></i>
+          </div>
+          <h3 class="is-bold">Payments</h3>
+          <p>
+            Powered by Stripe, we make sure that all payments are conducted securely and seamlessly for your convenience.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="content has-text-centered">
+      <a class="is-primary" href="/domain-management">
+        Learn more about domain management
+        <div class="icon is-primary is-small">
+          <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section is-primary is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-5">
+        <div class="content">
+          <h2 class="title is-2 is-bold is-white">One simple pricing plan for everyone.</h2>
+          <p class="subtitle is-5 is-whitelight">
+            Our Premium subscription is a monthly or annual fee. You will immediately get unlimited access to all of our features.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4 is-offset-1">
+        <div class="price-control control is-grouped">
+          <div class="control">
+            <input id="price-toggle" type="checkbox" name="price-toggle" class="switch is-accent is-rounded" checked="checked">
+            <label for="price-toggle"></label>
+          </div>
+          <div class="control">
+            <p class="is-whitelight">
+              Bill me annually
+            </p>
+          </div>
+        </div>
         <div class="control">
-          <a href="/signup" tabindex="0" class="button is-stylish is-primary is-large">
+          <span class="price-sign">$</span>
+          <span id="premium-price-month" class="price-month is-active">10.00</span>
+          <span id="premium-price-annual" class="price-annual">8.00</span>
+          <span id="premium-price-text" class="price-text">
+            Per month ($96 / year).
+          </span>
+        </div>
+        <hr />
+        <div class="content">
+          <p class="is-whitelight">
+            You can try DomaHub free for 30 days. Get access to all of our features now!
+          </p>
+          <a tabindex="0" class="button is-primary is-inverted is-stylish is-large" href="/signup">
             <div class="icon">
               <i class="fal fa-user-circle"></i>
             </div>
@@ -167,248 +223,126 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<section id="pricing" class="section is-medium">
-  <div class="container">
-    <div class="content has-text-centered" style="margin-bottom:50px;">
-      <h1 class="title is-3 has-text-centered is-bold">DomaHub Pricing</h1>
-      <p class="subtitle is-5">
-        One plan and one price for all of our features.
-      </p>
-    </div>
-    <div class="control is-grouped is-grouped-center">
-      <div class="control">
-        <p>
-          Billed Monthly
-        </p>
-      </div>
-      <div class="control">
-        <input id="price-toggle" type="checkbox" name="price-toggle" class="switch is-rounded" checked="checked">
-        <label for="price-toggle"></label>
-      </div>
-      <div class="control">
-        <p>
-          Billed Annually
-        </p>
-      </div>
-    </div>
-    <div class="price-card-wrapper">
-      <div class="price-card card is-fullwidth">
-        <div class="features-table">
-          <div class="list-table">
-            <ul>
-              <li>
-                Domains
-              </li>
-              <li>
-                Commission<sup>1</sup>
-              </li>
-              <li>
-                Landing Pages
-              </li>
-              <li>
-                Traffic Analysis
-              </li>
-              <li>
-                Domain Rentals
-              </li>
-              <li>
-                SSL Certificate
-              </li>
-              <li>
-                Custom Design
-              </li>
-              <li>
-                Custom URL
-              </li>
-              <li>
-                Custom Email
-              </li>
-              <li>
-                No Advertisements
-              </li>
-            </ul>
-          </div>
+    <div class="columns">
+      <div class="column is-3">
+        <div class="content">
+          <ul class="is-vertical">
+            <li class="has-icon">
+              <div class="icon is-white">
+                <i class="fal fa-check"></i>
+              </div>
+              <span class="is-whitelight">Unlimited domains</span>
+            </li>
+            <li class="has-icon">
+              <div class="icon is-white">
+                <i class="fal fa-check"></i>
+              </div>
+              <span class="is-whitelight">No commission on sales</span>
+            </li>
+          </ul>
         </div>
-        <div class="card-content">
-          <div class="content">
-            <div class="content has-text-centered">
-              <div>
-                <div class="icon is-circle is-medium is-primary">
-                  <i class="fal fa-trophy-alt"></i>
-                </div>
+      </div>
+      <div class="column is-3">
+        <div class="content">
+          <ul class="is-vertical">
+            <li class="has-icon">
+              <div class="icon is-white">
+                <i class="fal fa-check"></i>
               </div>
-              <p id="premium-price-month" class="title is-2 is-bold is-active">$10</p>
-              <p id="premium-price-annual" class="title is-2 is-inline-block is-bold">$8</p>
-              <p id="premium-price-text" class="is-grey">
-                Per month ($96 / year).
-              </p>
-            </div>
-          </div>
+              <span class="is-whitelight">Landing pages</span>
+            </li>
+            <li class="has-icon">
+              <div class="icon is-white">
+                <i class="fal fa-check"></i>
+              </div>
+              <span class="is-whitelight">Domain Hub (marketplace)</span>
+            </li>
+          </ul>
         </div>
-        <div class="card-footer">
-          <ul class="list-table">
-            <li>
-              <p class="heading">
-                Domains
-              </p>
-              <p class="is-bold">
-                Unlimited
-              </p>
-            </li>
-            <li>
-              <p class="heading">
-                Commission
-              </p>
-              <p class="is-bold">
-                None
-              </p>
-            </li>
-            <li>
-              <p class="heading">
-                Landing Pages
-              </p>
-              <div class="icon is-primary">
+      </div>
+      <div class="column is-3">
+        <div class="content">
+          <ul class="is-vertical">
+            <li class="has-icon">
+              <div class="icon is-white">
                 <i class="fal fa-check"></i>
               </div>
+              <span class="is-whitelight">Traffic analysis</span>
             </li>
-            <li>
-              <p class="heading">
-                Traffic Analysis
-              </p>
-              <div class="icon is-primary">
+            <li class="has-icon">
+              <div class="icon is-white">
                 <i class="fal fa-check"></i>
               </div>
+              <span class="is-whitelight">Domain rentals</span>
             </li>
-            <li>
-              <p class="heading">
-                Domain Rentals
-              </p>
-              <div class="icon is-primary">
+          </ul>
+        </div>
+      </div>
+      <div class="column is-3">
+        <div class="content">
+          <ul class="is-vertical">
+            <li class="has-icon">
+              <div class="icon is-white">
                 <i class="fal fa-check"></i>
               </div>
+              <span class="is-whitelight">HTTPS connection</span>
             </li>
-            <li>
-              <p class="heading">
-                SSL Certificate
-              </p>
-              <div class="icon is-primary">
+            <li class="has-icon">
+              <div class="icon is-white">
                 <i class="fal fa-check"></i>
               </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom Design
-              </p>
-              <div class="icon is-primary">
-                <i class="fal fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom URL
-              </p>
-              <div class="icon is-primary">
-                <i class="fal fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                Custom Email
-              </p>
-              <div class="icon is-primary">
-                <i class="fal fa-check"></i>
-              </div>
-            </li>
-            <li>
-              <p class="heading">
-                No Advertisements
-              </p>
-              <div class="icon is-primary">
-                <i class="fal fa-check"></i>
-              </div>
+              <span class="is-whitelight">Custom URL</span>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="content has-text-centered" style="margin-top:20px;">
-      <small class="is-block is-grey">
-        <sup>1</sup> All domain sales / rentals are subject to a 2.9% + $0.30 (per transaction) payments processing fee.
-      </small>
-    </div>
   </div>
 </section>
 
-<section class="section is-medium">
+<section class="section is-pastel">
   <div class="container">
-    <div class="content">
-      <h1 class="title has-text-centered is-bold">Frequently Asked Questions</h1>
-    </div>
     <div class="columns">
-      <div class="column is-4">
-        <div class="content">
-          <h3>What is a landing page?</h3>
-          <p>
-            A landing page is a simple website that is displayed when someone visits your domain.
-            They help capture inbound traffic.
-          </p>
-        </div>
+      <div class="column is-6">
+        <a class="notification is-info has-icon">
+          <div class="icon-box">
+            <div class="icon is-white is-large">
+              <i class="fal fa-book"></i>
+            </div>
+          </div>
+          <div class="content">
+            <h2 class="is-white">
+              Explore our FAQ
+              <div class="icon">
+                <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
+              </div>
+            </h2>
+            <p class="is-white">
+              Learn more about our features, pricing, procedures, and policies.
+            </p>
+          </div>
+        </a>
       </div>
-      <div class="column is-4">
-        <div class="content">
-          <h3>How are offers verified?</h3>
-          <p>
-            Firstly, users cannot submit any offers that are below your domain's minimum asking price.
-            Secondly, all users must confirm their offers by email. Offers that are not confirmed
-            will not be sent to you.
-          </p>
-        </div>
+      <div class="column is-6">
+        <a class="notification is-accent has-icon">
+          <div class="icon-box">
+            <div class="icon is-white is-large">
+              <i class="fal fa-rss"></i>
+            </div>
+          </div>
+          <div class="content">
+            <h2 class="is-white">
+              Read our blog
+              <div class="icon">
+                <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
+              </div>
+            </h2>
+            <p class="is-white">
+              Our blog contains troubleshooting articles, creative stories, feature highlights, and more!
+            </p>
+          </div>
+        </a>
       </div>
-      <div class="column is-4">
-        <div class="content">
-          <h3>What kind of analytics are provided?</h3>
-          <p>
-            We track stats like how many views your domain gets, where your visitors come from, how they get
-            to your domains, and much more!
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-4">
-        <div class="content">
-          <h3>What payment options does DomaHub accept?</h3>
-          <p>
-            We accept payments from all major credit and debit cards in more than 130 currencies.
-          </p>
-        </div>
-      </div>
-      <div class="column is-4">
-        <div class="content">
-          <h3>How do I get paid?</h3>
-          <p>
-            You must link a bank account with DomaHub. Once a transaction has been confirmed, we will deposit the money directly into your account
-            once it has been processed.
-          </p>
-        </div>
-      </div>
-      <div class="column is-4">
-        <div class="content">
-          <h3>Can I cancel my Premium subscription?</h3>
-          <p>
-            You can cancel your Premium subscription at any time. Your account will still remain active and your Premium status will last
-            until the end of the current billing cycle (1 month).
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="content has-text-centered">
-      <p>
-        Have other questions? Visit our <a tabindex="0" class="is-underlined is-primary" href="/faq">FAQ</a>!
-      </p>
     </div>
   </div>
 </section>
@@ -418,7 +352,7 @@
     <div class="control is-spaced is-mobile">
       <div class="control-left">
         <div class="content">
-          <h1 class="title is-bold ">Ready to get started?</h1>
+          <h1 class="title is-primary">Ready to get started?</h1>
           <h2 class="subtitle ">Create an account or get in touch!</h2>
         </div>
       </div>

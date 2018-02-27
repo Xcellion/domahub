@@ -80,23 +80,7 @@
       </div>
     </div>
     <div class="nav-center">
-      <% if (!user) { %>
-        <div class="nav-item is-hidden-tablet">
-          <a id="nav-demo-button" class="is-hidden" title="Try Demo" href="/demo">
-            Try Demo
-          </a>
-        </div>
-        <div class="nav-item is-hidden-tablet">
-          <a id="nav-signup-button" class="is-hidden has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
-            <div class="icon">
-              <i class="fal fa-user-circle"></i>
-            </div>
-            <span>
-              Sign Up
-            </span>
-          </a>
-        </div>
-      <% } %>
+
     </div>
 
     <span class="nav-toggle is-black" tabindex="0">
@@ -109,7 +93,27 @@
       <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
       <% if (!user) { %>
         <div class="nav-item">
-          <a class="nav-link" title="Features" href="/features">Features</a>
+          <a id="features-menu" class="nav-link" title="Features">Features</a>
+          <div class="hover-menu">
+            <a>
+              <div class="icon is-primary is-circle is-small">
+                <i class="fal fa-list-alt fa-fw"></i>
+              </div>
+              <span>Landing Pages</span>
+            </a>
+            <a>
+              <div class="icon is-accent is-circle is-small">
+                <i class="fal fa-building fa-fw"></i>
+              </div>
+              <span>Domain Hub</span>
+            </a>
+            <a>
+              <div class="icon is-info is-circle is-small">
+                <i class="fal fa-folder-open fa-fw"></i>
+              </div>
+              <span>Domain Management</span>
+            </a>
+          </div>
         </div>
         <div class="nav-item">
           <a class="nav-link" title="Pricing" href="/#pricing">Pricing</a>
