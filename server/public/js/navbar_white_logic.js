@@ -18,6 +18,11 @@ $(document).ready(function() {
     $("#message").attr("style", "").text("Log in below");
   });
 
+  //hover menu
+  $('#features-menu').on("click", function() {
+    $('.hover-menu').toggleClass("is-active");
+  })
+
   //ESC key to close modal
   $(document).keyup(function(e) {
     if (e.which == 27) {
