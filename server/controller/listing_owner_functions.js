@@ -1280,10 +1280,7 @@ module.exports = {
 
       //check if we're changing anything
       if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
-        res.json({
-          state: "success",
-          listings: (req.user) ? req.user.listings : false
-        });
+        error.handler(req, res, "nothing-changed", "json");
       }
       else {
         console.log("LOF: Updating domain details...");
@@ -1443,7 +1440,7 @@ module.exports = {
 
   //get any existing domain expenses
   getDomainExpenses : function(req, res, next){
-    console.log("LOF: Getting exisitng domain expense details...");
+    console.log("LOF: Getting existing domain expense details...");
     var selected_ids = req.body.selected_ids.split(",");
     listing_model.getDomainExpenses(selected_ids, function(result){
       if (result.state == "success"){
