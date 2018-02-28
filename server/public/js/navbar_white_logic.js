@@ -48,10 +48,20 @@ $(document).ready(function() {
   //clicked off navbar dropdown
   $(document).on("click", function(event) {
     if (!$(event.target).closest(".nav-toggle").length && $(".nav-menu").hasClass('is-active')) {
-      $(".nav-toggle, .nav-menu").removeClass("is-active");
+      $(".nav-toggle .nav-menu").removeClass("is-active");
     }
     if (!$(event.target).closest("#profile-button").length && !$("#profile-button").hasClass('is-hidden')) {
       $("#profile-dropdown").addClass("is-hidden");
+    }
+  });
+
+  //close user dropdown menu on click outside the element
+  $(document).on("click", function(event) {
+    if (!$(event.target).closest("#features-menu").length && !$(event.target).closest(".hover-menu-link").length) {
+      if ($(".hover-menu").is(":visible")) {
+        $(".hover-menu").removeClass("is-active");
+        $(this).toggleClass("is-active").blur();
+      }
     }
   });
 

@@ -22,6 +22,7 @@
 
 #landing {
   @include transition(all 0.2s ease);
+  padding-top: 200px;
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -29,14 +30,6 @@
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
-  }
-  .image {
-    height: 500px;
-    margin-top: 50px;
-    max-width: 800px;
-    img {
-      border-radius: 15px;
-    }
   }
 }
 
