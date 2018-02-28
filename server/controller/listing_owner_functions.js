@@ -286,7 +286,7 @@ module.exports = {
         console.log("LOF: Finished looking up domain expiration dates!");
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
-            req.session.new_listings.db_object[results[y].value.index][7] = moment(results[y].value.whois["Registry Expiry Date"]).valueOf();
+            req.session.new_listings.db_object[results[y].value.index][7] = moment(results[y].value.whois["Registrar Registration Expiration Date"]).valueOf();
             req.session.new_listings.db_object[results[y].value.index][8] = moment(results[y].value.whois["Creation Date"]).valueOf();
             req.session.new_listings.db_object[results[y].value.index][9] = results[y].value.whois["Registrar"];
           }
