@@ -465,7 +465,7 @@ module.exports = {
                 {
                   prop_name : "date_expire",
                   function_if_blank : function(){
-                    return moment(results[x].value.whois["Registry Expiry Date"]).valueOf();
+                    return moment(results[x].value.whois["Registrar Registration Expiration Date"]).valueOf();
                   }
                 },
                 {
