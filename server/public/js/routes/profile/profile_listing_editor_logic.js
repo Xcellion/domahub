@@ -180,8 +180,13 @@ function updateEditorEditing(selected_domain_ids){
 function setupEditingButtons(){
 
   //to submit form changes
-  $("#save-changes-button, #save-registrar-contact-button").off().on("click", function(e){
+  $("#save-changes-button").off().on("click", function(e){
     submitListingChanges($(this));
+  });
+
+  //to submit registrar contact modal changes
+  $("#save-registrar-contact-button").off().on("click", function(e){
+    submitListingChanges($(this), false, true);
   });
 
   //to cancel form changes
@@ -400,10 +405,10 @@ function checkBox(module_value, elem, child){
 
     //contact phone number
     if (listing_info["registrar_" + which_contact + "_phone"]){
-      $("#hub-phone-input").intlTelInput("setNumber", listing_info["registrar_" + which_contact + "_phone"]).val(listing_info["registrar_" + which_contact + "_phone"]);
+      $("#registrar-contact-phone-input").intlTelInput("setNumber", listing_info["registrar_" + which_contact + "_phone"]).val(listing_info["registrar_" + which_contact + "_phone"]);
     }
     else {
-      $("#hub-phone-input").val("");
+      $("#registrar-contact-phone-input").val("");
     }
   }
   function extraCloseModal(){
@@ -478,7 +483,6 @@ function checkBox(module_value, elem, child){
   }
   function updateDomainExpenseModal(expense_type, domain_expense){
     clearNotification();
-    $("#domain-expense-name-input").focus();
     if (expense_type == "new"){
       $(".domain-expense-input").val("");
       var expense_display_text = "Adding New ";
@@ -490,8 +494,9 @@ function checkBox(module_value, elem, child){
       var expense_display_text = "Editing ";
     }
     $("#domain-expense-modal").addClass('is-active');
+    $("#domain-expense-name-input").focus();
 
-    //display what are we doing to this expense (new, delete, edit)
+    //display what are we doing to this expense (new, edit)
     $("#how-change-domain-expense").text(expense_display_text);
 
     //for submission of new/edit/delete expense
@@ -1217,7 +1222,7 @@ function checkBox(module_value, elem, child){
   }
 
   //submit status change
-  function submitListingChanges(submit_button, status_only){
+  function submitListingChanges(submit_button, status_only, contact_modal){
     //clear any existing messages
     clearNotification();
     submit_button.addClass('is-loading');
@@ -1231,7 +1236,8 @@ function checkBox(module_value, elem, child){
       formData.append("status", new_status);
     }
     else {
-      $(".changeable-input, #paths-input").each(function(e){
+      var elements_list = (contact_modal) ? ".modal-input" : ".changeable-input, #paths-input";
+      $(elements_list).each(function(e){
         var input_name = $(this).data("name");
         var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
@@ -1304,46 +1310,54 @@ function checkBox(module_value, elem, child){
           listings = data.listings;
         }
 
-        //not premium but tried to update premium stuff
-        if (data.message == "not-premium"){
-          var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
-        }
-        else if (data.message == "dns-pending"){
-          var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
+        //nothing was changed
+        if (data.message == "nothing-changed"){
+          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "the selected listings";
+          infoMessage("No details were changed for " + plural_error_msg + ". Did you enter in the correct information?");
         }
         else {
-          //listing is no longer pointed to domahub, revert to verify tab
-          if (data.message == "verification-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
-            var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
-            showSelector(true);
-            createRows(false);
+          //not premium but tried to update premium stuff
+          if (data.message == "not-premium"){
+            var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
           }
-          else if (data.message == "ownership-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
-            var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
-            showSelector(true);
-            createRows(false);
-          }
-          else if (data.message == "accepted-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-            var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
-            showSelector(true);
-            createRows(false);
-          }
-          else if (data.message == "deposited-error" || data.message == "transferred-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-            var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
-            showSelector(true);
-            createRows(false);
+          else if (data.message == "dns-pending"){
+            var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
           }
           else {
-            var error_msg = data.message;
+            //listing is no longer pointed to domahub, revert to verify tab
+            if (data.message == "verification-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
+              var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "ownership-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
+              var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "accepted-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "deposited-error" || data.message == "transferred-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else {
+              var error_msg = data.message;
+            }
+
           }
 
+          errorMessage(error_msg);
         }
 
-        errorMessage(error_msg);
       }
 
       updateEditorEditing(selected_ids);
