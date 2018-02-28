@@ -104,6 +104,11 @@ function closeModals(){
   if ($("#announcement-modal").length == 1){
     bakeCookie("announcement", true);
   }
+
+  //extra function for some pages
+  if (typeof extraCloseModal != "undefined"){
+    extraCloseModal();
+  }
 }
 
 //</editor-fold>

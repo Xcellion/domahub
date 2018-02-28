@@ -24,9 +24,51 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+#domain-expense-table-wrapper {
+  padding-top:10px;
+}
+
+#domain-expense-table {
+  display: block;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  tr:not(:last-child) {
+    td {
+      border-bottom: 1px solid $border;
+    }
+  }
+  td {
+    padding: 0 5px;
+    width: 100%;
+  }
+  td:first-child {
+    padding-left : 0;
+  }
+  .domain-expense-date, .domain-expense-cost {
+    white-space : nowrap;
+  }
+  .button {
+    border: 0;
+  }
+}
+
+.expense-button-wrapper {
+  width:60px;
+  @include mobile {
+    width:36px;
+  }
+}
+
 .columns {
   margin-left:-20px;
   margin-right:-20px;
+}
+
+.card-header-title {
+  .icon {
+    margin-left:5px;
+  }
 }
 
 .remove-margin-bottom-content {

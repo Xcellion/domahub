@@ -26,6 +26,7 @@ button[data-balloon] {
   pointer-events: none;
   position: absolute;
   text-transform: none;
+  text-align: left;
   transform-origin: top;
   transform: translate(-50%, 10px);
   transition: all 0.18s ease-out 0.18s;
