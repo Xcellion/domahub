@@ -246,8 +246,17 @@
   <div class="modal-background"></div>
   <div class="modal-container">
     <div class="modal-content is-small">
-      <div class="content has-text-centered">
-        <p class="is-bold">Are you sure you want to delete the following <span id="delete-modal-count"></span> listing<span id="delete-modal-plural">s</span>?</p>
+      <div class="content">
+        <div class="notification no-shadow has-icon is-danger">
+          <div class="icon-box">
+            <div class="icon is-white">
+              <i class="far fa-exclamation-triangle"></i>
+            </div>
+          </div>
+          <div class="content">
+            <p class="is-white">Are you sure you want to delete the following <span id="delete-modal-count"></span> listing<span id="delete-modal-plural">s</span>?</p>
+          </div>
+        </div>
       </div>
       <div class="content">
         <ul id="delete-modal-domains" class="has-disc">
@@ -262,7 +271,7 @@
           </a>
         </div>
         <div class="control is-expanded">
-          <a tabindex="0" class='button is-fullwidth is-stylish is-small cancel-modal'>
+          <a tabindex="0" class='button is-fullwidth is-stylish no-shadow is-small cancel-modal'>
             <div class="icon is-small"><i class="far fa-times"></i></div>
             <span>Nevermind</span>
           </a>

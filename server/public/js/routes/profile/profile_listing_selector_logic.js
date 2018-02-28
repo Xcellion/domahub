@@ -201,7 +201,7 @@ function showBasedOnURL(){
   //replace URL tab if not a good tab
   var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
   var url_tab = getParameterByName("tab");
-  if (["verify", "info", "hub", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
+  if (["verify", "info", "hub", "design", "domain-info", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
     removeURLParameter("tab");
     url_tab = "";
   }
@@ -224,7 +224,7 @@ function showBasedOnURL(){
   }
 
   //requested specific tab
-  if (url_selected_listings != "" && ["info", "design", "hub"].indexOf(url_tab) != -1){
+  if (url_selected_listings != "" && ["info", "design", "hub", "domain-info"].indexOf(url_tab) != -1){
     viewDomainDetails(false, url_tab);
   }
   else if (url_selected_listings != "" && url_tab == "verify"){
@@ -899,7 +899,7 @@ function viewDomainDNS(push){
 var moneyFormat = wNumb({
   thousand: ',',
   prefix: '$',
-  decimals: 0
+  decimals: 2
 });
 
 //get domain_name or ID of all selected rows
