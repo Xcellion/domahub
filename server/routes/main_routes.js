@@ -20,7 +20,7 @@ module.exports = function(app){
   app.get([
     "/features",
     "/landing-pages",
-    "/domain-marketplace",
+    "/domain-hub",
     "/domain-management",
     "/payments",
     "/privacy",
