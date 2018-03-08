@@ -68,7 +68,23 @@ function clearNotification(){
 
 //check if we should display a success or error msg (for login)
 function loadNotification() {
-  if (message.toLowerCase().indexOf("success") != -1) {
+
+  //email address is not verified for this account
+  if (message == "non-verified-email"){
+    errorMessage("You must first verify your email address before logging in. Please check your inbox for a verification email from DomaHub!</br></br>To resend the email, please click <a id='verify-link' class='is-underlined'>here</a>.");
+
+    //ajax to resend email for verifying email
+    $("#verify-link").on("click", function(){
+      $(this).off();
+      $.ajax({
+        type: "POST",
+        url: "/verify"
+      }).done(function(data){
+        successMessage("Please check your inbox to finish verifying your DomaHub account!");
+      });
+    });
+  }
+  else if (message.toLowerCase().indexOf("success") != -1) {
     successMessage(message);
   }
   else if (typeof message != "undefined") {

@@ -51,6 +51,18 @@ var jwtClient = new google.auth.JWT(
 
 module.exports = {
 
+  //<editor-fold>-------------------------------------ONBOARDING-------------------------------
+
+  renderOnboarding : function(req, res, next){
+    console.log("PF: Rendering profile onboarding...");
+    res.render("profile/profile_onboarding.ejs", {
+      user: req.user,
+      listings: req.user.listings
+    });
+  },
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------------GOOGLE ANALYTICS-------------------------------
 
   //google embed analytics authentication
