@@ -113,6 +113,13 @@ a
       text-decoration: underline !important
     &:active
       outline: none
+  &.has-arrow
+    .fa-long-arrow-right
+      +transition(transform 0.3s ease)
+    &:hover,
+    &:focus
+      .fa-long-arrow-right
+        +translate(5px,0)
   +mobile-456px
     font-size: $size-7
 

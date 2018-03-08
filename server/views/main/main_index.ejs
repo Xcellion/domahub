@@ -10,20 +10,20 @@
 
 <body>
 
-<%- include("../templates/navbar_white", {user: user}); %>
+<%- include("../templates/navbar", {user: user}); %>
 
 <section id="landing" class="section">
   <div class="container">
     <div class="content has-text-centered">
-      <h1 class="title is-1 is-bold">
+      <h1 class="title is-white is-1 is-bold">
         Spend less time managing your domains
       </h1>
-      <p class="subtitle is-4">
+      <p class="subtitle is-whitelight is-4">
         Make domain management easier with our automated tools and services.
       </p>
     </div>
     <div class="content has-text-centered">
-      <a href="/signup" tabindex="0" class="button is-stylish is-primary is-large">
+      <a href="/signup" tabindex="0" class="button is-stylish is-primary is-inverted is-large">
         <div class="icon">
           <i class="fal fa-user-circle"></i>
         </div>
@@ -31,12 +31,14 @@
       </a>
     </div>
     <div class="content has-text-centered">
-      <small class="is-grey">
+      <small class="is-whitelight">
         Try it free - no credit card required.
       </small>
     </div>
   </div>
 </section>
+
+<div class="bubble"></div>
 
 <section class="section is-medium">
   <div class="container">
@@ -57,7 +59,7 @@
           </a>
         </div>
       </div>
-      <div class="column is-7">
+      <div class="column is-6 is-offset-1">
         <figure class="image has-shadow">
           <img src="/images/main/listing-page/normal_theme.png" alt="" />
         </figure>
@@ -69,12 +71,12 @@
 <section class="section is-medium">
   <div class="container">
     <div class="columns is-reversed">
-      <div class="column is-7">
+      <div class="column is-6">
         <figure class="image has-shadow">
           <img src="/images/main/marketplace.png" alt="" />
         </figure>
       </div>
-      <div class="column is-5">
+      <div class="column is-5 is-offset-1">
         <div class="content">
           <small class="tip">Domain Hub</small>
           <h1 class="title is-3 is-bold">No commission marketplace</h1>
@@ -100,14 +102,14 @@
     <div class="columns">
       <div class="column is-6">
         <div class="content">
-          <h1 class="title is-3 is-bold">Hundreds of professional domainers use DomaHub to manage their domains.</h1>
-          <p class="subtitle is-5">
+          <h1 class="title is-white is-3 is-bold">Hundreds of professional domainers use DomaHub to manage their domains.</h1>
+          <p class="subtitle is-white is-5">
             Join them now, for free!
           </p>
         </div>
       </div>
       <div class="column is-4 is-offset-2">
-        <a tabindex="0" class="button is-primary is-stylish is-large" href="/signup">
+        <a tabindex="0" class="button is-info is-inverted is-stylish is-large" href="/signup">
           <div class="icon">
             <i class="fal fa-user-circle"></i>
           </div>
@@ -129,7 +131,7 @@
     <div class="columns">
       <div class="column is-4">
         <div class="content has-text-centered">
-          <div class="icon is-info is-circle is-medium has-margin">
+          <div class="icon is-info is-inverted is-circle is-medium has-margin">
             <i class="fal fa-folder-open"></i>
           </div>
           <h3 class="is-bold">Portfolio Management</h3>
@@ -140,7 +142,7 @@
       </div>
       <div class="column is-4">
         <div class="content has-text-centered">
-          <div class="icon is-primary is-circle is-medium has-margin">
+          <div class="icon is-primary is-inverted is-circle is-medium has-margin">
             <i class="fal fa-chart-bar"></i>
           </div>
           <h3 class="is-bold">Traffic Analysis</h3>
@@ -151,7 +153,7 @@
       </div>
       <div class="column is-4">
         <div class="content has-text-centered">
-          <div class="icon is-accent is-circle is-medium has-margin">
+          <div class="icon is-accent is-inverted is-circle is-medium has-margin">
             <i class="fal fa-chart-line"></i>
           </div>
           <h3 class="is-bold">Revenue Tracking</h3>
@@ -197,10 +199,10 @@
         </div>
         <div class="control">
           <span class="price-sign">$</span>
-          <span id="premium-price-month" class="price-month is-active">10.00</span>
-          <span id="premium-price-annual" class="price-annual">8.00</span>
+          <span id="premium-price-month" class="price-month is-active">5.00</span>
+          <span id="premium-price-annual" class="price-annual">4.17</span>
           <span id="premium-price-text" class="price-text">
-            Per month ($96 / year).
+            Per month ($50 / year).
           </span>
         </div>
         <hr />
@@ -306,7 +308,7 @@
   <div class="container">
     <div class="columns">
       <div class="column is-6">
-        <a class="notification is-info has-icon">
+        <a class="notification has-arrow is-info has-icon" title="Go to FAQ page" href="/faq">
           <div class="icon-box">
             <div class="icon is-white is-large">
               <i class="fal fa-book"></i>
@@ -326,7 +328,7 @@
         </a>
       </div>
       <div class="column is-6">
-        <a class="notification is-accent has-icon">
+        <a class="notification has-arrow is-accent has-icon" title="Go to our blog on Medium" href="https://medium.com/domahub">
           <div class="icon-box">
             <div class="icon is-white is-large">
               <i class="fal fa-rss"></i>
