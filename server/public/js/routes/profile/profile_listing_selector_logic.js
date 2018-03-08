@@ -28,7 +28,7 @@ $(document).ready(function(){
     }
 
     //sort the rows
-    $(".table-row:not(.clone-row)").sort(function(a,b){
+    $(".table-row:not(.clone-row):not(#domain-expense-clone)").sort(function(a,b){
       if (sort_value == "registrar_name" || sort_value == "date_registered" || sort_value == "date_expire" || sort_value == "date_created" || sort_value == "min_price" || sort_value == "buy_price"){
         var a_sort = $(a).data("listing_info")[sort_value] || "";
         var b_sort = $(b).data("listing_info")[sort_value] || "";
@@ -38,7 +38,6 @@ $(document).ready(function(){
         var b_sort = $(b).find("." + sort_value + "-sort-value").text().toLowerCase();
       }
 
-      console.log(a_sort, b_sort);
       if (sort_direction){
         return (a_sort > b_sort) ? 1 : (a_sort < b_sort) ? -1 : 0;
       }
