@@ -477,6 +477,10 @@ module.exports = {
 
     //check the user image and upload to imgur
     checkListingImage : function(req, res, next){
+
+      //create a new listing info object to make changes to
+      req.session.new_listing_info = {};
+
       if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
 
         //custom image upload promise function
@@ -486,14 +490,15 @@ module.exports = {
             request.post({
               url: "https://imgur-apiv3.p.mashape.com/3/image",
               headers: {
-                'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
-                'Authorization' : 'Client-ID 730e9e6f4471d64'
+                'X-Mashape-Key' : (process.env.NODE_ENV == "dev") ? "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3" : "50g8uuI5B8msh59fdwSi39VMkEtup1dIOJRjsnDe8wNJKmzMls",
+                'Authorization' : 'Client-ID e67be8dd932733c'
               },
+              json : true,
               formData: formData
             }, function (err, response, body) {
-              if (!err){
+              if (!err && body.success){
                 resolve({
-                  imgur_link: JSON.parse(body).data.link,
+                  imgur_link: body.data.link,
                   image_type: formData.image_type
                 });
               }
@@ -517,7 +522,7 @@ module.exports = {
         //wait for all promises to finish
         Q.allSettled(promises)
         .then(function(results) {
-          req.session.new_listing_info = {};
+
           //figure out which promises failed / passed
           for (var y = 0; y < results.length; y++){
             if (results[y].state == "fulfilled"){
@@ -525,19 +530,10 @@ module.exports = {
             }
           }
 
-          //removing existing image(s) intentionally
-          if (req.body.background_image == "" || req.body.background_image_link == ""){
-            req.session.new_listing_info.background_image = null;
-          }
-          if (req.body.logo == "" || req.body.logo_image_link == ""){
-            req.session.new_listing_info.logo = null;
-          }
           next();
         });
       }
       else {
-        req.session.new_listing_info = {};
-
         //removing existing image(s) intentionally
         if (req.body.background_image == "" || req.body.background_image_link == ""){
           req.session.new_listing_info.background_image = null;
