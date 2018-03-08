@@ -10,8 +10,6 @@
 
 <body>
 
-  
-
   <section class="section is-fullscreen">
 		<div class="wrapper">
 
@@ -1208,92 +1206,92 @@
     <div class="modal-container">
       <div class="modal-content">
         <form id="stripe-bank-form" autocomplete="off" class="content">
-            <div class="control existing-bank is-hidden"></div>
-            <div class="control">
-              <label class="label" for="country-input">Country</label>
-              <span class="select is-fullwidth">
-                <select required name="bank_country" id="bank_country-input" class="stripe-bank-input">
-                  <option selected value="" disabled>Please select your bank's country</option>
-                  <option value="AT">Austria</option>
-                  <option value="AU">Australia</option>
-                  <option value="BE">Belgium</option>
-                  <option value="CA">Canada</option>
-                  <option value="DK">Denmark</option>
-                  <option value="FI">Finland</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                  <option value="HK">Hong Kong</option>
-                  <option value="IE">Ireland</option>
-                  <option value="IT">Italy</option>
-                  <option value="LU">Luxembourg</option>
-                  <option value="NL">Netherlands</option>
-                  <option value="NO">Norway</option>
-                  <option value="NZ">New Zealand</option>
-                  <option value="PT">Portugal</option>
-                  <option value="SG">Singapore</option>
-                  <option value="ES">Spain</option>
-                  <option value="SE">Sweden</option>
-                  <option value="CH">Switzerland</option>
-                  <option value="GB">United Kingdom</option>
-                  <option value="US">United States</option>
-                </select>
-              </span>
+          <div class="control existing-bank is-hidden"></div>
+          <div class="control">
+            <label class="label" for="country-input">Country</label>
+            <span class="select is-fullwidth">
+              <select required name="bank_country" id="bank_country-input" class="stripe-bank-input">
+                <option selected value="" disabled>Please select your bank's country</option>
+                <option value="AT">Austria</option>
+                <option value="AU">Australia</option>
+                <option value="BE">Belgium</option>
+                <option value="CA">Canada</option>
+                <option value="DK">Denmark</option>
+                <option value="FI">Finland</option>
+                <option value="FR">France</option>
+                <option value="DE">Germany</option>
+                <option value="HK">Hong Kong</option>
+                <option value="IE">Ireland</option>
+                <option value="IT">Italy</option>
+                <option value="LU">Luxembourg</option>
+                <option value="NL">Netherlands</option>
+                <option value="NO">Norway</option>
+                <option value="NZ">New Zealand</option>
+                <option value="PT">Portugal</option>
+                <option value="SG">Singapore</option>
+                <option value="ES">Spain</option>
+                <option value="SE">Sweden</option>
+                <option value="CH">Switzerland</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US">United States</option>
+              </select>
+            </span>
+          </div>
+          <div class="control">
+            <label class="label" for="currency-input">
+              <span>Currency</span>
+            </label>
+            <span class="select is-fullwidth">
+              <select required id="currency-input" name="currency" class="stripe-bank-input">
+                <option selected value="" disabled>Please select your bank's currency</option>
+                <option value='AUD'>AUD: Australian Dollar</option>
+                <option value='CAD'>CAD: Canadian Dollar</option>
+                <option value='CHF'>CHF: Swiss Franc</option>
+                <option value='EUR'>EUR: Euro</option>
+                <option value='GBP'>GBP: British Pound</option>
+                <option value='HKD'>HKD: Hong Kong Dollar</option>
+                <option value='JPY'>JPY: Japanese Yen</option>
+                <option value='NOK'>NOK: Norwegian Krone</option>
+                <option value='SGD'>SGD: Singapore Dollar</option>
+                <option value='SEK'>SEK: Swedish Krona</option>
+                <option value='USD'>USD: United States Dollar</option>
+              </select>
+            </span>
+          </div>
+          <div id="account_routing-wrapper" class="excess-routing-wrapper is-hidden control">
+            <label id="account_routing-text" class="label" for="account_routing-input">Routing Number</label>
+            <input id="account_routing-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_routing" />
+          </div>
+          <div id="account_routing2-wrapper" class="excess-routing-wrapper is-hidden control">
+            <label id="account_routing2-text" class="label" for="account_routing-input"></label>
+            <input id="account_routing2-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_routing2" />
+          </div>
+          <div id="account_routing3-wrapper" class="excess-routing-wrapper is-hidden control">
+            <label id="account_routing3-text" class="label" for="account_routing-input">Account Owner Name</label>
+            <input id="account_routing3-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_owner_name" />
+          </div>
+          <div id="account-wrapper" class="is-hidden control">
+            <label id="account_number-label" class="label" for="account_number-input">
+              <span id="account_number-text">Account Number </span>
+              <div class="is-hidden" id="account_number-last4">(Last 4 Digits)</div>
+            </label>
+            <input id="account_number-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_number" />
+          </div>
+          <div class="control is-grouped">
+            <div class="control is-expanded">
+              <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-fullwidth is-primary is-stylish is-small">
+                <div class="icon is-small"><i class="far fa-check-circle"></i></div>
+                <span>Save Bank</span>
+              </button>
             </div>
-            <div class="control">
-              <label class="label" for="currency-input">
-                <span>Currency</span>
-              </label>
-              <span class="select is-fullwidth">
-                <select required id="currency-input" name="currency" class="stripe-bank-input">
-                  <option selected value="" disabled>Please select your bank's currency</option>
-                  <option value='AUD'>AUD: Australian Dollar</option>
-                  <option value='CAD'>CAD: Canadian Dollar</option>
-                  <option value='CHF'>CHF: Swiss Franc</option>
-                  <option value='EUR'>EUR: Euro</option>
-                  <option value='GBP'>GBP: British Pound</option>
-                  <option value='HKD'>HKD: Hong Kong Dollar</option>
-                  <option value='JPY'>JPY: Japanese Yen</option>
-                  <option value='NOK'>NOK: Norwegian Krone</option>
-                  <option value='SGD'>SGD: Singapore Dollar</option>
-                  <option value='SEK'>SEK: Swedish Krona</option>
-                  <option value='USD'>USD: United States Dollar</option>
-                </select>
-              </span>
+            <div class="control is-expanded">
+              <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
+                <div class="icon is-small"><i class="far fa-ban"></i></div>
+                <span>Cancel</span>
+              </a>
             </div>
-            <div id="account_routing-wrapper" class="excess-routing-wrapper is-hidden control">
-              <label id="account_routing-text" class="label" for="account_routing-input">Routing Number</label>
-              <input id="account_routing-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_routing" />
-            </div>
-            <div id="account_routing2-wrapper" class="excess-routing-wrapper is-hidden control">
-              <label id="account_routing2-text" class="label" for="account_routing-input"></label>
-              <input id="account_routing2-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_routing2" />
-            </div>
-            <div id="account_routing3-wrapper" class="excess-routing-wrapper is-hidden control">
-              <label id="account_routing3-text" class="label" for="account_routing-input">Account Owner Name</label>
-              <input id="account_routing3-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_owner_name" />
-            </div>
-            <div id="account-wrapper" class="is-hidden control">
-              <label id="account_number-label" class="label" for="account_number-input">
-                <span id="account_number-text">Account Number </span>
-                <div class="is-hidden" id="account_number-last4">(Last 4 Digits)</div>
-              </label>
-              <input id="account_number-input" class="excess-routing-input input stripe-bank-input" type="text" name="account_number" />
-            </div>
-            <div class="control is-grouped">
-              <div class="control is-expanded">
-                <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-fullwidth is-primary is-stylish is-small">
-                  <div class="icon is-small"><i class="far fa-check-circle"></i></div>
-                  <span>Save Bank</span>
-                </button>
-              </div>
-              <div class="control is-expanded">
-                <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
-                  <div class="icon is-small"><i class="far fa-ban"></i></div>
-                  <span>Cancel</span>
-                </a>
-              </div>
-            </div>
-          </form>
+          </div>
+        </form>
       </div>
     </div>
     <button class="modal-close"></button>

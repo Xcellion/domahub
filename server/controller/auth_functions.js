@@ -659,10 +659,16 @@ module.exports = {
       res.header('Expires', '-1');
       res.header('Pragma', 'no-cache');
 
-      //no verified email, make them verify
+      //no verified email, say that they should check their email
       if (req.user.type == 0){
-        res.render("account/page_for_not_verified_email.ejs", {message: messageReset(req)});
+        req.session.message = "non-verified-email";
+        req.logout();
+        res.render("account/login.ejs", {
+          user: false,
+          message: messageReset(req)
+        });
       }
+      //successfully logged in!
       else {
         if (!req.user.id && req.method == "POST"){
           error.handler(req, res, "demo-error", "json");
@@ -812,16 +818,10 @@ module.exports = {
 
     //not logged in
     if (!req.isAuthenticated()){
-      error.handler(req, res, "Please log in!", "json");
+      error.handler(req, res, "You must be logged in to request a new email! Please refresh the page and log in to try again.", "json");
     }
-
-    //already verified
-    else if (req.user.type == 1){
-      res.redirect("/profile");
-    }
-
     //already requested and token still good
-    if (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp).getTime())){
+    else if (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp).getTime())){
       console.log("AUF: Sending existing token!");
 
       //email verify email
