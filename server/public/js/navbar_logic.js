@@ -40,6 +40,11 @@ $(document).ready(function() {
     $("#profile-dropdown").toggleClass("is-hidden");
   });
 
+  //features menu toggle
+  $('#features-menu').on("click", function() {
+    $('.hover-menu').toggleClass("is-active");
+  })
+
   //clicked off navbar dropdown
   $(document).on("click", function(event) {
     if (!$(event.target).closest(".nav-toggle").length && $(".nav-menu").hasClass('is-active')) {
@@ -47,6 +52,16 @@ $(document).ready(function() {
     }
     if (!$(event.target).closest("#profile-button").length && !$("#profile-button").hasClass('is-hidden')) {
       $("#profile-dropdown").addClass("is-hidden");
+    }
+  });
+
+  //close features dropdown menu on click outside the element
+  $(document).on("click", function(event) {
+    if (!$(event.target).closest("#features-menu").length && !$(event.target).closest(".hover-menu-link").length) {
+      if ($(".hover-menu").is(":visible")) {
+        $(".hover-menu").removeClass("is-active");
+        $(this).toggleClass("is-active").blur();
+      }
     }
   });
 

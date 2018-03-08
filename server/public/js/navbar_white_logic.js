@@ -18,7 +18,7 @@ $(document).ready(function() {
     $("#message").attr("style", "").text("Log in below");
   });
 
-  //hover menu
+  //features menu toggle
   $('#features-menu').on("click", function() {
     $('.hover-menu').toggleClass("is-active");
   })
@@ -55,7 +55,7 @@ $(document).ready(function() {
     }
   });
 
-  //close user dropdown menu on click outside the element
+  //close features dropdown menu on click outside the element
   $(document).on("click", function(event) {
     if (!$(event.target).closest("#features-menu").length && !$(event.target).closest(".hover-menu-link").length) {
       if ($(".hover-menu").is(":visible")) {

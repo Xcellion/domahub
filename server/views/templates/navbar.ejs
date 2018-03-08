@@ -82,11 +82,6 @@
     <div class="nav-center">
       <% if (!user) { %>
         <div class="nav-item is-hidden-tablet">
-          <a id="nav-demo-button" class="is-hidden" title="Try Demo" href="/demo">
-            Try Demo
-          </a>
-        </div>
-        <div class="nav-item is-hidden-tablet">
           <a id="nav-signup-button" class="is-hidden has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
             <div class="icon">
               <i class="fal fa-user-circle"></i>
@@ -109,18 +104,48 @@
       <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
       <% if (!user) { %>
         <div class="nav-item">
-          <a class="nav-link is-white" title="Features" href="/features">Features</a>
+          <a id="features-menu" class="nav-link" title="Features">Features</a>
+        </div>
+        <div class="hover-menu">
+          <a class="hover-menu-link" href="/landing-pages" title="Landing Pages">
+            <div class="icon is-primary is-circle is-small">
+              <i class="fal fa-list-alt fa-fw"></i>
+            </div>
+            <div class="content">
+              <p class="is-primary">Landing Pages</p>
+              <p>
+                Automated, custom landing page solution.
+              </p>
+            </div>
+          </a>
+          <a class="hover-menu-link" href="/domain-hub" title="Domain Hub">
+            <div class="icon is-accent is-circle is-small">
+              <i class="fal fa-building fa-fw"></i>
+            </div>
+            <div class="content">
+              <p class="is-accent">Domain Hub</p>
+              <p>
+                Sell all your domains from one website.
+              </p>
+            </div>
+          </a>
+          <a class="hover-menu-link" href="/domain-management" title="Domain Management">
+            <div class="icon is-info is-circle is-small">
+              <i class="fal fa-folder-open fa-fw"></i>
+            </div>
+            <div class="content">
+              <p class="is-info">Domain Management</p>
+              <p>
+                Easily track, manage, and analyze your domains.
+              </p>
+            </div>
+          </a>
         </div>
         <div class="nav-item">
           <a class="nav-link is-white" title="Pricing" href="/#pricing">Pricing</a>
         </div>
         <div class="nav-item is-hidden-mobile">
-          <a id="nav-demo-button" class="nav-link is-white" title="Try Demo" href="/demo">
-              Try Demo
-          </a>
-        </div>
-        <div class="nav-item is-hidden-mobile">
-          <a class="has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
+          <a class="has-icon button is-stylish is-small is-outlined is-primary" title="Sign Up" href="/signup">
             <div class="icon">
               <i class="fal fa-user-circle"></i>
             </div>
