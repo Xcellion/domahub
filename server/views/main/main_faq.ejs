@@ -9,27 +9,9 @@
 
 <body>
 
-  <%- include("../templates/navbar", {user: user}); %>
+  <%- include("../templates/navbar_white", {user: user}); %>
 
-  <section class="section is-medium is-primary">
-    <div class="container">
-      <div class="columns">
-        <div class="column is-8 is-offset-2">
-          <div class="content has-text-centered">
-            <figure class="image is-128x128">
-              <img src="/images/lib/inipagi/chat.svg" alt="Questions and Answers" />
-            </figure>
-            <h1 class="title is-2 is-white">Frequently Asked Questions</h1>
-            <p class="subtitle is-4 is-white">
-              ...and other questions, too!
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section is-small">
+  <section class="section is-medium">
     <div class="container">
       <div class="columns">
         <div class="column is-3 is-hidden-mobile">
@@ -48,6 +30,9 @@
           </aside>
         </div>
         <div class="column">
+          <div class="content has-text-centered">
+            <h1 class="title is-2 is-bold">Frequently Asked Questions</h1>
+          </div>
           <div id="about" class="faq-section">
             <h2 class="faq-header is-active">About Us</h3>
             <div class="content">
