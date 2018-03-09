@@ -91,25 +91,31 @@
     .icon
       margin-right: 20px
 
-.nav-menu
-  // Responsiveness
-  +mobile
-    +box-shadow(0,3px,15px,$border,1px)
-    background-color: $white
-    display: none
-    position: absolute
-    top: 100%
-    .nav-item
-      a
-        width: 100%
-    &:not(.is-left)
-      right: 0
-    &.is-active
-      display: flex
-      flex-direction: column
-      justify-content: center
-    &.is-left
-      left: 20px
+.nav-mobile-menu
+  +box-shadow(0,3px,15px,$border,1px)
+  background-color: $white
+  display: none
+  position: absolute
+  right: 0
+  top: 100%
+  padding: 20px
+  &.is-active
+    display: flex
+    flex-direction: column
+    justify-content: center
+    +tablet
+      display: none
+  .mobile-menu-section
+    padding-bottom: 20px
+    margin-bottom: 10px
+    border-bottom: 1px solid $border
+  .nav-menu-link
+    display: flex
+    align-items: center
+    .icon
+      margin-right: 10px
+    &:not(:last-child)
+      margin-bottom: 20px
 
 .nav-left
   align-items: stretch
