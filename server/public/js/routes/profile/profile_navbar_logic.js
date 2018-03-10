@@ -14,7 +14,7 @@ $(document).ready(function() {
   //mobile view nav menu
   $(".nav-toggle").on("click", function() {
     $(this).toggleClass("is-active");
-    $(".nav-menu").toggleClass("is-active");
+    $(".hover-menu").toggleClass("is-active");
   });
 
   //close user dropdown menu on click outside the element
@@ -22,7 +22,14 @@ $(document).ready(function() {
     if (!$(event.target).closest(".user-button").length && !$(event.target).closest(".contact-link").length) {
       if ($(".nav-drop").is(":visible")) {
         $(".nav-drop").addClass("is-hidden");
-        $(this).toggleClass("is-active").blur();
+        $(".user-button").toggleClass("is-active").blur();
+      }
+    }
+
+    if (!$(event.target).closest(".nav-toggle").length && !$(event.target).closest(".profile-nav-link").length) {
+      if ($(".hover-menu").is(":visible")) {
+        $(".hover-menu").removeClass("is-active");
+        $(".nav-toggle").toggleClass("is-active").blur();
       }
     }
   });

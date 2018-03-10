@@ -80,99 +80,168 @@
       </div>
     </div>
     <div class="nav-center">
-      <% if (!user) { %>
-        <div class="nav-item is-hidden-tablet">
-          <a id="nav-signup-button" class="is-hidden has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
-            <div class="icon">
-              <i class="fal fa-user-circle"></i>
-            </div>
-            <span>
-              Sign Up
-            </span>
-          </a>
-        </div>
-      <% } %>
+      
     </div>
 
-    <span class="nav-toggle is-black" tabindex="0">
-      <span></span>
-      <span></span>
-      <span></span>
-    </span>
-    <div class="nav-mobile-menu">
-      <div class="mobile-menu-section">
+    <% if (user) { %>
+      <div class="nav-mobile-menu is-profile expand-out">
+        <div class="mobile-menu-section">
+          <div class="content">
+            <p class="heading is-uppercase is-bold is-grey">
+              Account
+            </p>
+          </div>
+          <a class="nav-menu-link" href="/profile" title="Dashboard">
+            <div class="icon is-primary is-circle is-small">
+              <i class="fal fa-window-maximize fa-fw"></i>
+            </div>
+            <p class="is-bold is-primary">Dashboard</p>
+          </a>
+          <a class="nav-menu-link" href="/profile/mylistings" title="My Listings">
+            <div class="icon is-accent is-circle is-small">
+              <i class="fal fa-list fa-fw"></i>
+            </div>
+            <p class="is-bold is-accent">My Listings</p>
+          </a>
+          <a class="nav-menu-link" href="/profile/settings" title="Account Settings">
+            <div class="icon is-info is-circle is-small">
+              <i class="fal fa-cogs fa-fw"></i>
+            </div>
+            <p class="is-bold is-info">Account Settings</p>
+          </a>
+          <% if (!user.stripe_subscription_id) { %>
+          <a class="nav-menu-link" href="/profile/settings#premium" title="Upgrade Account">
+            <div class="icon is-warning is-circle is-small">
+              <i class="fal fa-trophy-alt fa-fw"></i>
+            </div>
+            <p class="is-bold is-warning">Upgrade Account</p>
+          </a>
+          <% } %>
+        </div>
+        <div class="columns is-mobile is-gapless">
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="/#pricing" title="Pricing">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="/faq" title="Pricing">
+                    FAQ
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="https://medium.com/domahub" title="Blog">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" title="Contact">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div class="content">
-          <p class="heading is-uppercase is-bold is-grey">
-            Products
-          </p>
+          <a class="is-primary has-arrow" href="/logout">
+            Log Out
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
+            </div>
+          </a>
         </div>
-        <a class="nav-menu-link" href="/landing-pages" title="Landing Pages">
-          <div class="icon is-primary is-circle is-small">
-            <i class="fal fa-list-alt fa-fw"></i>
-          </div>
-          <p class="is-bold is-primary">Landing Pages</p>
-        </a>
-        <a class="nav-menu-link" href="/domain-hub" title="Domain Hub">
-          <div class="icon is-accent is-circle is-small">
-            <i class="fal fa-building fa-fw"></i>
-          </div>
-          <p class="is-bold is-accent">Domain Hub</p>
-        </a>
-        <a class="nav-menu-link" href="/domain-management" title="Domain Management">
-          <div class="icon is-info is-circle is-small">
-            <i class="fal fa-folder-open fa-fw"></i>
-          </div>
-          <p class="is-bold is-info">Domain Management</p>
-        </a>
       </div>
-      <div class="columns is-mobile is-gapless">
-        <div class="column is-6">
+    <% } else { %>
+      <span class="nav-toggle is-black menu-toggle" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div class="nav-mobile-menu is-hidden-tablet">
+        <div class="mobile-menu-section">
           <div class="content">
-            <ul class="is-vertical">
-              <li>
-                <a href="/#pricing" title="Pricing">
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a href="/faq" title="Pricing">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="/signup" title="Sign Up">
-                  Sign Up
-                </a>
-              </li>
-            </ul>
+            <p class="heading is-uppercase is-bold is-grey">
+              Products
+            </p>
+          </div>
+          <a class="nav-menu-link" href="/landing-pages" title="Landing Pages">
+            <div class="icon is-primary is-circle is-small">
+              <i class="fal fa-list-alt fa-fw"></i>
+            </div>
+            <p class="is-bold is-primary">Landing Pages</p>
+          </a>
+          <a class="nav-menu-link" href="/domain-hub" title="Domain Hub">
+            <div class="icon is-accent is-circle is-small">
+              <i class="fal fa-building fa-fw"></i>
+            </div>
+            <p class="is-bold is-accent">Domain Hub</p>
+          </a>
+          <a class="nav-menu-link" href="/domain-management" title="Domain Management">
+            <div class="icon is-info is-circle is-small">
+              <i class="fal fa-folder-open fa-fw"></i>
+            </div>
+            <p class="is-bold is-info">Domain Management</p>
+          </a>
+        </div>
+        <div class="columns is-mobile is-gapless">
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="/#pricing" title="Pricing">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="/faq" title="Pricing">
+                    FAQ
+                  </a>
+                </li>
+                <li>
+                  <a href="/signup" title="Sign Up">
+                    Sign Up
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="https://medium.com/domahub" title="Blog">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" title="Contact">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="column is-6">
-          <div class="content">
-            <ul class="is-vertical">
-              <li>
-                <a href="https://medium.com/domahub" title="Blog">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="/contact" title="Contact">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
+        <div class="content">
+          <a class="is-primary has-arrow" href="/login">
+            Log In
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
+            </div>
+          </a>
         </div>
       </div>
-      <div class="content">
-        <a class="is-primary has-arrow" href="/login">
-          Log In
-          <div class="icon is-small">
-            <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
-          </div>
-        </a>
-      </div>
-    </div>
+    <% } %>
     <div class="nav-right">
 
       <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
@@ -180,7 +249,7 @@
         <div class="nav-item is-hidden-mobile">
           <a id="features-menu" class="nav-link" title="Features">Features</a>
         </div>
-        <div class="hover-menu">
+        <div class="hover-menu has-arrow">
           <a class="hover-menu-link" href="/landing-pages" title="Landing Pages">
             <div class="icon is-primary is-circle is-small">
               <i class="fal fa-list-alt fa-fw"></i>
@@ -238,79 +307,16 @@
             </span>
           </a>
         </div>
-
-      <!-- or else display the user profile as logged in -->
       <% } else { %>
         <div class="nav-item">
-          <a class="nav-link is-white" title="My Dashboard" href="/profile/dashboard">Dashboard</a>
-        </div>
-        <div class="nav-item">
-          <a id="profile-button" class="button is-primary is-outlined is-stylish is-small" title="Profile">
+          <a id="profile-button" class="button is-primary is-outlined is-stylish is-small menu-toggle" title="Profile">
             <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
             <div class="icon">
               <i class="fal fa-angle-down"></i>
             </div>
           </a>
-          <a class="nav-link is-hidden-tablet" href="/profile/mylistings" title="My Listings">
-            My Listings
-          </a>
-          <div id="profile-dropdown" class="is-hidden is-hidden-mobile expand-out">
-            <ul class="profile-dropdown-menu">
-              <li class="menu-item has-icon">
-                <a href="/profile/mylistings">
-                  <div class="icon is-small">
-                    <i class="fal fa-list-alt"></i>
-                  </div>
-                  <span>My Listings</span>
-                </a>
-              </li>
-              <li class="menu-item has-icon">
-                <a href="/profile/settings">
-                  <div class="icon is-small">
-                    <i class="fal fa-cog"></i>
-                  </div>
-                  <span>Account Settings</span>
-                </a>
-              </li>
-              <% if (!user.stripe_subscription_id) { %>
-                <li id="nav-premium-link menu-item has-icon">
-                  <a href="/profile/settings#premium">
-                    <div class="icon is-primary is-small">
-                      <i class="fal fa-trophy-alt"></i>
-                    </div>
-                    <span>Upgrade Account</span>
-                  </a>
-                </li>
-              <% } %>
-              <li class="menu-item has-icon">
-                <a href="/logout">
-                  <div class="icon is-small">
-                    <i class="fal fa-sign-out"></i>
-                  </div>
-                  <span>Log Out</span>
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
-        <div class="nav-item is-hidden-tablet">
-          <a class="nav-link is-hidden-tablet" href="/profile/settings" title="Account Settings">
-            Account Settings
-          </a>
-        </div>
-        <% if (!user.stripe_subscription_id) { %>
-          <div class="nav-item is-hidden-tablet">
-            <a class="nav-link is-hidden-tablet" href="/profile/settings#premium" title="Upgrade to Premium">
-              Upgrade Account
-            </a>
-          </div>
-        <% } %>
-        <div class="nav-item is-hidden-tablet">
-          <a class="nav-link is-hidden-tablet" href="/logout" title="Log Out">
-            Log Out
-          </a>
-        </div>
-      </div>
-    <% } %>
+      <% } %>
+    </div>
   </div>
 </nav>
