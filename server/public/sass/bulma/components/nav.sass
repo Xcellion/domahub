@@ -67,17 +67,18 @@
   right: 172px
   opacity: 0
   width: 350px
-  &::before
-    +box-shadow(-3px,-3px,15px,$border,0)
-    +rotate(45)
-    content: ''
-    background: $white
-    position: absolute
-    width: 20px
-    height: 20px
-    top: -10px
-    right: 47%
-    z-index: -1
+  &.has-arrow
+    &::before
+      +box-shadow(-3px,-3px,15px,$border,0)
+      +rotate(45)
+      content: ''
+      background: $white
+      position: absolute
+      width: 20px
+      height: 20px
+      top: -10px
+      right: 47%
+      z-index: -1
   &.is-active
     display: block
     opacity: 1
@@ -103,8 +104,11 @@
     display: flex
     flex-direction: column
     justify-content: center
+  &.is-profile
     +tablet
-      display: none
+      right: 30px
+    +mobile
+      right: 10px
   .mobile-menu-section
     padding-bottom: 20px
     margin-bottom: 10px
@@ -206,41 +210,6 @@
   width: 110px
   &.is-active
     border-radius: 3px 3px 0px 0px
-  +mobile
-    display: none
-
-// profile dropdown menu
-#profile-dropdown
-  +box-shadow(0,8px,20px,$border,0)
-  background-color: $white
-  position: absolute
-  right: 10px
-  text-align: left
-  top: 49px
-  width: 200px
-
-.profile-dropdown-menu
-  border-radius: 3px
-  li
-    &:not(:first-child)
-      border-top: 1px solid $border
-    &:first-child
-      padding-top: 14px
-    &:last-child
-      padding-bottom: 14px
-      a
-        font-weight: 700
-  a
-    display: inline-flex
-    align-items: center
-    padding: 15px
-    width: 100%
-    .icon
-      margin-right: 10px
-    &:hover,
-    &:active,
-    &:focus
-      background-color: $pastel
 
 .expand-out
   +keyframes(expand 0.1s forwards)

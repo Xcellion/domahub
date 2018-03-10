@@ -83,7 +83,7 @@
 }
 
 .menu-info {
-  padding: 15px 20px 40px 30px;
+  padding: 15px 20px 40px 22px;
   p {
     font-size: 10px;
     font-weight: 700;
@@ -148,8 +148,12 @@
       width: 60px;
       height: 60px;
     }
+    .hover-menu {
+      left: 0;
+    }
   }
 }
+
 
 .nav-item {
   &.is-toggle {
