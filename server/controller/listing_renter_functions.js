@@ -743,11 +743,10 @@ module.exports = {
               //if pending DNS changes, mark it active
               if (req.session.listing_info.status == 3){
                 console.log("LRF: Listing is now pointed to DomaHub! Marking as active...");
-                req.session.listing_info.status = 1;
-                console.log(domain_name, "WTFFFF");
                 listing_model.updateListingsInfo(domain_name, {
-                  status: 0,
+                  hub_phone: 1231,
                 }, function(result){
+                  req.session.listing_info.status = 1;
                   //change req.user.listings if req.user exists and is the owner of this domain
                   if (req.user && req.user.listings && req.user.id == req.session.listing_info.owner_id){
                     getUserListingObj(req.user.listings, domain_name).status = 1;
