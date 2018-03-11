@@ -21,6 +21,8 @@
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 
+
+
 .no-margin {
   margin :0 !important;
 }
@@ -459,6 +461,13 @@
     @media screen and (max-width: 1199px) {
       @include translate(0,0);
       width: 100%;
+    }
+  }
+  .image {
+    max-height: 48px;
+    img {
+      max-height: 48px;
+      width: auto;
     }
   }
 }

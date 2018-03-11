@@ -130,6 +130,14 @@
   word-break:keep-all !important;
 }
 
+td.has-cursor-pointer {
+  cursor:pointer;
+}
+
+td > .icon, th > .icon {
+  display:inline-block;
+}
+
 // edit listing tabs
 #edit-toolbar {
   margin-bottom: 20px;
