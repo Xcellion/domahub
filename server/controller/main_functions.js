@@ -10,6 +10,7 @@ var mailer = require('../lib/mailer.js');
 //<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var validator = require('validator');
+var path = require('path');
 
 //</editor-fold>>
 
@@ -71,6 +72,20 @@ module.exports = {
         subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
         text: req.body.contact_message
       }, function() {
+
+        //email welcome to domahub email
+        mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'thank_you_contact.ejs'), {
+          contact_name : req.body.contact_name
+        }, {
+          to: req.body.contact_email,
+          from: 'DomaHub <general@domahub.com>',
+          subject: 'Thank you for contacting DomaHub!',
+        }, function(state){
+          if (state != "success"){
+            error.log("Failed to send canned response to contact form email!");
+          }
+        });
+
         res.send({
           state: "success"
         });
