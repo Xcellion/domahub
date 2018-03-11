@@ -1,0 +1,322 @@
+<script type="text/javascript">
+  var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
+</script>
+<script src="/js/navbar_white_logic.js" type="text/javascript"></script>
+<script src="/js/routes/account/account_login_logic.js" type="text/javascript"></script>
+
+<%- include("notifications.ejs"); %>
+
+<% if (!user) { %>
+  <div id="modal-login" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      <div class="modal-content is-login pop-in">
+        <div id="login-dropdown">
+          <div class="content has-text-centered">
+            <h2>
+              <a class='is-inline-block flat-logo is-primary' title="Home" href="/">
+                <div class='is-inline-block flat-logo is-primary'></div>
+              </a>
+            </h2>
+          </div>
+          <form id="login-form" action="/login" method="post">
+            <div class="control has-icon">
+              <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
+              <div class="icon">
+                <i class="fal fa-envelope"></i>
+              </div>
+            </div>
+            <div class="control has-icon">
+              <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password">
+              <div class="icon">
+                <i class="fal fa-lock"></i>
+              </div>
+            </div>
+            <div class="control">
+              <button id="login-button" class="button is-primary is-stylish is-fullwidth">
+                <div class="icon is-small">
+                  <i class="fal fa-sign-in"></i>
+                </div>
+                <span>Log In</span>
+              </button>
+            </div>
+            <div class="control is-spaced">
+              <div>
+                <div class="checkbox-form is-inline">
+                  <input id="remember-checkbox" type="checkbox" title="Remember Me" />
+                  <label for="remember-checkbox" tabindex="0"></label>
+                </div>
+                <p class="remember-text">
+                  Remember Me
+                </p>
+              </div>
+              <p class="control-right">
+                  <a class="forgot is-underlined is-primary" href="/forgot">Forgot password?</a>
+              </p>
+            </div>
+          <%# <p class="control">
+            <p class="has-text-centered">
+              Don&#146;t have an account?
+            </p>
+            <div class="has-text-centered">
+              <a class="signup is-primary" href="/signup">Sign Up Now</a>
+            </div>
+          </p> %>
+          </form>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+<% } %>
+
+<nav id="navbar" class="nav is-white">
+  <div class="container">
+    <div class="nav-left">
+      <div class="nav-item">
+        <a id="nav-logo" class="flat-logo is-hidden-mobile" title="Home" href="/">
+        </a>
+        <a class="circle-logo is-hidden-tablet" title="Home" href="/"></a>
+      </div>
+    </div>
+    <div class="nav-center">
+
+    </div>
+
+    <% if (user) { %>
+      <div class="nav-mobile-menu is-profile expand-out">
+        <div class="mobile-menu-section">
+          <div class="content">
+            <p class="heading is-uppercase is-bold is-grey">
+              Account
+            </p>
+          </div>
+          <a class="nav-menu-link" href="/profile" title="Dashboard">
+            <div class="icon is-primary is-circle is-small">
+              <i class="fal fa-window-maximize fa-fw"></i>
+            </div>
+            <p class="is-bold is-primary">Dashboard</p>
+          </a>
+          <a class="nav-menu-link" href="/profile/mylistings" title="My Listings">
+            <div class="icon is-accent is-circle is-small">
+              <i class="fal fa-list fa-fw"></i>
+            </div>
+            <p class="is-bold is-accent">My Listings</p>
+          </a>
+          <a class="nav-menu-link" href="/profile/settings" title="Account Settings">
+            <div class="icon is-info is-circle is-small">
+              <i class="fal fa-cogs fa-fw"></i>
+            </div>
+            <p class="is-bold is-info">Account Settings</p>
+          </a>
+          <% if (!user.stripe_subscription_id) { %>
+          <a class="nav-menu-link" href="/profile/settings#premium" title="Upgrade Account">
+            <div class="icon is-warning is-circle is-small">
+              <i class="fal fa-trophy-alt fa-fw"></i>
+            </div>
+            <p class="is-bold is-warning">Upgrade Account</p>
+          </a>
+          <% } %>
+        </div>
+        <div class="columns is-mobile is-gapless">
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="/#pricing" title="Pricing">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="/faq" title="Pricing">
+                    FAQ
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="https://medium.com/domahub" title="Blog">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" title="Contact">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="content">
+          <a class="is-primary has-arrow" href="/logout">
+            Log Out
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    <% } else { %>
+      <span class="nav-toggle is-black menu-toggle" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div class="nav-mobile-menu is-hidden-tablet">
+        <div class="mobile-menu-section">
+          <div class="content">
+            <p class="heading is-uppercase is-bold is-grey">
+              Products
+            </p>
+          </div>
+          <a class="nav-menu-link" href="/landing-pages" title="Landing Pages">
+            <div class="icon is-primary is-circle is-small">
+              <i class="fal fa-list-alt fa-fw"></i>
+            </div>
+            <p class="is-bold is-primary">Landing Pages</p>
+          </a>
+          <a class="nav-menu-link" href="/domain-hub" title="Domain Hub">
+            <div class="icon is-accent is-circle is-small">
+              <i class="fal fa-building fa-fw"></i>
+            </div>
+            <p class="is-bold is-accent">Domain Hub</p>
+          </a>
+          <a class="nav-menu-link" href="/domain-management" title="Domain Management">
+            <div class="icon is-info is-circle is-small">
+              <i class="fal fa-folder-open fa-fw"></i>
+            </div>
+            <p class="is-bold is-info">Domain Management</p>
+          </a>
+        </div>
+        <div class="columns is-mobile is-gapless">
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="/#pricing" title="Pricing">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="/faq" title="Pricing">
+                    FAQ
+                  </a>
+                </li>
+                <li>
+                  <a href="/signup" title="Sign Up">
+                    Sign Up
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="content">
+              <ul class="is-vertical">
+                <li>
+                  <a href="https://medium.com/domahub" title="Blog">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" title="Contact">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="content">
+          <a class="is-primary has-arrow" href="/login">
+            Log In
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-right" data-fa-transform="down-3"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    <% } %>
+    <div class="nav-right">
+
+      <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
+      <% if (!user) { %>
+        <div class="nav-item is-hidden-mobile">
+          <a id="features-menu" class="nav-link" title="Features">Features</a>
+        </div>
+        <div class="hover-menu has-arrow">
+          <a class="hover-menu-link" href="/landing-pages" title="Landing Pages">
+            <div class="icon is-primary is-circle is-small">
+              <i class="fal fa-list-alt fa-fw"></i>
+            </div>
+            <div class="content">
+              <p class="is-primary">Landing Pages</p>
+              <p>
+                Automated, custom landing page solution.
+              </p>
+            </div>
+          </a>
+          <a class="hover-menu-link" href="/domain-hub" title="Domain Hub">
+            <div class="icon is-accent is-circle is-small">
+              <i class="fal fa-building fa-fw"></i>
+            </div>
+            <div class="content">
+              <p class="is-accent">Domain Hub</p>
+              <p>
+                Sell all your domains from one website.
+              </p>
+            </div>
+          </a>
+          <a class="hover-menu-link" href="/domain-management" title="Domain Management">
+            <div class="icon is-info is-circle is-small">
+              <i class="fal fa-folder-open fa-fw"></i>
+            </div>
+            <div class="content">
+              <p class="is-info">Domain Management</p>
+              <p>
+                Easily track, manage, and analyze your domains.
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="nav-item is-hidden-mobile">
+          <a class="nav-link" title="Pricing" href="/#pricing">Pricing</a>
+        </div>
+        <div class="nav-item is-hidden-mobile">
+          <a class="has-icon button is-stylish is-small is-outlined is-primary" title="Sign Up" href="/signup">
+            <div class="icon">
+              <i class="fal fa-user-circle"></i>
+            </div>
+            <span>
+              Sign Up
+            </span>
+          </a>
+        </div>
+        <div class="nav-item is-hidden-mobile">
+          <a id="login-navbar" class="checkout-track has-icon login-modal button is-stylish is-outlined is-small is-primary modal-button" title="Log In" data-object="#modal-login">
+            <div class="icon is-small">
+              <i class="fal fa-sign-in"></i>
+            </div>
+            <span>
+              Log In
+            </span>
+          </a>
+        </div>
+      <% } else { %>
+        <div class="nav-item">
+          <a id="profile-button" class="button is-primary is-outlined is-stylish is-small menu-toggle" title="Profile">
+            <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
+            <div class="icon">
+              <i class="fal fa-angle-down"></i>
+            </div>
+          </a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</nav>

@@ -19,6 +19,12 @@
         color: $color-invert
         width: 32px
         height: 32px
+        min-width: 32px
+        min-height: 32px
+        &.is-inverted
+          background-color: $white
+          color: $color
+          border-color: transparent
         &.is-outlined
           background-color: $color-invert
           border-color: $color
@@ -29,7 +35,6 @@
         &.is-medium
           width: 45px
           height: 45px
-          margin-bottom: 20px
           font-size: 24px
   // Sizes
   &.is-small

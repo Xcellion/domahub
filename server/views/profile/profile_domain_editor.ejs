@@ -10,7 +10,7 @@
       <div class="content">
         <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
           <div class="icon is-small">
-            <i class="far fa-long-arrow-left"></i>
+            <i class="fal fa-long-arrow-left"></i>
           </div>
           <span>Go Back To Listings</span>
         </a>
@@ -24,12 +24,12 @@
         </div>
         <div class="control-right is-flex">
           <a id="status-toggle-button" tabindex="0" class="button control-item is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
-            <div id="status-icon" class="icon is-small"><i class="far fa-toggle-on"></i></div>
+            <div id="status-icon" class="icon is-small"><i class="fal fa-toggle-on"></i></div>
             <span id="status-text" class="is-hidden-mobile"></span>
           </a>
           <div id="view-listings-button-wrapper" class="control-item is-relative">
             <a id="view-listings-button" class="button is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
-              <div class="icon is-small"><i class="far fa-external-link"></i></div>
+              <div class="icon is-small"><i class="fal fa-external-link"></i></div>
               <span class="is-hidden-mobile">View Page<span class="edit-domain-plural is-hidden">s</span></span>
             </a>
             <div id="view-listings-button-drop" class="box domain-tooltip is-hidden"></div>
@@ -48,7 +48,7 @@
             <a tabindex="0" class="">
               <span class="">Listing Design</span>
               <% if (!user.stripe_subscription_id) { %>
-                <span class="icon is-small"><i class="far fa-trophy-alt"></i></span>
+                <span class="icon is-small"><i class="fal fa-trophy-alt"></i></span>
               <% } %>
             </a>
           </li>
@@ -61,7 +61,7 @@
             <a tabindex="0" class="">
               <span class="">Hub</span>
               <% if (!user.stripe_subscription_id) { %>
-                <span class="icon is-small"><i class="far fa-trophy-alt"></i></span>
+                <span class="icon is-small"><i class="fal fa-trophy-alt"></i></span>
               <% } %>
             </a>
           </li>
@@ -69,13 +69,13 @@
             <div class="control is-grouped">
               <div class="control is-marginless">
                 <a id="save-changes-button" class="button is-primary is-stylish is-small is-hidden">
-                  <div class="icon is-small"><i class="far fa-check-circle"></i></div>
+                  <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
                   <span>Save</span>
                 </a>
               </div>
               <div class="control">
                 <a id="cancel-changes-button" class="button is-danger is-stylish is-small is-hidden">
-                  <div class="icon is-small"><i class="far fa-ban"></i></div>
+                  <div class="icon is-small"><i class="fal fa-ban"></i></div>
                   <span>Cancel</span>
                 </a>
               </div>
@@ -96,7 +96,7 @@
                 <label class="label" for="description">
                   Listing Description
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="A good description helps your potential customers understand the value of your domain name." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">Text description that will appear as a paragraph below the domain name on the listing page.</small>
@@ -107,7 +107,7 @@
                 <label class="label" for="categories-input">
                   Categories
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">Categories or industries <span class="this-domain">this domain</span> belong to. Helpful for users to find similar domains.</small>
@@ -127,11 +127,11 @@
                   <span>Footer Description</span>
                   <% if (!user.stripe_subscription_id) { %>
                     <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
-                      <i class="far fa-trophy-alt"></i>
+                      <i class="fal fa-trophy-alt"></i>
                     </div>
                   <% } %>
                   <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">Text that is displayed on the footer of the listing page. An ideal location for a slogan, phrase, or trademark.</small>
@@ -148,7 +148,7 @@
                 <label class="label" for="min-price-input">
                   Minimum Price
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">The minimum offer you will consider selling <span class="this-domain">this domain</span> for.</small>
@@ -158,7 +158,7 @@
                 <label class="label" for="buy-price-input">
                   Buy It Now Price
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">The price you are willing to sell <span class="this-domain">this domain</span> for immediately.</small>
@@ -191,7 +191,7 @@
               <label class="label">
                 Rental Price
                 <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for free rentals on your domain." data-balloon-pos="up">
-                  <i class="far fa-question-circle"></i>
+                  <i class="fal fa-question-circle"></i>
                 </div>
               </label>
               <small class="tip">The price per unit of time for a domain rental.</small>
@@ -211,7 +211,7 @@
                 <label class="label">
                   <span>Example Paths</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must consist of either letters or numbers." data-balloon-pos="up">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">Example paths or subdirectories that users may want to rent on <span class="this-domain">this domain</span>.</small>
@@ -233,7 +233,7 @@
               <div class="control is-expanded">
                 <a href="/profile/settings#premium" class="button is-fullwidth is-small is-primary is-stylish">
                   <div class="icon is-small">
-                    <i class="far fa-trophy-alt"></i>
+                    <i class="fal fa-trophy-alt"></i>
                   </div>
                   <span>Upgrade Now</span>
                 </a>
@@ -259,13 +259,13 @@
         <div class="button-wrapper is-mobile control">
           <a id="example-button-primary" class="preview-elem button is-stylish">
             <div class="icon is-small">
-              <i class="far fa-check-circle" aria-hidden="true"></i>
+              <i class="fal fa-check-circle" aria-hidden="true"></i>
             </div>
             <span>Send Offer</span>
           </a>
           <a id="example-button-accent" class="preview-elem button is-stylish">
             <div class="icon is-small">
-              <i class="far fa-shopping-cart" aria-hidden="true"></i>
+              <i class="fal fa-shopping-cart" aria-hidden="true"></i>
             </div>
             <span>Buy Now</span>
           </a>
@@ -292,13 +292,13 @@
                       <select tabindex="0" id="theme-input" class="premium-input"></select>
                     </span>
                     <div class="icon">
-                      <i class="far fa-image"></i>
+                      <i class="fal fa-image"></i>
                     </div>
                   </div>
                   <div class="control">
                     <a id="random-theme-button" class="premium-input no-shadow button is-stylish is-small">
                       <div class="icon is-small">
-                        <i class="far fa-random"></i>
+                        <i class="fal fa-random"></i>
                       </div>
                       <span>Random Theme</span>
                     </a>
@@ -338,7 +338,7 @@
                       </select>
                     </span>
                     <div class="icon">
-                      <i class="far fa-font"></i>
+                      <i class="fal fa-font"></i>
                     </div>
                   </div>
                 </div>
@@ -347,7 +347,7 @@
                 <label class="label">
                   <span>Background Color</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <div class="control">
@@ -456,7 +456,7 @@
                 <label class="label">
                   <span>Background Image URL</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Dimensions can be whatever you wish, but keep in mind your customers will have different resolutions. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
@@ -466,7 +466,7 @@
                 <div class="control">
                   <button id="background-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
                     <div class="icon is-small">
-                      <i class="far fa-sync-alt"></i>
+                      <i class="fal fa-sync-alt"></i>
                     </div>
                     <span>Refresh Preview</span>
                   </button>
@@ -475,7 +475,7 @@
                   </form>
                   <label for="background-image-input" class="premium-input no-shadow button is-stylish is-small">
                     <div class="icon is-small">
-                      <i class="far fa-upload" aria-hidden="true"></i>
+                      <i class="fal fa-upload" aria-hidden="true"></i>
                     </div>
                     <span data-default-name="Upload Background Image" id="background-image-label" class="file-label">Upload Image</span>
                   </label>
@@ -485,7 +485,7 @@
                 <label class="label">
                   <span>Logo Image URL</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <div class="control">
@@ -494,7 +494,7 @@
                 <div class="control">
                   <button id="logo-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
                     <div class="icon is-small">
-                      <i class="far fa-sync-alt"></i>
+                      <i class="fal fa-sync-alt"></i>
                     </div>
                     <span>Refresh Preview</span>
                   </button>
@@ -503,7 +503,7 @@
                   </form>
                   <label for="logo-image-input" class="premium-input button no-shadow is-stylish is-small">
                     <div class="icon is-small">
-                      <i class="far fa-upload" aria-hidden="true"></i>
+                      <i class="fal fa-upload" aria-hidden="true"></i>
                     </div>
                     <span data-default-name="Upload Logo" id="logo-image-label" class="file-label">Upload Logo</span>
                   </label>
@@ -528,7 +528,7 @@
                   <label class="label" for="placeholder-input">
                     Placeholder Text
                     <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The placeholder text is a light-hearted way of letting your users know what information to put in what form." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
+                      <i class="fal fa-question-circle"></i>
                     </div>
                   </label>
                   <small class="tip">Enables the movie-quote placeholder text on the listing page contact form.</small>
@@ -585,7 +585,7 @@
                   <label class="label">
                     <span>Show Other Listings</span>
                     <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="There will be nothing to display if you do not have any active or unsold listings." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
+                      <i class="fal fa-question-circle"></i>
                     </div>
                   </label>
                   <small class="tip">Displays a list of other <span class="is-bold">active</span> listings you own on DomaHub.</small>
@@ -610,11 +610,11 @@
               <h3 class="card-header-title">
                 Registrar Information
                 <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
-                  <i class="far fa-exclamation-triangle"></i>
+                  <i class="fal fa-exclamation-triangle"></i>
                 </div>
               </h3>
               <a id="lookup-dns-button" class="button is-icon no-shadow is-stylish is-small">
-                <span class="icon is-small"><i class="far fa-search"></i></span>
+                <span class="icon is-small"><i class="fal fa-search"></i></span>
                 <span>Lookup Missing Details</span>
               </a>
             </div>
@@ -727,14 +727,14 @@
                   <label class="label">
                     Related Expenses
                     <div class="icon is-tooltip is-small" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
-                      <i class="far fa-question-circle"></i>
+                      <i class="fal fa-question-circle"></i>
                     </div>
                   </label>
                   <small class="tip">Any expenses incurred related to <span class="this-domain">this domain</span>.</small>
                 </div>
                 <div class="control-right has-text-right">
                   <a id="add-new-expense-button" tabindex="0" class='button no-shadow is-stylish is-small'>
-                    <div class="icon is-small"><i class="far fa-plus"></i></div>
+                    <div class="icon is-small"><i class="fal fa-plus"></i></div>
                     <span>Add New Expense</span>
                   </a>
                 </div>
@@ -749,13 +749,13 @@
                       <td class="domain-expense-date"></td>
                       <td class="expense-button-wrapper">
                         <a tabindex="0" class='domain-expense-delete-button button no-shadow is-stylish is-small'>
-                          <div class="icon is-small"><i class="far fa-trash"></i></div>
+                          <div class="icon is-small"><i class="fal fa-trash"></i></div>
                           <span class="is-hidden-mobile">Delete</span>
                         </a>
                       </td>
                       <td class="expense-button-wrapper">
                         <a tabindex="0" class='domain-expense-edit-button button no-shadow is-stylish is-small'>
-                          <div class="icon is-small"><i class="far fa-edit"></i></div>
+                          <div class="icon is-small"><i class="fal fa-edit"></i></div>
                           <span class="is-hidden-mobile">Edit</span>
                         </a>
                       </td>
@@ -777,7 +777,7 @@
             <div class="content has-text-centered">
               <h3 class="is-bold">Domain <span class="registrar-which-text"></span> Details
                 <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
-                  <i class="far fa-exclamation-triangle"></i>
+                  <i class="fal fa-exclamation-triangle"></i>
                 </div>
               </h3>
             </div>
@@ -825,13 +825,13 @@
               <div class="control is-grouped is-grouped-center">
                 <div class="control is-expanded">
                   <a id="save-registrar-contact-button" tabindex="0" class='button is-fullwidth is-stylish is-small is-primary'>
-                    <div class="icon is-small"><i class="far fa-check"></i></div>
+                    <div class="icon is-small"><i class="fal fa-check"></i></div>
                     <span>Save Changes</span>
                   </a>
                 </div>
                 <div class="control is-expanded">
                   <a id="cancel-registrar-contact-button" tabindex="0" class='button is-fullwidth is-stylish is-small is-outlined is-danger'>
-                    <div class="icon is-small"><i class="far fa-times"></i></div>
+                    <div class="icon is-small"><i class="fal fa-times"></i></div>
                     <span>Cancel Changes</span>
                   </a>
                 </div>
@@ -879,13 +879,13 @@
                 <div class="control is-grouped is-grouped-center">
                   <div class="control is-expanded">
                     <button id="save-expense-button" type="submit" text="Save" form="domain-expense-form" tabindex="0" class='button is-fullwidth is-stylish is-small is-primary'>
-                      <div class="icon is-small"><i class="far fa-check"></i></div>
+                      <div class="icon is-small"><i class="fal fa-check"></i></div>
                       <span>Save</span>
                     </button>
                   </div>
                   <div class="control is-expanded">
                     <a tabindex="0" class='cancel-expense-button button is-fullwidth is-stylish is-small is-outlined is-danger'>
-                      <div class="icon is-small"><i class="far fa-times"></i></div>
+                      <div class="icon is-small"><i class="fal fa-times"></i></div>
                       <span>Cancel</span>
                     </a>
                   </div>
@@ -906,7 +906,7 @@
               <div class="notification no-shadow has-icon is-danger">
                 <div class="icon-box">
                   <div class="icon is-white">
-                    <i class="far fa-exclamation-triangle"></i>
+                    <i class="fal fa-exclamation-triangle"></i>
                   </div>
                 </div>
                 <div class="content">
@@ -942,13 +942,13 @@
               <div class="control is-grouped is-grouped-center">
                 <div class="control is-expanded">
                   <a id="delete-domain-expense-button" tabindex="0" class='button is-fullwidth is-stylish is-small is-danger'>
-                    <div class="icon is-small"><i class="far fa-trash"></i></div>
+                    <div class="icon is-small"><i class="fal fa-trash"></i></div>
                     <span>Delete</span>
                   </a>
                 </div>
                 <div class="control is-expanded">
                   <a tabindex="0" class='cancel-expense-button button is-fullwidth is-stylish is-small is-outlined no-shadow'>
-                    <div class="icon is-small"><i class="far fa-times"></i></div>
+                    <div class="icon is-small"><i class="fal fa-times"></i></div>
                     <span>Nevermind</span>
                   </a>
                 </div>
@@ -971,7 +971,7 @@
               <div class="control is-expanded">
                 <a href="/profile/settings#premium" class="button is-small is-fullwidth is-primary is-stylish">
                   <div class="icon is-small">
-                    <i class="far fa-trophy-alt"></i>
+                    <i class="fal fa-trophy-alt"></i>
                   </div>
                   <span>Upgrade Now</span>
                 </a>
@@ -979,7 +979,7 @@
               <div class="control is-expanded">
                 <a href="" class="button is-small is-fullwidth is-accent is-stylish">
                   <div class="icon is-small">
-                    <i class="far fa-eye"></i>
+                    <i class="fal fa-eye"></i>
                   </div>
                   <span>See An Example</span>
                 </a>
@@ -1015,7 +1015,7 @@
                 <label class="label" for="hub-title-input">
                   <span>Hub Name</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">Main text that will appear as the page title and at the top of your listings hub.</small>
@@ -1026,7 +1026,7 @@
                   <label class="label" for="hub-email-input">
                     <span>Display email</span>
                     <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Uses the same email as your DomaHub email." data-balloon-pos="top">
-                      <i class="far fa-question-circle"></i>
+                      <i class="fal fa-question-circle"></i>
                     </div>
                   </label>
                   <small class="tip">Displays your email address at the top of the page.</small>
@@ -1042,7 +1042,7 @@
                 <label class="label" for="hub-phone-input">
                   <span>Phone Number</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave blank for no phone number." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">Displays a phone number at the top of the page.</small>
@@ -1054,7 +1054,7 @@
                 <label class="label" for="hub-layout-count-input">
                   <span>Default Layout</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number greater than 10. There are 4 columns per row in the grid layout." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
                 <small class="tip">The number of domains shown in either a tiled or table layout.</small>
@@ -1081,7 +1081,7 @@
               <div id="sortable-clone" class="is-hidden">
                 <div class="control is-grouped hub-domain-wrapper">
                   <div class="icon divider-right is-small is-black">
-                    <i class="far fa-bars"></i>
+                    <i class="fal fa-bars"></i>
                   </div>
                   <div class="domain_name divider-right"></div>
                   <div class="categories"></div>
@@ -1093,7 +1093,7 @@
               <div id="no-domains-in-hub" class="is-hidden has-text-centered">
                 <div class="control has-text-centered">
                   <div class="icon is-large is-primary">
-                    <i class="far fa-exclamation-circle"></i>
+                    <i class="fal fa-exclamation-circle"></i>
                   </div>
                 </div>
                 <p class="control has-text-centered">
@@ -1104,7 +1104,7 @@
                 </p>
                 <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
                   <div class="icon is-small">
-                    <i class="far fa-long-arrow-left"></i>
+                    <i class="fal fa-long-arrow-left"></i>
                   </div>
                   <span>Go Back To My Listings</span>
                 </a>
@@ -1112,7 +1112,7 @@
               <div id="multiple-edit-hub" class="is-hidden has-text-centered">
                 <div class="control has-text-centered">
                   <div class="icon is-large is-primary">
-                    <i class="far fa-exclamation-circle"></i>
+                    <i class="fal fa-exclamation-circle"></i>
                   </div>
                 </div>
                 <p class="control has-text-centered">
@@ -1123,7 +1123,7 @@
                 </p>
                 <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
                   <div class="icon is-small">
-                    <i class="far fa-long-arrow-left"></i>
+                    <i class="fal fa-long-arrow-left"></i>
                   </div>
                   <span>Go Back To My Listings</span>
                 </a>
@@ -1131,7 +1131,7 @@
               <div id="not-a-hub" class="is-hidden has-text-centered">
                 <div class="control has-text-centered">
                   <div class="icon is-large is-primary">
-                    <i class="far fa-exclamation-circle"></i>
+                    <i class="fal fa-exclamation-circle"></i>
                   </div>
                 </div>
                 <p class="control has-text-centered">
@@ -1153,7 +1153,7 @@
     <div class="content">
       <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
         <div class="icon is-small">
-          <i class="far fa-long-arrow-left"></i>
+          <i class="fal fa-long-arrow-left"></i>
         </div>
         <span>Go Back To Listings</span>
       </a>
@@ -1169,19 +1169,19 @@
         <div class="offer-button control is-grouped">
           <div class="control">
             <a id="refresh-offers-button" class="is-hidden button is-stylish is-small" title="Refresh Offers">
-              <div class="icon is-small"><i class="far fa-sync-alt"></i></div>
+              <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
               <span class="is-hidden-mobile">Refresh Offers</span>
             </a>
           </div>
           <div class="control">
             <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-stylish is-small">
-              <div class="icon is-small"><i class="far fa-toggle-off"></i></div>
+              <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
               <span class="is-hidden-mobile">Show Rejected</span>
             </a>
           </div>
           <div class="control has-icon is-expanded">
             <div class="icon">
-              <i class="far fa-search"></i>
+              <i class="fal fa-search"></i>
             </div>
             <input id="offer-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search Offers" />
           </div>
@@ -1209,7 +1209,7 @@
       </div>
       <p class="resend-wrapper">
         <a class="button is-stylish is-small resend-offer-email-button">
-          <div class="icon is-small"><i class="far fa-repeat"></i></div>
+          <div class="icon is-small"><i class="fal fa-repeat"></i></div>
           <span>Re-send Payment Email</span>
         </a>
       </p>
@@ -1237,7 +1237,7 @@
       </div>
       <div class="resend-wrapper">
         <a class="button is-stylish is-small resend-offer-email-button">
-          <div class="icon is-small"><i class="far fa-repeat"></i></div>
+          <div class="icon is-small"><i class="fal fa-repeat"></i></div>
           <span>Re-send Verification Email</span></a>
         </a>
       </div>
@@ -1272,25 +1272,25 @@
             <ul id="offer-info" class="is-vertical offer-info">
               <li>
                 <div class="icon is-small" title="From">
-                  <i class="far fa-user-alt fa-fw"></i></span>
+                  <i class="fal fa-user-alt fa-fw"></i></span>
                 </div>
                 <span id="offer-modal-name">
               </li>
               <li>
                 <div class="icon is-small" title="Email">
-                  <i class="far fa-envelope fa-fw"></i></span>
+                  <i class="fal fa-envelope fa-fw"></i></span>
                 </div>
                 <span id="offer-modal-email">
               </li>
               <li>
                 <div class="icon is-small" title="Phone">
-                  <i class="far fa-phone fa-fw"></i></span>
+                  <i class="fal fa-phone fa-fw"></i></span>
                 </div>
                 <span id="offer-modal-phone">
               </li>
               <li>
                 <div class="icon is-small" title="Message">
-                  <i class="far fa-comment fa-fw"></i>
+                  <i class="fal fa-comment fa-fw"></i>
                 </div>
                 <p id="offer-modal-message" class="offer-msg"></p>
               </li>
@@ -1307,13 +1307,13 @@
           <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
             <div class="control is-expanded">
               <a id="accept_button" tabindex="0" class='button is-fullwidth is-stylish is-small is-primary '>
-                <div class="icon is-small"><i class="far fa-check"></i></div>
+                <div class="icon is-small"><i class="fal fa-check"></i></div>
                 <span>Accept offer</span>
               </a>
             </div>
             <div class="control is-expanded">
               <a id="reject_button" tabindex="0" class='button is-fullwidth is-stylish is-small is-outlined is-danger'>
-                <div class="icon is-small"><i class="far fa-times"></i></div>
+                <div class="icon is-small"><i class="fal fa-times"></i></div>
                 <span>Reject offer</span>
               </a>
             </div>
@@ -1336,28 +1336,28 @@
             <div class="nothing-exists-row has-text-centered">
               <div class="offer-table-no-listings is-hidden">
                 <div class="icon is-large is-primary">
-                  <i class="far fa-exclamation-circle"></i>
+                  <i class="fal fa-exclamation-circle"></i>
                 </div>
                 <p class="control has-text-centered">
                   You need listings before you can get offers! Let's go make some!
                 </p>
                 <a class="button is-primary is-stylish" href="/listings/create">
                   <div class="icon is-small">
-                    <i class="far fa-plus"></i>
+                    <i class="fal fa-plus"></i>
                   </div>
                   <span>Create New Listings</span>
                 </a>
               </div>
               <div class="offer-table-no-verified content has-text-centered is-hidden">
                 <div class="icon is-large is-primary">
-                  <i class="far fa-exclamation-circle"></i>
+                  <i class="fal fa-exclamation-circle"></i>
                 </div>
                 <p>
                   You must verify your domains before you can receive offers!
                 </p>
                 <a class="button is-primary is-stylish" href="/profile/mylistings?tab=verify">
                   <div class="icon">
-                    <i class="far fa-check-circle"></i>
+                    <i class="fal fa-check-circle"></i>
                   </div>
                   <span>Verify Domains</span>
                 </a>
@@ -1373,7 +1373,7 @@
           <td colspan="5">
             <div class="nothing-exists-row has-text-centered">
               <div class="icon is-large is-danger">
-                <i class="far fa-exclamation-circle"></i>
+                <i class="fal fa-exclamation-circle"></i>
               </div>
               <p>Oh, no! There are no existing/matching offers!</p>
               <p>Let's go out there and get some offers!</p>
@@ -1387,7 +1387,7 @@
         <tr class="no-hover-effect">
           <td colspan="5">
             <div class="nothing-exists-row has-text-centered">
-              <p class="icon is-medium"><i class="far fa-spin fa-sync-alt"></i></p>
+              <p class="icon is-medium"><i class="fal fa-spin fa-sync-alt"></i></p>
               <p>Now loading domain offers.</p>
               <p>This may take some time.</p>
             </div>
@@ -1400,23 +1400,23 @@
         <tr>
           <th class="offer-header-sort" data-value="domain_name">
             <span>Domain Name</span>
-            <div class="icon is-small"><i class="far fa-sort"></i></div>
+            <div class="icon is-small"><i class="fal fa-sort"></i></div>
           </th>
           <th class="offer-header-sort" data-value="offer">
             <span>Offer</span>
-            <div class="icon is-small"><i class="far fa-sort"></i></div>
+            <div class="icon is-small"><i class="fal fa-sort"></i></div>
           </th>
           <th class="offer-header-sort" data-value="accepted">
             <span>Status</span>
-            <div class="icon is-small"><i class="far fa-sort"></i></div>
+            <div class="icon is-small"><i class="fal fa-sort"></i></div>
           </th>
           <th class="offer-header-sort is-hidden-mobile" data-value="timestamp">
             <span>Date</span>
-            <div class="icon is-small"><i class="far fa-sort"></i></div>
+            <div class="icon is-small"><i class="fal fa-sort"></i></div>
           </th>
           <th class="offer-header-sort is-hidden-456px" data-value="name">
             <span>Name</span>
-            <div class="icon is-small"><i class="far fa-sort"></i></div>
+            <div class="icon is-small"><i class="fal fa-sort"></i></div>
           </th>
         </tr>
       </thead>
@@ -1425,7 +1425,7 @@
           <td>
             <span class="td-offer-domain break-all"></span>
             <div class="icon is-tooltip is-inline is-small" data-balloon-length="medium" data-balloon="Click on this offer to view more details or respond to it." data-balloon-pos="right">
-              <i class="far fa-question-circle"></i>
+              <i class="fal fa-question-circle"></i>
             </div>
           </td>
           <td class="td-offer-offer"></td>
@@ -1441,7 +1441,7 @@
   <div id="stats-section" class="is-hidden">
     <div id="loading-stats" class="content">
       <p>
-        <div class="icon is-small"><i class="far fa-spin fa-refresh"></i></div>
+        <div class="icon is-small"><i class="fal fa-spin fa-refresh"></i></div>
         <span>Now loading listing statistics...</span>
       </p>
     </div>
@@ -1455,7 +1455,7 @@
         <p>
           Unique Referers
           <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="What website your users are coming from (where they are being referred from)." data-balloon-pos="up">
-            <i class="far fa-question-circle"></i>
+            <i class="fal fa-question-circle"></i>
           </div>
         </p>
         <div class="chart-min-height">
@@ -1484,7 +1484,7 @@
     <div class="content">
       <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
         <div class="icon is-small">
-          <i class="far fa-long-arrow-left"></i>
+          <i class="fal fa-long-arrow-left"></i>
         </div>
         <span>Go Back To Listings</span>
       </a>
@@ -1503,13 +1503,13 @@
             <div id="verification-left" class="notification no-shadow has-icon is-lighter">
               <div class="icon-box">
                 <div id="verification-left-load" class="icon">
-                  <i class="far fa-spin fa-sync-alt"></i>
+                  <i class="fal fa-spin fa-sync-alt"></i>
                 </div>
                 <div id="verification-left-danger" class="icon is-white">
-                  <i class="far fa-exclamation-triangle"></i>
+                  <i class="fal fa-exclamation-triangle"></i>
                 </div>
                 <div id="verification-left-success" class="icon is-white">
-                  <i class="far fa-thumbs-up"></i>
+                  <i class="fal fa-thumbs-up"></i>
                 </div>
               </div>
               <div class="content">
@@ -1538,20 +1538,20 @@
           <div class="control is-grouped">
             <div class="control button-wrapper is-mobile">
               <a id="refresh-dns-button" class="button is-stylish is-small" title="Refresh DNS Table">
-                <div class="icon is-small"><i class="far fa-sync-alt"></i></div>
+                <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
                 <span>Refresh Table<span class="verification-plural"></span></span>
               </a>
               <a id="verify-button" class="verify-hidden-while-loading button is-stylish is-small is-primary is-hidden" title="Verify domain(s)">
-                <div class="icon is-small"><i class="far fa-check-circle"></i></div>
+                <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
                 <span>Verify Now</span>
               </a>
               <a id="prev-dns-table-button" data-value="-1" class="verify-hidden-while-loading button is-stylish is-small" title="Previous Domain Name">
-                <div class="icon is-small"><i class="far fa-angle-left"></i></div>
+                <div class="icon is-small"><i class="fal fa-angle-left"></i></div>
                 <span class="is-hidden-mobile">Previous</span>
               </a>
               <a id="next-dns-table-button" data-value="1" class="verify-hidden-while-loading button is-stylish is-small" title="Next Domain Name">
                 <span class="is-hidden-mobile">Next</span>
-                <div class="icon is-small"><i class="far fa-angle-right"></i></div>
+                <div class="icon is-small"><i class="fal fa-angle-right"></i></div>
               </a>
             </div>
           </div>
@@ -1562,7 +1562,7 @@
               <tr class="no-hover-effect">
                 <td class="has-text-centered">
                   <div class="nothing-exists-row has-text-centered">
-                    <p class="icon is-medium"><i class="far fa-spin fa-sync-alt"></i></p>
+                    <p class="icon is-medium"><i class="fal fa-spin fa-sync-alt"></i></p>
                     <p>Now loading existing DNS records.</p>
                     <p>This may take some time.</p>
                   </div>
@@ -1583,7 +1583,7 @@
                 <th>
                   Required Data
                   <div class="icon is-small is-danger" data-balloon-length="large" data-balloon="If your registrar doesn't let you input '@' as the required data, try entering in your domain name." data-balloon-pos="top">
-                    <i class="far fa-exclamation-circle"></i>
+                    <i class="fal fa-exclamation-circle"></i>
                   </div>
                 </th>
                 <th class="is-hidden-mobile">Current Data</th>

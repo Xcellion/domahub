@@ -45,7 +45,7 @@
                 <div class="content">
                   <div class="step-box">
                     <div class="icon is-primary">
-                      <i class="far fa-credit-card"></i>
+                      <i class="fal fa-credit-card"></i>
                     </div>
                     <h2>Pay with a card</h2>
                   </div>
@@ -59,7 +59,7 @@
                 <div class="content">
                   <div class="step-box">
                     <div class="icon is-medium is-accent">
-                        <i class="far fa-bitcoin"></i>
+                        <i class="fal fa-bitcoin"></i>
                     </div>
                     <h2>Pay with Bitcoin</h2>
                   </div>
@@ -72,7 +72,7 @@
                 <div class="content">
                   <div class="step-box">
                     <div class="icon is-medium is-info">
-                        <i class="far fa-paypal"></i>
+                        <i class="fal fa-paypal"></i>
                     </div>
                     <h2>Pay with PayPal</h2>
                   </div>
@@ -90,7 +90,7 @@
                   <div class="control has-icon">
                     <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
                     <div class="icon">
-                      <i id="cc-icon" class="far fa-credit-card"></i>
+                      <i id="cc-icon" class="fal fa-credit-card"></i>
                     </div>
                   </div>
                   <div class="control is-grouped">
@@ -99,7 +99,7 @@
                       <div class="control has-icon">
                         <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                         <div class="icon">
-                          <i class="far fa-calendar-alt"></i>
+                          <i class="fal fa-calendar-alt"></i>
                         </div>
                       </div>
                     </div>
@@ -108,7 +108,7 @@
                       <div class="control has-icon">
                         <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
                         <div class="icon">
-                          <i class="far fa-lock"></i>
+                          <i class="fal fa-lock"></i>
                         </div>
                       </div>
                     </div>
@@ -117,7 +117,7 @@
                   <div class="control has-icon">
                     <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                     <div class="icon">
-                      <i class="far fa-map-marker-alt"></i>
+                      <i class="fal fa-map-marker-alt"></i>
                     </div>
                   </div>
                 </form>
@@ -126,7 +126,7 @@
                   <div class="control">
                     <a tabindex="0" class="goback-button checkout-track button is-black is-stylish">
                       <div class="icon is-small">
-                        <i class="far fa-long-arrow-left"></i>
+                        <i class="fal fa-long-arrow-left"></i>
                       </div>
                       <span>Back to Payment Selection</span>
                     </a>
@@ -134,7 +134,7 @@
                   <div class="control">
                     <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
                       <div class="icon is-small">
-                        <i class="far fa-shopping-cart"></i>
+                        <i class="fal fa-shopping-cart"></i>
                       </div>
                       <span>Confirm & Pay</span>
                     </button>
@@ -147,7 +147,7 @@
                 <div class="control margin-top-30">
                   <a tabindex="0" class="goback-button checkout-track button is-black is-stylish">
                     <div class="icon is-small">
-                      <i class="far fa-undo"></i>
+                      <i class="fal fa-undo"></i>
                     </div>
                     <span>Back to Payment Selection</span>
                   </a>
@@ -198,12 +198,12 @@
             <footer id="edit-dates-button" class="card-footer">
               <% if (listing_info.premium){ %>
                 <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
-                  <div class="icon is-small"><i class="far fa-long-arrow-left"></i></div>
+                  <div class="icon is-small"><i class="fal fa-long-arrow-left"></i></div>
                   <span>Back to <%= listing_info.domain_name %></span>
                 </a>
               <% } else { %>
                 <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
-                  <div class="icon is-small"><i class="far fa-long-arrow-left"></i></div>
+                  <div class="icon is-small"><i class="fal fa-long-arrow-left"></i></div>
                   <span>Back to <%= listing_info.domain_name %></span>
                 </a>
               <% } %>

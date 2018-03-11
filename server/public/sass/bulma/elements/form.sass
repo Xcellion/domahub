@@ -110,7 +110,7 @@ input:-webkit-autofill
       border-color: $black-disabled
     &:focus
       outline: 0
-      border-color: #007bff
+      border-color: #007bff !important
     &::-ms-expand
       display: none
   &::-ms-expand
@@ -119,11 +119,10 @@ input:-webkit-autofill
     +box-shadow(0,5px,5px,$border,0)
   &.is-transparent
     background-color: transparent
+    border-color: transparent
     select
       background-color: transparent
-  &.no-borders
-    select
-      border: none
+      border-color: transparent
   &.is-fullwidth
     width: 100%
     select

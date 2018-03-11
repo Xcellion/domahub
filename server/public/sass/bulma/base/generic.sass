@@ -113,6 +113,13 @@ a
       text-decoration: underline !important
     &:active
       outline: none
+  &.has-arrow
+    .fa-long-arrow-right
+      +transition(transform 0.3s ease)
+    &:hover,
+    &:focus
+      .fa-long-arrow-right
+        +translate(5px,0)
   +mobile-456px
     font-size: $size-7
 
@@ -129,13 +136,6 @@ hr
 
 img
   max-width: 100%
-  // make imgs undraggable
-  user-drag: none
-  user-select: none
-  -moz-user-select: none
-  -webkit-user-drag: none
-  -webkit-user-select: none
-  -ms-user-select: none
 
 input[type="checkbox"],
 input[type="radio"]
@@ -161,7 +161,7 @@ strong
 .tip
   display: block
   margin: 5px 0
-  color: $text-light
+  color: $grey
   line-height: 1.5
 
 pre

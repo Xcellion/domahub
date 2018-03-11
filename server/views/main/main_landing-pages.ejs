@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Domain Landing Pages - DomaHub</title>
+  <link rel="stylesheet" type="text/css" href="/css/min/main_landing.min.css" />
+  <meta name="description" content="Simple, clean landing pages for your domains." />
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+<%- include("../templates/navbar", {user: user}); %>
+
+<section class="landing section is-medium">
+  <div class="container">
+    <div class="content has-text-centered">
+      <h1 class="title is-2 is-bold is-white">Don't miss out on sales opportunities</h1>
+      <p class="subtitle is-4 is-white">
+        Capture all inbound traffic with landing pages.
+      </p>
+    </div>
+    <div class="content has-text-centered">
+      <a tabindex="0" class="button is-primary is-inverted is-stylish is-large" href="/signup">
+        <div class="icon">
+          <i class="fal fa-user-circle"></i>
+        </div>
+        <span>Create Account</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="header">
+      <div class="content has-text-centered">
+        <h2 class="title is-3 is-bold">Convenience at your fingertips</h2>
+        <p class="subtitle is-5">
+          Simplify communication with the offer form.
+        </p>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column is-6">
+        <div class="box offer-form">
+          <div class="blackscreen">
+            <div id="offer-notification" class="notification demo is-hidden">
+
+            </div>
+            <div id="loader" class="icon is-large is-white is-hidden" style="position:absolute;top:45%;left:45%;">
+              <i class="fal fa-spinner fa-spin"></i>
+            </div>
+            <div id="checkout-form" class="box is-small demo is-hidden">
+              <form autocomplete="off" class="control">
+                <label class="label">Card Number</label>
+                <div class="control has-icon">
+                  <input disabled required id="cc-num" data-stripe="number" class="input contact-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                  <div class="icon">
+                    <i id="cc-icon" class="fal fa-credit-card"></i>
+                  </div>
+                </div>
+                <div class="control is-grouped">
+                  <div class="control is-expanded has-icon">
+                    <label class="label">Expiration Date</label>
+                    <div class="control has-icon">
+                      <input disabled required id="cc-exp" maxlength="7" data-stripe="exp" class="input contact-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                      <div class="icon">
+                        <i class="fal fa-calendar-alt"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="control">
+                    <label class="label">Security Code</label>
+                    <div class="control has-icon">
+                      <input disabled required id="cc-cvc" data-stripe="cvc" class="input contact-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                      <div class="icon">
+                        <i class="fal fa-lock"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <label class="label">Zip Code</label>
+                <div class="control has-icon">
+                  <input disabled required id="cc-zip" maxlength="6" data-stripe="address_zip" class="input contact-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                  <div class="icon">
+                    <i class="fal fa-map-marker-alt"></i>
+                  </div>
+                </div>
+                <div class="control is-grouped is-grouped-right">
+                  <a id="confirm-purchase-button" class="button is-primary is-stylish send-button">
+                    <div class="icon">
+                      <i class="fal fa-check-circle"></i>
+                    </div>
+                    <span>Confirm Purchase</span>
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+          <form id="buy-now-form" autocomplete="off">
+            <div class="control has-icon">
+              <input id="contact_name" disabled placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
+              <label class="error_message label">Name</label>
+              <div class="icon">
+                <i class="fal fa-user-alt"></i>
+              </div>
+            </div>
+            <div class="control has-icon">
+              <input id="contact_email" disabled placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email">
+              <label class="error_message label">Email Address</label>
+              <div class="icon">
+                <i class="fal fa-envelope"></i>
+              </div>
+            </div>
+            <div class="control has-icon">
+              <input id="contact_phone" disabled placeholder="201-555-0313" required class="contact-input input phone-number" name="contact_phone" type="tel">
+              <label class="error_message label">Phone</label>
+              <div class="icon">
+                <i class="fal fa-phone"></i>
+              </div>
+            </div>
+            <div class="control has-icon">
+              <input id="contact_offer" disabled placeholder="$2500" required class="contact-input input" name="contact_offer" type="number" />
+              <label class="error_message label">Offer in USD (Min. $2500)</label>
+              <div class="icon">
+                <i class="fal fa-usd-circle"></i>
+              </div>
+            </div>
+            <div class="control">
+              <textarea id="contact_message" required class=" textarea" name="contact_message" disabled placeholder="Send a message!"></textarea>
+            </div>
+            <div class="control is-grouped">
+              <div class="control is-expanded">
+                <a id="send-offer-button" name="offer" class="send-button is-fullwidth button is-primary is-stylish">
+                  <div class="icon is-small">
+                    <i class="fal fa-check-circle"></i>
+                  </div>
+                  <span>Send Offer</span>
+                </a>
+              </div>
+              <div class="control is-expanded">
+                <a id="buy-now-button" name="buy" class='is-accent is-fullwidth button is-stylish send-button'>
+                  <div class="icon is-small"><i class="fal fa-shopping-cart"></i></div>
+                  <span id="buy-button-text">Buy Now - $5000</span>
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="column is-1">
+        <div class="dashes">
+
+        </div>
+      </div>
+      <div id="features" class="column is-5">
+        <div class="box no-shadow content feature" data-feature="0">
+          <div class="control is-grouped">
+            <div class="control">
+              <div class="icon is-medium">
+                <i class="fal fa-play-circle"></i>
+              </div>
+            </div>
+            <div class="control">
+              <h3 class="is-bold">Offer Verification</h3>
+              <p class="is-grey">
+               No more spam or bots. We verify all offers before you receive them.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="box no-shadow content feature" data-feature="1">
+          <div class="control is-grouped">
+            <div class="control">
+              <div class="icon is-medium">
+                <i class="fal fa-play-circle"></i>
+              </div>
+            </div>
+            <div class="control">
+              <h3 class="is-bold">Buy-It-Now</h3>
+              <p class="is-grey">
+                Have a price in mind? Let customers buy your domain immediately at that number.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="box no-shadow content feature" data-feature="2">
+          <div class="control is-grouped">
+            <div class="control">
+              <div class="icon is-medium">
+                <i class="fal fa-play-circle"></i>
+              </div>
+            </div>
+            <div class="control">
+              <h3 class="is-bold">Minimum Price</h3>
+              <p class="is-grey">
+                No more low-ball offers. Set a minimum price and stop getting offers that waste your time.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section is-medium">
+  <div class="container">
+    <div class="header">
+      <div class="content has-text-centered">
+        <h2 class="title is-3 is-bold">Let your domain take the spotlight</h2>
+        <p class="subtitle is-5">
+          Design and customize to your heart's content.
+        </p>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column is-4">
+        <div class="content">
+          <a tabindex="0" href="/images/main/listing-page/star_theme.png" rel="noreferrer" target="_blank">
+            <figure class="image is-3by2 has-shadow">
+              <img src="/images/main/listing-page/star_theme.png" alt="DomaHub Star Themed Landing Page"/>
+            </figure>
+          </a>
+        </div>
+        <div class="content has-text-centered">
+          <a class="button is-small" href="https://domahub.com/listing/Domain.com?compare=true&theme=Stars" rel="noreferrer" target="_blank">
+            See Demo
+          </a>
+        </div>
+      </div>
+      <div class="column is-4 is-hidden-mobile">
+        <div class="content">
+          <a tabindex="0" href="/images/main/listing-page/normal_theme.png" rel="noreferrer" target="_blank">
+            <figure class="image is-3by2 has-shadow">
+              <img src="/images/main/listing-page/normal_theme.png" alt="DomaHub Regular Themed Landing Page"/>
+            </figure>
+          </a>
+        </div>
+        <div class="content has-text-centered">
+          <a class="button is-small" href="https://domahub.com/listing/DomaHub.com?compare=true&theme=Domahub" rel="noreferrer" target="_blank">
+            See Demo
+          </a>
+        </div>
+      </div>
+      <div class="column is-4 is-hidden-mobile">
+        <div class="content">
+          <a tabindex="0" href="/images/main/listing-page/city_theme.png" rel="noreferrer" target="_blank">
+            <figure class="image is-3by2 has-shadow">
+              <img src="/images/main/listing-page/city_theme.png"alt="DomaHub City Themed Landing Page" />
+            </figure>
+          </a>
+        </div>
+        <div class="content has-text-centered">
+          <a class="button is-small" href="https://domahub.com/listing/citylines.com?compare=true&theme=City" rel="noreferrer" target="_blank">
+            See Demo
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-mobile">
+      <div class="column is-4">
+        <div class="content">
+          <h3 class="is-bold">Brand</h3>
+          <p class="is-grey">
+            Customize all details to fit your brand.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="content">
+          <h3 class="is-bold">Modular</h3>
+          <p class="is-grey">
+            Show and hide any components as you please.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="content">
+          <h3 class="is-bold">Traffic</h3>
+          <p class="is-grey">
+            Chart to display traffic on your domain.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-mobile">
+      <div class="column is-4">
+        <div class="content">
+          <h3 class="is-bold">Images</h3>
+          <p class="is-grey">
+            Use your own images and logos.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="content">
+          <h3 class="is-bold">Colors</h3>
+          <p class="is-grey">
+            Change color of fonts, buttons, tags, etc.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="content">
+          <h3 class="is-bold">Texts</h3>
+          <p class="is-grey">
+            Write your own descriptions and texts.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-pastel">
+  <div class="container">
+    <div class="content has-text-centered">
+      <h1 class="title is-3 is-bold">See the landing page in action!</h1>
+      <h2 class="subtitle is-5">Try our free demo or create an account.</h2>
+      <a tabindex="0" class="button is-primary is-stylish is-large" href="https://domahub.com/listing/Welcome.com?compare=true&theme=Stars">
+        <div class="icon">
+          <i class="fal fa-desktop"></i>
+        </div>
+        <span>Try Free Demo</span>
+      </a>
+      <a tabindex="0" class="button is-primary is-outlined is-stylish is-large" href="/signup">
+        <div class="icon">
+          <i class="fal fa-user-circle"></i>
+        </div>
+        <span>Create Account</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<%- include("../templates/footer"); %>
+<script src="/js/routes/main/main_landing_page_logic.js" type="text/javascript"></script>
+<script src="/js/jquery/intlTelInput.min.js" type="text/javascript"></script>
+<script src="/js/lib/typed.min.js" type="text/javascript"></script>
+</body>
+
+</html>
