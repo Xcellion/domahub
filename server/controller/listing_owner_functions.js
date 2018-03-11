@@ -754,7 +754,6 @@ module.exports = {
                  }
                }
 
-               console.log("LOF: Checking...", still_pointing.length, not_pointing.length, still_pending.length);
                //some of the domains aren't pointing anymore
                if (not_pointing.length > 0){
                  console.log("LOF: Some domain(s) are not pointing to DomaHub! Reverting...");

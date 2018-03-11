@@ -745,6 +745,7 @@ module.exports = {
               if (req.session.listing_info.status == 3){
                 console.log("LRF: Listing is now pointed to DomaHub! Marking as active...");
                 req.session.listing_info.status = 1;
+                console.log(domain_name);
                 listing_model.updateListingsInfo(domain_name, {
                   status: 1
                 }, function(result){
@@ -1145,7 +1146,7 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold-------------------------------RENTAL FORWARDING-------------------------------
+  //<editor-fold--------------------------------RENTAL FORWARDING-------------------------------
 
   //catch future requests if rented (for dev environment and for rental preview)
   rentalForward : function(req, res, next){
