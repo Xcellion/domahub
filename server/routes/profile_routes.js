@@ -12,17 +12,25 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------ONBOARDING-------------------------------
 
-  // //onboarding page
-  // app.get("/profile/welcome", [
-  //   auth_functions.checkLoggedIn,
-  //   stripe_functions.getStripeAccount,
-  //   stripe_functions.getStripeTransactions,
-  //   stripe_functions.getStripeCustomer,
-  //   stripe_functions.getStripeSubscription,
-  //   profile_functions.getAccountListings,
-  //   profile_functions.updateAccountSettingsPassthrough,
-  //   profile_functions.renderOnboarding
-  // ]);
+  //onboarding page
+  app.get("/profile/welcome", [
+    auth_functions.checkLoggedIn,
+    stripe_functions.getStripeAccount,
+    stripe_functions.getStripeCustomer,
+    stripe_functions.getStripeSubscription,
+    profile_functions.getAccountListings,
+    profile_functions.getAccountRegistrars,
+    profile_functions.updateAccountSettingsPassthrough,
+    profile_functions.renderOnboarding
+  ]);
+
+  //finished welcome tutorial
+  app.post("/profile/welcome/finished", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.finishedOnboarding,
+    profile_functions.updateAccountSettingsPost
+  ]);
 
   //</editor-fold>
 

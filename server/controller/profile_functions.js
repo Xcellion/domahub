@@ -836,6 +836,16 @@ module.exports = {
     }
   },
 
+  //finished welcome onboarding
+  finishedOnboarding: function(req, res, next){
+    console.log('F: Marking account as having finished onboarding...');
+
+    req.session.new_account_info = {
+      finished_onboarding : true
+    }
+    next();
+  },
+
   //update account settings and go next (if possible)
   updateAccountSettingsPassthrough : function(req, res, next){
 
@@ -1021,7 +1031,7 @@ module.exports = {
       }
 
       Q.allSettled(registrar_domain_promises).then(function(results){
-        console.log("PF: Finished querying " + registrar_domain_promises.length + " registrars for domains! - ");
+        console.log("PF: Finished querying " + registrar_domain_promises.length + " registrars for domains!");
         var total_good_domains = [];
         var total_bad_domains = [];
 
@@ -1626,7 +1636,7 @@ function getDomainIPPromise(listing_obj){
             }
             else {
               if (!result || !result.reply || result.reply.code != "300"){
-                error.log(err, "Failed to get list of domains from NameSilo via API.");
+                error.log(result, "Failed to get list of domains from NameSilo via API.");
                 reject("Something went wrong while contacting your NameSilo account.");
               }
               else {

@@ -200,16 +200,7 @@ $(document).ready(function() {
       createBadReasons(data.reasons, temp_table_row);
     }
 
-
     temp_table_row.appendTo("#domain-input-body");
-  }
-
-  //clear any reasons from a row
-  function clearRowReasons(row){
-    row.removeClass('errored-row').removeClass("success-row");
-    row.find("small").remove();
-    row.find('.is-danger').removeClass("is-danger");
-    row.find('.is-primary').removeClass("is-primary");
   }
 
   //edit the rows to append any bad reasons
@@ -288,7 +279,7 @@ $(document).ready(function() {
   }
 
   //submit table domains (NOT TEXTAREA)
-  function submitDomains(submit_elem){
+  function submitDomains(){
     deleteEmptyTableRows();
     var domains = getTableListingInfo(".domain-name-input");
     if (domains.length > 0){

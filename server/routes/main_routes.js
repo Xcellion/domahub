@@ -37,7 +37,7 @@ module.exports = function(app){
 
   //blog redirect
   app.get("/blog", function(req, res){
-    res.redirect("https://medium.com/@domahub");
+    res.redirect("https://medium.com/domahub");
   });
 
   //</editor-fold>
