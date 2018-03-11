@@ -64,19 +64,19 @@ module.exports = {
 
   //console log the error and send a mail to notify if production
   log : function(error, info){
-    console.log("\x1b[31m", "ERROR: " + error + " INFO : " + info, '\x1b[0m');
+    console.log("\x1b[31m", "ERROR: " + JSON.stringify(error) + " INFO : " + info, '\x1b[0m');
 
     //notify via email of any errors
-    // if (process.env.NODE_ENV != "dev"){
-    //   if (error.code != "ECONNREFUSED"){
-    //     mailer.sendBasicMail({
-    //       to: "general@domahub.com",
-    //       from: 'general@domahub.com',
-    //       subject: "There was an error on DomaHub production servers!",
-    //       html: JSON.stringify(error) + JSON.stringify(info)
-    //     });
-    //   }
-    // }
+    if (process.env.NODE_ENV != "dev"){
+      if (error.code != "ECONNREFUSED"){
+        mailer.sendBasicMail({
+          to: "general@domahub.com",
+          from: 'general@domahub.com',
+          subject: "There was an error on DomaHub production servers!",
+          html: JSON.stringify(error) + JSON.stringify(info)
+        });
+      }
+    }
   }
 
   //</editor-fold>
