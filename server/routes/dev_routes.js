@@ -45,6 +45,9 @@ module.exports = function(app){
   //google embed analytics
   app.get("/google", googleAnalytics);
 
+  //paypal payouts
+  app.get("/paypal", paypal);
+
   //</editor-fold>
 
 }
@@ -1328,6 +1331,19 @@ function googleAnalytics(req, res, next){
       access_token : access_token
     });
   });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------PAYPAL-------------------------------
+
+var paypal_facilitator = "cumin-facilitator@domahub.com";
+var paypal_client_id = "AUhTlwR2uAIPU7rdMv5GZLq_sti0j5QTz6fybkCXkEAZ1iKQXFPcolcYAoXB1IUbFFWyjLdzevkhXwI4";
+var paypal_secret = "EIT2ZOp7hHqh4RAm2iHJGWGmcFqqiMbctL6zL3Ac-Pezk06kkGe6sO7P3HKzagzIHJ8OryGqVrqZA2TP";
+
+//testing paypal payouts
+function paypal(req, res, next){
+
 }
 
 //</editor-fold>
