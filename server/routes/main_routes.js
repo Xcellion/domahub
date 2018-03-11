@@ -19,6 +19,10 @@ module.exports = function(app){
   //routes any of the below routes to the appropriate view
   app.get([
     "/features",
+    "/landing-pages",
+    "/domain-hub",
+    "/domain-management",
+    "/payments",
     "/privacy",
     "/faq",
     "/contact",

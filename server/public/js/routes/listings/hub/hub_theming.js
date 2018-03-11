@@ -31,6 +31,8 @@ function setupCustomColorsHub(){
   stylize(listing_hub_info.primary_color, ".hub-section .is-primary.tag.is-dot", "background-color");
   stylize(listing_hub_info.primary_color, ".hub-section .price-tag", "background-color", true);
   stylize(listing_hub_info.primary_color, ".hub-section .sort-header .icon", "color");
+  stylize(listing_hub_info.primary_color, ".hub-section .price-tag", "background-color", true);
+  stylize(listing_hub_info.primary_color, ".hub-section .price-tag::before", "background");
   stylize(listing_hub_info.secondary_color, ".hub-section .is-accent.tag.is-dot", "background-color");
   stylize(listing_hub_info.tertiary_color, ".hub-section .is-info.tag.is-dot", "background-color");
   stylize(listing_hub_info.font_color, ".hub-section .subtitle", "color");

@@ -1,4 +1,16 @@
 .content
+  &.is-flex
+    display: flex
+    justify-content: flex-start
+    .icon + .content-box
+      margin-left: 20px
+    &.is-spaced
+      justify-content: space-between
+    &.is-centered
+      align-items: center
+    &.is-mobile
+      +mobile
+        flex-direction: column
   @extend .block
   & + .content
     margin-top: 20px
@@ -8,9 +20,10 @@
   // List elements
   li
     &.has-icon
-      span + span
-        margin-left: 5px
-      line-height: 24px
+      display: flex
+      align-items: center
+      .icon + span
+        margin-left: 10px
       &.is-small
         line-height: 16px
       &.is-medium
@@ -40,7 +53,7 @@
     &.is-vertical
       li
         line-height: 1.5
-        margin: 5px 0
+        margin: 8px 0
     &.has-disc
       list-style-type: disc
       padding-left: 20px
