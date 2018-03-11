@@ -18,11 +18,6 @@ $(document).ready(function() {
     $("#message").attr("style", "").text("Log in below");
   });
 
-  //features menu toggle
-  $('#features-menu').on("click", function() {
-    $('.hover-menu').toggleClass("is-active");
-  })
-
   //ESC key to close modal
   $(document).keyup(function(e) {
     if (e.which == 27) {
@@ -42,6 +37,7 @@ $(document).ready(function() {
 
   //features menu toggle
   $('#features-menu').on("click", function() {
+    console.log("Derp");
     $('.hover-menu').toggleClass("is-active");
   })
 
