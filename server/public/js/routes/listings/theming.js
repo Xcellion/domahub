@@ -104,7 +104,7 @@ function setupFooter(){
     $(".page-contents #listing-footer-logo").addClass('is-hidden');
   }
   else {
-    $(".page-contents #listing-footer-logo").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
+    $(".page-contents #listing-footer-logo").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary.png");
   }
 
   //</editor-fold>
