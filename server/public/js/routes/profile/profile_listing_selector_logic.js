@@ -28,7 +28,7 @@ $(document).ready(function(){
     }
 
     //sort the rows
-    $(".table-row:not(.clone-row)").sort(function(a,b){
+    $(".table-row:not(.clone-row):not(#domain-expense-clone)").sort(function(a,b){
       if (sort_value == "registrar_name" || sort_value == "date_registered" || sort_value == "date_expire" || sort_value == "date_created" || sort_value == "min_price" || sort_value == "buy_price"){
         var a_sort = $(a).data("listing_info")[sort_value] || "";
         var b_sort = $(b).data("listing_info")[sort_value] || "";
@@ -38,7 +38,6 @@ $(document).ready(function(){
         var b_sort = $(b).find("." + sort_value + "-sort-value").text().toLowerCase();
       }
 
-      console.log(a_sort, b_sort);
       if (sort_direction){
         return (a_sort > b_sort) ? 1 : (a_sort < b_sort) ? -1 : 0;
       }
@@ -201,7 +200,7 @@ function showBasedOnURL(){
   //replace URL tab if not a good tab
   var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
   var url_tab = getParameterByName("tab");
-  if (["verify", "info", "hub", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
+  if (["verify", "info", "hub", "design", "domain-info", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
     removeURLParameter("tab");
     url_tab = "";
   }
@@ -224,7 +223,7 @@ function showBasedOnURL(){
   }
 
   //requested specific tab
-  if (url_selected_listings != "" && ["info", "design", "hub"].indexOf(url_tab) != -1){
+  if (url_selected_listings != "" && ["info", "design", "hub", "domain-info"].indexOf(url_tab) != -1){
     viewDomainDetails(false, url_tab);
   }
   else if (url_selected_listings != "" && url_tab == "verify"){
@@ -899,7 +898,7 @@ function viewDomainDNS(push){
 var moneyFormat = wNumb({
   thousand: ',',
   prefix: '$',
-  decimals: 0
+  decimals: 2
 });
 
 //get domain_name or ID of all selected rows

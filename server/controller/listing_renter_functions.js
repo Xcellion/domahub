@@ -1301,7 +1301,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         unlisted: true,
         date_registered: whoisObj["Creation Date"] || moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm"),
         date_updated: whoisObj["Updated Date"],
-        registrar: whoisObj["Registrar"] || array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)],
+        registrar: whoisObj["Registrar"],
       }
 
       //development troubleshooting for whoisobj
@@ -1313,6 +1313,9 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       //comparing, so make fake listing info
       if (req.query.compare == "true"){
         console.log("LRF: Rendering the comparison tool!");
+
+        //registrar if doesnt exist
+        listing_info.registrar = whoisObj["Registrar"] || array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)];
 
         //info
         listing_info.status = 1;

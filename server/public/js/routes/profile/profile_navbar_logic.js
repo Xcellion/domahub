@@ -104,6 +104,11 @@ function closeModals(){
   if ($("#announcement-modal").length == 1){
     bakeCookie("announcement", true);
   }
+
+  //extra function for some pages
+  if (typeof extraCloseModal != "undefined"){
+    extraCloseModal();
+  }
 }
 
 //</editor-fold>
@@ -139,6 +144,9 @@ function getCurrentView() {
   }
   if (newPath == "Settings") {
     newPath = "Account Settings";
+  }
+  if (newPath == "Welcome") {
+    newPath = "Welcome to DomaHub!"
   }
 
   $("#current-view-name").html(newPath);
@@ -268,7 +276,7 @@ function appendNotification(msg) {
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------ANNOUNCEMENT COOKIE-------------------------------
+//<editor-fold>----------------------------------ANNOUNCEMENT COOKIE-------------------------------
 
 //helper function to make cookie
 function bakeCookie(name, value) {

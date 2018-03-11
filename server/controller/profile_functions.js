@@ -51,6 +51,18 @@ var jwtClient = new google.auth.JWT(
 
 module.exports = {
 
+  //<editor-fold>-------------------------------------ONBOARDING-------------------------------
+
+  renderOnboarding : function(req, res, next){
+    console.log("PF: Rendering profile onboarding...");
+    res.render("profile/profile_onboarding.ejs", {
+      user: req.user,
+      listings: req.user.listings
+    });
+  },
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------------GOOGLE ANALYTICS-------------------------------
 
   //google embed analytics authentication
@@ -451,24 +463,241 @@ module.exports = {
           //update req.user.listings
           var temp_listing_objs_for_db = [];      //object for DB updating
           var no_whois = 0;      //count of how many whois failed
+          var nothing_changed = 0;      //count of how many listings were affected
           for (var x = 0; x < results.length; x++){
             var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
             temp_listing_obj.whois = results[x].value.whois;
             temp_listing_obj.a_records = results[x].value.a_records;
 
             //whois exists! update our DB
-            if (results[x].value.whois){
-              temp_listing_obj.date_expire = moment(results[x].value.whois["Registry Expiry Date"]).valueOf();
-              temp_listing_obj.date_registered = moment(results[x].value.whois["Creation Date"]).valueOf();
-              temp_listing_obj.registrar_name = results[x].value.whois["Registrar"];
+            if (results[x].state == "fulfilled" && results[x].value.whois){
 
-              //temp object for DB insertion
-              temp_listing_objs_for_db.push([
-                results[x].value.id,
-                results[x].value.whois["Registrar"],
-                moment(results[x].value.whois["Registry Expiry Date"]).valueOf(),
-                moment(results[x].value.whois["Creation Date"]).valueOf()
-              ]);
+              //custom functions for each registrar value
+              var properties_to_check = [
+                {
+                  prop_name : "date_expire",
+                  function_if_blank : function(){
+                    return moment(results[x].value.whois["Registrar Registration Expiration Date"]).valueOf();
+                  }
+                },
+                {
+                  prop_name : "date_registered",
+                  function_if_blank : function(){
+                    return moment(results[x].value.whois["Creation Date"]).valueOf();
+                  }
+                },
+                {
+                  prop_name : "registrar_name",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Registrar"];
+                  }
+                },
+                {
+                  prop_name : "registrar_admin_name",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Admin Name"]
+                  }
+                },
+                {
+                  prop_name : "registrar_admin_org",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Admin Organization"]
+                  }
+                },
+                {
+                  prop_name : "registrar_admin_email",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Admin Email"]
+                  }
+                },
+                {
+                  prop_name : "registrar_admin_address",
+                  function_if_blank : function(){
+                    var address_to_return = "";
+                    if (results[x].value.whois["Admin Street"] != "" && results[x].value.whois["Admin Street"]){
+                      address_to_return += results[x].value.whois["Admin Street"];
+                    }
+                    if (results[x].value.whois["Admin City"] != "" && results[x].value.whois["Admin City"]){
+                      address_to_return += ", " + results[x].value.whois["Admin City"];
+                    }
+                    if (results[x].value.whois["Admin State/Province"] != "" && results[x].value.whois["Admin State/Province"]){
+                      address_to_return += ", " + results[x].value.whois["Admin State/Province"];
+                    }
+                    if (results[x].value.whois["Admin Postal Code"] != "" && results[x].value.whois["Admin Postal Code"]){
+                      address_to_return += ", " + results[x].value.whois["Admin Postal Code"];
+                    }
+                    if (results[x].value.whois["Admin Country"] != "" && results[x].value.whois["Admin Country"]){
+                      address_to_return += ", " + results[x].value.whois["Admin Country"];
+                    }
+                    return address_to_return.replace(",,", ",");
+                  }
+                },
+                {
+                  prop_name : "registrar_admin_phone",
+                  function_if_blank : function(){
+                    var registrar_admin_phone = "";
+                    if (results[x].value.whois["Admin Phone"] && results[x].value.whois["Admin Phone"] != ""){
+                      try {
+                        registrar_admin_phone = phoneUtil.format(phoneUtil.parse(results[x].value.whois["Admin Phone"]), PNF.INTERNATIONAL);
+                      }
+                      catch(err){
+                        registrar_admin_phone = results[x].value.whois["Admin Phone"];
+                      }
+                    }
+                    return registrar_admin_phone;
+                  }
+                },
+                {
+                  prop_name : "registrar_registrant_name",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Registrant Name"]
+                  }
+                },
+                {
+                  prop_name : "registrar_registrant_org",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Registrant Organization"]
+                  }
+                },
+                {
+                  prop_name : "registrar_registrant_email",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Registrant Email"]
+                  }
+                },
+                {
+                  prop_name : "registrar_registrant_address",
+                  function_if_blank : function(){
+                    var address_to_return = "";
+                    if (results[x].value.whois["Registrant Street"] != "" && results[x].value.whois["Registrant Street"]){
+                      address_to_return += results[x].value.whois["Registrant Street"];
+                    }
+                    if (results[x].value.whois["Registrant City"] != "" && results[x].value.whois["Registrant City"]){
+                      address_to_return += ", " + results[x].value.whois["Registrant City"];
+                    }
+                    if (results[x].value.whois["Registrant State/Province"] != "" && results[x].value.whois["Registrant State/Province"]){
+                      address_to_return += ", " + results[x].value.whois["Registrant State/Province"];
+                    }
+                    if (results[x].value.whois["Registrant Postal Code"] != "" && results[x].value.whois["Registrant Postal Code"]){
+                      address_to_return += ", " + results[x].value.whois["Registrant Postal Code"];
+                    }
+                    if (results[x].value.whois["Registrant Country"] != "" && results[x].value.whois["Registrant Country"]){
+                      address_to_return += ", " + results[x].value.whois["Registrant Country"];
+                    }
+                    return address_to_return.replace(",,", ",");
+                  }
+                },
+                {
+                  prop_name : "registrar_registrant_phone",
+                  function_if_blank : function(){
+                    var registrar_registrant_phone = "";
+                    if (results[x].value.whois["Registrant Phone"] && results[x].value.whois["Registrant Phone"] != ""){
+                      try {
+                        registrar_registrant_phone = phoneUtil.format(phoneUtil.parse(results[x].value.whois["Registrant Phone"]), PNF.INTERNATIONAL);
+                      }
+                      catch(err){
+                        registrar_registrant_phone = results[x].value.whois["Registrant Phone"];
+                      }
+                    }
+                    return registrar_registrant_phone;
+                  }
+                },
+                {
+                  prop_name : "registrar_tech_name",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Tech Name"]
+                  }
+                },
+                {
+                  prop_name : "registrar_tech_org",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Tech Organization"]
+                  }
+                },
+                {
+                  prop_name : "registrar_tech_email",
+                  function_if_blank : function(){
+                    return results[x].value.whois["Tech Email"]
+                  }
+                },
+                {
+                  prop_name : "registrar_tech_address",
+                  function_if_blank : function(){
+                    var address_to_return = "";
+                    if (results[x].value.whois["Tech Street"] != "" && results[x].value.whois["Tech Street"]){
+                      address_to_return += results[x].value.whois["Tech Street"];
+                    }
+                    if (results[x].value.whois["Tech City"] != "" && results[x].value.whois["Tech City"]){
+                      address_to_return += ", " + results[x].value.whois["Tech City"];
+                    }
+                    if (results[x].value.whois["Tech State/Province"] != "" && results[x].value.whois["Tech State/Province"]){
+                      address_to_return += ", " + results[x].value.whois["Tech State/Province"];
+                    }
+                    if (results[x].value.whois["Tech Postal Code"] != "" && results[x].value.whois["Tech Postal Code"]){
+                      address_to_return += ", " + results[x].value.whois["Tech Postal Code"];
+                    }
+                    if (results[x].value.whois["Tech Country"] != "" && results[x].value.whois["Tech Country"]){
+                      address_to_return += ", " + results[x].value.whois["Tech Country"];
+                    }
+                    return address_to_return.replace(",,", ",");
+                  }
+                },
+                {
+                  prop_name : "registrar_tech_phone",
+                  function_if_blank : function(){
+                    var registrar_tech_phone = "";
+                    if (results[x].value.whois["Tech Phone"] && results[x].value.whois["Tech Phone"] != ""){
+                      try {
+                        registrar_tech_phone = phoneUtil.format(phoneUtil.parse(results[x].value.whois["Tech Phone"]), PNF.INTERNATIONAL);
+                      }
+                      catch(err){
+                        registrar_tech_phone = results[x].value.whois["Tech Phone"];
+                      }
+                    }
+                    return registrar_tech_phone;
+                  }
+                }
+              ];
+
+              //check if something has changed
+              var something_changed = false;
+              properties_to_check.forEach(function(prop){
+                if (!temp_listing_obj[prop.prop_name] || temp_listing_obj[prop.prop_name] == ""){
+                  var auto_prop = prop.function_if_blank();
+                  if (auto_prop != ""){
+                    temp_listing_obj[prop.prop_name] = prop.function_if_blank();
+                    something_changed = true;
+                  }
+                }
+              });
+
+              if (something_changed){
+                //temp object for DB insertion
+                temp_listing_objs_for_db.push([
+                  temp_listing_obj.id,
+                  temp_listing_obj.registrar_name,
+                  temp_listing_obj.date_expire,
+                  temp_listing_obj.date_created,
+                  temp_listing_obj.registrar_admin_name,
+                  temp_listing_obj.registrar_admin_org,
+                  temp_listing_obj.registrar_admin_email,
+                  temp_listing_obj.registrar_admin_address,
+                  temp_listing_obj.registrar_admin_phone,
+                  temp_listing_obj.registrar_registrant_name,
+                  temp_listing_obj.registrar_registrant_org,
+                  temp_listing_obj.registrar_registrant_email,
+                  temp_listing_obj.registrar_registrant_address,
+                  temp_listing_obj.registrar_registrant_phone,
+                  temp_listing_obj.registrar_tech_name,
+                  temp_listing_obj.registrar_tech_org,
+                  temp_listing_obj.registrar_tech_email,
+                  temp_listing_obj.registrar_tech_address,
+                  temp_listing_obj.registrar_tech_phone
+                ]);
+              }
+              else {
+                nothing_changed++;
+              }
             }
             else {
               no_whois++;
@@ -479,13 +708,15 @@ module.exports = {
           if (temp_listing_objs_for_db.length > 0){
             req.session.new_listing_info = temp_listing_objs_for_db;
             req.session.no_whois = no_whois;
+            req.session.nothing_changed = nothing_changed;
             next();
           }
           else {
             res.send({
               state: "success",
               listings: req.user.listings,
-              no_whois : no_whois
+              no_whois : no_whois,
+              nothing_changed : nothing_changed
             });
           }
         });
