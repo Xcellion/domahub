@@ -128,7 +128,6 @@ module.exports = {
   //updates listing info
   updateListingsInfo : function(domains, listing_info, callback){
     console.log("DB: Attempting to update domain(s)...");
-    console.log(domains, listing_info);
     var query = "UPDATE listings \
         SET ? \
         WHERE (listings.domain_name IN (?) OR listings.id IN (?))"
