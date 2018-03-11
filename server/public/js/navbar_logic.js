@@ -30,23 +30,26 @@ $(document).ready(function() {
   //<editor-fold>-------------------------------NAVBAR-------------------------------
 
   //hamburger toggle button (not logged in)
-  $(".nav-toggle").on("click", function() {
+  $(".nav-toggle, #profile-button").on("click", function() {
     $(this).toggleClass("is-active");
-    $(".nav-menu").toggleClass("is-active");
+    $(".nav-mobile-menu").toggleClass("is-active");
   });
 
-  //profile dropdown
-  $("#profile-button").on("click", function() {
-    $("#profile-dropdown").toggleClass("is-hidden");
-  });
+  //features menu toggle
+  $('#features-menu').on("click", function() {
+    $('.hover-menu').toggleClass("is-active");
+  })
 
   //clicked off navbar dropdown
   $(document).on("click", function(event) {
-    if (!$(event.target).closest(".nav-toggle").length && $(".nav-menu").hasClass('is-active')) {
-      $(".nav-toggle, .nav-menu").removeClass("is-active");
+    if (!$(event.target).closest(".menu-toggle").length && $(".nav-mobile-menu").hasClass('is-active')) {
+      $(".nav-toggle, .nav-mobile-menu").removeClass("is-active");
     }
-    if (!$(event.target).closest("#profile-button").length && !$("#profile-button").hasClass('is-hidden')) {
-      $("#profile-dropdown").addClass("is-hidden");
+    if (!$(event.target).closest("#features-menu").length && !$(event.target).closest(".hover-menu-link").length) {
+      if ($(".hover-menu").is(":visible")) {
+        $(".hover-menu").removeClass("is-active");
+        $(this).toggleClass("is-active").blur();
+      }
     }
   });
 
@@ -70,6 +73,7 @@ function navbarChange(windowelem){
   //at the top
   if (windowelem.scrollTop() <= 0) {
     $("#nav-logo").removeClass('is-primary').addClass('is-white');
+    $(".circle-logo").removeClass('is-primary').addClass('is-white');
     $(".nav").removeClass("has-shadow is-white");
     $(".nav-toggle").removeClass("is-black").addClass("is-white");
     $(".nav-center .button").addClass('is-hidden');
@@ -85,6 +89,7 @@ function navbarChange(windowelem){
   //past the top
   else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
     $("#nav-logo").addClass('is-primary').removeClass('is-white');
+    $(".circle-logo").addClass('is-primary').removeClass('is-white');
     $(".nav").addClass("has-shadow is-white");
     $(".nav-link").removeClass('is-white');
     $(".nav-toggle").addClass("is-black").removeClass("is-white");

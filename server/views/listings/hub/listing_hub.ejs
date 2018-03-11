@@ -48,7 +48,7 @@
       <div class="hero-body">
         <div class="container">
           <div class="content has-text-centered">
-            <h1 class="title is-1 is-primary"><%= listing_info.hub_title || listing_info.domain_name %></h1>
+            <h1 class="title is-1 is-primary is-bold"><%= listing_info.hub_title || listing_info.domain_name %></h1>
 						<p class="subtitle is-5">
 							<%= listing_info.description %>
 						</p>
@@ -94,18 +94,18 @@
 						<div class="is-inline is-hidden-tablet" data-balloon="Switch View" data-balloon-pos="up">
 	            <button id="layout-button" class="button is-icon">
 	              <div class="icon">
-	                <i class="far fa-list"></i>
+	                <i class="fal fa-list"></i>
 	              </div>
 	            </button>
 						</div>
 						<button id="prev-page" class="is-disabled page-button button is-black is-inverted is-icon">
 							<div class="icon">
-								<i class="far fa-angle-left"></i>
+								<i class="fal fa-angle-left"></i>
 							</div>
 						</button>
 						<button id="next-page" class="is-disabled page-button button is-black is-inverted is-icon">
 							<div class="icon">
-								<i class="far fa-angle-right"></i>
+								<i class="fal fa-angle-right"></i>
 							</div>
 						</button>
 					</div>
@@ -122,22 +122,22 @@
 							<th class="sort-header" data-sort-by="domain_name" colspan="2">
 								<span class="is-hidden-mobile">Domain Name</span>
 								<span class="is-hidden-tablet">Name</span>
-                <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="buy_price" colspan="1">
                 <span class="is-hidden-mobile">Buy It Now Price</span>
 								<span class="is-hidden-tablet">BIN</span>
-                <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="min_price" colspan="1">
 								<span class="is-hidden-mobile">Minimum Price</span>
 								<span class="is-hidden-tablet">Min$</span>
-                <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 							<th class="sort-header" data-sort-by="price_rate" colspan="1">
                 <span class="is-hidden-mobile">Rental Price</span>
 								<span class="is-hidden-tablet">Rent$</span>
-                <div class="icon is-small"><i class="far fa-sort" data-fa-transform="down-2"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
               </th>
 						</tr>
 					</thead>
@@ -171,23 +171,23 @@
               </td>
 							<td colspan="1" class="misc-col is-hidden-mobile">
 								<button class="button no-shadow is-icon is-transparent is-black misc-button">
-									<div class="icon"><i class="far fa-ellipsis-h"></i></div>
+									<div class="icon"><i class="fal fa-ellipsis-h"></i></div>
 								</button>
 								<div class="misc-options is-hidden">
 									<ul>
                     <li>
 											<div class="icon is-white is-small">
-												<i class="far fa-comment"></i>
+												<i class="fal fa-comment"></i>
 											</div>
 										</li>
 										<li>
 											<div class="icon is-white is-small">
-												<i class="far fa-share"></i>
+												<i class="fal fa-share"></i>
 											</div>
 										</li>
 										<li>
 											<div class="icon is-white is-small">
-												<i class="far fa-exclamation-circle"></i>
+												<i class="fal fa-exclamation-circle"></i>
 											</div>
 										</li>
 									</ul>
@@ -203,7 +203,7 @@
                 <div>
                   <div class="nothing-exists-row has-text-centered">
                     <div class="icon is-dark is-large">
-											<i class="far fa-exclamation-circle"></i>
+											<i class="fal fa-exclamation-circle"></i>
 										</div>
                     <p>Oh, no! There are no matching domains!</p>
                   </div>
@@ -218,7 +218,7 @@
               <td>
                 <div>
                   <div class="nothing-exists-row has-text-centered">
-                    <p class="icon is-medium"><i class="far fa-spin fa-sync-alt"></i></p>
+                    <p class="icon is-medium"><i class="fal fa-spin fa-sync-alt"></i></p>
                     <p>Now loading domains.</p>
                     <p>This may take some time.</p>
                   </div>
@@ -251,7 +251,7 @@
     <div id="detailed-view-section" class="is-hidden">
       <a id="back-to-list-button" class="button no-shadow" tabindex="0" title="Back To List Of Domains">
         <div class="icon is-small">
-          <i class="far fa-long-arrow-left"></i>
+          <i class="fal fa-long-arrow-left"></i>
         </div>
         <span>Go back to list</span>
       </a>
