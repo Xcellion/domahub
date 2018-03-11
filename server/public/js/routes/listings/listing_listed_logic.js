@@ -284,8 +284,16 @@ function setupRightHalf(){
 
     //add active to the first appearing tab (if some tabs are disabled)
     if ($(".module-tab.is-active").length == 0){
-      $(".tab").eq(0).addClass('is-active');
-      $(".module").eq(0).removeClass('is-hidden');
+      $(".tab:not(.is-hidden)").eq(0).addClass('is-active');
+      var tab_id = $(".tab:not(.is-hidden)").eq(0).attr("id");
+      $("#" + tab_id.replace("tab", "module")).removeClass('is-hidden');
+
+      if (tab_id == "traffic-tab"){
+        getTrafficData();
+      }
+      else if (tab_id = "ticker-tab"){
+        getTickerData();
+      }
     }
 
     //hide all tabs if only 1 left
@@ -1167,6 +1175,12 @@ function setupRightHalf(){
                 drawTicks: false
               },
               ticks: {
+                userCallback: function(label, index, labels) {
+                  // when the floored value is the same as the value we have a whole number
+                  if (Math.floor(label) === label) {
+                    return label;
+                  }
+                },
                 fontStyle: 700,
                 fontColor: 'rgba(0,0,0,0.66)',
                 padding: 20,

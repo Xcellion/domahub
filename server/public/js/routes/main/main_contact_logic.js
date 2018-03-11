@@ -19,6 +19,7 @@ $(document).ready(function() {
 
 //submit contact form
 function submitContact(){
+  console.log("WTF");
   $("#submit-button").addClass('is-loading');
   $.ajax({
     url: "/contact",
@@ -30,7 +31,6 @@ function submitContact(){
     method: "POST"
   }).done(function(data){
     $("#submit-button").removeClass('is-loading');
-    clearNotification();
     if (data.state == "error"){
       errorMessage(data.message);
     }
