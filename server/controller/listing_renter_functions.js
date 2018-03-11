@@ -745,8 +745,8 @@ module.exports = {
               if (req.session.listing_info.status == 3){
                 console.log("LRF: Listing is now pointed to DomaHub! Marking as active...");
                 req.session.listing_info.status = 1;
-                console.log(domain_name);
                 listing_model.updateListingsInfo(domain_name, {
+                  verified: 1,
                   status: 1
                 }, function(result){
                   //change req.user.listings if req.user exists and is the owner of this domain
