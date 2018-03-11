@@ -171,6 +171,7 @@ function updateEditorEditing(selected_domain_ids){
   updateStatus(current_listing);
   updateInfoTab(current_listing);
   updateDesignTab(current_listing);
+  updateDomainInfoTab(current_listing, selected_domain_ids);
   updateRentalTab(current_listing);
   updateHubTab(current_listing, selected_domain_ids);
   updateBindings(current_listing, selected_domain_ids);
@@ -183,8 +184,13 @@ function setupEditingButtons(){
     submitListingChanges($(this));
   });
 
+  //to submit registrar contact modal changes
+  $("#save-registrar-contact-button").off().on("click", function(e){
+    submitListingChanges($(this), false, true);
+  });
+
   //to cancel form changes
-  $("#cancel-changes-button").off().on("click", function(e){
+  $("#cancel-changes-button, #cancel-registrar-contact-button").off().on("click", function(e){
     cancelListingChanges();
   });
 
@@ -268,12 +274,6 @@ function checkBox(module_value, elem, child){
     //categories
     $("#categories-input").val(listing_info.categories);
     updateCategorySelections(listing_info.categories);
-
-    //registrar info
-    $("#registrar-name-input").val(listing_info.registrar_name);
-    $("#date-expire-input").val((listing_info.date_expire) ? moment(listing_info.date_expire).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
-    $("#date-registered-input").val((listing_info.date_registered) ? moment(listing_info.date_registered).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
-    $("#annual-cost-input").val(listing_info.registrar_cost);
   }
   function updateCategoryInputDropdown(listing_info){
     $("#categories-input").on("focusin", function(){
@@ -303,6 +303,265 @@ function checkBox(module_value, elem, child){
     for (var x = 0 ; x < categories_array.length ; x++){
       $("#" + categories_array[x] + "-category-input").prop('checked', true);
     }
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------DOMAIN INFORMATION TAB EDITS-------------------------------
+
+  //update the domain information tab for editing registrar/domain info
+  function updateDomainInfoTab(listing_info, selected_domain_ids){
+    //registrar info
+    $("#registrar-name-input").val(listing_info.registrar_name);
+    $("#date-expire-input").val((listing_info.date_expire) ? moment(listing_info.date_expire).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
+    $("#date-registered-input").val((listing_info.date_registered) ? moment(listing_info.date_registered).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
+    $("#annual-cost-input").val(listing_info.registrar_cost);
+
+    //reset modal inputs
+    if (!$("#registrar-contact-modal").hasClass('is-active')){
+      $(".registrar-modal-input").val("");
+    }
+
+    //reduce function to change texts + figure out if all are missing
+    var test_contact_details = function(p, elem, i){
+      var elem_exists = listing_info["registrar_" + elem] != "" && listing_info["registrar_" + elem] != null;
+      if (elem_exists){
+        $("#registrar-" + elem + "-doesnt-exist").addClass("is-hidden");
+        $("#registrar-" + elem + "-text").removeClass("is-hidden").html(" &middot; " + listing_info["registrar_" + elem])
+      }
+      else {
+        $("#registrar-" + elem + "-text").addClass("is-hidden");
+      }
+      return (elem_exists === true) ? p + 1 : p;
+    }
+
+    //admin
+    var all_admin_exists = [
+      "admin_name",
+      "admin_org",
+      "admin_email",
+      "admin_address",
+      "admin_phone"
+    ].reduce(test_contact_details, 0);
+    if (all_admin_exists == 0){
+      $("#registrar-admin_name-doesnt-exist").removeClass("is-hidden");
+    }
+
+    //registrant
+    var all_registrant_exists = [
+      "registrant_name",
+      "registrant_org",
+      "registrant_email",
+      "registrant_address",
+      "registrant_phone"
+    ].reduce(test_contact_details, 0);
+    if (all_registrant_exists == 0){
+      $("#registrar-registrant_name-doesnt-exist").removeClass("is-hidden");
+    }
+
+    //tech
+    var all_tech_exists = [
+      "tech_name",
+      "tech_org",
+      "tech_email",
+      "tech_address",
+      "tech_phone"
+    ].reduce(test_contact_details, 0);
+    if (all_tech_exists == 0){
+      $("#registrar-tech_name-doesnt-exist").removeClass("is-hidden");
+    }
+
+    updateDomainContact(listing_info);
+    updateDomainExpenses(listing_info, selected_domain_ids);
+  }
+  function updateDomainContact(listing_info){
+
+    //phone input
+    $("#registrar-contact-phone-input").intlTelInput("destroy").intlTelInput({
+      utilsScript : "/js/jquery/utils.js",
+      autoPlaceholder : "aggressive"
+    });
+
+    $("#edit-registrar-contact-button").off().on("change", function(){
+      updateDomainContactModal($(this).val(), listing_info);
+    }).on("blur", function(){
+      $(this).val("off");
+    });
+  }
+  function updateDomainContactModal(which_contact, listing_info){
+    var registrar_display_text = (which_contact == "admin") ? "Administrator" : which_contact.substr(0,1).toUpperCase() + which_contact.substr(1, which_contact.length - 1);
+    $(".registrar-which-text").text(registrar_display_text);
+
+    clearNotification();
+    $(".modal").removeClass('is-active');
+    $("#registrar-contact-modal").addClass('is-active');
+
+    //update the text and values of inputs
+    $("#registrar-contact-name-input").data("name", "registrar_" + which_contact + "_name").attr("data-name", "registrar_" + which_contact + "_name").val(listing_info["registrar_" + which_contact + "_name"]);
+    $("#registrar-contact-org-input").data("name", "registrar_" + which_contact + "_org").attr("data-name", "registrar_" + which_contact + "_org").val(listing_info["registrar_" + which_contact + "_org"]);
+    $("#registrar-contact-email-input").data("name", "registrar_" + which_contact + "_email").attr("data-name", "registrar_" + which_contact + "_email").val(listing_info["registrar_" + which_contact + "_email"]);
+    $("#registrar-contact-address-input").data("name", "registrar_" + which_contact + "_address").attr("data-name", "registrar_" + which_contact + "_address").val(listing_info["registrar_" + which_contact + "_address"]);
+    $("#registrar-contact-phone-input").data("name", "registrar_" + which_contact + "_phone").attr("data-name", "registrar_" + which_contact + "_phone").val(listing_info["registrar_" + which_contact + "_phone"]);
+
+    //contact phone number
+    if (listing_info["registrar_" + which_contact + "_phone"]){
+      $("#registrar-contact-phone-input").intlTelInput("setNumber", listing_info["registrar_" + which_contact + "_phone"]).val(listing_info["registrar_" + which_contact + "_phone"]);
+    }
+    else {
+      $("#registrar-contact-phone-input").val("");
+    }
+  }
+  function extraCloseModal(){
+    cancelListingChanges();
+  }
+
+  function updateDomainExpenses(listing_info, selected_domain_ids){
+    //add new expense button
+    $("#add-new-expense-button").off().on("click", function(){
+      updateDomainExpenseModal("new", false);
+    });
+
+    //submit domain expense form
+    $("#domain-expense-form").off().on("submit", function(e){
+      e.preventDefault();
+      submitDomainExpense($(this), selected_domain_ids, $(this).data("expense_type"), $(this).data("expense_ids"));
+    });
+
+    //delete domain expense
+    $("#delete-domain-expense-button").off().on("click", function(){
+      submitDomainExpense($(this), selected_domain_ids, "delete", $(this).data("expense_ids"));
+    });
+
+    //cancel expense button
+    $(".cancel-expense-button").off().on("click", function(){
+      $(".modal").removeClass("is-active");
+    });
+
+    //expense table
+    if (listing_info.expenses){
+      createDomainExpenseTable(listing_info);
+    }
+    else {
+      getDomainExpenses(listing_info, selected_domain_ids);
+    }
+  }
+  function createDomainExpenseTable(listing_info, selected_domain_ids){
+    $("#domain-expense-table-wrapper").addClass('is-hidden');
+    $(".cloned-expense-row").remove();
+    if (listing_info.expenses){
+      for (var x = 0 ; x < listing_info.expenses.length ; x++){
+        var expense_clone = $("#domain-expense-clone").clone().removeAttr("id").removeClass("is-hidden").addClass("cloned-expense-row").data("domain_expense", listing_info.expenses[x]);
+        expense_clone.find(".domain-expense-name").text(listing_info.expenses[x].expense_name);
+        expense_clone.find(".domain-expense-cost").text(moneyFormat.to(parseFloat(listing_info.expenses[x].expense_cost)));
+        expense_clone.find(".domain-expense-date").text(moment(listing_info.expenses[x].expense_date).format("YYYY-MM-DD")).attr("title", moment(listing_info.expenses[x].expense_date).format("YYYY-MM-DD HH:mm"));
+        expense_clone.find(".domain-expense-delete-button").on("click", function(){
+          updateDeleteDomainExpenseModal($(this).closest(".cloned-expense-row").data("domain_expense"));
+        });
+        expense_clone.find(".domain-expense-edit-button").on("click", function(){
+          updateDomainExpenseModal("edit", $(this).closest(".cloned-expense-row").data("domain_expense"));
+        });
+        $("#domain-expense-table").append(expense_clone);
+      }
+      $("#domain-expense-table-wrapper").removeClass('is-hidden');
+    }
+  }
+  function getDomainExpenses(listing_info, selected_domain_ids){
+    $.ajax({
+      url: "/listings/getexpenses",
+      method : "POST",
+      data : {
+        selected_ids : selected_domain_ids.join(",")
+      }
+    }, 'json').done(function(data){
+      if (data.state == "success"){
+        updateDomainExpenseTable(data, selected_domain_ids);
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
+  }
+  function updateDomainExpenseModal(expense_type, domain_expense){
+    clearNotification();
+    if (expense_type == "new"){
+      $(".domain-expense-input").val("");
+      var expense_display_text = "Adding New ";
+    }
+    else {
+      $("#domain-expense-name-input").val(domain_expense.expense_name);
+      $("#domain-expense-cost-input").val(domain_expense.expense_cost);
+      $("#domain-expense-date-input").val(moment(domain_expense.expense_date).format('YYYY-MM-DDTHH:mm'));
+      var expense_display_text = "Editing ";
+    }
+    $("#domain-expense-modal").addClass('is-active');
+    $("#domain-expense-name-input").focus();
+
+    //display what are we doing to this expense (new, edit)
+    $("#how-change-domain-expense").text(expense_display_text);
+
+    //for submission of new/edit/delete expense
+    $("#domain-expense-form").data("expense_type", expense_type).data("expense_ids", (domain_expense.expense_ids) ? domain_expense.expense_ids : [domain_expense.id]);
+  }
+  function updateDeleteDomainExpenseModal(domain_expense){
+    clearNotification();
+    $("#domain-expense-name-delete-text").text(domain_expense.expense_name);
+    $("#domain-expense-cost-delete-text").text(moneyFormat.to(parseFloat(domain_expense.expense_cost)));
+    $("#domain-expense-date-delete-text").text(moment(domain_expense.expense_date).format("YYYY-MM-DD HH:mmA"));
+    $("#domain-expense-delete-modal").addClass('is-active');
+
+    //expense IDS
+    $("#delete-domain-expense-button").data("expense_ids", (domain_expense.expense_ids) ? domain_expense.expense_ids : [domain_expense.id]);
+  }
+  function submitDomainExpense(button_elem, selected_domain_ids, expense_type, expense_ids){
+    button_elem.addClass("is-loading");
+
+    var submit_data = {
+      selected_ids : selected_domain_ids.join(",")
+    }
+
+    //edit or create new
+    if (expense_type != "delete"){
+      submit_data.expense_name = $("#domain-expense-name-input").val();
+      submit_data.expense_cost = $("#domain-expense-cost-input").val();
+      submit_data.expense_date = $("#domain-expense-date-input").val();
+    }
+
+    //edit or delete
+    if (expense_type != "new"){
+      submit_data.expense_ids = expense_ids;
+    }
+
+    $.ajax({
+      url: "/listings/" + expense_type + "expenses",
+      method : "POST",
+      data : submit_data
+    }, 'json').done(function(data){
+      button_elem.removeClass("is-loading");
+      if (data.state == "success"){
+        $(".modal").removeClass('is-active');
+
+        //success msg
+        var success_msg = (expense_type == "new") ? "created a new" : expense_type + "d an existing";
+        var success_plural = (selected_domain_ids.length == 1) ? "for this domain!" : "for " + selected_domain_ids.length + " domains!";
+        successMessage("Successfully " + success_msg + " domain expense " + success_plural);
+
+        //recreate table after listing object refresh
+        updateDomainExpenseTable(data, selected_domain_ids);
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
+  }
+  function updateDomainExpenseTable(data, selected_domain_ids){
+    listings = data.listings;
+    if (selected_domain_ids.length > 1){
+      current_listing = getCommonListingInfo(selected_domain_ids);
+    }
+    else {
+      current_listing = getDomainByID(selected_domain_ids[0]);
+    }
+    createDomainExpenseTable(current_listing, selected_domain_ids);
   }
 
   //</editor-fold>
@@ -565,7 +824,8 @@ function checkBox(module_value, elem, child){
     }
 
     $("#hub-phone-input").intlTelInput("destroy").intlTelInput({
-      utilsScript : "/js/jquery/utils.js"
+      utilsScript : "/js/jquery/utils.js",
+      autoPlaceholder : "aggressive"
     });
 
     //hub design
@@ -719,20 +979,49 @@ function checkBox(module_value, elem, child){
       $(this).addClass('is-loading');
       getDNSRecords(selected_listings, selected_domain_ids, false, function(data){
         $("#lookup-dns-button").removeClass('is-loading');
+        var plural_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
         if (data.no_whois && data.no_whois == selected_domain_ids.length){
           listings = data.listings;
-          var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
-          errorMessage("Failed to look up registrar information for " + plural_success_msg + "! Please enter the information manually.");
+          errorMessage("Failed to look up registrar information for " + plural_msg + "! Please enter the information manually.");
         }
-        else if (data.no_whois && data.no_whois > 0){
+        if (data.nothing_changed && data.nothing_changed == selected_domain_ids.length){
           listings = data.listings;
-          var plural_success_msg = (data.no_whois == 1) ? "a listing" : data.no_whois + " listings";
-          errorMessage("Failed to look up registrar information for " + plural_success_msg + "! Please enter the information manually.");
+          infoMessage("No new registrar details were changed for " + plural_msg + ".");
         }
         else if (data.state == "success"){
           listings = data.listings;
-          var plural_success_msg = (selected_domain_ids.length == 1) ? "this listing" : selected_domain_ids.length + " listings";
-          successMessage("Successfully changed registrar information for " + plural_success_msg + "!");
+          var final_msg = "";
+
+          //some have nothing changed
+          if (data.nothing_changed > 0){
+            var plural_nothing_msg = (data.nothing_changed == 1) ? "a listing" : data.nothing_changed + " listings";
+            final_msg += "No new registrar details were changed for " + plural_nothing_msg + ".";
+          }
+
+          //some have changed
+          if (data.nothing_changed + data.no_whois != selected_domain_ids.length){
+            var plural_changed_msg = (selected_domain_ids.length - (data.nothing_changed + data.no_whois) == 1) ? "a listing" : (selected_domain_ids.length - (data.nothing_changed + data.no_whois)) + " listings";
+            if (final_msg != ""){
+              final_msg += "</br></br>";
+            }
+            final_msg += "Successfully changed registrar information for " + plural_changed_msg + ".";
+          }
+
+          //some errored
+          if (data.no_whois > 0){
+            var plural_nowhois_msg = (data.no_whois == 1) ? "a listing" : data.no_whois + " listings";
+            if (final_msg != ""){
+              final_msg += "</br></br>";
+            }
+            final_msg += "Failed to look up registrar information for " + plural_nowhois_msg + "! Please enter the information manually.";
+            errorMessage(final_msg);
+          }
+          else if (data.nothing_changed == 0){
+            successMessage(final_msg);
+          }
+          else {
+            infoMessage(final_msg);
+          }
         }
         else {
           errorMessage(data.message);
@@ -922,6 +1211,8 @@ function checkBox(module_value, elem, child){
   function cancelListingChanges(keep_message){
     refreshSubmitButtons();
 
+    $(".modal").removeClass('is-active');
+
     //revert all inputs
     updateEditorEditing(getSelectedDomains("id", true, true));
 
@@ -931,7 +1222,7 @@ function checkBox(module_value, elem, child){
   }
 
   //submit status change
-  function submitListingChanges(submit_button, status_only){
+  function submitListingChanges(submit_button, status_only, contact_modal){
     //clear any existing messages
     clearNotification();
     submit_button.addClass('is-loading');
@@ -945,7 +1236,8 @@ function checkBox(module_value, elem, child){
       formData.append("status", new_status);
     }
     else {
-      $(".changeable-input, #paths-input").each(function(e){
+      var elements_list = (contact_modal) ? ".modal-input" : ".changeable-input, #paths-input";
+      $(elements_list).each(function(e){
         var input_name = $(this).data("name");
         var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
@@ -956,7 +1248,7 @@ function checkBox(module_value, elem, child){
         else if (input_name == "logo_image_link"){
           var listing_comparison = current_listing["logo"];
         }
-        else if (input_name == "hub_phone"){
+        else if (input_name.indexOf("phone") != -1 && typeof intlTelInputUtils != "undefined"){
           var input_val = $(this).intlTelInput("getNumber", intlTelInputUtils.numberFormat.INTERNATIONAL);
           var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
         }
@@ -998,6 +1290,7 @@ function checkBox(module_value, elem, child){
       submit_button.removeClass('is-loading');
       refreshSubmitButtons();
       if (data.state == "success"){
+        $(".modal").removeClass("is-active");
         //status only success message
         if (status_only){
           var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
@@ -1017,46 +1310,54 @@ function checkBox(module_value, elem, child){
           listings = data.listings;
         }
 
-        //not premium but tried to update premium stuff
-        if (data.message == "not-premium"){
-          var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
-        }
-        else if (data.message == "dns-pending"){
-          var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
+        //nothing was changed
+        if (data.message == "nothing-changed"){
+          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "the selected listings";
+          infoMessage("No details were changed for " + plural_error_msg + ". Did you enter in the correct information?");
         }
         else {
-          //listing is no longer pointed to domahub, revert to verify tab
-          if (data.message == "verification-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
-            var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
-            showSelector(true);
-            createRows(false);
+          //not premium but tried to update premium stuff
+          if (data.message == "not-premium"){
+            var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
           }
-          else if (data.message == "ownership-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
-            var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
-            showSelector(true);
-            createRows(false);
-          }
-          else if (data.message == "accepted-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-            var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
-            showSelector(true);
-            createRows(false);
-          }
-          else if (data.message == "deposited-error" || data.message == "transferred-error"){
-            var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-            var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
-            showSelector(true);
-            createRows(false);
+          else if (data.message == "dns-pending"){
+            var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
           }
           else {
-            var error_msg = data.message;
+            //listing is no longer pointed to domahub, revert to verify tab
+            if (data.message == "verification-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
+              var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "ownership-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
+              var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "accepted-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "deposited-error" || data.message == "transferred-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else {
+              var error_msg = data.message;
+            }
+
           }
 
+          errorMessage(error_msg);
         }
 
-        errorMessage(error_msg);
       }
 
       updateEditorEditing(selected_ids);
@@ -2127,7 +2428,7 @@ function updateVerificationButton(listing_info, cb_when_verified){
 //<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
 
 String.prototype.toProperCase = function () {
-    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
 
 //return white or black text based on luminance
@@ -2184,24 +2485,65 @@ function updateCurrentListing(new_listings){
 //helper function get a combined listing_info object with common values
 function getCommonListingInfo(listing_ids){
   return listings.reduce(function(arr, item){
-    if (listing_ids.indexOf(item.id) != -1){
-      for (var x in item){
+    if (listing_ids.indexOf(item.id) != -1){    //common parameters of selected listings only
+      if (arr === false){                       //first object, set it
+        arr = Object.assign({}, item);
+      }
+      else {                                    //object afterwards (compare)
+        for (var x in item){
+          //categories special case
+          if (x == "categories" && item[x] == arr[x]){
+            arr[x] = arr[x].split(" ").filter(function(n){
+              return item[x].split(" ").indexOf(n) != -1
+            }).join(" ");
+          }
 
-        //first object, set it
-        if (!arr){
-          arr = Object.assign({}, item);
-        }
+          //expenses special case
+          else if (x == "expenses" && typeof item[x] != "undefined" && item[x] != null){
 
-        //equal! set it
-        else if (x == "categories" && item[x] && arr[x]){
-          arr[x] = arr[x].split(" ").filter(function(n){
-            return item[x].split(" ").indexOf(n) != -1
-          }).join(" ");
-        }
+            //if existing expenses obj is an array (expenses exist already)
+            if (Array.isArray(arr[x]) && Array.isArray(item[x])){
+              var temp_expenses = null;
+              for (var y = 0 ; y < arr[x].length ; y++){
+                var temp_expense_ids = [];
+                for (var z = 0 ; z < item[x].length ; z++){
+                  if (arr[x][y].expense_name == item[x][z].expense_name &&
+                      arr[x][y].expense_date == item[x][z].expense_date &&
+                      arr[x][y].expense_cost == item[x][z].expense_cost
+                  ){
+                    temp_expense_ids.push(arr[x][y].id, item[x][z].id);
+                  }
+                }
 
-        //different, make it null
-        else if (item[x] != arr[x]){
-          arr[x] = null;
+                //if something was the same!
+                if (temp_expense_ids.length != 0){
+                  var temp_expense = {
+                    expense_ids : temp_expense_ids,
+                    expense_name : arr[x][y].expense_name,
+                    expense_date : arr[x][y].expense_date,
+                    expense_cost : arr[x][y].expense_cost
+                  }
+
+                  //add to the expenses object
+                  if (temp_expenses == null){
+                    temp_expenses = [temp_expense];
+                  }
+                  else {
+                    temp_expenses.push(temp_expense);
+                  }
+                }
+              }
+              arr[x] = temp_expenses;
+            }
+            else {
+              arr[x] = null;
+            }
+          }
+
+          //different, make it null
+          else if (item[x] != arr[x]){
+            arr[x] = null;
+          }
         }
       }
     }

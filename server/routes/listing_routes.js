@@ -95,6 +95,54 @@ module.exports = function(app){
       owner_functions.updateListingsInfo
     ]);
 
+    //<editor-fold>-------------------------------DOMAIN EXPENSES-------------------------------
+
+    //get any existing expenses
+    app.post("/listings/getexpenses", [
+      auth_functions.checkLoggedIn,
+      general_functions.urlencodedParser,
+      owner_functions.checkSelectedIDs,
+      profile_functions.getAccountListings,
+      owner_functions.getDomainExpenses
+    ]);
+
+    //create new expense
+    app.post("/listings/newexpenses", [
+      auth_functions.checkLoggedIn,
+      general_functions.urlencodedParser,
+      owner_functions.checkSelectedIDs,
+      profile_functions.getAccountListings,
+      owner_functions.checkExpenseDetails,
+      owner_functions.createDomainExpense,
+      owner_functions.getDomainExpenses
+    ]);
+
+    //edit an existing expense
+    app.post("/listings/editexpenses", [
+      auth_functions.checkLoggedIn,
+      general_functions.urlencodedParser,
+      owner_functions.checkSelectedIDs,
+      profile_functions.getAccountListings,
+      owner_functions.checkExpenseIDs,
+      owner_functions.deleteDomainExpense,
+      owner_functions.checkExpenseDetails,
+      owner_functions.createDomainExpense,
+      owner_functions.getDomainExpenses
+    ]);
+
+    //delete an existing expense
+    app.post("/listings/deleteexpenses", [
+      auth_functions.checkLoggedIn,
+      general_functions.urlencodedParser,
+      owner_functions.checkSelectedIDs,
+      profile_functions.getAccountListings,
+      owner_functions.checkExpenseIDs,
+      owner_functions.deleteDomainExpense,
+      owner_functions.getDomainExpenses
+    ]);
+
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold>-------------------------------LISTING STATISTICS-------------------------------

@@ -89,6 +89,7 @@ module.exports = {
     console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
     var query = "SELECT \
           listings.*, \
+          NULL as expenses, \
           IF(listings.background_color IS NULL, '#FFFFFF', listings.background_color) as background_color, \
           IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
           IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \

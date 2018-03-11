@@ -41,15 +41,20 @@
         <ul>
           <li id="info-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <span class="">Information</span>
+              <span class="">Listing Info</span>
             </a>
           </li>
           <li id="design-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <span class="">Design</span>
+              <span class="">Listing Design</span>
               <% if (!user.stripe_subscription_id) { %>
                 <span class="icon is-small"><i class="far fa-trophy-alt"></i></span>
               <% } %>
+            </a>
+          </li>
+          <li id="domain-info-tab" class="verified-elem unpurchased-elem tab">
+            <a tabindex="0" class="">
+              <span class="">Domain Info</span>
             </a>
           </li>
           <li id="hub-tab" class="verified-elem unpurchased-elem tab">
@@ -79,41 +84,25 @@
         </ul>
       </div>
     </div>
-    <div id="info-tab-drop" data-title="Edit Information Details" class="tab-drop is-hidden">
+    <div id="info-tab-drop" data-title="Edit Listing Information" class="tab-drop is-hidden">
       <div class="columns">
         <div class="column is-6">
           <div class="card is-fullwidth">
             <div class="card-header">
-              <h3 class="card-header-title">Pricing</h3>
+              <h3 class="card-header-title">Listing Details</h3>
             </div>
             <div class="card-content">
               <div class="control">
-                <label class="label" for="min-price-input">
-                  Minimum Price
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
+                <label class="label" for="description">
+                  Listing Description
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="A good description helps your potential customers understand the value of your domain name." data-balloon-pos="top">
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
-                <small class="tip">The minimum offer you will consider selling <span class="this-domain">this domain</span> for.</small>
-                <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
+                <small class="tip">Text description that will appear as a paragraph below the domain name on the listing page.</small>
+                <textarea id="description" class="description-input textarea changeable-input"
+                tabindex="0" data-name="description" placeholder="The greatest domain name to ever have existed. Buy it today and start investing in your next project or venture!"></textarea>
               </div>
-              <div class="control">
-                <label class="label" for="buy-price-input">
-                  Buy It Now Price
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
-                    <i class="far fa-question-circle"></i>
-                  </div>
-                </label>
-                <small class="tip">The price you are willing to sell <span class="this-domain">this domain</span> for immediately.</small>
-                <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
-              </div>
-            </div>
-          </div>
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Listing Descriptions</h3>
-            </div>
-            <div class="card-content">
               <div class="control">
                 <label class="label" for="categories-input">
                   Categories
@@ -148,71 +137,37 @@
                 <small class="tip">Text that is displayed on the footer of the listing page. An ideal location for a slogan, phrase, or trademark.</small>
                 <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
                 </div>
+            </div>
+          </div>
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">Pricing</h3>
+            </div>
+            <div class="card-content">
               <div class="control">
-                <label class="label" for="description">
-                  Listing Description
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="A good description helps your potential customers understand the value of your domain name." data-balloon-pos="top">
+                <label class="label" for="min-price-input">
+                  Minimum Price
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
                     <i class="far fa-question-circle"></i>
                   </div>
                 </label>
-                <small class="tip">Text description that will appear as a paragraph below the domain name on the listing page.</small>
-                <textarea id="description" class="description-input textarea changeable-input"
-                tabindex="0" data-name="description" placeholder="The greatest domain name to ever have existed. Buy it today and start investing in your next project or venture!"></textarea>
+                <small class="tip">The minimum offer you will consider selling <span class="this-domain">this domain</span> for.</small>
+                <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
+              </div>
+              <div class="control">
+                <label class="label" for="buy-price-input">
+                  Buy It Now Price
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
+                    <i class="far fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">The price you are willing to sell <span class="this-domain">this domain</span> for immediately.</small>
+                <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
               </div>
             </div>
           </div>
         </div>
         <div class="column is-6">
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Registrar Information</h3>
-              <a id="lookup-dns-button" class="button is-icon is-stylish is-small">
-                <span class="icon is-small"><i class="far fa-search"></i></span>
-                <span>Lookup Automatically</span>
-              </a>
-            </div>
-            <div class="card-content">
-              <div class="control">
-                <div class="control">
-                  <label class="label" for="registrar-name-input">
-                    Registrar Name
-                  </label>
-                  <small class="tip">The registrar or company you first purchased <span class="this-domain">this domain</span> from.</small>
-                  <input id="registrar-name-input" class="input changeable-input" data-name="registrar_name" type="text">
-                </div>
-              </div>
-              <div class="control">
-                <div class="control">
-                  <label class="label" for="date-expire-input">
-                    Domain Registration Date
-                  </label>
-                  <small class="tip">When <span class="this-domain">this domain</span> was first registered with your registrar.</small>
-                  <input id="date-registered-input" class="input changeable-input" data-name="date_registered" type="datetime-local">
-                </div>
-              </div>
-              <div class="control">
-                <div class="control">
-                  <label class="label" for="date-expire-input">
-                    Domain Expiration Date
-                  </label>
-                  <small class="tip">When <span class="this-domain">this domain</span> will expire with your registrar.</small>
-                  <input id="date-expire-input" class="input changeable-input" data-name="date_expire" type="datetime-local">
-                </div>
-              </div>
-              <div class="control">
-                <div class="control">
-                  <label class="label" for="annual-cost-input">
-                    Annual Renewal Cost
-                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Registrar specific costs cannot be obtained automatically, please enter this information in manually." data-balloon-pos="top">
-                      <i class="far fa-question-circle"></i>
-                    </div>
-                  </label>
-                  <small class="tip">How much it costs per year to renew <span class="this-domain">this domain</span> with your registrar.</small>
-                  <input id="annual-cost-input" class="input changeable-input" data-name="registrar_cost" type="number" min="1" step="1">
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="card is-fullwidth">
             <div class="card-header">
               <h3 class="card-header-title">Domain Rentals</h3>
@@ -243,14 +198,12 @@
               <div class="control">
                 <div class="control has-addons">
                   <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
-                  <span class="select price-type-span no-shadow">
-                    <div class="drop-form">
-                      <select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
-                        <option value="month">Month</option>
-                        <option value="week">Week</option>
-                        <option value="day">Day</option>
-                      </select>
-                    </div>
+                  <span class="select is-stylish price-type-span no-shadow">
+                    <select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
+                      <option value="month">Month</option>
+                      <option value="week">Week</option>
+                      <option value="day">Day</option>
+                    </select>
                   </span>
                 </div>
               </div>
@@ -269,7 +222,7 @@
         </div>
       </div>
     </div>
-    <div id="design-tab-drop" data-title="Edit Design Details" class="tab-drop is-relative is-hidden">
+    <div id="design-tab-drop" data-title="Edit Listing Design" class="tab-drop is-relative is-hidden">
       <div id="premium-blackscreen-design" class="blackscreen">
         <div id="premium-only-notification" class="box is-medium">
           <div class="content has-text-centered">
@@ -335,7 +288,7 @@
                 <label class="label" for="random-button">Theme</label>
                 <div class="control is-grouped">
                   <div class="control has-icon">
-                    <span class="select has-shadow is-fullwidth is-stylish">
+                    <span class="select no-shadow is-fullwidth is-stylish">
                       <select tabindex="0" id="theme-input" class="premium-input"></select>
                     </span>
                     <div class="icon">
@@ -343,7 +296,7 @@
                     </div>
                   </div>
                   <div class="control">
-                    <a id="random-theme-button" class="premium-input button is-stylish is-small">
+                    <a id="random-theme-button" class="premium-input no-shadow button is-stylish is-small">
                       <div class="icon is-small">
                         <i class="far fa-random"></i>
                       </div>
@@ -376,7 +329,7 @@
                     <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input input changeable-input">
                   </div>
                   <div class="control has-icon">
-                    <span class="select has-shadow is-stylish is-fullwidth">
+                    <span class="select no-shadow is-stylish is-fullwidth">
                       <select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
                         <%# make all the categories %>
                         <% for (var x = 0; x < fonts.length; x++){ %>
@@ -511,7 +464,7 @@
                   <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
                 </div>
                 <div class="control">
-                  <button id="background-link-refresh" class='button is-stylish is-small is-disabled is-outlined'>
+                  <button id="background-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
                     <div class="icon is-small">
                       <i class="far fa-sync-alt"></i>
                     </div>
@@ -520,7 +473,7 @@
                   <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
                     <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
                   </form>
-                  <label for="background-image-input" class="premium-input button is-stylish is-small">
+                  <label for="background-image-input" class="premium-input no-shadow button is-stylish is-small">
                     <div class="icon is-small">
                       <i class="far fa-upload" aria-hidden="true"></i>
                     </div>
@@ -539,7 +492,7 @@
                   <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
                 </div>
                 <div class="control">
-                  <button id="logo-link-refresh" class='button is-stylish is-small is-disabled is-outlined'>
+                  <button id="logo-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
                     <div class="icon is-small">
                       <i class="far fa-sync-alt"></i>
                     </div>
@@ -548,7 +501,7 @@
                   <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
                     <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
                   </form>
-                  <label for="logo-image-input" class="premium-input button is-stylish is-small">
+                  <label for="logo-image-input" class="premium-input button no-shadow is-stylish is-small">
                     <div class="icon is-small">
                       <i class="far fa-upload" aria-hidden="true"></i>
                     </div>
@@ -648,6 +601,364 @@
           </div>
         </div>
       </div>
+    </div>
+    <div id="domain-info-tab-drop" data-title="Edit Domain Information" class="tab-drop is-hidden">
+      <div class="columns">
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">
+                Registrar Information
+                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
+                  <i class="far fa-exclamation-triangle"></i>
+                </div>
+              </h3>
+              <a id="lookup-dns-button" class="button is-icon no-shadow is-stylish is-small">
+                <span class="icon is-small"><i class="far fa-search"></i></span>
+                <span>Lookup Missing Details</span>
+              </a>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="registrar-name-input">
+                    Registrar Name
+                  </label>
+                  <small class="tip">The registrar <span class="this-domain">this domain</span> is registered on.</small>
+                  <input id="registrar-name-input" class="input changeable-input" data-name="registrar_name" type="text">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="date-expire-input">
+                    Domain Registration Date
+                  </label>
+                  <small class="tip">When <span class="this-domain">this domain</span> was first registered with its registrar.</small>
+                  <input id="date-registered-input" class="input changeable-input" data-name="date_registered" type="datetime-local">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="date-expire-input">
+                    Domain Expiration Date
+                  </label>
+                  <small class="tip">When <span class="this-domain">this domain</span> will expire with its registrar.</small>
+                  <input id="date-expire-input" class="input changeable-input" data-name="date_expire" type="datetime-local">
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    Edit Contact Details
+                  </label>
+                  <small class="tip">The various contact information for <span class="this-domain">this domain</span>.</small>
+                </div>
+                <div class="control-right has-text-right">
+                  <span class="select no-shadow is-stylish">
+                    <select id="edit-registrar-contact-button">
+                      <option selected value="off" disabled>Click to edit contact details</option>
+                      <option value="admin" data-text="Administrator">Edit Administrator</option>
+                      <option value="registrant" data-text="Registrant">Edit Registrant</option>
+                      <option value="tech" data-text="Tech">Edit Tech</option>
+                    </select>
+                  </span>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    Administrator Details
+                  </label>
+                </div>
+                <div class="control-right has-text-right">
+                  <small id="registrar-admin_name-doesnt-exist" class="tip">No details exist!</small>
+                  <small class="tip break-all"><span id="registrar-admin_name-text" ></span><span id="registrar-admin_org-text"></span></small>
+                  <small class="tip break-all"><span id="registrar-admin_email-text" ></span><span id="registrar-admin_phone-text"></span></small>
+                  <small class="tip break-all" id="registrar-admin_address-text"></small>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    Registrant Details
+                  </label>
+                </div>
+                <div class="control-right has-text-right">
+                  <small id="registrar-registrant_name-doesnt-exist" class="tip">No details exist!</small>
+                  <small class="tip break-all"><span id="registrar-registrant_name-text" ></span><span id="registrar-registrant_org-text"></span></small>
+                  <small class="tip break-all"><span id="registrar-registrant_email-text" ></span><span id="registrar-registrant_phone-text"></span></small>
+                  <small class="tip break-all" id="registrar-registrant_address-text"></small>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    Tech Details
+                  </label>
+                </div>
+                <div class="control-right has-text-right">
+                  <small id="registrar-tech_name-doesnt-exist" class="tip">No details exist!</small>
+                  <small class="tip break-all"><span id="registrar-tech_name-text" ></span><span id="registrar-tech_org-text"></span></small>
+                  <small class="tip break-all"><span id="registrar-tech_email-text" ></span><span id="registrar-tech_phone-text"></span></small>
+                  <small class="tip break-all" id="registrar-tech_address-text"></small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header is-block">
+              <h3 class="card-header-title">
+                Domain Expenses
+              </h3>
+              <small class="tip">Any costs, expenses, or invoices related to <span class="this-domain">this domain</span>.</small>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label" for="annual-cost-input">
+                  Annual Renewal Cost
+                </label>
+                <small class="tip">How much it costs per year to renew <span class="this-domain">this domain</span> with your registrar.</small>
+                <input id="annual-cost-input" class="input changeable-input" data-name="registrar_cost" type="number" min="1" step="1">
+              </div>
+              <div id="related-expenses-wrapper" class="remove-margin-bottom-content control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    Related Expenses
+                    <div class="icon is-tooltip is-small" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
+                      <i class="far fa-question-circle"></i>
+                    </div>
+                  </label>
+                  <small class="tip">Any expenses incurred related to <span class="this-domain">this domain</span>.</small>
+                </div>
+                <div class="control-right has-text-right">
+                  <a id="add-new-expense-button" tabindex="0" class='button no-shadow is-stylish is-small'>
+                    <div class="icon is-small"><i class="far fa-plus"></i></div>
+                    <span>Add New Expense</span>
+                  </a>
+                </div>
+              </div>
+              <div id="domain-expense-table-wrapper" class="is-hidden control">
+
+                <table class="table no-borders is-transparent-head no-shadow">
+                  <tbody id="domain-expense-table">
+                    <tr id="domain-expense-clone" class="is-hidden table-row no-hover-effect">
+                      <td class="domain-expense-name break-word"></td>
+                      <td class="domain-expense-cost"></td>
+                      <td class="domain-expense-date"></td>
+                      <td class="expense-button-wrapper">
+                        <a tabindex="0" class='domain-expense-delete-button button no-shadow is-stylish is-small'>
+                          <div class="icon is-small"><i class="far fa-trash"></i></div>
+                          <span class="is-hidden-mobile">Delete</span>
+                        </a>
+                      </td>
+                      <td class="expense-button-wrapper">
+                        <a tabindex="0" class='domain-expense-edit-button button no-shadow is-stylish is-small'>
+                          <div class="icon is-small"><i class="far fa-edit"></i></div>
+                          <span class="is-hidden-mobile">Edit</span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTRAR CONTACT MODAL -->
+      <div id="registrar-contact-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-container">
+          <div class="modal-content is-small">
+            <div class="content has-text-centered">
+              <h3 class="is-bold">Domain <span class="registrar-which-text"></span> Details
+                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
+                  <i class="far fa-exclamation-triangle"></i>
+                </div>
+              </h3>
+            </div>
+            <div class="content">
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="registrar-contact-name-input">
+                    <span class="registrar-which-text"></span> Name
+                  </label>
+                  <input id="registrar-contact-name-input" class="registrar-modal-input input changeable-input" data-name="registrar_contact_name" type="text">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="registrar-contact-org-input">
+                    <span class="registrar-which-text"></span> Organization
+                  </label>
+                  <input id="registrar-contact-org-input" class="registrar-modal-input input" data-name="registrar_contact_org" type="text">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="registrar-contact-email-input">
+                    <span class="registrar-which-text"></span> Email
+                  </label>
+                  <input id="registrar-contact-email-input" class="registrar-modal-input input" data-name="registrar_contact_email" type="text">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="registrar-contact-address-input">
+                    <span class="registrar-which-text"></span> Address
+                  </label>
+                  <input id="registrar-contact-address-input" class="registrar-modal-input input" data-name="registrar_contact_address" type="text">
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="registrar-admin-phone-input">
+                    <span class="registrar-which-text"></span> Phone
+                  </label>
+                  <input id="registrar-contact-phone-input" class="registrar-modal-input input" data-name="registrar_contact_phone" type="text">
+                </div>
+              </div>
+              <div class="control is-grouped is-grouped-center">
+                <div class="control is-expanded">
+                  <a id="save-registrar-contact-button" tabindex="0" class='button is-fullwidth is-stylish is-small is-primary'>
+                    <div class="icon is-small"><i class="far fa-check"></i></div>
+                    <span>Save Changes</span>
+                  </a>
+                </div>
+                <div class="control is-expanded">
+                  <a id="cancel-registrar-contact-button" tabindex="0" class='button is-fullwidth is-stylish is-small is-outlined is-danger'>
+                    <div class="icon is-small"><i class="far fa-times"></i></div>
+                    <span>Cancel Changes</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close"></button>
+      </div>
+
+      <!-- DOMAIN EXPENSE MODAL -->
+      <div id="domain-expense-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-container">
+          <div class="modal-content is-small">
+            <div class="content has-text-centered">
+              <h3 class="is-bold"><span id="how-change-domain-expense"></span>Domain Expense</h3>
+            </div>
+            <div class="content">
+              <form id="domain-expense-form">
+                <div class="control">
+                  <div class="control">
+                    <label class="label" for="domain-expense-name-input">
+                      Expense Name
+                    </label>
+                    <input required id="domain-expense-name-input" class="input domain-expense-input" data-name="domain_expense_name" type="text">
+                  </div>
+                </div>
+                <div class="control">
+                  <div class="control">
+                    <label class="label" for="domain-expense-cost-input">
+                      Expense Cost
+                    </label>
+                    <input required id="domain-expense-cost-input" class="input domain-expense-input" data-name="domain_expense_cost" type="number" min="1" step=".01">
+                  </div>
+                </div>
+                <div class="control">
+                  <div class="control">
+                    <label class="label" for="domain-expense-date-input">
+                      Expense Date
+                    </label>
+                    <input required id="domain-expense-date-input" class="input domain-expense-input" data-name="domain_expense_date" type="datetime-local">
+                  </div>
+                </div>
+                <div class="control is-grouped is-grouped-center">
+                  <div class="control is-expanded">
+                    <button id="save-expense-button" type="submit" text="Save" form="domain-expense-form" tabindex="0" class='button is-fullwidth is-stylish is-small is-primary'>
+                      <div class="icon is-small"><i class="far fa-check"></i></div>
+                      <span>Save</span>
+                    </button>
+                  </div>
+                  <div class="control is-expanded">
+                    <a tabindex="0" class='cancel-expense-button button is-fullwidth is-stylish is-small is-outlined is-danger'>
+                      <div class="icon is-small"><i class="far fa-times"></i></div>
+                      <span>Cancel</span>
+                    </a>
+                  </div>
+                </div>
+            </form>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close"></button>
+      </div>
+
+      <!-- DOMAIN EXPENSE DELETE MODAL -->
+      <div id="domain-expense-delete-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-container">
+          <div class="modal-content is-small">
+            <div class="content">
+              <div class="notification no-shadow has-icon is-danger">
+                <div class="icon-box">
+                  <div class="icon is-white">
+                    <i class="far fa-exclamation-triangle"></i>
+                  </div>
+                </div>
+                <div class="content">
+                  <p class="is-white">Are you sure you want to delete the following domain expense for <span class="this-domain">this domain</span>?</p>
+                </div>
+              </div>
+            </div>
+            <div class="content">
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="domain-expense-name-input">
+                    <span class="is-bold">Expense Name</span>
+                    <span id="domain-expense-name-delete-text" class="is-pulled-right break-all"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="domain-expense-cost-input">
+                    <span class="is-bold">Expense Cost</span>
+                    <span id="domain-expense-cost-delete-text" class="is-pulled-right break-all"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="control">
+                <div class="control">
+                  <label class="label" for="domain-expense-date-input">
+                    <span class="is-bold">Expense Date</span>
+                    <span id="domain-expense-date-delete-text" class="is-pulled-right break-all"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="control is-grouped is-grouped-center">
+                <div class="control is-expanded">
+                  <a id="delete-domain-expense-button" tabindex="0" class='button is-fullwidth is-stylish is-small is-danger'>
+                    <div class="icon is-small"><i class="far fa-trash"></i></div>
+                    <span>Delete</span>
+                  </a>
+                </div>
+                <div class="control is-expanded">
+                  <a tabindex="0" class='cancel-expense-button button is-fullwidth is-stylish is-small is-outlined no-shadow'>
+                    <div class="icon is-small"><i class="far fa-times"></i></div>
+                    <span>Nevermind</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close"></button>
+      </div>
+
     </div>
     <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-relative is-hidden">
       <div id="premium-blackscreen-hub" class="blackscreen">
@@ -749,13 +1060,11 @@
                 <small class="tip">The number of domains shown in either a tiled or table layout.</small>
                 <div class="control has-addons">
                   <input id="hub-layout-count-input" data-name="hub_layout_count" placeholder="10" type="number" min="10" step="1" class="input changeable-input premium-input hub-input" />
-                  <span class="select no-shadow">
-                    <div class="drop-form">
-                      <select id="hub-layout-type-input" data-name="hub_layout_type" class="hub-input changeable-input">
-                        <option value="0">Table</option>
-                        <option value="1">Tiled</option>
-                      </select>
-                    </div>
+                  <span class="select is-stylish no-shadow">
+                    <select id="hub-layout-type-input" data-name="hub_layout_type" class="hub-input changeable-input">
+                      <option value="0">Table</option>
+                      <option value="1">Tiled</option>
+                    </select>
                   </span>
                 </div>
               </div>

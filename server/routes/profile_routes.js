@@ -10,6 +10,22 @@ var stripe_functions = require('../controller/stripe_functions.js');
 
 module.exports = function(app){
 
+  //<editor-fold>-------------------------------ONBOARDING-------------------------------
+
+  // //onboarding page
+  // app.get("/profile/welcome", [
+  //   auth_functions.checkLoggedIn,
+  //   stripe_functions.getStripeAccount,
+  //   stripe_functions.getStripeTransactions,
+  //   stripe_functions.getStripeCustomer,
+  //   stripe_functions.getStripeSubscription,
+  //   profile_functions.getAccountListings,
+  //   profile_functions.updateAccountSettingsPassthrough,
+  //   profile_functions.renderOnboarding
+  // ]);
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------DASHBOARD-------------------------------
 
   //dashboard

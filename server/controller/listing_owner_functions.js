@@ -286,7 +286,7 @@ module.exports = {
         console.log("LOF: Finished looking up domain expiration dates!");
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
-            req.session.new_listings.db_object[results[y].value.index][7] = moment(results[y].value.whois["Registry Expiry Date"]).valueOf();
+            req.session.new_listings.db_object[results[y].value.index][7] = moment(results[y].value.whois["Registrar Registration Expiration Date"]).valueOf();
             req.session.new_listings.db_object[results[y].value.index][8] = moment(results[y].value.whois["Creation Date"]).valueOf();
             req.session.new_listings.db_object[results[y].value.index][9] = results[y].value.whois["Registrar"];
           }
@@ -477,6 +477,10 @@ module.exports = {
 
     //check the user image and upload to imgur
     checkListingImage : function(req, res, next){
+
+      //create a new listing info object to make changes to
+      req.session.new_listing_info = {};
+
       if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
 
         //custom image upload promise function
@@ -486,14 +490,15 @@ module.exports = {
             request.post({
               url: "https://imgur-apiv3.p.mashape.com/3/image",
               headers: {
-                'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
-                'Authorization' : 'Client-ID 730e9e6f4471d64'
+                'X-Mashape-Key' : (process.env.NODE_ENV == "dev") ? "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3" : "50g8uuI5B8msh59fdwSi39VMkEtup1dIOJRjsnDe8wNJKmzMls",
+                'Authorization' : 'Client-ID e67be8dd932733c'
               },
+              json : true,
               formData: formData
             }, function (err, response, body) {
-              if (!err){
+              if (!err && body.success){
                 resolve({
-                  imgur_link: JSON.parse(body).data.link,
+                  imgur_link: body.data.link,
                   image_type: formData.image_type
                 });
               }
@@ -517,7 +522,7 @@ module.exports = {
         //wait for all promises to finish
         Q.allSettled(promises)
         .then(function(results) {
-          req.session.new_listing_info = {};
+
           //figure out which promises failed / passed
           for (var y = 0; y < results.length; y++){
             if (results[y].state == "fulfilled"){
@@ -525,19 +530,10 @@ module.exports = {
             }
           }
 
-          //removing existing image(s) intentionally
-          if (req.body.background_image == "" || req.body.background_image_link == ""){
-            req.session.new_listing_info.background_image = null;
-          }
-          if (req.body.logo == "" || req.body.logo_image_link == ""){
-            req.session.new_listing_info.logo = null;
-          }
           next();
         });
       }
       else {
-        req.session.new_listing_info = {};
-
         //removing existing image(s) intentionally
         if (req.body.background_image == "" || req.body.background_image_link == ""){
           req.session.new_listing_info.background_image = null;
@@ -1074,18 +1070,9 @@ module.exports = {
       console.log("LOF: Checking posted listing details...");
 
       var status = parseFloat(req.body.status);
-      var description = req.body.description;
-      var description_hook = req.body.description_hook;
-
-      //prices
-      var price_rate = req.body.price_rate;
-      var price_type = req.body.price_type;
-      var buy_price = req.body.buy_price;
-      var min_price = req.body.min_price;
 
       //registrar info
       var registrar_cost = parseFloat(req.body.registrar_cost).toFixed(2);
-      var registrar_name = req.body.registrar_name;
       var date_expire = moment(req.body.date_expire);
       var date_registered = moment(req.body.date_registered);
 
@@ -1115,8 +1102,37 @@ module.exports = {
       }
       categories_clean = categories_clean.join(" ");
 
+      //registrar contact details
+      var registrar_admin_phone = req.body.registrar_admin_phone;
+      if (req.body.registrar_admin_phone || registrar_admin_phone != ""){
+        try {
+          registrar_admin_phone = phoneUtil.format(phoneUtil.parse(req.body.registrar_admin_phone), PNF.INTERNATIONAL)
+        }
+        catch(err){
+          registrar_admin_phone = false;
+        }
+      }
+      var registrar_registrant_phone = req.body.registrar_registrant_phone;
+      if (req.body.registrar_registrant_phone || registrar_registrant_phone != ""){
+        try {
+          registrar_registrant_phone = phoneUtil.format(phoneUtil.parse(req.body.registrar_registrant_phone), PNF.INTERNATIONAL)
+        }
+        catch(err){
+          registrar_registrant_phone = false;
+        }
+      }
+      var registrar_tech_phone = req.body.registrar_tech_phone;
+      if (req.body.registrar_tech_phone || registrar_tech_phone != ""){
+        try {
+          registrar_tech_phone = phoneUtil.format(phoneUtil.parse(req.body.registrar_tech_phone), PNF.INTERNATIONAL)
+        }
+        catch(err){
+          registrar_tech_phone = false;
+        }
+      }
+
       //invalid short description
-      if (req.body.description_hook && (description_hook.length < 0 || description_hook.length > 75)){
+      if (req.body.description_hook && (req.body.description_hook.length < 0 || req.body.description_hook.length > 75)){
         error.handler(req, res, "That's an invalid listing description!", "json");
       }
       //no paths
@@ -1131,16 +1147,16 @@ module.exports = {
       else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
         error.handler(req, res, "You have selected an invalid rental price type! Please try again.", "json");
       }
-      else if (req.body.price_rate && !validator.isInt(price_rate, {allow_leading_zeroes : true})){
+      else if (req.body.price_rate && !validator.isInt(req.body.price_rate, {allow_leading_zeroes : true})){
         error.handler(req, res, "The rental price must be a whole number! Please try a different price.", "json");
       }
-      else if (req.body.buy_price && !validator.isInt(buy_price, {allow_leading_zeroes : true}) && buy_price != 0){
+      else if (req.body.buy_price && !validator.isInt(req.body.buy_price, {allow_leading_zeroes : true}) && req.body.buy_price != 0){
         error.handler(req, res, "The buy it now price must be a whole number! Please try a different price.", "json");
       }
-      else if (req.body.min_price && !validator.isInt(min_price, {allow_leading_zeroes : true}) && min_price != 0){
+      else if (req.body.min_price && !validator.isInt(req.body.min_price, {allow_leading_zeroes : true}) && req.body.min_price != 0){
         error.handler(req, res, "The minimum price must be a whole number! Please try a different price.", "json");
       }
-      else if (req.body.registrar_name && req.body.registrar_name.length <= 0){
+      else if (req.body.registrar_name && (req.body.registrar_name.length <= 0 || req.body.registrar_name.length > 100)){
         error.handler(req, res, "You have entered an invalid registrar name! Please try something else.", "json");
       }
       else if (req.body.date_expire != "" && !date_expire.isValid()){
@@ -1155,24 +1171,91 @@ module.exports = {
       else if (rentable && rentable != 1 && rentable != 0){
         error.handler(req, res, "You have selected an invalid option! Please refresh the page and try again!", "json");
       }
+      //registrar contact information
+      else if (req.body.registrar_admin_name && (req.body.registrar_admin_name.length < 0 || req.body.registrar_admin_name.length > 100)){
+        error.handler(req, res, "That's an invalid registrar administrator name!", "json");
+      }
+      else if (req.body.registrar_admin_org && (req.body.registrar_admin_org.length < 0 || req.body.registrar_admin_org.length > 100)){
+        error.handler(req, res, "That's an invalid registrar administrator organization!", "json");
+      }
+      else if (req.body.registrar_admin_email && !validator.isEmail(req.body.registrar_admin_email)){
+        error.handler(req, res, "That's an invalid registrar administrator email!", "json");
+      }
+      else if (req.body.registrar_admin_address && (req.body.registrar_admin_address.length < 0 || req.body.registrar_admin_address.length > 200)){
+        error.handler(req, res, "That's an invalid registrar administrator address!", "json");
+      }
+      else if (req.body.registrar_admin_phone && !registrar_admin_phone){
+        error.handler(req, res, "That's an invalid registrar administrator phone number!", "json");
+      }
+      else if (req.body.registrar_registrant_name && (req.body.registrar_registrant_name.length < 0 || req.body.registrar_registrant_name.length > 100)){
+        error.handler(req, res, "That's an invalid registrar registrant name!", "json");
+      }
+      else if (req.body.registrar_registrant_org && (req.body.registrar_registrant_org.length < 0 || req.body.registrar_registrant_org.length > 100)){
+        error.handler(req, res, "That's an invalid registrar registrant organization!", "json");
+      }
+      else if (req.body.registrar_registrant_email && !validator.isEmail(req.body.registrar_registrant_email)){
+        error.handler(req, res, "That's an invalid registrar registrant email!", "json");
+      }
+      else if (req.body.registrar_registrant_address && (req.body.registrar_registrant_address.length < 0 || req.body.registrar_registrant_address.length > 200)){
+        error.handler(req, res, "That's an invalid registrar registrant address!", "json");
+      }
+      else if (req.body.registrar_registrant_phone && !registrar_registrant_phone){
+        error.handler(req, res, "That's an invalid registrar registrant phone number!", "json");
+      }
+      else if (req.body.registrar_tech_name && (req.body.registrar_tech_name.length < 0 || req.body.registrar_tech_name.length > 100)){
+        error.handler(req, res, "That's an invalid registrar tech name!", "json");
+      }
+      else if (req.body.registrar_tech_org && (req.body.registrar_tech_org.length < 0 || req.body.registrar_tech_org.length > 100)){
+        error.handler(req, res, "That's an invalid registrar tech organization!", "json");
+      }
+      else if (req.body.registrar_tech_email && !validator.isEmail(req.body.registrar_tech_email)){
+        error.handler(req, res, "That's an invalid registrar tech email!", "json");
+      }
+      else if (req.body.registrar_tech_address && (req.body.registrar_tech_address.length < 0 || req.body.registrar_tech_address.length > 200)){
+        error.handler(req, res, "That's an invalid registrar tech address!", "json");
+      }
+      else if (req.body.registrar_tech_phone && !registrar_tech_phone){
+        error.handler(req, res, "That's an invalid registrar tech phone number!", "json");
+      }
       else {
         if (!req.session.new_listing_info) {
           req.session.new_listing_info = {};
         }
         req.session.new_listing_info.status = status;
-        req.session.new_listing_info.description = description;
-        req.session.new_listing_info.description_hook = description_hook;
-        req.session.new_listing_info.price_type = price_type;
-        req.session.new_listing_info.price_rate = price_rate;
-        req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "0" : buy_price;
-        req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "0" : min_price;
+        req.session.new_listing_info.description = req.body.description;
+        req.session.new_listing_info.description_hook = req.body.description_hook;
+        req.session.new_listing_info.price_type = req.body.price_type;
+        req.session.new_listing_info.price_rate = req.body.price_rate;
+        req.session.new_listing_info.buy_price = (req.body.buy_price == "" || req.body.buy_price == 0) ? "0" : req.body.buy_price;
+        req.session.new_listing_info.min_price = (req.body.min_price == "" || req.body.min_price == 0) ? "0" : req.body.min_price;
         req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
         req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
         req.session.new_listing_info.rentable = rentable;
         req.session.new_listing_info.date_expire = (req.body.date_expire == "" || !date_expire.isValid()) ? null : date_expire.valueOf();
         req.session.new_listing_info.date_registered = (req.body.date_registered == "" || !date_registered.isValid()) ? null : date_registered.valueOf();
-        req.session.new_listing_info.registrar_name = registrar_name;
+        req.session.new_listing_info.registrar_name = req.body.registrar_name;
         req.session.new_listing_info.registrar_cost = registrar_cost;
+
+        //registrar contact administrator details
+        req.session.new_listing_info.registrar_admin_name = req.body.registrar_admin_name;
+        req.session.new_listing_info.registrar_admin_org = req.body.registrar_admin_org;
+        req.session.new_listing_info.registrar_admin_email = req.body.registrar_admin_email;
+        req.session.new_listing_info.registrar_admin_address = req.body.registrar_admin_address;
+        req.session.new_listing_info.registrar_admin_phone = req.body.registrar_admin_phone;
+
+        //registrar contact registrant details
+        req.session.new_listing_info.registrar_registrant_name = req.body.registrar_registrant_name;
+        req.session.new_listing_info.registrar_registrant_org = req.body.registrar_registrant_org;
+        req.session.new_listing_info.registrar_registrant_email = req.body.registrar_registrant_email;
+        req.session.new_listing_info.registrar_registrant_address = req.body.registrar_registrant_address;
+        req.session.new_listing_info.registrar_registrant_phone = req.body.registrar_registrant_phone;
+
+        //registrar contact tech details
+        req.session.new_listing_info.registrar_tech_name = req.body.registrar_tech_name;
+        req.session.new_listing_info.registrar_tech_org = req.body.registrar_tech_org;
+        req.session.new_listing_info.registrar_tech_email = req.body.registrar_tech_email;
+        req.session.new_listing_info.registrar_tech_address = req.body.registrar_tech_address;
+        req.session.new_listing_info.registrar_tech_phone = req.body.registrar_tech_phone;
 
         //delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
         for (var x in req.session.new_listing_info){
@@ -1193,10 +1276,7 @@ module.exports = {
 
       //check if we're changing anything
       if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
-        res.json({
-          state: "success",
-          listings: (req.user) ? req.user.listings : false
-        });
+        error.handler(req, res, "nothing-changed", "json");
       }
       else {
         console.log("LOF: Updating domain details...");
@@ -1222,12 +1302,15 @@ module.exports = {
         if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
         else {
           var no_whois = req.session.no_whois || 0;
+          var nothing_changed = req.session.nothing_changed || 0;
           delete req.session.new_listing_info;
           delete req.session.no_whois;
+          delete req.session.nothing_changed;
           res.json({
             state: "success",
             listings: req.user.listings,
-            no_whois : no_whois
+            no_whois : no_whois,
+            nothing_changed : nothing_changed
           });
         }
       });
@@ -1311,6 +1394,133 @@ module.exports = {
     },
 
     //</editor-fold>
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------EXPENSES------------------------------
+
+  //check expense info if it's legit
+  checkExpenseDetails : function(req, res, next){
+    console.log("LOF: Checking posted domain expense details...");
+
+    if (!req.body.expense_name || req.body.expense_name.length > 100){
+      error.handler(req, res, "That's an invalid name for a domain expense! Please enter something else and try again.", "json");
+    }
+    else if (!req.body.expense_date || !moment(req.body.expense_date).isValid()){
+      error.handler(req, res, "That's an invalid date for a domain expense! Please enter something else and try again.", "json");
+    }
+    else if (!req.body.expense_cost || !validator.isFloat(req.body.expense_cost)){
+      error.handler(req, res, "That's an invalid cost for a domain expense! Please enter something else and try again.", "json");
+    }
+    else {
+      next();
+    }
+  },
+
+  //check expense IDs to make sure they are legit
+  checkExpenseIDs : function(req, res, next){
+    console.log("LOF: Checking posted domain expense IDs...");
+
+    //check if all posted expense ids are legit
+    var expense_ids_check = (req.body.expense_ids && Array.isArray(req.body.expense_ids)) ? req.body.expense_ids.every(function(item){
+      return Number.isInteger(parseInt(item));
+    }) : false;
+
+    if (!req.body.expense_ids || !expense_ids_check){
+      error.handler(req, res, "That's an invalid domain expense! Please refresh the page and try again.", "json");
+    }
+    else {
+      next();
+    }
+  },
+
+  //get any existing domain expenses
+  getDomainExpenses : function(req, res, next){
+    console.log("LOF: Getting existing domain expense details...");
+    var selected_ids = req.body.selected_ids.split(",");
+    listing_model.getDomainExpenses(selected_ids, function(result){
+      if (result.state == "success"){
+        var current_listing = false;
+        for (var x = 0 ; x < result.info.length ; x++){
+          var result_expense = result.info[x];
+          var temp_expense_obj = {
+            id : result_expense.id,
+            expense_name : result_expense.expense_name,
+            expense_date : result_expense.expense_date,
+            expense_cost : result_expense.expense_cost
+          }
+          if (!current_listing || current_listing.id != result_expense.listing_id){
+            current_listing = getUserListingObjByID(req.user.listings, result_expense.listing_id);
+            current_listing.expenses = [temp_expense_obj];
+          }
+          else {
+            current_listing.expenses.push(temp_expense_obj);
+          }
+        }
+
+        //nothing found! delete any existing expenses property
+        if (result.info.length == 0){
+          for (var x = 0 ; x < selected_ids.length ; x++){
+            getUserListingObjByID(req.user.listings, selected_ids[x]).expenses = null;
+          }
+        }
+
+        res.send({
+          state : "success",
+          listings : req.user.listings
+        });
+      }
+      else {
+        error.handler(req, res, result.info, "json");
+      }
+    });
+  },
+
+  //create a new domain expense
+  createDomainExpense : function(req, res, next){
+    console.log("LOF: Creating a new domain expense...");
+    var domain_expenses = [];
+    var selected_ids = req.body.selected_ids.split(",");
+    var new_expense_obj = {
+      expense_name : req.body.expense_name,
+      expense_cost : Math.round(100 * parseFloat(req.body.expense_cost)) / 100,
+      expense_date : moment(req.body.expense_date).valueOf()
+    }
+
+    //for all selected ids
+    for (var x = 0 ; x < selected_ids.length ; x++){
+      domain_expenses.push([
+        selected_ids[x],
+        new_expense_obj.expense_name,
+        new_expense_obj.expense_cost,
+        new_expense_obj.expense_date
+      ]);
+    }
+
+    listing_model.newDomainExpenses(domain_expenses, function(result){
+      if (result.state == "success"){
+        //after creation, get expenses again
+        next();
+      }
+      else {
+        error.handler(req, res, result.info, "json");
+      }
+    });
+  },
+
+  //delete an existing domain expense
+  deleteDomainExpense : function(req, res, next){
+    console.log("LOF: Deleting an existing domain expense...");
+    listing_model.deleteDomainExpenses(req.body.expense_ids, function(result){
+      if (result.state == "success"){
+        //after deletion, get expenses again
+        next();
+      }
+      else {
+        error.handler(req, res, result.info, "json");
+      }
+    });
+  },
 
   //</editor-fold>
 
