@@ -719,7 +719,7 @@ module.exports = {
             if (!domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
               console.log("LRF: Listing is not pointed to DomaHub anymore! Reverting verification...");
               req.session.listing_info.status = 0;
-
+              console.log(domain_name, "WTF");
               listing_model.updateListingsInfo(domain_name, {
                 verified: null,
                 status: 0
@@ -745,6 +745,7 @@ module.exports = {
               if (req.session.listing_info.status == 3){
                 console.log("LRF: Listing is now pointed to DomaHub! Marking as active...");
                 req.session.listing_info.status = 1;
+                console.log(domain_name, "WTF");
                 listing_model.updateListingsInfo(domain_name, {
                   verified: 1,
                   status: 1
