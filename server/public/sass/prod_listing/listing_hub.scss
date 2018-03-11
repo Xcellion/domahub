@@ -657,6 +657,13 @@
       width: 100%;
     }
   }
+  .image {
+    max-height: 48px;
+    img {
+      max-height: 48px;
+      width: auto;
+    }
+  }
 }
 
 #custom_logo {

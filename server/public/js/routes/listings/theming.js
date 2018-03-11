@@ -97,10 +97,13 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
 
+  $(".page-contents .logo-item").closest("a").attr('title', listing_info.domain_name);
+
   if (listing_info.premium && listing_info.logo){
     $(".page-contents #listing-footer-logo").attr("src", listing_info.logo);
   }
   else if (listing_info.premium){
+    $(".page-contents .logo-item").closest("a").css("visibility", "hidden");
     $(".page-contents #listing-footer-logo").addClass('is-hidden');
   }
   else {
@@ -113,6 +116,9 @@ function setupFooter(){
 
   if (listing_info.premium && listing_info.description_footer){
     $(".page-contents #listing-footer").text(listing_info.description_footer)
+  }
+  else if (listing_info.premium){
+    $(".page-contents #listing-footer").text("Buy this domain today!");
   }
 
   //</editor-fold>
