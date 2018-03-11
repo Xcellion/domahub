@@ -620,7 +620,7 @@ function emailViews(req, res, next){
 
 //research (EXCEL)
 var XLSX = require('xlsx');
-var Q = require("Q");
+var q = require("q");
 var qlimit = require("qlimit");
 var glob = require("glob");
 var json2csv = require('json2csv');
@@ -925,7 +925,7 @@ function parseCSV(date, file, verbose, cb){
   console.log("\x1b[0m", "Starting queries...");
   var limit = qlimit(10);     //limit parallel promises (throttle)
 
-  Q.allSettled(q_promises.map(limit(function(item, index, collection){
+  q.allSettled(q_promises.map(limit(function(item, index, collection){
     console.log("\x1b[0m", 'Querying #', index + "...");
     return q_promises[index]();
   }))).then(function(results) {
@@ -1271,7 +1271,7 @@ function namesilo(req, res, next){
 }
 
 function deleteNameSiloDNSRecord(domain_name, record_id){
-  return Q.Promise(function(resolve, reject, notify){
+  return q.Promise(function(resolve, reject, notify){
     console.log("F: Setting DNS for NameSilo domain - " + domain_name + "..." + "record " + record_id);
 
     //delete an existing DNS record

@@ -14,48 +14,41 @@
     <ul class="menu-list">
       <li class="menu-item has-icon">
         <a id="dashboard-left-tab" href="/profile/dashboard" class="left-tab primary-theme">
-          <div class="icon" data-balloon="Dashboard" data-balloon-pos="right"><i class="far fa-window-maximize"></i></div>
+          <div class="icon" data-balloon="Dashboard" data-balloon-pos="right"><i class="fal fa-window-maximize"></i></div>
           <p class="is-hidden-laptop">Dashboard</p>
         </a>
       </li>
       <li class="menu-item has-icon">
         <a id="mylistings-left-tab" href="/profile/mylistings" class="left-tab primary-theme">
-          <div class="icon" data-balloon="My Listings" data-balloon-pos="right"><i class="far fa-list-alt"></i></div>
+          <div class="icon" data-balloon="My Listings" data-balloon-pos="right"><i class="fal fa-list-alt"></i></div>
           <p class="is-hidden-laptop">My Listings</p>
         </a>
-        <ul id="collapse-submenu">
-          <% if (user.listings.length > 0 ){ %>
-            <li class="menu-item has-icon">
-              <a id="offers-left-tab" href="/profile/mylistings?tab=offers" class="left-tab primary-theme is-sublink">
-                <div class="icon is-hidden-widescreen" data-balloon="My Offers" data-balloon-pos="right"><i class="far fa-money-bill"></i></div>
-                <small class="is-hidden-laptop">My Offers</small>
-              </a>
-            </li>
-          <% } %>
-          <%# <li>
-            <a id="stats-left-tab" href="/profile/mylistings?tab=stats" class="left-tab primary-theme">
-              <small class="is-white">View Statistics</small>
-            </a>
-          </li>%>
-          <li class="menu-item has-icon">
-            <a id="create-left-tab"  href="/listings/create" class="left-tab primary-theme is-sublink">
-              <div class="icon is-hidden-widescreen" data-balloon="Create Listings" data-balloon-pos="right"><i class="far fa-plus"></i></div>
-              <small class="is-hidden-laptop">Create Listings</small>
-            </a>
-          </li>
-        </ul>
+      </li>
+      <% if (user.listings.length > 0 ){ %>
+      <li class="menu-item has-icon">
+        <a id="offers-left-tab" href="/profile/mylistings?tab=offers" class="left-tab primary-theme">
+          <div class="icon" data-balloon="My Offers" data-balloon-pos="right"><i class="fal fa-shopping-basket"></i></div>
+          <p class="is-hidden-laptop">My Offers</p>
+        </a>
+      </li>
+      <% } %>
+      <li class="menu-item has-icon">
+        <a id="create-left-tab"  href="/listings/create" class="left-tab primary-theme">
+          <div class="icon" data-balloon="Create Listings" data-balloon-pos="right"><i class="fal fa-plus-circle"></i></div>
+          <p class="is-hidden-laptop">Create Listings</p>
+        </a>
       </li>
       <li class="menu-item has-icon">
         <a id="settings-left-tab" href="/profile/settings" class="left-tab primary-theme">
-          <div class="icon" data-balloon="Account Settings" data-balloon-pos="right"><i class="far fa-cogs"></i></div>
+          <div class="icon" data-balloon="Account Settings" data-balloon-pos="right"><i class="fal fa-cogs"></i></div>
           <p class="is-hidden-laptop">Account Settings</p>
         </a>
         <ul class="is-hidden-laptop">
           <li>
             <a id="nav-premium-link" title="Upgrade to a Premium Account" href="/profile/settings#premium" class="left-tab primary-theme is-sublink is-hidden">
-              <small>
+              <p>
                 Upgrade to Premium
-              </small>
+              </p>
             </a>
           </li>
         </ul>
@@ -69,7 +62,7 @@
       <% if (!user.id || !user || user.username == "DomaHubDemo") { %>
         <li class="menu-item has-icon">
           <a id="restart-tour-button" title="Restart DomaHub Demo Tutorial" class="left-tab primary-theme">
-            <div class="icon"><i class="far fa-sync"></i></div>
+            <div class="icon"><i class="fal fa-sync"></i></div>
             <p class="is-hidden-laptop">Restart Tutorial</p>
           </a>
         </li>

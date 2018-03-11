@@ -3,7 +3,6 @@
 @import '../bulma/base/base.sass';
 @import '../bulma/components/card.sass';
 @import '../bulma/components/grid.sass';
-@import '../bulma/components/level.sass';
 @import '../bulma/components/menu.sass';
 @import '../bulma/components/modal.sass';
 @import '../bulma/components/nav.sass';
@@ -21,32 +20,83 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
-.columns {
-  margin-left:-20px;
-  margin-right:-20px;
+.stat-columns {
+  display: flex;
+  @include laptop {
+    display: block;
+  }
+}
+
+.stat-column-large {
+  width: 75%;
+  margin-right: 20px;
+  .traffic-chart {
+    min-height: 500px;
+  }
+  @include laptop {
+    margin-right: 0;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  @include mobile {
+    .traffic-chart {
+      min-height: 350px;
+    }
+  }
+}
+
+.stat-column-small {
+  width: 25%;
+  @include laptop {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+  @include mobile {
+    display: block;
+    .traffic-chart {
+      height: 150px;
+    }
+  }
+}
+
+.chart-tabs {
+  @include overflow-touch;
+  display: flex;
+  justify-content: flex-start;
+  overflow: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .heading {
+  @include transition(color 0.2s ease);
   display: block;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 10px;
+  color: $grey;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 5px;
 }
 
-.counter {
-  margin-bottom: 10px;
-}
-
-.button-wrapper {
+.portfolio-table {
+  @include box-shadow(0,2px,8px,$border,0);
+  background-color: $white;
+  border-radius: $radius-large;
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
-  .button,
-  .select {
-    margin-right: 10px;
-    margin-bottom: 8px;
+  margin-bottom: 20px;
+  a {
+    padding: 10px 20px;
+    &:hover,
+    &:focus {
+      background-color: $pastel;
+      .heading {
+        color: $text;
+      }
+    }
   }
 }
+
 
 .traffic-chart-wrapper {
   position: relative;
@@ -54,13 +104,12 @@
 
 .traffic-chart {
   width: 100%;
-  height: 100%;
   position: relative;
 }
 
 .traffic-overlay {
   position: absolute;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.7);
   top: 0;
   width: 100%;
   height: 100%;
@@ -74,62 +123,50 @@
   margin-right: -50%;
 }
 
-.chart-tabs {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
 .stat-wrapper {
   cursor: pointer;
   display: inline-block;
   position: relative;
-  padding: 5px;
-  text-align: center;
-  &::before {
-    @include transition(all 0.2s ease);
-    content: "";
-    height: 3px;
-    opacity: 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
+  padding-bottom: 5px;
+  border-bottom: 2px solid transparent;
+  &:focus,
+  &:hover {
+    outline: 0;
+    border-color: $black-disabled;
+  }
+  &:not(:last-child) {
+    margin-right: 20px;
   }
   &.is-active {
-    color: $primary;
-    &::before {
-      width: 100%;
-      opacity: 1;
-      background: $primary;
-    }
-  }
-  &:hover {
-    background-color: $pastel;
-  }
-  &:focus {
-    outline: 0;
-  }
-}
-
-.portfolio-table {
-  a {
-    display: block;
-    padding: 10px;
-    &:hover {
-      background-color: $pastel;
+    border-color: $primary;
+    .counter-link {
+      p {
+        font-weight: 700;
+      }
     }
   }
 }
 
-.fac {
-  display: flex;
-  align-items: center;
-  .icon,
-  .tag {
-    margin-right: 10px;
+.small-chart {
+  @include box-shadow(0,2px,8px,$border,0);
+  background-color: $white;
+  border-radius: $radius-large;
+  padding: 10px;
+  &:not(:last-child) {
+    margin-bottom: 20px;
   }
-  &.has-margin-bottom {
-    margin-bottom: 10px;
+  @include laptop {
+    width: 33%;
+    &:not(:last-child) {
+      margin-bottom: 0;
+      margin-right: 20px;
+    }
+  }
+  @include mobile {
+    width: 100%;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+      margin-right: 0;
+    }
   }
 }
