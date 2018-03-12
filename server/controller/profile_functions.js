@@ -831,6 +831,10 @@ module.exports = {
     else if (req.body.paypal_email && !validator.isEmail(req.body.paypal_email)){
       error.handler(req, res, "Please provide a valid PayPal email address!", "json");
     }
+    //payoneer email
+    else if (req.body.payoneer_email && !validator.isEmail(req.body.payoneer_email)){
+      error.handler(req, res, "Please provide a valid Payoneer email address!", "json");
+    }
     else {
       next();
     }
@@ -899,6 +903,9 @@ module.exports = {
     }
     if (req.body.payoneer_email){
       new_account_info.payoneer_email = req.body.payoneer_email.toLowerCase();
+    }
+    if (req.body.bitcoin_address){
+      new_account_info.bitcoin_address = req.body.bitcoin_address;
     }
 
     //any changes from other routes (stripe upgrade)
