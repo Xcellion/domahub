@@ -86,10 +86,14 @@
 												</div>
 	                      <span>Save</span>
 	                    </button>
-	                    <%# <button id="payoneer-submit" type="submit" form="payoneer-form" class="toolbar-submit-button toolbar-submit-button toolbar-button is-hidden button is-primary">
+	                    <button id="bitcoin-submit" type="submit" form="bitcoin-form" class="toolbar-submit-button toolbar-submit-button toolbar-button is-hidden button is-primary">
 	                      <span class="icon is-small"><i class="fal fa-check-circle"></i></span>
 	                      <span>Save</span>
-	                    </button>%>
+	                    </button>
+	                    <button id="payoneer-submit" type="submit" form="payoneer-form" class="toolbar-submit-button toolbar-submit-button toolbar-button is-hidden button is-primary">
+	                      <span class="icon is-small"><i class="fal fa-check-circle"></i></span>
+	                      <span>Save</span>
+	                    </button>
 	                  </div>
 	                  <div class="control">
 	                    <a id="cancel-button" class="toolbar-button is-hidden button is-danger is-stylish is-small">
@@ -741,7 +745,7 @@
 	                <h3 class="card-header-title">
 	                  Bank Information
 	                </h3>
-	                <div class="icon is-info" data-balloon="Bank information is stored and handled by our payments processor, Stripe." data-balloon-pos="up" data-balloon-length="large">
+	                <div class="icon is-info" data-balloon="Bank information is stored and handled by our payments processor, Stripe." data-balloon-pos="left" data-balloon-length="large">
 	                  <i class="fal fa-stripe"></i>
 	                </div>
 	              </div>
@@ -774,7 +778,7 @@
 	                <h3 class="card-header-title">
 	                  PayPal Information
 	                </h3>
-	                <div class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="up" data-balloon-length="large">
+	                <div class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="left" data-balloon-length="large">
 	                  <i class="fal fa-paypal"></i>
 	                </div>
 	              </div>
@@ -788,7 +792,27 @@
 	              </div>
 	            </div>
 
-	            <%# <!-- PAYONEER EMAIL -->
+	            <!-- BITCOIN ADDRESS -->
+	            <div class="card is-fullwidth">
+	              <div class="card-header">
+	                <h3 class="card-header-title">
+	                  Bitcoin Wallet Address
+	                </h3>
+	                <div class="icon is-info">
+	                  <i class="far fa-bitcoin"></i>
+	                </div>
+	              </div>
+	              <div class="card-content">
+	                <form id="bitcoin-form">
+	                  <div class="control">
+	                    <label class="label" for="bitcoin_address-input">Bitcoin Wallet Address</label>
+	                    <input required id="bitcoin_address-input" data-uservar="bitcoin_address" class="account-input input" type="text" name="bitcoin_address-input" />
+	                  </div>
+	                </form>
+	              </div>
+	            </div>
+
+	            <!-- PAYONEER EMAIL -->
 	            <div class="card is-fullwidth">
 	              <div class="card-header">
 	                <h3 class="card-header-title">
@@ -803,7 +827,7 @@
 	                  </div>
 	                </form>
 	              </div>
-	            </div>%>
+	            </div>
 
 	          </div>
 					</div>
@@ -870,7 +894,7 @@
 											</p>
 										</div>
 										<div class="control-right">
-											<p id="total-available">
+											<p class="withdrawal-available">
 												$0.00
 											</p>
 										</div>
@@ -879,7 +903,7 @@
 	                  <div class="icon is-small">
 											<i class="fal fa-exchange"></i>
 										</div>
-	                  <span>Withdraw <span class="withdrawal-available"></span> to Bank</span>
+	                  <span>Withdraw <span class="withdrawal-available"></span></span>
 	                </a>
 	            	</div>
 	            </div>
@@ -1204,7 +1228,20 @@
   <div id="change-bank-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content">
+      <div class="modal-content is-small">
+        <div class="notification no-shadow has-icon is-primary">
+          <div class="icon-box">
+            <div class="icon is-white">
+              <i class="fal fa-credit-card"></i>
+            </div>
+          </div>
+          <div class="content">
+            <p class="is-hidden existing-cc is-white"></p>
+            <small class="is-white">
+              All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-white is-underlined">Stripe</a>.
+            </small>
+          </div>
+        </div>
         <form id="stripe-bank-form" autocomplete="off" class="content">
           <div class="control existing-bank is-hidden"></div>
           <div class="control">
@@ -1212,18 +1249,21 @@
             <span class="select is-fullwidth">
               <select required name="bank_country" id="bank_country-input" class="stripe-bank-input">
                 <option selected value="" disabled>Please select your bank's country</option>
-                <option value="AT">Austria</option>
                 <option value="AU">Australia</option>
+                <option value="AT">Austria</option>
                 <option value="BE">Belgium</option>
                 <option value="CA">Canada</option>
                 <option value="DK">Denmark</option>
                 <option value="FI">Finland</option>
                 <option value="FR">France</option>
                 <option value="DE">Germany</option>
+                <option value="GI">Gibraltar</option>
                 <option value="HK">Hong Kong</option>
                 <option value="IE">Ireland</option>
                 <option value="IT">Italy</option>
+                <option value="JP">Japan</option>
                 <option value="LU">Luxembourg</option>
+                <option value="MX">Mexico</option>
                 <option value="NL">Netherlands</option>
                 <option value="NO">Norway</option>
                 <option value="NZ">New Zealand</option>
@@ -1280,13 +1320,13 @@
           <div class="control is-grouped">
             <div class="control is-expanded">
               <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-fullwidth is-primary is-stylish is-small">
-                <div class="icon is-small"><i class="far fa-check-circle"></i></div>
+                <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
                 <span>Save Bank</span>
               </button>
             </div>
             <div class="control is-expanded">
               <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
-                <div class="icon is-small"><i class="far fa-ban"></i></div>
+                <div class="icon is-small"><i class="fal fa-ban"></i></div>
                 <span>Cancel</span>
               </a>
             </div>

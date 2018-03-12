@@ -260,7 +260,7 @@ $(document).ready(function() {
           if (data.user){
             user = data.user;
           }
-          successMessage("Successfully updated settings!");
+          successMessage("Successfully updated account settings!");
         }
         else {
           errorMessage(data.message);
@@ -346,6 +346,48 @@ $(document).ready(function() {
 
     //</editor-fold>
 
+    //<editor-fold>-------------------------------BITCOIN-------------------------------
+
+    //show bitcoin submit button
+    $("#bitcoin_address-input").on("input", function(){
+      clearNotification();
+      hideSaveCancelButtons();
+      if ($(this).val() != user.bitcoin_address){
+        $("#bitcoin-submit, #cancel-button").removeClass('is-hidden');
+      }
+    });
+
+    //submit bitcoin form
+    $("#bitcoin-form").submit(function(e){
+      e.preventDefault();
+      submitChanges({
+        bitcoin_address: $("#bitcoin_address-input").val().toLowerCase()
+      });
+    });
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------PAYONEER-------------------------------
+
+    //show payoneer submit button
+    $("#payoneer_email-input").on("input", function(){
+      clearNotification();
+      hideSaveCancelButtons();
+      if ($(this).val() != user.payoneer_email){
+        $("#payoneer-submit, #cancel-button").removeClass('is-hidden');
+      }
+    });
+
+    //submit payoneer form
+    $("#payoneer-form").submit(function(e){
+      e.preventDefault();
+      submitChanges({
+        payoneer_email: $("#payoneer_email-input").val().toLowerCase()
+      });
+    });
+
+    //</editor-fold>
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------TRANSACTIONS TAB-------------------------------
@@ -361,7 +403,8 @@ $(document).ready(function() {
 
       if (data.state == "success"){
         $("#transfer-button").addClass("is-disabled");
-        successMessage("Successfully transferred " + number_format.to(total_available) + " to your bank account!");
+        var total_available = $(".withdrawal-available").data("total_available");
+        successMessage("Successfully transferred " + moneyFormat.to(total_available) + " to your bank account!");
       }
       else {
         switch (data.message){
@@ -1427,7 +1470,7 @@ function calculateTotals(){
   $("#total-earned").text(moneyFormat.to(total_earned));
   $("#total-fees").text(moneyFormat.to(total_fees));
   $("#total-profit").text(moneyFormat.to(total_profit));
-  $("#total-available").text(moneyFormat.to(total_available));
+  $(".withdrawal-available").data("total_available", total_available).text(moneyFormat.to(total_available));
 
   //if there are funds available and a bank to withdraw to
   if (total_available > 0 && user.stripe_account && user.stripe_bank){

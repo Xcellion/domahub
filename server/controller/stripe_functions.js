@@ -579,7 +579,7 @@ module.exports = {
         updateUserTransactions(req.user, charges.data, "stripe");
 
         //refreshing transactions
-        if (req.method == "POST"){
+        if (req.method == "POST" && req.path == "/profile/gettransactions"){
           res.send({
             state : "success",
             user : req.user
@@ -597,11 +597,11 @@ module.exports = {
 
   //transfer money to a stripe connected account
   transferMoney : function(req, res, next){
-    if (req.user.type != 2 || !req.user.stripe_account_id || !req.user.stripe_info){
-      error.handler(req, res, "No bank account to charge!", "json");
+    if (req.user.type != 2 || !req.user.stripe_account || !req.user.stripe_bank){
+      error.handler(req, res, "Something went wrong with your bank account! Please refresh the page and try again.", "json");
     }
     else if (!req.user.stripe_charges){
-      error.handler(req, res, "Invalid charges!", "json");
+      error.handler(req, res, "You don't have any available funds to transfer to your bank!", "json");
     }
     else {
       var total_transfer = 0;
@@ -628,22 +628,21 @@ module.exports = {
           destination: req.user.stripe_account_id,
           transfer_group: "bank_transfer_" + req.user.id
         }, function(err, transfer) {
-          if (!err){
+          if (err){
+            error.log(err, "Something went wrong with the bank transfer!", "json");
+            error.handler(req, res, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
+          }
+          else {
             res.json({
               state : "success",
               user : req.user
             });
           }
-          else {
-            error.log(err, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
-            error.handler(req, res, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
-          }
         });
       }
       else {
-        error.handler(req, res, "You have no available funds to transfer to your bank!", "json");
+        error.handler(req, res, "You don't have any available funds to transfer to your bank!", "json");
       }
-
     }
   },
 
