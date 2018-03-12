@@ -49,19 +49,26 @@ $(document).ready(function() {
 
     //to show submit/cancel when data changes for account inputs
     $(".account-input").on("input", function(e){
-      clearNotification();
-      hideSaveCancelButtons();
-      if ($(this).val() != user[$(this).data("uservar")] && user[$(this).data("uservar")]){
+      var this_val = $(this).val();
+      var existing_val = (user[$(this).data("uservar")]) ? user[$(this).data("uservar")] : "";
+
+      //show only if different
+      if (this_val != existing_val){
         $("#account-submit, #cancel-button").removeClass("is-hidden");
+      }
+      else {
+        clearNotification();
+        hideSaveCancelButtons();
       }
     });
 
     //to submit any changes
-    $("#stripe-account-form").on("submit", function(e){
+    $("#account-details-form").on("submit", function(e){
       e.preventDefault();
       submitChanges({
         new_email: $("#email-input").val(),
-        username: $("#username-input").val()
+        username: $("#username-input").val(),
+        ga_tracking_id: $("#ga_tracking_id-input").val(),
       });
     });
 
@@ -467,7 +474,6 @@ function showSectionByURL(){
   //prefills all domahub account info
   function prefillAccountInfo(){
     $(".account-input").each(function(){
-      console.log(user[$(this).data("uservar")], $(this).data("uservar"))
       $(this).val(user[$(this).data("uservar")]);
     });
   }
@@ -493,7 +499,12 @@ function showSectionByURL(){
           }
         }
         else {
-          errorMessage(data.message);
+          if (data.message == "invalid-ga-tracking"){
+            errorMessage("Please provide a valid Google Analytics tracking ID! For instructions on how to get your tracking ID, please <a href='https://support.google.com/analytics/answer/1008080?hl=en#trackingID' class='is-underlined'>click here</a>.");
+          }
+          else {
+            errorMessage(data.message);
+          }
         }
 
         prefillAccountInfo();
