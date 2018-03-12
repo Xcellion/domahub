@@ -799,6 +799,10 @@ module.exports = {
     if (req.body.new_email && !validator.isEmail(req.body.new_email)){
       error.handler(req, res, "Please provide a valid email address for your account!", "json");
     }
+    //not a valid google tracking ID
+    if (req.body.ga_tracking_id && (req.body.ga_tracking_id.indexOf("UA-") == -1 || req.body.ga_tracking_id.indexOf("-") == -1)){
+      error.handler(req, res, "invalid-ga-tracking", "json");
+    }
     //username too long
     else if (req.body.username && req.body.username.length > 70){
       error.handler(req, res, "The new username is too long!", "json");
@@ -895,17 +899,20 @@ module.exports = {
     if (req.body.username){
       new_account_info.username = req.body.username.replace(/\s/g, '');
     }
+    if (req.body.ga_tracking_id){
+      new_account_info.ga_tracking_id = (req.body.ga_tracking_id) ? req.body.ga_tracking_id : null;
+    }
     if (req.body.new_password){
       new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
     }
     if (req.body.paypal_email || req.body.paypal_email == ""){
-      new_account_info.paypal_email = req.body.paypal_email.toLowerCase();
+      new_account_info.paypal_email = (req.body.paypal_email.toLowerCase()) ? req.body.paypal_email : null;
     }
     if (req.body.payoneer_email || req.body.payoneer_email == ""){
-      new_account_info.payoneer_email = req.body.payoneer_email.toLowerCase();
+      new_account_info.payoneer_email = (req.body.payoneer_email.toLowerCase()) ? req.body.payoneer_email : null;
     }
     if (req.body.bitcoin_address || req.body.bitcoin_address == ""){
-      new_account_info.bitcoin_address = req.body.bitcoin_address;
+      new_account_info.bitcoin_address = (req.body.bitcoin_address) ? req.body.bitcoin_address : null;
     }
 
     //any changes from other routes (stripe upgrade)

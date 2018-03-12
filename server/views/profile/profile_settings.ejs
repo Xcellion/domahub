@@ -68,7 +68,7 @@
 	              <li>
 	                <div class="control is-grouped">
 	                  <div class="control">
-	                    <button id="account-submit" type="submit" form="stripe-account-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
+	                    <button id="account-submit" type="submit" form="account-details-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
 	                      <div class="icon is-small">
 													<i class="fal fa-check-circle"></i>
 												</div>
@@ -113,7 +113,7 @@
 	                </h3>
 	              </div>
 	              <div class="card-content">
-	                <form id="stripe-account-form" class="control">
+	                <form id="account-details-form" class="control">
 	                  <div class="control">
 	                    <label class="label" for="email-input">
 	                      Email Address
@@ -131,23 +131,30 @@
 	                    <small class="tip">Other users will be able to see your username.</small>
 	                    <input required id="username-input" class="input account-input" data-uservar="username" type="text" value="<%= user.username %>" spellcheck="false"/>
 	                  </div>
-	                </form>
-	                <div class="control is-spaced is-mobile">
-	                  <div class="control-left">
-	                    <p>
-	                      Password
-	                    </p>
-	                    <small class="tip">Click the button to change your password.</small>
-	                  </div>
-	                  <div class="control-right">
-	                    <a id="change-password-button" class="button is-stylish is-small">
-	                      <div class="icon is-small">
-													<i class="fal fa-unlock-alt"></i>
-												</div>
-	                      <span>Change Password</span>
-	                    </a>
-	                  </div>
-	                </div>
+  	                <div class="control is-spaced is-mobile">
+  	                  <div class="control-left">
+  	                    <p>
+  	                      Password
+  	                    </p>
+  	                    <small class="tip">Click the button to change your password.</small>
+  	                  </div>
+  	                  <div class="control-right">
+  	                    <a id="change-password-button" class="button is-stylish is-small">
+  	                      <div class="icon is-small">
+  													<i class="fal fa-unlock-alt"></i>
+  												</div>
+  	                      <span>Change Password</span>
+  	                    </a>
+  	                  </div>
+  	                </div>
+                    <div class="control">
+                      <label class="label" for="ga_tracking_id-input">
+                        Google Analytics Tracking ID
+                      </label>
+                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-underlined" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
+                      <input required id="ga_tracking_id-input" class="input account-input" data-uservar="ga_tracking_id" type="text" value="<%= user.ga_tracking_id %>" spellcheck="false"/>
+                    </div>
+                  </form>
 								</div>
 							</div>
 						</div>
