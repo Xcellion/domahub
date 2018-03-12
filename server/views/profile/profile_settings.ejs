@@ -80,18 +80,10 @@
 												</div>
 	                      <span>Save</span>
 	                    </button>
-	                    <button id="paypal-submit" type="submit" form="paypal-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
+	                    <button id="payments-submit" type="submit" form="payments-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
 	                      <div class="icon is-small">
 													<i class="fal fa-check-circle"></i>
 												</div>
-	                      <span>Save</span>
-	                    </button>
-	                    <button id="bitcoin-submit" type="submit" form="bitcoin-form" class="toolbar-submit-button toolbar-submit-button toolbar-button is-hidden button is-primary">
-	                      <span class="icon is-small"><i class="fal fa-check-circle"></i></span>
-	                      <span>Save</span>
-	                    </button>
-	                    <button id="payoneer-submit" type="submit" form="payoneer-form" class="toolbar-submit-button toolbar-submit-button toolbar-button is-hidden button is-primary">
-	                      <span class="icon is-small"><i class="fal fa-check-circle"></i></span>
 	                      <span>Save</span>
 	                    </button>
 	                  </div>
@@ -773,61 +765,57 @@
 	            </div>
 
 	            <!-- PAYPAL EMAIL -->
-	            <div class="card is-fullwidth">
-	              <div class="card-header">
-	                <h3 class="card-header-title">
-	                  PayPal Information
-	                </h3>
-	                <div class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="left" data-balloon-length="large">
-	                  <i class="fal fa-paypal"></i>
-	                </div>
-	              </div>
-	              <div class="card-content">
-	                <form id="paypal-form">
-	                  <div class="control">
-	                    <label class="label" for="paypal_email-input">PayPal Email Address</label>
-	                    <input id="paypal_email-input" data-uservar="paypal_email" class="account-input input" type="email" name="paypal_email-input" />
-	                  </div>
-	                </form>
-	              </div>
-	            </div>
+              <form id="payments-form">
+  	            <div class="card is-fullwidth">
+  	              <div class="card-header">
+  	                <h3 class="card-header-title">
+  	                  PayPal Information
+  	                </h3>
+  	                <div class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="left" data-balloon-length="large">
+  	                  <i class="fal fa-paypal"></i>
+  	                </div>
+  	              </div>
+  	              <div class="card-content">
+                    <div class="control">
+                      <label class="label" for="paypal_email-input">PayPal Email Address</label>
+                      <input id="paypal_email-input" data-uservar="paypal_email" class="account-payments-input account-input input" type="email" name="paypal_email-input" />
+                    </div>
+  	              </div>
+  	            </div>
 
-	            <!-- BITCOIN ADDRESS -->
-	            <div class="card is-fullwidth">
-	              <div class="card-header">
-	                <h3 class="card-header-title">
-	                  Bitcoin Wallet Address
-	                </h3>
-	                <div class="icon is-info">
-	                  <i class="far fa-bitcoin"></i>
-	                </div>
-	              </div>
-	              <div class="card-content">
-	                <form id="bitcoin-form">
-	                  <div class="control">
-	                    <label class="label" for="bitcoin_address-input">Bitcoin Wallet Address</label>
-	                    <input id="bitcoin_address-input" data-uservar="bitcoin_address" class="account-input input" type="text" name="bitcoin_address-input" />
-	                  </div>
-	                </form>
-	              </div>
-	            </div>
+  	            <!-- BITCOIN ADDRESS -->
+  	            <div class="card is-fullwidth">
+  	              <div class="card-header">
+  	                <h3 class="card-header-title">
+  	                  Bitcoin Wallet Address
+  	                </h3>
+  	                <div class="icon is-info">
+  	                  <i class="far fa-bitcoin"></i>
+  	                </div>
+  	              </div>
+  	              <div class="card-content">
+                    <div class="control">
+                      <label class="label" for="bitcoin_address-input">Bitcoin Wallet Address</label>
+                      <input id="bitcoin_address-input" data-uservar="bitcoin_address" class="account-payments-input account-input input" type="text" name="bitcoin_address-input" />
+                    </div>
+  	              </div>
+  	            </div>
 
-	            <!-- PAYONEER EMAIL -->
-	            <div class="card is-fullwidth">
-	              <div class="card-header">
-	                <h3 class="card-header-title">
-	                  Payoneer Information
-	                </h3>
-	              </div>
-	              <div class="card-content">
-	                <form id="payoneer-form">
-	                  <div class="control">
-	                    <label class="label" for="payoneer_email-input">Payoneer Email Address</label>
-	                    <input id="payoneer_email-input" data-uservar="paypal_email" class="account-input input" type="email" name="payoneer_email-input" />
-	                  </div>
-	                </form>
-	              </div>
-	            </div>
+  	            <!-- PAYONEER EMAIL -->
+  	            <div class="card is-fullwidth">
+  	              <div class="card-header">
+  	                <h3 class="card-header-title">
+  	                  Payoneer Information
+  	                </h3>
+  	              </div>
+  	              <div class="card-content">
+                    <div class="control">
+                      <label class="label" for="payoneer_email-input">Payoneer Email Address</label>
+                      <input id="payoneer_email-input" data-uservar="payoneer_email" class="account-payments-input account-input input" type="email" name="payoneer_email-input" />
+                    </div>
+  	              </div>
+  	            </div>
+              </form>
 
 	          </div>
 					</div>

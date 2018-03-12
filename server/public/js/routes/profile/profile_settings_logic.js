@@ -325,64 +325,26 @@ $(document).ready(function() {
 
     //</editor-fold>
 
-    //<editor-fold>-------------------------------PAYPAL-------------------------------
+    //<editor-fold>-------------------------------PAYMENTS-------------------------------
 
-    //show paypal submit button
-    $("#paypal_email-input").on("input", function(){
+    //account payments
+    $(".account-payments-input").on("input", function(){
       clearNotification();
       hideSaveCancelButtons();
-      if ($(this).val() != user.paypal_email){
-        $("#paypal-submit, #cancel-button").removeClass('is-hidden');
+      if ($("#bitcoin_address-input").val() != user.bitcoin_address ||
+          $("#paypal_email-input").val() != user.paypal_email ||
+          $("#payoneer_email-input").val() != user.payoneer_email){
+        $("#payments-submit, #cancel-button").removeClass('is-hidden');
       }
     });
 
-    //submit paypal form
-    $("#paypal-form").submit(function(e){
+    //submit payments contact form
+    $("#payments-form").submit(function(e){
       e.preventDefault();
       submitChanges({
-        paypal_email: $("#paypal_email-input").val().toLowerCase()
-      });
-    });
-
-    //</editor-fold>
-
-    //<editor-fold>-------------------------------BITCOIN-------------------------------
-
-    //show bitcoin submit button
-    $("#bitcoin_address-input").on("input", function(){
-      clearNotification();
-      hideSaveCancelButtons();
-      if ($(this).val() != user.bitcoin_address){
-        $("#bitcoin-submit, #cancel-button").removeClass('is-hidden');
-      }
-    });
-
-    //submit bitcoin form
-    $("#bitcoin-form").submit(function(e){
-      e.preventDefault();
-      submitChanges({
+        paypal_email: $("#paypal_email-input").val().toLowerCase(),
+        payoneer_email: $("#payoneer_email-input").val().toLowerCase(),
         bitcoin_address: $("#bitcoin_address-input").val().toLowerCase()
-      });
-    });
-
-    //</editor-fold>
-
-    //<editor-fold>-------------------------------PAYONEER-------------------------------
-
-    //show payoneer submit button
-    $("#payoneer_email-input").on("input", function(){
-      clearNotification();
-      hideSaveCancelButtons();
-      if ($(this).val() != user.payoneer_email){
-        $("#payoneer-submit, #cancel-button").removeClass('is-hidden');
-      }
-    });
-
-    //submit payoneer form
-    $("#payoneer-form").submit(function(e){
-      e.preventDefault();
-      submitChanges({
-        payoneer_email: $("#payoneer_email-input").val().toLowerCase()
       });
     });
 
@@ -505,6 +467,7 @@ function showSectionByURL(){
   //prefills all domahub account info
   function prefillAccountInfo(){
     $(".account-input").each(function(){
+      console.log(user[$(this).data("uservar")], $(this).data("uservar"))
       $(this).val(user[$(this).data("uservar")]);
     });
   }
