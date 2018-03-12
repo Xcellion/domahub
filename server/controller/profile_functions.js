@@ -898,13 +898,13 @@ module.exports = {
     if (req.body.new_password){
       new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
     }
-    if (req.body.paypal_email){
+    if (req.body.paypal_email || req.body.paypal_email == ""){
       new_account_info.paypal_email = req.body.paypal_email.toLowerCase();
     }
-    if (req.body.payoneer_email){
+    if (req.body.payoneer_email || req.body.payoneer_email == ""){
       new_account_info.payoneer_email = req.body.payoneer_email.toLowerCase();
     }
-    if (req.body.bitcoin_address){
+    if (req.body.bitcoin_address || req.body.bitcoin_address == ""){
       new_account_info.bitcoin_address = req.body.bitcoin_address;
     }
 
