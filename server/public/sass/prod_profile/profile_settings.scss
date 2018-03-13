@@ -107,6 +107,11 @@
   }
 }
 
+.transactions-row-available .icon {
+  display: inline-block;
+  margin-left: 5px;
+}
+
 .select {
   &.is-narrow {
     select {

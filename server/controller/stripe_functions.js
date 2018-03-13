@@ -354,6 +354,15 @@ module.exports = {
           error.handler(req, res, err.message, "json");
         }
         else {
+
+          //notify us if someone cancels
+          mailer.sendBasicMail({
+            to: "general@domahub.com",
+            from: 'general@domahub.com',
+            subject: "Premium member cancelled! Email asking why / what's up",
+            html: "Username - " + req.user.username + "<br />Email - " + req.user.email + "<br />"
+          });
+
           updateUserStripeSubscription(req.user, subscription);
           res.json({
             state: "success",
@@ -573,21 +582,30 @@ module.exports = {
     if (!req.user.transactions || req.method == "POST"){
       stripe.charges.list({
         transfer_group: req.user.id,
-        expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
+        expand: ["data.balance_transaction"]    //when the balance is available for transfer / withdrawal
       }, function(err, charges) {
         if (err) { error.log(err, "Failed to get Stripe charges."); }
         updateUserTransactions(req.user, charges.data, "stripe");
 
-        //refreshing transactions
-        if (req.method == "POST" && req.path == "/profile/gettransactions"){
-          res.send({
-            state : "success",
-            user : req.user
-          });
-        }
-        else {
-          next();
-        }
+        //get stripe balance for stripe connected account
+        stripe.balance.retrieve({
+          stripe_account: req.user.stripe_account_id
+        }, function(err, balance){
+          if (err) { error.log(err, "Failed to get Stripe balance."); }
+          updateUserBalance(req.user, balance, "stripe");
+
+          //for button to refresh transactions
+          if (req.method == "POST" && req.path == "/profile/gettransactions"){
+            res.send({
+              state : "success",
+              user : req.user
+            });
+          }
+          else {
+            next();
+          }
+        });
+
       });
     }
     else {
@@ -600,20 +618,24 @@ module.exports = {
     if (req.user.type != 2 || !req.user.stripe_account || !req.user.stripe_bank){
       error.handler(req, res, "Something went wrong with your bank account! Please refresh the page and try again.", "json");
     }
-    else if (!req.user.stripe_charges){
+    else if (!req.user.transactions && !req.user.transactions.stripe_transactions){
       error.handler(req, res, "You don't have any available funds to transfer to your bank!", "json");
     }
     else {
+      console.log("SF: Calculating total amount available for withdrawal...");
       var total_transfer = 0;
       var time_now = new Date().getTime();
-      for (var x = 0; x < req.user.stripe_charges.length; x++){
+      for (var x = 0; x < req.user.transactions.stripe_transactions.length; x++){
+        var stripe_transaction = req.user.transactions.stripe_transactions[x];
 
         //only if it's a rental (and not refunded) or if it's a sale thats already transferred and if balance is available now
-        if (req.user.stripe_charges[x].available_on * 1000 < time_now && (req.user.stripe_charges[x].rental_id && req.user.stripe_charges[x].amount_refunded == 0) || req.user.stripe_charges[x].pending_transfer == "false"){
-          var doma_fees = (typeof req.user.stripe_charges[x].doma_fees != undefined) ? parseFloat(req.user.stripe_charges[x].doma_fees) : getDomaFees(req.user.stripe_charges[x].amount);
-          var stripe_fees = (typeof req.user.stripe_charges[x].stripe_fees != undefined) ? parseFloat(req.user.stripe_charges[x].stripe_fees) : getStripeFees(req.user.stripe_charges[x].amount);
-          total_transfer += req.user.stripe_charges[x].amount - doma_fees - stripe_fees;
-          req.user.stripe_charges[x].transferred = true;
+        if (stripe_transaction.available_on < time_now &&
+          ((stripe_transaction.rental_id && stripe_transaction.amount_refunded == 0) ||
+            stripe_transaction.pending_transfer == "false")){
+            var doma_fees = (typeof stripe_transaction.doma_fees != undefined) ? parseFloat(stripe_transaction.doma_fees) : getDomaFees(stripe_transaction.amount);
+            var stripe_fees = (typeof stripe_transaction.stripe_fees != undefined) ? parseFloat(stripe_transaction.stripe_fees) : getStripeFees(stripe_transaction.amount);
+            total_transfer += stripe_transaction.amount - doma_fees - stripe_fees;
+            stripe_transaction.transferred = true;
         }
       }
 
@@ -1068,6 +1090,38 @@ function updateUserTransactions(user, charges, type){
 
   //paypal transactions
   if (charges && type == "paypal"){
+
+  }
+}
+
+//update req.user with stripe balance
+function updateUserBalance(user, balance, type){
+  if (!user.dev_balances && process.env.NODE_ENV == "dev"){
+    user.dev_balances = {};
+  }
+
+  //reset balances
+  user.balances = {
+    total : 0
+  }
+
+  //stripe balance
+  if (balance && type == "stripe"){
+    if (process.env.NODE_ENV == "dev"){
+      user.dev_balances.stripe_balance = balance;
+    }
+
+    //set stripe balance object
+    user.balances.stripe_balance = balance.available;
+
+    //add to total balance
+    user.balances.total += balance.available.reduce(function(p, c, i){
+      return p += c.amount;
+    }, 0);
+  }
+
+  //paypal balance
+  if (balance && type == "paypal"){
 
   }
 }

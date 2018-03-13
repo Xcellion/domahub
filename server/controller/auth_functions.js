@@ -668,15 +668,15 @@ module.exports = {
           message: messageReset(req)
         });
       }
-      //redirect to welcome setup if just created account
-      else if (moment.duration(moment().diff(moment(req.user.date_created))).asDays() <= 1 && req.method == "GET"){
-        if (req.path == "/profile/welcome"){
-          next();
-        }
-        else {
-          res.redirect("/profile/welcome");
-        }
-      }
+      // //redirect to welcome setup if just created account
+      // else if (moment.duration(moment().diff(moment(req.user.date_created))).asDays() <= 1 && req.method == "GET"){
+      //   if (req.path == "/profile/welcome"){
+      //     next();
+      //   }
+      //   else {
+      //     res.redirect("/profile/welcome");
+      //   }
+      // }
       //successfully logged in!
       else {
         if (!req.user.id && req.method == "POST"){

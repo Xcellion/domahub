@@ -159,6 +159,7 @@ module.exports = function(app){
   app.post("/profile/gettransactions", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
+    stripe_functions.getStripeAccount,
     stripe_functions.getStripeTransactions
   ]);
 
