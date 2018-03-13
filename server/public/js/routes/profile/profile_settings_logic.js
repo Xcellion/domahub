@@ -363,32 +363,7 @@ $(document).ready(function() {
 
   //transfer to bank button
   $("#transfer-button").on('click', function(){
-    $("#transfer-button").addClass('is-loading').off();
-    $.ajax({
-      url: "/profile/transfer",
-      method: "POST"
-    }).done(function(data){
-      $("#transfer-button").removeClass('is-loading');
-
-      if (data.state == "success"){
-        $("#transfer-button").addClass("is-disabled");
-        var total_available = $(".withdrawal-available").data("total_available");
-        successMessage("Successfully transferred " + moneyFormat.to(total_available) + " to your bank account!");
-      }
-      else {
-        switch (data.message){
-          case ("Invalid charges!"):
-          errorMessage("Something went wrong with the transfer! Please refresh the page and try again.");
-          break;
-          case ("No bank account to charge"):
-          errorMessage("You need to add a valid bank account to your DomaHub account to be able to withdraw money!");
-          break;
-          default:
-          errorMessage(data.message);
-          break;
-        }
-      }
-    });
+    withdrawMoney($(this));
   });
 
   //refresh transactions
@@ -1245,11 +1220,13 @@ function createTransactionsRow(stripe_charge){
     setupTransactionsModal(temp_row, stripe_charge);
   });
 
+  var available_to_withdraw = stripe_charge.available_on < new Date().getTime() && ((stripe_charge.rental_id && stripe_charge.amount_refunded == 0) || stripe_charge.pending_transfer == "false");
+
   //temp row data for search and filter
   temp_row.data("domain_name", stripe_charge.domain_name);
   temp_row.data("sale", (stripe_charge.rental_id) ? false : true);
   temp_row.data("rental", (stripe_charge.rental_id) ? true : false);
-  temp_row.data("available", stripe_charge.available_on < new Date().getTime());
+  temp_row.data("available", available_to_withdraw);
   temp_row.data("notavailable", stripe_charge.available_on > new Date().getTime());
   temp_row.data("actionable", stripe_charge.pending_transfer == "true");
   temp_row.data("exists", true);
@@ -1261,17 +1238,17 @@ function createTransactionsRow(stripe_charge){
   temp_row.find(".transactions-row-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + stripe_charge.domain_name + "</a>");
 
   //balance available
-  if (stripe_charge.available_on < new Date().getTime()){
+  if (available_to_withdraw){
     temp_row.find(".transactions-row-available").text("Available");
   }
   //balance not yet available
   else {
     //actionable
     if (stripe_charge.pending_transfer == "true"){
-      temp_row.find(".transactions-row-available").text("Requires Action").append('<div class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="far fa-exclamation-circle"></i></div>');
+      temp_row.find(".transactions-row-available").text("Requires Action").append('<div class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="fal fa-exclamation-circle"></i></div>');
     }
     else {
-      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("YYYY-MM-DD") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
+      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("YYYY-MM-DD") + '" data-balloon-pos="up"><i class="fal fa-question-circle"></i></div>');
     }
   }
 
@@ -1426,33 +1403,56 @@ function calculateTotals(){
   var total_earned = 0;
   var total_fees = 0;
   var total_profit = 0;
-  var total_available = 0;
 
   //loop through and figure it out
   $(".transactions-row:not(#transactions-row-clone)").each(function(){
     total_earned += $(this).data("total_earned");
     total_fees += $(this).data("total_fees");
     total_profit += $(this).data("total_profit");
-
-    //available to withdraw
-    if ($(this).data("available")){
-      total_available +=$(this).data("total_profit");
-    }
   });
 
   //totals
   $("#total-earned").text(moneyFormat.to(total_earned));
   $("#total-fees").text(moneyFormat.to(total_fees));
   $("#total-profit").text(moneyFormat.to(total_profit));
-  $(".withdrawal-available").data("total_available", total_available).text(moneyFormat.to(total_available));
+  $(".withdrawal-available").text(moneyFormat.to(user.balances.total / 100));
 
   //if there are funds available and a bank to withdraw to
-  if (total_available > 0 && user.stripe_account && user.stripe_bank){
+  if (user.balances.total > 0 && user.stripe_account && user.stripe_bank){
     $("#transfer-button").removeClass('is-disabled');
   }
   else {
     $("#transfer-button").addClass('is-disabled');
   }
+}
+
+//withdraw money
+function withdrawMoney(){
+  $("#transfer-button").addClass('is-loading');
+  $.ajax({
+    url: "/profile/transfer",
+    method: "POST"
+  }).done(function(data){
+    $("#transfer-button").removeClass('is-loading');
+    if (data.state == "success"){
+      $("#transfer-button").addClass("is-disabled");
+      var total_available = $(".withdrawal-available").data("total_available");
+      successMessage("Successfully transferred " + moneyFormat.to(total_available) + " to your bank account!");
+    }
+    else {
+      switch (data.message){
+        case ("Invalid charges!"):
+        errorMessage("Something went wrong with the transfer! Please refresh the page and try again.");
+        break;
+        case ("No bank account to charge"):
+        errorMessage("You need to add a valid bank account to your DomaHub account to be able to withdraw money!");
+        break;
+        default:
+        errorMessage(data.message);
+        break;
+      }
+    }
+  });
 }
 
 //</editor-fold>
