@@ -1,7 +1,6 @@
 @import '../balloon';
 @import '../bulma/utilities/utilities.sass';
 @import '../bulma/base/base.sass';
-@import '../bulma/components/card.sass';
 @import '../bulma/components/grid.sass';
 @import '../bulma/components/level.sass';
 @import '../bulma/components/menu.sass';
@@ -9,6 +8,7 @@
 @import '../bulma/components/nav.sass';
 @import '../bulma/elements/alert.sass';
 @import '../bulma/elements/button.sass';
+@import '../bulma/elements/box.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/delete.sass';
 @import '../bulma/elements/form.sass';
@@ -16,10 +16,49 @@
 @import '../bulma/elements/icon.sass';
 @import '../bulma/elements/image.sass';
 @import '../bulma/elements/notification.sass';
+@import '../bulma/elements/progress.sass';
 @import '../bulma/elements/tag.sass';
 @import '../bulma/elements/title.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
+
+.progress {
+  position: absolute;
+  top: 0;
+}
+
+.steps-wrapper {
+  padding: 120px 160px;
+  height: 100%;
+  @include mobile {
+    padding: 60px 20px;
+  }
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.step-content {
+  .content,
+  form {
+    @include widescreen {
+      max-width: 50%;
+    }
+  }
+}
+
+.step-buttons {
+  margin-left: auto;
+  .button {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
 
 .columns {
   margin-left:-20px;
@@ -27,23 +66,14 @@
 }
 
 .heading {
+  color: $grey;
   display: block;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
   margin-bottom: 10px;
+  text-transform: uppercase;
 }
 
 .counter {
   margin-bottom: 10px;
-}
-
-.button-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  .button,
-  .select {
-    margin-right: 10px;
-    margin-bottom: 8px;
-  }
 }

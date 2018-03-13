@@ -46,9 +46,15 @@ $(document).ready(function() {
   //<editor-fold>-------------------------------GENERIC STEP LOGIC-------------------------------
 
   //click next button to submit form for current step
-  $(".onboarding-step-wrapper").on("submit", function(e){
+  $(".onboarding-step-form").on("submit", function(e){
     e.preventDefault();
-    submitSpecificStepForm($(this), $(this).attr("id").replace("onboarding-step-", ""));
+    //some vars to remember
+    var currentProgress = parseFloat($(".progress").attr("value"));
+    var currentStep = $(this).closest(".onboarding-step-wrapper");
+    //progress the bar
+    $(".progress").attr("value", currentProgress + 10);
+
+    submitSpecificStepForm(currentStep, currentStep.attr("id").replace("onboarding-step-", ""));
   });
 
   //skip step button
