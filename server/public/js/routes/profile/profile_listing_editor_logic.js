@@ -1372,23 +1372,17 @@ function checkBox(module_value, elem, child){
 
 //update a row if it's verified but not yet purchased
 function updateEditorOffers(selected_domain_ids){
-  updateEditorDomains(selected_domain_ids);
-  $(".non-offer-elem").addClass('is-hidden');
-  $(".offer-elem").removeClass('is-hidden');
-
-  //change domain name header
-  if (selected_domain_ids.length == 0){
-    $(".editor-title").text("My Offers");
-  }
-  else {
-    $(".editor-title").text("Viewing Offers - ");
-  }
-
   //select verified rows here so we can keep the heading as "My Offers"
   if (selected_domain_ids.length == 0){
     selectSpecificRows("verified", 1);
     selected_domain_ids = getSelectedDomains("id", true);
   }
+
+  updateEditorDomains(selected_domain_ids);
+  $(".non-offer-elem").addClass('is-hidden');
+  $(".offer-elem").removeClass('is-hidden');
+  $(".editor-title").text("Viewing Offers - ");
+
   setupOfferButtons(selected_domain_ids);
   createOffersTable(selected_domain_ids);
 }

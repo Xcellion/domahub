@@ -1151,7 +1151,6 @@ module.exports = {
       else {
         req.user.referrals = [];
       }
-
       res.send({
         state : "success",
         user : req.user
