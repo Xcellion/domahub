@@ -132,7 +132,7 @@ $(document).ready(function() {
       if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
 
       //show appropriate card icon
-      if ($(".far-cc-" + card_type) && card_type){
+      if ($(".fal-cc-" + card_type) && card_type){
         $("#cc-icon").attr("data-icon", "cc-" + card_type);
       }
       //or show default
@@ -258,7 +258,7 @@ $(document).ready(function() {
       $("#stripe-account-submit").addClass('is-loading');
       clearNotification();
       $.ajax({
-        url: "/profile/settings/payout",
+        url: "/profile/payout",
         method: "POST",
         data: $(this).serialize()
       }).done(function(data){
@@ -268,11 +268,11 @@ $(document).ready(function() {
             user = data.user;
           }
           successMessage("Successfully updated account settings!");
+          prefillStripeInfo();
         }
         else {
           errorMessage(data.message);
         }
-        prefillStripeInfo();
       });
     });
 
@@ -289,7 +289,6 @@ $(document).ready(function() {
     $("#change-bank-button").on("click", function(){
       clearNotification();
       $("#change-bank-modal").addClass('is-active');
-      $('#account_type-input').focus();
     });
 
     //submit bank information
@@ -312,8 +311,8 @@ $(document).ready(function() {
 
       //create stripe token
       Stripe.bankAccount.createToken(bank_info, function(status, response){
-        $("#stripe-bank-submit").removeClass('is-loading');
         if (status != 200){
+          $("#stripe-bank-submit").removeClass('is-loading');
           errorMessage(response.error.message);
         }
         else {
@@ -1013,6 +1012,10 @@ function showSectionByURL(){
 
   //pre-fill existing stripe information
   function prefillStripeInfo(){
+    
+    //hide bank inputs
+    $(".excess-routing-wrapper").addClass('is-hidden');
+
     //stripe account information
     if (user.stripe_account){
       for (var x in user.stripe_account){
@@ -1034,11 +1037,7 @@ function showSectionByURL(){
 
     //stripe bank information
     if (user.stripe_bank){
-      for (var x in user.stripe_bank){
-        $("#" + x + "-input").val(user.stripe_bank[x]);
-      }
-      //change bank info
-      changeBankCountry($("#currency-input").val());
+      //existing bank info
       $(".existing-bank").removeClass('is-hidden').text("Current bank account - " + user.stripe_bank.bank_name + " ending in " + user.stripe_bank.last4);
       $("#change-bank-button span:nth-child(2)").text("Change Bank");
     }
@@ -1055,12 +1054,13 @@ function showSectionByURL(){
   //submit stripe token for bank info
   function submitBank(stripe_token, updating_bank){
     $.ajax({
-      url: "/profile/settings/bank",
+      url: "/profile/bank",
       data: {
         stripe_token: stripe_token
       },
       method: "POST"
     }).done(function(data){
+      $("#stripe-bank-submit").removeClass('is-loading');
       if (data.state == "success"){
         if (data.user){
           user = data.user;
@@ -1403,22 +1403,28 @@ function calculateTotals(){
   var total_earned = 0;
   var total_fees = 0;
   var total_profit = 0;
+  var total_available = 0;
 
   //loop through and figure it out
   $(".transactions-row:not(#transactions-row-clone)").each(function(){
     total_earned += $(this).data("total_earned");
     total_fees += $(this).data("total_fees");
     total_profit += $(this).data("total_profit");
+
+    //available to withdraw
+    if ($(this).data("available")){
+      total_available +=$(this).data("total_profit");
+    }
   });
 
   //totals
   $("#total-earned").text(moneyFormat.to(total_earned));
   $("#total-fees").text(moneyFormat.to(total_fees));
   $("#total-profit").text(moneyFormat.to(total_profit));
-  $(".withdrawal-available").text(moneyFormat.to(user.balances.total / 100));
+  $(".withdrawal-available").data("total_available", total_available).text(moneyFormat.to(total_available - user.balances.stripe_balance.total / 100));
 
   //if there are funds available and a bank to withdraw to
-  if (user.balances.total > 0 && user.stripe_account && user.stripe_bank){
+  if (total_available > 0 && user.stripe_account && user.stripe_bank){
     $("#transfer-button").removeClass('is-disabled');
   }
   else {
