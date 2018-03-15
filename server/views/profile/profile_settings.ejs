@@ -68,7 +68,7 @@
 	              <li>
 	                <div class="control is-grouped">
 	                  <div class="control">
-	                    <button id="account-submit" type="submit" form="stripe-account-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
+	                    <button id="account-submit" type="submit" form="account-details-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
 	                      <div class="icon is-small">
 													<i class="fal fa-check-circle"></i>
 												</div>
@@ -80,16 +80,12 @@
 												</div>
 	                      <span>Save</span>
 	                    </button>
-	                    <button id="paypal-submit" type="submit" form="paypal-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
+	                    <button id="payments-submit" type="submit" form="payments-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
 	                      <div class="icon is-small">
 													<i class="fal fa-check-circle"></i>
 												</div>
 	                      <span>Save</span>
 	                    </button>
-	                    <%# <button id="payoneer-submit" type="submit" form="payoneer-form" class="toolbar-submit-button toolbar-submit-button toolbar-button is-hidden button is-primary">
-	                      <span class="icon is-small"><i class="fal fa-check-circle"></i></span>
-	                      <span>Save</span>
-	                    </button>%>
 	                  </div>
 	                  <div class="control">
 	                    <a id="cancel-button" class="toolbar-button is-hidden button is-danger is-stylish is-small">
@@ -117,7 +113,7 @@
 	                </h3>
 	              </div>
 	              <div class="card-content">
-	                <form id="stripe-account-form" class="control">
+	                <form id="account-details-form" class="control">
 	                  <div class="control">
 	                    <label class="label" for="email-input">
 	                      Email Address
@@ -135,23 +131,30 @@
 	                    <small class="tip">Other users will be able to see your username.</small>
 	                    <input required id="username-input" class="input account-input" data-uservar="username" type="text" value="<%= user.username %>" spellcheck="false"/>
 	                  </div>
-	                </form>
-	                <div class="control is-spaced is-mobile">
-	                  <div class="control-left">
-	                    <p>
-	                      Password
-	                    </p>
-	                    <small class="tip">Click the button to change your password.</small>
-	                  </div>
-	                  <div class="control-right">
-	                    <a id="change-password-button" class="button is-stylish is-small">
-	                      <div class="icon is-small">
-													<i class="fal fa-unlock-alt"></i>
-												</div>
-	                      <span>Change Password</span>
-	                    </a>
-	                  </div>
-	                </div>
+  	                <div class="control is-spaced is-mobile">
+  	                  <div class="control-left">
+  	                    <p>
+  	                      Password
+  	                    </p>
+  	                    <small class="tip">Click the button to change your password.</small>
+  	                  </div>
+  	                  <div class="control-right">
+  	                    <a id="change-password-button" class="button is-stylish is-small">
+  	                      <div class="icon is-small">
+  													<i class="fal fa-unlock-alt"></i>
+  												</div>
+  	                      <span>Change Password</span>
+  	                    </a>
+  	                  </div>
+  	                </div>
+                    <div class="control">
+                      <label class="label" for="ga_tracking_id-input">
+                        Google Analytics Tracking ID
+                      </label>
+                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-underlined" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
+                      <input required id="ga_tracking_id-input" class="input account-input" data-uservar="ga_tracking_id" type="text" value="<%= user.ga_tracking_id %>" spellcheck="false"/>
+                    </div>
+                  </form>
 								</div>
 							</div>
 						</div>
@@ -488,7 +491,7 @@
 	        <!-- PAYMENTS INFORMATION TAB -->
 	        <div id="payment" class="columns is-laptop is-hidden drop-tab">
 	          <div class="column">
-	            <form id="stripe-personal-form">
+	            <form id="stripe-personal-form" autocomplete="on">
 
 	              <!-- PERSONAL INFO -->
 	              <div class="card is-fullwidth">
@@ -505,16 +508,16 @@
 	                <div class="card-content">
 	                  <div class="control">
 	                    <label class="label" for="first_name-input">First Name</label>
-	                    <input required data-uservar="first_name" id="first_name-input" class="input stripe-account-input" type="text" name="first_name" />
+	                    <input required data-uservar="first_name" autocomplete="additional-name" id="first_name-input" class="input stripe-account-input" type="text" name="first_name" />
 	                  </div>
 	                  <div class="control">
 	                    <label class="label" for="last_name-input">Last Name</label>
-	                    <input required data-uservar="last_name" id="last_name-input" class="input stripe-account-input" type="text" name="last_name" />
+	                    <input required data-uservar="last_name" autocomplete="given-name" id="last_name-input" class="input stripe-account-input" type="text" name="last_name" />
 	                  </div>
 	                  <div class="control">
 	                    <label class="label">Birth Date</label>
 	                    <div class="select">
-	                      <select required data-uservar="birthday_year" id="birthday_year-input" name="birthday_year" class="stripe-account-input">
+	                      <select required data-uservar="birthday_year" autocomplete="bday-year" id="birthday_year-input" name="birthday_year" class="stripe-account-input">
 	                        <option selected value="" disabled>Year</option>
 	                        <option value="1998">1998</option>
 	                        <option value="1997">1997</option>
@@ -608,7 +611,7 @@
 	                      </select>
 	                    </div>
 	                    <div class="select">
-	                      <select required data-uservar="birthday_month" id="birthday_month-input" name="birthday_month" class="stripe-account-input">
+	                      <select required data-uservar="birthday_month" autocomplete="bday-month" id="birthday_month-input" name="birthday_month" class="stripe-account-input">
 	                        <option selected value="" disabled>Month</option>
 	                        <option value="1">January</option>
 	                        <option value="2">February</option>
@@ -625,7 +628,7 @@
 	                      </select>
 	                    </div>
 	                    <div class="select">
-	                      <select required data-uservar="birthday_day" id="birthday_day-input" name="birthday_day" class="stripe-account-input">
+	                      <select required data-uservar="birthday_day" autocomplete="bday-day" id="birthday_day-input" name="birthday_day" class="stripe-account-input">
 	                        <option selected value="" disabled>Day</option>
 	                        <option value="1">1</option>
 	                        <option value="2">2</option>
@@ -680,7 +683,7 @@
 	                  <div class="control">
 	                    <label class="label" for="country-input">Country</label>
 	                    <span class="select is-fullwidth">
-	                      <select required data-uservar="country" name="country" id="country-input" class="stripe-account-input">
+	                      <select required data-uservar="country" name="country" autocomplete="country" id="country-input" class="stripe-account-input">
 	                        <option selected value="" disabled>Please select your country</option>
 	                        <option value="AT">Austria</option>
 	                        <option value="AU">Australia</option>
@@ -709,23 +712,23 @@
 	                  </div>
 	                  <div class="control">
 	                    <label class="label" for="addressline1-input">Address Line 1</label>
-	                    <input required data-uservar="addressline1" id="addressline1-input" class="input stripe-account-input" type="text" name="addressline1" autocomplete=""/>
+	                    <input required data-uservar="addressline1" autocomplete="address-line1" id="addressline1-input" class="input stripe-account-input" type="text" name="addressline1" autocomplete=""/>
 	                  </div>
 	                  <div class="control">
 	                    <label class="label" for="addressline2-input">Address Line 2</label>
-	                    <input data-uservar="addressline2" id="addressline2-input" class="input stripe-account-input" type="text" name="addressline2" autocomplete=""/>
+	                    <input data-uservar="addressline2" id="addressline2-input" autocomplete="address-line2" class="input stripe-account-input" type="text" name="addressline2" autocomplete=""/>
 	                  </div>
 	                  <div class="control">
 	                    <label class="label" for="city-input">City / Town</label>
-	                    <input required data-uservar="city" id="city-input" class="input stripe-account-input" type="text" name="city" autocomplete=""/>
+	                    <input required data-uservar="city" id="city-input" autocomplete="address-level2" class="input stripe-account-input" type="text" name="city" autocomplete=""/>
 	                  </div>
 	                  <div class="control">
 	                    <label class="label" for="state-input">State / Province / Region</label>
-	                    <input required data-uservar="state" id="state-input" class="input stripe-account-input" type="text" name="state" autocomplete=""/>
+	                    <input required data-uservar="state" id="state-input" autocomplete="address-level1" class="input stripe-account-input" type="text" name="state" autocomplete=""/>
 	                  </div>
 	                  <div class="control">
 	                    <label class="label" for="postal_code-input">Zip / Postal Code</label>
-	                    <input required data-uservar="zip" id="postal_code-input" class="input stripe-account-input" type="text" name="zip" autocomplete=""/>
+	                    <input required data-uservar="zip" id="postal_code-input" autocomplete="postal-code" class="input stripe-account-input" type="text" name="zip" autocomplete=""/>
 	                  </div>
 	                </div>
 	              </div>
@@ -741,7 +744,7 @@
 	                <h3 class="card-header-title">
 	                  Bank Information
 	                </h3>
-	                <div class="icon is-info" data-balloon="Bank information is stored and handled by our payments processor, Stripe." data-balloon-pos="up" data-balloon-length="large">
+	                <div class="icon is-info" data-balloon="Bank information is stored and handled by our payments processor, Stripe." data-balloon-pos="left" data-balloon-length="large">
 	                  <i class="fal fa-stripe"></i>
 	                </div>
 	              </div>
@@ -750,9 +753,6 @@
 	                  <div class="control-left">
 	                    <div>
 	                      Default Bank
-	                      <div id="bank-tooltip" class="icon is-tooltip is-small" data-balloon="Please contact us if you do not see your country or currency listed in the default list of available choices." data-balloon-pos="up" data-balloon-length="large">
-	                        <i class="fal fa-question-circle"></i>
-	                      </div>
 	                    </div>
 	                    <small class="tip existing-bank">Click the button to add a default bank account!</small>
 	                  </div>
@@ -769,41 +769,57 @@
 	            </div>
 
 	            <!-- PAYPAL EMAIL -->
-	            <div class="card is-fullwidth">
-	              <div class="card-header">
-	                <h3 class="card-header-title">
-	                  PayPal Information
-	                </h3>
-	                <div class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="up" data-balloon-length="large">
-	                  <i class="fal fa-paypal"></i>
-	                </div>
-	              </div>
-	              <div class="card-content">
-	                <form id="paypal-form">
-	                  <div class="control">
-	                    <label class="label" for="paypal_email-input">PayPal Email Address</label>
-	                    <input required id="paypal_email-input" data-uservar="paypal_email" class="account-input input" type="email" name="paypal_email-input" />
-	                  </div>
-	                </form>
-	              </div>
-	            </div>
+              <form id="payments-form">
+  	            <div class="card is-fullwidth">
+  	              <div class="card-header">
+  	                <h3 class="card-header-title">
+  	                  PayPal Information
+  	                </h3>
+  	                <div class="icon is-info" data-balloon="PayPal information is stored and handled by our payments processor, PayPal." data-balloon-pos="left" data-balloon-length="large">
+  	                  <i class="fal fa-paypal"></i>
+  	                </div>
+  	              </div>
+  	              <div class="card-content">
+                    <div class="control">
+                      <label class="label" for="paypal_email-input">PayPal Email Address</label>
+                      <input id="paypal_email-input" data-uservar="paypal_email" class="account-payments-input account-input input" type="email" name="paypal_email-input" />
+                    </div>
+  	              </div>
+  	            </div>
 
-	            <%# <!-- PAYONEER EMAIL -->
-	            <div class="card is-fullwidth">
-	              <div class="card-header">
-	                <h3 class="card-header-title">
-	                  Payoneer Information
-	                </h3>
-	              </div>
-	              <div class="card-content">
-	                <form id="payoneer-form">
-	                  <div class="control">
-	                    <label class="label" for="payoneer_email-input">Payoneer Email Address</label>
-	                    <input required id="payoneer_email-input" class="account-input input" type="email" name="payoneer_email-input" />
-	                  </div>
-	                </form>
-	              </div>
-	            </div>%>
+  	            <!-- BITCOIN ADDRESS -->
+  	            <div class="card is-fullwidth">
+  	              <div class="card-header">
+  	                <h3 class="card-header-title">
+  	                  Bitcoin Wallet Address
+  	                </h3>
+  	                <div class="icon is-info">
+  	                  <i class="fal fa-bitcoin"></i>
+  	                </div>
+  	              </div>
+  	              <div class="card-content">
+                    <div class="control">
+                      <label class="label" for="bitcoin_address-input">Bitcoin Wallet Address</label>
+                      <input id="bitcoin_address-input" data-uservar="bitcoin_address" class="account-payments-input account-input input" type="text" name="bitcoin_address-input" />
+                    </div>
+  	              </div>
+  	            </div>
+
+  	            <!-- PAYONEER EMAIL -->
+  	            <div class="card is-fullwidth">
+  	              <div class="card-header">
+  	                <h3 class="card-header-title">
+  	                  Payoneer Information
+  	                </h3>
+  	              </div>
+  	              <div class="card-content">
+                    <div class="control">
+                      <label class="label" for="payoneer_email-input">Payoneer Email Address</label>
+                      <input id="payoneer_email-input" data-uservar="payoneer_email" class="account-payments-input account-input input" type="email" name="payoneer_email-input" />
+                    </div>
+  	              </div>
+  	            </div>
+              </form>
 
 	          </div>
 					</div>
@@ -866,11 +882,11 @@
 									<div class="control is-spaced">
 										<div class="control-left">
 											<p>
-												Available for Withdrawal
+												Available For Withdrawal
 											</p>
 										</div>
 										<div class="control-right">
-											<p id="total-available">
+											<p class="withdrawal-available">
 												$0.00
 											</p>
 										</div>
@@ -879,7 +895,7 @@
 	                  <div class="icon is-small">
 											<i class="fal fa-exchange"></i>
 										</div>
-	                  <span>Withdraw <span class="withdrawal-available"></span> to Bank</span>
+	                  <span>Withdraw <span class="withdrawal-available"></span></span>
 	                </a>
 	            	</div>
 	            </div>
@@ -1204,26 +1220,47 @@
   <div id="change-bank-modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-container">
-      <div class="modal-content">
+      <div class="modal-content is-small">
+        <div class="notification no-shadow has-icon is-primary">
+          <div class="icon-box">
+            <div class="icon is-white">
+              <i class="fal fa-credit-card"></i>
+            </div>
+          </div>
+          <div class="content">
+            <p class="is-hidden existing-cc is-white"></p>
+            <small class="is-white">
+              All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-white is-underlined">Stripe</a>.
+            </small>
+          </div>
+        </div>
         <form id="stripe-bank-form" autocomplete="off" class="content">
           <div class="control existing-bank is-hidden"></div>
           <div class="control">
-            <label class="label" for="country-input">Country</label>
+            <label class="label" for="country-input">
+              Country
+              <div id="bank-tooltip" style="display:inline-block;" class="icon is-tooltip is-small" data-balloon="Please contact us if you do not see your country or currency listed in the default list of available choices." data-balloon-pos="up" data-balloon-length="large">
+                <i class="fal fa-question-circle"></i>
+              </div>
+            </label>
             <span class="select is-fullwidth">
               <select required name="bank_country" id="bank_country-input" class="stripe-bank-input">
                 <option selected value="" disabled>Please select your bank's country</option>
-                <option value="AT">Austria</option>
                 <option value="AU">Australia</option>
+                <option value="AT">Austria</option>
                 <option value="BE">Belgium</option>
                 <option value="CA">Canada</option>
                 <option value="DK">Denmark</option>
                 <option value="FI">Finland</option>
                 <option value="FR">France</option>
                 <option value="DE">Germany</option>
+                <option value="GI">Gibraltar</option>
                 <option value="HK">Hong Kong</option>
                 <option value="IE">Ireland</option>
                 <option value="IT">Italy</option>
+                <option value="JP">Japan</option>
                 <option value="LU">Luxembourg</option>
+                <option value="MX">Mexico</option>
                 <option value="NL">Netherlands</option>
                 <option value="NO">Norway</option>
                 <option value="NZ">New Zealand</option>
@@ -1280,13 +1317,13 @@
           <div class="control is-grouped">
             <div class="control is-expanded">
               <button id="stripe-bank-submit" type="submit" form="stripe-bank-form" class="button is-fullwidth is-primary is-stylish is-small">
-                <div class="icon is-small"><i class="far fa-check-circle"></i></div>
+                <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
                 <span>Save Bank</span>
               </button>
             </div>
             <div class="control is-expanded">
               <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
-                <div class="icon is-small"><i class="far fa-ban"></i></div>
+                <div class="icon is-small"><i class="fal fa-ban"></i></div>
                 <span>Cancel</span>
               </a>
             </div>
@@ -1318,7 +1355,7 @@
 							Please <a id="transfer-ownership-href" class="is-underlined is-primary">transfer ownership</a> of this domain to access these funds!</span>
             </li>
             <li id="available-on-wrapper">
-              <div class="icon is-small" title="Type">
+              <div class="icon is-small" title="Available For Withdrawal">
 								<i class="fal fa-check fa-fw"></i>
 							</div>
 							<span id="transactions-modal-available"></span>
@@ -1331,7 +1368,7 @@
             </li>
             <li>
               <div class="icon is-small" title="Payment Processing Fees">
-								<i class="fal fa-stripe fa-fw"></i>
+								<i class="fal fa-tags fa-fw"></i>
 							</div>
 							<span id="transactions-modal-processfees"></span>
             </li>

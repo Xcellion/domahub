@@ -267,7 +267,7 @@ module.exports = {
     var query = "UPDATE accounts \
         SET ? \
         WHERE email = ?"
-    database.query(query, "Failed to update account!", callback, [account_info, email]);
+    database.query(query, "Something went wrong in updating your account!", callback, [account_info, email]);
   },
 
   //updates a specific promo code
@@ -276,7 +276,7 @@ module.exports = {
     var query = "UPDATE coupon_codes \
           SET ? \
         WHERE code = ? "
-    database.query(query, "Failed to apply coupon code!", callback, [account_info, code]);
+    database.query(query, "Something went wrong in applying the coupon code!", callback, [account_info, code]);
   },
 
   //marks as redeemed used promo codes
@@ -287,7 +287,7 @@ module.exports = {
           VALUES ? \
           ON DUPLICATE KEY UPDATE \
             date_redeemed = NOW() "
-    database.query(query, "Failed to redeemed used coupon codes!", callback, [used_codes]);
+    database.query(query, "Something went wrong in redeeming used coupon codes!", callback, [used_codes]);
   },
 
   //marks as redeemed used referral codes
@@ -298,7 +298,7 @@ module.exports = {
           VALUES ? \
           ON DUPLICATE KEY UPDATE \
             date_redeemed_r = NOW() "
-    database.query(query, "Failed to redeemed used coupon codes!", callback, [used_codes]);
+    database.query(query, "Something went wrong in redeeming used coupon codes!", callback, [used_codes]);
   },
 
   //cancels a user's premium subscription
