@@ -255,10 +255,10 @@
                 <h1>
                   Fill out your billing address.
                 </h1>
-                <small class="tip">
+                <p class="tip">
                   This information is legally required for payments processing. DomaHub does not share this information with anyone except our payments processors.
                   <a class="is-underlined">Why is my country not listed?</a>
-                </small>
+                </p>
               </div>
               <form id="step-form-3" class="onboarding-step-form">
                 <div class="control">
@@ -482,15 +482,30 @@
               </button>
             </div>
           </div>
-              <!-- STEP 6 (Premium) -->
-              <form id="onboarding-step-6" class="onboarding-step-wrapper is-hidden">
-                Step 6
-                <p>
+          <!-- STEP 6 (Premium) -->
+          <div id="onboarding-step-6" class="step onboarding-step-wrapper is-hidden">
+            <div class="step-content">
+              <div class="control is-spaced is-mobile">
+                <div class="control-left">
+                  <p class="heading">
+                    Premium Subscription
+                  </p>
+                </div>
+                <div class="control-right">
+                  <a class="is-primary onboarding-skip-button">No, maybe some other time</a>
+                </div>
+              </div>
+              <div class="content">
+                <h1>
                   Upgrade to Premium and get access to all of these features!
-                </p>
-
+                </h1>
+                <p class="tip">
+  								All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-underlined">Stripe</a>.
+  							</p>
+              </div>
+              <form id="step-form-6" class="onboarding-step-form">
                 <div class="control">
-                  <label class="label" for="subscription-type-input">Please select your desired billing cycle</label>
+                  <label class="label" for="subscription-type-input">Billing Cycle</label>
                   <span class="select is-fullwidth">
                     <select required name="subscription-type" id="subscription-type-input">
                       <option selected value="" disabled>Please select your desired billing cycle</option>
@@ -499,100 +514,105 @@
                     </select>
                   </span>
                 </div>
-
-                <small>
-  								All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-underlined">Stripe</a>.
-  							</small>
-                <label class="label">Card Number</label>
-                <input id="cc-num" required tabindex="0" data-stripe="number" class="input modal-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                <label class="label">Expiration Date</label>
-                <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input modal-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-                <label class="label">Security Code</label>
-                <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input modal-input" type="tel" placeholder="•••" autocomplete="off"/>
-
-                <a class="button is-stylish is-small onboarding-prev-button">
-                  <div class="icon is-small">
-                    <i class="fal fa-hand-point-left"></i>
+                <div class="control">
+                  <label class="label">Card Number</label>
+                  <input id="cc-num" required tabindex="0" data-stripe="number" class="input modal-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                </div>
+                <div class="control is-grouped">
+                  <div class="control is-expanded">
+                    <label class="label">Expiration Date</label>
+                    <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input modal-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                   </div>
-                  <span class="is-hidden-mobile">Previous Step</span>
-                </a>
-                <button type="submit" class="button is-stylish is-small onboarding-next-button">
-                  <span class="is-hidden-mobile">Next Step (Pay Now)</span>
-                  <div class="icon is-small">
-                    <i class="fal fa-long-arrow-right"></i>
+                  <div class="control is-expanded">
+                    <label class="label">Security Code</label>
+                    <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input modal-input" type="tel" placeholder="•••" autocomplete="off"/>
                   </div>
-                </button>
-                <a class="is-underlined onboarding-skip-button">Skip Step</a>
+                </div>
               </form>
+            </div>
+            <div class="control step-buttons">
+              <a class="button is-stylish is-black is-inverted onboarding-prev-button">
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-left"></i>
+                </div>
+                <span class="is-hidden-mobile">Previous Step</span>
+              </a>
+              <button form="step-form-6" type="submit" class="button is-stylish is-primary onboarding-next-button">
+                <span class="is-hidden-mobile">Next Step (Pay Now)</span>
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-right"></i>
+                </div>
+              </button>
+            </div>
+          </div>
 
-              <!-- STEP 7 (Finished Personal Information) -->
+          <!-- STEP 7 (Finished Personal Information) -->
           <div id="onboarding-step-7" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
-              <div class="control">
-                <p class="heading">
-                  First Phase Complete
-                </p>
+              <div class="control is-spaced is-mobile">
+                <div class="control-left">
+                  <p class="heading">
+                    Upload Domains
+                  </p>
+                </div>
+                <div class="control-right">
+                  <a class="is-primary onboarding-skip-button">No, I'll upload them later</a>
+                </div>
               </div>
               <div class="content">
                 <h1>
                   Great! Your information is set and ready. Are you ready to add some domains?
                 </h1>
                 <p class="tip">
-                  With DomaHub listings, you'll be able to...
+                  You can connect a domain registrar and import your domains automatically, or you can
+                  bulk upload your domains manually.
                 </p>
               </div>
               <form id="step-form-7" class="onboarding-step-form">
+                <div class="columns">
+                  <div class="column is-6">
+                    <a class="box has-footer">
+                      <div class="box-content">
+                        <div class="content has-text-centered">
+                          <div class="icon is-primary is-circle is-medium">
+                            <i class="fal fa-server"></i>
+                          </div>
+                        </div>
+                        <div class="content has-text-centered">
+                          <p class="is-bold">Connect a Registrar</p>
+                          <p class="tip">
+                            We currently provide support for the following registars: GoDaddy, Namecheap, and Namesilo.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <div class="button is-stylish is-primary">Select</div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="column is-6">
+                    <a class="box has-footer">
+                      <div class="box-content">
+                        <div class="content has-text-centered">
+                          <div class="icon is-accent is-circle is-medium">
+                            <i class="fal fa-keyboard"></i>
+                          </div>
+                        </div>
+                        <div class="content has-text-centered">
+                          <p class="is-bold">Upload Domains Manually</p>
+                          <p class="tip">
+                            Easily upload domains in bulk with our upload tool.
+                            Best if you only have a handful of domains to upload.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <div class="button is-stylish is-accent">Select</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </form>
-              <div class="columns">
-                <div class="column is-4">
-                  <div class="box">
-                    <div class="card-header">
-                      <h3 class="card-header-title">Create Landing Pages</h3>
-                    </div>
-                    <div class="card-content">
-                      <div class="content">
-
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <a class="button is-stylish card-footer-item">Learn More</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-4">
-                  <div class="box">
-                    <div class="card-header">
-                      <h3 class="card-header-title">Create a Domain Hub</h3>
-                    </div>
-                    <div class="card-image">
-                      <img src="/images/main/listing-page/star_theme.png" alt="" />
-                    </div>
-                    <div class="card-content">
-                      <div class="content">
-
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <a class="button is-stylish card-footer-item">Learn More</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-4">
-                  <div class="box">
-                    <div class="card-header">
-                      <h3 class="card-header-title">Use Management Tools</h3>
-                    </div>
-                    <div class="card-content">
-                      <div class="content">
-
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <a class="button is-stylish card-footer-item">Learn More</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
             <div class="control step-buttons">
               <a class="button is-stylish is-black is-inverted onboarding-prev-button">
@@ -610,116 +630,148 @@
             </div>
           </div>
 
-              <!-- STEP 8 (Registrars) -->
-              <form id="onboarding-step-8" class="onboarding-step-wrapper is-hidden">
-                Step 8
-                <p>
-                  Do you have any domains with any of the below listed registrars?
+          <!-- STEP 8 (Registrars) -->
+          <div id="onboarding-step-8" class="step onboarding-step-wrapper is-hidden">
+            <div class="step-content">
+              <div class="control is-spaced is-mobile">
+                <div class="control-left">
+                  <p class="heading">
+                    Choose Your Registrar
+                  </p>
+                </div>
+                <div class="control-right">
+                  <a class="is-primary onboarding-skip-button">Skip this step</a>
+                </div>
+              </div>
+              <div class="content">
+                <h1>
+                  Please select a registrar to connect.
+                </h1>
+                <p class="tip">
+                  By connecting your registrar, you'll be able to automatically create listings for all of your domains.
+                  If you'd like to see a different registrar added, <a class="contact-link is-underlined">let us know</a>!
                 </p>
-                <p>
-                  By connecting your registrar, you'll be able to automatically create listings for all of your domains!
-                </p>
-                <p>
-                  If you don't see your registrar listed, don't worry! We'll help guide you through creating a domain listing manually.
-                </p>
-                <p>
-                  If you'd like to see your registrar added, <a class="contact-link is-underlined">let us know</a>!
-                </p>
-
-                <div class="control is-spaced is-mobile">
+              </div>
+              <form id="step-form-8" class="onboarding-step-form">
+                <div class="box no-shadow control is-spaced is-mobile">
                   <div class="control-left">
-                    <p>
-                      GoDaddy
-                    </p>
+                    <figure class="image is-logo left-aligned">
+                      <img src="/images/companies/godaddy-logo.png" alt="GoDaddy Logo" />
+                    </figure>
                     <small data-registrar="godaddy" data-registrar_name="GoDaddy" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar="godaddy" class="add-registrar-button button is-icon is-stylish is-small">
+                    <a data-registrar="godaddy" class="add-registrar-button button is-stylish is-small is-primary">
                       <span class="icon is-small"><i class="fal fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar_name="GoDaddy"></span>
                     </a>
                   </div>
                 </div>
-
-                <div class="control is-spaced is-mobile">
+                <div class="box no-shadow control is-spaced is-mobile">
                   <div class="control-left">
-                    <p>
-                      Namecheap
-                    </p>
+                    <figure class="image is-logo left-aligned">
+                      <img src="/images/companies/namecheap-logo.png" alt="Namecheap Logo" />
+                    </figure>
                     <small data-registrar="namecheap" data-registrar_name="Namecheap" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar="namecheap" class="add-registrar-button button is-icon is-stylish is-small">
+                    <a data-registrar="namecheap" class="add-registrar-button button is-stylish is-small is-primary">
                       <span class="icon is-small"><i class="fal fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar_name="Namecheap"></span>
                     </a>
                   </div>
                 </div>
-
-                <div class="control is-spaced is-mobile">
+                <div class="box no-shadow control is-spaced is-mobile">
                   <div class="control-left">
-                    <p>
-                      NameSilo
-                    </p>
-                    <small data-registrar="namesilo" data-registrar_name="NameSilo" class="tip registrar-tip"></small>
+                    <figure class="image is-logo left-aligned">
+                      <img src="/images/companies/namesilo-logo.png" alt="Namesilo Logo" />
+                    </figure>
+                    <small data-registrar="namesilo" data-registrar_name="Namesilo" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar="namesilo" class="add-registrar-button button is-icon is-stylish is-small">
+                    <a data-registrar="namesilo" class="add-registrar-button button is-stylish is-small is-primary">
                       <span class="icon is-small"><i class="fal fa-link"></i></span>
                       <span class="registrar-button-text" data-registrar_name="NameSilo"></span>
                     </a>
                   </div>
                 </div>
-
-                <!-- list some features/images here -->
-
-                <a class="button is-stylish is-small onboarding-prev-button">
-                  <div class="icon is-small">
-                    <i class="fal fa-hand-point-left"></i>
-                  </div>
-                  <span class="is-hidden-mobile">Previous Step</span>
-                </a>
-                <button type="submit" class="button is-stylish is-small onboarding-next-button">
-                  <span class="is-hidden-mobile">Next Step</span>
-                  <div class="icon is-small">
-                    <i class="fal fa-long-arrow-right"></i>
-                  </div>
-                </button>
-                <a class="is-underlined onboarding-skip-button">Skip Step and add domains manually</a>
               </form>
+            </div>
+            <div class="control step-buttons">
+              <a class="button is-stylish is-black is-inverted onboarding-prev-button">
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-left"></i>
+                </div>
+                <span class="is-hidden-mobile">Previous Step</span>
+              </a>
+              <button form="step-form-8" type="submit" class="button is-stylish is-primary onboarding-next-button">
+                <span class="is-hidden-mobile">Next Step</span>
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-right"></i>
+                </div>
+              </button>
+            </div>
+          </div>
 
-              <!-- STEP 9 (Manual Domain Entry) -->
-              <form id="onboarding-step-9" class="onboarding-step-wrapper is-hidden">
-                Step 9
-
-                <div class="content">
-                  <p>
-                    Enter up to 100 domain names in the box below <strong>separated
-                    by commas</strong>. You must include TLD extensions such as .com, .org, or .net at the end.
+          <!-- STEP 9 (Manual Domain Entry) -->
+          <div id="onboarding-step-9" class="step onboarding-step-wrapper is-hidden">
+            <div class="step-content">
+              <div class="control is-spaced is-mobile">
+                <div class="control-left">
+                  <p class="heading">
+                    Manually Upload Domains
                   </p>
                 </div>
-                <div class="content">
+                <div class="control-right">
+                  <a class="is-primary onboarding-skip-button">Skip this step</a>
+                </div>
+              </div>
+              <div class="content">
+                <h1>Upload your domains below.</h1>
+                <p class="tip">
+                  Enter up to 100 domain names in the box below <strong>separated
+                  by commas</strong>. You must include TLD extensions such as .com, .org, or .net at the end.
+                </p>
+              </div>
+              <form id="onboarding-step-9" class="onboarding-step-form">
+                <div class="control">
                   <textarea tabindex="0" required autofocus id="domain-names" class="textarea" placeholder="butterflies.com, oysters.org, tigers.net" spellcheck="false"></textarea>
                 </div>
-
-                <a class="button is-stylish is-small onboarding-prev-button">
-                  <div class="icon is-small">
-                    <i class="fal fa-hand-point-left"></i>
-                  </div>
-                  <span class="is-hidden-mobile">Previous Step (Add automatically via your registrar)</span>
-                </a>
-                <button type="submit" class="button is-stylish is-small onboarding-next-button">
-                  <span class="is-hidden-mobile">Next Step</span>
-                  <div class="icon is-small">
-                    <i class="fal fa-long-arrow-right"></i>
-                  </div>
-                </button>
               </form>
+            </div>
+            <div class="control step-buttons">
+              <a class="button is-stylish is-black is-inverted onboarding-prev-button">
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-left"></i>
+                </div>
+                <span class="is-hidden-mobile">Previous Step</span>
+              </a>
+              <button form="step-form-9" type="submit" class="button is-stylish is-primary onboarding-next-button">
+                <span class="is-hidden-mobile">Next Step</span>
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-right"></i>
+                </div>
+              </button>
+            </div>
+          </div>
 
-              <!-- STEP 10 (Domain Table) -->
-              <form id="onboarding-step-10" class="onboarding-step-wrapper is-hidden">
-                Step 10
-
+          <!-- STEP 10 (Domain Table) -->
+          <div id="onboarding-step-10" class="step onboarding-step-wrapper is-hidden">
+            <div class="step-content">
+              <div class="control is-spaced is-mobile">
+                <div class="control-left">
+                  <p class="heading">
+                    Review and Edit
+                  </p>
+                </div>
+              </div>
+              <div class="content">
+                <h1>Review and edit your domains.</h1>
+                <p class="tip">
+                  Take a moment to review your domains and enter additional information.
+                </p>
+              </div>
+              <form id="onboarding-step-10" class="onboarding-step-form">
                 <table id="domain-input-table" class="table has-shadow">
                     <thead>
                       <tr>
@@ -727,13 +779,13 @@
                         <th class="td-price is-hidden-mobile">
                           <span>Minimum Price</span>
                           <span class="icon is-tooltip is-small" data-balloon="The minimum offer you will consider selling this domain for. Leave blank for no minimum price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-                            <i class="fal fa-question-circle"></i>
+                            <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                           </span>
                         </th>
                         <th class="td-price is-hidden-mobile">
                           <span>Buy it now Price</span>
                           <span class="icon is-tooltip is-small" data-balloon="The price you are willing to sell this domain for immediately. Leave blank to disable the buy it now option. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-                            <i class="fal fa-question-circle"></i>
+                            <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                           </span>
                         </th>
                       </tr>
@@ -744,7 +796,7 @@
                           <div class='control has-addons is-marginless'>
                             <button class="button is-icon delete-icon no-shadow">
                               <span class='icon is-small'>
-                                <i class='far fa-trash'></i>
+                                <i class='fal fa-trash-alt'></i>
                               </span>
                             </button>
                             <input class="domain-name-input table-input input is-expanded no-shadow" type="text" value=""/>
@@ -759,25 +811,28 @@
                       </tr>
                     </tbody>
                   </table>
-
-                <a class="button is-stylish is-small onboarding-prev-button">
-                  <div class="icon is-small">
-                    <i class="fal fa-hand-point-left"></i>
-                  </div>
-                  <span class="is-hidden-mobile">Previous Step</span>
-                </a>
-                <button type="submit" class="button is-stylish is-small onboarding-next-button">
-                  <span class="is-hidden-mobile">Next Step</span>
-                  <div class="icon is-small">
-                    <i class="fal fa-long-arrow-right"></i>
-                  </div>
-                </button>
               </form>
+            </div>
+            <div class="control step-buttons">
+              <a class="button is-stylish is-black is-inverted onboarding-prev-button">
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-left"></i>
+                </div>
+                <span class="is-hidden-mobile">Previous Step</span>
+              </a>
+              <button form="step-form-10" type="submit" class="button is-stylish is-primary onboarding-next-button">
+                <span class="is-hidden-mobile">Next Step</span>
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-right"></i>
+                </div>
+              </button>
+            </div>
+          </div>
 
-              <!-- STEP 11 (After Successfully Creating A Listing) -->
-              <form id="onboarding-step-final" class="onboarding-step-wrapper is-hidden">
-                Step 11
-
+          <!-- STEP 11 (After Successfully Creating A Listing) -->
+          <div id="onboarding-step-11" class="step onboarding-step-wrapper is-hidden">
+            <div class="step-content">
+              <form id="onboarding-step-final" class="onboarding-step-form">
                 <p>
                   Congratulations! You've created your first <span id="total-created-listings"></span>! Before we can get that set up, let's walk you through the DomaHub profile menu.
                 </p>
@@ -811,6 +866,8 @@
                 </p>
 
               </form>
+            </div>
+          </div>
 
         </div>
       </div>

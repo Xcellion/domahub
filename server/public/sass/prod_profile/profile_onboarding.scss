@@ -18,6 +18,7 @@
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/progress.sass';
 @import '../bulma/elements/tag.sass';
+@import '../bulma/elements/table.sass';
 @import '../bulma/elements/title.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
@@ -43,8 +44,12 @@
 }
 
 .step-content {
-  .content,
-  form {
+  & > .content {
+    @include widescreen {
+      max-width: 50%;
+    }
+  }
+  & > form {
     @include widescreen {
       max-width: 50%;
     }
@@ -57,6 +62,25 @@
     &:not(:last-child) {
       margin-right: 10px;
     }
+  }
+}
+
+a {
+  &.box {
+    @include transition(all 0.2s ease);
+    &:hover {
+      @include box-shadow(0,8px,20px,$border,6px);
+    }
+    &:active {
+      @include box-shadow(0,4px,10px,$border,0);
+      @include translate(0,2px);
+    }
+  }
+}
+
+.image {
+  &.is-logo {
+    width: 140px;
   }
 }
 
