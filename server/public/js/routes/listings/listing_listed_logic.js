@@ -421,7 +421,7 @@ function setupRightHalf(){
     if (listing_info.rentable && listing_info.status == 1){
       //submit times (redirect to rental checkout)
       $("#checkout-button").off().on("click", function(){
-        submitTimes($(this));
+        submitTimes();
       });
 
       //<editor-fold>-------------------------------TYPED PATH-------------------------------
@@ -446,7 +446,7 @@ function setupRightHalf(){
 
         //select all on existing path
         $("#typed-slash").select();
-      }).off().on("focusout", function(){
+      }).on("focusout", function(){
         if ($("#typed-slash").val() == ""){
           $("#input-tooltip").removeClass('is-hidden');
         }
@@ -457,14 +457,12 @@ function setupRightHalf(){
           $("#calendar-input").val("");
           $("#checkout-button").addClass('is-disabled');
 
-          $("#calendar-input").off("click").off().on("click", function(){
-            getTimes($(this));
-          });
+          getTimes();
         }
       });
 
       //function for input text validation and tooltip change
-      $("#typed-slash").off().on("keypress onkeypress", function(e) {
+      $("#typed-slash").on("keypress onkeypress", function(e) {
         var code = e.charCode || e.keyCode;
         var inp = String.fromCharCode(code);
         //regex for alphanumeric
@@ -482,7 +480,7 @@ function setupRightHalf(){
         else {
           $("#input-tooltip-error").addClass("is-hidden");
         }
-      }).off().on('keyup', function(e){
+      }).on('keyup', function(e){
         var code = e.charCode || e.keyCode;
 
         var validChar = /^[0-9a-zA-Z]+$/;
@@ -495,7 +493,7 @@ function setupRightHalf(){
 
           //get new calendar if mypath is different
           if (myPath != $(this).val()) {
-            getTimes($(this));
+            getTimes();
           }
 
           //show if mypath is the same
@@ -541,7 +539,7 @@ function setupRightHalf(){
 
   //<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
 
-  //helper function to check if everything is legit
+  //check if everything is legit
   function checkTimes(){
     var startDate = $("#calendar-input").data('daterangepicker').startDate;
     var endDate = $("#calendar-input").data('daterangepicker').endDate.clone().add(1, "millisecond");
@@ -557,20 +555,19 @@ function setupRightHalf(){
     }
   }
 
-  function submitTimes(checkout_button){
-    //remove event handler
-    checkout_button.off();
-    checkout_button.addClass('is-loading');
-    var newEvent = checkTimes();
+  //submit times for rental
+  function submitTimes(){
+    $("#checkout-button").addClass('is-loading');
 
+    var newEvent = checkTimes();
     if (newEvent.starttime && newEvent.endtime){
 
       //test rental submit (for compare tool)
       if (compare){
-        testSubmitRentHandler(checkout_button);
+        testSubmitRentHandler();
       }
       else {
-        //redirect to checkout page
+        //submit the desired rental times
         $.ajax({
           type: "POST",
           url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkoutrent",
@@ -581,21 +578,14 @@ function setupRightHalf(){
           },
           xhrFields: { withCredentials: true }
         }).done(function(data){
-          checkout_button.removeClass('is-loading');
+          //redirect to checkout page
           if (data.state == "success"){
             window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
           }
           else if (data.state == "error"){
-            $("#calendar-regular-message").addClass('is-hidden');
+            $("#checkout-button").removeClass('is-loading');
             errorHandler(data.message);
-            checkout_button.on('click', function(){
-              submitTimes(checkout_button);
-            });
-
-            //re-add calendar event handler to fetch new events
-            $("#calendar-input").off('click').off().on("click", function(){
-              getTimes($(this));
-            });
+            getTimes();
           }
         });
       }
@@ -630,16 +620,12 @@ function setupRightHalf(){
   //<editor-fold>-------------------------------CALENDAR SET UP-------------------------------
 
   //get times from the server
-  function getTimes(calendar_elem){
-    //now loading messages
+  function getTimes(){
+    //now loading times
     $("#calendar-input").addClass('is-disabled');
     $("#calendar-regular-message").addClass('is-hidden');
     $("#calendar-error-message").addClass('is-hidden');
-
-    //loading dates message
-    if (calendar_elem){
-      calendar_elem.off("click");
-    }
+    $("#calendar-loading-message").removeClass('is-hidden');
 
     //comparison only, no need for AJAX
     if (compare){
@@ -654,6 +640,7 @@ function setupRightHalf(){
         }
       }).done(function(data){
         $("#calendar-input").removeClass('is-disabled');
+        $("#calendar-loading-message").addClass('is-hidden');
         $("#calendar-regular-message").removeClass('is-hidden');
 
         //got the future events, go ahead and create the calendar
@@ -746,10 +733,8 @@ function setupRightHalf(){
     $(".daterangepicker").appendTo("#calendar");
 
     //only show if the calendar input is visible
-    if ($("#calendar-input").is(":visible")){
-      $("#calendar-input").data('daterangepicker').show();
-      $("#calendar-input").addClass('is-hidden');
-    }
+    $("#calendar-input").data('daterangepicker').show();
+    $("#calendar-input").addClass('is-hidden');
 
   }
 
@@ -1422,21 +1407,21 @@ function setupRightHalf(){
       if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>an image</a>";
         ticker_icon_color.addClass('is-info');
-        ticker_icon.replaceWith("<i class='far fa-camera-retro'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-camera-retro'></i>");
       }
 
       //showing a GIF
       else if (rental.address.match(/\.(gif)$/) != null){
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a GIF</a>";
         ticker_icon_color.addClass('is-dark');
-        ticker_icon.replaceWith("<i class='far fa-video'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-video'></i>");
       }
 
       //showing a PDF
       else if (rental.address.match(/\.(pdf)$/) != null){
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a PDF</a>";
         ticker_icon_color.addClass('is-dark');
-        ticker_icon.replaceWith("<i class='far fa-file-pdf'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-file-pdf'></i>");
       }
 
       //showing a website
@@ -1444,14 +1429,14 @@ function setupRightHalf(){
         var ticker_address = getHost(rental.address);
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>" + ticker_address + "</a>";
         ticker_icon_color.addClass('is-primary');
-        ticker_icon.replaceWith("<i class='far fa-desktop'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-desktop'></i>");
       }
 
       //showing nothing
       else {
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display nothing";
         ticker_icon_color.addClass('is-black');
-        ticker_icon.replaceWith("<i class='far fa-eye-slash'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-eye-slash'></i>");
       }
     }
     //forward the domain
@@ -1459,7 +1444,7 @@ function setupRightHalf(){
       var ticker_address = getHost(rental.address);
       var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='" + rental.address + "' class='is-info is-underlined'>" + ticker_address + "</a>";
       ticker_icon_color.addClass('is-accent');
-      ticker_icon.replaceWith("<i class='far fa-share'></i>");
+      ticker_icon.replaceWith("<i class='fal fa-share'></i>");
     }
     ticker_clone.find(".ticker-type").html(ticker_type);
 

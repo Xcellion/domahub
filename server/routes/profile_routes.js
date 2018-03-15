@@ -252,7 +252,11 @@ module.exports = function(app){
     stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
-    stripe_functions.transferMoney,
+    profile_functions.checkWithdrawalAccounts,
+    stripe_functions.calculateWithdrawalAmount,
+    stripe_functions.withdrawToStripeBank,
+    profile_functions.withdrawToPayPal,
+    stripe_functions.markTransactionsWithdrawn,
     stripe_functions.getStripeTransactions
   ]);
 

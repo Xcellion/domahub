@@ -360,8 +360,14 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------TRANSACTIONS TAB-------------------------------
 
-  //transfer to bank button
+  //show withdrawal modal
   $("#transfer-button").on('click', function(){
+    setupWithdrawModal();
+  });
+
+  //withdrawal to account
+  $("#withdrawal-modal-form").on('submit', function(e){
+    e.preventDefault();
     withdrawMoney($(this));
   });
 
@@ -1012,7 +1018,7 @@ function showSectionByURL(){
 
   //pre-fill existing stripe information
   function prefillStripeInfo(){
-    
+
     //hide bank inputs
     $(".excess-routing-wrapper").addClass('is-hidden');
 
@@ -1432,14 +1438,54 @@ function calculateTotals(){
   }
 }
 
+//for withdrawal selection
+function setupWithdrawModal(){
+  $("#withdrawal-modal").addClass('is-active');
+
+  //stripe bank account
+  if (user.stripe_bank){
+    $("#withdrawal-bank-option").text("Bank account - " + user.stripe_bank.bank_name + " " + user.stripe_bank.last4);
+  }
+  else {
+    $("#withdrawal-bank-option").addClass('is-hidden');
+  }
+
+  //paypal
+  if (user.paypal_email){
+    $("#withdrawal-paypal-option").text("PayPal account - " + user.paypal_email);
+  }
+  else {
+    $("#withdrawal-paypal-option").addClass('is-hidden');
+  }
+
+  //bitcoin
+  if (user.bitcoin_address){
+    $("#withdrawal-bitcoin-option").text("PayPal account - " + user.bitcoin_address);
+  }
+  else {
+    $("#withdrawal-bitcoin-option").addClass('is-hidden');
+  }
+
+  //payoneer
+  if (user.payoneer_email){
+    $("#withdrawal-payoneer-option").text("PayPal account - " + user.payoneer_email);
+  }
+  else {
+    $("#withdrawal-payoneer-option").addClass('is-hidden');
+  }
+}
+
 //withdraw money
 function withdrawMoney(){
-  $("#transfer-button").addClass('is-loading');
+  $("#withdrawal-modal-submit-button").addClass('is-loading');
   $.ajax({
-    url: "/profile/transfer",
-    method: "POST"
+    url : "/profile/transfer",
+    method : "POST",
+    data : {
+      destination_account : $("#withdrawal-destination-input").val()
+    }
   }).done(function(data){
-    $("#transfer-button").removeClass('is-loading');
+    $("#withdrawal-modal-submit-button").removeClass('is-loading');
     if (data.state == "success"){
       $("#transfer-button").addClass("is-disabled");
       var total_available = $(".withdrawal-available").data("total_available");
