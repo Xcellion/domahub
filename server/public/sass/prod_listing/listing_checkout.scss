@@ -17,10 +17,6 @@
 @import '../bulma/layout/section.sass';
 @import '../bulma/layout/footer.sass';
 
-.min-height {
-  min-height: calc(100vh - 110px) !important;
-}
-
 .box {
   @include transition(all 0.3s ease);
   &.hover-effect {

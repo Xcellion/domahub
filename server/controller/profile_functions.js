@@ -899,7 +899,7 @@ module.exports = {
     if (req.body.username){
       new_account_info.username = req.body.username.replace(/\s/g, '');
     }
-    if (req.body.ga_tracking_id){
+    if (req.body.ga_tracking_id || req.body.ga_tracking_id == ""){
       new_account_info.ga_tracking_id = (req.body.ga_tracking_id) ? req.body.ga_tracking_id : null;
     }
     if (req.body.new_password){
@@ -1259,6 +1259,93 @@ module.exports = {
         error.handler(req, res, "Something went wrong with the promo code! Please refresh the page and try again!", "json");
       }
     });
+  },
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------------WITHDRAWAL-------------------------------
+
+  //check if the account being withdrawn to is legit
+  checkWithdrawalAccounts : function(req, res, next){
+    console.log("PF: Checking if the withdrawal account is legitimate...");
+
+    //check if selected destination account is legit / exists
+    if (["bank", "paypal", "bitcoin", "payoneer"].indexOf(req.body.destination_account) == -1){
+      error.handler(req, res, "Please select a valid account to withdraw to!", "json");
+    }
+    else if (req.body.destination_account == "bank" && (req.user.type != 2 || !req.user.stripe_account || !req.user.stripe_bank)){
+      error.handler(req, res, "You don't have a bank account connected to your DomaHub account! Please connect a bank account and try again.", "json");
+    }
+    else if (req.body.destination_account == "bitcoin" && !req.user.bitcoin_address){
+      error.handler(req, res, "You don't have a valid Bitcoin wallet connected to your DomaHub account! Please connect a Bitcoin wallet and try again.", "json");
+    }
+    else if (req.body.destination_account == "paypal" && !req.user.paypal_email){
+      error.handler(req, res, "You don't have a valid PayPal account connected to your DomaHub account! Please connect a Paypal account and try again.", "json");
+    }
+    else if (req.body.destination_account == "payoneer" && !req.user.payoneer_email){
+      error.handler(req, res, "You don't have a valid Payoneer account connected to your DomaHub account! Please connect a Payoneer account and try again.", "json");
+    }
+    else if (!req.user.transactions && !req.user.transactions.stripe_transactions){
+      error.handler(req, res, "You don't have any available funds to withdraw! Please refresh the page and verify your transactions.", "json");
+    }
+    else {
+      next();
+    }
+  },
+
+  //withdraw money to a paypal account
+  withdrawToPayPal : function(req, res, next){
+    if (req.body.destination_account == "paypal"){
+      var total_amount_available = req.session.total_amount_available;
+      console.log("PF: Attempting to transfer " + moneyFormat.to(total_amount_available/100) + " to PayPal account - " + req.user.paypal_email + "...");
+
+      //notify us
+      mailer.sendBasicMail({
+        to: "general@domahub.com",
+        from: 'general@domahub.com',
+        subject: "Someone tried to withdraw to PayPal!",
+        html: "Username - " + req.user.username + "<br />Email - " + req.user.email + "<br />PayPal email - " + req.user.paypal_email
+      });
+    }
+
+    next();
+  },
+
+  //withdraw money to a bitcoin wallet
+  withdrawToBitcoin : function(req, res, next){
+    if (req.body.destination_account == "bitcoin"){
+      var total_amount_available = req.session.total_amount_available;
+      console.log("PF: Attempting to transfer " + moneyFormat.to(total_amount_available/100) + " to Bitcoin wallet - " + req.user.bitcoin_address + "...");
+
+      //notify us
+      mailer.sendBasicMail({
+        to: "general@domahub.com",
+        from: 'general@domahub.com',
+        subject: "Someone tried to withdraw to Bitcoin!",
+        html: "Username - " + req.user.username + "<br />Email - " + req.user.email + "<br />Bitcoin address - " + req.user.bitcoin_address
+      });
+    }
+
+    next();
+  },
+
+  //withdraw money to a payoneer account
+  withdrawToPayoneer : function(req, res, next){
+    if (req.body.destination_account == "payoneer"){
+      var total_amount_available = req.session.total_amount_available;
+      console.log("PF: Attempting to transfer " + moneyFormat.to(total_amount_available/100) + " to Payoneer account - " + req.user.payoneer_email + "...");
+
+      //notify us
+      mailer.sendBasicMail({
+        to: "general@domahub.com",
+        from: 'general@domahub.com',
+        subject: "Someone tried to withdraw to Payoneer!",
+        html: "Username - " + req.user.username + "<br />Email - " + req.user.email + "<br />Payoneer email - " + req.user.payoneer_email
+      });
+
+    }
+
+    next();
   },
 
   //</editor-fold>

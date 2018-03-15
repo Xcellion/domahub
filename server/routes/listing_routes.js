@@ -8,6 +8,7 @@ var owner_functions = require("../controller/listing_owner_functions.js");
 var listing_general_functions = require("../controller/listing_general_functions.js");
 var profile_functions = require("../controller/profile_functions.js");
 var stripe_functions = require("../controller/stripe_functions.js");
+var paypal_functions = require("../controller/paypal_functions.js");
 
 //</editor-fold>>
 
@@ -376,6 +377,12 @@ module.exports = function(app){
       renter_functions.checkRentalPrice,
       renter_functions.addToRentalCheckoutHistory,
       renter_functions.redirectToCheckout
+    ]);
+
+    //create a paypal payment ID
+    app.post('/listing/:domain_name/rent/paypalID', [
+      general_functions.urlencodedParser,
+      paypal_functions.createPaymentID
     ]);
 
     //</editor-fold>

@@ -211,7 +211,8 @@ module.exports = {
 
           //loop through all domains in registrar gotten via API
           var registrar_info = req.session.registrar_info[x];
-          for (var y = 0 ; y < registrar_info.domains.length ; y++){
+          if (req.session.registrar_info.domains){
+            for (var y = 0 ; y < registrar_info.domains.length ; y++){
             var registrar_domain_name = registrar_info.domains[y].domain_name;
 
             //if domain name is being created on domahub (not all domains in registrar)
@@ -236,6 +237,7 @@ module.exports = {
                 break;
               }
             }
+          }
           }
         }
 

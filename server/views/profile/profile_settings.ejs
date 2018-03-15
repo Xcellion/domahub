@@ -18,6 +18,7 @@
 			<div class="right-content">
 
 				<%- include("../profile/profile_navbar_top.ejs"); %>
+
 				<div class="right-content-items">
 
 	        <div id="settings-toolbar">
@@ -101,7 +102,7 @@
 	          </div>
 	        </div>
 
-        <!-- ACCOUNT SETTINGS TAB -->
+          <!-- ACCOUNT SETTINGS TAB -->
 					<div id="account" class="columns is-laptop is-hidden drop-tab">
 
 	          <!-- ACCOUNT INFORMATION (EMAIL, USERNAME, PW) -->
@@ -151,8 +152,8 @@
                       <label class="label" for="ga_tracking_id-input">
                         Google Analytics Tracking ID
                       </label>
-                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-underlined" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
-                      <input required id="ga_tracking_id-input" class="input account-input" data-uservar="ga_tracking_id" type="text" value="<%= user.ga_tracking_id %>" spellcheck="false"/>
+                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-underlined" target="_blank" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
+                      <input id="ga_tracking_id-input" class="input account-input" data-uservar="ga_tracking_id" type="text" value="<%= user.ga_tracking_id %>" spellcheck="false"/>
                     </div>
                   </form>
 								</div>
@@ -223,7 +224,7 @@
 	          </div>
 	        </div>
 
-        <!-- PREMIUM / REFERRAL / PROMO CODE TAB -->
+          <!-- PREMIUM / REFERRAL / PROMO CODE TAB -->
 	        <div id="premium" class="columns is-laptop is-hidden drop-tab">
 	          <div class="column">
 		          <div class="card is-fullwidth">
@@ -242,7 +243,7 @@
   									<div class="content">
   										<small class="is-white">
   											Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
-  											<a tabindex="0" class="is-white is-underlined" href="/features#pricing">
+  											<a tabindex="0" target="_blank" class="is-white is-underlined" href="/features#pricing">
   												Click here to learn more.
   											</a>
   										</small>
@@ -259,7 +260,7 @@
                       <div class="content">
                         <small class="is-white">
                           Your Premium account is currently set to expire on <span class="exp-date-text"></span>. You will lose access to additional features like no commission fees, design customization, unlimited domains, etc.
-                          <a tabindex="0" class="is-white is-underlined" href="/features#pricing">
+                          <a tabindex="0" target="_blank" class="is-white is-underlined" href="/features#pricing">
                             Click here to learn more.
                           </a>
                         </small>
@@ -454,7 +455,7 @@
                         Total earned: <span id="total-amount-redeemed"></span>
                       </th>
                       <th>
-                        <a id="refresh-referral-table-button" class="button is-stylish is-small is-outlined">
+                        <a id="refresh-referral-table-button" class="button is-pulled-right is-stylish is-small is-outlined">
                           <div class="icon is-small">
                             <i class="fal fa-sync-alt"></i>
                           </div>
@@ -833,7 +834,7 @@
 	                  Earnings Report
 	                </h3>
 	                <div class="card-header-icon">
-	                  <div class="icon is-tooltip" data-balloon="Money withdrawn on non-business days will be available when your bank opens. Your withdrawal could be delayed or blocked if we find any issues with either your DomaHub or bank account." data-balloon-pos="up" data-balloon-length="large">
+	                  <div class="icon is-tooltip" data-balloon="Your withdrawal could be delayed or blocked if we find any issues with either your DomaHub or bank account." data-balloon-pos="up" data-balloon-length="large">
 	                    <i class="fal fa-question-circle"></i>
 	                  </div>
 	                </div>
@@ -1000,6 +1001,7 @@
 	            </table>
 	          </div>
 	        </div>
+
 				</div>
       </div>
 		</div>
@@ -1395,6 +1397,54 @@
         <div class="control">
           <small class="tip basic-hidden">* Hurray! You paid 0% commission on this transaction!</small>
           <small class="tip premium-hidden">* Upgrade to <a href="/profile/settings#premium" class="is-underlined is-primary">Premium</a> and pay 0% commission on future sales/rentals!</small>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+
+  <!-- WITHDRAWAL MODAL -->
+  <div id="withdrawal-modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      <div class="modal-content is-small">
+        <div class="content has-text-centered">
+          <h3 class="is-bold">Now withdrawing</h3>
+        </div>
+        <div class="content">
+          <h1 class="withdrawal-available has-text-centered"></h1>
+        </div>
+        <div class="content">
+          <form id="withdrawal-modal-form">
+            <div class="control">
+              <label class="label">Please select an account for this withdrawal</label>
+              <div class="select is-fullwidth">
+                <select required id="withdrawal-destination-input">
+                  <option selected value="" disabled>Select an account</option>
+                  <option id="withdrawal-bank-option" value="bank">Bank account</option>
+                  <option id="withdrawal-paypal-option" value="paypal">PayPal</option>
+                  <option id="withdrawal-bitcoin-option" value="bitcoin">Bitcoin Wallet</option>
+                  <option id="withdrawal-payoneer-option" value="payoneer">Payoneer</option>
+                </select>
+              </div>
+            </div>
+            <div class="control is-grouped">
+              <div class="control is-expanded">
+                <button id="withdrawal-modal-submit-button" type="submit" class="button is-fullwidth is-primary is-stylish is-small">
+                  <div class="icon is-small">
+                    <i class="fal fa-exchange"></i>
+                  </div>
+                  <span>Withdraw</span>
+                </button>
+              </div>
+              <div class="control is-expanded">
+                <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
+                  <div class="icon is-small"><i class="fal fa-ban"></i></div>
+                  <span>Cancel</span>
+                </a>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

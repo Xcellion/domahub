@@ -613,94 +613,119 @@ module.exports = {
     }
   },
 
-  //transfer money to a stripe connected account
-  transferMoney : function(req, res, next){
-    if (req.user.type != 2 || !req.user.stripe_account || !req.user.stripe_bank){
-      error.handler(req, res, "Something went wrong with your bank account! Please refresh the page and try again.", "json");
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------STRIPE WITHDRAW TO BANK-------------------------------
+
+  //check how much money is available to withdraw
+  calculateWithdrawalAmount : function(req, res, next){
+    console.log("SF: Calculating total amount available for withdrawal...");
+
+    var total_amount_available = 0;
+    var transactions_being_withdrawn = [];
+    var time_now = new Date().getTime();
+
+    //loop through all transactions and find the valid ones to include
+    for (var x = 0; x < req.user.transactions.stripe_transactions.length; x++){
+      var stripe_transaction = req.user.transactions.stripe_transactions[x];
+
+      //not yet withdrawn
+      if (!stripe_transaction.already_withdrawn &&
+        //available now
+        stripe_transaction.available_on < time_now &&
+        (
+          //if rental and not refunded
+          (
+            stripe_transaction.rental_id &&
+            stripe_transaction.amount_refunded == 0
+          ) ||
+          //or if it's a sale and finished transfer
+          stripe_transaction.pending_transfer == "false"
+        )
+      ){
+
+        //calculate fees
+        var doma_fees = (typeof stripe_transaction.doma_fees != "undefined") ? parseFloat(stripe_transaction.doma_fees) : getDomaFees(stripe_transaction.amount);
+        var stripe_fees = (typeof stripe_transaction.stripe_fees != "undefined") ? parseFloat(stripe_transaction.stripe_fees) : getStripeFees(stripe_transaction.amount);
+
+        //add to total amount being withdrawn
+        total_amount_available += stripe_transaction.amount - doma_fees - stripe_fees;
+
+        //mark as withdrawn locally and add to promise to change on stripe
+        stripe_transaction.already_withdrawn = true;
+        transactions_being_withdrawn.push(set_stripe_charge_as_withdrawn(stripe_transaction.charge_id))
+      }
     }
-    else if (!req.user.transactions && !req.user.transactions.stripe_transactions){
-      error.handler(req, res, "You don't have any available funds to transfer to your bank!", "json");
+
+    //if it's a legit number
+    if (Number.isInteger(total_amount_available) && total_amount_available > 0){
+      req.session.total_amount_available = total_amount_available;
+      req.session.transactions_being_withdrawn = transactions_being_withdrawn;
+      next();
     }
     else {
-      console.log("SF: Calculating total amount available for withdrawal...");
-      var total_transfer = 0;
-      var time_now = new Date().getTime();
-      var transactions_being_withdrawn = [];
-      for (var x = 0; x < req.user.transactions.stripe_transactions.length; x++){
-        var stripe_transaction = req.user.transactions.stripe_transactions[x];
-
-        //not yet withdrawn
-        if (!stripe_transaction.already_withdrawn &&
-            //available now
-            stripe_transaction.available_on < time_now &&
-            (
-              //if rental and not refunded
-              (
-                stripe_transaction.rental_id &&
-                stripe_transaction.amount_refunded == 0
-              ) ||
-              //or if it's a sale and finished transfer
-              stripe_transaction.pending_transfer == "false"
-            )
-           ){
-            var doma_fees = (typeof stripe_transaction.doma_fees != "undefined") ? parseFloat(stripe_transaction.doma_fees) : getDomaFees(stripe_transaction.amount);
-            var stripe_fees = (typeof stripe_transaction.stripe_fees != "undefined") ? parseFloat(stripe_transaction.stripe_fees) : getStripeFees(stripe_transaction.amount);
-            total_transfer += stripe_transaction.amount - doma_fees - stripe_fees;
-
-            //mark as withdrawn
-            stripe_transaction.already_withdrawn = true;
-            transactions_being_withdrawn.push(set_stripe_charge_as_withdrawn(stripe_transaction.charge_id))
-        }
-      }
-
-      //if it's a legit number
-      if (total_transfer > 0 && Number.isInteger(total_transfer)){
-        console.log("SF: Attempting to transfer " + moneyFormat.to(total_transfer/100) + "...");
-
-        //transfer the money to their stripe account
-        stripe.transfers.create({
-          amount: total_transfer,
-          currency: "usd",
-          destination: req.user.stripe_account_id,
-          transfer_group: req.user.id
-        }, function(err, transfer) {
-          if (err){
-            error.log(err, "Something went wrong with the Stripe account transfer!", "json");
-            error.handler(req, res, "Something went wrong with the withdrawal! Please refresh the page and try again.", "json");
-          }
-          else {
-
-            //transfer to bank manually
-            stripe.payouts.create({
-              amount: total_transfer,
-              currency: "usd",
-            }, {
-              stripe_account: req.user.stripe_account_id,
-            }).then(function(payout) {
-              if (!payout || payout.failure_code || payout.failure_message){
-                error.log(err, "Something went wrong with the bank payout!", "json");
-                error.handler(req, res, "Something went wrong with the withdrawal! Please refresh the page and try again.", "json");
-              }
-              else {
-
-                //mark all charges as withdrawn
-                var limit = qlimit(10);     //limit parallel promises (throttle)
-                Q.allSettled(transactions_being_withdrawn.map(limit(function(item, index, collection){
-                  return transactions_being_withdrawn[index]();
-                }))).then(function(results) {
-                  delete req.user.transactions.stripe_transactions;
-                  next();
-                });
-
-              }
-            });
-          }
-        });
-      }
-      else {
-        error.handler(req, res, "You don't have any available funds to transfer to your bank!", "json");
-      }
+      error.handler(req, res, "You don't have any available funds to withdraw! Please refresh the page and verify your transactions.", "json");
     }
+  },
+
+  //withdraw money to a stripe bank
+  withdrawToStripeBank : function(req, res, next){
+    if (req.body.destination_account == "bank"){
+      var total_amount_available = req.session.total_amount_available;
+      console.log("SF: Attempting to transfer " + moneyFormat.to(total_amount_available/100) + " to Stripe bank account...");
+
+      //transfer the money to stripe connected account
+      stripe.transfers.create({
+        amount: total_amount_available,
+        currency: "usd",
+        destination: req.user.stripe_account_id,
+        transfer_group: req.user.id
+      }, function(err, transfer) {
+        if (err){
+          error.log(err, "Something went wrong with the Stripe account transfer!", "json");
+          error.handler(req, res, "Something went wrong with the withdrawal! Please refresh the page and try again.", "json");
+        }
+        else {
+
+          //transfer to bank manually
+          stripe.payouts.create({
+            amount: total_amount_available,
+            currency: "usd",
+          }, {
+            stripe_account: req.user.stripe_account_id,
+          }).then(function(payout) {
+            if (!payout || payout.failure_code || payout.failure_message){
+              error.log(err, "Something went wrong with the bank payout!", "json");
+              error.handler(req, res, "Something went wrong with the withdrawal! Please refresh the page and try again.", "json");
+            }
+            else {
+              next();
+            }
+          });
+        }
+      });
+    }
+    else {
+      next();
+    }
+  },
+
+  //marks the stripe transactions as being withdrawn
+  markTransactionsWithdrawn : function(req, res, next){
+    console.log("SF: Marking all withdrawn transactions as having been withdrawn...");
+
+    var limit = qlimit(10);     //limit parallel promises (throttle)
+    Q.allSettled(req.session.transactions_being_withdrawn.map(limit(function(item, index, collection){
+      return req.session.transactions_being_withdrawn[index]();
+    }))).then(function(results) {
+
+      //delete session variables and refresh transactions
+      delete req.session.transactions_being_withdrawn;
+      delete req.session.req.session.total_amount_available;
+      delete req.user.transactions.stripe_transactions;
+
+      next();
+    });
   },
 
   //</editor-fold>
@@ -718,30 +743,30 @@ module.exports = {
         var doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(total_price);
         var stripe_fees = getStripeFees(total_price);
 
-        var stripeOptions = {
-          amount: total_price,
-          currency: "usd",
-          source: req.body.stripeToken,
-          description: "Rental for " + req.params.domain_name,
-          transfer_group : req.session.listing_info.owner_id,
-          metadata: {
-            "domain_name" : req.params.domain_name,
-            "renter_name" : (req.user) ? req.user.username : "Guest",
-            "rental_id" : req.session.new_rental_info.rental_id,
-            "doma_fees" : doma_fees,
-            "stripe_fees" : stripe_fees
-          }
-        }
-
         //something went wrong with the price
-        if (isNaN(total_price) || isNaN(total_price) || isNaN(total_price)){
-          error.handler(req, res, "Invalid price!", 'json');
+        if (isNaN(total_price) || isNaN(stripe_fees) || isNaN(doma_fees)){
+          error.handler(req, res, "Something went wrong with the price of the rental! Please refresh the page and try again!", 'json');
         }
         else {
           console.log("SF: Charging money via Stripe...");
 
-          //charge the end user, transfer to the owner, take doma fees if its a basic listing
-          stripe.charges.create(stripeOptions, function(err, charge) {
+          var stripe_options = {
+            amount: total_price,
+            currency: "usd",
+            source: req.body.stripeToken,
+            description: "Rental for " + req.params.domain_name,
+            transfer_group : req.session.listing_info.owner_id,
+            metadata: {
+              "domain_name" : req.params.domain_name,
+              "renter_name" : (req.user) ? req.user.username : "Guest",
+              "rental_id" : req.session.new_rental_info.rental_id,
+              "doma_fees" : doma_fees,
+              "stripe_fees" : stripe_fees
+            }
+          }
+
+          //charge the end user and take doma fees if its a basic listing
+          stripe.charges.create(stripe_options, function(err, charge) {
             if (err) {
               error.log(err, "Failed to create Stripe charge.");
               error.handler(req, res, "Invalid price!", "json");
