@@ -152,9 +152,6 @@ function getCurrentView() {
   if (newPath == "Settings") {
     newPath = "Account Settings";
   }
-  if (newPath == "Welcome") {
-    newPath = "Welcome to DomaHub!"
-  }
 
   $("#current-view-name").html(newPath);
 }
