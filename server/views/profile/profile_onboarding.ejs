@@ -571,7 +571,7 @@
               <form id="step-form-7" class="onboarding-step-form">
                 <div class="columns">
                   <div class="column is-6">
-                    <a class="box has-footer">
+                    <a id="go-step-8" class="box has-footer">
                       <div class="box-content">
                         <div class="content has-text-centered">
                           <div class="icon is-primary is-circle is-medium">
@@ -591,7 +591,7 @@
                     </a>
                   </div>
                   <div class="column is-6">
-                    <a class="box has-footer">
+                    <a id="go-step-9" class="box has-footer">
                       <div class="box-content">
                         <div class="content has-text-centered">
                           <div class="icon is-accent is-circle is-medium">
@@ -621,12 +621,6 @@
                 </div>
                 <span class="is-hidden-mobile">Previous Step</span>
               </a>
-              <button form="step-form-7" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
-                <div class="icon is-small">
-                  <i class="fal fa-long-arrow-right"></i>
-                </div>
-              </button>
             </div>
           </div>
 
@@ -640,7 +634,7 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">Skip this step</a>
+                  <a class="is-primary onboarding-skip-button">Add domains manually</a>
                 </div>
               </div>
               <div class="content">
@@ -733,7 +727,7 @@
                   by commas</strong>. You must include TLD extensions such as .com, .org, or .net at the end.
                 </p>
               </div>
-              <form id="onboarding-step-9" class="onboarding-step-form">
+              <form id="step-form-9" class="onboarding-step-form">
                 <div class="control">
                   <textarea tabindex="0" required autofocus id="domain-names" class="textarea" placeholder="butterflies.com, oysters.org, tigers.net" spellcheck="false"></textarea>
                 </div>
@@ -758,12 +752,10 @@
           <!-- STEP 10 (Domain Table) -->
           <div id="onboarding-step-10" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
-              <div class="control is-spaced is-mobile">
-                <div class="control-left">
-                  <p class="heading">
-                    Review and Edit
-                  </p>
-                </div>
+              <div class="control">
+                <p class="heading">
+                  Review and Edit
+                </p>
               </div>
               <div class="content">
                 <h1>Review and edit your domains.</h1>
@@ -771,7 +763,7 @@
                   Take a moment to review your domains and enter additional information.
                 </p>
               </div>
-              <form id="onboarding-step-10" class="onboarding-step-form">
+              <form id="step-form-10" class="onboarding-step-form">
                 <table id="domain-input-table" class="table has-shadow">
                     <thead>
                       <tr>
@@ -830,42 +822,36 @@
           </div>
 
           <!-- STEP 11 (After Successfully Creating A Listing) -->
-          <div id="onboarding-step-11" class="step onboarding-step-wrapper is-hidden">
+          <div id="onboarding-step-final" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
-              <form id="onboarding-step-final" class="onboarding-step-form">
-                <p>
-                  Congratulations! You've created your first <span id="total-created-listings"></span>! Before we can get that set up, let's walk you through the DomaHub profile menu.
+              <div class="control">
+                <p class="heading">
+                  Continue Learning
                 </p>
-
-                <p>
-                  Click on a box below to learn more about that specific page.
+              </div>
+              <div class="content">
+                <h1>
+                  Congratulations! You've created your first <span id="total-created-listings"></span> and set up your account.
+                  <span class=" is-bold">Now, would you like to learn more about the DomaHub interface?</span>
+                </h1>
+                <p class="tip">
+                  This next part will guide you through each part of the DomaHub interface, so you understand how everything
+                  fits together!
                 </p>
-
-                <p class="box">
-                  Profile Dashboard
-                </p>
-                <p class="box">
-                  My Listings
-                </p>
-                <p class="box">
-                  Create Listings
-                </p>
-                <p class="box">
-                  Profile Settings
-                </p>
-
-                <p>
-                  When you're ready to exit this setup wizard and set up your newly created domain listings, click <a href="/profile/mylistings" class="is-underlined">here</a>.
-                </p>
-
-                <p class="box">
-                  Have any questions? Contact us
-                </p>
-                <p class="box">
-                  Read our blog for latest news
-                </p>
-
+              </div>
+              <form id="step-form-final" class="onboarding-step-form">
               </form>
+              <div class="control">
+                <button class="button is-stylish is-primary is-large">
+                  <span>Start the Guide</span>
+                  <div class="icon">
+                    <i class="fal fa-long-arrow-right"></i>
+                  </div>
+                </button>
+              </div>
+              <div class="control">
+                <a class="is-primary">I'd rather skip it.</a>
+              </div>
             </div>
           </div>
 
