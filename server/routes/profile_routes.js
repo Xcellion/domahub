@@ -12,7 +12,7 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------ONBOARDING-------------------------------
 
-  // //onboarding page
+  //onboarding page
   // app.get("/profile/welcome", [
   //   auth_functions.checkLoggedIn,
   //   stripe_functions.getStripeAccount,
