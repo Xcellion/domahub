@@ -491,13 +491,18 @@ function stepSixSubmitFormLogic(form_elem){
 
 function stepSevenLogic(backwards){
   console.log("step 7 specific logic");
+  $("#go-step-8, #go-step-9").off().on("click", function() {
+    if ($(this).attr("id") == "go-step-8") {
+      showSpecificStep(true, "8");
+    }
+    else {
+      showSpecificStep(true, "9");
+    }
+  });
 }
 
-function stepSevenSubmitFormLogic(){
+function stepSevenSubmitFormLogic(form_elem){
   console.log("step 7 specific form submission");
-
-  //show next step
-  showSpecificStep(true, "8");
 }
 
 //</editor-fold>
