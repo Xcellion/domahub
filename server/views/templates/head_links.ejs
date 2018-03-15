@@ -69,5 +69,16 @@
     ga('set', 'dimension2', user);
   }
   ga('send', 'pageview');
+
+  <!-- Custom GA Tracking ID -->
+  <% if (typeof listing_info != "undefined" && listing_info.ga_tracking_id) { %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', <%= listing_info.ga_tracking_id %>);
+    </script>
+  <% } %>
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

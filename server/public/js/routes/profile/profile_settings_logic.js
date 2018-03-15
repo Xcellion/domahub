@@ -49,19 +49,26 @@ $(document).ready(function() {
 
     //to show submit/cancel when data changes for account inputs
     $(".account-input").on("input", function(e){
-      clearNotification();
-      hideSaveCancelButtons();
-      if ($(this).val() != user[$(this).data("uservar")] && user[$(this).data("uservar")]){
+      var this_val = $(this).val();
+      var existing_val = (user[$(this).data("uservar")]) ? user[$(this).data("uservar")] : "";
+
+      //show only if different
+      if (this_val != existing_val){
         $("#account-submit, #cancel-button").removeClass("is-hidden");
+      }
+      else {
+        clearNotification();
+        hideSaveCancelButtons();
       }
     });
 
     //to submit any changes
-    $("#stripe-account-form").on("submit", function(e){
+    $("#account-details-form").on("submit", function(e){
       e.preventDefault();
       submitChanges({
         new_email: $("#email-input").val(),
-        username: $("#username-input").val()
+        username: $("#username-input").val(),
+        ga_tracking_id: $("#ga_tracking_id-input").val(),
       });
     });
 
@@ -125,7 +132,7 @@ $(document).ready(function() {
       if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
 
       //show appropriate card icon
-      if ($(".far-cc-" + card_type) && card_type){
+      if ($(".fal-cc-" + card_type) && card_type){
         $("#cc-icon").attr("data-icon", "cc-" + card_type);
       }
       //or show default
@@ -251,7 +258,7 @@ $(document).ready(function() {
       $("#stripe-account-submit").addClass('is-loading');
       clearNotification();
       $.ajax({
-        url: "/profile/settings/payout",
+        url: "/profile/payout",
         method: "POST",
         data: $(this).serialize()
       }).done(function(data){
@@ -260,12 +267,12 @@ $(document).ready(function() {
           if (data.user){
             user = data.user;
           }
-          successMessage("Successfully updated settings!");
+          successMessage("Successfully updated account settings!");
+          prefillStripeInfo();
         }
         else {
           errorMessage(data.message);
         }
-        prefillStripeInfo();
       });
     });
 
@@ -282,7 +289,6 @@ $(document).ready(function() {
     $("#change-bank-button").on("click", function(){
       clearNotification();
       $("#change-bank-modal").addClass('is-active');
-      $('#account_type-input').focus();
     });
 
     //submit bank information
@@ -305,8 +311,8 @@ $(document).ready(function() {
 
       //create stripe token
       Stripe.bankAccount.createToken(bank_info, function(status, response){
-        $("#stripe-bank-submit").removeClass('is-loading');
         if (status != 200){
+          $("#stripe-bank-submit").removeClass('is-loading');
           errorMessage(response.error.message);
         }
         else {
@@ -325,22 +331,26 @@ $(document).ready(function() {
 
     //</editor-fold>
 
-    //<editor-fold>-------------------------------PAYPAL-------------------------------
+    //<editor-fold>-------------------------------PAYMENTS-------------------------------
 
-    //show paypal submit button
-    $("#paypal_email-input").on("input", function(){
+    //account payments
+    $(".account-payments-input").on("input", function(){
       clearNotification();
       hideSaveCancelButtons();
-      if ($(this).val() != user.paypal_email){
-        $("#paypal-submit, #cancel-button").removeClass('is-hidden');
+      if ($("#bitcoin_address-input").val() != user.bitcoin_address ||
+          $("#paypal_email-input").val() != user.paypal_email ||
+          $("#payoneer_email-input").val() != user.payoneer_email){
+        $("#payments-submit, #cancel-button").removeClass('is-hidden');
       }
     });
 
-    //submit paypal form
-    $("#paypal-form").submit(function(e){
+    //submit payments contact form
+    $("#payments-form").submit(function(e){
       e.preventDefault();
       submitChanges({
-        paypal_email: $("#paypal_email-input").val().toLowerCase()
+        paypal_email: $("#paypal_email-input").val().toLowerCase(),
+        payoneer_email: $("#payoneer_email-input").val().toLowerCase(),
+        bitcoin_address: $("#bitcoin_address-input").val().toLowerCase()
       });
     });
 
@@ -352,31 +362,7 @@ $(document).ready(function() {
 
   //transfer to bank button
   $("#transfer-button").on('click', function(){
-    $("#transfer-button").addClass('is-loading').off();
-    $.ajax({
-      url: "/profile/transfer",
-      method: "POST"
-    }).done(function(data){
-      $("#transfer-button").removeClass('is-loading');
-
-      if (data.state == "success"){
-        $("#transfer-button").addClass("is-disabled");
-        successMessage("Successfully transferred " + number_format.to(total_available) + " to your bank account!");
-      }
-      else {
-        switch (data.message){
-          case ("Invalid charges!"):
-          errorMessage("Something went wrong with the transfer! Please refresh the page and try again.");
-          break;
-          case ("No bank account to charge"):
-          errorMessage("You need to add a valid bank account to your DomaHub account to be able to withdraw money!");
-          break;
-          default:
-          errorMessage(data.message);
-          break;
-        }
-      }
-    });
+    withdrawMoney($(this));
   });
 
   //refresh transactions
@@ -487,7 +473,12 @@ function showSectionByURL(){
           }
         }
         else {
-          errorMessage(data.message);
+          if (data.message == "invalid-ga-tracking"){
+            errorMessage("Please provide a valid Google Analytics tracking ID! For instructions on how to get your tracking ID, please <a href='https://support.google.com/analytics/answer/1008080?hl=en#trackingID' class='is-underlined'>click here</a>.");
+          }
+          else {
+            errorMessage(data.message);
+          }
         }
 
         prefillAccountInfo();
@@ -1021,6 +1012,10 @@ function showSectionByURL(){
 
   //pre-fill existing stripe information
   function prefillStripeInfo(){
+    
+    //hide bank inputs
+    $(".excess-routing-wrapper").addClass('is-hidden');
+
     //stripe account information
     if (user.stripe_account){
       for (var x in user.stripe_account){
@@ -1042,11 +1037,7 @@ function showSectionByURL(){
 
     //stripe bank information
     if (user.stripe_bank){
-      for (var x in user.stripe_bank){
-        $("#" + x + "-input").val(user.stripe_bank[x]);
-      }
-      //change bank info
-      changeBankCountry($("#currency-input").val());
+      //existing bank info
       $(".existing-bank").removeClass('is-hidden').text("Current bank account - " + user.stripe_bank.bank_name + " ending in " + user.stripe_bank.last4);
       $("#change-bank-button span:nth-child(2)").text("Change Bank");
     }
@@ -1063,12 +1054,13 @@ function showSectionByURL(){
   //submit stripe token for bank info
   function submitBank(stripe_token, updating_bank){
     $.ajax({
-      url: "/profile/settings/bank",
+      url: "/profile/bank",
       data: {
         stripe_token: stripe_token
       },
       method: "POST"
     }).done(function(data){
+      $("#stripe-bank-submit").removeClass('is-loading');
       if (data.state == "success"){
         if (data.user){
           user = data.user;
@@ -1228,11 +1220,13 @@ function createTransactionsRow(stripe_charge){
     setupTransactionsModal(temp_row, stripe_charge);
   });
 
+  var available_to_withdraw = stripe_charge.available_on < new Date().getTime() && ((stripe_charge.rental_id && stripe_charge.amount_refunded == 0) || stripe_charge.pending_transfer == "false");
+
   //temp row data for search and filter
   temp_row.data("domain_name", stripe_charge.domain_name);
   temp_row.data("sale", (stripe_charge.rental_id) ? false : true);
   temp_row.data("rental", (stripe_charge.rental_id) ? true : false);
-  temp_row.data("available", stripe_charge.available_on < new Date().getTime());
+  temp_row.data("available", available_to_withdraw);
   temp_row.data("notavailable", stripe_charge.available_on > new Date().getTime());
   temp_row.data("actionable", stripe_charge.pending_transfer == "true");
   temp_row.data("exists", true);
@@ -1244,17 +1238,17 @@ function createTransactionsRow(stripe_charge){
   temp_row.find(".transactions-row-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + stripe_charge.domain_name + "</a>");
 
   //balance available
-  if (stripe_charge.available_on < new Date().getTime()){
+  if (available_to_withdraw){
     temp_row.find(".transactions-row-available").text("Available");
   }
   //balance not yet available
   else {
     //actionable
     if (stripe_charge.pending_transfer == "true"){
-      temp_row.find(".transactions-row-available").text("Requires Action").append('<div class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="far fa-exclamation-circle"></i></div>');
+      temp_row.find(".transactions-row-available").text("Requires Action").append('<div class="icon is-small is-danger" data-balloon-length="large" data-balloon="Please transfer ownership of this domain to access these funds!" data-balloon-pos="up"><i class="fal fa-exclamation-circle"></i></div>');
     }
     else {
-      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("YYYY-MM-DD") + '" data-balloon-pos="up"><i class="far fa-question-circle"></i></div>');
+      temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + moment(stripe_charge.available_on).format("YYYY-MM-DD") + '" data-balloon-pos="up"><i class="fal fa-question-circle"></i></div>');
     }
   }
 
@@ -1427,7 +1421,7 @@ function calculateTotals(){
   $("#total-earned").text(moneyFormat.to(total_earned));
   $("#total-fees").text(moneyFormat.to(total_fees));
   $("#total-profit").text(moneyFormat.to(total_profit));
-  $("#total-available").text(moneyFormat.to(total_available));
+  $(".withdrawal-available").data("total_available", total_available).text(moneyFormat.to(total_available - user.balances.stripe_balance.total / 100));
 
   //if there are funds available and a bank to withdraw to
   if (total_available > 0 && user.stripe_account && user.stripe_bank){
@@ -1436,6 +1430,35 @@ function calculateTotals(){
   else {
     $("#transfer-button").addClass('is-disabled');
   }
+}
+
+//withdraw money
+function withdrawMoney(){
+  $("#transfer-button").addClass('is-loading');
+  $.ajax({
+    url: "/profile/transfer",
+    method: "POST"
+  }).done(function(data){
+    $("#transfer-button").removeClass('is-loading');
+    if (data.state == "success"){
+      $("#transfer-button").addClass("is-disabled");
+      var total_available = $(".withdrawal-available").data("total_available");
+      successMessage("Successfully transferred " + moneyFormat.to(total_available) + " to your bank account!");
+    }
+    else {
+      switch (data.message){
+        case ("Invalid charges!"):
+        errorMessage("Something went wrong with the transfer! Please refresh the page and try again.");
+        break;
+        case ("No bank account to charge"):
+        errorMessage("You need to add a valid bank account to your DomaHub account to be able to withdraw money!");
+        break;
+        default:
+        errorMessage(data.message);
+        break;
+      }
+    }
+  });
 }
 
 //</editor-fold>

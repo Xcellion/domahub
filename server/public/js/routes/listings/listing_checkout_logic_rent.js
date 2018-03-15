@@ -390,13 +390,15 @@ function successHandler(rental_id, owner_hash_id){
     //remove click handler for going back to login/customize
     $(".step-header").off();
 
+    var owner_hash_id = (owner_hash_id) ? "/" + owner_hash_id : "";
+
     //edit preview button
     if (listing_info.premium){
       $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
-      $("#rental-link-input").val("https://" + listing_info.domain_name.toLowerCase() + "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + "/" + owner_hash_id);
+      $("#rental-link-input").val("https://" + listing_info.domain_name.toLowerCase() + "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + owner_hash_id);
     } else {
       $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
-      $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + "/" + owner_hash_id);
+      $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + owner_hash_id);
     }
 
     //copy ownership url

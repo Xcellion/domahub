@@ -159,6 +159,7 @@ module.exports = function(app){
   app.post("/profile/gettransactions", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
+    stripe_functions.getStripeAccount,
     stripe_functions.getStripeTransactions
   ]);
 
@@ -179,27 +180,6 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.getRegistrarAPI,
     profile_functions.getRegistrarDomains
-  ]);
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------PROMO CODES-------------------------------
-
-  //get all existing referral promo codes for user
-  app.post("/profile/getreferrals", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    profile_functions.getUnredeemedPromoCodes,
-    stripe_functions.getStripeCustomerNextInvoice,
-    profile_functions.getCouponsAndReferralsForUser,
-  ]);
-
-  //posting a new promo code or referral
-  app.post("/profile/promocode", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    profile_functions.checkPromoCode,
-    profile_functions.applyPromoCode
   ]);
 
   //</editor-fold>
@@ -245,7 +225,7 @@ module.exports = function(app){
   //<editor-fold>-------------------------------STRIPE TRANSFER-------------------------------
 
   //post to create new stripe managed account or update stripe managed account
-  app.post("/profile/settings/payout", [
+  app.post("/profile/payout", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
@@ -256,7 +236,7 @@ module.exports = function(app){
   ]);
 
   //post to create new stripe managed account or update stripe managed account
-  app.post("/profile/settings/bank", [
+  app.post("/profile/bank", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
@@ -272,7 +252,29 @@ module.exports = function(app){
     stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
-    stripe_functions.transferMoney
+    stripe_functions.transferMoney,
+    stripe_functions.getStripeTransactions
+  ]);
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------PROMO CODES-------------------------------
+
+  //get all existing referral promo codes for user
+  app.post("/profile/getreferrals", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.getUnredeemedPromoCodes,
+    stripe_functions.getStripeCustomerNextInvoice,
+    profile_functions.getCouponsAndReferralsForUser,
+  ]);
+
+  //posting a new promo code or referral
+  app.post("/profile/promocode", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.checkPromoCode,
+    profile_functions.applyPromoCode
   ]);
 
   //</editor-fold>

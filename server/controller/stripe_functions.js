@@ -96,7 +96,7 @@ module.exports = {
       next();
     }
     //if customer id and subscription id exists in our database
-    if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && typeof req.user.stripe_customer.upcoming_invoice == "undefined"){
+    else if (req.user.stripe_subscription_id && req.user.stripe_customer_id && req.user.stripe_customer && typeof req.user.stripe_customer.upcoming_invoice == "undefined"){
       console.log("SF: Getting Stripe customer upcoming invoice for an account...");
 
       stripe.invoices.retrieveUpcoming(req.user.stripe_customer_id, function(err, upcoming) {
@@ -354,6 +354,15 @@ module.exports = {
           error.handler(req, res, err.message, "json");
         }
         else {
+
+          //notify us if someone cancels
+          mailer.sendBasicMail({
+            to: "general@domahub.com",
+            from: 'general@domahub.com',
+            subject: "Premium member cancelled! Email asking why / what's up",
+            html: "Username - " + req.user.username + "<br />Email - " + req.user.email + "<br />"
+          });
+
           updateUserStripeSubscription(req.user, subscription);
           res.json({
             state: "success",
@@ -382,7 +391,7 @@ module.exports = {
         //update our DH database to remove stripe_account_id
         if (!account){
           console.log("SF: Not a real Stripe account! Updating our database appropriately...");
-          deleteDHStripeDetails(req, "stripe_account_id");
+          deleteDHStripeDetails(req, "stripe_account_id", true);
         }
         else {
           updateUserStripeAccount(req.user, account);
@@ -573,21 +582,30 @@ module.exports = {
     if (!req.user.transactions || req.method == "POST"){
       stripe.charges.list({
         transfer_group: req.user.id,
-        expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
+        expand: ["data.balance_transaction"]    //when the balance is available for transfer / withdrawal
       }, function(err, charges) {
         if (err) { error.log(err, "Failed to get Stripe charges."); }
         updateUserTransactions(req.user, charges.data, "stripe");
 
-        //refreshing transactions
-        if (req.method == "POST"){
-          res.send({
-            state : "success",
-            user : req.user
-          });
-        }
-        else {
-          next();
-        }
+        //get stripe balance for stripe connected account
+        stripe.balance.retrieve({
+          stripe_account: req.user.stripe_account_id
+        }, function(err, balance){
+          if (err) { error.log(err, "Failed to get Stripe balance."); }
+          updateUserBalance(req.user, balance, "stripe");
+
+          //for button to refresh transactions
+          if (req.method == "POST" && req.path == "/profile/gettransactions"){
+            res.send({
+              state : "success",
+              user : req.user
+            });
+          }
+          else {
+            next();
+          }
+        });
+
       });
     }
     else {
@@ -597,23 +615,41 @@ module.exports = {
 
   //transfer money to a stripe connected account
   transferMoney : function(req, res, next){
-    if (req.user.type != 2 || !req.user.stripe_account_id || !req.user.stripe_info){
-      error.handler(req, res, "No bank account to charge!", "json");
+    if (req.user.type != 2 || !req.user.stripe_account || !req.user.stripe_bank){
+      error.handler(req, res, "Something went wrong with your bank account! Please refresh the page and try again.", "json");
     }
-    else if (!req.user.stripe_charges){
-      error.handler(req, res, "Invalid charges!", "json");
+    else if (!req.user.transactions && !req.user.transactions.stripe_transactions){
+      error.handler(req, res, "You don't have any available funds to transfer to your bank!", "json");
     }
     else {
+      console.log("SF: Calculating total amount available for withdrawal...");
       var total_transfer = 0;
       var time_now = new Date().getTime();
-      for (var x = 0; x < req.user.stripe_charges.length; x++){
+      var transactions_being_withdrawn = [];
+      for (var x = 0; x < req.user.transactions.stripe_transactions.length; x++){
+        var stripe_transaction = req.user.transactions.stripe_transactions[x];
 
-        //only if it's a rental (and not refunded) or if it's a sale thats already transferred and if balance is available now
-        if (req.user.stripe_charges[x].available_on * 1000 < time_now && (req.user.stripe_charges[x].rental_id && req.user.stripe_charges[x].amount_refunded == 0) || req.user.stripe_charges[x].pending_transfer == "false"){
-          var doma_fees = (typeof req.user.stripe_charges[x].doma_fees != undefined) ? parseFloat(req.user.stripe_charges[x].doma_fees) : getDomaFees(req.user.stripe_charges[x].amount);
-          var stripe_fees = (typeof req.user.stripe_charges[x].stripe_fees != undefined) ? parseFloat(req.user.stripe_charges[x].stripe_fees) : getStripeFees(req.user.stripe_charges[x].amount);
-          total_transfer += req.user.stripe_charges[x].amount - doma_fees - stripe_fees;
-          req.user.stripe_charges[x].transferred = true;
+        //not yet withdrawn
+        if (!stripe_transaction.already_withdrawn &&
+            //available now
+            stripe_transaction.available_on < time_now &&
+            (
+              //if rental and not refunded
+              (
+                stripe_transaction.rental_id &&
+                stripe_transaction.amount_refunded == 0
+              ) ||
+              //or if it's a sale and finished transfer
+              stripe_transaction.pending_transfer == "false"
+            )
+           ){
+            var doma_fees = (typeof stripe_transaction.doma_fees != "undefined") ? parseFloat(stripe_transaction.doma_fees) : getDomaFees(stripe_transaction.amount);
+            var stripe_fees = (typeof stripe_transaction.stripe_fees != "undefined") ? parseFloat(stripe_transaction.stripe_fees) : getStripeFees(stripe_transaction.amount);
+            total_transfer += stripe_transaction.amount - doma_fees - stripe_fees;
+
+            //mark as withdrawn
+            stripe_transaction.already_withdrawn = true;
+            transactions_being_withdrawn.push(set_stripe_charge_as_withdrawn(stripe_transaction.charge_id))
         }
       }
 
@@ -626,24 +662,44 @@ module.exports = {
           amount: total_transfer,
           currency: "usd",
           destination: req.user.stripe_account_id,
-          transfer_group: "bank_transfer_" + req.user.id
+          transfer_group: req.user.id
         }, function(err, transfer) {
-          if (!err){
-            res.json({
-              state : "success",
-              user : req.user
-            });
+          if (err){
+            error.log(err, "Something went wrong with the Stripe account transfer!", "json");
+            error.handler(req, res, "Something went wrong with the withdrawal! Please refresh the page and try again.", "json");
           }
           else {
-            error.log(err, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
-            error.handler(req, res, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
+
+            //transfer to bank manually
+            stripe.payouts.create({
+              amount: total_transfer,
+              currency: "usd",
+            }, {
+              stripe_account: req.user.stripe_account_id,
+            }).then(function(payout) {
+              if (!payout || payout.failure_code || payout.failure_message){
+                error.log(err, "Something went wrong with the bank payout!", "json");
+                error.handler(req, res, "Something went wrong with the withdrawal! Please refresh the page and try again.", "json");
+              }
+              else {
+
+                //mark all charges as withdrawn
+                var limit = qlimit(10);     //limit parallel promises (throttle)
+                Q.allSettled(transactions_being_withdrawn.map(limit(function(item, index, collection){
+                  return transactions_being_withdrawn[index]();
+                }))).then(function(results) {
+                  delete req.user.transactions.stripe_transactions;
+                  next();
+                });
+
+              }
+            });
           }
         });
       }
       else {
-        error.handler(req, res, "You have no available funds to transfer to your bank!", "json");
+        error.handler(req, res, "You don't have any available funds to transfer to your bank!", "json");
       }
-
     }
   },
 
@@ -903,10 +959,10 @@ function newStripeSubscription(req, res, next){
 function newStripeAccount(req, res, next, legal_entity){
   console.log('SF: Creating a new Stripe managed account...');
   stripe.accounts.create({
-    managed: true,
     country: req.body.country,
     email: req.user.email,
-    transfer_schedule: {
+    type: "custom",
+    payout_schedule: {
       "interval": "manual"
     },
     tos_acceptance : {
@@ -915,7 +971,10 @@ function newStripeAccount(req, res, next, legal_entity){
     },
     legal_entity: legal_entity,
   }, function(err, account){
-    if (account){
+    if (err){
+      error.handler(req, res, err.message, "json");
+    }
+    else {
       updateUserStripeAccount(req.user, account);
 
       //update our database with new stripe account ID and type = 2
@@ -926,9 +985,6 @@ function newStripeAccount(req, res, next, legal_entity){
 
       next();
     }
-    else {
-      error.handler(req, res, err.message, "json");
-    }
   });
 }
 
@@ -937,12 +993,18 @@ function newStripeAccount(req, res, next, legal_entity){
 //<editor-fold>-------------------------------REQ.USER HELPERS-------------------------------
 
 //delete an expired stripe info (our DB was outdated)
-function deleteDHStripeDetails(req, stripe_col){
+function deleteDHStripeDetails(req, stripe_col, type_as_well){
   if (!req.session.new_account_info){
     req.session.new_account_info = {}
   }
   //update our DH database to remove specific stripe info
   req.session.new_account_info[stripe_col] = null;
+  delete req.user[stripe_col];
+
+  //change type of account as well
+  if (type_as_well){
+    req.session.new_account_info.type = 1;
+  }
 }
 
 //update req.user with stripe customer object
@@ -1040,9 +1102,9 @@ function updateUserTransactions(user, charges, type){
       user.dev_transactions.stripe_transactions = charges;
     }
 
-    var temp_charges = [];
+    var temp_transactions = [];
     for (var x = 0; x < charges.length; x++){
-      var temp_transfer = {
+      var temp_transaction = {
         charge_id : charges[x].id,
         amount : charges[x].amount,
         created : charges[x].created * 1000,
@@ -1053,22 +1115,58 @@ function updateUserTransactions(user, charges, type){
         stripe_fees : (charges[x].metadata) ? charges[x].metadata.stripe_fees : "",
         doma_fees : (charges[x].metadata) ? charges[x].metadata.doma_fees : "",
         pending_transfer : (charges[x].metadata) ? charges[x].metadata.pending_transfer : "",
+        already_withdrawn : (charges[x].metadata) ? charges[x].metadata.already_withdrawn : false,
         available_on : (charges[x].balance_transaction && charges[x].balance_transaction.available_on) ? charges[x].balance_transaction.available_on * 1000 : false,
       }
 
       //if the charge is a rental
       if (charges[x].metadata && charges[x].metadata.rental_id){
-        temp_transfer.rental_id = charges[x].metadata.rental_id;
-        temp_transfer.renter_name = charges[x].metadata.renter_name;
+        temp_transaction.rental_id = charges[x].metadata.rental_id;
+        temp_transaction.renter_name = charges[x].metadata.renter_name;
       }
-      temp_charges.push(temp_transfer);
+      temp_transactions.push(temp_transaction);
     }
     user.transactions.total += charges.length;
-    user.transactions.stripe_transactions = temp_charges;
+    user.transactions.stripe_transactions = temp_transactions;
   }
 
   //paypal transactions
   if (charges && type == "paypal"){
+
+  }
+}
+
+//update req.user with stripe balance
+function updateUserBalance(user, balance, type){
+  if (!user.dev_balances && process.env.NODE_ENV == "dev"){
+    user.dev_balances = {};
+  }
+
+  //reset balances
+  user.balances = {
+    total : 0
+  }
+
+  //stripe balance
+  if (balance && type == "stripe"){
+    if (process.env.NODE_ENV == "dev"){
+      user.dev_balances.stripe_balance = balance;
+    }
+
+    //set stripe balance object
+    user.balances.stripe_balance = {
+      available : balance.available,
+      total : balance.available.reduce(function(p, c, i) {
+        return p += c.amount;
+      }, 0)
+    }
+
+    //add to total balance
+    user.balances.total += user.balances.stripe_balance.total;
+  }
+
+  //paypal balance
+  if (balance && type == "paypal"){
 
   }
 }
@@ -1340,6 +1438,34 @@ function checkForRedeemedableCoupons(customer_id, account_id, amount_due, cb){
       cb(true);
     }
   });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------TRANSFER / WITHDRAW HELPERS-------------------------------
+
+//returns a promise to mark specific stripe charge as already withdrawn
+function set_stripe_charge_as_withdrawn(stripe_charge_id){
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
+      stripe.charges.update(
+        stripe_charge_id,
+        {
+          metadata: {
+            already_withdrawn : true
+          }
+        },
+        function(err, charge) {
+          if (err){
+            reject(err);
+          }
+          else {
+            resolve(charge);
+          }
+        }
+      );
+    });
+  }
 }
 
 //</editor-fold>

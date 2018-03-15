@@ -225,7 +225,7 @@ function stepThreeSubmitFormLogic(form_elem){
   //ajax for submitting personal details
   form_elem.find(".onboarding-next-button").addClass('is-loading');
   $.ajax({
-    url: "/profile/settings/payout",
+    url: "/profile/payout",
     method: "POST",
     data: form_elem.add(form_elem.prev(".onboarding-step-wrapper")).serialize()
   }).done(function(data){
@@ -377,7 +377,7 @@ function changeBankCountry(currency){
 //submit stripe token for bank info
 function submitBank(stripe_token, updating_bank, form_elem){
   $.ajax({
-    url: "/profile/settings/bank",
+    url: "/profile/bank",
     data: {
       stripe_token: stripe_token
     },
