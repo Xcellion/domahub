@@ -28,8 +28,15 @@
   top: 0;
 }
 
+.loading-screen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .steps-wrapper {
-  padding: 120px 160px;
+  padding: 120px;
   height: 100%;
   @include mobile {
     padding: 60px 20px;
@@ -57,7 +64,7 @@
 }
 
 .step-buttons {
-  margin-left: auto;
+  margin: 25px 0 25px auto;
   .button {
     &:not(:last-child) {
       margin-right: 10px;
@@ -94,7 +101,6 @@ a {
   display: block;
   font-size: 12px;
   letter-spacing: 1px;
-  margin-bottom: 10px;
   text-transform: uppercase;
 }
 
