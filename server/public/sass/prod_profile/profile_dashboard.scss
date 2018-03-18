@@ -87,6 +87,7 @@
   margin-bottom: 20px;
   a {
     padding: 10px 20px;
+    flex-grow: 1;
     &:hover,
     &:focus {
       background-color: $pastel;

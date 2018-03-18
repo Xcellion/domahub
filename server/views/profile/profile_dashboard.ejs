@@ -33,82 +33,82 @@
 
         <%- include("profile_navbar_top.ejs"); %>
         <div class="right-content-items">
-          <div class="portfolio-table">
-            <a title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
-              <div class="fac">
-                <div>
-                  <p class="heading">
-                    Total Listings
-                  </p>
-                  <p>
-                    <%= user.listings.length %>
-                  </p>
-                </div>
-              </div>
-            </a>
-            <a title="View Sold" href="/profile/mylistings?tab=offers">
-              <div class="fac">
-                <div>
-                  <p class="heading">
-                    Domains Sold
-                  </p>
-                  <p id="sold-counter"></p>
-                </div>
-              </div>
-            </a>
-            <a title="View Unverified" href="/profile/mylistings?tab=verify">
-              <div class="fac">
-                <div>
-                  <p class="heading">
-                    Unverified Listings
-                  </p>
-                  <p id="unverified-counter"></p>
-                </div>
-              </div>
-            </a>
-            <a title="View Expiring" href="/profile/mylistings">
-              <div class="fac">
-                <div>
-                  <p class="heading">
-                    Expiring Domains
-                  </p>
-                  <p id="expiring-counter"></p>
-                </div>
-              </div>
-            </a>
-            <a title="View Profit" href="/profile/settings#transactions">
-              <div class="fac">
-                <div>
-                  <p class="heading">
-                    Profit YTD
-                  </p>
-                  <p id="profit-counter"></p>
-                </div>
-              </div>
-            </a>
-            <a title="View Expenses" href="/profile/settings#transactions">
-              <div class="fac">
-                <div>
-                  <p class="heading">
-                    Expenses YTD
-                  </p>
-                  <p id="expenses-counter"></p>
-                </div>
-              </div>
-            </a>
-            <a title="View Offers" href="/profile/mylistings?tab=offers">
-              <div class="fac">
-                <div>
-                  <p class="heading">
-                    Offers
-                  </p>
-                  <p id="offers-counter"></p>
-                </div>
-              </div>
-            </a>
-          </div>
           <div class="stat-columns">
             <div id="dashboard-traffic-card" class="stat-column-large">
+              <div class="portfolio-table">
+                <a title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
+                  <div class="fac">
+                    <div>
+                      <p class="heading">
+                        Total Listings
+                      </p>
+                      <p>
+                        <%= user.listings.length %>
+                      </p>
+                    </div>
+                  </div>
+                </a>
+                <a title="View Sold" href="/profile/mylistings?tab=offers">
+                  <div class="fac">
+                    <div>
+                      <p class="heading">
+                        Domains Sold
+                      </p>
+                      <p id="sold-counter"></p>
+                    </div>
+                  </div>
+                </a>
+                <a title="View Unverified" href="/profile/mylistings?tab=verify">
+                  <div class="fac">
+                    <div>
+                      <p class="heading">
+                        Unverified Listings
+                      </p>
+                      <p id="unverified-counter"></p>
+                    </div>
+                  </div>
+                </a>
+                <a title="View Expiring" href="/profile/mylistings">
+                  <div class="fac">
+                    <div>
+                      <p class="heading">
+                        Expiring Domains
+                      </p>
+                      <p id="expiring-counter"></p>
+                    </div>
+                  </div>
+                </a>
+                <a title="View Profit" href="/profile/settings#transactions">
+                  <div class="fac">
+                    <div>
+                      <p class="heading">
+                        Profit YTD
+                      </p>
+                      <p id="profit-counter"></p>
+                    </div>
+                  </div>
+                </a>
+                <a title="View Expenses" href="/profile/settings#transactions">
+                  <div class="fac">
+                    <div>
+                      <p class="heading">
+                        Expenses YTD
+                      </p>
+                      <p id="expenses-counter"></p>
+                    </div>
+                  </div>
+                </a>
+                <a title="View Offers" href="/profile/mylistings?tab=offers">
+                  <div class="fac">
+                    <div>
+                      <p class="heading">
+                        Offers
+                      </p>
+                      <p id="offers-counter"></p>
+                    </div>
+                  </div>
+                </a>
+              </div>
               <div class="card is-fullwidth">
                 <div class="card-header no-border-bottom">
                   <h3 class="is-bold">
