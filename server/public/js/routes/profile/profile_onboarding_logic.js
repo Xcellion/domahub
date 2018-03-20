@@ -48,12 +48,8 @@ $(document).ready(function() {
   //click next button to submit form for current step
   $(".onboarding-step-form").on("submit", function(e){
     e.preventDefault();
-    //some vars to remember
-    var currentProgress = parseFloat($(".progress").attr("value"));
-    var currentStep = $(this).closest(".onboarding-step-wrapper");
-    //progress the bar
-    $(".progress").attr("value", currentProgress + 10);
 
+    var currentStep = $(this).closest(".onboarding-step-wrapper");
     submitSpecificStepForm(currentStep, currentStep.attr("id").replace("onboarding-step-", ""));
   });
 
@@ -186,6 +182,8 @@ function submitSpecificStepForm(form_elem, step_number){
 
 function stepOneLogic(backwards){
   console.log("step 1 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 0);
 }
 
 function stepOneSubmitFormLogic(form_elem){
@@ -201,12 +199,13 @@ function stepOneSubmitFormLogic(form_elem){
 
 function stepTwoLogic(backwards){
   console.log("step 2 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 10);
 }
 
 
 function stepTwoSubmitFormLogic(form_elem){
   console.log("step 2 specific form submission");
-
   //show next step
   showSpecificStep(true, "3");
 }
@@ -217,6 +216,8 @@ function stepTwoSubmitFormLogic(form_elem){
 
 function stepThreeLogic(backwards){
   console.log("step 3 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 20);
 }
 
 function stepThreeSubmitFormLogic(form_elem){
@@ -248,6 +249,8 @@ function stepThreeSubmitFormLogic(form_elem){
 
 function stepFourLogic(backwards){
   console.log("step 4 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 30);
 
   //if we dont have a stripe account, skip bank account
   if (!user.stripe_account && !user.stripe_account_id){
@@ -408,6 +411,8 @@ function submitBank(stripe_token, updating_bank, form_elem){
 
 function stepFiveLogic(backwards){
   console.log("step 5 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 40);
 }
 
 function stepFiveSubmitFormLogic(form_elem){
@@ -441,6 +446,8 @@ function stepFiveSubmitFormLogic(form_elem){
 
 function stepSixLogic(backwards){
   console.log("step 6 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 50);
 
   //if already premium, skip this step
   if (user.stripe_subscription_id && user.stripe_subscription){
@@ -491,6 +498,9 @@ function stepSixSubmitFormLogic(form_elem){
 
 function stepSevenLogic(backwards){
   console.log("step 7 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 60);
+
   $("#go-step-8, #go-step-9").off().on("click", function() {
     if ($(this).attr("id") == "go-step-8") {
       showSpecificStep(true, "8");
@@ -511,6 +521,8 @@ function stepSevenSubmitFormLogic(form_elem){
 
 function stepEightLogic(backwards){
   console.log("step 8 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 70);
 
   updateRegistrars();
 }
@@ -556,6 +568,8 @@ function stepEightSubmitFormLogic(form_elem){
 
 function stepNineLogic(backwards){
   console.log("step 9 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 80);
 
   if (backwards && domain_created_by == "connect"){
     showSpecificStep(true, "8");
@@ -601,6 +615,8 @@ function stepNineSubmitFormLogic(form_elem){
 
 function stepTenLogic(backwards){
   console.log("step 10 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 90);
 
   //if we refreshed and came to this step, show step 8 instead
   if (domain_created_by == ""){
@@ -857,6 +873,8 @@ function stepTenSubmitFormLogic(form_elem){
 //logic for after all steps are finished
 function finishedAllStepsLogic(){
   console.log("finished all steps!");
+  //advance progress bar
+  $(".progress").attr("value", 100);
 
   //show all left menu buttons (MAKE THIS DYNAMIC)
   $(".menu-item").removeClass("is-hidden");

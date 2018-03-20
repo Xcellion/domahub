@@ -497,38 +497,68 @@
               </div>
               <div class="content">
                 <h1>
-                  Upgrade to Premium and get access to all of these features!
+                  Upgrade to Premium and get access to even more features!
                 </h1>
                 <p class="tip">
-  								All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-underlined">Stripe</a>.
-  							</p>
+                  Our Premium subscription only costs $5 a month for unlimited access to
+                  all of our features.
+                </p>
               </div>
-              <form id="step-form-6" class="onboarding-step-form">
-                <div class="control">
-                  <label class="label" for="subscription-type-input">Billing Cycle</label>
-                  <span class="select is-fullwidth">
-                    <select required name="subscription-type" id="subscription-type-input">
-                      <option selected value="" disabled>Please select your desired billing cycle</option>
-                      <option value="monthly">Monthly - $5 / month ($60 / year)</option>
-                      <option value="annual">Annually - $50 / year ($4.16 / month)</option>
-                    </select>
-                  </span>
+              <div class="columns">
+                <div class="column is-6">
+                  <form id="step-form-6" class="onboarding-step-form">
+                    <div class="control">
+                      <label class="label" for="subscription-type-input">Billing Cycle</label>
+                      <span class="select is-fullwidth">
+                        <select required name="subscription-type" id="subscription-type-input">
+                          <option selected value="" disabled>Please select your desired billing cycle</option>
+                          <option value="monthly">Monthly - $5 / month ($60 / year)</option>
+                          <option value="annual">Annually - $50 / year ($4.16 / month)</option>
+                        </select>
+                      </span>
+                    </div>
+                    <div class="control">
+                      <label class="label">Card Number</label>
+                      <input id="cc-num" required tabindex="0" data-stripe="number" class="input modal-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                    </div>
+                    <div class="control is-grouped">
+                      <div class="control is-expanded">
+                        <label class="label">Expiration Date</label>
+                        <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input modal-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                      </div>
+                      <div class="control is-expanded">
+                        <label class="label">Security Code</label>
+                        <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input modal-input" type="tel" placeholder="•••" autocomplete="off"/>
+                      </div>
+                    </div>
+                    <div class="control">
+                      <small class="tip">
+                        All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-underlined">Stripe</a>.
+                      </small>
+                    </div>
+                  </form>
                 </div>
-                <div class="control">
-                  <label class="label">Card Number</label>
-                  <input id="cc-num" required tabindex="0" data-stripe="number" class="input modal-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                </div>
-                <div class="control is-grouped">
-                  <div class="control is-expanded">
-                    <label class="label">Expiration Date</label>
-                    <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input modal-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                <div class="column is-6">
+                  <div class="card">
+                    <div class="card-content">
+                      <div class="content has-text-centered">
+                        <div class="icon is-circle is-medium is-primary">
+                          <i class="fal fa-trophy-alt"></i>
+                        </div>
+                      </div>
+                      <div class="content has-text-centered">
+                        <p class="is-bold">
+                          DomaHub Premium
+                        </p>
+                        <p>
+                          Enjoy zero commission on all sales, unlock designs for landing pages and hubs,
+                          use custom URL's for all pages, and much more!
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="control is-expanded">
-                    <label class="label">Security Code</label>
-                    <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input modal-input" type="tel" placeholder="•••" autocomplete="off"/>
-                  </div>
                 </div>
-              </form>
+              </div>
             </div>
             <div class="control step-buttons">
               <a class="button is-stylish is-black is-inverted onboarding-prev-button">
