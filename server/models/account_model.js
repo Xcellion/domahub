@@ -233,9 +233,9 @@ module.exports = {
                 FROM domain_expenses \
                 INNER JOIN listings \
                   ON listings.id = domain_expenses.listing_id \
-                WHERE domain_expenses.listing_id IN (SELECT id FROM listings WHERE owner_id = 1) ) dummy \
+                WHERE domain_expenses.listing_id IN (SELECT id FROM listings WHERE owner_id = ?) ) dummy \
                 ORDER BY date_created ";
-    database.query(query, "Failed to get all transactions connected to account " + account_id + "!", callback, [account_id, account_id]);
+    database.query(query, "Failed to get all transactions connected to account " + account_id + "!", callback, [account_id, account_id, account_id]);
   },
 
   //gets the stripe ID and listing type of a listing owner
