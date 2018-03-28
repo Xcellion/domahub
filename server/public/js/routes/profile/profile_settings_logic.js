@@ -1253,6 +1253,7 @@ function showSectionByURL(){
       $("#transactions-table").removeClass("is-hidden");
     }
     else {
+      $("#transactions-table").addClass("is-hidden");
       $("#no-transactions-table").removeClass("is-hidden");
     }
   }
