@@ -1205,7 +1205,7 @@ function showSectionByURL(){
     //show loading stuff
     $("#loading-transactions-table").removeClass('is-hidden');
     $("#no-matching-transactions-table, #no-transactions-table, #transactions-table").addClass('is-hidden');
-    $("#total-revenue, #total-fees, #total-profit, #total-withdrawn, p.withdrawal-available").text("Loading...");
+    $(".total-loading").text("Loading...");
     $("span.withdrawal-available").text("");
     $("#refresh-transactions-button").addClass("is-loading");
     $("#transactions-toolbar").addClass("is-hidden");
