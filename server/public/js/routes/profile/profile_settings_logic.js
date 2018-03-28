@@ -1250,7 +1250,16 @@ function showSectionByURL(){
       //show transactions table and total transactions
       calculateTotals();
       showTransactionRows();
-      $("#transactions-table").removeClass("is-hidden");
+
+      //if any visible
+      if ($(".transactions-row:not(.is-hidden)")){
+        $("#transactions-table").removeClass("is-hidden");
+        $("#no-transactions-table").addClass("is-hidden");
+      }
+      else {
+        $("#transactions-table").addClass("is-hidden");
+        $("#no-transactions-table").removeClass("is-hidden");
+      }
     }
     else {
       $("#transactions-table").addClass("is-hidden");
