@@ -1252,7 +1252,7 @@ function showSectionByURL(){
       showTransactionRows();
 
       //if any visible
-      if ($(".transactions-row:not(.is-hidden)")){
+      if ($(".transactions-row:not(.is-hidden)").length > 0){
         $("#transactions-table").removeClass("is-hidden");
         $("#no-transactions-table").addClass("is-hidden");
       }
