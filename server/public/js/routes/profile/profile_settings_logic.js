@@ -1204,7 +1204,7 @@ function showSectionByURL(){
 
     //show loading stuff
     $("#loading-transactions-table").removeClass('is-hidden');
-    $("#no-matching-transactions-table, #no-transactions-table, #transactions-table").addClass('is-hidden');
+    $("#no-transactions-table, #transactions-table").addClass('is-hidden');
     $(".total-loading").text("Loading...");
     $("span.withdrawal-available").text("");
     $("#refresh-transactions-button").addClass("is-loading");
@@ -1537,12 +1537,12 @@ function showSectionByURL(){
       $("#no-transactions-table").addClass('is-hidden');
       //something matches
       if ($(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").length > 0){
-        $("#no-matching-transactions-table").addClass('is-hidden');
+        $("#no-transactions-table").addClass('is-hidden');
         $("#transactions-table").removeClass('is-hidden');
       }
       //nothing matches
       else {
-        $("#no-matching-transactions-table").removeClass('is-hidden');
+        $("#no-transactions-table").removeClass('is-hidden');
         $("#transactions-table").addClass('is-hidden');
       }
     }
