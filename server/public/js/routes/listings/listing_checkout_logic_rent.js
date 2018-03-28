@@ -127,18 +127,18 @@ $(document).ready(function () {
         $("#checkout-button").removeClass("is-hidden");
       }
 
-      //bitcoin
-      else if (which_choice.hasClass("bitcoin-choice")){
-        $(".bitcoin-choice-column").removeClass("is-hidden").find('input').focus();
-        showMessage("bitcoin-regular-message");
-      }
-
       //paypal
       else if (which_choice.hasClass("paypal-choice")){
         $(".paypal-choice-column").removeClass("is-hidden");
         showMessage("paypal-regular-message");
         $("#paypal-button").removeClass("is-hidden");
         $("#checkout-button").addClass("is-hidden");
+      }
+
+      //bitcoin
+      else if (which_choice.hasClass("bitcoin-choice")){
+        $(".bitcoin-choice-column").removeClass("is-hidden").find('input').focus();
+        showMessage("bitcoin-regular-message");
       }
     });
 
@@ -318,22 +318,18 @@ function createPayPalButton(){
             resolve(data.payment.id);
           }
           else {
+            errorHandler(data.message);
             reject(new Error(data.message));
           }
         }).fail(function(err){
+          errorHandler("Something went wrong with your PayPal payment! Please refresh the page and try again.");
           reject(new Error(err));
         });
       });
     },
 
-    //called when the customer approves the payment
+    //payment has been authorized, submit and execute payment via PayPal Payment Execute api
     onAuthorize : function(data) {
-
-      console.log('The payment was authorized!');
-      console.log('Payment ID = ', data.paymentID);
-      console.log('PayerID = ', data.payerID);
-
-      //payment has been authorized, complete payment via PayPal Payment Execute api
       submitNewRental("paypal", {
         paymentID: data.paymentID,
         payerID: data.payerID
@@ -347,7 +343,7 @@ function createPayPalButton(){
 
     //when theres an error with the payment
     onError: function(err) {
-      console.log("WOOT", err)
+      console.log("Something went wrong!", err)
     }
 
   }, '#paypal-button');
@@ -386,7 +382,8 @@ function submitNewRental(type, token){
     starttime: new_rental_info.starttime,
     endtime: new_rental_info.endtime,
     address: $(".input-selected").val(),
-    rental_type: ($(".input-selected").attr("id") == "address-forward-input") ? 1 : 0
+    rental_type: ($(".input-selected").attr("id") == "address-forward-input") ? 1 : 0,
+    payment_type: type
   }
 
   //type of payment
@@ -394,7 +391,10 @@ function submitNewRental(type, token){
     data_for_submit.stripeToken = token;
   }
   else if (type == "paypal" && token){
-    data_for_submit.paymentID = token;
+    data_for_submit.paymentID = token.paymentID;
+    data_for_submit.payerID = token.payerID;
+    $("#paypal-button-loading").removeClass('is-hidden');
+    $("#paypal-button").addClass('is-hidden');
   }
 
   //optional email for unregistered renters
@@ -408,6 +408,8 @@ function submitNewRental(type, token){
     data: data_for_submit
   }).done(function(data){
     $("#checkout-button").removeClass('is-loading');
+
+    //handlers
     if (data.state == "success"){
       successHandler(data.rental_id, data.owner_hash_id);
     }
@@ -416,6 +418,12 @@ function submitNewRental(type, token){
     }
     else {
       errorHandler(data.message);
+    }
+
+    //show paypal again
+    if (type == "paypal"){
+      $("#paypal-button-loading").addClass('is-hidden');
+      $("#paypal-button").removeClass('is-hidden');
     }
   });
 }
@@ -440,7 +448,7 @@ function errorHandler(message){
     showMessage("address-error-message", "There's something wrong with this address! Please choose a different website link.");
     break;
     case "Invalid rental type!":
-    showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh this page and try again.");
+    showMessage("stripe-error-message", "Something went wrong with processing the rental! Please refresh the page and try again.");
     break;
     case "Invalid address!":
     showStep("site");
@@ -451,7 +459,12 @@ function errorHandler(message){
     showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please choose a different website link.");
     break;
     default:
-    showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh the page and try again.");
+    if (message){
+      showMessage("stripe-error-message", message);
+    }
+    else {
+      showMessage("stripe-error-message", "Something went wrong with processing the rental! Please refresh the page and try again.");
+    }
     break;
   }
 }

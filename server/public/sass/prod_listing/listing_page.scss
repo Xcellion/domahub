@@ -77,6 +77,21 @@
   }
 }
 
+//<editor-fold>---------------------CALENDAR---------------------
+
+#calendar-loading-message {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  p {
+    margin-top:25px;
+  }
+}
+
+//</editor-fold>
+
 //<editor-fold>---------------------LISTING---------------------
 
 .listing-page {

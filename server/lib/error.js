@@ -42,6 +42,7 @@ module.exports = {
           //redirect to listing
           case "Invalid rental!":                   //not a number
           case "Invalid domain name for rental!":   //wrong domain for rental
+            delete req.session.message;
             redirectTo = RemoveLastDirectoryPartOf(req.path);
             break;
 

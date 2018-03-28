@@ -338,7 +338,7 @@
               </p>
               <p id="paypal-regular-message" class="is-hidden regular-message">
                 By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>. Clicking the button will bring you to your PayPal log in page where you can select your desired payment method.
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>. Clicking the button will bring you to the PayPal log in page where you can select your desired payment method.
               </p>
               <p id="bitcoin-regular-message" class="is-hidden regular-message">
                 Please enter your Bitcoin wallet address. By clicking the Confirm & Pay button,
@@ -372,12 +372,12 @@
                     <h2>Pay via PayPal</h2>
                   </div>
                   <p>
-                    Pay by using your PayPal account.
+                    Pay instantly using your PayPal balance or any other saved payment methods.
                   </p>
                 </div>
               </div>
 
-              <div id="bitcoin-choice" class="bitcoin-choice checkout-track box hover-effect choice-block">
+              <!-- <div id="bitcoin-choice" class="bitcoin-choice checkout-track box hover-effect choice-block">
                 <div class="content">
                   <div class="step-box">
                     <span class="icon is-medium is-accent">
@@ -386,10 +386,10 @@
                     <h2>Pay with Bitcoin</h2>
                   </div>
                   <p>
-                    Pay securely using your Bitcoin wallet.
+                    Harness the power of blockchain and pay securely using Bitcoin.
                   </p>
                 </div>
-              </div>
+              </div> -->
 
               <div class="control">
                 <button id="back-to-address-button" class="back-button checkout-track button is-stylish">
@@ -444,7 +444,7 @@
                  BITCOIN WALLET FORM
               </div>
               <div class="control is-hidden paypal-choice-column choice-column">
-                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/cc-badges-ppmcvdam.png" alt="Credit Card Badges">
+                <img style="display:block;" src="/images/lib/credit-card-logos.png" alt="Credit Card Badges">
               </div>
               <div class="control is-grouped">
                 <div class="control">
@@ -463,6 +463,12 @@
                     <span>Confirm & Pay</span>
                   </button>
                   <div id="paypal-button" class="is-hidden"></div>
+                  <button id="paypal-button-loading" tabindex="0" class="is-loading is-fullwidth is-hidden checkout-track button is-black is-stylish">
+                    <div class="icon is-small">
+                      <i class="fal fa-shopping-cart"></i>
+                    </div>
+                    <span>PAYPAL CONFIRM & PAY LOADING BUTTON</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -481,7 +487,7 @@
                   </a>
                 </div>
               </div>
-              <a id="rental-preview-button" class="checkout-track button is-stylish is-primary no-shadow">
+              <a id="rental-preview-button" class="checkout-track button is-stylish is-primary no-shadow is-fullwidth">
                 <div class="icon is-small">
                   <i class="fal fa-search"></i>
                 </div>
