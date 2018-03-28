@@ -178,6 +178,9 @@
                 <div class="control-left">
                   <label class="label" for="rentable-input">
                     Allow Rentals
+                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="A rented domain cannot be purchased during the rental term. For more details, please check the DomaHub FAQ." data-balloon-pos="up">
+                      <i class="fal fa-question-circle"></i>
+                    </div>
                   </label>
                   <small class="tip">Allows users to rent usage of <span class="this-domain">this domain</span> for short amounts of time.</small>
                 </div>
@@ -726,7 +729,7 @@
                 <div class="control-left">
                   <label class="label">
                     Related Expenses
-                    <div class="icon is-tooltip is-small" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
+                    <div class="icon is-tooltip is-small" style="display:inline-block;" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
                       <i class="fal fa-question-circle"></i>
                     </div>
                   </label>
@@ -743,18 +746,16 @@
 
                 <table class="table no-borders is-transparent-head no-shadow">
                   <tbody id="domain-expense-table">
-                    <tr id="domain-expense-clone" class="is-hidden table-row no-hover-effect">
+                    <tr id="domain-expense-clone" class="clone-row is-hidden table-row no-hover-effect">
                       <td class="domain-expense-name break-word"></td>
                       <td class="domain-expense-cost"></td>
                       <td class="domain-expense-date"></td>
                       <td class="expense-button-wrapper">
-                        <a tabindex="0" class='domain-expense-delete-button button no-shadow is-stylish is-small'>
+                        <a tabindex="0" class='domain-expense-delete-button button no-shadow is-stylish is-small is-pulled-right'>
                           <div class="icon is-small"><i class="fal fa-trash"></i></div>
                           <span class="is-hidden-mobile">Delete</span>
                         </a>
-                      </td>
-                      <td class="expense-button-wrapper">
-                        <a tabindex="0" class='domain-expense-edit-button button no-shadow is-stylish is-small'>
+                        <a tabindex="0" class='domain-expense-edit-button button no-shadow is-stylish is-small is-pulled-right'>
                           <div class="icon is-small"><i class="fal fa-edit"></i></div>
                           <span class="is-hidden-mobile">Edit</span>
                         </a>
@@ -1158,7 +1159,7 @@
         <span>Go Back To Listings</span>
       </a>
     </div>
-    <div class="control">
+    <div class="content">
       <div class="content">
         <h2 class="title-wrapper is-bold">
           <span class="editor-title">My Offers</span>
@@ -1189,73 +1190,6 @@
       </div>
     </div>
 
-    <!-- OFFER ACCEPT / DEPOSIT BOXES -->
-    <div id="accepted-offer" class="whats-next-offer control is-hidden">
-      <div class="box no-shadow no-border content">
-        <h3 class="is-bold">
-          I accepted the offer--what's next?
-        </h3>
-        <p>
-          The buyer has been sent an email with instructions on completing payment.
-          Once the payment has been verified, you will need to manually transfer the ownership of <span class="this-domain">this domain</span> to him/her.
-          If you do not know how to manually transfer a domain, please refer to our <a target="_blank" href="/faq#transferguide" class="is-primary is-underlined">Domain Transfer Guide</a>.
-        </p>
-        <p>
-          If you have changed your mind about this offer, please <a href="/contact" class="is-primary is-underlined">let us know</a>.
-        </p>
-        <p class="is-bold">
-          There is no required action on your part just yet. Hold tight, we are getting you your money.
-        </p>
-      </div>
-      <p class="resend-wrapper">
-        <a class="button is-stylish is-small resend-offer-email-button">
-          <div class="icon is-small"><i class="fal fa-repeat"></i></div>
-          <span>Re-send Payment Email</span>
-        </a>
-      </p>
-    </div>
-    <div id="deposited-offer" class="whats-next-offer control is-hidden">
-      <div class="box no-shadow no-border content">
-        <h3 class="is-bold">
-          Congratulations on selling your domain!
-        </h3>
-        <p>
-          The money has been deposited and verified by DomaHub. You must now transfer the ownership of <span class="this-domain">this domain</span> to the new owner.
-          Once the new owner has verified that the ownership has been transferred over, the money will become available for withdrawal.
-          If you do not know how to manually transfer a domain, please refer to our <a target="_blank" href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-primary is-underlined">Domain Transfer Guide</a>.
-        </p>
-        <p>
-          <span class="this-domain">this domain</span> must be transferred by <span id="deposited-deadline" class="is-bold"></span>. Otherwise your account will be flagged for review.
-        </p>
-        <p class="is-bold">
-          Failure to transfer ownership of the domain within the next 14 days will result in the money being refunded.
-        </p>
-        <p>
-          Having issues? <a class="is-primary is-underlined contact-link" href="/contact">Contact us</a> for assistance.
-        </p>
-
-      </div>
-      <div class="resend-wrapper">
-        <a class="button is-stylish is-small resend-offer-email-button">
-          <div class="icon is-small"><i class="fal fa-repeat"></i></div>
-          <span>Re-send Verification Email</span></a>
-        </a>
-      </div>
-    </div>
-    <div id="transferred-offer" class="whats-next-offer control is-hidden">
-      <div class="box no-shadow no-border content">
-        <h3 class="is-bold">
-          Congratulations on selling your domain!
-        </h3>
-        <p>
-          The money has been deposited and verified by DomaHub. You can see your earnings on your <a class="is-primary is-underlined contact-link" href="/settings#transactions">Account Settings transactions</a> page.
-        </p>
-        <p>
-          Have questions about this transaction? <a class="is-primary is-underlined contact-link" href="/contact">Contact us</a> for assistance.
-        </p>
-      </div>
-    </div>
-
     <!-- OFFER MODAL -->
     <div id="offer-modal" class="modal">
       <div class="modal-background"></div>
@@ -1268,173 +1202,275 @@
           <div class="content">
             <h1 id="offer-modal-price" class="has-text-centered"></h1>
           </div>
-          <div class="content">
+          <div class="content remove-margin-bottom-content">
             <ul id="offer-info" class="is-vertical offer-info">
               <li>
                 <div class="icon is-small" title="From">
                   <i class="fal fa-user-alt fa-fw"></i></span>
                 </div>
                 <span id="offer-modal-name">
-              </li>
-              <li>
-                <div class="icon is-small" title="Email">
-                  <i class="fal fa-envelope fa-fw"></i></span>
+                </li>
+                <li>
+                  <div class="icon is-small" title="Email">
+                    <i class="fal fa-envelope fa-fw"></i></span>
+                  </div>
+                  <span id="offer-modal-email">
+                  </li>
+                  <li>
+                    <div class="icon is-small" title="Phone">
+                      <i class="fal fa-phone fa-fw"></i></span>
+                    </div>
+                    <span id="offer-modal-phone">
+                    </li>
+                    <li>
+                      <div class="icon is-small" title="Message">
+                        <i class="fal fa-comment fa-fw"></i>
+                      </div>
+                      <p id="offer-modal-message" class="offer-msg"></p>
+                    </li>
+                  </ul>
                 </div>
-                <span id="offer-modal-email">
-              </li>
-              <li>
-                <div class="icon is-small" title="Phone">
-                  <i class="fal fa-phone fa-fw"></i></span>
+                <div id="offer-response-wrapper" class="content" style="margin-top:0;">
+                  <p id="offer-response-label" class="is-hidden">
+                    Your response:
+                  </p>
+                  <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
                 </div>
-                <span id="offer-modal-phone">
-              </li>
-              <li>
-                <div class="icon is-small" title="Message">
-                  <i class="fal fa-comment fa-fw"></i>
+                <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
+                  <div class="control is-expanded">
+                    <a id="accept_button" tabindex="0" class='button is-fullwidth is-stylish is-small is-primary '>
+                      <div class="icon is-small"><i class="fal fa-check"></i></div>
+                      <span>Accept offer</span>
+                    </a>
+                  </div>
+                  <div class="control is-expanded">
+                    <a id="reject_button" tabindex="0" class='button is-fullwidth is-stylish is-small is-outlined is-danger'>
+                      <div class="icon is-small"><i class="fal fa-times"></i></div>
+                      <span>Reject offer</span>
+                    </a>
+                  </div>
                 </div>
-                <p id="offer-modal-message" class="offer-msg"></p>
-              </li>
-            </ul>
-          </div>
-          <div id="offer-response-label" class="content is-hidden">
-            <p>
-              Your response:
-            </p>
-          </div>
-          <div id="offer-response-wrapper" class="content">
-            <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
-          </div>
-          <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
-            <div class="control is-expanded">
-              <a id="accept_button" tabindex="0" class='button is-fullwidth is-stylish is-small is-primary '>
-                <div class="icon is-small"><i class="fal fa-check"></i></div>
-                <span>Accept offer</span>
-              </a>
+                <div class="content">
+                  <a id="offer-modal-whats-next" tabindex="0" class='is-stylish is-fullwidth button is-primary'>
+                    <div class="icon is-small"><i class="fal fa-question-circle"></i></div>
+                    <span>What do I need to do next?</span>
+                  </a>
+                </div>
+              </div>
             </div>
-            <div class="control is-expanded">
-              <a id="reject_button" tabindex="0" class='button is-fullwidth is-stylish is-small is-outlined is-danger'>
-                <div class="icon is-small"><i class="fal fa-times"></i></div>
-                <span>Reject offer</span>
-              </a>
+            <button class="modal-close"></button>
+          </div>
+
+    <div class="columns">
+      <!-- OFFER ACCEPT / DEPOSIT BOXES -->
+      <div id="whats-next-offer-wrapper" class="column is-narrow is-hidden">
+        <div class="card is-fullwidth-mobile">
+          <div id="accepted-offer" class="whats-next-offer is-hidden">
+            <div class="card-image">
+              <div class="notification no-shadow has-icon is-info">
+                <div class="icon-box">
+                  <div class="icon is-white">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </div>
+                <div class="content">
+                  <p class="is-white">I accepted the offer--what's next for me?</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <p class="is-bold">
+                  There is no required action on your part just yet. Hold tight, we are getting you your money.
+                </p>
+                <p>
+                  Once payment has been verified, you will need to manually transfer the ownership of <span class="this-domain">this domain</span> to the buyer.
+                </p>
+                <p>
+                  If you have changed your mind about this offer, please <a href="/contact" class="is-primary is-underlined contact-link">let us know</a>.
+                </p>
+                <div class="resend-wrapper">
+                  <a class="button is-stylish is-fullwidth is-small resend-offer-email-button">
+                    <div class="icon is-small"><i class="fal fa-repeat"></i></div>
+                    <span>Resend Payment Reminder Email</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="content">
-            <a id="offer-modal-whats-next" tabindex="0" class='is-underlined is-primary'>
-              <span>What do I need to do next?</span>
-            </a>
+          <div id="deposited-offer" class="whats-next-offer is-hidden">
+            <div class="card-image">
+              <div class="notification no-shadow has-icon is-accent">
+                <div class="icon-box">
+                  <div class="icon is-white">
+                    <i class="fal fa-exclamation-circle"></i>
+                  </div>
+                </div>
+                <div class="content">
+                  <p class="is-white">You still have one final step left before you can claim the payment!</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <p class="is-bold">
+                  You must transfer the ownership of <span class="this-domain">this domain</span> to the buyer by <span id="deposited-deadline"></span>.
+                </p>
+                <p>
+                  Once the buyer has verified the ownership transfer, the payment will become available to you for withdrawal.
+                </p>
+                <p>
+                  Failure to transfer ownership by the deadline will result in your account being flagged for review.
+                </p>
+                <p>
+                  Please refer to our <a target="_blank" href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-primary is-underlined">Domain Transfer Guide</a> or <a class="is-primary is-underlined contact-link" href="/contact">contact us</a> for assistance.
+                </p>
+
+                <div class="resend-wrapper">
+                  <a class="button is-stylish is-fullwidth is-small resend-offer-email-button">
+                    <div class="icon is-small"><i class="fal fa-repeat"></i></div>
+                    <span>Resend Verification Reminder Email</span></a>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div id="transferred-offer" class="whats-next-offer is-hidden">
+            <div class="card-image">
+
+            </div>
+
+            <div class="card-content">
+
+            </div>
+
+            <div class="box no-shadow no-border content">
+              <h3 class="is-bold">
+                Congratulations on selling your domain!
+              </h3>
+              <p>
+                The money has been deposited and verified by DomaHub. You can see your earnings on your <a class="is-primary is-underlined contact-link" href="/settings#transactions">Account Settings transactions</a> page.
+              </p>
+              <p>
+                Have questions about this transaction? <a class="is-primary is-underlined contact-link" href="/contact">Contact us</a> for assistance.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <button class="modal-close"></button>
+
+      <div class="column">
+        <!-- OFFER TABLE -->
+        <table id="no-verified-listings-table" class="is-hidden has-shadow table is-fixed is-bordered">
+          <tbody>
+            <tr class="no-hover-effect">
+              <td colspan="5">
+                <div class="nothing-exists-row has-text-centered">
+                  <div class="offer-table-no-listings is-hidden">
+                    <div class="icon is-large is-primary">
+                      <i class="fal fa-exclamation-circle"></i>
+                    </div>
+                    <p class="control has-text-centered">
+                      You need listings before you can get offers! Let's go make some!
+                    </p>
+                    <a class="button is-primary is-stylish" href="/listings/create">
+                      <div class="icon is-small">
+                        <i class="fal fa-plus"></i>
+                      </div>
+                      <span>Create New Listings</span>
+                    </a>
+                  </div>
+                  <div class="offer-table-no-verified content has-text-centered is-hidden">
+                    <div class="icon is-large is-primary">
+                      <i class="fal fa-exclamation-circle"></i>
+                    </div>
+                    <p>
+                      You must verify your domains before you can receive offers!
+                    </p>
+                    <a class="button is-primary is-stylish" href="/profile/mylistings?tab=verify">
+                      <div class="icon">
+                        <i class="fal fa-check-circle"></i>
+                      </div>
+                      <span>Verify Domains</span>
+                    </a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="no-offers-table" class="hidden-while-loading-offers has-shadow is-hidden table is-fixed is-bordered">
+          <tbody>
+            <tr class="no-hover-effect">
+              <td colspan="5">
+                <div class="nothing-exists-row has-text-centered">
+                  <div class="icon is-large is-danger">
+                    <i class="fal fa-exclamation-circle"></i>
+                  </div>
+                  <p>Oh, no! There are no existing/matching offers!</p>
+                  <p>Let's go out there and get some offers!</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="loading-offers-table" class="is-hidden has-shadow table is-fixed is-bordered">
+          <tbody>
+            <tr class="no-hover-effect">
+              <td colspan="5">
+                <div class="nothing-exists-row has-text-centered">
+                  <p class="icon is-medium"><i class="fal fa-spin fa-sync-alt"></i></p>
+                  <p>Now loading domain offers.</p>
+                  <p>This may take some time.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="offers-table" class="is-hidden has-shadow has-shadow hidden-while-loading-offers table is-fixed is-bordered">
+              <thead class="has-hover-effect">
+                <tr>
+                  <th class="offer-header-sort" data-value="domain_name">
+                    <span>Domain Name</span>
+                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                  </th>
+                  <th class="offer-header-sort" data-value="offer">
+                    <span>Offer</span>
+                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                  </th>
+                  <th class="offer-header-sort" data-value="accepted">
+                    <span>Status</span>
+                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                  </th>
+                  <th class="offer-header-sort is-hidden-mobile" data-value="timestamp">
+                    <span>Date</span>
+                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                  </th>
+                  <th class="offer-header-sort is-hidden-456px" data-value="name">
+                    <span>Name</span>
+                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="offers-wrapper">
+                <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
+                  <td>
+                    <span class="td-offer-domain break-all"></span>
+                    <div class="icon is-tooltip is-inline is-small" data-balloon-length="medium" data-balloon="Click on this offer to view more details or respond to it." data-balloon-pos="right">
+                      <i class="fal fa-question-circle"></i>
+                    </div>
+                  </td>
+                  <td class="td-offer-offer"></td>
+                  <td class="td-offer-status"></td>
+                  <td class="td-offer-timestamp is-hidden-mobile"></td>
+                  <td class="td-offer-name is-hidden-456px"></td>
+                </tr>
+              </tbody>
+            </table>
+      </div>
     </div>
 
-    <!-- OFFER TABLE -->
-    <table id="no-verified-listings-table" class="is-hidden has-shadow table is-fixed is-bordered">
-      <tbody>
-        <tr class="no-hover-effect">
-          <td colspan="5">
-            <div class="nothing-exists-row has-text-centered">
-              <div class="offer-table-no-listings is-hidden">
-                <div class="icon is-large is-primary">
-                  <i class="fal fa-exclamation-circle"></i>
-                </div>
-                <p class="control has-text-centered">
-                  You need listings before you can get offers! Let's go make some!
-                </p>
-                <a class="button is-primary is-stylish" href="/listings/create">
-                  <div class="icon is-small">
-                    <i class="fal fa-plus"></i>
-                  </div>
-                  <span>Create New Listings</span>
-                </a>
-              </div>
-              <div class="offer-table-no-verified content has-text-centered is-hidden">
-                <div class="icon is-large is-primary">
-                  <i class="fal fa-exclamation-circle"></i>
-                </div>
-                <p>
-                  You must verify your domains before you can receive offers!
-                </p>
-                <a class="button is-primary is-stylish" href="/profile/mylistings?tab=verify">
-                  <div class="icon">
-                    <i class="fal fa-check-circle"></i>
-                  </div>
-                  <span>Verify Domains</span>
-                </a>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <table id="no-offers-table" class="hidden-while-loading-offers has-shadow is-hidden table is-fixed is-bordered">
-      <tbody>
-        <tr class="no-hover-effect">
-          <td colspan="5">
-            <div class="nothing-exists-row has-text-centered">
-              <div class="icon is-large is-danger">
-                <i class="fal fa-exclamation-circle"></i>
-              </div>
-              <p>Oh, no! There are no existing/matching offers!</p>
-              <p>Let's go out there and get some offers!</p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <table id="loading-offers-table" class="is-hidden has-shadow table is-fixed is-bordered">
-      <tbody>
-        <tr class="no-hover-effect">
-          <td colspan="5">
-            <div class="nothing-exists-row has-text-centered">
-              <p class="icon is-medium"><i class="fal fa-spin fa-sync-alt"></i></p>
-              <p>Now loading domain offers.</p>
-              <p>This may take some time.</p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <table id="offers-table" class="is-hidden has-shadow has-shadow hidden-while-loading-offers table is-fixed is-bordered">
-      <thead class="has-hover-effect">
-        <tr>
-          <th class="offer-header-sort" data-value="domain_name">
-            <span>Domain Name</span>
-            <div class="icon is-small"><i class="fal fa-sort"></i></div>
-          </th>
-          <th class="offer-header-sort" data-value="offer">
-            <span>Offer</span>
-            <div class="icon is-small"><i class="fal fa-sort"></i></div>
-          </th>
-          <th class="offer-header-sort" data-value="accepted">
-            <span>Status</span>
-            <div class="icon is-small"><i class="fal fa-sort"></i></div>
-          </th>
-          <th class="offer-header-sort is-hidden-mobile" data-value="timestamp">
-            <span>Date</span>
-            <div class="icon is-small"><i class="fal fa-sort"></i></div>
-          </th>
-          <th class="offer-header-sort is-hidden-456px" data-value="name">
-            <span>Name</span>
-            <div class="icon is-small"><i class="fal fa-sort"></i></div>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="offers-wrapper">
-        <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
-          <td>
-            <span class="td-offer-domain break-all"></span>
-            <div class="icon is-tooltip is-inline is-small" data-balloon-length="medium" data-balloon="Click on this offer to view more details or respond to it." data-balloon-pos="right">
-              <i class="fal fa-question-circle"></i>
-            </div>
-          </td>
-          <td class="td-offer-offer"></td>
-          <td class="td-offer-status"></td>
-          <td class="td-offer-timestamp is-hidden-mobile"></td>
-          <td class="td-offer-name is-hidden-456px"></td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 
   <!-- STATS -->
@@ -1472,7 +1508,7 @@
       </div>
       <div class="content">
         <p>
-          Is there a specific statistic you would like to see for your domains? Please <a class="is-primary is-underlined" href="/contact">let us know</a>!
+          Is there a specific statistic you would like to see for your domains? Please <a class="is-primary contact-link is-underlined" href="/contact">let us know</a>!
         </p>
       </div>
     </div>

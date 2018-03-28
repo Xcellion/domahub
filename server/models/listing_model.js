@@ -385,15 +385,6 @@ module.exports = {
     database.query(query, "Failed to update rental #" + rental_id + "!", callback, new_rental_times);
   },
 
-  //toggles the rental active or inactive
-  toggleActivateRental : function(rental_id, callback){
-    console.log("DB: Attempting to toggle activation on rental #" + rental_id + "...");
-    var query = "UPDATE rentals \
-        SET status = !status \
-        WHERE rental_id = ?"
-    database.query(query, "Failed to toggle activation on rental #" + rental_id + "!", callback, rental_id);
-  },
-
   //deletes a specific rental
   deleteRental : function(rental_id, callback){
     console.log("DB: Attempting to de-activate rental #" + rental_id + "...");
@@ -416,6 +407,15 @@ module.exports = {
     database.query(query, "Failed to delete " + rentals_to_delete.length + " rentals!", callback, [rentals_to_delete]);
   },
 
+  //marks certain rentals as having been withdrawn
+  markRentalsWithdrawn : function(rental_ids, withdrawn_on, callback){
+    console.log("DB: Attempting to mark " + rental_ids.length + " rentals as having been withdrawn...");
+    var query = "UPDATE rentals \
+      SET ? \
+      WHERE rental_id IN (?)"
+    database.query(query, "Failed to mark " + rental_ids.length + " rentals as having been withdrawn!", callback, [withdrawn_on, rental_ids]);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------DISPLAY A LISTING-------------------------------
@@ -433,7 +433,9 @@ module.exports = {
           IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
           IF(listings.footer_color IS NULL, '#565656', listings.footer_color) as footer_color, \
           IF(listings.footer_background_color IS NULL, '#F1F1F1', listings.footer_background_color) as footer_background_color, \
-          accounts.username, \
+          rented_table.rented, \
+          rented_table.date + rented_table.duration AS current_rental_end, \
+          accounts.username AS owner_username, \
           accounts.email AS owner_email, \
           accounts.stripe_subscription_id, \
           accounts.ga_tracking_id, \
@@ -450,6 +452,20 @@ module.exports = {
           WHERE stats_contact_history.deposited = 1 \
         ) as offers_table \
         ON offers_table.listing_id = listings.id \
+        LEFT JOIN \
+          (SELECT DISTINCT\
+            listings.id AS listing_id, \
+            rental_times.date, \
+            rental_times.duration, \
+            rentals.rental_id IS NOT NULL AS rented \
+          FROM rental_times \
+          INNER JOIN rentals \
+            ON rental_times.rental_id = rentals.rental_id \
+          INNER JOIN listings \
+            ON listings.id = rentals.listing_id \
+          WHERE (UNIX_TIMESTAMP(NOW())*1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+        ) as rented_table \
+        ON rented_table.listing_id = listings.id \
         WHERE listings.domain_name = ? \
         AND listings.verified = 1 \
         AND listings.deleted IS NULL";

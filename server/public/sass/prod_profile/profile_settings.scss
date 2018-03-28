@@ -22,6 +22,10 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.text-line-through {
+  text-decoration: line-through;
+}
+
 .columns {
   margin-left:-20px;
   margin-right:-20px;
@@ -71,7 +75,7 @@
 }
 
 // table
-#referral-table, #payment-history-table {
+#referral-table, #payment-history-table, #transactions-table {
   thead,
   tbody tr {
     display: table;
@@ -84,6 +88,18 @@
     overflow-y: auto;
     overflow-x: hidden;
   }
+}
+
+th.has-text-right, td.has-text-right{
+  text-align:right !important;
+}
+
+.transaction-header-sort{
+  cursor:pointer;
+}
+
+#transactions-table-body {
+  max-height:calc(100vh - 300px) !important;
 }
 
 .no-border-bottom {

@@ -25,16 +25,20 @@
             <h2>Checkout</h2>
           </header>
           <div class='step-content'>
-            <div id="payment-notification" class="notification is-pastel no-shadow">
+            <div id="payment-notification" class="notification is-pastel no-shadow has-border">
               <p id="payment-regular-message" class="regular-message">
                 Please choose your preferred method of payment.</a>
               </p>
               <p id="stripe-regular-message" class="is-hidden regular-message">
                 Please enter your payment information. By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>.
               </p>
               <p id="paypal-regular-message" class="is-hidden regular-message">
-                Please log in to your PayPal account.
+                By clicking the Confirm & Pay button, you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>. Clicking the button will bring you to the PayPal log in page where you can select your desired payment method.
+              </p>
+              <p id="bitcoin-regular-message" class="is-hidden regular-message">
+                Please enter your Bitcoin wallet address. By clicking the Confirm & Pay button,
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>.
               </p>
               <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
               <p id="stripe-success-message" class="regular-message is-hidden"></p>
@@ -54,20 +58,7 @@
                   </p>
                 </div>
               </div>
-              <%#
-              <div id="bitcoin-choice" class="checkout-track box hover-effect choice-block">
-                <div class="content">
-                  <div class="step-box">
-                    <div class="icon is-medium is-accent">
-                        <i class="fal fa-bitcoin"></i>
-                    </div>
-                    <h2>Pay with Bitcoin</h2>
-                  </div>
-                  <p>
-                    Pay securely using your Bitcoin wallet.
-                  </p>
-                </div>
-              </div>
+
               <div id="paypal-choice" class="checkout-track box hover-effect choice-block">
                 <div class="content">
                   <div class="step-box">
@@ -77,14 +68,29 @@
                     <h2>Pay with PayPal</h2>
                   </div>
                   <p>
-                    Login to your PayPal account and pay instantly using your PayPal balance or any of your saved payment methods.
+                    Pay instantly using your PayPal balance or any other saved payment methods.
                   </p>
                 </div>
-              </div> %>
+              </div>
+
+              <!-- <div id="bitcoin-choice" class="checkout-track box hover-effect choice-block">
+                <div class="content">
+                  <div class="step-box">
+                    <div class="icon is-medium is-accent">
+                        <i class="fal fa-bitcoin"></i>
+                    </div>
+                    <h2>Pay with Bitcoin</h2>
+                  </div>
+                  <p>
+                    Harness the power of blockchain and pay securely using Bitcoin.
+                  </p>
+                </div>
+              </div> -->
+              
             </div>
 
             <div id="choices-selected" style="display:none;">
-              <div id="stripe-choice-column" class="is-hidden choice-column">
+              <div id="stripe-choice-column" class="control is-hidden choice-column">
                 <form id="stripe-form" autocomplete="off" class="control">
                   <label class="label">Card Number</label>
                   <div class="control has-icon">
@@ -121,36 +127,38 @@
                     </div>
                   </div>
                 </form>
-
-                <div class="control is-grouped">
-                  <div class="control">
-                    <a tabindex="0" class="goback-button checkout-track button is-black is-stylish">
-                      <div class="icon is-small">
-                        <i class="fal fa-long-arrow-left"></i>
-                      </div>
-                      <span>Back to Payment Selection</span>
-                    </a>
-                  </div>
-                  <div class="control">
-                    <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
-                      <div class="icon is-small">
-                        <i class="fal fa-shopping-cart"></i>
-                      </div>
-                      <span>Confirm & Pay</span>
-                    </button>
-                  </div>
-                </div>
               </div>
-              <div id="paypal-choice-column" class="is-hidden choice-column">
-                Log in with PayPal
-
+              <div id="paypal-choice-column" class="control is-hidden choice-column">
+                <img style="display:block;" src="/images/lib/credit-card-logos.png" alt="Credit Card Badges">
+              </div>
+              <div id="bitcoin-choice-column" class="control is-hidden choice-column">
+                BITCOIN
                 <div class="control margin-top-30">
-                  <a tabindex="0" class="goback-button checkout-track button is-black is-stylish">
+                  <a tabindex="0" class="goback-button checkout-track button is-stylish">
                     <div class="icon is-small">
                       <i class="fal fa-undo"></i>
                     </div>
                     <span>Back to Payment Selection</span>
                   </a>
+                </div>
+              </div>
+              <div class="control is-grouped">
+                <div class="control">
+                  <a tabindex="0" class="goback-button checkout-track button is-stylish">
+                    <div class="icon is-small">
+                      <i class="fal fa-long-arrow-left"></i>
+                    </div>
+                    <span>Back to Payment Selection</span>
+                  </a>
+                </div>
+                <div class="control">
+                  <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
+                    <div class="icon is-small">
+                      <i class="fal fa-shopping-cart"></i>
+                    </div>
+                    <span>Confirm & Pay</span>
+                  </button>
+                  <div id="paypal-button" class="is-hidden"></div>
                 </div>
               </div>
             </div>

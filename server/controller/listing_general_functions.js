@@ -27,12 +27,12 @@ module.exports = {
 
     //redirect to lowercase URL of listing
     else if (req.params.domain_name != req.params.domain_name.toLowerCase()){
-      res.redirect(req.originalUrl.replace(req.params.domain_name, req.params.domain_name.toLowerCase()));
+      res.redirect(307, req.originalUrl.replace(req.params.domain_name, req.params.domain_name.toLowerCase()));
     }
 
     //redirect www. inside of a domain name
     else if (req.params.domain_name.indexOf("www.") != -1){
-      res.redirect(req.originalUrl.replace("www.", ""));
+      res.redirect(307, req.originalUrl.replace("www.", ""));
     }
 
     else {

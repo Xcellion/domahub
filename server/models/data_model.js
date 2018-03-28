@@ -581,6 +581,15 @@ module.exports = {
     database.query(query, "Failed to change offer to deposited!", callback, [deposited_details, offer_id, domain_name]);
   },
 
+  //marks certain offers as having been withdrawn
+  markSalesWithdrawn : function(stats_contact_history_ids, withdrawn_on, callback){
+    console.log("DB: Attempting to mark " + stats_contact_history_ids.length + " offers as having been withdrawn...");
+    var query = "UPDATE stats_contact_history \
+      SET ? \
+      WHERE id IN (?)"
+    database.query(query, "Failed to mark " + stats_contact_history_ids.length + " offers as having been withdrawn!", callback, [withdrawn_on, stats_contact_history_ids]);
+  },
+
   //</editor-fold>
 
 }

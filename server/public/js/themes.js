@@ -172,7 +172,7 @@ var listing_themes = [
     tertiary_color : "#D53C1B",
     font_name : "Nunito Sans",
     font_color : "#FFFFFF",
-    background_color : "#FFFFFF",
+    background_color : "#040008",
     background_image : "https://images.unsplash.com/photo-1504344977555-430929e2c4ba?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
     footer_color : "#FFFFFF",
     footer_background_color : "#040008",

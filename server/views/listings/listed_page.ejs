@@ -163,60 +163,60 @@
           <!-- CONTACT FORM MODULE -->
           <div id="contact-form-module" class="box is-medium module">
             <form id="buy-now-form" autocomplete="off" method="post">
-                <div class="control has-icon">
-                  <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text">
-                  <label class="error_message label" for="contact_name">Name</label>
-                  <div class="icon">
-                    <i class="fal fa-user-alt"></i>
-                  </div>
+              <div class="control has-icon">
+                <input id="contact_name" placeholder="John Smith" required class="contact-input input" name="contact_name" type="text" oninvalid="this.setCustomValidity('Please enter your full name!')" oninput="setCustomValidity('')">
+                <label class="error_message label" for="contact_name">Name</label>
+                <div class="icon">
+                  <i class="fal fa-user-alt"></i>
                 </div>
-                <div class="control has-icon">
-                  <input id="contact_email" placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email">
-                  <label class="error_message label" for="contact_email">Email Address</label>
-                  <div class="icon">
-                    <i class="fal fa-envelope"></i>
-                  </div>
+              </div>
+              <div class="control has-icon">
+                <input id="contact_email" placeholder="john@smith.com" required class="contact-input input" name="contact_email" type="email" oninvalid="this.setCustomValidity('Please enter a valid email address!')" oninput="setCustomValidity('')">
+                <label class="error_message label" for="contact_email">Email Address</label>
+                <div class="icon">
+                  <i class="fal fa-envelope"></i>
                 </div>
-                <div class="control has-icon">
-                  <input id="contact_phone" required class="contact-input input phone-number" name="contact_phone" type="tel">
-                  <label class="error_message label" for="contact_phone">Phone</label>
+              </div>
+              <div class="control has-icon">
+                <input id="contact_phone" required class="contact-input input phone-number" name="contact_phone" type="tel" oninvalid="this.setCustomValidity('Please enter a valid phone number!')" oninput="setCustomValidity('')">
+                <label class="error_message label" for="contact_phone">Phone</label>
+              </div>
+              <div class="control has-icon">
+                <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" oninvalid="this.setCustomValidity('Please enter a valid domain offer!')" oninput="setCustomValidity('')"/>
+                <label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
+                <div class="icon">
+                  <i class="fal fa-usd-circle"></i>
                 </div>
-                <div class="control has-icon">
-                  <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" />
-                  <label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
-                  <div class="icon">
-                    <i class="fal fa-usd-circle"></i>
-                  </div>
-                </div>
-                <div class="control">
-                  <textarea id="contact_message" required class="contact-input textarea" name="contact_message"></textarea>
-                </div>
+              </div>
+              <div class="control">
+                <textarea id="contact_message" required class="contact-input textarea break-all" name="contact_message" oninvalid="this.setCustomValidity('Please enter a message for the domain owner!')" oninput="setCustomValidity('')"></textarea>
+              </div>
 
-                <div class="control is-grouped">
-                  <div class="control is-expanded">
-                    <button id="send-offer-button" name="offer" type="submit" class="contact-input is-fullwidth button is-primary is-stylish">
-                      <div class="icon is-small">
-                        <i class="fal fa-check-circle"></i>
-                      </div>
-                      <span>Send Offer</span>
-                    </button>
-                  </div>
-                  <div class="control is-expanded">
-                    <button id="buy-now-button" name="buy" type="submit" class='is-accent is-fullwidth button is-stylish contact-input'>
-                      <div class="icon is-small"><i class="fal fa-shopping-cart"></i></div>
-                      <span id="buy-button-text">Buy Now</span>
-                    </button>
-                  </div>
+              <div class="control is-grouped">
+                <div class="control is-expanded">
+                  <button id="send-offer-button" name="offer" type="button" class="contact-input is-fullwidth button is-primary is-stylish">
+                    <div class="icon is-small">
+                      <i class="fal fa-check-circle"></i>
+                    </div>
+                    <span>Send Offer</span>
+                  </button>
                 </div>
+                <div class="control is-expanded">
+                  <button id="buy-now-button" name="buy" type="button" class='is-accent is-fullwidth button is-stylish contact-input'>
+                    <div class="icon is-small"><i class="fal fa-shopping-cart"></i></div>
+                    <span id="buy-button-text">Buy Now</span>
+                  </button>
+                </div>
+              </div>
 
-              </form>
+            </form>
           </div>
 
           <!-- RENTAL MODULE -->
           <div id="rental-module" class="box module is-hidden">
             <div class="content">
               <p>
-                Rent usage of this domain right now! Use it to display various web content such as news articles, images, or video.
+                Rent usage of this domain right now! Use it to display various web content such as news articles, images, or full webpages.
               </p>
               <p class='is-bold'>
                 <span class='total-price'>Total Cost of Rental - </span>
@@ -227,7 +227,7 @@
                 Enter your desired subpage (optional):
               </p>
               <div class="input">
-                <span class="is-inline-block"><span class="domain-title"></span>/</span>
+                <span class="is-inline-block"><span id="rental-domain-title"></span>/</span>
                 <form id="path-input" class="is-inline-block">
                   <div class="control">
                     <input id="typed-slash" tabindex="0" type="text" autocomplete="off">
@@ -240,10 +240,12 @@
             <div id="calendar" class="control">
               <p id="calendar-regular-message">
                 Select your desired dates:
+                <a id="refresh-calendar-button" class="is-pulled-right is-underlined">Click to refresh dates</a>
               </p>
-              <p id="calendar-loading-message" class="is-hidden">
-                Now loading rental availability...
-              </p>
+              <div id="calendar-loading-message" class="is-hidden has-text-centered">
+                <p class="icon is-medium"><i class="fal fa-spin fa-sync-alt"></i></p>
+                <p>Now loading rental availability...</p>
+              </div>
               <p id="calendar-error-message" class='is-danger is-hidden'></p>
               <input id="calendar-input" class="input is-disabled" placeholder="Anytime" />
             </div>

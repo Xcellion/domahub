@@ -4,6 +4,7 @@ var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
 var encryptor = require('../lib/encryptor.js');
+var mailer = require('../lib/mailer.js');
 
 //</editor-fold>
 

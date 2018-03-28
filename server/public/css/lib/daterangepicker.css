@@ -87,8 +87,8 @@ td.free-times {
     white-space: nowrap;
     cursor: pointer; }
     .daterangepicker td.available:hover, .daterangepicker th.available:hover {
-      background-color: #222222;
-      border-radius: 0 4px 4px 0;
+      background-color: #444;
+      border-radius: 4px;
       color: #FFF; }
     .daterangepicker td.week, .daterangepicker th.week {
       font-size: 80%;

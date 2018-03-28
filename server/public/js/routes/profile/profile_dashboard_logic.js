@@ -130,18 +130,31 @@ function updatePortfolioOverviewCounters(){
   }
 
   //figure out total profit
-  var total_profit = 0;
+  var total_revenue = 0;
   var total_expenses = 0;
-  for (var x = 0 ; x < user.transactions.stripe_transactions.length ; x++){
-    var current_expense = parseFloat(user.transactions.stripe_transactions[x].doma_fees) + parseFloat(user.transactions.stripe_transactions[x].stripe_fees);
-    total_profit += user.transactions.stripe_transactions[x].amount - user.transactions.stripe_transactions[x].amount_refunded - current_expense;
-    total_expenses += current_expense;
+  if (user.transactions){
+    for (var x = 0 ; x < user.transactions.length ; x++){
+      //profit + fees in money format
+      var doma_fees = (user.transactions[x].doma_fees) ? user.transactions[x].doma_fees : 0;
+      var payment_fees = (user.transactions[x].payment_fees) ? user.transactions[x].payment_fees : 0;
+      var transaction_cost = (user.transactions[x].transaction_cost) ? user.transactions[x].transaction_cost : 0;
+      var transaction_cost_refunded = (user.transactions[x].transaction_cost_refunded) ? user.transactions[x].transaction_cost_refunded : 0;
+
+      //update totals
+      if (user.transactions[x].transaction_type != "expense"){
+        total_revenue += (transaction_cost - transaction_cost_refunded);
+      }
+      else {
+        total_expenses += transaction_cost;
+      }
+      total_expenses += (doma_fees + payment_fees);
+    }
   }
-  $("#profit-counter").addClass("is-primary").text(wNumb({
+  $("#revenue-counter").addClass("is-primary").text(wNumb({
     prefix: '$ ',
     decimals: 2,
     thousand: ','
-  }).to(total_profit/100));
+  }).to(total_revenue/100));
   $("#expenses-counter").text(wNumb({
     prefix: '$ ',
     decimals: 2,

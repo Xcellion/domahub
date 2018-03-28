@@ -663,13 +663,13 @@ function selectAllRows(select){
   if (select){
     $("#select-all").data('selected', true).prop("checked", true);
     $(".table-row:not(.clone-row)").addClass('is-selected');
-    $(".table-row:not('.clone-row') .select-button").prop("checked", true);
+    $(".table-row:not(.clone-row) .select-button").prop("checked", true);
   }
   //deselect all
   else {
     $("#select-all").data('selected', false).prop("checked", false);
     $(".table-row:not(.clone-row)").removeClass('is-selected');
-    $(".table-row:not('.clone-row') .select-button").prop("checked", false);
+    $(".table-row:not(.clone-row) .select-button").prop("checked", false);
   }
   multiSelectButtons();
 }

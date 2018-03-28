@@ -16,14 +16,14 @@
       <form id="login-form" action="/login" method="post">
         <label class="label" for="email">Email</label>
         <div class="control has-icon">
-          <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
+          <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false" oninvalid="this.setCustomValidity('Please enter a valid email address!')" oninput="setCustomValidity('')">
           <div class="icon">
             <i class="fal fa-envelope"></i>
           </div>
         </div>
         <label class="label" for="password">Password</label>
         <div class="control has-icon">
-          <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password">
+          <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password" oninvalid="this.setCustomValidity('Please enter a valid password!')" oninput="setCustomValidity('')">
           <div class="icon">
             <i class="fal fa-lock"></i>
           </div>
