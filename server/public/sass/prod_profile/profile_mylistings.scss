@@ -24,6 +24,31 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+//domain expenses
+.expense-button-wrapper {
+  padding-right:0 !important;
+  a {
+    margin-left:5px;
+  }
+}
+
+#domain-expense-table {
+  td {
+    padding-left: 0;
+  }
+  tr:not(:last-child) td {
+    border-bottom:1px solid $border;
+  }
+  tr:last-child td {
+    padding-bottom:0;
+  }
+}
+
+//domain registrar info icon
+.card-header-title .icon {
+  margin-left:5px;
+}
+
 .columns {
   margin-left:-20px;
   margin-right:-20px;

@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+  //<editor-fold>------------------------------------------PAGE SETUP----------------------------------------
+
   //set purchase price
   if (new_buying_info.id){
     $("#total-price").text(moneyFormat.to(new_buying_info.offer));
@@ -8,7 +10,13 @@ $(document).ready(function () {
     $("#total-price").text(moneyFormat.to(listing_info.buy_price));
   }
 
-  //<editor-fold>-------------------------------PAYMENT METHOD SELECTION-------------------------------
+  // $(".checkout-track").on("click", function(){
+  //     trackCheckoutBehavior($(this).attr("id"));
+  // });
+
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------PAYMENT METHOD SELECTION----------------------------------------
 
   //click choice block
   $(".choice-block").on("click", function() {
@@ -20,12 +28,22 @@ $(document).ready(function () {
       if (which_choice == "stripe-choice") {
         $("#stripe-choice-column").removeClass("is-hidden").find('#cc-num').focus();
         showMessage("stripe-regular-message");
+        $("#paypal-button").addClass("is-hidden");
+        $("#checkout-button").removeClass("is-hidden");
       }
 
       //paypal
       else if (which_choice == "paypal-choice") {
-        $("#paypal-choice-column").removeClass("is-hidden").find('input').focus();
+        $("#paypal-choice-column").removeClass("is-hidden");
         showMessage("paypal-regular-message");
+        $("#paypal-button").removeClass("is-hidden");
+        $("#checkout-button").addClass("is-hidden");
+      }
+
+      //bitcoin
+      else if (which_choice == "bitcoin-choice") {
+        $("#bitcoin-choice-column").removeClass("is-hidden");
+        showMessage("bitcoin-regular-message");
       }
     });
 
@@ -40,9 +58,12 @@ $(document).ready(function () {
     });
   });
 
+  //create paypal button
+  createPayPalButton();
+
   //</editor-fold>
 
-  //<editor-fold>-------------------------------PAYMENT-------------------------------
+  //<editor-fold>------------------------------------------STRIPE----------------------------------------
 
   //key for stripe
   if (node_env == "dev"){
@@ -58,18 +79,21 @@ $(document).ready(function () {
   $('#cc-cvc').payment('formatCardCVC');
   $('#cc-zip').payment('restrictNumeric');
 
+  //stripe submit checkout handler
+  $('#checkout-button').on("click", function(e){
+    submitStripe();
+  });
+
   //request a token from stripe
   $("#stripe-form").submit(function(e){
     Stripe.card.createToken($(this), function(status, response){
       if (response.error){
-        $('#checkout-button').removeClass('is-loading').on("click", function(){
-          submitStripe($(this));
-        });
+        $('#checkout-button').removeClass('is-loading');
         showMessage("stripe-error-message", response.error.message);
       }
       //all good!
       else {
-        submitNewPurchase(response.id);
+        submitNewPurchase("stripe", response.id);
       }
     });
     return false;
@@ -96,20 +120,176 @@ $(document).ready(function () {
     }
   });
 
-  //checkout button
-  $('#checkout-button').on("click", function(e){
-    submitStripe($(this));
-  });
-
   //</editor-fold>
 
-  //--------------------------------------------------------------------------------------------------------- BEHAVIOR TRACKER
-
-  // $(".checkout-track").on("click", function(){
-  //     trackCheckoutBehavior($(this).attr("id"));
-  // });
-
 });
+
+//<editor-fold>------------------------------------------PAYPAL----------------------------------------
+
+//create a paypal checkout button
+function createPayPalButton(){
+  paypal.Button.render({
+    env : 'sandbox',
+    // env: 'production',
+    commit : true,
+    style : {
+      color : 'black',
+      shape : 'rect',
+      size : 'large',
+      label : "checkout",
+      tagline : false
+    },
+
+    //set up a getter to create a Payment ID using the payments api on server
+    payment : function() {
+      return new paypal.Promise(function(resolve, reject) {
+
+        //make an ajax call to backend get the Payment ID (via PayPal Payment Create api)
+        $.ajax({
+          type: "POST",
+          url: "/listing/" + listing_info.domain_name.toLowerCase() + "/buy/paypalID",
+        }).done(function(data){
+          if (data.state == "success" && data.payment){
+            resolve(data.payment.id);
+          }
+          else {
+            reject(new Error(data.message));
+          }
+        }).fail(function(err){
+          reject(new Error(err));
+        });
+      });
+    },
+
+    //payment has been authorized, submit and execute payment via PayPal Payment Execute api
+    onAuthorize : function(data) {
+      submitNewPurchase("paypal", {
+        paymentID: data.paymentID,
+        payerID: data.payerID
+      });
+    },
+
+    //when the customer cancels the payment
+    onCancel : function(data) {
+      console.log('The payment was cancelled!', data);
+    },
+
+    //when theres an error with the payment
+    onError: function(err) {
+      console.log("Something went wrong!", err)
+    }
+
+  }, '#paypal-button');
+}
+
+//</editor-fold>
+
+//<editor-fold>------------------------------------------STRIPE----------------------------------------
+
+//check the CC info
+function checkCC(){
+  $("#stripe-regular-message").addClass('is-hidden');
+  if (!$("#cc-num").val()){
+    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a credit card to charge.");
+  }
+  else if (!$("#cc-exp").val()){
+    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card expiration date.");
+  }
+  else if (!$("#cc-cvc").val()){
+    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card CVC number.");
+  }
+  else if (!$("#cc-zip").val()){
+    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a ZIP code.");
+  }
+  else {
+    $("#stripe-regular-message").removeClass('is-hidden');
+    return true;
+  }
+}
+
+//client side check and then submit for a new stripe token
+function submitStripe(checkout_button){
+  showMessage("stripe-regular-message");
+  $("#checkout-button").addClass('is-loading');
+
+  //successfully passed CC test
+  if (checkCC()){
+    //submit to get the stripe token
+    $("#stripe-form").submit();
+  }
+  else {
+    $("#checkout-button").removeClass('is-loading');
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>------------------------------------------SUBMIT PAYMENT----------------------------------------
+
+//submit for a new purchase
+function submitNewPurchase(type, token){
+  var data_for_submit = {
+    payment_type : type
+  }
+
+  if (type == "stripe"){
+    data_for_submit.stripeToken = token;
+  }
+  else if (type == "paypal" && token){
+    data_for_submit.paymentID = token.paymentID;
+    data_for_submit.payerID = token.payerID;
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/buy",
+    data: data_for_submit
+  }).done(function(data){
+    $("#checkout-button").removeClass('is-loading');
+    if (data.state == "success"){
+      successHandler(data);
+    }
+    else {
+      errorHandler(data.message);
+    }
+  });
+}
+
+//handler for various error messages
+function errorHandler(message){
+  switch (message){
+    case "Invalid email!":
+      showStep("log");
+      showMessage("log-error-message");
+    break;
+    default:
+    if (message){
+      showMessage("stripe-error-message", message);
+    }
+    else {
+      showMessage("stripe-error-message", "Something went wrong with processing the purchase! Please refresh the page and try again.");
+    }
+    break;
+  }
+
+  //reattach handler
+  $('#checkout-button').removeClass('is-loading').on("click", function(){
+    submitStripe($(this));
+  });
+}
+
+//handler for successful rental
+function successHandler(rental_id, owner_hash_id){
+  //hide certain stuff
+  $("#choices-selected").remove();
+  $("#edit-dates-button").remove();
+  $("#checkout-success-content").removeClass('is-hidden');
+  showMessage("stripe-success-message", "Hurray! Your purchase has been completed. Please check your email for further instructions on ownership transfer.");
+}
+
+//</editor-fold>
+
+//<editor-fold>------------------------------------------HELPERS----------------------------------------
 
 //used to see what people are doing on this checkout page
 function trackCheckoutBehavior(id){
@@ -138,94 +318,11 @@ function showMessage(message_id, text){
   }
 }
 
-//check the CC info
-function checkCC(){
-  $("#stripe-regular-message").addClass('is-hidden');
-  if (!$("#cc-num").val()){
-    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a credit card to charge.");
-  }
-  else if (!$("#cc-exp").val()){
-    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card expiration date.");
-  }
-  else if (!$("#cc-cvc").val()){
-    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card CVC number.");
-  }
-  else if (!$("#cc-zip").val()){
-    $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a ZIP code.");
-  }
-  else {
-    $("#stripe-regular-message").removeClass('is-hidden');
-    return true;
-  }
-}
-
-//client side check and then submit for a new stripe token
-function submitStripe(checkout_button){
-  showMessage("stripe-regular-message");
-  checkout_button.off().addClass('is-loading');
-
-  //successfully passed CC test
-  if (checkCC()){
-    //submit to get the stripe token
-    $("#stripe-form").submit();
-  }
-  else {
-    checkout_button.removeClass('is-loading');
-    checkout_button.on("click", function(){
-      submitStripe(checkout_button);
-    });
-  }
-}
-
-//submit for a new rental
-function submitNewPurchase(stripeToken){
-  $.ajax({
-    type: "POST",
-    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/buy",
-    data: {
-      stripeToken: stripeToken
-    }
-  }).done(function(data){
-    $("#checkout-button").removeClass('is-loading');
-    if (data.state == "success"){
-      successHandler(data);
-    }
-    else {
-      errorHandler(data.message);
-    }
-  });
-}
-
-//handler for various error messages
-function errorHandler(message){
-  switch (message){
-    case "Invalid email!":
-    showStep("log");
-    showMessage("log-error-message");
-    break;
-    default:
-    showMessage("stripe-error-message", "Something went wrong with the payment! Please refresh the page and try again.");
-    break;
-  }
-
-  //reattach handler
-  $('#checkout-button').removeClass('is-loading').on("click", function(){
-    submitStripe($(this));
-  });
-}
-
-//handler for successful rental
-function successHandler(rental_id, owner_hash_id){
-  //hide certain stuff
-  $("#choices-selected").remove();
-  $("#edit-dates-button").remove();
-  $("#checkout-success-content").removeClass('is-hidden');
-  showMessage("stripe-success-message", "Hurray! Your purchase has been completed. Please check your email for further instructions on ownership transfer.");
-}
-
 //to format a number for $$$$
 var moneyFormat = wNumb({
   thousand: ',',
   prefix: '$',
   decimals: 2
 });
+
+//</editor-fold>

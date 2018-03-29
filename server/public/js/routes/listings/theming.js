@@ -49,7 +49,8 @@ function setupCustomColorsListing(){
   stylize(listing_info.secondary_color, ".page-contents .is-accent.button", "background-color", true);
 
   //tertiary color (links)
-  stylize(listing_info.tertiary_color, ".page-contents a.is-info", "color");
+  stylize(listing_info.tertiary_color, ".page-contents a.is-info:not(.button)", "color");
+  stylize(listing_info.primary_color, ".page-contents a.is-primary:not(.button)", "color");
 
   //price tags
   stylize(listing_info.primary_color, ".page-contents .main-price-tag", "color");
@@ -87,6 +88,10 @@ function setupCustomColorsListing(){
   //footer
   stylize(listing_info.footer_color, ".page-contents .footer-item", "color");
   stylize(listing_info.footer_background_color, ".page-contents .footer", "background-color");
+
+  //sold page notification
+  stylize(hexToRgbA(listing_info.primary_color, 0.8), ".page-contents #sold-domain-notitication", "background-color", true);
+  stylize(listing_info.primary_color, ".page-contents .icon-box", "background-color", true);
 }
 
 //</editor-fold>
@@ -94,6 +99,8 @@ function setupCustomColorsListing(){
 //<editor-fold>-------------------------------SET UP FOOTER-------------------------------
 
 function setupFooter(){
+
+  console.log("Setting up custom footer...");
 
   //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
 
@@ -107,7 +114,7 @@ function setupFooter(){
     $(".page-contents #listing-footer-logo").addClass('is-hidden');
   }
   else {
-    $(".page-contents #listing-footer-logo").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary.png");
+    $(".page-contents .logo-item").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary.png");
   }
 
   //</editor-fold>
@@ -122,6 +129,7 @@ function setupFooter(){
   }
 
   //</editor-fold>
+
 }
 
 //</editor-fold>

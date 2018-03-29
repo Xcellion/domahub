@@ -21,8 +21,6 @@
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 
-
-
 .no-margin {
   margin :0 !important;
 }
@@ -78,6 +76,21 @@
     }
   }
 }
+
+//<editor-fold>---------------------CALENDAR---------------------
+
+#calendar-loading-message {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  p {
+    margin-top:25px;
+  }
+}
+
+//</editor-fold>
 
 //<editor-fold>---------------------LISTING---------------------
 
@@ -298,7 +311,7 @@
       }
       &.is-active {
         background-color: $danger;
-        width: 225px;
+        width: 185px;
         &::before {
           border-bottom-color: $danger;
           border-left-color: $danger;
@@ -321,7 +334,7 @@
     }
 
     #calendar {
-      min-height : 270px;
+      min-height : 254px;
     }
 
     //</editor-fold>-----------------------------------------------

@@ -8,6 +8,7 @@ var owner_functions = require("../controller/listing_owner_functions.js");
 var listing_general_functions = require("../controller/listing_general_functions.js");
 var profile_functions = require("../controller/profile_functions.js");
 var stripe_functions = require("../controller/stripe_functions.js");
+var paypal_functions = require("../controller/paypal_functions.js");
 
 //</editor-fold>>
 
@@ -262,9 +263,13 @@ module.exports = function(app){
       listing_general_functions.checkDomainValid,
       listing_general_functions.checkDomainListed,
       renter_functions.checkSessionListingInfoPost,
+      renter_functions.checkListingRented,
       stripe_functions.checkStripeSubscriptionForUser,
       profile_functions.updateAccountSettingsPassthrough,
+      buyer_functions.checkPaymentType,
       stripe_functions.chargeMoneyBuy,
+      paypal_functions.chargeMoneyBuy,
+      buyer_functions.checkPaymentSuccessful,
       buyer_functions.createBuyContactRecord,
       buyer_functions.alertOwnerBIN,
       buyer_functions.alertBuyerNextSteps,
@@ -273,11 +278,12 @@ module.exports = function(app){
       owner_functions.updateListingsInfo
     ]);
 
-    //new buy it now
+    //new buy it now (render the BIN checkout page)
     app.post("/listing/:domain_name/contact/buy", [
       general_functions.urlencodedParser,
       listing_general_functions.checkDomainValid,
       renter_functions.checkSessionListingInfoPost,
+      renter_functions.checkListingRented,
       buyer_functions.checkContactInfo,
       stripe_functions.checkStripeSubscriptionForUser,
       profile_functions.updateAccountSettingsPassthrough,
@@ -287,6 +293,16 @@ module.exports = function(app){
     //render BIN checkout page
     app.get('/listing/:domain_name/checkout/buy', [
       buyer_functions.renderCheckout
+    ]);
+
+    //create a paypal payment ID for BIN domain
+    app.post('/listing/:domain_name/buy/paypalID', [
+      general_functions.urlencodedParser,
+      renter_functions.checkSessionListingInfoPost,
+      renter_functions.checkListingRented,
+      stripe_functions.checkStripeSubscriptionForUser,
+      profile_functions.updateAccountSettingsPassthrough,
+      paypal_functions.createPaymentIDBuy
     ]);
 
     //</editor-fold>
@@ -378,6 +394,15 @@ module.exports = function(app){
       renter_functions.redirectToCheckout
     ]);
 
+    //create a paypal payment ID for rental domain
+    app.post('/listing/:domain_name/rent/paypalID', [
+      general_functions.urlencodedParser,
+      renter_functions.checkSessionListingInfoPost,
+      stripe_functions.checkStripeSubscriptionForUser,
+      profile_functions.updateAccountSettingsPassthrough,
+      paypal_functions.createPaymentIDRent
+    ]);
+
     //</editor-fold>
 
     //<editor-fold>-------------------------------CREATE RENTAL-------------------------------
@@ -389,14 +414,17 @@ module.exports = function(app){
       listing_general_functions.checkDomainListed,
       renter_functions.checkSessionListingInfoPost,
       stripe_functions.checkStripeSubscriptionForUser,
+      profile_functions.updateAccountSettingsPassthrough,
       // renter_functions.getListingFreeTimes,
       renter_functions.checkRentalInfoNew,
       renter_functions.checkRentalTimes,
       renter_functions.checkRentalPrice,
       renter_functions.createRental,
       renter_functions.getOwnerStripe,
+      renter_functions.checkPaymentType,
       stripe_functions.chargeMoneyRent,
-      renter_functions.toggleActivateRental,
+      paypal_functions.chargeMoneyRent,
+      renter_functions.markActiveAndPaidRental,
       renter_functions.sendRentalSuccess
     ]);
 
@@ -424,6 +452,22 @@ module.exports = function(app){
     app.get('/rentalpreview', [
       renter_functions.checkForPreview,
       renter_functions.renderRental
+    ]);
+
+    //refund a rental
+    app.post('/listing/:domain_name/:rental_id/refund', [
+      general_functions.urlencodedParser,
+      listing_general_functions.checkDomainValid,
+      listing_general_functions.checkDomainListed,
+      owner_functions.checkListingOwnerPost,
+      renter_functions.getRental,
+      renter_functions.checkRentalDomain,
+      renter_functions.checkRentalPaymentID,
+      renter_functions.createRentalObject,
+      stripe_functions.refundRental,
+      paypal_functions.refundRental,
+      renter_functions.editRental,
+      renter_functions.updateRentalObject
     ]);
 
     //changing rental information

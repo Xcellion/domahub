@@ -4,6 +4,9 @@ var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
 
+var stripe_functions = require('./stripe_functions.js');
+var paypal_functions = require('./paypal_functions.js');
+
 var passport = require('../lib/passport.js').passport;
 
 var Categories = require("../lib/categories.js");
@@ -16,6 +19,7 @@ var encryptor = require('../lib/encryptor.js');
 //<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var Q = require('q');
+var qlimit = require("qlimit");
 var bcrypt = require("bcrypt-nodejs");
 var whois = require("whois");
 var parser = require('parse-whois');
@@ -67,14 +71,19 @@ module.exports = {
 
   //google embed analytics authentication
   authWithGoogle : function(req, res, next){
-    console.log("PF: Authenticating with Google Analytics API...");
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        error.log(err, "Failed to authenticate with Google for the GA API");
-      }
-      req.user.ga_access_token = (tokens) ? tokens.access_token : false;
+    if (!req.user.ga_access_token){
+      console.log("PF: Authenticating with Google Analytics API...");
+      jwtClient.authorize(function (err, tokens) {
+        if (err) {
+          error.log(err, "Failed to authenticate with Google for the GA API");
+        }
+        req.user.ga_access_token = (tokens) ? tokens.access_token : false;
+        next();
+      });
+    }
+    else {
       next();
-    });
+    }
   },
 
   //</editor-fold>
@@ -89,13 +98,13 @@ module.exports = {
 
     //if we dont already have the list of listings
     if (!req.user.listings){
+      console.log("PF: Getting account listings...");
       account_model.getAccountListings(req.user.id, function(result){
+        if (result.state=="error"){error.log(result.info, "Failed to get existing user listings!");}
 
-        if (result.state=="error"){error.handler(req, res, result.info);}
-        else {
-          req.user.listings = result.info;
-          next();
-        }
+        //update user obj
+        req.user.listings = (result.state=="success") ? result.info : [];
+        next();
       });
     }
     else {
@@ -108,16 +117,96 @@ module.exports = {
 
     //if we dont already have the list of registrars
     if (!req.user.registrars){
+      console.log("PF: Getting account registrars...");
       account_model.getAccountRegistrars(req.user.id, function(result){
-        if (result.state=="error"){error.handler(req, res, result.info);}
+        if (result.state=="error"){error.log(result.info, "Failed to get existing user registrars!");}
+
+        //update user obj
+        updateUserRegistrar(req.user, ((result.state=="success") ? result.info : []));
+        next();
+      });
+    }
+    else {
+      next();
+    }
+  },
+
+  //gets all local DH DB transactions for a user (force refresh if we're getting it via POST)
+  getAccountTransactionsLocal : function(req, res, next){
+    if (!req.user.transactions || req.method == "POST"){
+      console.log("PF: Getting local DomaHub account transactions...");
+      account_model.getAccountTransactions(req.user.id, function(result){
+        if (result.state=="error"){error.log(result.info, "Failed to get existing user transactions!")}
+
+        //update user obj
+        req.user.transactions = (result.state=="success") ? result.info : [];
+        req.user.transactions_remote = false;
+        next();
+      });
+    }
+    else {
+      next();
+    }
+  },
+
+  //gets all remote transactions (stripe / paypal promises) for a user
+  getAccountTransactionsRemote : function(req, res, next){
+
+    //if there are any transactions
+    if (req.user.transactions && req.user.transactions.length > 0){
+      console.log("PF: Getting account transactions from remote locations via promises...");
+
+      //create promises
+      var withdrawal_availability_promises = [];
+      for (var x = 0 ; x < req.user.transactions.length ; x++){
+        if (req.user.transactions[x].transaction_id && !req.user.transactions[x].remote_received){
+          //get payment details (promises)
+          if (req.user.transactions[x].payment_type == "stripe"){
+            withdrawal_availability_promises.push(stripe_functions.get_stripe_transaction_details(req.user.transactions[x].transaction_id, x));
+          }
+          else if (req.user.transactions[x].payment_type == "paypal"){
+            withdrawal_availability_promises.push(paypal_functions.get_paypal_transaction_details(req.user.transactions[x].transaction_id, x));
+          }
+        }
+      }
+
+      //all whois data received!
+      var limit = qlimit(10);     //limit parallel promises (throttle)
+      Q.allSettled(withdrawal_availability_promises.map(limit(function(item, index, collection){
+        return withdrawal_availability_promises[index]();
+      }))).then(function(results) {
+        for (var y = 0 ; y < results.length ; y++){
+          if (results[y].state == "fulfilled"){
+            updateUserTransactionDetails(req.user.transactions[results[y].value.index], results[y].value.payment_obj, results[y].value.payment_type);
+          }
+        }
+
+        //to mark that we got remote transactions
+        req.user.transactions_remote = true;
+
+        //for button to refresh transactions / withdraw from bank
+        if (req.method == "POST"){
+          res.send({
+            state : "success",
+            user : req.user
+          });
+        }
         else {
-          updateUserRegistrar(req.user, result.info);
           next();
         }
       });
     }
     else {
-      next();
+      //for button to refresh transactions / withdraw from bank
+      if (req.method == "POST"){
+        res.send({
+          state : "success",
+          user : req.user
+        });
+      }
+      else {
+        next();
+      }
     }
   },
 
@@ -362,7 +451,7 @@ module.exports = {
             //user object has the same listing id as the listing being verified
             if (req.user.listings[y].id == req.body.ids[x]){
               if (req.user.listings[y].verified != 1){
-                to_verify_promises.push(getDomainIPPromise({
+                to_verify_promises.push(get_domain_ip({
                   domain_name : req.user.listings[y].domain_name,
                   listing_id : req.user.listings[y].id
                 }));
@@ -442,7 +531,7 @@ module.exports = {
             if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
             && req.user.listings[y].id == req.body.selected_listings[x].id){
               //add to list of promises
-              dns_record_promises.push(getDomainDNSPromise({
+              dns_record_promises.push(get_domain_dns({
                 domain_name : req.user.listings[y].domain_name,
                 id : req.user.listings[y].id
               }, get_a));
@@ -768,11 +857,24 @@ module.exports = {
 
         //update req.user.listings
         if (result.state == "success"){
-          for (var x = 0 ; x < req.user.listings.length ; x++){
-            req.user.listings[x].offers = [];
-            for (var y = 0; y < result.info.length; y++){
-              if (req.user.listings[x].id == result.info[y].listing_id){
-                req.user.listings[x].offers.push(result.info[y]);
+
+          //create hash table of result offers
+          var offers_object = {};
+          for (var x = 0; x < result.info.length; x++){
+            if (offers_object[result.info[x].listing_id]){
+              offers_object[result.info[x].listing_id].push(result.info[x]);
+            }
+            else {
+              offers_object[result.info[x].listing_id] = [result.info[x]];
+            }
+          }
+
+          //set listings obj to the results
+          for (var y = 0; y < req.user.listings.length; y++){
+            for (var z in offers_object){
+              if (z == req.user.listings[y].id){
+                req.user.listings[y].offers = offers_object[z];
+                break;
               }
             }
           }
@@ -899,7 +1001,7 @@ module.exports = {
     if (req.body.username){
       new_account_info.username = req.body.username.replace(/\s/g, '');
     }
-    if (req.body.ga_tracking_id){
+    if (req.body.ga_tracking_id || req.body.ga_tracking_id == ""){
       new_account_info.ga_tracking_id = (req.body.ga_tracking_id) ? req.body.ga_tracking_id : null;
     }
     if (req.body.new_password){
@@ -1263,12 +1365,162 @@ module.exports = {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------------WITHDRAWAL-------------------------------
+
+  //check if the account being withdrawn to is legit
+  checkWithdrawalAccounts : function(req, res, next){
+    console.log("PF: Checking if the withdrawal account is legitimate...");
+
+    //check if selected destination account is legit / exists
+    if (["bank", "paypal", "bitcoin", "payoneer"].indexOf(req.body.destination_account) == -1){
+      error.handler(req, res, "Please select a valid account to withdraw to!", "json");
+    }
+    else if (req.body.destination_account == "bank" && (req.user.type != 2 || !req.user.stripe_account || !req.user.stripe_bank)){
+      error.handler(req, res, "You don't have a bank account connected to your DomaHub account! Please connect a bank account and try again.", "json");
+    }
+    else if (req.body.destination_account == "bitcoin" && !req.user.bitcoin_address){
+      error.handler(req, res, "You don't have a valid Bitcoin wallet connected to your DomaHub account! Please connect a Bitcoin wallet and try again.", "json");
+    }
+    else if (req.body.destination_account == "paypal" && !req.user.paypal_email){
+      error.handler(req, res, "You don't have a valid PayPal account connected to your DomaHub account! Please connect a Paypal account and try again.", "json");
+    }
+    else if (req.body.destination_account == "payoneer" && !req.user.payoneer_email){
+      error.handler(req, res, "You don't have a valid Payoneer account connected to your DomaHub account! Please connect a Payoneer account and try again.", "json");
+    }
+    else if (!req.user.transactions && !req.user.transactions.stripe_transactions){
+      error.handler(req, res, "You don't have any available funds to withdraw! Please refresh the page and verify your transactions.", "json");
+    }
+    else {
+      next();
+    }
+  },
+
+  //check how much money is available to withdraw
+  calculateWithdrawalAmount : function(req, res, next){
+    console.log("PF: Calculating total amount available for withdrawal...");
+
+    var total_amount_available = 0;
+    var withdrawn_on = new Date().getTime();
+
+    //arrays to mark withdrawn after
+    var rentals_withdrawn = [];
+    var sales_withdrawn = [];
+
+    //loop through all transactions and find the valid ones to include
+    for (var x = 0; x < req.user.transactions.length; x++){
+      var temp_transaction = req.user.transactions[x];
+      var temp_available = false;
+
+      //not yet withdrawn and available for withdrawal (not refunded if rental, transferred if sale)
+      if (!temp_transaction.withdrawn_on && temp_transaction.available == 1){
+
+        //available for withdrawal via stripe or paypal
+        if ((temp_transaction.payment_type == "stripe" && temp_transaction.payment_available_on < withdrawn_on) ||
+            (temp_transaction.payment_type == "paypal" && temp_transaction.payment_status == "approved")){
+
+          temp_available = true;
+        }
+
+        //available for withdrawal!
+        if (temp_available){
+
+          //calculate fees
+          var doma_fees = (temp_transaction.doma_fees) ? parseFloat(temp_transaction.doma_fees) : 0;
+          var payment_fees = (temp_transaction.payment_fees) ? parseFloat(temp_transaction.payment_fees) : 0;
+
+          //add to total amount being withdrawn
+          total_amount_available += parseFloat(temp_transaction.transaction_cost) - doma_fees - payment_fees;
+
+          //mark as withdrawn on domahub database
+          if (temp_transaction.transaction_type == "rental"){
+            rentals_withdrawn.push(temp_transaction.id);
+          }
+          else {
+            sales_withdrawn.push(temp_transaction.id);
+          }
+        }
+      }
+    }
+
+    //if it's a legit number
+    if (Number.isInteger(total_amount_available) && total_amount_available > 0){
+
+      //session variables for next
+      req.session.withdrawal_obj = {
+        total_amount_available : total_amount_available,
+        withdrawn_on : withdrawn_on,
+        rentals_withdrawn : rentals_withdrawn,
+        sales_withdrawn : sales_withdrawn
+      }
+      next();
+    }
+    else {
+      error.handler(req, res, "You don't have any available funds to withdraw! Please refresh the page and verify your transactions.", "json");
+    }
+  },
+
+  //marks all withdrawn transactions as being withdrawn
+  markTransactionsWithdrawn : function(req, res, next){
+    console.log("PF: Marking all withdrawn transactions as having been withdrawn...");
+
+    //waterfall to mark rentals / sales as withdrawn
+    Q.fcall(mark_rentals_withdrawn, req.session.withdrawal_obj)      //function to call, and the parameter
+    .then(mark_sales_withdrawn, mark_sales_withdrawn)                 //function on success, function on error
+    .done(function(){
+      delete req.session.withdrawal_obj;
+      next();
+    }, function(err){
+      error.log(err, "Withdrawal error!");
+      error.handler(req, res, "Something went wrong with the withdrawal! Please refresh the page and try again!", "json");
+    });
+  },
+
+  //withdraw money to a bitcoin wallet
+  withdrawToBitcoin : function(req, res, next){
+    if (req.body.destination_account == "bitcoin"){
+      var total_amount_available = req.session.withdrawal_obj.total_amount_available;
+      var total_amount_available_formatted = moneyFormat.to(req.session.withdrawal_obj.total_amount_available / 100);
+      console.log("PF: Attempting to transfer " + total_amount_available_formatted + " to Bitcoin wallet - " + req.user.bitcoin_address + "...");
+
+      //notify us
+      mailer.sendBasicMail({
+        to: "general@domahub.com",
+        from: 'general@domahub.com',
+        subject: "Someone tried to withdraw to Bitcoin!",
+        html: "Username - " + req.user.username + "<br />Email - " + req.user.email + "<br />Bitcoin address - " + req.user.bitcoin_address + "<br />Amount - " + total_amount_available_formatted
+      });
+    }
+
+    next();
+  },
+
+  //withdraw money to a payoneer account
+  withdrawToPayoneer : function(req, res, next){
+    if (req.body.destination_account == "payoneer"){
+      var total_amount_available = req.session.withdrawal_obj.total_amount_available;
+      var total_amount_available_formatted = moneyFormat.to(req.session.withdrawal_obj.total_amount_available / 100);
+      console.log("PF: Attempting to transfer " + total_amount_available_formatted + " to Payoneer account - " + req.user.payoneer_email + "...");
+
+      //notify us
+      mailer.sendBasicMail({
+        to: "general@domahub.com",
+        from: 'general@domahub.com',
+        subject: "Someone tried to withdraw to Payoneer!",
+        html: "Username - " + req.user.username + "<br />Email - " + req.user.email + "<br />Payoneer email - " + req.user.payoneer_email + "<br />Amount - " + total_amount_available_formatted
+      });
+    }
+
+    next();
+  },
+
+  //</editor-fold>
+
 }
 
 //<editor-fold>-------------------------------------VERIFICATION HELPERS (promises)-------------------------------
 
 //promise function to look up the existing DNS records for a domain name
-function getDomainDNSPromise(listing_obj, get_a){
+function get_domain_dns(listing_obj, get_a){
   return Q.Promise(function(resolve, reject, notify){
     console.log("PF: Now looking up WHOIS info for " + listing_obj.domain_name + "...");
     whois.lookup(listing_obj.domain_name, function(err, data){
@@ -1304,7 +1556,7 @@ function getDomainDNSPromise(listing_obj, get_a){
 }
 
 //custom promise creation, get ip address of domain
-function getDomainIPPromise(listing_obj){
+function get_domain_ip(listing_obj){
   return Q.Promise(function(resolve, reject, notify){
     dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
       if (err) {
@@ -1322,6 +1574,54 @@ function getDomainIPPromise(listing_obj){
       }
     });
   })
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------------WITHDRAWAL HELPERS (promises)-------------------------------
+
+//custom promise creation, marks a rental as withdrawn
+function mark_rentals_withdrawn(withdrawal_obj){
+  return Q.Promise(function(resolve, reject, notify){
+    if (withdrawal_obj.rentals_withdrawn.length > 0){
+      console.log("PF: Now marking withdrawn rentals as having been withdrawn...");
+      listing_model.markRentalsWithdrawn(withdrawal_obj.rentals_withdrawn, {
+        withdrawn_on : withdrawal_obj.withdrawn_on
+      }, function(result){
+        if (result.state == "success"){
+          resolve(withdrawal_obj);
+        }
+        else {
+          reject(result.info);
+        }
+      });
+    }
+    else {
+      resolve(withdrawal_obj);
+    }
+  });
+}
+
+//custom promise creation, marks a sale as withdrawn
+function mark_sales_withdrawn(withdrawal_obj){
+  return Q.Promise(function(resolve, reject, notify){
+    if (withdrawal_obj.sales_withdrawn.length > 0){
+      console.log("PF: Now marking withdrawn sales as having been withdrawn...");
+      listing_model.markSalesWithdrawn(withdrawal_obj.sales_withdrawn, {
+        withdrawn_on : withdrawal_obj.withdrawn_on
+      }, function(result){
+        if (result.state == "success"){
+          resolve(withdrawal_obj);
+        }
+        else {
+          reject(result.info);
+        }
+      })
+    }
+    else {
+      resolve(withdrawal_obj);
+    }
+  });
 }
 
 //</editor-fold>
@@ -1681,6 +1981,24 @@ function getDomainIPPromise(listing_obj){
 
 //<editor-fold>-------------------------------------HELPERS-------------------------------
 
+//helper function to get listing by ID
+function getListingByID(listings, id){
+  for (var x = 0 ; x < listings.length ; x++){
+    if (listings[x].id == id){
+      return listings[x];
+    }
+  }
+}
+
+//helper to check for empty object
+function isEmptyObject(obj) {
+  return !Object.keys(obj).length;
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------------UPDATE USER OBJ-------------------------------
+
 //helper function to update req.user.listings after deleting
 function updateUserListingsObjectDelete(user_listings, to_delete_formatted){
   for (var x = user_listings.length - 1; x >= 0; x--){
@@ -1704,20 +2022,6 @@ function updateUserListingsObjectVerify(user_listings, to_verify_formatted){
       }
     }
   }
-}
-
-//helper function to get listing by ID
-function getListingByID(listings, id){
-  for (var x = 0 ; x < listings.length ; x++){
-    if (listings[x].id == id){
-      return listings[x];
-    }
-  }
-}
-
-//helper to check for empty object
-function isEmptyObject(obj) {
-  return !Object.keys(obj).length;
 }
 
 //update the user object with registrar details
@@ -1752,6 +2056,61 @@ function updateUserRegistrar(user, registrars){
     }
   }
 
+}
+
+//update the user object with registrar details
+function updateUserTransactionDetails(user_transaction_obj, transaction_details, payment_type){
+  if (transaction_details){
+
+    //dev for debug
+    if (process.env.NODE_ENV == "dev"){
+      user_transaction_obj.dev_transaction_details = transaction_details;
+    }
+
+    //mark as received from remote source (so we dont keep getting it)
+    user_transaction_obj.remote_received = true;
+
+    //details from the payment source (available on, etc.)
+    if (payment_type == "stripe"){
+      user_transaction_obj.payment_available_on = transaction_details.balance_transaction.available_on * 1000;
+      user_transaction_obj.payment_status = transaction_details.balance_transaction.status;
+
+      try {
+        //refunded
+        if (transaction_details.refunded){
+          user_transaction_obj.transaction_cost_refunded = transaction_details.amount_refunded;
+          user_transaction_obj.date_refunded = transaction_details.refunds.data[0].created * 1000;
+        }
+      }
+      catch (e){
+        error.log(e, "Error in getting Stripe refunded details!");
+      }
+    }
+    else if (payment_type == "paypal"){
+      user_transaction_obj.payment_available_on = false;
+      user_transaction_obj.payment_status = transaction_details.payments[0].state;
+
+      //refunded
+      try {
+        if (transaction_details.payments[0].transactions[0].related_resources[1]){
+          user_transaction_obj.transaction_cost_refunded = transaction_details.payments[0].transactions[0].amount.total * 100;
+          user_transaction_obj.date_refunded = new Date(transaction_details.payments[0].transactions[0].related_resources[1].refund.create_time).getTime();
+        }
+      }
+      catch(e){
+        error.log(e, "Error in getting PayPal refunded payment details!");
+      }
+
+      //sales ID for refund
+      try {
+        user_transaction_obj.sales_id = transaction_details.payments[0].transactions[0].related_resources[0].sale.id;
+      }
+      catch(e) {
+        user_transaction_obj.sales_id = "";
+        error.log(e, "Error in getting PayPal refunded sales ID!");
+      }
+    }
+  }
 }
 
 //</editor-fold>

@@ -1094,11 +1094,8 @@ function testSubmitBuyHandler(){
 }
 
 //do submit rent handler
-function testSubmitRentHandler(checkout_button){
+function testSubmitRentHandler(){
   setTimeout(function(){
-    checkout_button.removeClass('is-loading').addClass('is-disabled').on('click', function(){
-      submitTimes(checkout_button);
-    });
     successMessage("Success! If this were your real domain, the user would be redirected to a checkout page where they can edit the details of their domain rental.");
   }, 500);
 }

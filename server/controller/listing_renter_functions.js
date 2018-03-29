@@ -228,6 +228,27 @@ module.exports = {
     }
   },
 
+  //check the payment method of rental
+  checkPaymentType : function(req, res, next){
+    console.log("LRF: Checking rental payment type...");
+
+    //free rental
+    if (req.session.new_rental_info.price == 0){
+      next();
+    }
+    //paying by stripe
+    else if (req.body.payment_type == "stripe" && req.body.stripeToken){
+      next();
+    }
+    //paying by paypal
+    else if (req.body.payment_type == "paypal" && req.body.paymentID && req.body.payerID){
+      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong with your payment! Please refresh the page and try again.", "json");
+    }
+  },
+
   //get the stripe id of the listing owner if it exists
   getOwnerStripe : function(req, res, next){
     if (req.session.new_rental_info.price != 0){
@@ -301,30 +322,39 @@ module.exports = {
     });
   },
 
-  //activate the rental once its good
-  toggleActivateRental : function(req, res, next){
-    console.log("LRF: Toggling rental activation...");
+  //toggle active (and add transaction ID if it exists)
+  markActiveAndPaidRental : function(req, res, next){
+    console.log("LRF: Toggling rental activation and marking transaction ID (if exists)...");
 
     var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
-    var domain_name = req.params.domain_name;
-    var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
+    var new_rental_info = {
+      status : 1
+    }
 
-    listing_model.toggleActivateRental(rental_id, function(result){
+    //transaction ID (stripe + paypal)
+    if (req.session.new_rental_info.rental_transaction_id){
+      new_rental_info.transaction_id = req.session.new_rental_info.rental_transaction_id;
+    }
+
+    //total cost in USD cents (stripe + paypal)
+    if (req.session.new_rental_info.rental_cost){
+      new_rental_info.total_cost = req.session.new_rental_info.rental_cost;
+      new_rental_info.doma_fees = req.session.new_rental_info.rental_doma_fees;
+      new_rental_info.payment_fees = req.session.new_rental_info.rental_payment_fees;
+    }
+
+    //payment type (stripe + paypal)
+    if (req.session.new_rental_info.rental_payment_type){
+      new_rental_info.payment_type = req.session.new_rental_info.rental_payment_type;
+    }
+
+    //toggle active (and add transaction ID if it exists)
+    listing_model.updateRental(rental_id, new_rental_info, function(result){
       if (result.state != "success"){
         delete req.session.new_rental_info;
-        error.handler(req, res, result.info);
+        error.handler(req, res, result.info, "json");
       }
       else {
-        if (req.user){
-          delete req.user.rentals;
-        }
-
-        //update the session listing info rentals if we're creating a new rental
-        if (req.session.listing_info.rentals && req.session.new_rental_info){
-          req.session.listing_info.rentals.push(req.session.new_rental_info);
-          req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
-        }
-
         next();
       }
     });
@@ -334,7 +364,12 @@ module.exports = {
   sendRentalSuccess : function(req, res, next){
     var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
     var owner_hash_id = (req.session.new_rental_info.rental_db_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
+
+    //delete any existing session variables
     delete req.session.new_rental_info;
+    if (req.user){
+      delete req.user.rentals;
+    }
 
     res.send({
       state: "success",
@@ -347,348 +382,378 @@ module.exports = {
 
   //<editor-fold>-------------------------------EDIT RENTAL-------------------------------
 
-  //gets the rental/listing info
-  getRental : function(req, res, next){
-    console.log("LRF: Getting all rental info...");
+    //<editor-fold>-------------------------------GETS-------------------------------
 
-    var rental_id = req.params.rental_id;
+    //gets the rental/listing info
+    getRental : function(req, res, next){
+      console.log("LRF: Getting all rental info...");
 
-    //if its a number
-    if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id != "new"){
-      error.handler(req, res, "Invalid rental!");
-    }
-    //get it otherwise
-    else {
-      listing_model.getRentalInfo(rental_id, function(result){
-        if (result.state != "success"){error.handler(req, res, result.info);}
-        //no rental exists
-        else if (result.info.length == 0){
-          error.handler(req, res, "Invalid rental!");
-        }
-        else {
-          req.session.rental_info = result.info[0];
-          next();
-        }
-      });
-    }
-  },
+      var rental_id = req.params.rental_id;
 
-  //gets the rental times info
-  getRentalRentalTimes : function(req, res, next){
-    console.log("LRF: Getting all rental times for a rental...");
-
-    var rental_id = req.params.rental_id;
-
-    listing_model.getRentalRentalTimes(rental_id, function(result){
-      if (result.state != "success"){error.handler(req, res, result.info);}
+      //if its not a number or not "new"
+      if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id != "new"){
+        error.handler(req, res, "Invalid rental!");
+      }
+      //get it otherwise
       else {
-        req.session.rental_info.times = joinRentalTimes(result.info);
-        next();
-      }
-    });
-  },
-
-  //create a rental object for checking (for edit)
-  createRentalObject : function(req, res, next){
-    req.session.rental_object = {
-      db_object: {}
-    };
-
-    next();
-  },
-
-  //check domain name for rental
-  checkRentalDomain : function(req, res, next){
-    console.log("LRF: Checking if rental belongs to the correct domain...");
-    var domain_name = req.params.domain_name;
-
-    if (req.session.rental_info.domain_name.toLowerCase() != domain_name.toLowerCase()){
-      error.handler(req, res, "Invalid domain name for rental!");
-    }
-    else {
-      next();
-    }
-  },
-
-  //check if rental belongs to account
-  checkRentalOwner : function(req, res, next){
-    console.log("LRF: Checking rental owner...");
-    var owner_hash_id = req.params.owner_hash_id;
-    //correct hash
-    if (req.session.proxy_edit){
-      next();
-    }
-    else if (req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
-      req.session.proxy_edit = true;
-      next();
-    }
-    //incorrect owner!
-    else if (req.user && req.session.rental_info.account_id != req.user.id){
-      delete req.session.rental_info.owner_hash_id;
-      req.session.proxy_edit = false;
-      next();
-    }
-    //if hash exists in URL and its not the same, redirect to the normal rental
-    else if (owner_hash_id && req.session.rental_info.owner_hash_id != owner_hash_id){
-      delete req.session.rental_info.owner_hash_id;
-      req.session.proxy_edit = false;
-      next();
-    }
-    else {
-      next();
-    }
-  },
-
-  //check if domain belongs to account (for refunding a rental)
-  checkDomainOwner : function(req, res, next){
-    console.log("LRF: Checking domain owner...");
-
-    listing_model.checkListingOwner(req.user.id, req.params.domain_name, function(result){
-      //incorrect owner!
-      if (result.state == "error" || result.info.length == 0){
-        error.handler(req, res, "Invalid domain owner!");
-      }
-      else {
-        next();
-      }
-    });
-  },
-
-  //check posted rental address or type (for editing rental address)
-  checkRentalInfoEdit : function(req, res, next){
-    console.log("LRF: Checking posted rental information...");
-
-    var address = addProtocol(req.body.address);
-    var rental_type = parseFloat(req.body.type);
-
-    //check for address
-    if (req.body.address && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
-      error.handler(req, res, "Invalid address!", "json");
-    }
-    //check for rental type
-    else if (req.body.type && rental_type != 0 && rental_type != 1){
-      error.handler(req, res, "Invalid rental type!", "json");
-    }
-    else {
-
-      //edit the rental info db object
-      var edit_rental_info_db = function(){
-        //if type exists
-        if (req.body.type){
-          req.session.rental_object.db_object.type = req.body.type;
-        }
-
-        //if address exists
-        if (req.body.address != "undefined"){
-          req.session.rental_object.db_object.address = address;
-        }
-        else if (req.body.address == ""){
-          req.session.rental_object.db_object.address = "";
-        }
-
-        next();
-      }
-
-      if (req.body.address){
-        //check against google safe browsing
-        googleSafeCheck(req, res, address, function(){
-          //check if its a valid HTTP address and that theres a response
-          request(address, function (err, response, body) {
-            if (!err && response.statusCode == 200) {
-              edit_rental_info_db();
-            }
-            else {
-              error.handler(req, res, "Nothing displayed at that address!", "json");
-            }
-          });
-        });
-      }
-      else {
-        edit_rental_info_db();
-      }
-    }
-  },
-
-  //deactivate a rental
-  deactivateRental : function(req, res, next){
-    console.log("LRF: Deactivating rental...");
-    req.session.rental_object.db_object.status = 0;
-    next();
-  },
-
-  //updates the owner of a rental that has no owner (hash rental)
-  updateRentalOwner : function(req, res, next){
-    //if we're actually updating the owner of the rental
-    if (req.user && req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
-      console.log("LRF: Updating the rental owner...");
-      req.session.proxy_edit = true;
-      delete req.session.rental_info.owner_hash_id;
-      req.session.rental_object = {
-        db_object : {
-          account_id: req.user.id,
-          owner_hash_id: null
-        }
-      }
-      next();
-    }
-    //else delete the rental object to edit DB
-    else {
-      delete req.session.rental_object;
-      next();
-    }
-  },
-
-  //redirect to rental page after updating its owner
-  redirectToRental: function(req, res, next){
-    console.log("LRF: Redirecting to rental page...");
-
-    delete req.session.rental_object.db_object;
-    delete req.rental_info;
-    res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
-  },
-
-  //check to make sure we should display edit overlay
-  checkForPreview : function(req, res, next){
-    console.log("LRF: Checking if preview is defined...");
-    if (!req.session.rental_info){
-      res.redirect("/");
-    }
-    else {
-      //coming from /rentalpreview (endless loop)
-      if (!req.session.rental_editted && req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
-        console.log("LRF: Something went wrong and triggered an endless loop!");
-        res.render("proxy/proxy-error.ejs", {
-          image: "",
-          preview: req.session.proxy_edit,
-          doma_rental_info : req.session.rental_info
-        });
-      }
-      else {
-        next();
-      }
-    }
-  },
-
-  //redirect to rental preview route
-  redirectToPreview : function(req, res, next){
-    console.log("LRF: Redirecting to rental preview...");
-    res.redirect('/rentalpreview');
-  },
-
-  //render a rental edit page
-  renderRental : function(req, res, next){
-    console.log("LRF: Rendering rental...");
-
-    //now rendering rental, delete any sensitive stuff
-    if (!req.session.proxy_edit){
-      delete req.session.rental_info.owner_hash_id;
-      delete req.session.rental_info.owner_email;
-    }
-    delete req.session.rental_editted;
-
-    //render the appropriate address
-    if (req.session.rental_info.address && req.session.rental_info.type == 0){
-      req.session.rented_info = req.session.rental_info;
-      var address_request = request({
-        url: addProtocol(req.session.rented_info.address),
-        encoding: null
-      }, function (err, response, body) {
-        //not an image requested
-        if (response.headers['content-type'].indexOf("image") == -1 && response.headers['content-type'].indexOf("pdf") == -1){
-          console.log("LRF: Requested rental address was a website!");
-
-          var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');
-          var preview_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs');
-
-          var proxy_index = fs.readFileSync(index_path);
-          var proxy_preview = fs.readFileSync(preview_path);
-          var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
-          var buffer_array = [body, proxy_index, proxy_preview, rental_info_buffer];
-
-          //if authenticated to edit the rental preview
-          if (req.session.proxy_edit){
-            var edit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs');
-            var proxy_preview = fs.readFileSync(edit_path);
-            buffer_array.push(proxy_preview);
-          }
-          else {
-            var noedit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs');
-            var proxy_nopreview = fs.readFileSync(noedit_path);
-            buffer_array.push(proxy_nopreview);
-          }
-
-          if (!proxy_index || (req.session.proxy_edit && !proxy_preview) || (!req.session.proxy_edit && !proxy_nopreview)) {
+        listing_model.getRentalInfo(rental_id, function(result){
+          if (result.state != "success"){error.handler(req, res, result.info);}
+          //no rental exists
+          else if (result.info.length == 0){
             error.handler(req, res, "Invalid rental!");
           }
           else {
-            res.set("content-type", response.headers["content-type"]);
-            res.end(Buffer.concat(buffer_array));
+            req.session.rental_info = result.info[0];
+            next();
           }
-        }
+        });
+      }
+    },
+
+    //gets the rental times info
+    getRentalRentalTimes : function(req, res, next){
+      console.log("LRF: Getting all rental times for a rental...");
+
+      var rental_id = req.params.rental_id;
+
+      listing_model.getRentalRentalTimes(rental_id, function(result){
+        if (result.state != "success"){error.handler(req, res, result.info);}
         else {
-          console.log("LRF: Requested rental address was an image/PDF!");
-
-          res.render("proxy/proxy-image.ejs", {
-            image: req.session.rental_info.address,
-            content: response.headers['content-type'],
-            edit: req.session.proxy_edit,
-            preview: true,
-            doma_rental_info : req.session.rental_info
-          });
+          req.session.rental_info.times = joinRentalTimes(result.info);
+          next();
         }
-      }).on('error', function(err){
-        error.handler(req, res, "Invalid rental!");
       });
-    }
+    },
 
-    //render the blank template
-    else {
-      res.render("proxy/proxy-image.ejs", {
-        image: "",
-        edit: req.session.proxy_edit,
-        preview: true,
-        doma_rental_info : req.session.rental_info
-      });
-    }
+    //</editor-fold>
 
-  },
+    //<editor-fold>-------------------------------CHECKS-------------------------------
 
-  //edit the rental (update the database)
-  editRental : function(req, res, next){
-    if (req.session.rental_object && req.session.rental_object.db_object){
-      console.log("LRF: Updating rental...");
+    //check domain name for rental
+    checkRentalDomain : function(req, res, next){
+      console.log("LRF: Checking if rental belongs to the correct domain...");
+      var domain_name = req.params.domain_name;
 
-      listing_model.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
-        if (result.state != "success"){error.handler(req, res, result.info, "json");}
+      if (req.session.rental_info.domain_name.toLowerCase() != domain_name.toLowerCase()){
+        error.handler(req, res, "Invalid domain name for rental!");
+      }
+      else {
+        next();
+      }
+    },
+
+    //check if rental belongs to account
+    checkRentalOwner : function(req, res, next){
+      console.log("LRF: Checking rental owner...");
+      var owner_hash_id = req.params.owner_hash_id;
+      //correct hash
+      if (req.session.proxy_edit){
+        next();
+      }
+      else if (req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
+        req.session.proxy_edit = true;
+        next();
+      }
+      //incorrect owner!
+      else if (req.user && req.session.rental_info.account_id != req.user.id){
+        delete req.session.rental_info.owner_hash_id;
+        req.session.proxy_edit = false;
+        next();
+      }
+      //if hash exists in URL and its not the same, redirect to the normal rental
+      else if (owner_hash_id && req.session.rental_info.owner_hash_id != owner_hash_id){
+        delete req.session.rental_info.owner_hash_id;
+        req.session.proxy_edit = false;
+        next();
+      }
+      else {
+        next();
+      }
+    },
+
+    //check if domain belongs to account (for refunding a rental)
+    checkDomainOwner : function(req, res, next){
+      console.log("LRF: Checking domain owner...");
+
+      listing_model.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+        //incorrect owner!
+        if (result.state == "error" || result.info.length == 0){
+          error.handler(req, res, "Invalid domain owner!");
+        }
         else {
           next();
         }
       });
-    }
-    else {
-      next();
-    }
-  },
+    },
 
-  //update the rental session object
-  updateRentalObject : function(req, res, next){
-    if (req.user){
-      //update the user rentals object with anything thats changed
-      updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
-    }
-    else {
-      //update the session rental info with anything that's changed
-      for (x in req.session.rental_object.db_object){
-        req.session.rental_info[x] = req.session.rental_object.db_object[x];
+    //check posted rental address or type (for editing rental address)
+    checkRentalInfoEdit : function(req, res, next){
+      console.log("LRF: Checking posted rental information...");
+
+      var address = addProtocol(req.body.address);
+      var rental_type = parseFloat(req.body.type);
+
+      //check for address
+      if (req.body.address && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+        error.handler(req, res, "Invalid address!", "json");
       }
-    }
-    req.session.rental_editted = true;
-    delete req.session.rental_object;
-    res.send({
-      state: "success",
-      rentals: (req.user) ? req.user.rentals : false
-    });
-  },
+      //check for rental type
+      else if (req.body.type && rental_type != 0 && rental_type != 1){
+        error.handler(req, res, "Invalid rental type!", "json");
+      }
+      else {
+
+        //edit the rental info db object
+        var edit_rental_info_db = function(){
+          //if type exists
+          if (req.body.type){
+            req.session.rental_object.db_object.type = req.body.type;
+          }
+
+          //if address exists
+          if (req.body.address != "undefined"){
+            req.session.rental_object.db_object.address = address;
+          }
+          else if (req.body.address == ""){
+            req.session.rental_object.db_object.address = "";
+          }
+
+          next();
+        }
+
+        if (req.body.address){
+          //check against google safe browsing
+          googleSafeCheck(req, res, address, function(){
+            //check if its a valid HTTP address and that theres a response
+            request(address, function (err, response, body) {
+              if (!err && response.statusCode == 200) {
+                edit_rental_info_db();
+              }
+              else {
+                error.handler(req, res, "Nothing displayed at that address!", "json");
+              }
+            });
+          });
+        }
+        else {
+          edit_rental_info_db();
+        }
+      }
+    },
+
+    //check if the editing rental has payment ID and is legit
+    checkRentalPaymentID : function(req, res, next){
+      console.log("LRF: Checking if rental has a transaction ID to refund...");
+      if (req.body.transaction_id && ["stripe", "paypal"].indexOf(req.session.rental_info.payment_type) != -1){
+        next();
+      }
+      else if (!req.body.transaction_id){
+        error.handler(req, res, "Something went wrong with refunding this rental. Please refresh the page and try again!", "json");
+      }
+      else {
+        error.handler(req, res, "This rental cannot be refunded. Are you sure that you received a payment for this transaction?", "json");
+      }
+    },
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------EDITS-------------------------------
+
+    //create a rental object for updating DB
+    createRentalObject : function(req, res, next){
+      req.session.rental_object = {
+        db_object: {}
+      };
+
+      next();
+    },
+
+    //deactivate a rental
+    deactivateRental : function(req, res, next){
+      console.log("LRF: Deactivating rental...");
+      req.session.rental_object.db_object.status = 0;
+      next();
+    },
+
+    //updates the owner of a rental that has no owner (hash rental)
+    updateRentalOwner : function(req, res, next){
+      //if we're actually updating the owner of the rental
+      if (req.user && req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
+        console.log("LRF: Updating the rental owner...");
+        req.session.proxy_edit = true;
+        delete req.session.rental_info.owner_hash_id;
+        req.session.rental_object = {
+          db_object : {
+            account_id: req.user.id,
+            owner_hash_id: null
+          }
+        }
+        next();
+      }
+      //else delete the rental object to edit DB
+      else {
+        delete req.session.rental_object;
+        next();
+      }
+    },
+
+    //redirect to rental page after updating its owner
+    redirectToRental: function(req, res, next){
+      console.log("LRF: Redirecting to rental page...");
+
+      delete req.session.rental_object.db_object;
+      delete req.rental_info;
+      res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
+    },
+
+    //edit the rental (update the database)
+    editRental : function(req, res, next){
+      if (req.session.rental_object && req.session.rental_object.db_object){
+        console.log("LRF: Updating rental...");
+
+        listing_model.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
+          if (result.state != "success"){error.handler(req, res, result.info, "json");}
+          else {
+            next();
+          }
+        });
+      }
+      else {
+        next();
+      }
+    },
+
+    //update the rental session object
+    updateRentalObject : function(req, res, next){
+      //update the user rentals object with anything thats changed
+      if (req.user && req.user.rentals){
+        updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
+      }
+      else {
+        //update the session rental info with anything that's changed
+        for (x in req.session.rental_object.db_object){
+          req.session.rental_info[x] = req.session.rental_object.db_object[x];
+        }
+      }
+      req.session.rental_editted = true;
+      delete req.session.rental_object;
+      res.send({
+        state: "success",
+        rentals: (req.user) ? req.user.rentals : false
+      });
+    },
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------PREVIEW-------------------------------
+
+    //check to make sure we should display edit overlay
+    checkForPreview : function(req, res, next){
+      console.log("LRF: Checking if preview is defined...");
+      if (!req.session.rental_info){
+        res.redirect("/");
+      }
+      else {
+        //coming from /rentalpreview (endless loop)
+        if (!req.session.rental_editted && req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
+          console.log("LRF: Something went wrong and triggered an endless loop!");
+          res.render("proxy/proxy-error.ejs", {
+            image: "",
+            preview: req.session.proxy_edit,
+            doma_rental_info : req.session.rental_info
+          });
+        }
+        else {
+          next();
+        }
+      }
+    },
+
+    //redirect to rental preview route
+    redirectToPreview : function(req, res, next){
+      console.log("LRF: Redirecting to rental preview...");
+      res.redirect('/rentalpreview');
+    },
+
+    //render a rental edit page
+    renderRental : function(req, res, next){
+      console.log("LRF: Rendering rental...");
+
+      //now rendering rental, delete any sensitive stuff
+      if (!req.session.proxy_edit){
+        delete req.session.rental_info.owner_hash_id;
+        delete req.session.rental_info.owner_email;
+      }
+      delete req.session.rental_editted;
+
+      //render the appropriate address
+      if (req.session.rental_info.address && req.session.rental_info.type == 0){
+        req.session.rented_info = req.session.rental_info;
+        var address_request = request({
+          url: addProtocol(req.session.rented_info.address),
+          encoding: null
+        }, function (err, response, body) {
+          //not an image requested
+          if (response.headers['content-type'].indexOf("image") == -1 && response.headers['content-type'].indexOf("pdf") == -1){
+            console.log("LRF: Requested rental address was a website!");
+
+            var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');
+            var preview_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs');
+
+            var proxy_index = fs.readFileSync(index_path);
+            var proxy_preview = fs.readFileSync(preview_path);
+            var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
+            var buffer_array = [body, proxy_index, proxy_preview, rental_info_buffer];
+
+            //if authenticated to edit the rental preview
+            if (req.session.proxy_edit){
+              var edit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs');
+              var proxy_preview = fs.readFileSync(edit_path);
+              buffer_array.push(proxy_preview);
+            }
+            else {
+              var noedit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs');
+              var proxy_nopreview = fs.readFileSync(noedit_path);
+              buffer_array.push(proxy_nopreview);
+            }
+
+            if (!proxy_index || (req.session.proxy_edit && !proxy_preview) || (!req.session.proxy_edit && !proxy_nopreview)) {
+              error.handler(req, res, "Invalid rental!");
+            }
+            else {
+              res.set("content-type", response.headers["content-type"]);
+              res.end(Buffer.concat(buffer_array));
+            }
+          }
+          else {
+            console.log("LRF: Requested rental address was an image/PDF!");
+
+            res.render("proxy/proxy-image.ejs", {
+              image: req.session.rental_info.address,
+              content: response.headers['content-type'],
+              edit: req.session.proxy_edit,
+              preview: true,
+              doma_rental_info : req.session.rental_info
+            });
+          }
+        }).on('error', function(err){
+          error.handler(req, res, "Invalid rental!");
+        });
+      }
+
+      //render the blank template
+      else {
+        res.render("proxy/proxy-image.ejs", {
+          image: "",
+          edit: req.session.proxy_edit,
+          preview: true,
+          doma_rental_info : req.session.rental_info
+        });
+      }
+
+    },
+
+    //</editor-fold>
 
   //</editor-fold>
 
@@ -910,6 +975,17 @@ module.exports = {
     }
   },
 
+  //check if listing is currently rented to prevent BIN
+  checkListingRented : function(req, res, next){
+    console.log("LRF: Checking if listing is rented...");
+    if (req.session.listing_info.rented == 1 || req.session.listing_info.current_rented_end != null){
+      error.handler(req, res, "This domain is currently being rented and cannot be purchased right now! Please use the calendar (under the 'Rent' tab of the domain landing page) to see when it'll be available for purchase!", "json");
+    }
+    else {
+      next();
+    }
+  },
+
   //check if session listing_info exists and get listing info if it doesnt match with current domain_name
   checkSessionListingInfoPost : function(req, res, next){
     console.log("LRF: Checking if session listing info domain is same as posted domain...");
@@ -1014,8 +1090,15 @@ module.exports = {
     if (validator.isInt(exclude_id) && validator.isInt(owner_id)){
       console.log("LRF: Finding other listings by same owner...");
       listing_model.getListingsByOwner(exclude_id, owner_id, function(result){
-        if (!result.info.length || result.state == "error"){
+        if (result.state == "error"){
           error.handler(req, res, "Failed to get other listings by the same owner!", "json");
+        }
+        //no other listings
+        else if (!result.info.length){
+          res.send({
+            state: "success",
+            listings: []
+          });
         }
         else {
           var listings = result.info;

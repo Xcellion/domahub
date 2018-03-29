@@ -36,21 +36,25 @@ module.exports = {
   checkContactInfo : function(req, res, next){
     console.log("LBF: Checking posted contact details for offer...");
 
-    if (!req.body.contact_name){
+    //trying to BIN but it's not enabled for BIN
+    if (req.path.indexOf("/buy") != -1 && (!req.session.listing_info.buy_price || req.session.listing_info.buy_price <= 0)){
+      error.handler(req, res, "This domain is unavailable for buy it now! Please enter an offer and the owner will get back to you.", "json");
+    }
+    //no name
+    else if (!req.body.contact_name){
       error.handler(req, res, "Please enter your name!", "json");
     }
+    //invalid email
     else if (!validator.isEmail(req.body.contact_email)){
       error.handler(req, res, "Please enter a valid email address!", "json");
     }
+    //invalid phone number
     else if (!req.body.contact_phone || !phoneUtil.isValidNumber(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL)){
       error.handler(req, res, "Please enter a real phone number! Did you select the correct country for your phone number?", "json");
     }
     //if offer price is too low
     else if (req.body.contact_offer && !validator.isInt(req.body.contact_offer, { min: req.session.listing_info.min_price })){
       error.handler(req, res, "This is an invalid offer price! Please enter an amount greater than " + moneyFormat.to(parseFloat(req.session.listing_info.min_price)) + ".", "json");
-    }
-    else if (!req.body.contact_message){
-      error.handler(req, res, "A message to the owner greatly increases your chance of successfully purchasing this domain name! Please enter a short message for the owner.", "json");
     }
     else {
       next();
@@ -163,7 +167,7 @@ module.exports = {
                   to: "general@domahub.com",
                   from: 'general@domahub.com',
                   subject: "New verified offer for a listing on DomaHub!",
-                  html: "There was a new offer for - " + req.params.domain_name + "<br />From - " + offer_result.name + "<br />Email - " + offer_result.email + "<br />Message - " + offer_result.message
+                  html: "There was a new offer for - " + req.params.domain_name + "<br />From - " + offer_result.name + "<br />Email - " + offer_result.email + "<br />Message - " + offer_result.message + "<br />Offer - " + offer_formatted
                 });
               }
             }
@@ -381,12 +385,31 @@ module.exports = {
 
   //create a record for this purchase
   createBuyContactRecord : function(req, res, next){
+
+    var contact_details = {
+      deposited : true
+    };
+
+    //payment ID
+    if (req.session.new_buying_info.purchase_transaction_id){
+      contact_details.transaction_id = req.session.new_buying_info.purchase_transaction_id;
+    }
+
+    //payment type
+    if (req.session.new_buying_info.purchase_payment_type){
+      contact_details.payment_type = req.session.new_buying_info.purchase_payment_type;
+      contact_details.doma_fees = req.session.new_buying_info.purchase_doma_fees;
+      contact_details.payment_fees = req.session.new_buying_info.purchase_payment_fees;
+    }
+
+    //if depositing money after accepting offer
     if (req.session.new_buying_info.id){
       console.log("LBF: Updating contact record with deposited...");
-      data_model.depositedOffer({
-        deposited : true,
-        deadline : moment().add(2, "week")._d.getTime()
-      }, req.session.listing_info.domain_name, req.session.new_buying_info.id, function(result){
+
+      //update the deadline to two weeks from now
+      contact_details.deadline = moment().add(2, "week")._d.getTime()
+
+      data_model.depositedOffer(contact_details, req.session.listing_info.domain_name, req.session.new_buying_info.id, function(result){
         if (result.state == "success"){
           next();
         }
@@ -395,20 +418,26 @@ module.exports = {
         }
       });
     }
+    //if BIN
     else {
-      console.log("LBF: Creating a new contact buy record...");
+      console.log("LBF: Creating a new contact BIN record...");
+
+      //create a verification code so we can contact the buyer for next steps
       req.session.new_buying_info.verification_code = randomstring.generate(10);
-      var contact_details = {
-        listing_id : req.session.listing_info.id,
-        timestamp : new Date().getTime(),
-        user_ip : getIP(req),
-        name : req.session.new_buying_info.name,
-        email : req.session.new_buying_info.email,
-        phone : req.session.new_buying_info.phone,
-        message : req.session.new_buying_info.message,
-        verification_code : req.session.new_buying_info.verification_code,
-        bin : true
-      }
+
+      //new contact offer details
+      contact_details.listing_id = req.session.listing_info.id;
+      contact_details.timestamp = new Date().getTime();
+      contact_details.user_ip = getIP(req);
+      contact_details.name = req.session.new_buying_info.name;
+      contact_details.email = req.session.new_buying_info.email;
+      contact_details.phone = req.session.new_buying_info.phone;
+      contact_details.message = req.session.new_buying_info.message;
+      contact_details.offer = req.session.listing_info.buy_price;
+      contact_details.verification_code = req.session.new_buying_info.verification_code;
+      contact_details.verified = true;
+      contact_details.accepted = true;
+      contact_details.bin = true;
 
       data_model.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
         if (result.state == "success"){
@@ -478,14 +507,14 @@ module.exports = {
     }
 
     //premium email from listing owner or from domahub
-    var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
+    var email_from = (req.session.listing_info.premium) ? "'" + req.session.listing_info.owner_username + "'<" + req.session.listing_info.owner_email + ">" : '"DomaHub" <general@domahub.com>'
     var emailDetails = {
       to: req.session.new_buying_info.email,
       from: email_from,
       subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
     };
 
-    //email the owner
+    //email the buyer of next steps
     mailer.sendEJSMail(pathEJSTemplate, EJSVariables, emailDetails, false);
 
     next();
@@ -504,6 +533,40 @@ module.exports = {
     }
 
     next();
+  },
+
+  //check the payment method of BIN
+  checkPaymentType : function(req, res, next){
+    console.log("LRF: Checking BIN payment type...");
+
+    //not set for BIN
+    if (req.session.listing_info.buy_price <= 0 || !req.session.listing_info.buy_price){
+      error.handler(req, res, "This domain is unavailable for buy it now! Please go back to the main page and create an offer for the owner.", "json");
+    }
+    //paying by stripe
+    else if (req.body.payment_type == "stripe" && req.body.stripeToken){
+      next();
+    }
+    //paying by paypal
+    else if (req.body.payment_type == "paypal" && req.body.paymentID && req.body.payerID){
+      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong with your payment! Please refresh the page and try again.", "json");
+    }
+  },
+
+  //check if the payment method of BIN was successful
+  checkPaymentSuccessful : function(req, res, next){
+    console.log("LRF: Checking BIN payment type...");
+
+    //transaction ID was created in previous steps (either via stripe or paypal)
+    if (req.session.new_buying_info.purchase_transaction_id){
+      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong with your payment! Please refresh the page and try again.", "json");
+    }
   },
 
   //</editor-fold>
