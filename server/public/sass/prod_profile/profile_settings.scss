@@ -22,6 +22,10 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.text-line-through {
+  text-decoration: line-through;
+}
+
 .columns {
   margin-left:-20px;
   margin-right:-20px;
@@ -71,7 +75,7 @@
 }
 
 // table
-#referral-table, #payment-history-table {
+#referral-table, #payment-history-table, #transactions-table {
   thead,
   tbody tr {
     display: table;
@@ -86,13 +90,42 @@
   }
 }
 
-.no-border-bottom {
-  border-bottom-width: 0px !important;
-  margin-bottom:0;
+th.has-text-right, td.has-text-right{
+  text-align:right !important;
 }
 
-.remove-margin-bottom-content {
-  margin-bottom:0 !important;
+//transactions table
+.transaction-header-sort{
+  cursor:pointer;
+}
+
+#transactions-table-body {
+  max-height:calc(100vh - 300px) !important;
+}
+
+.transactions-row-available {
+  @include widescreen {
+    width: 200px;
+  }
+}
+
+.transactions-row-domain {
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+.transactions-row-date {
+  @include widescreen {
+    width:120px;
+  }
+}
+
+.transactions-row-type {
+  width: 90px;
+}
+
+.transactions-row-payment {
+  width: 110px;
 }
 
 #transactions-info {
@@ -110,6 +143,15 @@
 .transactions-row-available .icon {
   display: inline-block;
   margin-left: 5px;
+}
+
+.no-border-bottom {
+  border-bottom-width: 0px !important;
+  margin-bottom:0;
+}
+
+.remove-margin-bottom-content {
+  margin-bottom:0 !important;
 }
 
 .select {

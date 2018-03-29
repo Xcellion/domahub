@@ -28,6 +28,9 @@ $(document).ready(function() {
 
 function setupListedPage(){
 
+  //reset myPath
+  myPath = null;
+
   //click to show on mobile
   $("#show-more-details").off().on("click", function(){
     $("#more-details-wrapper").toggleClass('is-hidden-mobile');
@@ -63,13 +66,8 @@ function setupPriceTags(){
   if (listing_info.status == 0) {
     var price_tag_text = "Unavailable";
   }
-  else if (listing_info.buy_price > 0){
+  else if (listing_info.buy_price > 0 && listing_info.rented != 1){
     var price_tag_text = "Buy now - " + moneyFormat.to(listing_info.buy_price);
-
-    //dont need to require the offer part when buying now
-    $("#buy-now-button").off().on('click', function(){
-      $("#contact_offer").removeAttr("required");
-    }).find("#buy-button-text").text(price_tag_text);
   }
   //minimum price
   else if (listing_info.min_price > 0){
@@ -80,6 +78,35 @@ function setupPriceTags(){
     var price_tag_text = "Now available";
   }
   $("#price-tag").text(price_tag_text);
+
+  if (listing_info.buy_price > 0 && listing_info.rented != 1){
+    //dont need to require the offer/message part when buying now
+    $("#buy-now-button").removeClass("is-hidden").off().on('click', function(){
+      $("#contact_message").removeAttr("required");
+      $("#contact_offer").removeAttr("required");
+
+      //create a fake input button
+      var temp_hidden_submit_button = $("<button type='submit' class='is-hidden'></button>");
+      $("#buy-now-form").data('type_of_submit', "buy").append(temp_hidden_submit_button)
+      temp_hidden_submit_button.click();
+      temp_hidden_submit_button.remove();
+    }).find("#buy-button-text").text(price_tag_text);
+  }
+  else {
+    $("#buy-now-button").closest(".control").remove();
+  }
+
+  //need the min offer input if you're offering
+  $("#send-offer-button").off().on('click', function(){
+    $("#contact_offer").attr("required", true);
+    $("#contact_message").attr("required", true);
+
+    //create a fake input button
+    var temp_hidden_submit_button = $("<button type='submit' class='is-hidden'></button>");
+    $("#buy-now-form").data('type_of_submit', "offer").append(temp_hidden_submit_button);
+    temp_hidden_submit_button.click();
+    temp_hidden_submit_button.remove();
+  });
 
   //rental price tag
   if (listing_info.rentable && listing_info.status == 1){
@@ -96,7 +123,7 @@ function setupPriceTags(){
 //<editor-fold>-------------------------------DESCRIPTION-------------------------------
 
 function setupDescription(){
-  $("#listing-description").text(listing_info.description);
+  $("#listing-description").text((listing_info.description) ? listing_info.description : "");
 }
 
 //</editor-fold>
@@ -189,7 +216,7 @@ function setupRightHalf(){
 
   function setUpTabs(){
 
-    //<editor-fold>-------------------------------TABS HANDLER-------------------------------
+    //<editor-fold>-------------------------------TABS LOGIC-------------------------------
 
     //switch tabs
     $(".tab").off().on("click", function(){
@@ -227,12 +254,23 @@ function setupRightHalf(){
 
     });
 
+    //reset active tab
+    $(".module-tab").removeClass("is-active");
+    $(".module").addClass("is-hidden");
+
+    //if the active is hidden
+    if ($(".module-tab.is-active").hasClass("is-hidden")){
+      $(".module-tab.is-active").removeClass("is-active");
+    }
+
     //</editor-fold>
 
-    //rental tab
+    //<editor-fold>-------------------------------SPECIFIC TAB LOGIC-------------------------------
+
+    //hide or show rental tab
     if (!listing_info.rentable || listing_info.status == 0){
-      $("#rental-module").addClass("is-hidden");
       $("#rental-tab").addClass("is-hidden");
+      $("#rental-module").addClass("is-hidden");
     }
     else {
       $("#rental-tab").removeClass("is-hidden");
@@ -241,7 +279,7 @@ function setupRightHalf(){
       }
     }
 
-    //traffic tab
+    //hide or show traffic tab
     if (listing_info.premium && listing_info.show_traffic_graph == 0 && listing_info.show_alexa_stats == 0){
       $("#traffic-module").addClass("is-hidden");
       $("#traffic-tab").addClass("is-hidden");
@@ -253,7 +291,7 @@ function setupRightHalf(){
       }
     }
 
-    //ticker history tab
+    //hide or show ticker history tab
     if (listing_info.premium && listing_info.show_history_ticker == 0){
       $("#ticker-module").addClass("is-hidden");
       $("#ticker-tab").addClass("is-hidden");
@@ -265,7 +303,7 @@ function setupRightHalf(){
       }
     }
 
-    //ticker history tab
+    //hide or show ticker history tab
     if (listing_info.premium && listing_info.show_domain_list == 0){
       $("#domainlist-tab").addClass("is-hidden");
       $("#domainlist-module").addClass("is-hidden");
@@ -277,13 +315,8 @@ function setupRightHalf(){
       }
     }
 
-    //if the active is hidden
-    if ($(".module-tab.is-active").hasClass("is-hidden")){
-      $(".module-tab.is-active").removeClass("is-active");
-    }
-
     //add active to the first appearing tab (if some tabs are disabled)
-    if ($(".module-tab.is-active").length == 0){
+    if ($(".module-tab.is-active:not(.is-hidden)").length == 0){
       $(".tab:not(.is-hidden)").eq(0).addClass('is-active');
       var tab_id = $(".tab:not(.is-hidden)").eq(0).attr("id");
       $("#" + tab_id.replace("tab", "module")).removeClass('is-hidden');
@@ -300,6 +333,8 @@ function setupRightHalf(){
     if ($(".module-tab:not(.is-hidden)").length == 1){
       $(".module-tab").addClass('is-hidden');
     }
+
+    //</editor-fold>
   }
 
   //</editor-fold>
@@ -330,11 +365,6 @@ function setupRightHalf(){
         $("#contact_offer").attr("min", listing_info.min_price).attr("placeholder", listing_info.min_price);
       }
 
-      //need the min offer input if you're offering
-      $("#send-offer-button").off().on('click', function(){
-        $("#contact_offer").attr("required", true);
-      });
-
       //click buy tab (tutorial / focus)
       $("#contact-form-tab").off().on("click", function(e){
         //doing the tutorial!
@@ -350,13 +380,16 @@ function setupRightHalf(){
 
       //submit the contact form
       $("#buy-now-form").off().on("submit", function(e){
-        var type_of_submit = $("button[type=submit][clicked=true]").attr("name");
+        var type_of_submit = $(this).data('type_of_submit');
         e.preventDefault();
 
         if ($("#contact_phone").intlTelInput("isValidNumber")){
-          $("button[type=submit][clicked=true]").addClass('is-loading');
-          $(".notification").addClass('is-hidden').removeClass('is-active');
+
+          //visual feedback of form submission
+          var button_id = (type_of_submit == "buy") ? "buy-now-button" : "send-offer-button";
+          $("#" + button_id).addClass('is-loading');
           $(".contact-input").attr('disabled', true);
+          $(".notification").addClass('is-hidden').removeClass('is-active');
 
           //comparison only, no need for AJAX
           if (compare){
@@ -375,19 +408,20 @@ function setupRightHalf(){
                 contact_message: $("#contact_message").val()
               }
             }).done(function(data){
-              $("button[type=submit][clicked=true]").removeClass('is-loading');
 
               if (data.state == "success"){
                 if (type_of_submit == "offer"){
                   clearNotification();
                   successMessage("Success! Please check your email for further instructions.");
                   $("#buy-now-form").off();
+                  $("#" + button_id).removeClass('is-loading');
                 }
                 else {
                   window.location.assign("/listing/" + listing_info.domain_name + "/checkout/buy");
                 }
               }
               else {
+                $("#" + button_id).removeClass('is-loading');
                 $(".contact-input").removeAttr('disabled');
                 clearNotification();
                 errorMessage(data.message);
@@ -399,12 +433,6 @@ function setupRightHalf(){
           clearNotification();
           errorMessage("Please enter a real phone number! Did you select the correct country for your phone number?");
         }
-      });
-
-      //set the clicked attribute so we know which type of submit
-      $("form button[type=submit]").off().on("click", function(e){
-        $("form button[type=submit][clicked=true]").attr("clicked", false);
-        $(this).attr('clicked', true);
       });
     }
     else {
@@ -419,9 +447,15 @@ function setupRightHalf(){
 
   function setupRentalTab(){
     if (listing_info.rentable && listing_info.status == 1){
+
       //submit times (redirect to rental checkout)
       $("#checkout-button").off().on("click", function(){
-        submitTimes($(this));
+        submitTimes();
+      });
+
+      //refresh calendar times
+      $("#refresh-calendar-button").off().on("click", function(){
+        getTimes();
       });
 
       //<editor-fold>-------------------------------TYPED PATH-------------------------------
@@ -446,7 +480,7 @@ function setupRightHalf(){
 
         //select all on existing path
         $("#typed-slash").select();
-      }).off().on("focusout", function(){
+      }).on("focusout", function(){
         if ($("#typed-slash").val() == ""){
           $("#input-tooltip").removeClass('is-hidden');
         }
@@ -457,14 +491,12 @@ function setupRightHalf(){
           $("#calendar-input").val("");
           $("#checkout-button").addClass('is-disabled');
 
-          $("#calendar-input").off("click").off().on("click", function(){
-            getTimes($(this));
-          });
+          getTimes();
         }
       });
 
       //function for input text validation and tooltip change
-      $("#typed-slash").off().on("keypress onkeypress", function(e) {
+      $("#typed-slash").on("keypress onkeypress", function(e) {
         var code = e.charCode || e.keyCode;
         var inp = String.fromCharCode(code);
         //regex for alphanumeric
@@ -482,7 +514,7 @@ function setupRightHalf(){
         else {
           $("#input-tooltip-error").addClass("is-hidden");
         }
-      }).off().on('keyup', function(e){
+      }).on('keyup', function(e){
         var code = e.charCode || e.keyCode;
 
         var validChar = /^[0-9a-zA-Z]+$/;
@@ -495,7 +527,7 @@ function setupRightHalf(){
 
           //get new calendar if mypath is different
           if (myPath != $(this).val()) {
-            getTimes($(this));
+            getTimes();
           }
 
           //show if mypath is the same
@@ -509,6 +541,10 @@ function setupRightHalf(){
       if (getParameterByName("wanted")){
         $("#typed-slash").val(getParameterByName("wanted"));
       }
+
+      //rental input domain title (middle ellipsis crop)
+      var rental_domain_title = (listing_info.domain_name.length > 20) ? listing_info.domain_name.substr(0,12) + "..." + listing_info.domain_name.substr(-8) : listing_info.domain_name;
+      $("#rental-domain-title").text(rental_domain_title);
 
       //</editor-fold>
 
@@ -539,106 +575,99 @@ function setupRightHalf(){
     }
   }
 
-  //<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
+    //<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
 
-  //helper function to check if everything is legit
-  function checkTimes(){
-    var startDate = $("#calendar-input").data('daterangepicker').startDate;
-    var endDate = $("#calendar-input").data('daterangepicker').endDate.clone().add(1, "millisecond");
+    //check if everything is legit
+    function checkTimes(){
+      var startDate = $("#calendar-input").data('daterangepicker').startDate;
+      var endDate = $("#calendar-input").data('daterangepicker').endDate.clone().add(1, "millisecond");
 
-    if (!startDate.isValid() || !endDate.isValid()){
-      $("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
-    }
-    else {
-      return {
-        starttime : startDate._d.getTime(),
-        endtime : endDate._d.getTime()
-      };
-    }
-  }
-
-  function submitTimes(checkout_button){
-    //remove event handler
-    checkout_button.off();
-    checkout_button.addClass('is-loading');
-    var newEvent = checkTimes();
-
-    if (newEvent.starttime && newEvent.endtime){
-
-      //test rental submit (for compare tool)
-      if (compare){
-        testSubmitRentHandler(checkout_button);
+      if (!startDate.isValid() || !endDate.isValid()){
+        $("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
       }
       else {
-        //redirect to checkout page
-        $.ajax({
-          type: "POST",
-          url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkoutrent",
-          data: {
-            starttime: newEvent.starttime,
-            endtime: newEvent.endtime,
-            path: $("#typed-slash").val()
-          },
-          xhrFields: { withCredentials: true }
-        }).done(function(data){
-          checkout_button.removeClass('is-loading');
-          if (data.state == "success"){
-            window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
-          }
-          else if (data.state == "error"){
-            $("#calendar-regular-message").addClass('is-hidden');
-            errorHandler(data.message);
-            checkout_button.on('click', function(){
-              submitTimes(checkout_button);
-            });
-
-            //re-add calendar event handler to fetch new events
-            $("#calendar-input").off('click').off().on("click", function(){
-              getTimes($(this));
-            });
-          }
-        });
+        return {
+          starttime : startDate._d.getTime(),
+          endtime : endDate._d.getTime()
+        };
       }
     }
-  }
 
-  //handler for various error messages
-  function errorHandler(message){
-    $("#calendar-regular-message").addClass('is-hidden');
+    //submit times for rental
+    function submitTimes(){
+      $("#checkout-button").addClass('is-loading');
 
-    switch (message){
-      case "Dates are unavailable!":
-      $("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
-      break;
-      case "Invalid dates!":
-      case "Invalid dates! No times posted!":
-      case "Invalid dates! Not valid dates!":
-      case "Not divisible by hour blocks!":
-      case "Start time in the past!":
-      case "Invalid end time!":
-      case "Invalid start time!":
-      $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
-      break;
-      default:
-      $("#calendar-error-message").removeClass('is-hidden').text("Oh no, something went wrong! Please refresh the page and try again.");
-      break;
+      var newEvent = checkTimes();
+      if (newEvent.starttime && newEvent.endtime){
+
+        //test rental submit (for compare tool)
+        if (compare){
+          testSubmitRentHandler();
+        }
+        else {
+          //submit the desired rental times
+          $.ajax({
+            type: "POST",
+            url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkoutrent",
+            data: {
+              starttime: newEvent.starttime,
+              endtime: newEvent.endtime,
+              path: $("#typed-slash").val()
+            },
+            xhrFields: { withCredentials: true }
+          }).done(function(data){
+            //redirect to checkout page
+            if (data.state == "success"){
+              window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
+            }
+            else if (data.state == "error"){
+              $("#checkout-button").removeClass('is-loading');
+              errorHandler(data.message);
+              getTimes();
+            }
+          });
+        }
+      }
     }
-  }
 
-  //</editor-fold>
+    //handler for various error messages
+    function errorHandler(message){
+      $("#calendar-regular-message").addClass('is-hidden');
 
-  //<editor-fold>-------------------------------CALENDAR SET UP-------------------------------
+      switch (message){
+        case "Dates are unavailable!":
+        $("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
+        break;
+        case "Invalid dates!":
+        case "Invalid dates! No times posted!":
+        case "Invalid dates! Not valid dates!":
+        case "Not divisible by hour blocks!":
+        case "Start time in the past!":
+        case "Invalid end time!":
+        case "Invalid start time!":
+        $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
+        break;
+        default:
+        $("#calendar-error-message").removeClass('is-hidden').text("Oh no, something went wrong! Please refresh the page and try again.");
+        break;
+      }
+    }
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------CALENDAR SET UP-------------------------------
 
   //get times from the server
-  function getTimes(calendar_elem){
-    //now loading messages
-    $("#calendar-input").addClass('is-disabled');
+  function getTimes(){
+    //now loading times
+    $("#calendar-input").addClass('is-hidden');
     $("#calendar-regular-message").addClass('is-hidden');
     $("#calendar-error-message").addClass('is-hidden');
+    $("#calendar-loading-message").removeClass('is-hidden');
 
-    //loading dates message
-    if (calendar_elem){
-      calendar_elem.off("click");
+    //remove if calendar already exists
+    if ($("#calendar-input").data('daterangepicker')){
+      $("#calendar-input").data('daterangepicker').remove();
     }
 
     //comparison only, no need for AJAX
@@ -653,7 +682,8 @@ function setupRightHalf(){
           path: $("#typed-slash").val()
         }
       }).done(function(data){
-        $("#calendar-input").removeClass('is-disabled');
+        $("#calendar-input").removeClass('is-hidden');
+        $("#calendar-loading-message").addClass('is-hidden');
         $("#calendar-regular-message").removeClass('is-hidden');
 
         //got the future events, go ahead and create the calendar
@@ -666,14 +696,9 @@ function setupRightHalf(){
             });
           }
 
-          //only show new calendar if path changed
-          if (myPath != $("#typed-slash").val() || !$("#calendar-input").data('daterangepicker')){
-            myPath = $("#typed-slash").val();
-            setUpCalendar(listing_info);
-          }
-          else if ($("#calendar-input").is(":visible")){
-            $("#calendar-input").focus().data('daterangepicker').show();
-          }
+          //set up new calendar
+          myPath = $("#typed-slash").val();
+          setUpCalendar(listing_info);
         }
         else {
           errorHandler("");
@@ -746,10 +771,8 @@ function setupRightHalf(){
     $(".daterangepicker").appendTo("#calendar");
 
     //only show if the calendar input is visible
-    if ($("#calendar-input").is(":visible")){
-      $("#calendar-input").data('daterangepicker').show();
-      $("#calendar-input").addClass('is-hidden');
-    }
+    $("#calendar-input").data('daterangepicker').show();
+    $("#calendar-input").addClass('is-hidden');
 
   }
 
@@ -990,25 +1013,51 @@ function setupRightHalf(){
           datasets: []
         },
         options: {
+          layout: {
+            padding: {
+              top: 20,
+              bottom: 20,
+              left: 0,
+              right: 0
+            }
+          },
           maintainAspectRatio: false,
           legend: {
             display: false
           },
           scales: {
             xAxes: [{
-              gridLines: {
-                display: false
+              type: "category",
+              gridLines : {
+                  display : false
               },
-              type: "category"
+              ticks: {
+                fontStyle: 700,
+                fontColor: 'rgba(0,0,0,0.66)',
+                padding: 10,
+              }
             }],
             yAxes: [{
-              display: true,
-              type: 'linear',
+              gridLines : {
+                drawBorder: false,
+                drawTicks: false
+              },
               ticks: {
-                beginAtZero: true   // minimum value will be 0.
+                userCallback: function(label, index, labels) {
+                  // when the floored value is the same as the value we have a whole number
+                  if (Math.floor(label) === label) {
+                    return label;
+                  }
+                },
+                fontStyle: 700,
+                fontColor: 'rgba(0,0,0,0.66)',
+                padding: 20,
+                suggestedMax: 5,
+                beginAtZero: true,   // minimum value will be 0.
               }
             }]
           }
+
         }
       });
     }
@@ -1422,21 +1471,21 @@ function setupRightHalf(){
       if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>an image</a>";
         ticker_icon_color.addClass('is-info');
-        ticker_icon.replaceWith("<i class='far fa-camera-retro'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-camera-retro'></i>");
       }
 
       //showing a GIF
       else if (rental.address.match(/\.(gif)$/) != null){
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a GIF</a>";
         ticker_icon_color.addClass('is-dark');
-        ticker_icon.replaceWith("<i class='far fa-video'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-video'></i>");
       }
 
       //showing a PDF
       else if (rental.address.match(/\.(pdf)$/) != null){
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a PDF</a>";
         ticker_icon_color.addClass('is-dark');
-        ticker_icon.replaceWith("<i class='far fa-file-pdf'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-file-pdf'></i>");
       }
 
       //showing a website
@@ -1444,14 +1493,14 @@ function setupRightHalf(){
         var ticker_address = getHost(rental.address);
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>" + ticker_address + "</a>";
         ticker_icon_color.addClass('is-primary');
-        ticker_icon.replaceWith("<i class='far fa-desktop'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-desktop'></i>");
       }
 
       //showing nothing
       else {
         var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display nothing";
         ticker_icon_color.addClass('is-black');
-        ticker_icon.replaceWith("<i class='far fa-eye-slash'></i>");
+        ticker_icon.replaceWith("<i class='fal fa-eye-slash'></i>");
       }
     }
     //forward the domain
@@ -1459,7 +1508,7 @@ function setupRightHalf(){
       var ticker_address = getHost(rental.address);
       var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='" + rental.address + "' class='is-info is-underlined'>" + ticker_address + "</a>";
       ticker_icon_color.addClass('is-accent');
-      ticker_icon.replaceWith("<i class='far fa-share'></i>");
+      ticker_icon.replaceWith("<i class='fal fa-share'></i>");
     }
     ticker_clone.find(".ticker-type").html(ticker_type);
 

@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  
+
 
   <section class="page-contents no-background section is-hidden is-medium min-height">
     <div class="container">
@@ -30,17 +30,17 @@
           <div id="step-content-site" class="step-content">
             <div class="notification is-pastel no-shadow has-border">
               <p id="site-regular-message" class="regular-message">
-                There are many different ways to create content for your new domain name.
-                See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
+                There are many different ways to display content for your domain name rental.
+                Here are some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
               </p>
               <p id="address-forward-message" class="is-hidden regular-message">
-                Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
+                Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link below to get started!
               </p>
               <p id="address-link-message" class="is-hidden regular-message">
-                Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
+                Display existing web content (e.g. a gif, image, meme) on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
               </p>
               <p id="address-build-message" class="is-hidden regular-message">
-                Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
+                Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>, whether its a personal portfolio, your new eCommerce store, or just a fun hobby website.
               </p>
               <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please choose a different website link.</p>
             </div>
@@ -117,7 +117,7 @@
                       <div class="icon">
                         <i class="fal fa-check-circle"></i>
                       </div>
-                      <span>Submit</span>
+                      <span>Next</span>
                     </button>
                   </div>
                 </div>
@@ -154,7 +154,7 @@
                     </div>
                   </div>
                 </div>
-                <small>We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                <small><span class='is-bold'>NOTE</span>: We are not affiliated with the sites listed above. Clicking an image will send you to the respective website.</small>
               </div>
 
               <div class="control is-hidden link-choice-column choice-column">
@@ -170,7 +170,7 @@
                       <div class="icon">
                         <i class="fal fa-check-circle"></i>
                       </div>
-                      <span>Submit</span>
+                      <span>Next</span>
                     </button>
                   </div>
                 </div>
@@ -207,7 +207,7 @@
                     </div>
                   </div>
                 </div>
-                <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                <small><span class='is-bold'>NOTE</span>: We are not affiliated with the sites listed above. Clicking an image will send you to the respective website.</small>
               </div>
 
               <div class="control is-hidden build-choice-column choice-column">
@@ -223,7 +223,7 @@
                       <div class="icon">
                         <i class="fal fa-check-circle"></i>
                       </div>
-                      <span>Submit</span>
+                      <span>Next</span>
                     </button>
                   </div>
                 </div>
@@ -305,7 +305,7 @@
                     </div>
                   </div>
                 </div>
-                <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                <small><span class='is-bold'>NOTE</span>: We are not affiliated with the sites listed above. Clicking an image will send you to the respective website.</small>
               </div>
 
               <div class="control">
@@ -334,15 +334,15 @@
               </p>
               <p id="stripe-regular-message" class="is-hidden regular-message">
                 Please enter your payment information. By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>.
+              </p>
+              <p id="paypal-regular-message" class="is-hidden regular-message">
+                By clicking the Confirm & Pay button,
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>. Clicking the button will bring you to the PayPal log in page where you can select your desired payment method.
               </p>
               <p id="bitcoin-regular-message" class="is-hidden regular-message">
                 Please enter your Bitcoin wallet address. By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
-              </p>
-              <p id="paypal-regular-message" class="is-hidden regular-message">
-                Please log in to your PayPal account. By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>.
               </p>
               <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
               <p id="stripe-success-message" class="regular-message is-hidden"></p>
@@ -363,22 +363,36 @@
                 </div>
               </div>
 
-              <%# <div id="bitcoin-choice" class="bitcoin-choice checkout-track box hover-effect choice-block">
+              <div id="paypal-choice" class="paypal-choice checkout-track box hover-effect choice-block">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-info">
+                        <i class="fal fa-paypal"></i>
+                    </span>
+                    <h2>Pay via PayPal</h2>
+                  </div>
+                  <p>
+                    Pay instantly using your PayPal balance or any other saved payment methods.
+                  </p>
+                </div>
+              </div>
+
+              <!-- <div id="bitcoin-choice" class="bitcoin-choice checkout-track box hover-effect choice-block">
                 <div class="content">
                   <div class="step-box">
                     <span class="icon is-medium is-accent">
-                        <i class="fal fa-bitcoin"></i>
+                      <i class="fal fa-bitcoin"></i>
                     </span>
                     <h2>Pay with Bitcoin</h2>
                   </div>
                   <p>
-                    Pay securely using your Bitcoin wallet.
+                    Harness the power of blockchain and pay securely using Bitcoin.
                   </p>
                 </div>
-              </div>%>
+              </div> -->
 
               <div class="control">
-                <button id="back-to-address-button" class="checkout-track button is-stylish">
+                <button id="back-to-address-button" class="back-button checkout-track button is-stylish">
                   <div class="icon is-small">
                     <i class="fal fa-long-arrow-left"></i>
                   </div>
@@ -427,7 +441,10 @@
                 </form>
               </div>
               <div class="control is-hidden bitcoin-choice-column choice-column">
-                 BITCOIN
+                 BITCOIN WALLET FORM
+              </div>
+              <div class="control is-hidden paypal-choice-column choice-column">
+                <img style="display:block;" src="/images/lib/credit-card-logos.png" alt="Credit Card Badges">
               </div>
               <div class="control is-grouped">
                 <div class="control">
@@ -444,6 +461,13 @@
                       <i class="fal fa-shopping-cart"></i>
                     </div>
                     <span>Confirm & Pay</span>
+                  </button>
+                  <div id="paypal-button" class="is-hidden"></div>
+                  <button id="paypal-button-loading" tabindex="0" class="is-loading is-fullwidth is-hidden checkout-track button is-black is-stylish">
+                    <div class="icon is-small">
+                      <i class="fal fa-shopping-cart"></i>
+                    </div>
+                    <span>PAYPAL CONFIRM & PAY LOADING BUTTON</span>
                   </button>
                 </div>
               </div>
@@ -463,7 +487,7 @@
                   </a>
                 </div>
               </div>
-              <a id="rental-preview-button" class="checkout-track button is-stylish is-primary no-shadow">
+              <a id="rental-preview-button" class="checkout-track button is-stylish is-primary no-shadow is-fullwidth">
                 <div class="icon is-small">
                   <i class="fal fa-search"></i>
                 </div>
@@ -557,6 +581,7 @@
   <script src="/js/lib/moment.min.js" type="text/javascript"></script>
   <script src="/js/lib/wNumb.js" type="text/javascript"></script>
   <script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
+  <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
   <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
   <script src="/js/routes/listings/listing_checkout_logic_rent.js" type="text/javascript"></script>
   <script src="/js/routes/listings/theming.js" type="text/javascript"></script>

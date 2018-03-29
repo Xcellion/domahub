@@ -1,14 +1,21 @@
+//<editor-fold>-------------------------------VARIABLES-------------------------------
+
 var current_listing = {};
 var referer_chart = false;
 var traffic_chart = false;
 var completed_domains = 0;
+
+//premium backdrops for promotion
 var premium_blackscreen_design = $("#premium-blackscreen-design").clone();
 var premium_blackscreen_hub = $("#premium-blackscreen-hub").clone();
+
 //hash table for categories
 var categories_hash = {};
 for (var x = 0 ; x < categories.length ; x++){
   categories_hash[categories[x].back] = categories[x].front;
 }
+
+//</editor-fold>
 
 $(document).ready(function(){
 
@@ -412,7 +419,9 @@ function checkBox(module_value, elem, child){
     }
   }
   function extraCloseModal(){
-    cancelListingChanges();
+    if (getParameterByName("tab") == "domain-info"){
+      cancelListingChanges();
+    }
   }
 
   function updateDomainExpenses(listing_info, selected_domain_ids){
@@ -1620,7 +1629,7 @@ function updateOffersTable(listing_info, total_domains){
       else if (listing_info.offers[x].accepted == 1){
         cloned_offer_row.find(".td-offer-status").text('Accepted').addClass('is-primary');
       }
-      else if (listing_info.offers[x].accepted == 0){
+      else if (listing_info.offers[x].accepted == 0 || listing_info.accepted == 1){
         cloned_offer_row.find(".td-offer-status").text('Rejected').addClass('is-danger');
         cloned_offer_row.addClass('rejected-offer unaccepted-offer');
       }
@@ -1631,7 +1640,7 @@ function updateOffersTable(listing_info, total_domains){
 
       //click to open modal
       cloned_offer_row.off().on("click", function(){
-        editOfferModal($(this).data("offer"), listing_info);
+        editOfferModal($(this).data("offer"), listing_info, total_domains);
       });
 
       $("#offers-wrapper").prepend(cloned_offer_row);
@@ -1656,11 +1665,19 @@ function finishedOfferTable(total_domains, listing_info){
     if (real_listing_info_obj.accepted || real_listing_info_obj.deposited || real_listing_info_obj.transferred){
       whatsNextOfferView(real_listing_info_obj, true);
     }
+    else {
+      $("#whats-next-offer-wrapper").addClass('is-hidden');
+      $("#offers-toolbar").removeClass('is-hidden');
+    }
+  }
+  else {
+    $("#whats-next-offer-wrapper").addClass('is-hidden');
+    $("#offers-toolbar").removeClass('is-hidden');
   }
 }
 
 //edit modal with specific offer info
-function editOfferModal(offer, listing_info){
+function editOfferModal(offer, listing_info, total_domains){
   $("#offer-modal").addClass('is-active');
   $("#offer-response").val("");
   $("#offer-modal-timestamp").text(moment(offer.timestamp).format("YYYY-MM-DD HH:mm"));
@@ -1669,27 +1686,34 @@ function editOfferModal(offer, listing_info){
   $("#offer-modal-email").text(offer.email);
   $("#offer-modal-phone").text(offer.phone);
   $("#offer-modal-ip").text(offer.user_ip).attr("href", "http://whatismyipaddress.com/ip/" + offer.user_ip);
-  $("#offer-modal-message").text(offer.message);
+  var offer_message = (offer.message) ? offer.message : "The buyer did not include a message";
+  $("#offer-modal-message").text(offer_message);
 
   //whats next button
   $("#offer-modal-whats-next").addClass('is-hidden');
 
-  //this offer was accepted or rejected! hide the buttons
-  if (offer.accepted == 1 || offer.accepted == 0){
+  //an offer was accepted or rejected! hide the buttons
+  if (offer.accepted == 1 || offer.accepted == 0 || listing_info.accepted){
     $("#offer-modal-button-wrapper").removeClass("remove-margin-bottom-content").addClass('is-hidden');
     $("#offer-response-label").removeClass('is-hidden');
     $("#offer-response").val((offer.response) ? offer.response : "You did not include a response.").addClass('is-disabled');
     var accept_or_reject_text = (offer.accepted == 1) ? "Accepted" : "Rejected";
     $("#offer-modal-domain").text(accept_or_reject_text + " offer for " + listing_info.domain_name);
 
-    //hide margin on modal
-    $("#offer-response-wrapper").addClass('remove-margin-bottom-content');
+    //show margin-top for "whats next?"
+    $("#offer-response-wrapper").removeClass('remove-margin-bottom-content');
 
-    //accepted and toolbar visible (not already displaying whats next)
-    if (!offer.transferred && offer.accepted && !$("#offers-toolbar").hasClass('is-hidden')){
-      $("#offer-modal-whats-next").removeClass('is-hidden').off().on("click", function(){
-        whatsNextOfferView(listing_info);
-      });
+    //only show what's next if we're not selecting only 1
+    if (total_domains > 1){
+      //accepted and toolbar visible (not already displaying whats next)
+      if ((!offer.transferred && offer.accepted && !$("#offers-toolbar").hasClass('is-hidden')) || listing_info.accepted){
+        $("#offer-modal-whats-next").removeClass('is-hidden').off().on("click", function(){
+          whatsNextOfferView(listing_info);
+        });
+      }
+    }
+    else {
+      $("#offer-response-wrapper").addClass('remove-margin-bottom-content');
     }
   }
   //not yet accepted
@@ -1726,7 +1750,7 @@ function resendAcceptEmail(resend_button, listing_info, offer_id, deposit){
         resend_button.addClass('is-hidden');
 
         //remove the resend button (for margin bottom on previous p)
-        $(".resend-wrapper").remove();
+        $(".resend-wrapper").addClass("is-hidden remove-margin-bottom-content");
       }
       else {
         errorMessage(data.message);
@@ -1803,6 +1827,9 @@ function offerSuccessHandler(accept, listing_info, offer, response_to_offerer){
 //accepted the offer, unhide the accepted help text
 function whatsNextOfferView(listing_info, dont_reselect){
   $("#offer-modal").removeClass('is-active');
+  $("#whats-next-offer-wrapper").removeClass('is-hidden');
+  $(".unaccepted-offer").addClass('is-hidden');
+  $(".resend-wrapper").removeClass("is-hidden");
 
   //recreate rows and only select this listing if necessary
   if (!dont_reselect){
@@ -1830,7 +1857,8 @@ function whatsNextOfferView(listing_info, dont_reselect){
   else if (listing_info.deposited){
     $("#deposited-offer").removeClass('is-hidden');
     deposit_offer = true;
-    $("#deposited-deadline").text(moment(offer.deadline).format("YYYY-MM-DD"));
+    var deadline = (offer.deadline) ? moment(new Date(offer.deadline)) : moment(offer.timestamp).add("2", "weeks");
+    $("#deposited-deadline").text(deadline.format("YYYY-MM-DD"));
   }
   else if (listing_info.accepted){
     $("#accepted-offer").removeClass('is-hidden');

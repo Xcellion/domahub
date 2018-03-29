@@ -171,6 +171,73 @@ module.exports = {
     database.query(query, "Failed to get all registrars connected to account " + account_id + "!", callback, account_id);
   },
 
+  //gets all transactions (rentals + sales) connected to specific account
+  getAccountTransactions : function(account_id, callback){
+    console.log("DB: Attempting to get all transactions connected to account " + account_id + "...");
+    var query = "SELECT * FROM \
+                (SELECT  \
+                  'sale' as transaction_type, \
+                  stats_contact_history.id as id, \
+                  listings.domain_name, \
+                  listings.id as listing_id, \
+                  stats_contact_history.timestamp as date_created, \
+                  stats_contact_history.withdrawn_on as withdrawn_on, \
+                  stats_contact_history.transaction_id as transaction_id, \
+                  stats_contact_history.payment_type as payment_type, \
+                  (stats_contact_history.offer * 100) as transaction_cost, \
+                  NULL as transaction_details, \
+                  0 as transaction_cost_refunded, \
+                  stats_contact_history.doma_fees as doma_fees, \
+                  stats_contact_history.payment_fees as payment_fees, \
+                  (stats_contact_history.transferred && stats_contact_history.withdrawn_on IS NULL) as available \
+                FROM stats_contact_history \
+                INNER JOIN listings \
+                  ON listings.id = stats_contact_history.listing_id \
+                WHERE stats_contact_history.listing_id IN (SELECT id FROM listings WHERE owner_id = ?) AND deposited = 1 \
+              UNION ALL \
+                SELECT \
+                  'rental' as transaction_type, \
+                  rentals.rental_id as id, \
+                  listings.domain_name, \
+                  listings.id as listing_id, \
+                  rentals.date_created as date_created, \
+                  rentals.withdrawn_on as withdrawn_on, \
+                  rentals.transaction_id as transaction_id, \
+                  rentals.payment_type as payment_type, \
+                  rentals.total_cost as transaction_cost, \
+                  rentals.amount_refunded as transaction_cost_refunded, \
+                  NULL as transaction_details, \
+                  rentals.doma_fees as doma_fees, \
+                  rentals.payment_fees as payment_fees, \
+                  (rentals.amount_refunded IS NULL && rentals.withdrawn_on IS NULL) as available \
+                FROM rentals \
+                INNER JOIN listings \
+                  ON listings.id = rentals.listing_id \
+                WHERE rentals.listing_id IN (SELECT id FROM listings WHERE owner_id = ?) \
+              UNION ALL \
+                SELECT \
+                  'expense' as transaction_type, \
+                  domain_expenses.id as id, \
+                  listings.domain_name, \
+                  listings.id as listing_id, \
+                  domain_expenses.expense_date as date_created, \
+                  NULL as withdrawn_on, \
+                  NULL as transaction_id, \
+                  NULL as payment_type, \
+                  ROUND(domain_expenses.expense_cost * 100) as transaction_cost, \
+                  domain_expenses.expense_name as transaction_details, \
+                  NULL as transaction_cost_refunded, \
+                  NULL as doma_fees, \
+                  NULL as payment_fees, \
+                  0 as available \
+                FROM domain_expenses \
+                INNER JOIN listings \
+                  ON listings.id = domain_expenses.listing_id \
+                WHERE domain_expenses.listing_id IN (SELECT id FROM listings WHERE owner_id = ?) ) dummy \
+                ORDER BY date_created ";
+    database.query(query, "Failed to get all transactions connected to account " + account_id + "!", callback, [account_id, account_id, account_id]);
+  },
+
   //gets the stripe ID and listing type of a listing owner
   getStripeAndType : function(domain_name, callback){
     console.log("DB: Attempting to get the Stripe ID of the owner of: " + domain_name + "...");
@@ -215,7 +282,7 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------SETS-------------------------------
+  //<editor-fold>-------------------------------CREATES-------------------------------
 
   //creates a new account
   newAccount : function(account_info, callback){

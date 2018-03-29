@@ -16,7 +16,7 @@
   		<form id="target" method="post" autocomplete="off">
   			<label class="label" for="email-input">Email</label>
 				<div class="control has-icon has-icon-right">
-					<input required class="input is-medium no-shadow" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+					<input required class="input is-medium no-shadow" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" oninvalid="this.setCustomValidity('Please enter a valid email address!')" oninput="setCustomValidity('')"/>
 					<div class="icon is-hidden is-success">
 						<i class="fal fa-check"></i>
 					</div>
@@ -30,7 +30,7 @@
 					</span>
 				</label>
 				<div class="control has-icon has-icon-right">
-					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium no-shadow" name="username" type="text" id="username-input" spellcheck="false" value="" />
+					<input minlength="3" maxlength="50" required class="input is-medium no-shadow" name="username" type="text" id="username-input" spellcheck="false" value=""  oninvalid="this.setCustomValidity('Please enter a valid username!')" oninput="setCustomValidity('')"/>
 					<div class="icon is-hidden is-success">
 						<i class="fal fa-check"></i>
 					</div>
@@ -39,12 +39,12 @@
 					</div>
 				</div>
   			<label class="label" for="pw-input">Password
-					<span class="icon is-small is-tooltip" data-balloon="At least 6 characters." data-balloon-pos="up">
+					<span class="icon is-small is-tooltip" data-balloon="At least 3 characters." data-balloon-pos="up">
 						<i class="fal fa-question-circle"></i>
 					</span>
 				</label>
 				<div class="control has-icon has-icon-right">
-					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+					<input minlength="3" maxlength="70" required class="input is-medium no-shadow" name="password" type="password" id="pw-input" autocomplete="new-password" value=""  oninvalid="this.setCustomValidity('Please enter a valid password!')" oninput="setCustomValidity('')"/>
 					<div class="icon is-hidden is-success">
 						<i class="fal fa-check"></i>
 					</div>
@@ -54,7 +54,7 @@
 				</div>
   			<label class="label" for="verify-pw">Confirm Password</label>
 				<div class="control has-icon has-icon-right">
-					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium no-shadow" name="verify-pw" type="password" id="verify-pw" value="" autocomplete="off"/>
+					<input minlength="3" maxlength="70" required class="input is-medium no-shadow" name="verify-pw" type="password" id="verify-pw" value="" autocomplete="off" oninvalid="this.setCustomValidity('Please enter a valid password!')" oninput="setCustomValidity('')"/>
           <div class="icon is-hidden is-success">
             <i class="fal fa-check is-success"></i>
           </div>

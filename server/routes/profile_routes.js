@@ -5,6 +5,7 @@ var auth_functions = require('../controller/auth_functions.js');
 var profile_functions = require('../controller/profile_functions.js');
 var owner_functions = require('../controller/listing_owner_functions.js');
 var stripe_functions = require('../controller/stripe_functions.js');
+var paypal_functions = require('../controller/paypal_functions.js');
 
 //</editor-fold>
 
@@ -40,11 +41,11 @@ module.exports = function(app){
   app.get("/profile/dashboard", [
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
-    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
     profile_functions.updateAccountSettingsPassthrough,
     profile_functions.getAccountListings,
+    profile_functions.getAccountTransactionsLocal,
     profile_functions.authWithGoogle,
     profile_functions.renderDashboard
   ]);
@@ -137,7 +138,6 @@ module.exports = function(app){
     profile_functions.getAccountListings,
     profile_functions.getAccountRegistrars,
     stripe_functions.getStripeAccount,
-    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeCustomerInvoices,
     profile_functions.getUnredeemedPromoCodes,
@@ -159,8 +159,8 @@ module.exports = function(app){
   app.post("/profile/gettransactions", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
-    stripe_functions.getStripeAccount,
-    stripe_functions.getStripeTransactions
+    profile_functions.getAccountTransactionsLocal,
+    profile_functions.getAccountTransactionsRemote
   ]);
 
   //</editor-fold>
@@ -222,7 +222,7 @@ module.exports = function(app){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------STRIPE TRANSFER-------------------------------
+  //<editor-fold>-------------------------------STRIPE BANK-------------------------------
 
   //post to create new stripe managed account or update stripe managed account
   app.post("/profile/payout", [
@@ -244,16 +244,26 @@ module.exports = function(app){
     stripe_functions.createStripeBank
   ]);
 
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------WITHDRAWAL-------------------------------
+
   //transfer to bank
   app.post("/profile/transfer", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
     stripe_functions.getStripeAccount,
-    stripe_functions.getStripeTransactions,
     stripe_functions.getStripeCustomer,
     stripe_functions.getStripeSubscription,
-    stripe_functions.transferMoney,
-    stripe_functions.getStripeTransactions
+    profile_functions.checkWithdrawalAccounts,
+    profile_functions.calculateWithdrawalAmount,
+    stripe_functions.withdrawToStripeBank,
+    paypal_functions.withdrawToPayPal,
+    profile_functions.withdrawToPayoneer,
+    profile_functions.withdrawToBitcoin,
+    profile_functions.markTransactionsWithdrawn,
+    profile_functions.getAccountTransactionsLocal,
+    profile_functions.getAccountTransactionsRemote
   ]);
 
   //</editor-fold>
