@@ -1,6 +1,6 @@
 //resize marquee
 $(window).resize(function(){
-  updateMarqueeHandlers($(".transactions-row-domain"));
+  updateMarqueeHandlers($(".transactions-row-domain.sort-by-domain_name"));
 });
 
 $(document).ready(function() {
@@ -311,8 +311,8 @@ $(document).ready(function() {
       e.preventDefault();
       submitChanges({
         paypal_email: $("#paypal_email-input").val().toLowerCase(),
-        payoneer_email: $("#payoneer_email-input").val().toLowerCase(),
-        bitcoin_address: $("#bitcoin_address-input").val().toLowerCase()
+        // payoneer_email: $("#payoneer_email-input").val().toLowerCase(),
+        // bitcoin_address: $("#bitcoin_address-input").val().toLowerCase()
       });
     });
 
@@ -1463,7 +1463,7 @@ function showSectionByURL(){
     $(".withdrawal-available").data("total_available", total_available);
 
     //if there are funds available and a bank to withdraw to
-    if (total_available > 0 && user.stripe_account && user.stripe_bank){
+    if (total_available > 0 && (user.stripe_account && user.stripe_bank || user.paypal_email)){
       $("#transfer-button").removeClass('is-hidden').prev(".control").removeClass("remove-margin-bottom-content");
     }
     else {

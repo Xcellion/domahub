@@ -104,7 +104,9 @@ th.has-text-right, td.has-text-right{
 }
 
 .transactions-row-available {
-  max-width: 200px;
+  @include widescreen {
+    width: 200px;
+  }
 }
 
 .transactions-row-domain {
@@ -113,15 +115,17 @@ th.has-text-right, td.has-text-right{
 }
 
 .transactions-row-date {
-  max-width:120px;
+  @include widescreen {
+    width:120px;
+  }
 }
 
 .transactions-row-type {
-  max-width: 90px;
+  width: 90px;
 }
 
 .transactions-row-payment {
-  max-width: 110px;
+  width: 110px;
 }
 
 #transactions-info {
