@@ -36,15 +36,19 @@ module.exports = {
   checkContactInfo : function(req, res, next){
     console.log("LBF: Checking posted contact details for offer...");
 
-    if (!req.session.listing_info.buy_price || req.session.listing_info.buy_price <= 0){
+    //trying to BIN but it's not enabled for BIN
+    if (req.path.indexOf("/buy") != -1 && (!req.session.listing_info.buy_price || req.session.listing_info.buy_price <= 0)){
       error.handler(req, res, "This domain is unavailable for buy it now! Please enter an offer and the owner will get back to you.", "json");
     }
+    //no name
     else if (!req.body.contact_name){
       error.handler(req, res, "Please enter your name!", "json");
     }
+    //invalid email
     else if (!validator.isEmail(req.body.contact_email)){
       error.handler(req, res, "Please enter a valid email address!", "json");
     }
+    //invalid phone number
     else if (!req.body.contact_phone || !phoneUtil.isValidNumber(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL)){
       error.handler(req, res, "Please enter a real phone number! Did you select the correct country for your phone number?", "json");
     }
@@ -545,6 +549,19 @@ module.exports = {
     }
     //paying by paypal
     else if (req.body.payment_type == "paypal" && req.body.paymentID && req.body.payerID){
+      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong with your payment! Please refresh the page and try again.", "json");
+    }
+  },
+
+  //check if the payment method of BIN was successful
+  checkPaymentSuccessful : function(req, res, next){
+    console.log("LRF: Checking BIN payment type...");
+
+    //transaction ID was created in previous steps (either via stripe or paypal)
+    if (req.session.new_buying_info.purchase_transaction_id){
       next();
     }
     else {

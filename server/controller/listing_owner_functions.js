@@ -1501,6 +1501,9 @@ module.exports = {
     listing_model.newDomainExpenses(domain_expenses, function(result){
       if (result.state == "success"){
         //after creation, get expenses again
+        if (req.user.transactions){
+          delete req.user.transactions;
+        }
         next();
       }
       else {

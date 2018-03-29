@@ -94,6 +94,7 @@ th.has-text-right, td.has-text-right{
   text-align:right !important;
 }
 
+//transactions table
 .transaction-header-sort{
   cursor:pointer;
 }
@@ -102,13 +103,25 @@ th.has-text-right, td.has-text-right{
   max-height:calc(100vh - 300px) !important;
 }
 
-.no-border-bottom {
-  border-bottom-width: 0px !important;
-  margin-bottom:0;
+.transactions-row-available {
+  max-width: 200px;
 }
 
-.remove-margin-bottom-content {
-  margin-bottom:0 !important;
+.transactions-row-domain {
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+.transactions-row-date {
+  max-width:120px;
+}
+
+.transactions-row-type {
+  max-width: 90px;
+}
+
+.transactions-row-payment {
+  max-width: 110px;
 }
 
 #transactions-info {
@@ -126,6 +139,15 @@ th.has-text-right, td.has-text-right{
 .transactions-row-available .icon {
   display: inline-block;
   margin-left: 5px;
+}
+
+.no-border-bottom {
+  border-bottom-width: 0px !important;
+  margin-bottom:0;
+}
+
+.remove-margin-bottom-content {
+  margin-bottom:0 !important;
 }
 
 .select {

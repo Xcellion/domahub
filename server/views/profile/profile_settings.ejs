@@ -990,27 +990,27 @@
 	            <table id="transactions-table" class="table has-shadow is-hidden">
 	              <thead>
 	                <tr>
-                    <th class="transaction-header-sort">
+                    <th class="transaction-header-sort transactions-row-available">
                       <span>Status</span>
                       <div class="icon is-small" data-sort-by="status"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
                     </th>
-                    <th class="transaction-header-sort">
+                    <th class="transaction-header-sort transactions-row-date">
                       <span>Date</span>
                       <div class="icon is-small" data-sort-by="date_created"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
                     </th>
-                    <th class="transaction-header-sort">
+                    <th class="transaction-header-sort transactions-row-domain">
                       <span>Domain Name</span>
                       <div class="icon is-small" data-sort-by="domain_name"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
                     </th>
-                    <th class="transaction-header-sort has-text-right">
+                    <th class="transaction-header-sort transactions-row-amount has-text-right">
                       <span>Earnings</span>
                       <div class="icon is-small" data-sort-by="transaction_cost"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
                     </th>
-                    <th class="transaction-header-sort is-hidden-mobile">
-                      <span>Transaction Type</span>
+                    <th class="transaction-header-sort transactions-row-type is-hidden-mobile">
+                      <span>Type</span>
                       <div class="icon is-small" data-sort-by="transaction_type" ><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
                     </th>
-                    <th class="transaction-header-sort is-hidden-mobile">
+                    <th class="transaction-header-sort transactions-row-payment is-hidden-mobile">
                       <span>Payment Method</span>
                       <div class="icon is-small" data-sort-by="payment_type" ><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
                     </th>
@@ -1506,6 +1506,7 @@
 
 	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
   <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
+  <script src="/js/jquery/jquery.marquee.min.js" type="text/javascript"></script>
   <script src="/js/lib/moment.min.js" type="text/javascript"></script>
   <script src="/js/lib/wNumb.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
