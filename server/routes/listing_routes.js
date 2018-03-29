@@ -269,6 +269,7 @@ module.exports = function(app){
       buyer_functions.checkPaymentType,
       stripe_functions.chargeMoneyBuy,
       paypal_functions.chargeMoneyBuy,
+      buyer_functions.checkPaymentSuccessful,
       buyer_functions.createBuyContactRecord,
       buyer_functions.alertOwnerBIN,
       buyer_functions.alertBuyerNextSteps,

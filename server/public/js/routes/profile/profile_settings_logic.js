@@ -1,3 +1,8 @@
+//resize marquee
+$(window).resize(function(){
+  updateMarqueeHandlers($(".transactions-row-domain"));
+});
+
 $(document).ready(function() {
 
   //<editor-fold>-------------------------------ACCOUNT TAB-------------------------------
@@ -1260,6 +1265,11 @@ function showSectionByURL(){
         $("#transactions-table").addClass("is-hidden");
         $("#no-transactions-table").removeClass("is-hidden");
       }
+
+      $(document).ready(function () {
+        updateMarqueeHandlers($(".transactions-row-domain.sort-by-domain_name"));
+      });
+
     }
     else {
       $("#transactions-table").addClass("is-hidden");
@@ -1383,7 +1393,7 @@ function showSectionByURL(){
           }
           //if has a set available date
           else if (payment_available_on.isValid() && payment_available_on.valueOf() > new Date().getTime()){
-            temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="bubble-tooltip icon is-small is-danger" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + payment_available_on.format("MMMM DD") + '!" data-balloon-pos="up"><i class="fal fa-exclamation-circle"></i></div>');
+            temp_row.find(".transactions-row-available").text("Not yet available").append('<div class="bubble-tooltip icon is-small is-danger" data-balloon-length="medium" data-balloon="Available for withdrawal on ' + payment_available_on.format("YYYY-MM-DD") + '!" data-balloon-pos="up"><i class="fal fa-exclamation-circle"></i></div>');
             temp_row.data("notavailable", true);
           }
           //if okay from payment details ('approved' for paypal, 'available' for stripe)
@@ -1706,7 +1716,7 @@ function showSectionByURL(){
     }
     //domain expense related stuff
     else {
-      $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid" + ((transaction.transaction_details) ? " for " + transaction.transaction_details : ""));
+      $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid" + ((transaction.transaction_details) ? ' for "' + transaction.transaction_details + '"': ""));
       $("#commission-promo-message, #pending-transfer-wrapper, #available-on-wrapper, #payment-fees-wrapper").addClass("is-hidden");
 
       //button for edit / delete
@@ -1850,6 +1860,28 @@ function moneyCountAnimation(elem, number){
     step: function (now) {
       $(this).text(moneyFormat.to(parseFloat(now)));
     }
+  });
+}
+
+//make marquees move if necessary (function needed for resize)
+function updateMarqueeHandlers(elem){
+  elem.marquee("destroy").each(function(){
+    if (this.offsetWidth < this.scrollWidth){
+      updateMarqueeHandler($(this));
+    }
+  });
+}
+
+//start a marquee on an element (handle destroy when mouseleave)
+function updateMarqueeHandler(elem){
+  elem.marquee("destroy").marquee({
+    startVisible : true,
+    delayBeforeStart : 0,
+    speed : 100
+  }).marquee("pause").on("mouseenter", function(){
+    $(this).marquee("resume");
+  }).on("mouseleave", function(){
+    updateMarqueeHandler(elem);
   });
 }
 

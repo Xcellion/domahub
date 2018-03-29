@@ -277,7 +277,7 @@ module.exports = {
       }
     }
     else {
-      error.handler(req, res, "Something went wrong with the price of the domain! Please refresh the page and try again!", 'json');
+      next();
     }
   },
 

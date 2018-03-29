@@ -184,7 +184,7 @@ module.exports = {
                   stats_contact_history.withdrawn_on as withdrawn_on, \
                   stats_contact_history.transaction_id as transaction_id, \
                   stats_contact_history.payment_type as payment_type, \
-                  stats_contact_history.offer as transaction_cost, \
+                  (stats_contact_history.offer * 100) as transaction_cost, \
                   NULL as transaction_details, \
                   0 as transaction_cost_refunded, \
                   stats_contact_history.doma_fees as doma_fees, \

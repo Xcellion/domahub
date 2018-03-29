@@ -746,7 +746,7 @@ module.exports = {
 
               //various info for keeping track of transactions on our end
               req.session.new_buying_info.purchase_payment_type = "stripe";
-              req.session.new_buying_info.purchase_transaction_id = payment.id;
+              req.session.new_buying_info.purchase_transaction_id = charge.id;
               req.session.new_buying_info.purchase_doma_fees = doma_fees;
               req.session.new_buying_info.purchase_payment_fees = stripe_fees;
 
