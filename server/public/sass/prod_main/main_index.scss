@@ -34,6 +34,12 @@
   }
 }
 
+.centered-button {
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+}
+
 .bubble {
   background-image: url("/images/main/drawing.svg");
   background-size: cover;

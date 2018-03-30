@@ -1231,27 +1231,27 @@ function namesilo(req, res, next){
   //   });
   // });
 
-  // for (var x = 0 ; x < 200 ; x++){
-    //register a new domain
-    // request({
-    //   url: namesilo_url + "/registerDomain",
-    //   method: "GET",
-    //   timeout: 10000,
-    //   qs : {
-    //     version : 1,
-    //     type : "xml",
-    //     key : namesilo_api,
-    //     domain : "testdomahub.com",
-    //     years : 1
-    //   }
-    // }, function(err, response, body){
-    //   parseString(body, {trim: true}, function (err, result) {
-    //     res.json(result);
-    //   });
-    // });
-  // }
-  // res.send("okay");
-
+  // register a new domain
+  for (var x = 0 ; x < 20 ; x++){
+    request({
+      url: namesilo_url + "/registerDomain",
+      method: "GET",
+      timeout: 10000,
+      qs : {
+        version : 1,
+        type : "xml",
+        key : namesilo_api,
+        domain : "testdomahub" + x + ".com",
+        years : 1
+      }
+    }, function(err, response, body){
+      parseString(body, {trim: true}, function (err, result) {
+        console.log(body);
+        // res.json(result);
+      });
+    });
+  }
+  res.send("okay");
 
   // //add A record for 208
   // request({
