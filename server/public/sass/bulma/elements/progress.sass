@@ -9,10 +9,13 @@
   padding: 0
   width: 100%
   &::-webkit-progress-bar
+    +transition(all 300ms ease)
     background-color: $border
   &::-webkit-progress-value
+    +transition(width 300ms ease)
     background-color: $text
   &::-moz-progress-bar
+    +transition(all 300ms ease)
     background-color: $text
   // Colors
   @each $name, $pair in $colors

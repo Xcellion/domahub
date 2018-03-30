@@ -50,6 +50,16 @@
     margin: 5px 15px
   ul
     list-style: none
+    &.is-horizontal
+      list-style: circle
+      li
+        display: inline-block
+        &:not(:last-child)
+          margin-right: 10px
+        &::before
+          content: "•"
+          padding-right: 2px
+          color: $white
     &.is-vertical
       li
         line-height: 1.5

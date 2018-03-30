@@ -93,14 +93,6 @@
   }
 }
 
-#collapse-submenu {
-  @include laptop {
-    margin: 0;
-    padding-left: 0;
-    border-left: none;
-  }
-}
-
 .right-content {
   @include transition(left 0.2s ease);
   background-color: $pastel;
@@ -249,18 +241,6 @@
   @include mobile {
     right: 0;
   }
-}
-
-.menu-label {
-  margin-top:0;
-  margin-bottom:0;
-}
-
-.smile {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
-  width: 36px;
 }
 
 .columns {
