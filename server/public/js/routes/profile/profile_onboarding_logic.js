@@ -48,12 +48,8 @@ $(document).ready(function() {
   //click next button to submit form for current step
   $(".onboarding-step-form").on("submit", function(e){
     e.preventDefault();
-    //some vars to remember
-    var currentProgress = parseFloat($(".progress").attr("value"));
-    var currentStep = $(this).closest(".onboarding-step-wrapper");
-    //progress the bar
-    $(".progress").attr("value", currentProgress + 10);
 
+    var currentStep = $(this).closest(".onboarding-step-wrapper");
     submitSpecificStepForm(currentStep, currentStep.attr("id").replace("onboarding-step-", ""));
   });
 
@@ -67,18 +63,47 @@ $(document).ready(function() {
     showSpecificStep(true, $(this).closest(".onboarding-step-wrapper").prev(".onboarding-step-wrapper").attr("id").replace("onboarding-step-", ""), true);
   });
 
-  //</editor-fold>
+  //navigate to a step in the side menu
+  $(".step-link").on("click", function() {
+    $(".step-link").removeClass("is-active");
+    $(this).addClass("is-active");
+    showSpecificStep(true, $(this).data("step").toString());
+  });
+
+  //button to toggle collapsed steps menu on lower width
+  $(".steps-menu-button").on("click", function() {
+    $(".steps-menu").toggleClass("is-active");
+  });
+
+  //hide steps menu on click outside
+  $(document).on("click", function(event) {
+    if (!$(event.target).closest(".steps-menu-button").length && !$(event.target).closest(".menu-list").length) {
+      if ($(".steps-menu").is(":visible")) {
+        $(".steps-menu").removeClass("is-active");
+      }
+    }
+  });
+
+  //hide modal on escape key
+  $(document).on("keyup", function(e) {
+    if (e.which == 27) {
+      closeModals();
+    }
+  });
+
+  //close modal
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    closeModals();
+  });
 
 });
+//</editor-fold>
 
 //<editor-fold>-------------------------------GENERIC STEP LOGIC-------------------------------
 
 //shows a specific step or gets the current step from URL (or show first step)
 //push = whether or not to add to history
 function showSpecificStep(push, current_step, backwards){
-
-  //hide all left menu buttons (except setup wizard)
-  $(".menu-item:not(#onboarding-left-tab-wrapper)").addClass("is-hidden");
 
   var url_step = getParameterByName("step");
 
@@ -92,12 +117,22 @@ function showSpecificStep(push, current_step, backwards){
     current_step = "1";
   }
 
+  //check previous form submits and show check icon accordingly
+  for (var i = 1; i < current_step; i++) {
+    checkFormInputs(i);
+  }
+
+  //update step-link active
+  $(".step-link").removeClass("is-active");
+  $(".step-link[data-step=" + current_step  + "]").addClass("is-active");
+
   //update URL
   updateQueryStringParam("step", current_step, push);
 
   //show specific step and run logic
-  $(".onboarding-step-wrapper").addClass('is-hidden');
-  $("#onboarding-step-" + current_step).removeClass('is-hidden');
+  $(".onboarding-step-wrapper").addClass("is-hidden");
+  $("#onboarding-step-" + url_step).removeClass("slide-in is-hidden").addClass('slide-out');
+  $("#onboarding-step-" + current_step).removeClass('slide-out is-hidden').addClass("slide-in");
   runStepSpecificLogic(current_step, backwards);
 }
 
@@ -180,12 +215,129 @@ function submitSpecificStepForm(form_elem, step_number){
   }
 }
 
+//modal close function
+function closeModals(){
+  clearNotification();
+  $(".modal").find("input, textarea, select").val("");
+  $(".modal").removeClass('is-active');
+  $("#cancel-premium-button").addClass("is-disabled");
+
+  //closing announcement modal
+  if ($("#announcement-modal").length == 1){
+    bakeCookie("announcement", true);
+  }
+
+  //extra function for some pages
+  if (typeof extraCloseModal != "undefined"){
+    extraCloseModal();
+  }
+}
+
+//check to see if a form has all input values filled
+function checkFormInputs(step_number) {
+  var formInputs = $("#step-form-" + step_number).find(".input");
+  var formSelects = $("#step-form-" + step_number).find("select");
+  var counter = 0;
+
+  //check each input
+  formInputs.each(function(element) {
+    if ($(formInputs[element]).val()) {
+      // console.log(element + "st input complete");
+      counter++;
+    }
+    else {
+      // console.log(element + "st input incomplete");
+      counter--;
+    }
+  });
+
+  //check each select
+  formSelects.each(function(element) {
+    if ($(formSelects[element]).val()) {
+      // console.log(element + "st select complete");
+      counter++;
+    }
+    else {
+      // console.log(element + "st select incomplete");
+      counter--;
+    }
+  });
+
+  //show check or minus icon accordingly
+  if (counter < 0) {
+    // console.log("Showing minuses");
+    $(".step-link[data-step=" + step_number + "]").find(".is-primary").addClass("is-hidden");
+    $(".step-link[data-step=" + step_number + "]").find(".is-danger").removeClass("is-hidden");
+  }
+  else {
+    // console.log("Showing checks");
+    $(".step-link[data-step=" + step_number + "]").find(".is-danger").addClass("is-hidden");
+    $(".step-link[data-step=" + step_number + "]").find(".is-primary").removeClass("is-hidden");
+  }
+}
+
+//show or hide loading screen
+function toggleLoadingScreen(current_form, show, message) {
+  if (show) {
+    $(current_form).addClass('is-hidden');
+    $(".loading-screen").removeClass("is-hidden");
+  }
+  else {
+    $(current_form).removeClass('is-hidden');
+    $(".loading-screen").addClass("is-hidden");
+  }
+
+  if (message) {
+    $("#loading-screen-heading").html(message);
+  }
+}
+
+//get a URL query param by name
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+  results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function updateQueryStringParam(key, value, push) {
+  var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
+  urlQueryString = document.location.search,
+  newParam = key + '=' + value,
+  params = '?' + newParam;
+  // If the "search" string exists, then build params from it
+  if (urlQueryString) {
+    updateRegex = new RegExp('([\?&])' + key + '[^&]*');
+    removeRegex = new RegExp('([\?&])' + key + '=[^&;]+[&;]?');
+    if( typeof value == 'undefined' || value == null || value == '' ) { // Remove param if value is empty
+      params = urlQueryString.replace(removeRegex, "$1");
+      params = params.replace( /[&;]$/, "" );
+    } else if (urlQueryString.match(updateRegex) !== null) { // If param exists already, update it
+      params = urlQueryString.replace(updateRegex, "$1" + newParam);
+    } else { // Otherwise, add it to end of query string
+      params = urlQueryString + '&' + newParam;
+    }
+  }
+  params = (params == "?") ? "" : params;
+  if (push){
+    window.history.pushState({}, "", baseUrl + params);
+  }
+  else {
+    window.history.replaceState({}, "", baseUrl + params);
+  }
+};
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------STEP 1 (WELCOME MESSAGE)-------------------------------
 
 function stepOneLogic(backwards){
   console.log("step 1 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 0);
 }
 
 function stepOneSubmitFormLogic(form_elem){
@@ -201,12 +353,13 @@ function stepOneSubmitFormLogic(form_elem){
 
 function stepTwoLogic(backwards){
   console.log("step 2 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 10);
 }
 
 
 function stepTwoSubmitFormLogic(form_elem){
   console.log("step 2 specific form submission");
-
   //show next step
   showSpecificStep(true, "3");
 }
@@ -217,6 +370,8 @@ function stepTwoSubmitFormLogic(form_elem){
 
 function stepThreeLogic(backwards){
   console.log("step 3 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 20);
 }
 
 function stepThreeSubmitFormLogic(form_elem){
@@ -248,6 +403,8 @@ function stepThreeSubmitFormLogic(form_elem){
 
 function stepFourLogic(backwards){
   console.log("step 4 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 30);
 
   //if we dont have a stripe account, skip bank account
   if (!user.stripe_account && !user.stripe_account_id){
@@ -269,7 +426,8 @@ function stepFourLogic(backwards){
 function stepFourSubmitFormLogic(form_elem){
   console.log("step 4 specific form submission");
 
-  form_elem.find(".onboarding-next-button").addClass('is-loading');
+  toggleLoadingScreen(form_elem, true, "Submitting your information...");
+
   var bank_info = {
     country: $('#bank_country-input').val(),
     currency: $('#currency-input').val(),
@@ -287,7 +445,7 @@ function stepFourSubmitFormLogic(form_elem){
   //create stripe token
   Stripe.bankAccount.createToken(bank_info, function(status, response){
     if (status != 200){
-      form_elem.find(".onboarding-next-button").removeClass('is-loading');
+      toggleLoadingScreen(form_elem, false);
       errorMessage(response.error.message);
     }
     else {
@@ -383,7 +541,7 @@ function submitBank(stripe_token, updating_bank, form_elem){
     },
     method: "POST"
   }).done(function(data){
-    form_elem.find(".onboarding-next-button").removeClass('is-loading');
+    toggleLoadingScreen(form_elem, false);
     if (data.state == "success"){
       if (data.user){
         user = data.user;
@@ -408,6 +566,8 @@ function submitBank(stripe_token, updating_bank, form_elem){
 
 function stepFiveLogic(backwards){
   console.log("step 5 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 40);
 }
 
 function stepFiveSubmitFormLogic(form_elem){
@@ -441,6 +601,8 @@ function stepFiveSubmitFormLogic(form_elem){
 
 function stepSixLogic(backwards){
   console.log("step 6 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 50);
 
   //if already premium, skip this step
   if (user.stripe_subscription_id && user.stripe_subscription){
@@ -491,6 +653,9 @@ function stepSixSubmitFormLogic(form_elem){
 
 function stepSevenLogic(backwards){
   console.log("step 7 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 60);
+
   $("#go-step-8, #go-step-9").off().on("click", function() {
     if ($(this).attr("id") == "go-step-8") {
       showSpecificStep(true, "8");
@@ -511,6 +676,8 @@ function stepSevenSubmitFormLogic(form_elem){
 
 function stepEightLogic(backwards){
   console.log("step 8 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 70);
 
   updateRegistrars();
 }
@@ -556,6 +723,8 @@ function stepEightSubmitFormLogic(form_elem){
 
 function stepNineLogic(backwards){
   console.log("step 9 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 80);
 
   if (backwards && domain_created_by == "connect"){
     showSpecificStep(true, "8");
@@ -601,6 +770,8 @@ function stepNineSubmitFormLogic(form_elem){
 
 function stepTenLogic(backwards){
   console.log("step 10 specific logic");
+  //advance progress bar
+  $(".progress").attr("value", 90);
 
   //if we refreshed and came to this step, show step 8 instead
   if (domain_created_by == ""){
@@ -752,7 +923,7 @@ function stepTenSubmitFormLogic(form_elem){
       form_elem.find(".onboarding-next-button").addClass('is-loading');
       deleteGoodTableRows();
       clearNotification();
-      infoMessage("Now creating listings...this process could take a long time. Do not refresh the page or close the browser when creating a large set of listings.");
+      toggleLoadingScreen(form_elem, true, "Now adding your domains...");
       $.ajax({
         url: "/listings/create",
         method: "POST",
@@ -857,6 +1028,8 @@ function stepTenSubmitFormLogic(form_elem){
 //logic for after all steps are finished
 function finishedAllStepsLogic(){
   console.log("finished all steps!");
+  //advance progress bar
+  $(".progress").attr("value", 100);
 
   //show all left menu buttons (MAKE THIS DYNAMIC)
   $(".menu-item").removeClass("is-hidden");

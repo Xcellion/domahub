@@ -4,8 +4,8 @@ var times_errored = 0;
 
 //display/hide error messages
 function errorMessage(message){
-  //hide success
-  $("#error-notification, #success-notification, #info-notification").addClass('is-hidden').removeClass("is-active");
+  //remove any colors and hide existing notification
+  $("#popup-notification").removeClass("is-primary is-info growl-out");
 
   //domahub demo
   if (message == "demo-error"){
@@ -23,45 +23,46 @@ function errorMessage(message){
       times_errored++;
     }
 
-    $("#error-notification").removeClass('is-hidden').addClass("is-active");
-    $("#error-message").html(message);
+    $("#popup-notification").removeClass("is-hidden").addClass('is-danger growl-in');
+    $("#popup-notification-message").html(message);
     contactLinkHandler();
   }
   else if (!message) {
-    $("#error-notification").addClass('is-hidden').removeClass("is-active");
+    $("#popup-notification").removeClass('growl-in');
   }
 }
 
 //display success messages
 function successMessage(message){
-  //hide any error
-  $("#error-notification, #success-notification, #info-notification").addClass('is-hidden').removeClass("is-active");
+  //remove any colors and hide existing notification
+  $("#popup-notification").removeClass("is-danger is-info growl-out");
 
   if (message){
-    $("#success-notification").removeClass('is-hidden').addClass("is-active");
-    $("#success-message").html(message);
+    $("#popup-notification").removeClass("is-hidden").addClass("is-primary growl-in");
+    $("#popup-notification-message").html(message);
   }
   else if (!message){
-    $("#success-notification").addClass('is-hidden').removeClass("is-active");
+    $("#popup-notification").removeClass("growl-in");
   }
 }
 
 //display informational messages
 function infoMessage(message){
-  //hide any error
-  $("#error-notification, #success-notification, #info-notification").addClass('is-hidden').removeClass("is-active");
+  //remove any colors and hide existing notification
+  $("#popup-notification").removeClass("is-danger is-primary growl-out");
 
   if (message){
-    $("#info-notification").removeClass('is-hidden').addClass("is-active");
-    $("#info-message").html(message);
+    $("#popup-notification").removeClass("is-hidden").addClass("is-info growl-in");
+    $("#popup-notification-message").html(message);
   }
   else if (!message){
-    $("#info-notification").addClass('is-hidden').removeClass("is-active");
+    $("#popup-notification").removeClass("growl-in");
   }
 }
 
 //refresh notifications
 function clearNotification(){
+  infoMessage(false);
   errorMessage(false);
   successMessage(false);
 }
@@ -112,9 +113,17 @@ function contactLinkHandler(){
 
 //</editor-fold>
 
-//delete notifications button
 $(document).ready(function(){
+
+  //delete notifications button
   $(".delete").on("click", function(e){
-    $(this).parent(".notification").addClass('is-hidden');
+    var notification = $(this).parent(".notification");
+    notification.removeClass("growl-in").addClass("growl-out");
+
+    setTimeout(function() {
+      notification.addClass("is-hidden");
+    }, 250);
+
   });
+
 });

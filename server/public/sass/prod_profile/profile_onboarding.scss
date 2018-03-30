@@ -2,11 +2,8 @@
 @import '../bulma/utilities/utilities.sass';
 @import '../bulma/base/base.sass';
 @import '../bulma/components/grid.sass';
-@import '../bulma/components/level.sass';
-@import '../bulma/components/menu.sass';
 @import '../bulma/components/modal.sass';
 @import '../bulma/components/nav.sass';
-@import '../bulma/elements/alert.sass';
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/box.sass';
 @import '../bulma/elements/content.sass';
@@ -21,7 +18,34 @@
 @import '../bulma/elements/table.sass';
 @import '../bulma/elements/title.sass';
 @import '../bulma/layout/section.sass';
-@import '../profile_wrapper';
+
+//<editor-fold>-------------------------------Animations------------------------
+
+@keyframes slideOut {
+  0% {
+    display: block;
+    opacity: 1;
+    @include translate(0,0);
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    @include translate(-500px,0);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    @include translate(500px,0);
+  }
+  100% {
+    opacity: 1;
+    @include translate(0,0);
+  }
+}
+
+//</editor-fold>
 
 .progress {
   position: absolute;
@@ -29,17 +53,35 @@
 }
 
 .loading-screen {
-  height: 100%;
   display: flex;
+  height: 100%;
   justify-content: center;
-  align-items: center;
+  left: 0;
+  padding-top: 240px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 7;
 }
 
-.steps-wrapper {
-  padding: 120px;
-  height: 100%;
-  @include mobile {
-    padding: 60px 20px;
+.steps-menu-button {
+  left: 10px;
+  position: absolute;
+  top: 20px;
+  z-index: 6;
+  @include widescreen {
+    display: none;
+  }
+}
+
+.onboarding-step-wrapper {
+  &.slide-out {
+    @include keyframes(slideOut 400ms forwards);
+    z-index: 4;
+  }
+  &.slide-in {
+    @include keyframes(slideIn 400ms forwards);
+    z-index: 5;
   }
 }
 
@@ -48,6 +90,14 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  left: 0;
+  padding: 120px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  @include mobile {
+    padding: 80px 20px;
+  }
 }
 
 .step-content {
@@ -91,11 +141,6 @@ a {
   }
 }
 
-.columns {
-  margin-left:-20px;
-  margin-right:-20px;
-}
-
 .heading {
   color: $grey;
   display: block;
@@ -104,6 +149,74 @@ a {
   text-transform: uppercase;
 }
 
-.counter {
-  margin-bottom: 10px;
+.columns {
+  margin-left: -20px;
 }
+
+//<editor-fold>-------------------------------Profile Wrapper-------------------
+.wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.menu-info {
+  padding: 15px 20px 40px;
+  p {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+}
+
+.steps-menu {
+  @include transition(transform 0.2s ease);
+  @include box-shadow(2px,0,10px,$border,0);
+  @include translate(-250px,0);
+  background-color: $white;
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 100;
+  &.is-active {
+    @include translate(0,0);
+  }
+  @include widescreen {
+    @include translate(0,0);
+  }
+}
+
+.step-link {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  &:hover,
+  &:focus {
+    background-color: $pastel;
+  }
+  &.is-active {
+    p {
+      color: $primary;
+      font-weight: 700;
+    }
+  }
+}
+
+.right-content {
+  @include transition(transform 0.3s ease);
+  @include translate(250px,0);
+  background-color: $pastel;
+  height: 100%;
+  overflow-x: hidden;
+  position: absolute;
+  width: calc(100% - 250px);
+  @include laptop {
+    @include translate(0,0);
+    position: relative;
+    width: 100%;
+  }
+}
+//</editor-fold>----------------------------------------------------------------

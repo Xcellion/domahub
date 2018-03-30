@@ -53,7 +53,7 @@
 										</div>
 	                  <span class="is-relative is-hidden-mobile">Payment
 											<div class="stripe-required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
-		                    <i class="fal fa-exclamation-circle"></i>
+		                    <i class="fal fa-exclamation-circle" data-fa-transform="up-3 left-4"></i>
 		                  </div>
 										</span>
 	                </a>
@@ -110,7 +110,7 @@
 							<div class="card is-fullwidth">
 								<div class="card-header">
 									<h3 class="card-header-title">
-	                  <span>Account Information</span>
+	                  Account Information
 	                </h3>
 	              </div>
 	              <div class="card-content">
@@ -119,17 +119,15 @@
 	                    <label class="label" for="email-input">
 	                      Email Address
 	                    </label>
-	                    <small class="tip">This is your main DomaHub email address.</small>
 	                    <input required id="email-input" class="input account-input" data-uservar="email" type="email" value="<%= user.email %>" oninvalid="this.setCustomValidity('Please enter a valid email address!')" oninput="setCustomValidity('')"/>
 	                  </div>
 	                  <div class="control">
 	                    <label class="label" for="username-input">
 	                      Username
 	                      <div class="icon is-tooltip is-small" data-balloon="Must be between 3 and 50 characters and cannot include any spaces." data-balloon-pos="up" data-balloon-length="medium">
-	                        <i class="fal fa-question-circle"></i>
+	                        <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
 	                      </div>
 	                    </label>
-	                    <small class="tip">Other users will be able to see your username.</small>
 	                    <input required id="username-input" minlength="3" maxlength="50" class="input account-input" data-uservar="username" type="text" value="<%= user.username %>" spellcheck="false" oninvalid="this.setCustomValidity('Please enter a valid username!')" oninput="setCustomValidity('')"/>
 	                  </div>
   	                <div class="control is-spaced is-mobile">
@@ -165,7 +163,7 @@
 	            <div class="card is-fullwidth">
 	              <div class="card-header">
 	                <h3 class="card-header-title">
-	                  <span>My Registrars</span>
+	                  My Registrars
 	                </h3>
 	              </div>
 	              <div class="card-content">
@@ -215,9 +213,6 @@
 	                      <span class="registrar-button-text" data-registrar_name="NameSilo"></span>
 	                    </a>
 	                  </div>
-	                </div>
-	                <div class="tip">
-	                  Don't see your registrar listed or need help? <a target="_blank" class="is-primary is-underlined contact-link" href="/contact">Let us know!</a>
 	                </div>
 	              </div>
 	            </div>
@@ -371,7 +366,7 @@
 	            <div class="card is-fullwidth">
 	          	<div class="card-header">
 	          		<h3 class="card-header-title">
-	          			<span>My Referrals and Promo Codes</span>
+	          			My Referrals and Promo Codes
 	          		</h3>
 	          	</div>
 	            <div class="card-content">
@@ -403,7 +398,7 @@
 	          			<label class="label" for="referral-link">
 	                  My Referrals
 	                  <div class="icon is-tooltip is-small" data-balloon="Once the referred account has signed up for a Premium account, you will both be credited with a free month of Premium!" data-balloon-pos="up" data-balloon-length="large">
-	                    <i class="fal fa-question-circle"></i>
+	                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
 	                  </div>
 	                </label>
 	          			<small class="tip">
@@ -1078,7 +1073,7 @@
             <label id="pw-label" class="label" for="new-pw-input">
               New Password
               <span data-balloon="Must be at least 6 characters long." data-balloon-pos="up" data-balloon-length="medium" class="icon is-tooltip is-small">
-                <i class="fal fa-question-circle"></i>
+                <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
               </span>
             </label>
             <input required id="new-pw-input" maxlength="70" minlength="6" name="new-pw-input" autocomplete="new-password" class="input modal-input account-input" type="password" oninvalid="this.setCustomValidity('Please enter a valid password!')" oninput="setCustomValidity('')">
@@ -1088,7 +1083,15 @@
             <input required id="verify-pw-input" maxlength="70" minlength="6" name="verify-pw-input" autocomplete="new-password" class="input modal-input account-input" type="password" oninvalid="this.setCustomValidity('Please enter a valid password!')" oninput="setCustomValidity('')">
           </div>
         </form>
-        <div class="control is-grouped is-grouped-center">
+        <div class="control is-grouped">
+					<div class="control is-expanded">
+            <a tabindex="0" class='button is-fullwidth is-inverted is-danger is-stylish is-small cancel-modal'>
+              <div class="icon is-small">
+								<i class="fal fa-ban"></i>
+							</div>
+              <span>Cancel</span>
+            </a>
+          </div>
           <div class="control is-expanded">
             <button form="password-form" type="submit" id="password-submit" tabindex="0" class='is-fullwidth toolbar-submit-button button is-primary is-stylish is-small'>
               <div class="icon is-small">
@@ -1096,14 +1099,6 @@
 							</div>
               <span>Save Password</span>
             </button>
-          </div>
-          <div class="control is-expanded">
-            <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
-              <div class="icon is-small">
-								<i class="fal fa-ban"></i>
-							</div>
-              <span>Cancel</span>
-            </a>
           </div>
         </div>
       </div>
