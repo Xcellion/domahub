@@ -653,6 +653,11 @@ module.exports = {
   checkLoggedIn : function(req, res, next) {
     console.log("AUF: Checking if authenticated...");
 
+    //session var for verifying email of user
+    if (req.session.verify_email_user){
+      delete req.session.verify_email_user;
+    }
+
     //if user is authenticated in the session, carry on
     if (req.isAuthenticated()){
       res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -662,6 +667,7 @@ module.exports = {
       //no verified email, say that they should check their email
       if (req.user.type == 0){
         req.session.message = "non-verified-email";
+        req.session.verify_email_user = req.user;
         req.logout();
         res.render("account/login.ejs", {
           user: false,
@@ -755,13 +761,19 @@ module.exports = {
             var now = new Date();
             var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
+            var user_db_obj = {
+              date_accessed : now_utc
+            }
+
+            //remove tokens if we're already logging in / verified email
+            if (user.type > 0){
+              user_db_obj.token = null;
+              user_db_obj.token_exp = null;
+            }
+
             //update account last accessed and removing any existing tokens
             console.log("AUF: Updating last accessed for account with email: " + req.body.email);
-            account_model.updateAccount({
-              date_accessed : now_utc,
-              token: null,
-              token_exp: null
-            }, req.body.email, function(result){
+            account_model.updateAccount(user_db_obj, req.body.email, function(result){
               return res.redirect(redirectTo);
             });
           }
@@ -823,52 +835,49 @@ module.exports = {
   },
 
   //request verification email again
-  requestVerify: function(req, res){
+  requestVerify: function(req, res, next){
 
-    //not logged in
-    if (!req.isAuthenticated()){
+    //no session var from having logged in before
+    if (!req.session.verify_email_user){
       error.handler(req, res, "You must be logged in to request a new email! Please refresh the page and log in to try again.", "json");
     }
     //already requested and token still good
-    else if (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp).getTime())){
+    else if (req.session.verify_email_user.token && req.session.verify_email_user.token_exp && (new Date().getTime() < new Date(req.session.verify_email_user.token_exp).getTime())){
       console.log("AUF: Sending existing token!");
 
       //email verify email
       mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
-        username : req.user.username,
-        token : req.user.token
+        username : req.session.verify_email_user.username,
+        token : req.session.verify_email_user.token
       }, {
-        to: user.email,
+        to: req.session.verify_email_user.email,
         from: 'DomaHub Support <support@domahub.com>',
-        subject: "Hi, " + user.username + '! Please verify your email address for DomaHub!',
+        subject: "Hi, " + req.session.verify_email_user.username + '! Please verify your email address for DomaHub!',
       }, function(state){
-        req.logout();
+        delete req.session.verify_email_user;
         if (state == "success"){
           res.send({
             state: "success"
           });
         }
         else {
-          res.send({
-            state: "error"
-          });
+          error.log("Failed to send new token email!");
+          error.handler(req, res, "Failed to send new token email!", "json");
         }
       });
     }
-
     //generate new token
     else {
-      generateVerify(req, res, req.user.email, req.user.username, function(state){
+      generateVerify(req, res, req.session.verify_email_user.email, req.session.verify_email_user.username, function(state){
+        delete req.session.verify_email_user;
         if (state == "success"){
-          req.logout();
           res.send({
             state: "success"
-          })
+          });
         }
         else {
-          res.send({
-            state: "error"
-          })
+          error.log("Failed to generate new token!");
+          error.handler(req, res, "Failed to generate new token!", "json");
         }
       });
     }

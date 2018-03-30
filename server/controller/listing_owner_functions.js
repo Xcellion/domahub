@@ -284,7 +284,10 @@ module.exports = {
       }
 
       //all whois data received!
-      Q.allSettled(whois_promises).then(function(results) {
+      var limit = qlimit(1);     //limit parallel promises (throttle)
+      Q.allSettled(whois_promises.map(limit(function(item, index, collection){
+        return whois_promises[index]();
+      }))).then(function(results) {
         console.log("LOF: Finished looking up domain expiration dates!");
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
@@ -323,8 +326,13 @@ module.exports = {
 
               //some DNS changes were made! check them now to see if we should auto-verify some listings
               if (req.session.new_listings.check_dns_promises.length > 0){
-                //all whois data received!
-                Q.allSettled(req.session.new_listings.check_dns_promises).then(function(results) {
+                var check_dns_promises = req.session.new_listings.check_dns_promises
+
+                //all DNS changes checked!
+                var limit = qlimit(5);     //limit parallel promises (throttle)
+                Q.allSettled(check_dns_promises.map(limit(function(item, index, collection){
+                  return check_dns_promises[index]();
+                }))).then(function(results) {
                   console.log("LOF: Finished checking DNS changes for newly created domains!");
 
                   //remove from the inserted_ids list
@@ -521,6 +529,7 @@ module.exports = {
           });
           promises.push(promise);
         }
+
         //wait for all promises to finish
         Q.allSettled(promises)
         .then(function(results) {
@@ -1760,94 +1769,121 @@ function checkInsertedIDs(req, res, inserted_ids){
   }
 }
 
-//promise function for verified DNS status change
-function verified_dns_promise(various_ids){
-  var verified_dns_promise = Q.defer();
-  if (various_ids.verified_ids.length > 0){
-    console.log("LOF: Now setting status for successful DNS changes...");
-    listing_model.updateListingsInfo(various_ids.verified_ids, {
-      status : 1,
-      verified : 1
-    }, function(result){
-      if (result.state == "error"){
-        verified_dns_promise.reject({
-          info : result.info,
-          various_ids : various_ids
-        });
-      }
-      else {
-        verified_dns_promise.resolve(various_ids);
-      }
-    });
-  }
-  else {
-    verified_dns_promise.resolve(various_ids);
-  }
-  return verified_dns_promise.promise;
-}
+  //<editor-fold>-------------------------------LISTING CREATE HELPERS (promises)------------------------------
 
-//promise function for pending DNS status change
-function pending_dns_promise(various_ids){
-  var pending_dns_promise = Q.defer();
-
-  //if we error and have to wrap this object in a error obj
-  var various_ids = (various_ids.info) ? various_ids.various_ids : various_ids;
-
-  if (various_ids.pending_dns_ids.length > 0){
-    console.log("LOF: Now setting status to pending DNS changes...");
-    listing_model.updateListingsInfo(various_ids.pending_dns_ids, {
-      status : 3,
-      verified : 1
-    }, function(result){
-      if (result.state == "error"){
-        pending_dns_promise.reject({
-          info : result.info,
-          various_ids : various_ids
-        });
-      }
-      else {
-        pending_dns_promise.resolve(various_ids);
-      }
-    });
-  }
-  else {
-    pending_dns_promise.resolve(various_ids);
-  }
-  return pending_dns_promise.promise;
-}
-
-//returns a promise to figure out domain name whois
-function check_whois_promise(domain_name, index){
-  return Q.Promise(function(resolve, reject, notify){
-    console.log("LOF: Looking up WHOIS info for domain - " + domain_name + "...");
-
-    //look up whois info
-    whois.lookup(domain_name, function(err, data){
-      if (err){
-        error.log(err, "Failed to lookup WHOIS information for domain " + domain_name);
-        reject(false);
-      }
-      else {
-        var whoisObj = {};
-        var array = parser.parseWhoIsData(data);
-        for (var x = 0; x < array.length; x++){
-          whoisObj[array[x].attribute.trim()] = array[x].value;
-        }
-
-        //only if the WHOIS object is legit
-        if (whoisObj["Registrar"]){
-          resolve({
-            whois : whoisObj,
-            index : index
+  //promise function for verified DNS status change
+  function verified_dns_promise(various_ids){
+    var verified_dns_promise = Q.defer();
+    if (various_ids.verified_ids.length > 0){
+      console.log("LOF: Now setting status for successful DNS changes...");
+      listing_model.updateListingsInfo(various_ids.verified_ids, {
+        status : 1,
+        verified : 1
+      }, function(result){
+        if (result.state == "error"){
+          verified_dns_promise.reject({
+            info : result.info,
+            various_ids : various_ids
           });
         }
         else {
+          verified_dns_promise.resolve(various_ids);
+        }
+      });
+    }
+    else {
+      verified_dns_promise.resolve(various_ids);
+    }
+    return verified_dns_promise.promise;
+  }
+
+  //promise function for pending DNS status change
+  function pending_dns_promise(various_ids){
+    var pending_dns_promise = Q.defer();
+
+    //if we error and have to wrap this object in a error obj
+    var various_ids = (various_ids.info) ? various_ids.various_ids : various_ids;
+
+    if (various_ids.pending_dns_ids.length > 0){
+      console.log("LOF: Now setting status to pending DNS changes...");
+      listing_model.updateListingsInfo(various_ids.pending_dns_ids, {
+        status : 3,
+        verified : 1
+      }, function(result){
+        if (result.state == "error"){
+          pending_dns_promise.reject({
+            info : result.info,
+            various_ids : various_ids
+          });
+        }
+        else {
+          pending_dns_promise.resolve(various_ids);
+        }
+      });
+    }
+    else {
+      pending_dns_promise.resolve(various_ids);
+    }
+    return pending_dns_promise.promise;
+  }
+
+  //returns a promise to figure out domain name whois
+  function check_whois_promise(domain_name, index){
+    return function(){
+      return Q.Promise(function(resolve, reject, notify){
+      console.log("LOF: Looking up WHOIS info for domain - " + domain_name + "...");
+
+      //look up whois info
+      whois.lookup(domain_name, function(err, data){
+        if (err){
+          error.log(err, "Failed to lookup WHOIS information for domain " + domain_name);
           reject(false);
         }
-      }
+        else {
+          var whoisObj = {};
+          var array = parser.parseWhoIsData(data);
+          for (var x = 0; x < array.length; x++){
+            whoisObj[array[x].attribute.trim()] = array[x].value;
+          }
+
+          //only if the WHOIS object is legit
+          if (whoisObj["Registrar"]){
+            resolve({
+              whois : whoisObj,
+              index : index
+            });
+          }
+          else {
+            reject(false);
+          }
+        }
+      });
     });
-  });
-}
+    }
+  }
+
+  //check a domain name to see if the DNS changes are good yet
+  function check_domain_dns_promise(domain_name, inserted_id){
+    return function (){
+      console.log("LOF: Checking to see if domain is still pointed to DomaHub...");
+      return Q.Promise(function(resolve, reject, notify){
+        dns.resolve(domain_name, "A", function (err, address, family) {
+          var domain_ip = address;
+          dns.resolve("domahub.com", "A", function (err, address, family) {
+            var doma_ip = address;
+            if (err || !domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
+              reject(inserted_id);
+            }
+            else {
+              resolve(inserted_id);
+            }
+          });
+        });
+      });
+    }
+  }
+
+  //</editor-fold>
 
 //</editor-fold>
 
@@ -2180,25 +2216,6 @@ function addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, rrtype, r
         }
       });
     }
-  });
-}
-
-//check a domain name to see if the DNS changes are good yet
-function check_domain_dns_promise(domain_name, inserted_id){
-  console.log("LOF: Checking to see if domain is still pointed to DomaHub...");
-  return Q.Promise(function(resolve, reject, notify){
-    dns.resolve(domain_name, "A", function (err, address, family) {
-      var domain_ip = address;
-      dns.resolve("domahub.com", "A", function (err, address, family) {
-        var doma_ip = address;
-        if (err || !domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
-          reject(inserted_id);
-        }
-        else {
-          resolve(inserted_id);
-        }
-      });
-    });
   });
 }
 
