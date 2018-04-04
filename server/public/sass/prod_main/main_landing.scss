@@ -18,13 +18,8 @@
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 
-.landing {
-  @include transition(all 0.2s ease);
-  background-color: #3cbc8d;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='100' y1='33' x2='100' y2='-3'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0.23'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='0.23'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='100' y1='135' x2='100' y2='97'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0.23'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='0.23'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23309671' fill-opacity='0.23'%3E%3Crect x='100' width='100' height='100'/%3E%3Crect y='100' width='100' height='100'/%3E%3C/g%3E%3Cg fill-opacity='0.23'%3E%3Cpolygon fill='url(%23a)' points='100%2C30 0%2C0 200%2C0'/%3E%3Cpolygon fill='url(%23b)' points='100%2C100 0%2C130 0%2C100 200%2C100 200%2C130'/%3E%3C/g%3E%3C/svg%3E");
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
+.landing {background-color: #3cbc8d;
+background-image: url("data:image/svg+xml,%3Csvg width='84' height='48' viewBox='0 0 84 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h12v6H0V0zm28 8h12v6H28V8zm14-8h12v6H42V0zm14 0h12v6H56V0zm0 8h12v6H56V8zM42 8h12v6H42V8zm0 16h12v6H42v-6zm14-8h12v6H56v-6zm14 0h12v6H70v-6zm0-16h12v6H70V0zM28 32h12v6H28v-6zM14 16h12v6H14v-6zM0 24h12v6H0v-6zm0 8h12v6H0v-6zm14 0h12v6H14v-6zm14 8h12v6H28v-6zm-14 0h12v6H14v-6zm28 0h12v6H42v-6zm14-8h12v6H56v-6zm0-8h12v6H56v-6zm14 8h12v6H70v-6zm0 8h12v6H70v-6zM14 24h12v6H14v-6zm14-8h12v6H28v-6zM14 8h12v6H14V8zM0 8h12v6H0V8z' fill='%2336a57c' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
   overflow: hidden;
   position: relative;
   width: 100%;

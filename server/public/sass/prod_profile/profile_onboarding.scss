@@ -75,6 +75,7 @@
 }
 
 .onboarding-step-wrapper {
+  will-change: transform;
   &.slide-out {
     @include keyframes(slideOut 400ms forwards);
     z-index: 4;
@@ -179,6 +180,7 @@ a {
   height: 100%;
   width: 250px;
   position: fixed;
+  will-change: transform;
   z-index: 100;
   &.is-active {
     @include translate(0,0);
@@ -213,6 +215,7 @@ a {
   overflow-x: hidden;
   position: absolute;
   width: calc(100% - 250px);
+  will-change: transform;
   @include laptop {
     @include translate(0,0);
     position: relative;
