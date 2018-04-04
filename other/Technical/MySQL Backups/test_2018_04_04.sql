@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 29, 2018 at 06:41 PM
+-- Generation Time: Apr 04, 2018 at 08:36 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `type` tinyint(1) NOT NULL DEFAULT '0',
   `token` varchar(100) DEFAULT NULL,
   `token_exp` datetime DEFAULT NULL,
+  `onboarding_step` int(11) DEFAULT NULL,
   `stripe_account_id` varchar(32) DEFAULT NULL,
   `stripe_customer_id` varchar(32) DEFAULT NULL,
   `stripe_subscription_id` varchar(32) DEFAULT NULL,
@@ -50,20 +51,21 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `date_created`, `date_accessed`, `type`, `token`, `token_exp`, `stripe_account_id`, `stripe_customer_id`, `stripe_subscription_id`, `ga_tracking_id`, `paypal_email`, `bitcoin_address`, `payoneer_email`) VALUES
-(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2018-03-29 01:10:03', 2, NULL, NULL, 'acct_1C5ITfEpVgQoC6Fs', 'cus_CVh0MqmilTxsZO', 'sub_CVh0ZUxR1rlNSO', NULL, 'won2blee@gmail.com', NULL, NULL),
-(2, 'DomaHub', 'general@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2018-03-29 21:58:43', 2, NULL, NULL, 'acct_1CB5H0JjMkKlUdaL', NULL, NULL, NULL, 'general@domahub.com', NULL, NULL),
-(5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2018-03-29 01:13:55', 1, NULL, NULL, NULL, NULL, NULL, NULL, 'wonq33@gmail.com', NULL, NULL),
-(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2016-09-13 06:04:17', '2018-01-18 07:24:41', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2018-03-01 00:22:25', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(41, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2018-01-11 03:23:18', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2018-03-13 01:21:07', '2018-03-20 04:19:32', 2, NULL, NULL, 'acct_1C5IMuDnRmMzAdyH', 'cus_CUMPk4do5qCpTR', 'sub_CUMRkROfoT8id3', NULL, NULL, NULL, NULL);
+INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `date_created`, `date_accessed`, `type`, `token`, `token_exp`, `onboarding_step`, `stripe_account_id`, `stripe_customer_id`, `stripe_subscription_id`, `ga_tracking_id`, `paypal_email`, `bitcoin_address`, `payoneer_email`) VALUES
+(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2018-04-04 22:28:50', 2, NULL, NULL, NULL, 'acct_1C5ITfEpVgQoC6Fs', 'cus_CVh0MqmilTxsZO', 'sub_CVh0ZUxR1rlNSO', NULL, 'won2blee@gmail.com', NULL, NULL),
+(2, 'DomaHub', 'general@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2018-03-30 07:34:41', 2, NULL, NULL, NULL, 'acct_1CB5H0JjMkKlUdaL', NULL, NULL, NULL, 'general@domahub.com', NULL, NULL),
+(5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2018-03-29 01:13:55', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wonq33@gmail.com', NULL, NULL),
+(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2018-03-30 06:04:17', '2018-03-31 03:39:37', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'test@test.com', NULL, NULL),
+(37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2018-03-30 20:07:44', 0, 'e235b675fd', '2018-03-30 21:07:46', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(41, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2018-01-11 03:23:18', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2018-03-13 01:21:07', '2018-03-31 04:03:43', 2, NULL, NULL, NULL, 'acct_1C5IMuDnRmMzAdyH', 'cus_CUMPk4do5qCpTR', 'sub_CUMRkROfoT8id3', NULL, NULL, NULL, NULL),
+(47, 'fff', 'test@test1.com', '$2a$10$Si8koH07D6qkTa85pZZmL.6JRMFXUHT82REXd8MyelydkMmARHpPe', '2018-04-04 14:27:01', '2018-04-04 22:28:16', 1, NULL, NULL, 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -139,9 +141,6 @@ CREATE TABLE IF NOT EXISTS `domain_expenses` (
 
 INSERT INTO `domain_expenses` (`id`, `listing_id`, `expense_name`, `expense_cost`, `expense_date`) VALUES
 (48, 7, 'Extra fees', 12.99, 1546228740000),
-(49, 1626, 'Test', 12, 1514782740000),
-(50, 1626, 'Test2', 14, 1546318740000),
-(51, 1626, 'Test3', 16, 1514782800000),
 (52, 50, 'After market purchase fees', 25.99, 1480568340000),
 (53, 50, 'Escrow fees (One time)', 4.99, 1480568340000),
 (54, 1609, 'Extra \"fee\" for friend', 10, 1511845140000);
@@ -223,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `listings` (
   UNIQUE KEY `listings_unique_domain` (`domain_name`,`verified`),
   KEY `listings_owner_fk_idx` (`owner_id`),
   KEY `registrar_id_fk` (`registrar_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1628 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1634 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `listings`
@@ -251,8 +250,7 @@ INSERT INTO `listings` (`id`, `date_created`, `date_expire`, `date_registered`, 
 (1612, 1516331413049, NULL, NULL, 'AwesomeDomains.org', 2, 0, NULL, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'month', 250, 5000, 500, 'The perfect domain for your next venture or company.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', 'https://www.sciencealert.com/images/articles/processed/warming_tropics_1024.jpg', '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
 (1613, 1516331413049, NULL, NULL, 'GreatAwesomeDomains.com', 2, 0, NULL, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'month', 250, 250, 500, 'Buy this domain today and start your next adventure!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', 'https://i.pinimg.com/736x/8e/0f/bd/8e0fbdf32b7662080ba4288cee3e03d0--fried-rice-wolves-art.jpg', '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
 (1614, 1516331413049, NULL, NULL, 'CoolFunDomains.com', 2, 1, NULL, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'month', 25, 250, 500, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1626, 1520895524867, 1560744000000, 1520895524867, 'test.com', 1, 1, NULL, 1, 'NETWORK SOLUTIONS, LLC.', NULL, 0, 'PERFECT PRIVACY, LLC', NULL, 'tx8y66f62mp@networksolutionsprivateregistration.com', '12808 Gran Bay Parkway West, Jacksonville, FL, 32258, US', '+1.5707088780', 'PERFECT PRIVACY, LLC', NULL, 'tx8y66f62mp@networksolutionsprivateregistration.com', '12808 Gran Bay Parkway West, Jacksonville, FL, 32258, US', '+1.5707088780', 'PERFECT PRIVACY, LLC', NULL, 'jf87g6w38cb@networksolutionsprivateregistration.com', '12808 Gran Bay Parkway West, Jacksonville, FL, 32258, US', '+1.5707088780', 0, 'month', 25, 0, 0, 'A great venture starts with a great domain name. Buy yours today!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1627, 1522106533873, 1527033600000, 1522106533873, 'test2.com', 1, 1, NULL, 1, '123-Reg Limited', NULL, 0, 'Neil', 'Catchline PR', 'nferguson@catchline.co.uk', '40 High Street, Kirkcaldy, Fife, KY1 1LU, GB', '+44.1592643200', 'Neil Ferguson', 'Catchline PR', 'nferguson@catchline.co.uk', '40 High Street, Kirkcaldy, Fife, KY1 1LU, GB', '+44.1592643200', 'Webfusion Limited', 'Webfusion Limited', 'services@123-reg.co.uk', '5 Roundwood Avenue, Stockley Park, Uxbridge, UB11 1FF, GB', '+44.8712309525', 0, 'month', 25, 0, 0, 'The greatest domain for your next project.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0);
+(1630, 1522381035009, NULL, NULL, 'testdomainwoohoohoohoo.com', 42, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -945,7 +943,6 @@ CREATE TABLE IF NOT EXISTS `stats_contact_history` (
 
 INSERT INTO `stats_contact_history` (`id`, `listing_id`, `timestamp`, `deadline`, `user_ip`, `name`, `email`, `phone`, `offer`, `message`, `response`, `verification_code`, `bin`, `verified`, `accepted`, `deposited`, `transferred`, `withdrawn_on`, `payment_type`, `transaction_id`, `doma_fees`, `payment_fees`) VALUES
 (2, 7, 1511295539533, NULL, NULL, 'test', 'won2blee@gmail.com', '+1 718-309-7773', 1, 'fuck you', '', 'c7JMw4Z5Ur', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 1626, 1516334788885, NULL, NULL, 'wonmin', 'won2blee@gmail.com', '+1 718-309-7773', 500, 'Test!', NULL, 'uj7aqlHZiD', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (4, 50, 1516334914743, NULL, NULL, 'test', 'won2blee@gmail.com', '+1 718-309-7773', 500, 'tests', NULL, 'F2kuSDd5AI', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (5, 50, 1516334945086, NULL, NULL, 'test', 'won2blee@gmail.com', '+1 718-309-7773', 500, 'testst', NULL, '4PxqaZdtyC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (6, 7, 1521506518338, NULL, NULL, 'asdfasf', 'fafs@fasdf.com', '+1 201-555-0123', 1500, 'Tcfsd', NULL, 'jHjB7ReEs8', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
