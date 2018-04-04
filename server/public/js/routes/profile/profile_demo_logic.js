@@ -2,6 +2,20 @@ var profile_demo_tour;
 
 $(document).ready(function(){
 
+  //set up immediately if demo
+  if (user.username == "DomaHubDemo"){
+    setupDomaTutorial();
+  }
+
+  //restart tour
+  $("#restart-tour-button").on("click", function(){
+    restartTutorial();
+  });
+});
+
+function setupDomaTutorial(){
+  console.log("Initializing DomaHub Demo...");
+
   profile_demo_tour = new Tour({
     // debug : true,
     backdrop : true,
@@ -12,19 +26,19 @@ $(document).ready(function(){
                 <div class='popover-navigation'> \
                   <button class='button is-stylish is-small' data-role='prev'> \
                     <span class='icon is-small'> \
-                      <i class='far fa-angle-double-left'></i> \
+                      <i class='fal fa-angle-double-left'></i> \
                     </span> \
                     <span>Prev</span> \
                   </button> \
                   <button class='button is-stylish is-small is-primary' data-role='next'> \
                     <span>Next</span> \
                     <span class='icon is-small'> \
-                      <i class='far fa-angle-double-right'></i> \
+                      <i class='fal fa-angle-double-right'></i> \
                     </span> \
                   </button> \
                   <button class='button is-stylish is-small' data-role='end'> \
                     <span class='icon is-small'> \
-                      <i class='far fa-sign-out'></i> \
+                      <i class='fal fa-sign-out'></i> \
                     </span> \
                     <span>End Tutorial</span> \
                   </button> \
@@ -42,7 +56,7 @@ $(document).ready(function(){
                         <div class='control is-expanded'> \
                           <button class='button is-stylish is-fullwidth is-small is-primary' data-role='next'> \
                             <span class='icon is-small'> \
-                              <i class='far fa-thumbs-up'></i> \
+                              <i class='fal fa-thumbs-up'></i> \
                             </span> \
                             <span>Yes! Show me how it works.</span> \
                           </button> \
@@ -50,7 +64,7 @@ $(document).ready(function(){
                         <div class='control is-expanded'> \
                           <button class='button is-stylish is-fullwidth is-small is-danger is-outlined' data-role='end'> \
                             <span class='icon is-small'> \
-                              <i class='far fa-frown'></i> \
+                              <i class='fal fa-frown'></i> \
                             </span> \
                             <span>No, I'll figure it out.</span> \
                           </button> \
@@ -82,7 +96,7 @@ $(document).ready(function(){
       //dashboard left menu - 3
       {
         element : ".left-menu",
-        content : "This is your navigation menu. Try clicking on 'My Listings' to see an example domain name portfolio.",
+        content : 'This is the navigation menu. Click Next to go to the <span class="is-bold">My Listings</span> page.',
         placement : "right",
         path : "/profile/dashboard",
         next : 5,
@@ -91,7 +105,7 @@ $(document).ready(function(){
       //dashboard left menu (mobile) - 4
       {
         element : ".nav-right",
-        content : "This is your navigation menu. Try clicking on 'My Listings' to see an example domain name portfolio.",
+        content : 'This is the navigation menu. Click Next to go to the <span class="is-bold">My Listings</span> page.',
         placement : "bottom",
         path : "/profile/dashboard",
         prev : 2,
@@ -100,7 +114,7 @@ $(document).ready(function(){
       //mylistings - 5
       {
         orphan : true,
-        content : "This is the My Listings page--where you can edit and view offers for all of your existing domain name listings.",
+        content : 'This is the <span class="is-bold">My Listings</span> page--where you can edit related details or view offers for all of your existing domain name listings.',
         path : "/profile/mylistings",
         prev : $(".left-menu").is(":visible") ? 3 : 4,
       },
@@ -121,7 +135,7 @@ $(document).ready(function(){
       //mylistings buttons - 7
       {
         element : "#domain-selector-toolbox",
-        content : "Use these buttons to edit, view offers for, verify ownership of, or delete, your listings. Let's try editing some active listings by pressing on Edit Details.",
+        content : "Use these buttons to edit, view offers for, verify ownership of, or delete, your listings. Let's try editing some active listings by pressing on <span class='is-bold'>Edit Details</span>.",
         placement : "bottom",
         onShow : function(){
           //select verified domains if none are selected
@@ -134,7 +148,7 @@ $(document).ready(function(){
 
       //mylistings edit listings - 8
       {
-        content : "This is the listings editing page. Where you can change the information, design, and various details of your listings.",
+        content : "This is the <span class='is-bold'>listings editing page</span>. Where you can change the information, design, and related details of your listings.",
         element : "#info-tab-drop",
         placement : "top",
         onShow : function(){
@@ -148,7 +162,7 @@ $(document).ready(function(){
       //mylistings edit design listings - 9
       {
         element : "#design-tab-drop",
-        content : "This is the design tab where you can change the look and feel of your listing pages.",
+        content : "This is the <span class='is-bold'>design tab</span> where you can change the look and feel of your listing pages.",
         placement : "top",
         onShow : function(){
           //show design tab
@@ -161,7 +175,7 @@ $(document).ready(function(){
       //mylistings offer view - 10
       {
         element : "#offers-table",
-        content : "This is the offers tab where you can view the various offers made for your domain names.",
+        content : "This is the <span class='is-bold'>offers tab</span> where you can view the various offers made for your domain names.",
         placement : "top",
         path : "/profile/mylistings",
         redirect : false,
@@ -176,7 +190,7 @@ $(document).ready(function(){
       //create listings - 11
       {
         orphan : true,
-        content : "This is the Create Listings page where you can manually or automatically create new listings for your domain names.",
+        content : "This is the <span class='is-bold'>Create Listings</span> page where you can manually or automatically create new listings for your domain names.",
         path : "/listings/create",
         prev : 10,
       },
@@ -199,7 +213,7 @@ $(document).ready(function(){
       //create listings connect a registrar - 11
       {
         orphan : true,
-        content : "This is the profile settings page. Here, you can edit your profile information, payment details, or view your total account earnings.",
+        content : "This is the <span class='is-bold'>Profile Settings</span> page. Here, you can edit your profile information, payment details, or view your total account earnings.",
         path : "/profile/settings",
       },
 
@@ -212,19 +226,19 @@ $(document).ready(function(){
                     <div> \
                       <div class='control is-grouped'> \
                         <div class='control is-expanded'> \
-                          <a href='/login' class='button is-stylish is-fullwidth is-small is-primary'> \
+                          <a href='/login' class='button is-stylish is-fullwidth is-small is-primary' " + ((user.username != "DomaHubDemo") ? "data-role='end'" : "") + "> \
                             <span class='icon is-small'> \
-                              <i class='far fa-thumbs-up'></i> \
+                              <i class='fal fa-thumbs-up'></i> \
                             </span> \
-                            <span>That was awesome! Sign me up.</span> \
+                            <span>" + ((user.username != "DomaHubDemo") ? "That was awesome! Thanks." : "That was awesome! Sign me up.") + "</span> \
                           </a> \
                         </div> \
                         <div class='control is-expanded'> \
-                          <button class='button is-stylish is-fullwidth is-small is-danger is-outlined' data-role='end'> \
+                          <button id='tour-end-button' class='button is-stylish is-fullwidth is-small is-danger is-outlined' " + ((user.username != "DomaHubDemo") ? "data-role='restart'" : "data-role='end'") + "> \
                             <span class='icon is-small'> \
-                              <i class='far fa-sign-out'></i> \
+                              <i class='fal fa-sign-out'></i> \
                             </span> \
-                            <span>I still want to explore.</span> \
+                            <span>" + ((user.username != "DomaHubDemo") ? "Replay demo." : "I still want to explore.") + "</span> \
                           </button> \
                         </div> \
                       </div> \
@@ -240,22 +254,29 @@ $(document).ready(function(){
   profile_demo_tour.init();
   profile_demo_tour.start();
 
+  //restart button if not domademo
+  if (user.username != "DomaHubDemo"){
+    $("#tour-end-button").on("click", function(){
+      profile_demo_tour.goTo(0);
+    });
+  }
+
   //click backdrop to end tour
-  $(".tour-backdrop").on("click", function(){
+  $(".tour-backdrop").off().on("click", function(){
     profile_demo_tour.end();
   });
+}
 
-  //restart tour
-  $("#restart-tour-button").on("click", function(){
-    if (window.location.pathname != "/profile/dashboard"){
-      window.location = "/profile/dashboard";
-    }
+function restartTutorial(){
+  if (window.location.pathname != "/profile/dashboard"){
+    window.location = "/profile/dashboard";
+  }
+  if (profile_demo_tour){
     profile_demo_tour.restart();
     profile_demo_tour.init();
     profile_demo_tour.start();
-  });
-});
-
-//<editor-fold>----------------------------------DOMAHUB PROFILE DEMO--------------------------------
-
-//</editor-fold>
+  }
+  else {
+    setupDomaTutorial();
+  }
+}

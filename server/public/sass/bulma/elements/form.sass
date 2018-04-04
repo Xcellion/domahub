@@ -8,6 +8,16 @@
       &:focus
         border-color: darken($color, 6%)
 
+input:-webkit-autofill
+  -webkit-box-shadow: 0 0 0 1000px white inset
+  box-shadow: 0 0 0 1000px white inset
+
+input:-webkit-autofill
+  &:focus
+    border-color: $info
+    -webkit-box-shadow: 0 0 0 1000px white inset, 0 2px 4px 0 $border
+    box-shadow: 0 0 0 1000px white inset, 0 2px 4px 0 $border
+
 .form
   margin: 10px 0
 

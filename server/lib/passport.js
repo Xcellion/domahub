@@ -70,7 +70,8 @@ module.exports = {
                 var account_info = {
                   email: email,
                   username: req.body.username,
-                  password: bcrypt.hashSync(password, null, null)
+                  password: bcrypt.hashSync(password, null, null),
+                  onboarding_step: 1
                 }
                 //create the new account
                 account_model.newAccount(account_info, function(result){
