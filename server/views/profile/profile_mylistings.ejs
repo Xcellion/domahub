@@ -11,8 +11,8 @@
 </head>
 
 <body>
-  
-  
+
+
 
 	<section class="section is-fullscreen">
 		<div class="wrapper">
@@ -35,7 +35,6 @@
 	</section>
 
   <script type="text/javascript">
-    var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
     var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
     var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
     var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }else{ %>""<% } %>;

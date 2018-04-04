@@ -57,12 +57,38 @@ module.exports = {
 
   //<editor-fold>-------------------------------------ONBOARDING-------------------------------
 
+  checkOnboardingStep : function(req, res, next){
+    if (!req.user.onboarding_step || [0,1,2,3,4,5,6,7,8,9,10,11].indexOf(parseFloat(req.user.onboarding_step)) == -1){
+      res.redirect("/profile/dashboard");
+    }
+    else {
+      next();
+    }
+  },
+
+  //render the onboarding page
   renderOnboarding : function(req, res, next){
     console.log("PF: Rendering profile onboarding...");
     res.render("profile/profile_onboarding.ejs", {
       user: req.user,
       listings: req.user.listings
     });
+  },
+
+  //finished welcome onboarding (11 is the final step, 12 means they want to check out tutorial)
+  setOnboardingStep : function(req, res, next){
+    if (!req.body.onboarding_step || [0,1,2,3,4,5,6,7,8,9,10,11,12,13].indexOf(parseFloat(req.body.onboarding_step)) == -1){
+      error.handler(req, res, "Invalid onboarding step!", "json");
+    }
+    else {
+      console.log('F: Marking account current step...');
+
+      //13 means delete
+      req.session.new_account_info = {
+        onboarding_step : (req.body.onboarding_step == "13") ? null : req.body.onboarding_step
+      }
+      next();
+    }
   },
 
   //</editor-fold>
@@ -84,6 +110,21 @@ module.exports = {
     else {
       next();
     }
+  },
+
+  //replace existing google embed analytics authentication
+  deleteGoogleAPI : function(req, res, next){
+    console.log("PF: Re-authenticating with Google Analytics API...");
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        error.log(err, "Failed to authenticate with Google for the GA API");
+      }
+      req.user.ga_access_token = (tokens) ? tokens.access_token : false;
+      res.send({
+        state : "success",
+        user : user
+      });
+    });
   },
 
   //</editor-fold>
@@ -944,16 +985,6 @@ module.exports = {
     else {
       next();
     }
-  },
-
-  //finished welcome onboarding
-  finishedOnboarding: function(req, res, next){
-    console.log('F: Marking account as having finished onboarding...');
-
-    req.session.new_account_info = {
-      finished_onboarding : true
-    }
-    next();
   },
 
   //update account settings and go next (if possible)

@@ -455,7 +455,6 @@ module.exports = {
   //check posted info for personal
   checkPayoutPersonal : function(req, res, next){
     console.log('SF: Checking posted Stripe managed account personal information...');
-
     if (!req.body.first_name){
       error.handler(req, res, "Invalid first name! Please enter a valid first name!", "json");
     }

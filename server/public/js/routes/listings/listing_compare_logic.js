@@ -66,19 +66,19 @@ $(document).ready(function() {
                 <div class='popover-navigation'> \
                   <button class='button is-stylish is-small' data-role='prev'> \
                     <span class='icon is-small'> \
-                      <i class='far fa-angle-double-left'></i> \
+                      <i class='fal fa-angle-double-left'></i> \
                     </span> \
                     <span>Prev</span> \
                   </button> \
                   <button class='button is-stylish is-small is-primary' data-role='next'> \
                     <span>Next</span> \
                     <span class='icon is-small'> \
-                      <i class='far fa-angle-double-right'></i> \
+                      <i class='fal fa-angle-double-right'></i> \
                     </span> \
                   </button> \
                   <button class='button is-stylish is-small' data-role='end'> \
                     <span class='icon is-small'> \
-                      <i class='far fa-sign-out'></i> \
+                      <i class='fal fa-sign-out'></i> \
                     </span> \
                     <span>End Tutorial</span> \
                   </button> \
@@ -99,7 +99,7 @@ $(document).ready(function() {
           <div class='control is-expanded'> \
             <button class='button is-fullwidth is-stylish is-small is-primary' data-role='next'> \
               <span class='icon is-small'> \
-                <i class='far fa-thumbs-up'></i> \
+                <i class='fal fa-thumbs-up'></i> \
               </span> \
               <span>Yes! Show me how it works.</span> \
             </button> \
@@ -107,7 +107,7 @@ $(document).ready(function() {
           <div class='control is-expanded'> \
             <button class='button is-fullwidth is-stylish is-small is-danger is-outlined' data-role='end'> \
               <span class='icon is-small'> \
-                <i class='far fa-frown'></i> \
+                <i class='fal fa-frown'></i> \
               </span> \
               <span>No, I'll figure it out.</span> \
             </button> \
@@ -138,13 +138,13 @@ $(document).ready(function() {
                       <div> \
                         <button class='button is-stylish is-small' data-role='prev'> \
                           <span class='icon is-small'> \
-                            <i class='far fa-angle-double-left'></i> \
+                            <i class='fal fa-angle-double-left'></i> \
                           </span> \
                           <span>Prev</span> \
                         </button> \
                         <button class='button is-stylish is-small' data-role='end'> \
                           <span class='icon is-small'> \
-                            <i class='far fa-sign-out'></i> \
+                            <i class='fal fa-sign-out'></i> \
                           </span> \
                           <span>End Tutorial</span> \
                         </button> \
@@ -167,19 +167,19 @@ $(document).ready(function() {
                     <div class='popover-navigation'> \
                       <button class='button is-stylish is-small' data-role='prev'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-left'></i> \
+                          <i class='fal fa-angle-double-left'></i> \
                         </span> \
                         <span>Prev</span> \
                       </button> \
                       <button class='button is-stylish is-small is-primary' data-role='next'> \
                         <span>Next</span> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-right'></i> \
+                          <i class='fal fa-angle-double-right'></i> \
                         </span> \
                       </button> \
                       <button class='button is-stylish is-small' data-role='end'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-sign-out'></i> \
+                          <i class='fal fa-sign-out'></i> \
                         </span> \
                         <span>End Tutorial</span> \
                       </button> \
@@ -212,19 +212,19 @@ $(document).ready(function() {
                     <div class='popover-navigation'> \
                       <button class='button is-stylish is-small' data-role='prev'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-left'></i> \
+                          <i class='fal fa-angle-double-left'></i> \
                         </span> \
                         <span>Prev</span> \
                       </button> \
                       <button class='button is-stylish is-small is-primary' data-role='next'> \
                         <span>Next</span> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-right'></i> \
+                          <i class='fal fa-angle-double-right'></i> \
                         </span> \
                       </button> \
                       <button class='button is-stylish is-small' data-role='end'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-sign-out'></i> \
+                          <i class='fal fa-sign-out'></i> \
                         </span> \
                         <span>End Tutorial</span> \
                       </button> \
@@ -252,13 +252,13 @@ $(document).ready(function() {
                     <div class='popover-navigation'> \
                       <button class='button is-stylish is-small' data-role='prev'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-left'></i> \
+                          <i class='fal fa-angle-double-left'></i> \
                         </span> \
                         <span>Prev</span> \
                       </button> \
                       <button class='button is-stylish is-small' data-role='end'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-sign-out'></i> \
+                          <i class='fal fa-sign-out'></i> \
                         </span> \
                         <span>End Tutorial</span> \
                       </button> \
@@ -286,19 +286,19 @@ $(document).ready(function() {
                     <div class='popover-navigation'> \
                       <button class='button is-stylish is-small' data-role='prev'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-left'></i> \
+                          <i class='fal fa-angle-double-left'></i> \
                         </span> \
                         <span>Prev</span> \
                       </button> \
                       <button class='button is-stylish is-small is-primary' data-role='next'> \
                         <span>Next</span> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-right'></i> \
+                          <i class='fal fa-angle-double-right'></i> \
                         </span> \
                       </button> \
                       <button class='button is-stylish is-small' data-role='end'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-sign-out'></i> \
+                          <i class='fal fa-sign-out'></i> \
                         </span> \
                         <span>End Tutorial</span> \
                       </button> \
@@ -336,13 +336,13 @@ $(document).ready(function() {
                     <div class='popover-navigation'> \
                       <button class='button is-stylish is-small' data-role='prev'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-left'></i> \
+                          <i class='fal fa-angle-double-left'></i> \
                         </span> \
                         <span>Prev</span> \
                       </button> \
                       <button class='button is-stylish is-small' data-role='end'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-sign-out'></i> \
+                          <i class='fal fa-sign-out'></i> \
                         </span> \
                         <span>End Tutorial</span> \
                       </button> \
@@ -382,13 +382,13 @@ $(document).ready(function() {
                     <div class='popover-navigation'> \
                       <button class='button is-stylish is-small' data-role='prev'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-angle-double-left'></i> \
+                          <i class='fal fa-angle-double-left'></i> \
                         </span> \
                         <span>Prev</span> \
                       </button> \
                       <button class='button is-stylish is-small' data-role='end'> \
                         <span class='icon is-small'> \
-                          <i class='far fa-sign-out'></i> \
+                          <i class='fal fa-sign-out'></i> \
                         </span> \
                         <span>End Tutorial</span> \
                       </button> \
@@ -427,7 +427,7 @@ $(document).ready(function() {
               <div class='control is-expanded'> \
                 <a href='/signup' class='button is-fullwidth is-stylish is-small is-primary'> \
                   <span class='icon is-small'> \
-                    <i class='far fa-thumbs-up'></i> \
+                    <i class='fal fa-thumbs-up'></i> \
                   </span> \
                   <span>That was awesome! Sign me up.</span> \
                 </a> \
@@ -435,7 +435,7 @@ $(document).ready(function() {
               <div class='control is-expanded'> \
                 <button class='button is-fullwidth is-stylish is-small is-danger is-outlined' data-role='end'> \
                   <span class='icon is-small'> \
-                    <i class='far fa-sign-out'></i> \
+                    <i class='fal fa-sign-out'></i> \
                   </span> \
                   <span>I still want to explore.</span> \
                 </button> \
@@ -797,7 +797,7 @@ function updateFooter(premium){
   else {
     $("#dh-footer-right-text").replaceWith("<p id='dh-footer-right-text' class='footer-item'>Simple, clean sales pages for your domains.</p>");
     $("#dh-footer-right-smile").removeClass("is-hidden");
-    $("#doma_logo").replaceWith('<a id="doma_logo" href="https://domahub.com"><i class="far fa-copyright v-align-bottom"></i> DomaHub, Inc.</a>');
+    $("#doma_logo").replaceWith('<a id="doma_logo" href="https://domahub.com"><i class="fal fa-copyright v-align-bottom"></i> DomaHub, Inc.</a>');
     $(".logo-item").attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png").removeClass('is-hidden').removeAttr("style").attr("href", "/");
   }
 }

@@ -139,15 +139,12 @@
             </a>
           </li>
           <li class="menu-item">
-            <a class="step-link" data-step="10">
+            <a id="step-link-no-handler" class="step-link">
               <p>
                 Review and Edit
               </p>
               <div class="icon is-primary is-hidden">
                 <i class="fal fa-check"></i>
-              </div>
-              <div class="icon is-danger is-hidden">
-                <i class="fal fa-circle"></i>
               </div>
             </a>
           </li>
@@ -156,7 +153,12 @@
 
       <div class="right-content">
         <progress class="progress is-primary" value="0" max="100"></progress>
-        <button class="button steps-menu-button is-stylish is-small">Show Menu</button>
+        <button class="button steps-menu-button is-stylish is-small">
+          <span class="icon is-small">
+            <i class="fal fa-bars"></i>
+          </span>
+          <span>Show Menu</span>
+        </button>
 
         <div class="steps-wrapper">
 
@@ -174,7 +176,7 @@
                 </h1>
                 <p class="tip">
                   You're just a few steps away from accessing our platform.
-                  Here, we'll quickly guide you through the process of setting up your account.
+                  But first, let us quickly guide you through the process of setting up your account.
                   Click the button on the bottom-right corner of your screen to get started.
                 </p>
               </div>
@@ -183,7 +185,7 @@
             </div>
             <div class="control step-buttons">
               <button form="step-form-1" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -208,11 +210,11 @@
               <form id="step-form-2" class="onboarding-step-form">
                 <div class="control">
                   <label class="label" for="first_name-input">First Name</label>
-                  <input required data-uservar="first_name" id="first_name-input" class="input stripe-account-input has-shadow" type="text" name="first_name" />
+                  <input required data-uservar="first_name" id="first_name-input" placeholder="John" class="input stripe-account-input has-shadow" type="text" name="first_name" />
                 </div>
                 <div class="control">
                   <label class="label" for="last_name-input">Last Name</label>
-                  <input required data-uservar="last_name" id="last_name-input" class="input stripe-account-input has-shadow" type="text" name="last_name" />
+                  <input required data-uservar="last_name" id="last_name-input" placeholder="Smith" class="input stripe-account-input has-shadow" type="text" name="last_name" />
                 </div>
                 <div class="control">
                   <label class="label">Birth Date</label>
@@ -368,13 +370,14 @@
             </div>
             <div class="control step-buttons">
               <button form="step-form-2" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
               </button>
             </div>
           </div>
+
           <!-- STEP 3 (Address) -->
           <div id="onboarding-step-3" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
@@ -385,7 +388,7 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">Skip this step for now</a>
+                  <a class="is-primary is-underlined onboarding-skip-button">Skip this step for now</a>
                 </div>
               </div>
               <div class="content">
@@ -394,7 +397,7 @@
                 </h1>
                 <p class="tip">
                   This information is legally required for payments processing. DomaHub does not share this information with anyone except our payments processors.
-                  <a class="is-underlined">Why is my country not listed?</a>
+                  <a class="is-underlined" data-balloon="Only a select few countries are eligible for bank withdrawals. If you do not see your country listed, please skip this step and add other payout accounts." data-balloon-length="large" data-balloon-pos="up">Why is my country not listed?</a>
                 </p>
               </div>
               <form id="step-form-3" class="onboarding-step-form">
@@ -430,24 +433,26 @@
                 </div>
                 <div class="control">
                   <label class="label" for="addressline1-input">Address Line 1</label>
-                  <input required data-uservar="addressline1" id="addressline1-input" class="input stripe-account-input has-shadow" type="text" name="addressline1" autocomplete=""/>
+                  <input required data-uservar="addressline1" id="addressline1-input" placeholder="50 Doma Street" class="input stripe-account-input has-shadow" type="text" name="addressline1" autocomplete=""/>
                 </div>
                 <div class="control">
                   <label class="label" for="addressline2-input">Address Line 2</label>
-                  <input data-uservar="addressline2" id="addressline2-input" class="input stripe-account-input has-shadow" type="text" name="addressline2" autocomplete=""/>
+                  <input data-uservar="addressline2" id="addressline2-input" class="input stripe-account-input has-shadow" placeholder="Suite 322" type="text" name="addressline2" autocomplete=""/>
+                </div>
+                <div class="control">
+                  <div class="control is-expanded">
+                    <label class="label" for="city-input">City / Town</label>
+                    <input required data-uservar="city" placeholder="Doma City" id="city-input" class="input stripe-account-input has-shadow" type="text" name="city" autocomplete=""/>
+                  </div>
                 </div>
                 <div class="control is-grouped">
                   <div class="control is-expanded">
-                    <label class="label" for="city-input">City / Town</label>
-                    <input required data-uservar="city" id="city-input" class="input stripe-account-input has-shadow" type="text" name="city" autocomplete=""/>
-                  </div>
-                  <div class="control is-expanded">
                     <label class="label" for="state-input">State / Province / Region</label>
-                    <input required data-uservar="state" id="state-input" class="input stripe-account-input has-shadow" type="text" name="state" autocomplete=""/>
+                    <input required data-uservar="state" id="state-input" placeholder="DH" class="input stripe-account-input has-shadow" type="text" name="state" autocomplete=""/>
                   </div>
                   <div class="control is-expanded">
                     <label class="label" for="postal_code-input">Zip / Postal Code</label>
-                    <input required data-uservar="zip" id="postal_code-input" class="input stripe-account-input has-shadow" type="text" name="zip" autocomplete=""/>
+                    <input required data-uservar="zip" id="postal_code-input" placeholder="12345" class="input stripe-account-input has-shadow" type="text" name="zip" autocomplete=""/>
                   </div>
                 </div>
               </form>
@@ -457,10 +462,10 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
               <button form="step-form-3" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -478,16 +483,19 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">Skip this step for now</a>
+                  <a class="is-primary is-underlined onboarding-skip-button">Skip this step for now</a>
                 </div>
               </div>
               <div class="content">
                 <h1>
                   Set up a bank account so we can get you paid.
                 </h1>
-                <p class="tip">
-                  Don't see your country listed or prefer to use a different method to receive payments? <a class="contact-link is-underlined">Let us know</a>!
+                <p>
+                  This information is legally required for payments processing. DomaHub does not share this information with anyone except our payments processors. <a class="is-underlined" data-balloon="Only a select few countries are eligible for bank withdrawals. If you do not see your country listed, please skip this step and add other payout accounts." data-balloon-length="large" data-balloon-pos="up">Why is my country not listed?</a>
                 </p>
+              </div>
+              <div class="control">
+                <p id="existing-bank-details"></p>
               </div>
               <form id="step-form-4" class="onboarding-step-form">
                 <div class="control existing-bank is-hidden"></div>
@@ -568,10 +576,10 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
               <button form="step-form-4" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -589,7 +597,7 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">Skip this step for now</a>
+                  <a class="is-primary is-underlined onboarding-skip-button">Skip this step for now</a>
                 </div>
               </div>
               <div class="content">
@@ -609,16 +617,17 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
               <button form="step-form-5" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
               </button>
             </div>
           </div>
+
           <!-- STEP 6 (Premium) -->
           <div id="onboarding-step-6" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
@@ -629,7 +638,7 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">No, maybe some other time</a>
+                  <a class="is-primary onboarding-skip-button is-underlined">No, maybe some other time</a>
                 </div>
               </div>
               <div class="content">
@@ -637,8 +646,7 @@
                   Upgrade to Premium and get access to even more features!
                 </h1>
                 <p class="tip">
-                  Our Premium subscription only costs $5 a month for unlimited access to
-                  all of our features.
+                  Our <a class="is-primary is-underlined" target="_blank" href="/#pricing">Premium subscription</a> gives unlimited access to all of our features.
                 </p>
               </div>
               <div class="columns">
@@ -675,8 +683,8 @@
                     </div>
                   </form>
                 </div>
-                <div class="column is-6">
-                  <div class="box is-small">
+                <div class="column is-3 is-offset-1">
+                  <div class="box">
                     <div class="content has-text-centered">
                       <div class="icon is-circle is-medium is-primary">
                         <i class="fal fa-trophy-alt"></i>
@@ -688,8 +696,9 @@
                       </p>
                       <p>
                         Enjoy zero commission on all sales, unlock designs for landing pages and hubs,
-                        use custom URL's for all pages, and much more!
+                        use custom URL's for all pages, SSL certificates, and much more!
                       </p>
+                      <a class="is-primary is-underlined" target="_blank" href="/#pricing">Click here to learn more!</a>
                     </div>
                   </div>
                 </div>
@@ -700,10 +709,10 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
               <button form="step-form-6" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step (Pay Now)</span>
+                <span>Next Step (Pay Now)</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -720,13 +729,10 @@
                     Upload Domains
                   </p>
                 </div>
-                <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">No, I'll upload them later</a>
-                </div>
               </div>
               <div class="content">
                 <h1>
-                  Great! Your information is set and ready. Are you ready to add some domains?
+                  Great! Your information is set and ready. Let's add some domains!
                 </h1>
                 <p class="tip">
                   You can connect a domain registrar and import your domains automatically, or you can
@@ -744,7 +750,7 @@
                           </div>
                         </div>
                         <div class="content has-text-centered">
-                          <p class="is-bold">Connect a Registrar</p>
+                          <p class="is-bold">Connect A Registrar</p>
                           <p class="tip">
                             We currently provide support for the following registars: GoDaddy, Namecheap, and Namesilo.
                           </p>
@@ -766,8 +772,7 @@
                         <div class="content has-text-centered">
                           <p class="is-bold">Upload Domains Manually</p>
                           <p class="tip">
-                            Easily upload domains in bulk with our upload tool.
-                            Best if you only have a handful of domains to upload.
+                            Easily upload domains in bulk with our upload tool. Best if you only have a handful of domains.
                           </p>
                         </div>
                       </div>
@@ -784,7 +789,7 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
             </div>
           </div>
@@ -799,16 +804,19 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">Add domains manually</a>
+                  <a class="is-primary onboarding-skip-button is-underlined">Add domains manually</a>
                 </div>
               </div>
               <div class="content">
                 <h1>
-                  Please select a registrar to connect.
+                  Please select a domain registrar to connect.
                 </h1>
                 <p class="tip">
                   By connecting your registrar, you'll be able to automatically create listings for all of your domains.
-                  If you'd like to see a different registrar added, <a class="contact-link is-underlined">let us know</a>!
+                  If you'd like to see a different registrar added, <a href="/contact" target="_blank" class="contact-link is-primary is-underlined">let us know</a>!
+                </p>
+                <p class="tip">
+                  DomaHub is not affiliated with any of the below listed registrars.
                 </p>
               </div>
               <form id="step-form-8" class="onboarding-step-form">
@@ -861,10 +869,10 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
               <button form="step-form-8" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Lookup Domain Names</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -880,9 +888,6 @@
                   <p class="heading">
                     Manually Upload Domains
                   </p>
-                </div>
-                <div class="control-right">
-                  <a class="is-primary onboarding-skip-button">Skip this step</a>
                 </div>
               </div>
               <div class="content">
@@ -903,10 +908,10 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
               <button form="step-form-9" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -925,49 +930,49 @@
               <div class="content">
                 <h1>Review and edit your domains.</h1>
                 <p class="tip">
-                  Take a moment to review your domains and enter additional information.
+                  Take a moment to review your domains and enter optional pricing information.
                 </p>
               </div>
               <form id="step-form-10" class="onboarding-step-form">
                 <table id="domain-input-table" class="table has-shadow">
-                    <thead>
-                      <tr>
-                        <th class='td-domain'>Domain Name</th>
-                        <th class="td-price is-hidden-mobile">
-                          <span>Minimum Price</span>
-                          <span class="icon is-tooltip is-small" data-balloon="The minimum offer you will consider selling this domain for. Leave blank for no minimum price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-                            <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                          </span>
-                        </th>
-                        <th class="td-price is-hidden-mobile">
-                          <span>Buy it now Price</span>
-                          <span class="icon is-tooltip is-small" data-balloon="The price you are willing to sell this domain for immediately. Leave blank to disable the buy it now option. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-                            <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                          </span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody id="domain-input-body" data-rows="0">
-                      <tr id="clone-row" class="is-hidden table-row no-hover-effect">
-                        <td class="td-domain aligned">
-                          <div class='control has-addons is-marginless'>
-                            <button class="button is-icon delete-icon no-shadow">
-                              <span class='icon is-small'>
-                                <i class='fal fa-trash-alt'></i>
-                              </span>
-                            </button>
-                            <input class="domain-name-input table-input input is-expanded no-shadow" type="text" value=""/>
-                          </div>
-                        </td>
-                        <td class="td-price aligned is-hidden-mobile">
-                          <input class="min-price-input table-input input no-shadow" type="number" min="0" />
-                        </td>
-                        <td class="td-price aligned is-hidden-mobile">
-                          <input class="buy-price-input table-input input no-shadow" type="number" min="0" />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <thead>
+                    <tr>
+                      <th class='td-domain'>Domain Name</th>
+                      <th class="td-price is-hidden-mobile">
+                        <span>Minimum Price</span>
+                        <span class="icon is-tooltip is-small" data-balloon="The minimum offer you will consider selling this domain for. Leave blank for no minimum price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+                          <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+                        </span>
+                      </th>
+                      <th class="td-price is-hidden-mobile">
+                        <span>Buy It Now Price</span>
+                        <span class="icon is-tooltip is-small" data-balloon="The price you are willing to sell this domain for immediately. Leave blank to disable the buy it now option. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+                          <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+                        </span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="domain-input-body" data-rows="0">
+                    <tr id="clone-row" class="is-hidden table-row no-hover-effect">
+                      <td class="td-domain aligned">
+                        <div class='control has-addons is-marginless'>
+                          <button class="button is-icon delete-icon no-shadow">
+                            <span class='icon is-small'>
+                              <i class='fal fa-trash-alt'></i>
+                            </span>
+                          </button>
+                          <input class="domain-name-input table-input input is-expanded no-shadow" type="text" value=""/>
+                        </div>
+                      </td>
+                      <td class="td-price aligned is-hidden-mobile">
+                        <input class="min-price-input table-input input no-shadow" type="number" min="0" />
+                      </td>
+                      <td class="td-price aligned is-hidden-mobile">
+                        <input class="buy-price-input table-input input no-shadow" type="number" min="0" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </form>
             </div>
             <div class="control step-buttons">
@@ -975,10 +980,10 @@
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-left"></i>
                 </div>
-                <span class="is-hidden-mobile">Previous Step</span>
+                <span>Previous Step</span>
               </a>
               <button form="step-form-10" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span class="is-hidden-mobile">Next Step</span>
+                <span>Submit Domains</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -987,7 +992,7 @@
           </div>
 
           <!-- STEP 11 (After Successfully Creating A Listing) -->
-          <div id="onboarding-step-final" class="step onboarding-step-wrapper is-hidden">
+          <div id="onboarding-step-11" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
               <div class="control">
                 <p class="heading">
@@ -996,25 +1001,30 @@
               </div>
               <div class="content">
                 <h1>
-                  Congratulations! You've created your first <span id="total-created-listings"></span> and set up your account.
+                  Congratulations! You've created <span id="total-created-listings">some domain listings</span> and set up your account.
                 </h1>
                 <p class="tip">
                   This next part will guide you through each part of the DomaHub interface, so you understand how everything
                   fits together!
                 </p>
               </div>
-              <form id="step-form-final" class="onboarding-step-form">
+              <form id="step-form-11" class="onboarding-step-form">
               </form>
               <div class="control">
-                <button class="button is-stylish is-primary is-large">
-                  <span>Start the Guide</span>
+                <button id="goto-tutorial-button" class="button is-stylish is-primary is-large">
+                  <span>Start The Guide</span>
                   <div class="icon">
                     <i class="fal fa-long-arrow-right"></i>
                   </div>
                 </button>
               </div>
               <div class="control">
-                <a class="is-primary">I'd rather skip it.</a>
+                <button id="skip-tutorial-button" class="button is-small is-stylish">
+                  <div class="icon is-small">
+                    <i class="fal fa-frown"></i>
+                  </div>
+                  <span>No thanks, I'll dive right in.</span>
+                </button>
               </div>
             </div>
           </div>

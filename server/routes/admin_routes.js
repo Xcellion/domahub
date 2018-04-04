@@ -166,7 +166,7 @@ function createPromoCodes(req, res, next){
 
 //render the admin dashboard
 function renderAdminDashboard(req, res, next){
-  res.render("./admin/admin_dashboard.ejs");
+  res.render("./admin/admin_page.ejs");
 }
 
 //</editor-fold>

@@ -56,8 +56,17 @@
   }
 }
 
+#cta .column.is-2 {
+  @include mobile{
+    padding-top: 50px;
+  }
+}
+
 .centered-button {
-  left:50%;
+  left:calc(50% - 10px);
   top:50%;
   transform:translate(-50%, -50%);
+  @include mobile {
+    left:50% !important;
+  }
 }
