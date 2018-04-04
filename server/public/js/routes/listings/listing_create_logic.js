@@ -432,7 +432,7 @@ function lookupRegistrars(){
           createDomainsTable(data.bad_listings, data.good_listings.slice(0, 20));
         }
         else if (data.bad_listings.length == 0){
-          infoMessage("We couldn't find any unlisted domains in your connected registrars! If there is something wrong, please <a class='is-underlined contact-link' href='/contact'>contact us</a> for assistance!");
+          infoMessage("We couldn't find any unlisted domains in your connected registrars! Please try creating your domain listings manually.</br></br>If there is something wrong, please <a class='is-underlined contact-link' href='/contact'>contact us</a> for assistance!");
         }
         else {
           errorMessage("Something went wrong in looking up your domains! Please refresh the page and try again. If this continues, please create your listings manually.");

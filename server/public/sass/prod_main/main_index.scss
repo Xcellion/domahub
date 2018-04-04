@@ -74,10 +74,25 @@
   background-position: center;
 }
 
+#cta .column.is-2 {
+  @include mobile{
+    padding-top: 50px;
+  }
+}
+
 .is-reversed {
   @include mobile {
     display: flex;
     flex-direction: column-reverse;
+  }
+}
+
+.has-text-right-desktop {
+  @include mobile{
+    text-align: center !important;
+  }
+  @include desktop{
+    text-align: right !important;
   }
 }
 
@@ -111,8 +126,10 @@
 
 .price-control {
   margin-top: -50px;
+  justify-content: flex-end !important;
   @include mobile {
     margin-top: 0;
+    justify-content: center !important;
   }
 }
 

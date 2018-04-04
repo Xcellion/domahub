@@ -2,6 +2,7 @@ var time_chart;
 var countries_chart;
 var popular_chart;
 var channels_chart;
+var refreshing_charts = false;
 
 $(document).ready(function() {
 
@@ -44,41 +45,13 @@ $(document).ready(function() {
   //when analytics has finished loading
   gapi.analytics.ready(function() {
 
-    //autorize user with google analytics
-    gapi.analytics.auth.authorize({
-      'serverAuth': {
-        'access_token': user.ga_access_token
-      }
-    });
+    //authorize user with google analytics and then build all charts
+    googleAuthAndBuildCharts();
 
-    //filter out only user listings
-    var listing_filters = user.listings.map(function(listing){
-      return listing.domain_name.toLowerCase();
-    }).join("|");
-    var listing_regex = (user.listings.length > 0) ? new RegExp("^(" + listing_filters + ")") : new RegExp("(?!)");
-
-    buildCharts(listing_regex);
-
-    //change date range
-    $("#last-days-select").on("change", function(){
-      buildCharts(listing_regex);
-    });
-
-    //change stats on time chart (only if different from current)
-    $(".stat-wrapper").on("click", function(){
-      if (!$(this).hasClass("is-active")){
-        $(".stat-wrapper").removeClass("is-active");
-        $(this).addClass("is-active");
-        var now = moment();
-        buildTimeChart(listing_regex, now, "time-chart");
-      }
-    });
-
-    //refresh charts
-    $("#refresh-tables-button").on("click", function(){
-      buildCharts(listing_regex);
-    });
-
+    //set up tutorial if step # is 12
+    if (user.onboarding_step == 12){
+      setupDomaTutorial();
+    }
   });
 
   //</editor-fold>
@@ -168,6 +141,43 @@ function updatePortfolioOverviewCounters(){
 
   //<editor-fold>-------------------------------GOOGLE AUTH-------------------------------
 
+  //authorize user with google analytics and then build all charts
+  function googleAuthAndBuildCharts(){
+    gapi.analytics.auth.authorize({
+      'serverAuth': {
+        'access_token': user.ga_access_token
+      }
+    });
+
+    //filter out only user listings
+    var listing_filters = user.listings.map(function(listing){
+      return listing.domain_name.toLowerCase();
+    }).join("|");
+    var listing_regex = (user.listings.length > 0) ? new RegExp("^(" + listing_filters + ")") : new RegExp("(?!)");
+
+    buildCharts(listing_regex);
+
+    //change date range
+    $("#last-days-select").off().on("change", function(){
+      buildCharts(listing_regex);
+    });
+
+    //change stats on time chart (only if different from current)
+    $(".stat-wrapper").off().on("click", function(){
+      if (!$(this).hasClass("is-active")){
+        $(".stat-wrapper").removeClass("is-active");
+        $(this).addClass("is-active");
+        var now = moment();
+        buildTimeChart(listing_regex, now, "time-chart");
+      }
+    });
+
+    //refresh charts
+    $("#refresh-tables-button").off().on("click", function(){
+      buildCharts(listing_regex);
+    });
+  }
+
   //extend google embed api "gapi.analytics.report.Data" and wrap it in a promise
   function gaQuery(params) {
     return new Promise(function(resolve, reject) {
@@ -176,6 +186,17 @@ function updatePortfolioOverviewCounters(){
       .once('error', function(response) { reject(response); })
       .execute();
     });
+  }
+
+  //error handler for google
+  function gaErrorHandler(err){
+    console.log(err);
+    // $.ajax({
+    //   url : "/profile/refreshGoogleAPI",
+    //   method : "POST"
+    // }).done(function(data){
+    //   location.reload();
+    // });
   }
 
   //</editor-fold>
@@ -379,6 +400,8 @@ function updatePortfolioOverviewCounters(){
         //display current stat name
         $("#current-stat-name").text(stat_to_get_desc);
       }
+    }).catch(function(err){
+      gaErrorHandler(err);
     });
   }
 
@@ -573,6 +596,8 @@ function updatePortfolioOverviewCounters(){
         thousand : ",",
         decimals : 0
       });
+    }).catch(function(err){
+      gaErrorHandler(err);
     });
   }
 
@@ -724,6 +749,8 @@ function updatePortfolioOverviewCounters(){
 
         }
       }
+    }).catch(function(err){
+      gaErrorHandler(err);
     });
   }
 
@@ -847,6 +874,8 @@ function updatePortfolioOverviewCounters(){
           countries_chart = new Chart(ctx, chartOptions);
         }
       }
+    }).catch(function(err){
+      gaErrorHandler(err);
     });
   }
 
@@ -983,6 +1012,8 @@ function updatePortfolioOverviewCounters(){
           popular_chart = new Chart(ctx, chartOptions);
         }
       }
+    }).catch(function(err){
+      gaErrorHandler(err);
     });
   }
 
