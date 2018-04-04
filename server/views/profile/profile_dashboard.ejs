@@ -221,7 +221,7 @@
                           </p>
                         </div>
                         <div id="time-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                          <p class='icon is-medium'><i class="fal fa-spin fa-sync-alt"></i></p>
+                          <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
                           <p>Now loading <span id="current-stat-name-loading">unique users</span> data.</p>
                         </div>
                       </div>
@@ -249,7 +249,7 @@
                       </p>
                     </div>
                     <div id="channels-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                      <p class='icon is-medium'><i class="fal fa-spin fa-sync-alt"></i></p>
+                      <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
                       <p>Now loading channel data.</p>
                     </div>
                   </div>
@@ -273,7 +273,7 @@
                       </p>
                     </div>
                     <div id="countries-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                      <p class='icon is-medium'><i class="fal fa-spin fa-sync-alt"></i></p>
+                      <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
                       <p>Now loading country data.</p>
                     </div>
                   </div>
@@ -297,7 +297,7 @@
                       </p>
                     </div>
                     <div id="popular-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                      <p class='icon is-medium'><i class="fal fa-spin fa-sync-alt"></i></p>
+                      <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
                       <p>Now loading listing data.</p>
                     </div>
                   </div>
@@ -313,6 +313,7 @@
   <% if (new Date(user.date_accessed).getTime() < new Date("2018-01-23").getTime()){ %>
     <%- include("templates/announcements.ejs"); %>
   <% } %>
+
   <script src="/js/routes/profile/profile_dashboard_logic.js" type="text/javascript"></script>
 
 </body>

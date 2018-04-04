@@ -13,25 +13,26 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------ONBOARDING-------------------------------
 
-  // //onboarding page
-  // app.get("/profile/welcome", [
-  //   auth_functions.checkLoggedIn,
-  //   stripe_functions.getStripeAccount,
-  //   stripe_functions.getStripeCustomer,
-  //   stripe_functions.getStripeSubscription,
-  //   profile_functions.getAccountListings,
-  //   profile_functions.getAccountRegistrars,
-  //   profile_functions.updateAccountSettingsPassthrough,
-  //   profile_functions.renderOnboarding
-  // ]);
-  //
-  // //finished welcome tutorial
-  // app.post("/profile/welcome/finished", [
-  //   general_functions.urlencodedParser,
-  //   auth_functions.checkLoggedIn,
-  //   profile_functions.finishedOnboarding,
-  //   profile_functions.updateAccountSettingsPost
-  // ]);
+  //render onboarding page
+  app.get("/profile/welcome", [
+    auth_functions.checkLoggedIn,
+    stripe_functions.getStripeAccount,
+    stripe_functions.getStripeCustomer,
+    stripe_functions.getStripeSubscription,
+    profile_functions.getAccountListings,
+    profile_functions.getAccountRegistrars,
+    profile_functions.checkOnboardingStep,
+    profile_functions.updateAccountSettingsPassthrough,
+    profile_functions.renderOnboarding
+  ]);
+
+  //sets current step for onboarding
+  app.post("/profile/welcome/setstep", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.setOnboardingStep,
+    profile_functions.updateAccountSettingsPost
+  ]);
 
   //</editor-fold>
 
@@ -48,6 +49,11 @@ module.exports = function(app){
     profile_functions.getAccountTransactionsLocal,
     profile_functions.authWithGoogle,
     profile_functions.renderDashboard
+  ]);
+
+  app.post("/profile/refreshGoogleAPI", [
+    auth_functions.checkLoggedIn,
+    profile_functions.deleteGoogleAPI
   ]);
 
   //</editor-fold>

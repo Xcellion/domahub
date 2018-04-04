@@ -573,7 +573,7 @@ module.exports = {
                       to: "general@domahub.com",
                       from: 'general@domahub.com',
                       subject: "New user signed up for DomaHub! Failed monkey insert!",
-                      html: "Username - " + user.username + "<br />Email - " + user.email + "<br />Error - " + err + "<br />Body - " + body
+                      html: "Username - " + user.username + "<br />Email - " + user.email + "<br />Error - " + err + "<br />Body - " + JSON.stringify(body) + JSON.stringify(err)
                     });
                   }
                   else {
@@ -674,15 +674,15 @@ module.exports = {
           message: messageReset(req)
         });
       }
-      // //redirect to welcome setup if just created account
-      // else if (moment.duration(moment().diff(moment(req.user.date_created))).asDays() <= 1 && req.method == "GET"){
-      //   if (req.path == "/profile/welcome"){
-      //     next();
-      //   }
-      //   else {
-      //     res.redirect("/profile/welcome");
-      //   }
-      // }
+      //redirect to welcome setup if just created account (12 means finished onboarding and wants to check out tutorial)
+      else if (req.user.onboarding_step && [0,1,2,3,4,5,6,7,8,9,10,11].indexOf(parseFloat(req.user.onboarding_step)) != -1){
+        if (req.path.indexOf("/profile/welcome") != -1 || req.header("Referer").indexOf("profile/welcome") != -1){
+          next();
+        }
+        else {
+          res.redirect("/profile/welcome?step=" + user.onboarding_step);
+        }
+      }
       //successfully logged in!
       else {
         if (!req.user.id && req.method == "POST"){
@@ -769,6 +769,12 @@ module.exports = {
             if (user.type > 0){
               user_db_obj.token = null;
               user_db_obj.token_exp = null;
+            }
+
+            //remove onboarding step if they've logged out and logged in again after completing
+            if (user.onboarding_step == 12){
+              user_db_obj.onboarding_step = null;
+              delete req.user.onboarding_step;
             }
 
             //update account last accessed and removing any existing tokens
