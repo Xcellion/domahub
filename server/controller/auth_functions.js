@@ -573,7 +573,7 @@ module.exports = {
                       to: "general@domahub.com",
                       from: 'general@domahub.com',
                       subject: "New user signed up for DomaHub! Failed monkey insert!",
-                      html: "Username - " + user.username + "<br />Email - " + user.email + "<br />Error - " + err + "<br />Body - " + body
+                      html: "Username - " + user.username + "<br />Email - " + user.email + "<br />Error - " + err + "<br />Body - " + JSON.stringify(body) + JSON.stringify(err)
                     });
                   }
                   else {
