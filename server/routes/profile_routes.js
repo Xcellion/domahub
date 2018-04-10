@@ -196,6 +196,7 @@ module.exports = function(app){
   //lookup registrars and pull domain names
   app.post("/profile/registrar/lookup", [
     auth_functions.checkLoggedIn,
+    profile_functions.getAccountListings,
     profile_functions.getRegistrarAPI,
     profile_functions.getRegistrarDomains
   ]);
