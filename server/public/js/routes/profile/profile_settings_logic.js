@@ -513,10 +513,10 @@ function showSectionByURL(){
         hideSaveCancelButtons();
         closeModals();
         if (data.state == "success"){
-          successMessage("Successfully updated account settings!");
           if (data.user){
             user = data.user;
           }
+          successMessage("Successfully updated account settings!");
         }
         else {
           if (data.message == "invalid-ga-tracking"){

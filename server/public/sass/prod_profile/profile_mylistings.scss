@@ -311,14 +311,15 @@ td > .icon, th > .icon {
   .field {
     margin-right: 10px;
   }
-  &.is-mobile {
-    @include mobile {
-      .button {
-        .icon {
-          &:first-child {
-            margin-left: 0;
-            margin-right: 0;
-          }
+}
+
+.control.is-mobile {
+  @include mobile {
+    .button {
+      .icon {
+        &:first-child {
+          margin-left: 0;
+          margin-right: 0;
         }
       }
     }
