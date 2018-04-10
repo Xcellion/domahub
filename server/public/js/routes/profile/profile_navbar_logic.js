@@ -221,9 +221,12 @@ function removeURLParameter(parameter) {
 //populate the notifications tray
 function showNotifications() {
 
+  //reset tray
+  $("#notification-tray li").remove();
+
   //if no listings
   if (!user.listings || user.listings.length == 0){
-    appendNotification("<a tabindex='0' class='is-primary' href='/listings/create'>Create DomaHub listings</a>");
+    appendNotification("listings-notification", "<a tabindex='0' class='is-primary' href='/listings/create'>Create DomaHub listings</a>");
   }
 
   //if unverified domains exist
@@ -231,26 +234,26 @@ function showNotifications() {
     return !listing.verified;
   });
   if (unverified_listings.length > 0){
-    appendNotification("<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
+    appendNotification("verify-notification", "<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
   }
 
   //if stripe payout settings are not set
   if (!user.stripe_account) {
-    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Complete payout settings</a>");
+    appendNotification("payout-details-notification", "<a tabindex='0' href='/profile/settings#payment'>Add payout details</a>");
   }
 
   //if bank account is not connected
-  if (!user.stripe_bank) {
-    appendNotification("<a tabindex='0' href='/profile/settings#payment'>Connect a bank account</a>");
+  if (!user.stripe_bank && !user.paypal_email) {
+    appendNotification("payout-account-notification", "<a tabindex='0' href='/profile/settings#payment'>Connect a payout method</a>");
   }
 
   //if not premium
   if (!user.stripe_subscription){
-    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
+    appendNotification("premium-notification", "<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
   }
   //if premium expiring
   else if (user.stripe_subscription.cancel_at_period_end){
-    appendNotification("<a tabindex='0' href='/profile/settings#premium'>Premium is expiring!</a>");
+    appendNotification("expiring-notification", "<a tabindex='0' href='/profile/settings#premium'>Premium is expiring!</a>");
   }
 
   calcNotificationCounter();
@@ -259,23 +262,28 @@ function showNotifications() {
 //when notifications tray is empty
 function calcNotificationCounter() {
   var notification_length = $("#notification-tray li").length;
-  if (notification_length > 0) {
+  if (notification_length > 0 && $("#notification-counter").hasClass("is-hidden")) {
+    $("#all-set-notification").remove();
     $("#notification-number").html(notification_length);
     $("#notification-counter").removeClass("is-hidden").text(notification_length);
-    var page_title = document.title.split(" - ");
+    var page_title = document.title.replace(/\(([^)]+)\)/, "").split(" - ");
     if (page_title){
       document.title = page_title[0] + " (" + notification_length + ") - " + page_title[1];
     }
   }
-  else {
+  else if (notification_length == 0 && $("#all-set-notification").length == 0){
+    $("#notification-counter").addClass("is-hidden");
     $("#notification-number").html("");
-    $("#notification-tray").append("<div class='content'><p>None - you're all set!</p></div>");
+    $("#notification-tray").append("<div id='all-set-notification' class='content'><p>None - you're all set!</p></div>");
+    document.title = document.title.replace(/\(([^)]+)\)/, "");
   }
 }
 
-function appendNotification(msg) {
-  var tray = $("#notification-tray");
-  return tray.append("<li>" + msg + "</li>");
+function appendNotification(id, msg) {
+  if ($("#" + id).length == 0){
+    var tray = $("#notification-tray");
+    tray.append("<li id=" + id + ">" + msg + "</li>");
+  }
 }
 
 //</editor-fold>

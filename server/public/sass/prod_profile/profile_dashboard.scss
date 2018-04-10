@@ -27,6 +27,20 @@
   }
 }
 
+//centered icons for mobile
+.control.is-mobile {
+  @include mobile {
+    .button {
+      .icon {
+        &:first-child {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
 .stat-column-large {
   width: 75%;
   margin-right: 20px;
