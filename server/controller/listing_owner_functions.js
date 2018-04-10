@@ -247,18 +247,18 @@ module.exports = {
         }))).then(function(results) {
           console.log("LOF: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
           for (var y = 0; y < results.length ; y++){
-            //if there was an error, then add it to bad reasons
-            if (results[y].state != "fulfilled"){
-              req.session.new_listings.bad_listings.push({
-                domain_name : results[y].reason.domain_name,
-                reasons : results[y].reason.reasons
-              });
-            }
             //successfully changed DNS!
-            else {
+            if (results[y].state == "fulfilled"){
               req.session.new_listings.good_listings.push({
                 domain_name : results[y].value.domain_name,
                 reasons : results[y].value.reasons
+              });
+            }
+            //if there was an error, then add it to bad reasons
+            else {
+              req.session.new_listings.bad_listings.push({
+                domain_name : results[y].reason.domain_name,
+                reasons : results[y].reason.reasons
               });
             }
           }
