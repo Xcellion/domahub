@@ -6,6 +6,7 @@ var data_model = require('../models/data_model.js');
 
 var stripe_functions = require('./stripe_functions.js');
 var paypal_functions = require('./paypal_functions.js');
+var listing_owner_functions = require('./listing_owner_functions.js');
 
 var passport = require('../lib/passport.js').passport;
 
@@ -477,8 +478,8 @@ module.exports = {
 
     //<editor-fold>-------------------------------------VERIFY-------------------------------
 
-    //format the posted domain ids to be verified
-    formatPostedVerificationRows : function(req, res, next){
+    //format the posted domain IDs to be verified
+    formatAndCheckIPVerify : function(req, res, next){
       console.log("PF: Checking posted IDs for verification...");
       var to_verify_formatted = [];
       var to_verify_promises = [];
@@ -502,6 +503,8 @@ module.exports = {
           }
         }
       }
+
+      //check the IPs
       if (to_verify_promises.length > 0){
         console.log("PF: Checking domain name IP addresses...");
         dns.resolve("domahub.com", "A", function (err, address, family) {
@@ -514,10 +517,10 @@ module.exports = {
           }
           else {
             var doma_ip = address[0];
-
-            //wait for all promises to finish
-            Q.allSettled(to_verify_promises)
-            .then(function(results) {
+            var limit = qlimit(10);     //limit parallel promises (throttle)
+            Q.allSettled(to_verify_promises.map(limit(function(item, index, collection){
+              return to_verify_promises[index]();
+            }))).then(function(results) {
               for (var x = 0; x < results.length; x++){
                 if (results[x].state == "fulfilled"){
                   if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
@@ -854,7 +857,7 @@ module.exports = {
     },
 
     //multi-verify listings
-    verifyListings : function(req, res, next){
+    verifyListingsOnDatabase : function(req, res, next){
       console.log("PF: Updating verified listings...");
       listing_model.verifyListings(req.session.verification_object.to_verify_formatted, function(result){
         if (result.state == "success"){
@@ -874,6 +877,160 @@ module.exports = {
         }
       });
     },
+
+      //<editor-fold>-------------------------------------AUTO VERIFY DNS-------------------------------
+
+      //format the posted domain IDs, and update DNS
+      formatAndUpdateDNS : function(req, res, next){
+        console.log("PF: Updating posted IDs DNS settings...");
+        var to_update_dns = [];
+
+        //build a hash of registrar_id and registrar_name
+        var connected_registrars_name_hash = {};
+        for (var x = 0 ; x < req.user.registrars.length ; x++){
+          connected_registrars_name_hash[req.user.registrars[x]["id"]] = req.user.registrars[x]["name"];
+        }
+
+        //build a hash of registrar_info
+        var connected_registrars_info_hash = {};
+        for (var x = 0 ; x < req.session.registrar_info.length ; x++){
+          connected_registrars_info_hash[req.session.registrar_info[x]["registrar_name"]] = req.session.registrar_info[x];
+        }
+
+        //create the array of promises of unverified but registrar connected domain names
+        if (req.body.ids){
+          for (var x = 0; x < req.body.ids.length; x++){
+            for (var y = 0; y < req.user.listings.length; y++){
+
+              //user object has the same listing id as the listing being verified
+              if (req.user.listings[y].id == req.body.ids[x]){
+
+                var listing_info = req.user.listings[y];
+
+                //if not verified and has a connected registrar
+                if (listing_info.verified != 1 && listing_info.registrar_id != null && connected_registrars_name_hash[listing_info.registrar_id] != undefined){
+
+                  //create promise to set DNS via API
+                  switch (connected_registrars_name_hash[req.user.listings[y].registrar_id]){
+                    case "godaddy":
+                    to_update_dns.push(listing_owner_functions.set_dns_godaddy_promise(connected_registrars_info_hash["godaddy"], listing_info.domain_name, listing_info.id));
+                    break;
+                    case "namecheap":
+                    to_update_dns.push(listing_owner_functions.set_dns_namecheap_promise(connected_registrars_info_hash["namecheap"], listing_info.domain_name, listing_info.id));
+                    break;
+                    case "namesilo":
+                    to_update_dns.push(listing_owner_functions.set_dns_namesilo_promise(connected_registrars_info_hash["namesilo"], listing_info.domain_name, listing_info.id));
+                    break;
+                  }
+                  break;
+                }
+
+              }
+            }
+          }
+        }
+
+        //finished creating array, now check
+        if (to_update_dns.length > 0){
+          console.log("PF: Getting registrar API keys...");
+
+          //all DNS registrars added!
+          var limit = qlimit(1);     //limit parallel promises (throttle)
+          Q.allSettled(to_update_dns.map(limit(function(item, index, collection){
+            return to_update_dns[index]();
+          }))).then(function(results) {
+            console.log("PF: Finished querying " + to_update_dns.length + " registrars for setting domain DNS!");
+
+            req.session.dns_changed_listings = [];
+            req.session.dns_unchanged_listings = [];
+
+            for (var y = 0; y < results.length ; y++){
+              //successfully changed DNS!
+              if (results[y].state == "fulfilled"){
+                req.session.dns_changed_listings.push({
+                  domain_name : results[y].value.domain_name,
+                  listing_id : results[y].value.listing_id,
+                  reasons : results[y].value.reasons
+                });
+              }
+              //if there was an error, then add it to bad reasons
+              else {
+                req.session.dns_unchanged_listings.push({
+                  domain_name : results[y].reason.domain_name,
+                  listing_id : results[y].reason.listing_id,
+                  reasons : results[y].reason.reasons
+                });
+              }
+            }
+            delete req.session.registrar_info;
+
+            next();
+          });
+
+        }
+        else {
+          error.handler(req, res, "Something went wrong in updating the DNS settings for your domains. Please refresh the page and try again!", "json");
+        }
+      },
+
+      //edit successful listings to status 3 and send response
+      updateListingsPostDNSUpdate : function(req, res, next){
+        console.log("PF: Checking if DNS settings have taken effect...");
+
+        //check if some DNS changes were made to see if we should auto-verify some listings
+        var check_dns_changed_promises = [];
+        if (req.session.dns_changed_listings && req.session.dns_changed_listings.length > 0){
+          for (var z = 0 ; z < req.session.dns_changed_listings.length ; z++){
+            check_dns_changed_promises.push(listing_owner_functions.check_domain_dns_promise(req.session.dns_changed_listings[z].domain_name, req.session.dns_changed_listings[z].listing_id));
+          }
+        }
+
+        //some didnt get their DNS settings changed
+        var dns_unchanged_listing_ids = [];
+        if (req.session.dns_unchanged_listings && req.session.dns_unchanged_listings.length > 0){
+          dns_unchanged_listing_ids = req.session.dns_unchanged_listings.reduce(function(p, c, i){
+            return p.push(c.listing_id);
+          }, []);
+        }
+
+        //all DNS changes checked!
+        var limit = qlimit(5);     //limit parallel promises (throttle)
+        Q.allSettled(check_dns_changed_promises.map(limit(function(item, index, collection){
+          return check_dns_changed_promises[index]();
+        }))).then(function(results) {
+          console.log("PF: Finished checking if DNS changes have taken effect...");
+
+          var pending_dns_ids = [];     //listings whose DNS settings were changed but is still waiting propagation
+          var verified_ids = [];        //listings whose DNS settings are already propagated (verified)
+          for (var x = 0; x < results.length; x++){
+            //DNS changes are propagated already so insert into an array of legit verified domains (status = 1)
+            if (results[x].state == "fulfilled"){
+              verified_ids.push(results[x].value.toString());
+            }
+            //insert into array of pending DNS domains (status = 3)
+            else {
+              pending_dns_ids.push(results[x].reason.toString());
+            }
+          }
+
+          //object wrapper for the various IDs
+          var various_ids = {
+            pending_dns_ids : pending_dns_ids,
+            verified_ids : verified_ids
+          }
+
+          //waterfall to make verified / pending DNS updates to the listings
+          Q.fcall(listing_owner_functions.verified_dns_promise, various_ids)      //function to call, and the parameter
+          .then(listing_owner_functions.pending_dns_promise, listing_owner_functions.pending_dns_promise)   //function on success, function on error
+          .done(function(various_ids){
+            setListingObjAfterDNS(req, res, dns_unchanged_listing_ids, pending_dns_ids, verified_ids);
+          }, function(err){
+            setListingObjAfterDNS(req, res, dns_unchanged_listing_ids, pending_dns_ids, verified_ids);
+          });
+        });
+      },
+
+      //</editor-fold>
 
     //</editor-fold>
 
@@ -917,6 +1074,11 @@ module.exports = {
                 req.user.listings[y].offers = offers_object[z];
                 break;
               }
+            }
+
+            //empty array if no offers
+            if (!req.user.listings[y].offers){
+              req.user.listings[y].offers = [];
             }
           }
         }
@@ -1141,7 +1303,7 @@ module.exports = {
 
       //get the registrar API keys
       account_model.getAccountRegistrars(req.user.id, function(result){
-        if (result.state=="error"){ error.handler(req, res, result.info); }
+        if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
         else {
           req.session.registrar_info = result.info;
           next();
@@ -1548,64 +1710,99 @@ module.exports = {
 
 }
 
-//<editor-fold>-------------------------------------VERIFICATION HELPERS (promises)-------------------------------
+//<editor-fold>-------------------------------------VERIFICATION HELPERS-------------------------------
 
-//promise function to look up the existing DNS records for a domain name
-function get_domain_dns(listing_obj, get_a){
-  return Q.Promise(function(resolve, reject, notify){
-    console.log("PF: Now looking up WHOIS info for " + listing_obj.domain_name + "...");
-    whois.lookup(listing_obj.domain_name, function(err, data){
-      var whoisObj = {};
-      if (err){
-        error.log(err, "Failed to look up whois information for table building during verification.");
+  //set the user.listings object after changing DNS settings automatically
+  function setListingObjAfterDNS(req, res, dns_unchanged_listing_ids, pending_dns_ids, verified_ids){
+    for (var x = 0 ; x < req.user.listings.length ; x++){
+      var current_listing_id = req.user.listings[x].id.toString();
+
+      //DNS changed but not verified yet (pending)
+      if (pending_dns_ids.indexOf(current_listing_id) != -1){
+        req.user.listings[x].status = 3;
+        req.user.listings[x].verified = 1;
       }
-      else {
-        var array = parser.parseWhoIsData(data);
-        for (var x = 0; x < array.length; x++){
-          whoisObj[array[x].attribute.trim()] = array[x].value;
+      //verified!
+      else if (verified_ids.indexOf(current_listing_id) != -1){
+        req.user.listings[x].status = 1;
+        req.user.listings[x].verified = 1;
+      }
+    }
+
+    delete req.session.dns_changed_listings;
+    delete req.session.dns_unchanged_listings;
+
+    res.send({
+      state : "success",
+      listings : req.user.listings,
+      dns_unchanged_listing_ids  :dns_unchanged_listing_ids,
+      pending_dns_ids : pending_dns_ids,
+      verified_ids : verified_ids
+    });
+  }
+
+  //<editor-fold>-------------------------------------VERIFICATION HELPERS (promises)-------------------------------
+
+  //promise function to look up the existing DNS records for a domain name
+  function get_domain_dns(listing_obj, get_a){
+    return Q.Promise(function(resolve, reject, notify){
+      console.log("PF: Now looking up WHOIS info for " + listing_obj.domain_name + "...");
+      whois.lookup(listing_obj.domain_name, function(err, data){
+        var whoisObj = {};
+        if (err){
+          error.log(err, "Failed to look up whois information for table building during verification.");
         }
-      }
-      listing_obj.whois = (whoisObj["Registrar"]) ? whoisObj : false;
-
-      //get A records as well
-      if (get_a){
-        //look up any existing DNS A Records
-        console.log("PF: Now looking up DNS A records for " + listing_obj.domain_name + "...");
-        dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
-          if (err && err.code != "ENOTFOUND" && err.code != "ENODATA"){
-            error.log(err, "Failed to look up A record information for table building during verification.");
+        else {
+          var array = parser.parseWhoIsData(data);
+          for (var x = 0; x < array.length; x++){
+            whoisObj[array[x].attribute.trim()] = array[x].value;
           }
-          listing_obj.a_records = (addresses) ? addresses : false;
-          resolve(listing_obj);
-        });
-      }
-      else {
-        resolve(listing_obj);
-      }
-    });
-  });
-}
-
-//custom promise creation, get ip address of domain
-function get_domain_ip(listing_obj){
-  return Q.Promise(function(resolve, reject, notify){
-    dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
-      if (err) {
-        if (err.code != "ENODATA"){
-          error.log(err, "Failed to look up DNS records while trying to verify listings.");
         }
-        reject(err);
-      }
-      else {
-        resolve({
-          domain_name : listing_obj.domain_name,
-          listing_id : listing_obj.listing_id,
-          address : address
-        });
-      }
+        listing_obj.whois = (whoisObj["Registrar"]) ? whoisObj : false;
+
+        //get A records as well
+        if (get_a){
+          //look up any existing DNS A Records
+          console.log("PF: Now looking up DNS A records for " + listing_obj.domain_name + "...");
+          dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
+            if (err && err.code != "ENOTFOUND" && err.code != "ENODATA"){
+              error.log(err, "Failed to look up A record information for table building during verification.");
+            }
+            listing_obj.a_records = (addresses) ? addresses : false;
+            resolve(listing_obj);
+          });
+        }
+        else {
+          resolve(listing_obj);
+        }
+      });
     });
-  })
-}
+  }
+
+  //custom promise creation, get ip address of domain
+  function get_domain_ip(listing_obj){
+    return function(){
+      return Q.Promise(function(resolve, reject, notify){
+        dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
+          if (err) {
+            if (err.code != "ENODATA"){
+              error.log(err, "Failed to look up DNS records while trying to verify listings.");
+            }
+            reject(err);
+          }
+          else {
+            resolve({
+              domain_name : listing_obj.domain_name,
+              listing_id : listing_obj.listing_id,
+              address : address
+            });
+          }
+        });
+      });
+    }
+  }
+
+  //</editor-fold>
 
 //</editor-fold>
 
