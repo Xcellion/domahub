@@ -117,8 +117,20 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
     profile_functions.checkPostedRowOwnership,
-    profile_functions.formatPostedVerificationRows,
-    profile_functions.verifyListings
+    profile_functions.formatAndCheckIPVerify,
+    profile_functions.verifyListingsOnDatabase
+  ]);
+
+  //auto multi verify via connected registrar
+  app.post("/profile/mylistings/verify/auto", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.getAccountListings,
+    profile_functions.checkPostedRowOwnership,
+    profile_functions.getAccountRegistrars,
+    profile_functions.getRegistrarAPI,
+    profile_functions.formatAndUpdateDNS,
+    profile_functions.updateListingsPostDNSUpdate,
   ]);
 
   //mylistings add to/remove from hub

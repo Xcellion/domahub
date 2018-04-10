@@ -1617,6 +1617,7 @@ function updateOffersTable(listing_info, total_domains){
         listing_info.transferred = 1;
       }
 
+
       //accepted an offer!
       if (listing_info.offers[x].deposited == 1 && listing_info.offers[x].transferred != 1){
         listing_info.accepted = 1;
@@ -1645,9 +1646,9 @@ function updateOffersTable(listing_info, total_domains){
 
       $("#offers-wrapper").prepend(cloned_offer_row);
     }
-
-    completed_domains++;
   }
+
+  completed_domains++;
 
   //all offers gotten
   if (completed_domains == total_domains){
@@ -2171,12 +2172,16 @@ function updateEditorUnverified(selected_domain_ids){
 //set up verification buttons
 function setupVerificationButtons(selected_domain_ids){
 
+  //show next / prev table buttons
   $("#prev-dns-table-button, #next-dns-table-button").off().on("click", function(){
     var upcoming_index = $(".cloned-dns-table:not(.is-hidden)").data("index") + $(this).data("value");
     upcoming_index = (upcoming_index < 0) ? $(".cloned-dns-table").length - 1 : upcoming_index;
     upcoming_index = (upcoming_index > $(".cloned-dns-table").length - 1) ? 0 : upcoming_index;
     $(".cloned-dns-table:not(.is-hidden)").addClass('is-hidden').stop().fadeOut(300, function(){
       $(".cloned-dns-table").eq(upcoming_index).stop().fadeIn(300).removeClass('is-hidden');
+
+      //show auto-DNS button if there is a registrar connected
+      updateAutoDNSButton($(".cloned-dns-table").eq(upcoming_index));
     });
   });
 
@@ -2214,6 +2219,7 @@ function createDNSRecordRows(selected_domain_ids, force){
       selected_listings.push({
         domain_name : listing_info.domain_name,
         id : selected_domain_ids[x],
+        registrar_id : listing_info.registrar_id,
         client_index : x
       });
     }
@@ -2263,9 +2269,12 @@ function getDNSRecords(selected_listings, selected_domain_ids, get_a, cb){
 
 //update the registrar URL if there is one
 function createDNSTable(listing_info, total_unverified, row_index){
-  var cloned_table = $("#current-dns-table-clone").clone().removeAttr('id').attr("id", "dns-table" + row_index).addClass("cloned-dns-table").data("index", row_index)
+  var cloned_table = $("#current-dns-table-clone").clone().removeAttr('id').attr("id", "dns-table" + row_index).addClass("cloned-dns-table").data("index", row_index);
   var cloned_a_row = cloned_table.find(".doma-a-record");
   var cloned_www_row = cloned_table.find(".doma-www-record");
+
+  //should show auto DNS button
+  cloned_table.data("show_auto", listing_info.registrar_id != null);
 
   var clipped_domain_name = (listing_info.domain_name.length > 25) ? listing_info.domain_name.substr(0, 15) + "..." + listing_info.domain_name.substr(listing_info.domain_name.length - 7, listing_info.domain_name.length - 1) : listing_info.domain_name;
 
@@ -2363,12 +2372,16 @@ function checkDNSAllDone(total_unverified){
       return ($(a).data("index") < $(b).data("index")) ? -1 : ($(a).data("index") > $(b).data("index")) ? 1 : 0;
     }).appendTo("#current-dns-tables");
 
+    //show the first unfinished
     if ($(".cloned-dns-table .is-danger").length){
       $(".cloned-dns-table .is-danger").closest(".cloned-dns-table").eq(0).removeClass('is-hidden');
     }
     else {
       $(".cloned-dns-table").eq(0).removeClass('is-hidden');
     }
+
+    //show auto-DNS button if there is a registrar connected
+    updateAutoDNSButton($(".cloned-dns-table:not(.is-hidden)"));
 
     //all DNS settings are good
     $("#verification-left-load").addClass('is-hidden');
@@ -2421,28 +2434,81 @@ function multiVerify(verify_button){
   });
 }
 
-//update the verify button
-function updateVerificationButton(listing_info, cb_when_verified){
-  var verify_button = $("#verify-button");
+//show auto-DNS button if there is a registrar connected
+function updateAutoDNSButton(cloned_dns_table){
+  if (cloned_dns_table.data("show_auto")){
+    $("#auto-dns-button").removeClass("is-hidden").off().on("click", function(){
 
-  //ajax to make sure it's all done, then display a regular row if verified
-  verify_button.off().on("click", function(e){
-    e.preventDefault();
+      //attempt to automatically make DNS changes via connected registrar
+      $("#auto-dns-button").addClass('is-loading');
+      var verify_ids = getSelectedDomains("id", false);
+      $.ajax({
+        url: "/profile/mylistings/verify/auto",
+        method: "POST",
+        data: {
+          ids: verify_ids
+        }
+      }).done(function(data){
+        $("#auto-dns-button").removeClass('is-loading');
+        if (data.state == "success"){
+          if (data.listings){
+            listings = data.listings;
+            user.listings = data.listings;
+          }
 
-    verify_button.addClass('is-loading');
-    $.ajax({
-      url: "/listing/" + listing_info.domain_name.toLowerCase() + "/verify",
-      method: "POST"
-    }).done(function(data){
-      verify_button.removeClass('is-loading is-danger');
-      if (data.state == "success"){
-        cb_when_verified();
-      }
-      else {
-        errorMessage(data.message);
-      }
+          var success_msg_text = "";
+          var pluralizer = function(number){
+            return (number == 1) ? "a domain" : number + " domains";
+          }
+          var was_there_error = false;
+          var was_there_success = false;
+
+          //verified
+          if (data.verified_ids && data.verified_ids.length > 0){
+            success_msg_text += "Successfully verified " + pluralizer(data.verified_ids.length) + "!";
+            was_there_success = true;
+          }
+          if (data.pending_dns_ids && data.pending_dns_ids.length > 0){
+            success_msg_text += "Successfully changed DNS settings for " + pluralizer(data.pending_dns_ids.length) + "! It may take up to 72 hours for the changes to take effect. In the meanwhile, please feel free to edit your listing details.";
+            was_there_success = true;
+          }
+          //unchanged DNS settings
+          if (data.dns_unchanged_listing_ids && data.dns_unchanged_listing_ids.length > 0){
+            success_msg_text += "Failed to change DNS settings for " + pluralizer(data.dns_unchanged_listing_ids.length) + ". Please make the changes manually to verify ownership.";
+            was_there_error = true;
+          }
+
+          //success or info or error message
+          if (was_there_error && was_there_success){
+            infoMessage(success_msg_text);
+          }
+          else if (was_there_error){
+            errorMessage(success_msg_text);
+          }
+          else {
+            successMessage(success_msg_text);
+          }
+
+          //if any success, show selector
+          if (was_there_success && !was_there_error){
+            createRows();
+            showSelector(true);
+          }
+          //if only error, refresh tables
+          else {
+            createDNSRecordRows(data.dns_unchanged_listing_ids, true);
+          }
+        }
+        else {
+          errorMessage(data.message);
+        }
+
+      });
     });
-  });
+  }
+  else {
+    $("#auto-dns-button").addClass("is-hidden").off();
+  }
 }
 
 //</editor-fold>
