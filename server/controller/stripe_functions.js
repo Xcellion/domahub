@@ -310,7 +310,8 @@ module.exports = {
             console.log("SF: Renewing existing Stripe subscription...");
 
             stripe.subscriptions.update(req.user.stripe_subscription_id, {
-              plan: subscription.plan.id
+              plan: subscription.plan.id,
+              cancel_at_period_end : false
             }, function(err, subscription) {
               if (err){
                 error.log(err, "Failed to update Stripe subscription.");

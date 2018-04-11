@@ -1177,41 +1177,41 @@ function namecheap(req, res, next){
 function namesilo(req, res, next){
   console.log("F: namesilo...");
 
-  // //get list of DNS records
-  // request({
-  //   url: namesilo_url + "/dnsListRecords",
-  //   method: "GET",
-  //   timeout: 10000,
-  //   qs : {
-  //     version : 1,
-  //     type : "xml",
-  //     key : namesilo_api,
-  //     domain : "testdomainwoohoohoohoo.com",
-  //   }
-  // }, function(err, response, body){
-  //   parseString(body, {
-  //     trim: true,
-  //     explicitRoot : false,
-  //     explicitArray : false,
-  //   }, function (err, result) {
-  //
-  //     //delete all DNS records
-  //     // var delete_dns_promises = [];
-  //     // for (var x = 0 ; x < result.namesilo.reply[0].resource_record.length ; x++){
-  //     //   delete_dns_promises.push(deleteNameSiloDNSRecord("testdomainwoohoohoohoo.com", result.namesilo.reply[0].resource_record[x].record_id[0]));
-  //     // }
-  //     //
-  //     // //deleted all DNS records, now create the two we need
-  //     // Q.allSettled(delete_dns_promises).then(function(results){
-  //     //   res.send(result);
-  //     // });
-  //
-  //     //just see the DNS records
-  //     res.send(result);
-  //   });
-  // });
+  //get list of DNS records
+  request({
+    url: namesilo_url + "/dnsListRecords",
+    method: "GET",
+    timeout: 10000,
+    qs : {
+      version : 1,
+      type : "xml",
+      key : namesilo_api,
+      domain : "testdomahub1.com",
+    }
+  }, function(err, response, body){
+    parseString(body, {
+      trim: true,
+      explicitRoot : false,
+      explicitArray : false,
+    }, function (err, result) {
 
-  // // //get all domains
+      //delete all DNS records
+      // var delete_dns_promises = [];
+      // for (var x = 0 ; x < result.namesilo.reply[0].resource_record.length ; x++){
+      //   delete_dns_promises.push(deleteNameSiloDNSRecord("testdomainwoohoohoohoo.com", result.namesilo.reply[0].resource_record[x].record_id[0]));
+      // }
+      //
+      // //deleted all DNS records, now create the two we need
+      // Q.allSettled(delete_dns_promises).then(function(results){
+      //   res.send(result);
+      // });
+
+      //just see the DNS records
+      res.send(result);
+    });
+  });
+
+  //get all domains
   // request({
   //   url: namesilo_url + "/listDomains",
   //   method: "GET",
@@ -1232,26 +1232,26 @@ function namesilo(req, res, next){
   // });
 
   // register a new domain
-  for (var x = 0 ; x < 20 ; x++){
-    request({
-      url: namesilo_url + "/registerDomain",
-      method: "GET",
-      timeout: 10000,
-      qs : {
-        version : 1,
-        type : "xml",
-        key : namesilo_api,
-        domain : "testdomahub" + x + ".com",
-        years : 1
-      }
-    }, function(err, response, body){
-      parseString(body, {trim: true}, function (err, result) {
-        console.log(body);
-        // res.json(result);
-      });
-    });
-  }
-  res.send("okay");
+  // for (var x = 0 ; x < 20 ; x++){
+  //   request({
+  //     url: namesilo_url + "/registerDomain",
+  //     method: "GET",
+  //     timeout: 10000,
+  //     qs : {
+  //       version : 1,
+  //       type : "xml",
+  //       key : namesilo_api,
+  //       domain : "testdomahub" + x + ".com",
+  //       years : 1
+  //     }
+  //   }, function(err, response, body){
+  //     parseString(body, {trim: true}, function (err, result) {
+  //       console.log(err, body);
+  //       // res.json(result);
+  //     });
+  //   });
+  // }
+  // res.send("okay");
 
   // //add A record for 208
   // request({

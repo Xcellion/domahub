@@ -40,6 +40,11 @@ function successMessage(message){
   if (message){
     $("#popup-notification").removeClass("is-hidden").addClass("is-primary growl-in");
     $("#popup-notification-message").html(message);
+
+    //refresh notifications
+    if (showNotifications){
+      showNotifications();
+    }
   }
   else if (!message){
     $("#popup-notification").removeClass("growl-in");
