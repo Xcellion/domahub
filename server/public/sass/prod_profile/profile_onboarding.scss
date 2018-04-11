@@ -142,6 +142,32 @@ a {
   }
 }
 
+.steam {
+  @include keyframes(coffee 2s ease-in-out alternate infinite);
+}
+
+.spike {
+  @include keyframes(shake 2s ease-in-out infinite alternate);
+}
+
+@keyframes coffee {
+  0% {
+    @include translate(0,0);
+  }
+  100% {
+    @include translate(0,5px);
+  }
+}
+
+@keyframes shake {
+  0% {
+    @include scale(1);
+  }
+  20%, 100% {
+    @include scale(1.02);
+  }
+}
+
 .heading {
   color: $grey;
   display: block;
