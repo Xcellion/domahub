@@ -130,7 +130,8 @@ module.exports = {
     console.log("DB: Attempting to update domain(s)...");
     var query = "UPDATE listings \
         SET ? \
-        WHERE (listings.domain_name IN (?) OR listings.id IN (CAST(? AS CHAR)))"
+        WHERE (listings.domain_name IN (?) OR listings.id IN (?))"
+        // WHERE (listings.domain_name IN (?) OR listings.id IN (CAST(? AS CHAR)))"
     database.query(query, "Failed to update domain(s)!", callback, [listing_info, domains, domains]);
   },
 

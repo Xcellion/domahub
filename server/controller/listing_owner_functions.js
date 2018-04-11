@@ -35,7 +35,7 @@ var fs = require('fs');
 
 //registrar info
 var namecheap_url = (process.env.NODE_ENV == "dev") ? "https://api.sandbox.namecheap.com/xml.response" : "https://api.namecheap.com/xml.response";
-var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.com/api" : "https://www.namesilo.com/apibatch";
+var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.com/apibatch" : "https://www.namesilo.com/apibatch";
 var parseString = require('xml2js').parseString;
 
 //phone
@@ -211,58 +211,58 @@ module.exports = {
 
           //loop through all domains in registrar gotten via API
           var registrar_info = req.session.registrar_info[x];
-          if (req.session.registrar_info.domains){
+          if (registrar_info.domains){
             for (var y = 0 ; y < registrar_info.domains.length ; y++){
-            var registrar_domain_name = registrar_info.domains[y].domain_name;
+              var registrar_domain_name = registrar_info.domains[y].domain_name;
 
-            //if domain name is being created on domahub (not all domains in registrar)
-            for (var z = 0 ; z < req.session.new_listings.db_object.length ; z++){
-              if (req.session.new_listings.db_object[z][2].toLowerCase() == registrar_domain_name.toLowerCase()){
-                //change registrar_id to registrar_id in DB object
-                req.session.new_listings.db_object[z][3] = registrar_info.id;
+              //if domain name is being created on domahub (not all domains in registrar)
+              for (var z = 0 ; z < req.session.new_listings.db_object.length ; z++){
+                if (req.session.new_listings.db_object[z][2].toLowerCase() == registrar_domain_name.toLowerCase()){
+                  //change registrar_id to registrar_id in DB object
+                  req.session.new_listings.db_object[z][3] = registrar_info.id;
 
-                //create promise to set DNS via API
-                switch (req.session.registrar_info[x].registrar_name){
-                  case "godaddy":
-                    registrar_domain_promises.push(set_dns_godaddy_promise(registrar_info, registrar_domain_name));
-                    break;
-                  case "namecheap":
-                    registrar_domain_promises.push(set_dns_namecheap_promise(registrar_info, registrar_domain_name));
-                    break;
-                  case "namesilo":
-                    registrar_domain_promises.push(set_dns_namesilo_promise(registrar_info, registrar_domain_name));
-                    break;
+                  //create promise to set DNS via API
+                  switch (req.session.registrar_info[x].registrar_name){
+                    case "godaddy":
+                      registrar_domain_promises.push(set_dns_godaddy_promise(registrar_info, registrar_domain_name));
+                      break;
+                    case "namecheap":
+                      registrar_domain_promises.push(set_dns_namecheap_promise(registrar_info, registrar_domain_name));
+                      break;
+                    case "namesilo":
+                      registrar_domain_promises.push(set_dns_namesilo_promise(registrar_info, registrar_domain_name));
+                      break;
+                  }
+                  break;
                 }
-
-                break;
               }
             }
           }
-          }
         }
 
-        //all whois data received!
-        var limit = qlimit(5);     //limit parallel promises (throttle)
+        //all DNS registrars added!
+        var limit = qlimit(1);     //limit parallel promises (throttle)
         Q.allSettled(registrar_domain_promises.map(limit(function(item, index, collection){
           return registrar_domain_promises[index]();
         }))).then(function(results) {
           console.log("LOF: Finished querying " + registrar_domain_promises.length + " registrars for setting domain DNS!");
           for (var y = 0; y < results.length ; y++){
-            //if there was an error, then add it to bad reasons
-            if (results[y].state != "fulfilled"){
-              req.session.new_listings.bad_listings.push({
-                domain_name : results[y].reason.domain_name,
-                reasons : results[y].reason.reasons
-              });
-            }
             //successfully changed DNS!
-            else {
+            if (results[y].state == "fulfilled"){
               req.session.new_listings.good_listings.push({
                 domain_name : results[y].value.domain_name,
                 reasons : results[y].value.reasons
               });
             }
+            //if there was an error, then add it to bad reasons
+            else {
+              req.session.new_listings.bad_listings.push({
+                domain_name : results[y].reason.domain_name,
+                reasons : results[y].reason.reasons
+              });
+            }
           }
+          delete req.session.registrar_info;
 
           next();
         });
@@ -373,10 +373,13 @@ module.exports = {
                   Q.fcall(verified_dns_promise, various_ids)      //function to call, and the parameter
                   .then(pending_dns_promise, pending_dns_promise)   //function on success, function on error
                   .done(function(various_ids){
+                    //after updating status to 3 for some (if not all)
                     //see if we inserted anything and revert to unverified if necessary
                     checkInsertedIDs(req, res, various_ids.inserted_ids);
                   }, function(err){
-                    error.handler(req, res, err.info, "json");
+                    //on error if updating status to 3 failed for some (if not all)
+                    //see if we inserted anything and revert to unverified if necessary
+                    checkInsertedIDs(req, res, various_ids.inserted_ids);
                   });
                 });
               }
@@ -389,6 +392,16 @@ module.exports = {
         }
       });
     },
+
+    //promises for editing DNS (used in verifying automatically after listing creation)
+    set_dns_godaddy_promise : set_dns_godaddy_promise,
+    set_dns_namecheap_promise : set_dns_namecheap_promise,
+    set_dns_namesilo_promise : set_dns_namesilo_promise,
+
+    //promises for checking if above DNS settings were successful and editing listing info accordingly
+    check_domain_dns_promise : check_domain_dns_promise,
+    pending_dns_promise : pending_dns_promise,
+    verified_dns_promise : verified_dns_promise,
 
     //</editor-fold>
 
@@ -1890,7 +1903,7 @@ function checkInsertedIDs(req, res, inserted_ids){
 //<editor-fold>-------------------------------REGISTRAR DNS HELPERS------------------------------
 
 //returns a promise to set DNS for godaddy domains
-function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
+function set_dns_godaddy_promise(registrar_info, registrar_domain_name, listing_id){
   return function(){
     return Q.Promise(function(resolve, reject, notify){
     console.log("LOF: Setting DNS for GoDaddy domain - " + registrar_domain_name + "...");
@@ -1918,7 +1931,8 @@ function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
         }
         reject({
           domain_name : registrar_domain_name,
-          reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
+          reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."],
+          listing_id : listing_id
         });
       }
       else {
@@ -1944,13 +1958,15 @@ function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
             }
             reject({
               domain_name : registrar_domain_name,
-              reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."]
+              reasons : ["Failed to connect to GoDaddy! Please verify ownership manually."],
+              listing_id : listing_id
             });
           }
           else {
             resolve({
               domain_name : registrar_domain_name,
-              reasons : ["Successfully set DNS records via registrar!"]
+              reasons : ["Successfully set DNS records via registrar!"],
+              listing_id : listing_id
             });
           }
         });
@@ -1962,7 +1978,7 @@ function set_dns_godaddy_promise(registrar_info, registrar_domain_name){
 }
 
 //returns a promise to set DNS for namecheap domains
-function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
+function set_dns_namecheap_promise(registrar_info, registrar_domain_name, listing_id){
   return function(){
     return Q.Promise(function(resolve, reject, notify){
     console.log("LOF: Setting DNS for Namecheap domain - " + registrar_domain_name + "...");
@@ -1994,16 +2010,18 @@ function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
         error.log(err, "Failed to request Namecheap API while deleting DNS record of domain " + registrar_domain_name);
         reject({
           domain_name : registrar_domain_name,
-          reasons : ["Failed to connect to Namecheap! Please verify ownership manually."]
+          reasons : ["Failed to connect to Namecheap! Please verify ownership manually."],
+          listing_id : listing_id
         });
       }
       else {
         parseString(body, {trim: true}, function (err, result) {
           if (err){
-            error.log(err, "Failed to parse XML response from Namecheap while trying to delete DNS record of domain " + registrar_domain_name);
+            error.log(body, "Failed to parse XML response from Namecheap while trying to delete DNS record of domain " + registrar_domain_name);
             reject({
               domain_name : registrar_domain_name,
-              reasons : ["Failed to connect to Namecheap! Please verify ownership manually."]
+              reasons : ["Failed to connect to Namecheap! Please verify ownership manually."],
+              listing_id : listing_id
             });
           }
           else if (!result || !result.ApiResponse || !result.ApiResponse.$ || !result.ApiResponse.CommandResponse || result.ApiResponse.$.Status != "OK"){
@@ -2016,13 +2034,15 @@ function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
             }
             reject({
               domain_name : registrar_domain_name,
-              reasons : ["Failed to connect to Namecheap! Please verify ownership manually."]
+              reasons : ["Failed to connect to Namecheap! Please verify ownership manually."],
+              listing_id : listing_id
             });
           }
           else {
             resolve({
               domain_name : registrar_domain_name,
-              reasons : ["Successfully set DNS records via registrar!"]
+              reasons : ["Successfully set DNS records via registrar!"],
+              listing_id : listing_id
             });
           }
         });
@@ -2034,7 +2054,7 @@ function set_dns_namecheap_promise(registrar_info, registrar_domain_name){
 }
 
 //returns a promise to set DNS for namesilo domains
-function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
+function set_dns_namesilo_promise(registrar_info, registrar_domain_name, listing_id){
   return function(){
     return Q.Promise(function(resolve, reject, notify){
       console.log("LOF: Setting DNS for NameSilo domain - " + registrar_domain_name + "...");
@@ -2056,7 +2076,8 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
           error.log(err, "Failed to request NameSilo API while getting existing DNS records of domain " + registrar_domain_name);
           reject({
             domain_name : registrar_domain_name,
-            reasons : ["Failed to connect to NameSilo! Please verify ownership manually."]
+            reasons : ["Failed to connect to NameSilo! Please verify ownership manually."],
+            listing_id : listing_id
           });
         }
         else {
@@ -2066,10 +2087,11 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
             explicitArray : false,
           }, function (err, result) {
             if (err){
-              error.log(err, "Failed to parse XML response from NameSilo while getting existing DNS records of domain " + registrar_domain_name);
+              error.log(body, "Failed to parse XML response from NameSilo while getting existing DNS records of domain " + registrar_domain_name);
               reject({
                 domain_name : registrar_domain_name,
-                reasons : ["Failed to connect to NameSilo! Please verify ownership manually."]
+                reasons : ["Failed to connect to NameSilo! Please verify ownership manually."],
+                listing_id : listing_id
               });
             }
             else {
@@ -2077,47 +2099,71 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
                 error.log(err, "Failed to get existing DNS records of domain from NameSilo.");
                 reject({
                   domain_name : registrar_domain_name,
-                  reasons : ["Failed to connect to NameSilo! Please verify ownership manually."]
+                  reasons : ["Failed to connect to NameSilo! Please verify ownership manually."],
+                  listing_id : listing_id
                 });
               }
               //got the list of DNS records
               else {
                 var delete_dns_promises = [];
-                console.log("LOF: Checking to see if there are any DNS records to delete for NameSilo domain - " + registrar_domain_name + "...");
-                if (result.reply.resource_record){
+                var existing_legit_records = 0;
+                console.log("LOF: Checking for DNS records to delete for NameSilo domain - " + registrar_domain_name + "...");
 
+                //check if the existing DNS records are good or should we delete
+                if (result.reply.resource_record){
                   for (var x = 0 ; x < result.reply.resource_record.length ; x++){
-                    delete_dns_promises.push(delete_dns_record_namesilo_promise(namesilo_api_key, registrar_domain_name, result.reply.resource_record[x].record_id));
+                    //is not legit, let's delete it
+                    if (
+                      !(result.reply.resource_record[x].type == "A" && result.reply.resource_record[x].value == "208.68.37.82") &&
+                      !(result.reply.resource_record[x].type == "CNAME" && result.reply.resource_record[x].host == ("www." + result.reply.resource_record[x].value))
+                    ) {
+                      delete_dns_promises.push(delete_dns_record_namesilo_promise(namesilo_api_key, registrar_domain_name, result.reply.resource_record[x].record_id));
+                    }
+                    else {
+                      existing_legit_records++;
+                    }
                   }
                 }
 
-                //deleted all DNS records, now create the two we need
-                Q.allSettled(delete_dns_promises).then(function(results){
-                  console.log("LOF: Deleted all DNS records for NameSilo domain - " + registrar_domain_name + "...");
+                //deleted all DNS records
+                var limit = qlimit(1);     //limit parallel promises (throttle)
+                Q.allSettled(delete_dns_promises.map(limit(function(item, index, collection){
+                  return delete_dns_promises[index]();
+                }))).then(function(results) {
+                  console.log("LOF: Checked existing DNS records for NameSilo domain - " + registrar_domain_name + "...");
 
                   //check if everything deleted successfully
                   var deleted_all_dns_records = true;
                   for (var x = 0 ; x < results.length ; x++){
                     if (results[x].state != "fulfilled"){
                       error.log(results[x].reason, "Something went wrong with deleting a DNS record for NameSilo domain - " + registrar_domain_name);
-                      deleted_all_dns_records = false;
+                      deleted_all_dns_records = false;    //something went wrong with deleting DNS records, mark reasons appropriately
                       break;
                     }
                   }
 
-                  //add A record
-                  addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, "A", "", "208.68.37.82", reject, function(){
-
-                    //add CNAME record
-                    addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, "CNAME", "www", registrar_domain_name, reject, function(){
-                      resolve({
-                        domain_name : registrar_domain_name,
-                        reasons : [((!deleted_all_dns_records) ? "Failed to connect to NameSilo! Please verify ownership manually." : "Successfully set DNS records via registrar!")]
+                  //if both records are not there
+                  if (existing_legit_records < 2){
+                    //add A record
+                    addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, "A", "", "208.68.37.82", reject, function(){
+                      //add CNAME record
+                      addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, "CNAME", "www", registrar_domain_name, reject, function(){
+                        resolve({
+                          domain_name : registrar_domain_name,
+                          reasons : [((!deleted_all_dns_records) ? "Failed to connect to NameSilo! Please verify ownership manually." : "Successfully set DNS records via registrar!")],
+                          listing_id : listing_id
+                        });
                       });
-
                     });
-                  });
-
+                  }
+                  //both records exist already
+                  else {
+                    resolve({
+                      domain_name : registrar_domain_name,
+                      reasons : ["Successfully set DNS records via registrar!"],
+                      listing_id : listing_id
+                    });
+                  }
                 });
               }
             }
@@ -2130,8 +2176,9 @@ function set_dns_namesilo_promise(registrar_info, registrar_domain_name){
 
 //return a promise to delete a single DNS record on namesilo
 function delete_dns_record_namesilo_promise(namesilo_api_key, registrar_domain_name, record_id){
-  return Q.Promise(function(resolve, reject, notify){
-    console.log("LOF: Deleting DNS record for NameSilo domain - " + registrar_domain_name + "..." + " - Record ID: " + record_id);
+  return function(){
+    return Q.Promise(function(resolve, reject, notify){
+    console.log("LOF: Deleting DNS record for NameSilo domain - " + registrar_domain_name + "...");
 
     //delete an existing DNS record
     request({
@@ -2157,8 +2204,8 @@ function delete_dns_record_namesilo_promise(namesilo_api_key, registrar_domain_n
           explicitArray : false,
         }, function (err, result) {
           if (err){
-            error.log(err, "Failed to parse XML response from NameSilo while trying to delete DNS record of domain " + registrar_domain_name);
-            reject(err);
+            error.log(body, "Failed to parse XML response from NameSilo while trying to delete DNS record of domain " + registrar_domain_name);
+            reject(body);
           }
           else if (!result || !result.reply || result.reply.code != "300"){
             reject("Failed to connect to NameSilo!");
@@ -2170,6 +2217,7 @@ function delete_dns_record_namesilo_promise(namesilo_api_key, registrar_domain_n
       }
     });
   });
+  }
 }
 
 //add an A record for namesilo
@@ -2204,13 +2252,18 @@ function addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, rrtype, r
         explicitRoot : false,
         explicitArray : false,
       }, function (err, result) {
-        if (err || !result || !result.reply || result.reply.code != "300"){
-          error.log(err, "Failed to parse XML response from NameSilo while adding A record for domain " + registrar_domain_name);
+        if (err || !result){
+          error.log(body, "Failed to parse XML response from NameSilo while adding A record for domain " + registrar_domain_name);
           reject({
             domain_name : registrar_domain_name,
             reasons : ["Failed to connect to NameSilo! Please verify ownership manually."]
           });
         }
+        //already exists
+        else if (result.reply && result.reply.code == "280" && result.reply.detail && result.reply.detail.indexOf("already exists") != -1){
+          cb();
+        }
+        //successfully added
         else {
           cb();
         }

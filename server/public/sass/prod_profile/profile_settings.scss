@@ -26,6 +26,27 @@
   text-decoration: line-through;
 }
 
+//images for registrar connect
+.image {
+  &.is-logo {
+    width: 140px;
+  }
+}
+
+//centered icons for mobile
+.control.is-mobile {
+  @include mobile {
+    .button {
+      .icon {
+        &:first-child {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
 .columns {
   margin-left:-20px;
   margin-right:-20px;
