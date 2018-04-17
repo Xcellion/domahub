@@ -320,8 +320,8 @@ function checkBox(module_value, elem, child){
   function updateDomainInfoTab(listing_info, selected_domain_ids){
     //registrar info
     $("#registrar-name-input").val(listing_info.registrar_name);
-    $("#date-expire-input").val((listing_info.date_expire) ? moment(listing_info.date_expire).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
-    $("#date-registered-input").val((listing_info.date_registered) ? moment(listing_info.date_registered).format('YYYY-MM-DDTHH:mm') : "0000-00-00T00:00");
+    $("#date-expire-input").val((listing_info.date_expire) ? moment(listing_info.date_expire).format('YYYY-MM-DDTHH:mm') : "");
+    $("#date-registered-input").val((listing_info.date_registered) ? moment(listing_info.date_registered).format('YYYY-MM-DDTHH:mm') : "");
     $("#annual-cost-input").val(listing_info.registrar_cost);
 
     //reset modal inputs
@@ -2390,7 +2390,7 @@ function checkDNSAllDone(total_unverified){
       $("#refresh-dns-button").addClass('is-hidden');
       $("#verification-left").addClass('is-primary').removeClass('is-danger');
       $("#verification-left-success").removeClass('is-hidden');
-      $("#verification-left-text").addClass('is-white').text("All DNS settings look good! Click the verify now button to verify your domains.");
+      $("#verification-left-text").addClass('is-white').text("All DNS settings look good! Please click the verify now button!");
     }
     else {
       $("#verify-button").addClass('is-hidden');
