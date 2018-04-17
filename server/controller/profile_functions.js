@@ -81,6 +81,13 @@ module.exports = {
     if (!req.body.onboarding_step || [0,1,2,3,4,5,6,7,8,9,10,11,12,13].indexOf(parseFloat(req.body.onboarding_step)) == -1){
       error.handler(req, res, "Invalid onboarding step!", "json");
     }
+    //skip if we're going backwards
+    else if (req.user.onboarding_step && parseFloat(req.body.onboarding_step) <= req.user.onboarding_step){
+      res.json({
+        state: "success",
+        user: req.user
+      });
+    }
     else {
       console.log('F: Marking account current step...');
 
@@ -609,43 +616,45 @@ module.exports = {
               var properties_to_check = [
                 {
                   prop_name : "date_expire",
-                  function_if_blank : function(){
-                    return moment(results[x].value.whois["Registrar Registration Expiration Date"]).valueOf();
+                  function_to_run_if_current_is_blank : function(){
+                    var registrar_exp_date = moment(results[x].value.whois["Registrar Registration Expiration Date"], "YYYY-MM-DDTHH:mm Z");
+                    return (registrar_exp_date.isValid() ? registrar_exp_date.valueOf() : null);
                   }
                 },
                 {
                   prop_name : "date_registered",
-                  function_if_blank : function(){
-                    return moment(results[x].value.whois["Creation Date"]).valueOf();
+                  function_to_run_if_current_is_blank : function(){
+                    var registrar_create_date = moment(results[x].value.whois["Creation Date"], "YYYY-MM-DDTHH:mm Z");
+                    return (registrar_create_date.isValid() ? registrar_create_date.valueOf() : null);
                   }
                 },
                 {
                   prop_name : "registrar_name",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Registrar"];
                   }
                 },
                 {
                   prop_name : "registrar_admin_name",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Admin Name"]
                   }
                 },
                 {
                   prop_name : "registrar_admin_org",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Admin Organization"]
                   }
                 },
                 {
                   prop_name : "registrar_admin_email",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Admin Email"]
                   }
                 },
                 {
                   prop_name : "registrar_admin_address",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     var address_to_return = "";
                     if (results[x].value.whois["Admin Street"] != "" && results[x].value.whois["Admin Street"]){
                       address_to_return += results[x].value.whois["Admin Street"];
@@ -667,7 +676,7 @@ module.exports = {
                 },
                 {
                   prop_name : "registrar_admin_phone",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     var registrar_admin_phone = "";
                     if (results[x].value.whois["Admin Phone"] && results[x].value.whois["Admin Phone"] != ""){
                       try {
@@ -682,25 +691,25 @@ module.exports = {
                 },
                 {
                   prop_name : "registrar_registrant_name",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Registrant Name"]
                   }
                 },
                 {
                   prop_name : "registrar_registrant_org",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Registrant Organization"]
                   }
                 },
                 {
                   prop_name : "registrar_registrant_email",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Registrant Email"]
                   }
                 },
                 {
                   prop_name : "registrar_registrant_address",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     var address_to_return = "";
                     if (results[x].value.whois["Registrant Street"] != "" && results[x].value.whois["Registrant Street"]){
                       address_to_return += results[x].value.whois["Registrant Street"];
@@ -722,7 +731,7 @@ module.exports = {
                 },
                 {
                   prop_name : "registrar_registrant_phone",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     var registrar_registrant_phone = "";
                     if (results[x].value.whois["Registrant Phone"] && results[x].value.whois["Registrant Phone"] != ""){
                       try {
@@ -737,25 +746,25 @@ module.exports = {
                 },
                 {
                   prop_name : "registrar_tech_name",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Tech Name"]
                   }
                 },
                 {
                   prop_name : "registrar_tech_org",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Tech Organization"]
                   }
                 },
                 {
                   prop_name : "registrar_tech_email",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     return results[x].value.whois["Tech Email"]
                   }
                 },
                 {
                   prop_name : "registrar_tech_address",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     var address_to_return = "";
                     if (results[x].value.whois["Tech Street"] != "" && results[x].value.whois["Tech Street"]){
                       address_to_return += results[x].value.whois["Tech Street"];
@@ -777,7 +786,7 @@ module.exports = {
                 },
                 {
                   prop_name : "registrar_tech_phone",
-                  function_if_blank : function(){
+                  function_to_run_if_current_is_blank : function(){
                     var registrar_tech_phone = "";
                     if (results[x].value.whois["Tech Phone"] && results[x].value.whois["Tech Phone"] != ""){
                       try {
@@ -796,9 +805,9 @@ module.exports = {
               var something_changed = false;
               properties_to_check.forEach(function(prop){
                 if (!temp_listing_obj[prop.prop_name] || temp_listing_obj[prop.prop_name] == ""){
-                  var auto_prop = prop.function_if_blank();
+                  var auto_prop = prop.function_to_run_if_current_is_blank();
                   if (auto_prop != ""){
-                    temp_listing_obj[prop.prop_name] = prop.function_if_blank();
+                    temp_listing_obj[prop.prop_name] = prop.function_to_run_if_current_is_blank();
                     something_changed = true;
                   }
                 }
@@ -1750,7 +1759,7 @@ module.exports = {
       whois.lookup(listing_obj.domain_name, function(err, data){
         var whoisObj = {};
         if (err){
-          error.log(err, "Failed to look up whois information for table building during verification.");
+          error.log(err, "Failed to look up whois information for table building during verification for domain " + listing_obj.domain_name);
         }
         else {
           var array = parser.parseWhoIsData(data);
@@ -1766,7 +1775,7 @@ module.exports = {
           console.log("PF: Now looking up DNS A records for " + listing_obj.domain_name + "...");
           dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
             if (err && err.code != "ENOTFOUND" && err.code != "ENODATA"){
-              error.log(err, "Failed to look up A record information for table building during verification.");
+              error.log(err, "Failed to look up A record information for table building during verification for domain " + listing_obj.domain_name);
             }
             listing_obj.a_records = (addresses) ? addresses : false;
             resolve(listing_obj);
@@ -1786,7 +1795,7 @@ module.exports = {
         dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
           if (err) {
             if (err.code != "ENODATA"){
-              error.log(err, "Failed to look up DNS records while trying to verify listings.");
+              error.log(err, "Failed to look up DNS records while trying to verify domain " + listing_obj.domain_name);
             }
             reject(err);
           }

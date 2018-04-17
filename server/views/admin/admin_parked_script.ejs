@@ -1,0 +1,74 @@
+<html>
+<head>
+  <title>DomaHub Admin Dashboard</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <style>
+    .is-hidden {
+      display:none!important;
+    }
+    #warning {
+      position:fixed;
+      width:50vw;
+      height:50vh;
+      left:50%;
+      top:50%;
+      z-index:999;
+      transform:translate(-50%, -50%);
+      margin-right:-50%;
+      background-color:#222;
+      padding:50px;
+    }
+    #warning h1 {
+      color : white
+    }
+  </style>
+</head>
+<body>
+  <script>
+    $(document).ready(function(){
+
+      //warning message
+      $("#sendgrid").on("click", function(){
+        $("#warning").toggleClass('is-hidden');
+      });
+
+      //post contacts to sendgrid
+      $("#sendcontacts").on("click", function(){
+        $(this).off();
+        $("#warning").html("<h1>Sent! I hope you know what you just did.</h1>");
+        $.ajax({
+          url : "/parked",
+          method : "POST"
+        }).done(function(data){
+          console.log(data);
+          if (data.state == "success"){
+            $("#warning").html("<h1>Success</h1>");
+          }
+          else {
+            $("#warning").html("<h1>Something fucked up</h1>");
+          }
+        });
+      });
+
+    });
+  </script>
+  <h1>DomaHub Cold Email Script</h1>
+  <div>
+    <h1 class="is-inline">Script is now running. Please check the GIT console for the progress.</h1>
+    <p>
+      <button id="sendgrid">Click here to send contacts to SendGrid</button>
+    </p>
+    <div id="warning" class="is-hidden">
+      <h1>WARNING: PLEASE DOUBLE CHECK THAT ALL THE CONTACTS ARE LEGIT IN THE CheckBeforeSending FOLDER BEFORE ACCEPTING THIS</h1>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      <button id="sendcontacts">I've checked.</button>
+    </div>
+
+
+  </div>
+</body>
+</html>

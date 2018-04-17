@@ -1,0 +1,72 @@
+[
+    {
+        "domain_name": "activitydigital.com",
+        "parked": true,
+        "admin_email": "news1964@comcast.net",
+        "tech_email": "news1964@comcast.net",
+        "registrant_email": "news1964@comcast.net",
+        "admin_name": "Robert Sagarino",
+        "tech_name": "Robert Sagarino",
+        "registrant_name": "Robert Sagarino",
+        "intial_word": "activity",
+        "parked_strings": [
+            "cdnpark.com"
+        ],
+        "potentially_parked": false,
+        "potentially_parked_strings": [],
+        "current_screenshot": "https://i.imgur.com/jC1a5LF.jpg",
+        "domahub_screenshot": "https://i.imgur.com/wKL0US6.jpg",
+        "first_name": "Robert",
+        "last_name": "Sagarino"
+    },
+    {
+        "domain_name": "cryptoforafrica.com",
+        "parked": true,
+        "admin_email": "neilgoodchild@hotmail.com",
+        "tech_email": "neilgoodchild@hotmail.com",
+        "registrant_email": "neilgoodchild@hotmail.com",
+        "admin_name": "Neil Goodchild",
+        "tech_name": "Neil Goodchild",
+        "registrant_name": "Neil Goodchild",
+        "intial_word": "crypto",
+        "parked_strings": [
+            "parked free of charge"
+        ],
+        "potentially_parked": false,
+        "potentially_parked_strings": [],
+        "current_screenshot": "https://i.imgur.com/60DTHjf.jpg",
+        "domahub_screenshot": "https://i.imgur.com/WTlvle1.jpg",
+        "first_name": "Neil",
+        "last_name": "Goodchild"
+    },
+    {
+        "domain_name": "cryptohydra.net",
+        "parked": false,
+        "admin_email": "dustin.klaas@otherpayments.com",
+        "tech_email": "dustin.klaas@otherpayments.com",
+        "registrant_email": "dustin.klaas@otherpayments.com",
+        "admin_name": "Dustin Klaas",
+        "tech_name": "Dustin Klaas",
+        "registrant_name": "Dustin Klaas",
+        "intial_word": "crypto",
+        "parked_strings": [],
+        "potentially_parked": false,
+        "potentially_parked_strings": []
+    },
+    {
+        "domain_name": "precioscryptomonedas.com",
+        "parked": false,
+        "admin_email": "contacto@ideasdigitales.cl",
+        "tech_email": "contacto@ideasdigitales.cl",
+        "registrant_email": "contacto@ideasdigitales.cl",
+        "admin_name": "Richard Quirola",
+        "tech_name": "Richard Quirola",
+        "registrant_name": "Richard Quirola",
+        "intial_word": "crypto",
+        "parked_strings": [],
+        "potentially_parked": true,
+        "potentially_parked_strings": [
+            "park"
+        ]
+    }
+]
