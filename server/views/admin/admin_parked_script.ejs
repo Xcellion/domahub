@@ -3,13 +3,22 @@
   <title>DomaHub Admin Dashboard</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <style>
+    body {
+      margin-top:250px;
+      text-align:center;
+    }
+    .is-disabled{
+      opacity:0.25;
+      color:grey;
+    }
     .is-hidden {
       display:none!important;
     }
     #warning {
+      padding:250px;
       position:fixed;
-      width:50vw;
-      height:50vh;
+      width:100vw;
+      height:100vh;
       left:50%;
       top:50%;
       z-index:999;
@@ -18,26 +27,63 @@
       background-color:#222;
       padding:50px;
     }
-    #warning h1 {
+    #warning > h1 {
+      margin-top: 250px;
+      padding-left: 500;
+      padding-right: 500px;
       color : white
+    }
+    input {
+      margin:auto;
+      width:450px;
+      background-color: white;
+      border: 1px solid black;
+      padding: 15px;
+      border-radius: 5px;
+      display:inline-block;
+    }
+    button {
+      display:inline-block;
+      margin:auto;
+      background-color: white;
+      border: 1px solid black;
+      padding: 15px;
+      border-radius: 5px;
+      cursor:pointer;
+      margin-left:25px;
+      margin-right:25px;
+    }
+    button:hover{
+      background-color:black;
+      color:white;
+    }
+    #screenshotform {
+      display:inline-block;
     }
   </style>
 </head>
 <body>
   <script>
+    var date_to_get = <% if(typeof date_to_get != "undefined"){ %><%-JSON.stringify(date_to_get)%><% }else{ %>""<% } %>;
+    var script_running = <% if(typeof script_running != "undefined"){ %><%-JSON.stringify(script_running)%><% }else{ %>""<% } %>;
+
     $(document).ready(function(){
 
+      //refresh the page after 30min if script is running
+      if (script_running){
+        setTimeout(function(){ location.reload(); }, 1800000);
+      }
+
       //warning message
-      $("#sendgrid").on("click", function(){
+      $("#sendgrid, #cancelgrid").on("click", function(){
         $("#warning").toggleClass('is-hidden');
       });
 
       //post contacts to sendgrid
       $("#sendcontacts").on("click", function(){
-        $(this).off();
-        $("#warning").html("<h1>Sent! I hope you know what you just did.</h1>");
+        $(this).off().addClass('is-disabled');
         $.ajax({
-          url : "/parked",
+          url : "/sendparked/" + date_to_get,
           method : "POST"
         }).done(function(data){
           console.log(data);
@@ -50,24 +96,118 @@
         });
       });
 
+      //get today's contacts
+      $("#getcontactsfortoday").on("click", function(){
+        $(this).off().addClass('is-disabled');
+        $.ajax({
+          url : "/getparked",
+          method : "POST"
+        }).done(function(data){
+          location.reload();
+        });
+      });
+
+      //get specific day's contacts
+      $("#getspecificdaycontacts").on("click", function(){
+        $(this).off().addClass('is-disabled');
+        $.ajax({
+          url : "/getparked/" + date_to_get,
+          method : "POST"
+        }).done(function(data){
+          location.reload();
+        });
+      });
+
+      //rebuild CSV
+      $("#buildcsv").on("click", function(){
+        $(this).off().addClass('is-disabled');
+        $.ajax({
+          url : "/rebuildcsv/" + date_to_get,
+          method : "POST"
+        }).done(function(data){
+          location.reload();
+        });
+      });
+
+      //retake screenshots
+      $("#screenshotform").on("submit", function(e){
+        $("#screenshotform").addClass('is-disabled');
+        e.preventDefault();
+        $.ajax({
+          url : "/retakescreenshots/" + date_to_get,
+          method : "POST",
+          data : {
+            ids_to_screenshot : $("#screenshotids").val()
+          }
+        }).done(function(data){
+          location.reload();
+        });
+      });
+
     });
   </script>
   <h1>DomaHub Cold Email Script</h1>
+  <h1><%= date_to_get %></h1>
   <div>
-    <h1 class="is-inline">Script is now running. Please check the GIT console for the progress.</h1>
-    <p>
-      <button id="sendgrid">Click here to send contacts to SendGrid</button>
-    </p>
-    <div id="warning" class="is-hidden">
-      <h1>WARNING: PLEASE DOUBLE CHECK THAT ALL THE CONTACTS ARE LEGIT IN THE CheckBeforeSending FOLDER BEFORE ACCEPTING THIS</h1>
-      </br>
-      </br>
-      </br>
-      </br>
-      </br>
-      <button id="sendcontacts">I've checked.</button>
-    </div>
 
+    <% if (results_exist) { %>
+
+      <% if (script_running){ %>
+        <h1>Script is now running. Please check the GIT console for progress. Refresh this page for current status.</h1>
+      <% } else { %>
+
+        <% if (csv_exists){ %>
+
+          <h1>
+            Script has finished, go check this file and
+            </br>
+            delete any row that looks weird
+            </br>
+            </br>
+            other/marketing/parkedcontacts/FinalCSV/<%= date_to_get %>.csv
+          </h1>
+          <a target="_blank" href="http://www.openallurls.com/">Use this website to open all screenshots</a>
+
+          <div id="warning" class="is-hidden">
+          <h1 style="margin-bottom:200px;">
+          <span style="color:red;">WARNING</span>
+          </br>
+          </br>
+          DID YOU CHECK THE BELOW FILE?
+          </br>
+          </br>
+          other/marketing/parkedcontacts/FinalCSV/<%= date_to_get %>.csv
+          </h1>
+          <button id="sendcontacts">I have checked.</button>
+          <button id="cancelgrid">Fuck I forgot.</button>
+          </div>
+
+          <div style="margin-top:50px;">
+            <button id="sendgrid">Click here to send contacts to SendGrid</button>
+            <form id="screenshotform">
+              <input required id="screenshotids" type="text" placeholder="Enter index of CSV file domain to retake screenshot (Excel index)" />
+              <button style="display:inline-block;" id="retakescreenshots" type="submit">Click here to retake screenshots</button>
+            </form>
+            <button id="getcontactsfortoday">Click here to run the contacts gathering script for today</button>
+          </div>
+
+        <% } else { %>
+
+          <h1>
+            Something went wrong with building the CSV, but results exist. Lets try rebuilding CSV.
+          </h1>
+
+          <button id="buildcsv">Click here to rebuild CSV for above date</button>
+
+        <% } %>
+
+      <% } %>
+    <% } else { %>
+
+      <h1>No results exist for that date.</h1>
+      <button id="getspecificdaycontacts">Click here to run the contacts gathering script</button>
+
+    <% } %>
 
   </div>
 </body>

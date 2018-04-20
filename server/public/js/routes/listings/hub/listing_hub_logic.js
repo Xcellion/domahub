@@ -51,7 +51,12 @@ $(document).ready(function() {
   //</editor-fold>
 
   //footer text
-  $("#listing-footer").text(listing_hub_info.description_footer);
+  if (listing_hub_info.description_footer){
+    $("#listing-footer").text(listing_hub_info.description_footer);
+  }
+  else {
+    $("#listing-footer").text("");
+  }
 
 });
 
