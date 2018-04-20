@@ -105,6 +105,8 @@ function updatePortfolioOverviewCounters(){
   //figure out total profit
   var total_revenue = 0;
   var total_expenses = 0;
+
+  //any transactions
   if (user.transactions){
     for (var x = 0 ; x < user.transactions.length ; x++){
       //profit + fees in money format
@@ -123,6 +125,16 @@ function updatePortfolioOverviewCounters(){
       total_expenses += (doma_fees + payment_fees);
     }
   }
+
+  //listings renewal cost
+  if (user.listings){
+    for (var x = 0 ; x < user.listings.length ; x++){
+      if (parseFloat(user.listings[x].registrar_cost) > 0){
+        total_expenses -= parseFloat(user.listings[x].registrar_cost * 100);
+      }
+    }
+  }
+
   $("#revenue-counter").addClass("is-primary").text(wNumb({
     prefix: '$ ',
     decimals: 2,
