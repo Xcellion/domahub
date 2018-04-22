@@ -173,10 +173,11 @@ module.exports = function(app){
     profile_functions.updateAccountSettingsPost
   ]);
 
-  //get all existing transactions for user (sales / rentals)
+  //get all existing transactions for user (sales / rentals / renewals)
   app.post("/profile/gettransactions", [
     general_functions.urlencodedParser,
     auth_functions.checkLoggedIn,
+    profile_functions.getAccountListings,
     profile_functions.getAccountTransactionsLocal,
     profile_functions.getAccountTransactionsRemote
   ]);
