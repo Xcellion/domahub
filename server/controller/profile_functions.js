@@ -190,6 +190,31 @@ module.exports = {
         //update user obj
         req.user.transactions = (result.state=="success") ? result.info : [];
         req.user.transactions_remote = false;
+
+        //renewal transactions
+        if (req.user.listings && req.user.listings.length > 0){
+          for (var x = 0 ; x < req.user.listings.length ; x++){
+            if (req.user.listings[x].registrar_cost){
+              req.user.transactions.push({
+                available : 0,
+                date_created : (req.user.listings[x].date_registered) ? req.user.listings[x].date_registered : "No date",
+                doma_fees : null,
+                domain_name : req.user.listings[x].domain_name,
+                id : null,
+                listing_id : req.user.listings[x].id,
+                payment_fees : null,
+                payment_type : null,
+                transaction_cost : req.user.listings[x].registrar_cost * 100,
+                transaction_cost_refunded : null,
+                transaction_details : "Annual renewal cost",
+                transaction_id : null,
+                transaction_type : "expense",
+                withdrawn_on : null
+              });
+            }
+          }
+        }
+
         next();
       });
     }
@@ -617,15 +642,33 @@ module.exports = {
                 {
                   prop_name : "date_expire",
                   function_to_run_if_current_is_blank : function(){
-                    var registrar_exp_date = moment(results[x].value.whois["Registrar Registration Expiration Date"], "YYYY-MM-DDTHH:mm Z");
-                    return (registrar_exp_date.isValid() ? registrar_exp_date.valueOf() : null);
+                    if (results[x].value.whois["Registrar Registration Expiration Date"]){
+                      var registrar_expiry_date = moment(results[x].value.whois["Registrar Registration Expiration Date"], "YYYY-MM-DDTHH:mm Z");
+                      return (registrar_expiry_date.isValid()) ? registrar_expiry_date.valueOf() : null;
+                    }
+                    else if (results[x].value.whois["Registry Expiry Date"]){
+                      var registrar_expiry_date = moment(results[x].value.whois["Registry Expiry Date"], "YYYY-MM-DDTHH:mm Z");
+                      return (registrar_expiry_date.isValid()) ? registrar_expiry_date.valueOf() : null;
+                    }
+                    else {
+                      return null;
+                    }
                   }
                 },
                 {
                   prop_name : "date_registered",
                   function_to_run_if_current_is_blank : function(){
-                    var registrar_create_date = moment(results[x].value.whois["Creation Date"], "YYYY-MM-DDTHH:mm Z");
-                    return (registrar_create_date.isValid() ? registrar_create_date.valueOf() : null);
+                    if (results[x].value.whois["Creation Date"]){
+                      var registrar_create_date = moment(results[x].value.whois["Creation Date"], "YYYY-MM-DDTHH:mm Z");
+                      return (registrar_create_date.isValid()) ? registrar_create_date.valueOf() : null;
+                    }
+                    else if (results[x].value.whois["Created Date"]){
+                      var registrar_create_date = moment(results[x].value.whois["Created Date"], "YYYY-MM-DDTHH:mm Z");
+                      return (registrar_create_date.isValid()) ? registrar_create_date.valueOf() : null;
+                    }
+                    else {
+                      return null;
+                    }
                   }
                 },
                 {
@@ -637,19 +680,19 @@ module.exports = {
                 {
                   prop_name : "registrar_admin_name",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Admin Name"]
+                    return results[x].value.whois["Admin Name"];
                   }
                 },
                 {
                   prop_name : "registrar_admin_org",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Admin Organization"]
+                    return results[x].value.whois["Admin Organization"];
                   }
                 },
                 {
                   prop_name : "registrar_admin_email",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Admin Email"]
+                    return results[x].value.whois["Admin Email"];
                   }
                 },
                 {
@@ -692,19 +735,19 @@ module.exports = {
                 {
                   prop_name : "registrar_registrant_name",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Registrant Name"]
+                    return results[x].value.whois["Registrant Name"];
                   }
                 },
                 {
                   prop_name : "registrar_registrant_org",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Registrant Organization"]
+                    return results[x].value.whois["Registrant Organization"];
                   }
                 },
                 {
                   prop_name : "registrar_registrant_email",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Registrant Email"]
+                    return results[x].value.whois["Registrant Email"];
                   }
                 },
                 {
@@ -747,19 +790,19 @@ module.exports = {
                 {
                   prop_name : "registrar_tech_name",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Tech Name"]
+                    return results[x].value.whois["Tech Name"];
                   }
                 },
                 {
                   prop_name : "registrar_tech_org",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Tech Organization"]
+                    return results[x].value.whois["Tech Organization"];
                   }
                 },
                 {
                   prop_name : "registrar_tech_email",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Tech Email"]
+                    return results[x].value.whois["Tech Email"];
                   }
                 },
                 {
@@ -819,7 +862,7 @@ module.exports = {
                   temp_listing_obj.id,
                   temp_listing_obj.registrar_name,
                   temp_listing_obj.date_expire,
-                  temp_listing_obj.date_created,
+                  temp_listing_obj.date_registered,
                   temp_listing_obj.registrar_admin_name,
                   temp_listing_obj.registrar_admin_org,
                   temp_listing_obj.registrar_admin_email,
@@ -840,6 +883,7 @@ module.exports = {
               else {
                 nothing_changed++;
               }
+
             }
             else {
               no_whois++;

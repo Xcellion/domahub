@@ -126,15 +126,6 @@ function updatePortfolioOverviewCounters(){
     }
   }
 
-  //listings renewal cost
-  if (user.listings){
-    for (var x = 0 ; x < user.listings.length ; x++){
-      if (parseFloat(user.listings[x].registrar_cost) > 0){
-        total_expenses -= parseFloat(user.listings[x].registrar_cost * 100);
-      }
-    }
-  }
-
   $("#revenue-counter").addClass("is-primary").text(wNumb({
     prefix: '$ ',
     decimals: 2,

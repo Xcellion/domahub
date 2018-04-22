@@ -457,7 +457,7 @@ module.exports = function(app){
     "admin",
     "billing",
     "consulting",
-    "contact.gandi.net",
+    "contact",
     "dns@",
     "dnsmgr",
     "dnsadm",
@@ -498,6 +498,7 @@ module.exports = function(app){
   //filters for bad names
   var no_bueno_names = [
     "@",
+    "academy",
     "admin",
     "author",
     "bluehost",
@@ -508,7 +509,7 @@ module.exports = function(app){
     "comerc",
     "consult",
     "customer",
-    "academy",
+    "contact",
     "domain",
     "digital",
     "department",
@@ -523,7 +524,7 @@ module.exports = function(app){
     "inc.",
     "international",
     "internet",
-    "informa",
+    "info",
     "kft.",
     "limited",
     "lda.",
@@ -539,6 +540,7 @@ module.exports = function(app){
     "office",
     "president",
     "product",
+    "reality",
     "registry",
     "service",
     "shop",
@@ -559,7 +561,8 @@ module.exports = function(app){
     "gandi.net",
     "cdnpark.com",
     "sedoparking",
-    "bluehost - top rated web hosting provider",
+    // "bluehost - top rated web hosting provider",
+    // "web hosting from just host",
     "parkingcrew",
     "parkdomain",
     "domainpark",
@@ -573,7 +576,6 @@ module.exports = function(app){
     "this domain is parked",
     "this domain name is parked",
     "this web page is parked free",
-    "web hosting from just host",
     "courtesy of www.hostmonster.com",
     "would you like to buy this domain",
     "sk-logabpstatus.php",
@@ -985,160 +987,170 @@ module.exports = function(app){
         try {
           //look up domain owner info
           whois.lookup(domain_name,{
-            "follow":  10    // number of times to follow redirects
+            "follow":  20    // number of times to follow redirects
           }, function(err, data){
-          var whoisObj = {};
-          if (data && !err){
-            var array = parser.parseWhoIsData(data);
-            for (var x = 0; x < array.length; x++){
-              whoisObj[array[x].attribute.trim()] = array[x].value;
-            }
+            console.log("RECEIVED WHOIS - " + domain_name);
+            var whoisObj = {};
+            if (data && !err){
+              console.log("PARSING WHOIS - " + domain_name);
+              var array = parser.parseWhoIsData(data);
+              for (var x = 0; x < array.length; x++){
+                whoisObj[array[x].attribute.trim()] = array[x].value;
+              }
 
-            if (whoisObj["Admin Email"] || whoisObj["Tech Email"] || whoisObj["Registrant Email"]){
-              var admin_email = (whoisObj["Admin Email"]) ? whoisObj["Admin Email"].toLowerCase() : "";
-              var tech_email = (whoisObj["Tech Email"]) ? whoisObj["Tech Email"].toLowerCase() : "";
-              var registrant_email = (whoisObj["Registrant Email"]) ? whoisObj["Registrant Email"].toLowerCase() : "";
+              if (whoisObj["Admin Email"] || whoisObj["Tech Email"] || whoisObj["Registrant Email"]){
+                console.log("CHECKING WHOIS EMAIL - " + domain_name);
+                var admin_email = (whoisObj["Admin Email"]) ? whoisObj["Admin Email"].toLowerCase() : "";
+                var tech_email = (whoisObj["Tech Email"]) ? whoisObj["Tech Email"].toLowerCase() : "";
+                var registrant_email = (whoisObj["Registrant Email"]) ? whoisObj["Registrant Email"].toLowerCase() : "";
 
-              //check if there are any bad emails
-              var any_good = no_bueno_email_strings.every(function(bad_email_str){
-                var admin_check = (admin_email != "") ? admin_email.indexOf(bad_email_str) == -1 : false;
-                var tech_check = (tech_email != "") ? tech_email.indexOf(bad_email_str) == -1 : false;
-                var registrant_check = (registrant_email != "") ? registrant_email.indexOf(bad_email_str) == -1 : false;
+                //check if there are any bad emails
+                var any_good = no_bueno_email_strings.every(function(bad_email_str){
+                  var admin_check = (admin_email != "") ? admin_email.indexOf(bad_email_str) == -1 : false;
+                  var tech_check = (tech_email != "") ? tech_email.indexOf(bad_email_str) == -1 : false;
+                  var registrant_check = (registrant_email != "") ? registrant_email.indexOf(bad_email_str) == -1 : false;
 
-                //remove if bad
-                if (!admin_check){
-                  admin_email = "";
-                }
-                if (!tech_check){
-                  tech_email = "";
-                }
-                if (!registrant_check){
-                  registrant_email = "";
-                }
-                return (admin_check || tech_check || registrant_check);
-              });
-
-              if (any_good && (admin_email != "" || tech_email != "" || registrant_email != "")){
-                //check if website is parked
-                // console.log("FOUND EMAIL - " + domain_name + " - " + registrant_email);
-                request.get({
-                  url: "http://" + domain_name,
-                  timeout: 100000,
-                  headers : {
-                    'User-Agent' : "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+                  //remove if bad
+                  if (!admin_check){
+                    admin_email = "";
                   }
-                }, function (err, response, body) {
-                  if (!err && body){
+                  if (!tech_check){
+                    tech_email = "";
+                  }
+                  if (!registrant_check){
+                    registrant_email = "";
+                  }
+                  return (admin_check || tech_check || registrant_check);
+                });
 
-                    //why it was marked parked
-                    var strings = [];
-                    var parked = parked_strings.some(function(parked_string){
-                      var exists = response.body.toLowerCase().indexOf(parked_string) != -1;
-                      if (exists){
-                        strings.push(parked_string);
+                if (any_good && (admin_email != "" || tech_email != "" || registrant_email != "")){
+                  try {
+                    //check if website is parked
+                    console.log("REQUEST - " + domain_name);
+                    request.get({
+                      url: "http://" + domain_name,
+                      timeout: 100000,
+                      headers : {
+                        'User-Agent' : "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
                       }
-                      return exists;
-                    });
+                    }, function (err, response, body) {
+                      if (!err && body){
+                        //why it was marked parked
+                        console.log("CHECKING PARKED - " + domain_name);
+                        var strings = [];
+                        var parked = parked_strings.some(function(parked_string){
+                          var exists = response.body.toLowerCase().indexOf(parked_string) != -1;
+                          if (exists){
+                            strings.push(parked_string);
+                          }
+                          return exists;
+                        });
 
-                    //is it potentially parked or parked?
-                    var potentially_parked = false;
-                    var potentially_parked_strings = [];
-                    if (parked){
-                      console.log("\x1b[44m%s\x1b[0m" ,"PARKED!!! - " + domain_name + " - " + JSON.stringify(strings));
-                    }
-                    else {
-                      var park_potential = (response.body.toLowerCase().indexOf("park") != -1) ? "park" : "";
-                      var domain_potential = (response.body.toLowerCase().indexOf("domain") != -1) ? "domain" : "";
+                        //is it potentially parked or parked?
+                        var potentially_parked = false;
+                        var potentially_parked_strings = [];
+                        if (parked){
+                          console.log("\x1b[44m%s\x1b[0m" ,"PARKED!!! - " + domain_name + " - " + JSON.stringify(strings));
+                        }
+                        else {
+                          var park_potential = (response.body.toLowerCase().indexOf("park") != -1) ? "park" : "";
+                          var domain_potential = (response.body.toLowerCase().indexOf("domain") != -1) ? "domain" : "";
 
-                      //why was it potentially parked?
-                      if (park_potential != "" || domain_potential  != ""){
-                        console.log("\x1b[41m%s\x1b[0m", "Potentially parked - " + domain_name + " (" + park_potential + " " + domain_potential + ")");
-                        var potentially_parked = true;
-                        if (park_potential != ""){
-                          potentially_parked_strings.push(park_potential);
+                          //why was it potentially parked?
+                          if (park_potential != "" || domain_potential  != ""){
+                            console.log("\x1b[41m%s\x1b[0m", "Potentially parked - " + domain_name + " (" + park_potential + " " + domain_potential + ")");
+                            var potentially_parked = true;
+                            if (park_potential != ""){
+                              potentially_parked_strings.push(park_potential);
+                            }
+                            if (domain_potential != ""){
+                              potentially_parked_strings.push(domain_potential);
+                            }
+                          }
                         }
-                        if (domain_potential != ""){
-                          potentially_parked_strings.push(domain_potential);
+
+                        //figure out names
+                        console.log("CHECKING NAMES - " + domain_name);
+                        if (whoisObj["Admin Name"] || whoisObj["Tech Name"] || whoisObj["Registrant Name"]){
+                          var admin_name = (whoisObj["Admin Name"]) ? whoisObj["Admin Name"].toLowerCase() : "";
+                          var tech_name = (whoisObj["Tech Name"]) ? whoisObj["Tech Name"].toLowerCase() : "";
+                          var registrant_name = (whoisObj["Registrant Name"]) ? whoisObj["Registrant Name"].toLowerCase() : "";
+
+                          var admin_name_lower = (whoisObj["Admin Name"]) ? whoisObj["Admin Name"].toLowerCase() : "";
+                          var tech_name_lower = (whoisObj["Tech Name"]) ? whoisObj["Tech Name"].toLowerCase() : "";
+                          var registrant_name_lower = (whoisObj["Registrant Name"]) ? whoisObj["Registrant Name"].toLowerCase() : "";
+
+                          //check if there are any bad names
+                          no_bueno_names.some(function(bad_name){
+                            var admin_check = (admin_name_lower != "") ? admin_name_lower.indexOf(bad_name) != -1 : false;
+                            var tech_check = (tech_name_lower != "") ? tech_name_lower.indexOf(bad_name) != -1 : false;
+                            var registrant_check = (registrant_name_lower != "") ? registrant_name_lower.indexOf(bad_name) != -1 : false;
+
+                            //make blank if bad (contains a bad word or has no letters)
+                            if (admin_check || !admin_name_lower.match(/[a-z]/i)){
+                              admin_name = "";
+                            }
+                            if (tech_check || !tech_name_lower.match(/[a-z]/i)){
+                              tech_name = "";
+                            }
+                            if (registrant_check || !registrant_name_lower.match(/[a-z]/i)){
+                              registrant_name = "";
+                            }
+                            return (admin_check || tech_check || registrant_check);
+                          });
                         }
+                        else {
+                          var admin_check = "";
+                          var tech_check = "";
+                          var registrant_check = "";
+                        }
+
+                        var admin_name = toTitleCase(admin_name);
+                        var tech_name = toTitleCase(tech_name);
+                        var registrant_name = toTitleCase(registrant_name);
+
+                        resolve({
+                          domain_name : domain_name.toLowerCase(),
+                          parked : parked,
+                          admin_email : (admin_email == "") ? fillInBlank(admin_email, tech_email, registrant_email) : admin_email,
+                          tech_email : (tech_email == "") ? fillInBlank(tech_email, admin_email, registrant_email) : tech_email,
+                          registrant_email : (registrant_email == "") ? fillInBlank(registrant_email, tech_email, admin_email) : registrant_email,
+                          admin_name : (admin_name == "") ? fillInBlank(admin_name, tech_name, registrant_name) : admin_name,
+                          tech_name : (tech_name == "") ? fillInBlank(tech_name, admin_name, registrant_name) : tech_name,
+                          registrant_name : (registrant_name == "") ? fillInBlank(registrant_name, tech_name, admin_name) : registrant_name,
+                          intial_word : intial_word,
+                          parked_strings : strings,
+                          potentially_parked : potentially_parked,
+                          potentially_parked_strings : potentially_parked_strings,
+                        });
                       }
-                    }
-
-                    //figure out names
-                    if (whoisObj["Admin Name"] || whoisObj["Tech Name"] || whoisObj["Registrant Name"]){
-                      var admin_name = (whoisObj["Admin Name"]) ? whoisObj["Admin Name"].toLowerCase() : "";
-                      var tech_name = (whoisObj["Tech Name"]) ? whoisObj["Tech Name"].toLowerCase() : "";
-                      var registrant_name = (whoisObj["Registrant Name"]) ? whoisObj["Registrant Name"].toLowerCase() : "";
-
-                      var admin_name_lower = (whoisObj["Admin Name"]) ? whoisObj["Admin Name"].toLowerCase() : "";
-                      var tech_name_lower = (whoisObj["Tech Name"]) ? whoisObj["Tech Name"].toLowerCase() : "";
-                      var registrant_name_lower = (whoisObj["Registrant Name"]) ? whoisObj["Registrant Name"].toLowerCase() : "";
-
-                      //check if there are any bad names
-                      no_bueno_names.some(function(bad_name){
-                        var admin_check = (admin_name_lower != "") ? admin_name_lower.indexOf(bad_name) != -1 : false;
-                        var tech_check = (tech_name_lower != "") ? tech_name_lower.indexOf(bad_name) != -1 : false;
-                        var registrant_check = (registrant_name_lower != "") ? registrant_name_lower.indexOf(bad_name) != -1 : false;
-
-                        //make blank if bad (contains a bad word or has no letters)
-                        if (admin_check || !admin_name_lower.match(/[a-z]/i)){
-                          admin_name = "";
-                        }
-                        if (tech_check || !tech_name_lower.match(/[a-z]/i)){
-                          tech_name = "";
-                        }
-                        if (registrant_check || !registrant_name_lower.match(/[a-z]/i)){
-                          registrant_name = "";
-                        }
-                        return (admin_check || tech_check || registrant_check);
-                      });
-                    }
-                    else {
-                      var admin_check = "";
-                      var tech_check = "";
-                      var registrant_check = "";
-                    }
-
-                    var admin_name = toTitleCase(admin_name);
-                    var tech_name = toTitleCase(tech_name);
-                    var registrant_name = toTitleCase(registrant_name);
-
-                    resolve({
-                      domain_name : domain_name.toLowerCase(),
-                      parked : parked,
-                      admin_email : (admin_email == "") ? fillInBlank(admin_email, tech_email, registrant_email) : admin_email,
-                      tech_email : (tech_email == "") ? fillInBlank(tech_email, admin_email, registrant_email) : tech_email,
-                      registrant_email : (registrant_email == "") ? fillInBlank(registrant_email, tech_email, admin_email) : registrant_email,
-                      admin_name : (admin_name == "") ? fillInBlank(admin_name, tech_name, registrant_name) : admin_name,
-                      tech_name : (tech_name == "") ? fillInBlank(tech_name, admin_name, registrant_name) : tech_name,
-                      registrant_name : (registrant_name == "") ? fillInBlank(registrant_name, tech_name, admin_name) : registrant_name,
-                      intial_word : intial_word,
-                      parked_strings : strings,
-                      potentially_parked : potentially_parked,
-                      potentially_parked_strings : potentially_parked_strings,
+                      else {
+                        reject();
+                      }
                     });
                   }
-                  else {
-                    // console.log("\x1b[41m%s\x1b[0m", "Error in request!");
+                  catch (error){
+                    console.log("\x1b[33m%s\x1b[0m", error);
                     reject();
                   }
-                });
+                }
+                else {
+                  reject();
+                }
               }
               else {
                 reject();
               }
             }
             else {
+              console.log("\x1b[33m%s\x1b[0m", err);
               reject();
             }
-          }
-          else {
-            reject();
-          }
-        });
+          });
         }
         catch (error){
           console.log("\x1b[33m%s\x1b[0m", error);
-          reject()
+          reject();
         }
       });
     }
