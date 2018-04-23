@@ -105,6 +105,7 @@ function updatePortfolioOverviewCounters(){
   //figure out total profit
   var total_revenue = 0;
   var total_expenses = 0;
+  var total_profit = 0;
 
   //any transactions
   if (user.transactions){
@@ -116,26 +117,46 @@ function updatePortfolioOverviewCounters(){
       var transaction_cost_refunded = (user.transactions[x].transaction_cost_refunded) ? user.transactions[x].transaction_cost_refunded : 0;
 
       //update totals
-      if (user.transactions[x].transaction_type != "expense"){
+      if (user.transactions[x].transaction_type != "expense" && user.transactions[x].transaction_type != "renewal"){
         total_revenue += (transaction_cost - transaction_cost_refunded);
+        total_profit += transaction_cost - doma_fees - payment_fees;
       }
       else {
-        total_expenses += transaction_cost;
+        total_expenses -= transaction_cost;
+        total_profit -= transaction_cost - doma_fees - payment_fees;
       }
-      total_expenses += (doma_fees + payment_fees);
+      total_expenses -= (doma_fees + payment_fees);
     }
   }
 
   $("#revenue-counter").addClass("is-primary").text(wNumb({
-    prefix: '$ ',
+    prefix: '$',
     decimals: 2,
     thousand: ','
   }).to(total_revenue/100));
+
+  //total expense counter
   $("#expenses-counter").text(wNumb({
-    prefix: '$ ',
+    prefix: '$',
     decimals: 2,
     thousand: ','
   }).to(total_expenses/100));
+  if (total_expenses < 0){
+    $("#expenses-counter").addClass("is-danger").removeClass("is-primary");
+  }
+
+  //total profit counter
+  $("#profit-counter").text(wNumb({
+    prefix: '$',
+    decimals: 2,
+    thousand: ','
+  }).to(total_profit/100));
+  if (total_profit < 0){
+    $("#profit-counter").addClass("is-danger").removeClass("is-primary");
+  }
+  else if (total_profit > 0){
+    $("#profit-counter").removeClass("is-danger").addClass("is-primary");
+  }
 }
 
 //</editor-fold>
