@@ -1293,6 +1293,7 @@ function showSectionByURL(){
     temp_row.data("sale", transaction.transaction_type == "sale");
     temp_row.data("rental", transaction.transaction_type == "rental");
     temp_row.data("expense", transaction.transaction_type == "expense");
+    temp_row.data("renewal", transaction.transaction_type == "renewal");
     temp_row.data("exists", true);
 
     //date created, no date if it's a renewal cost but has no registration date
@@ -1368,9 +1369,14 @@ function showSectionByURL(){
       else {
 
         //tooltip for prices
-        if (transaction.transaction_type == "expense"){
+        if (transaction.transaction_type == "expense" || transaction.transaction_type == "renewal"){
+          if (transaction.transaction_type == "expense"){
+            temp_row.find(".transactions-row-available").text("Expense Recorded");
+          }
+          else {
+            temp_row.find(".transactions-row-available").text("Domain Renewal");
+          }
           temp_row.find(".transactions-row-amount").text(moneyFormat.to(-total_profit)).addClass('is-danger');
-          temp_row.find(".transactions-row-available").text("Expense Recorded")
           temp_row.data("total_earned", -total_earned);
           temp_row.data("total_fees", 0);
         }
@@ -1437,7 +1443,7 @@ function showSectionByURL(){
       total_fees += $(this).data("total_fees");
 
       //count towards revenue if its not an expense
-      if (!$(this).data("expense")){
+      if (!$(this).data("expense") || !$(this).data('renewal')){
         total_earned += $(this).data("total_earned");
       }
       else {
@@ -1583,6 +1589,9 @@ function showSectionByURL(){
     if (date_created_moment.isValid()){
       if (transaction.transaction_type == "expense"){
         modal_timestamp_text = "Recorded on " + date_created_moment.format("YYYY-MM-DD");
+      }
+      else if (transaction.transaction_type == "renewal"){
+        modal_timestamp_text = "Renewal paid on " + date_created_moment.format("YYYY-MM-DD");
       }
       else if (transaction.transaction_type == "rental" && transaction.transaction_cost == null){
         modal_timestamp_text = "Created on " + date_created_moment.format("YYYY-MM-DD");
@@ -1732,7 +1741,12 @@ function showSectionByURL(){
     }
     //domain expense related stuff
     else {
-      $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid" + ((transaction.transaction_details) ? ' for "' + transaction.transaction_details + '"': ""));
+      if (transaction.transaction_type == "expense"){
+        $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid" + ((transaction.transaction_details) ? ' for "' + transaction.transaction_details + '"': ""));
+      }
+      else {
+        $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid for annual domain renewal");
+      }
       $("#commission-promo-message, #pending-transfer-wrapper, #available-on-wrapper, #payment-fees-wrapper").addClass("is-hidden");
 
       //button for edit / delete
