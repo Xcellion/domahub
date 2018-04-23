@@ -22,6 +22,11 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+//transactions modal
+#transactions-details-modal .modal-content h3 {
+  word-wrap:break-word;
+}
+
 .text-line-through {
   text-decoration: line-through;
 }

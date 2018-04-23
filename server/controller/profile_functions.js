@@ -208,7 +208,7 @@ module.exports = {
                 transaction_cost_refunded : null,
                 transaction_details : "Annual renewal cost",
                 transaction_id : null,
-                transaction_type : "expense",
+                transaction_type : "renewal",
                 withdrawn_on : null
               });
             }
