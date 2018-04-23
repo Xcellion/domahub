@@ -987,7 +987,7 @@ module.exports = function(app){
         try {
           //look up domain owner info
           whois.lookup(domain_name,{
-            "follow":  20    // number of times to follow redirects
+            "follow":  100    // number of times to follow redirects
           }, function(err, data){
             console.log("RECEIVED WHOIS - " + domain_name);
             var whoisObj = {};
@@ -1143,13 +1143,13 @@ module.exports = function(app){
               }
             }
             else {
-              console.log("\x1b[33m%s\x1b[0m", err);
+              console.log("\x1b[33m%s\x1b[0m","WHOIS ERR", err);
               reject();
             }
           });
         }
         catch (error){
-          console.log("\x1b[33m%s\x1b[0m", error);
+          console.log("\x1b[33m%s\x1b[0m", "TRY CATCH ERR", error);
           reject();
         }
       });
