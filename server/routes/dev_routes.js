@@ -151,8 +151,7 @@ module.exports = function(app){
     console.log("Checking WHOIS...");
     var domain_name = req.params.domain_name;
     whois.lookup(domain_name, {
-      // "proxy" : "whois.geektools.com"
-      "follow":  10    // number of times to follow redirects
+      "follow":  2    // number of times to follow redirects
     }, function(err, data){
       var whoisObj = {};
       if (data && !err){
@@ -450,6 +449,7 @@ module.exports = function(app){
     "@qq.com",
     "@secretregistration.com",
     "@simplesite.com",
+    "@simplames.com",
     "@spamfree.bookmyname.com",
     "@webnode.com",
     "academy",
@@ -465,6 +465,8 @@ module.exports = function(app){
     "dotcommedia.com",
     "dropcatch.com",
     "forsale@epik.com",
+    "help@",
+    "helpus@",
     "hosting",
     "hostmaster",
     "info@",
@@ -472,6 +474,7 @@ module.exports = function(app){
     "junkemail",
     "justhost.com",
     "management",
+    "netsolution@",
     "o-w-o.info",
     "photography",
     "privacy",
@@ -596,7 +599,7 @@ module.exports = function(app){
       }).sort(function(a, b){
         var date_a = moment(a.replace(".json", ""));
         var date_b = moment(b.replace(".json", ""));
-        return date_a < date_b;
+        return (date_a < date_b) ? 1 : (date_a == date_b) ? 0 : -1;
       })[0].replace(".json", "");
     }
     else {
@@ -987,7 +990,7 @@ module.exports = function(app){
         try {
           //look up domain owner info
           whois.lookup(domain_name,{
-            "follow":  100    // number of times to follow redirects
+            "follow":  2    // number of times to follow redirects
           }, function(err, data){
             console.log("RECEIVED WHOIS - " + domain_name);
             var whoisObj = {};
