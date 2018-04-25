@@ -21,31 +21,48 @@
 @import '../bulma/layout/section.sass';
 
 #landing {
-  @include transition(all 0.2s ease);
-  padding-top: 140px;
   overflow: hidden;
+  padding: 140px 0;
   position: relative;
-  background: $primary;
   width: 100%;
+  .container {
+    z-index: 5;
+  }
   .subtitle {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
   }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url("/images/main/background.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    z-index: 0;
+  }
+}
+
+.heading {
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 20px !important;
+  text-transform: uppercase;
+}
+
+.header {
+  margin-bottom: 60px !important;
 }
 
 .centered-button {
   left:50%;
   top:50%;
   transform:translate(-50%, -50%);
-}
-
-.bubble {
-  background-image: url("/images/main/drawing.svg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 90px;
 }
 
 .notification {
@@ -87,25 +104,23 @@
   }
 }
 
-.has-text-right-desktop {
-  @include mobile{
-    text-align: center !important;
-  }
-  @include desktop{
-    text-align: right !important;
-  }
+#pricing {
+  background-image: linear-gradient(#2c8564,#3cbc8d);
 }
 
 .price-sign {
   font-size: $size-5;
   vertical-align: top;
-  color: $white;
 }
 
-.price-month {
+.price-amount {
   display: inline-block;
+  font-size: $size-1;
+  font-weight: 700;
+  color: $text;
   position: relative;
   &::before {
+    @include transition(all 0.2s ease);
     background: transparent;
     content: '';
     width: 0;
@@ -117,38 +132,35 @@
   &.is-active {
     color: $black-disabled;
     &::before {
-      @include transition(all 0.2s ease);
       background: $black-disabled;
       width: 100%;
     }
   }
 }
 
-.price-control {
-  margin-top: -50px;
-  justify-content: flex-end !important;
-  @include mobile {
-    margin-top: 0;
-    justify-content: center !important;
-  }
-}
-
-.price-month,
 .price-annual {
   font-size: $size-1;
   font-weight: 700;
-  color: $white;
+  color: $text;
+  @include keyframes(fadeIn 500ms forwards);
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 }
 
 .price-text {
   display: block;
-  color: $white;
   margin: -10px 0 0 20px;
 }
 
 .is-vertical {
   .icon {
-    background-color: rgba(255,255,255,0.25);
+    background-color: $primary-lighter;
     border-radius: 3px;
   }
 }

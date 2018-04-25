@@ -418,7 +418,7 @@ function updateDomainRow(tempRow, listing_info, now){
     var listing_href = "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase();
   }
 
-  tempRow.find(".td-domain").html("<a class='is-underlined' target='_blank' href='" + listing_href + "'>" + listing_info.domain_name + "</a>").attr("title", listing_info.domain_name);
+  tempRow.find(".td-domain").html("<a class='is-bold' target='_blank' href='" + listing_href + "'>" + listing_info.domain_name + "</a>").attr("title", listing_info.domain_name);
   tempRow.find(".td-registrar").text((listing_info.registrar_name) ? listing_info.registrar_name : "-");
 
   if (listing_info.date_registered){

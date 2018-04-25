@@ -14,38 +14,9 @@
 @import '../bulma/elements/image.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/progress.sass';
-@import '../bulma/elements/tag.sass';
 @import '../bulma/elements/table.sass';
 @import '../bulma/elements/title.sass';
 @import '../bulma/layout/section.sass';
-
-//<editor-fold>-------------------------------Animations------------------------
-
-@keyframes slideOut {
-  0% {
-    display: block;
-    opacity: 1;
-    @include translate(0,0);
-  }
-  100% {
-    display: none;
-    opacity: 0;
-    @include translate(-500px,0);
-  }
-}
-
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    @include translate(500px,0);
-  }
-  100% {
-    opacity: 1;
-    @include translate(0,0);
-  }
-}
-
-//</editor-fold>
 
 .progress {
   position: absolute;
@@ -72,6 +43,11 @@
   @include widescreen {
     display: none;
   }
+}
+
+.step-tracker {
+  font-size: 12px;
+  line-height: 24px;
 }
 
 .onboarding-step-wrapper {
@@ -140,31 +116,9 @@ a {
   &.is-logo {
     width: 140px;
   }
-}
-
-.steam {
-  @include keyframes(coffee 2s ease-in-out alternate infinite);
-}
-
-.spike {
-  @include keyframes(shake 2s ease-in-out infinite alternate);
-}
-
-@keyframes coffee {
-  0% {
-    @include translate(0,0);
-  }
-  100% {
-    @include translate(0,5px);
-  }
-}
-
-@keyframes shake {
-  0% {
-    @include scale(1);
-  }
-  20%, 100% {
-    @include scale(1.02);
+  &.is-onboard {
+    width: 196px;
+    margin-bottom: 20px;
   }
 }
 
@@ -179,6 +133,74 @@ a {
 .columns {
   margin-left: -20px;
 }
+
+//<editor-fold>-------------------------------Animations-------------------
+
+@keyframes slideOut {
+  0% {
+    display: block;
+    opacity: 1;
+    @include translate(0,0);
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    @include translate(-500px,0);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    @include translate(500px,0);
+  }
+  100% {
+    opacity: 1;
+    @include translate(0,0);
+  }
+}
+
+.steam {
+  @include keyframes(coffee 2s ease-in-out infinite alternate);
+}
+
+.spike {
+  @include keyframes(shake 2s ease-in-out infinite alternate);
+}
+
+.blast {
+  @include keyframes(fire 1s ease-in-out infinite alternate);
+}
+
+@keyframes coffee {
+  0% {
+    @include translate(0,0);
+  }
+  100% {
+    @include translate(0,5px);
+  }
+}
+
+@keyframes shake {
+  0% {
+    @include scale(1.02);
+  }
+  20%, 100% {
+    @include scale(1);
+  }
+}
+
+@keyframes fire {
+  0% {
+    @include translate(0,0);
+    opacity: 0;
+  }
+  100% {
+    @include translate(0,2px);
+    opacity: 1;
+  }
+}
+//</editor-fold>
 
 //<editor-fold>-------------------------------Profile Wrapper-------------------
 .wrapper {
@@ -228,7 +250,6 @@ a {
   &.is-active {
     p {
       color: $primary;
-      font-weight: 700;
     }
   }
 }
