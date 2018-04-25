@@ -30,7 +30,7 @@
           <p class="break-all is-hidden-laptop"><%= user.username %></p>
         </div>
         <ul class="menu-list">
-          <p class="heading is-bold" style="padding-left:20px;padding-bottom:10px;">
+          <p class="heading" style="padding-left:20px;padding-bottom:10px;">
             Steps
           </p>
           <li class="menu-item">
@@ -38,6 +38,9 @@
               <p>
                 Personal Information
               </p>
+              <div class="step-tracker is-hidden" data-tracker="1">
+                1 of 2
+              </div>
               <div class="icon is-primary is-hidden">
                 <i class="fal fa-check"></i>
               </div>
@@ -46,7 +49,7 @@
               </div>
             </a>
           </li>
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <a class="step-link" data-step="3">
               <p>
                 Billing Address
@@ -58,10 +61,26 @@
                 <i class="fal fa-minus"></i>
               </div>
             </a>
-          </li>
-          <% if (user.stripe_account && user.stripe_account_id) { %>
+          </li> -->
           <li class="menu-item">
             <a class="step-link" data-step="4">
+              <p>
+                Payout Methods
+              </p>
+              <div class="step-tracker is-hidden" data-tracker="2">
+                1 of 2
+              </div>
+              <div class="icon is-primary is-hidden">
+                <i class="fal fa-check"></i>
+              </div>
+              <div class="icon is-danger is-hidden">
+                <i class="fal fa-minus"></i>
+              </div>
+            </a>
+          </li>
+          <!-- <% if (user.stripe_account && user.stripe_account_id) { %>
+          <li class="menu-item">
+            <a class="step-link" data-step="5">
               <p>
                 Bank Information
               </p>
@@ -75,23 +94,9 @@
           </li>
           <% } %>
           <li class="menu-item">
-            <a class="step-link" data-step="5">
-              <p>
-                Payout Method
-              </p>
-              <div class="icon is-primary is-hidden">
-                <i class="fal fa-check"></i>
-              </div>
-              <div class="icon is-danger is-hidden">
-                <i class="fal fa-minus"></i>
-              </div>
-            </a>
-          </li>
-          <% if (!(user.stripe_subscription_id && user.stripe_subscription)) { %>
-          <li class="menu-item">
             <a class="step-link" data-step="6">
               <p>
-                Upgrade to Premium
+                Connect PayPal
               </p>
               <div class="icon is-primary is-hidden">
                 <i class="fal fa-check"></i>
@@ -100,13 +105,15 @@
                 <i class="fal fa-minus"></i>
               </div>
             </a>
-          </li>
-          <% } %>
+          </li> -->
           <li class="menu-item">
             <a class="step-link" data-step="7">
               <p>
                 Upload Domains
               </p>
+              <div class="step-tracker is-hidden" data-tracker="3">
+                1 of 2
+              </div>
               <div class="icon is-primary is-hidden">
                 <i class="fal fa-check"></i>
               </div>
@@ -115,7 +122,7 @@
               </div>
             </a>
           </li>
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <a class="step-link" data-step="8">
               <p>
                 Connect Registrar
@@ -140,26 +147,32 @@
                 <i class="fal fa-circle"></i>
               </div>
             </a>
-          </li>
+          </li> -->
+          <% if (!(user.stripe_subscription_id && user.stripe_subscription)) { %>
           <li class="menu-item">
-            <a id="step-link-no-handler" class="step-link">
+            <a class="step-link" data-step="11">
               <p>
-                Review and Edit
+                Complete Setup
               </p>
               <div class="icon is-primary is-hidden">
                 <i class="fal fa-check"></i>
               </div>
+              <div class="icon is-danger is-hidden">
+                <i class="fal fa-minus"></i>
+              </div>
             </a>
           </li>
+          <% } %>
         </ul>
+        <a class="" href="/logout">Log Out</a>
       </div>
 
       <div class="right-content">
         <progress class="progress is-primary" value="0" max="100"></progress>
         <button class="button steps-menu-button is-stylish is-small">
-          <span class="icon is-small">
+          <div class="icon is-small">
             <i class="fal fa-bars"></i>
-          </span>
+          </div>
           <span>Show Menu</span>
         </button>
 
@@ -169,7 +182,7 @@
           <div id="onboarding-step-1" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
               <div class="content">
-                <figure class="image is-196x196 left-aligned">
+                <figure class="image is-onboard left-aligned">
                   <?xml version="1.0" encoding="utf-8"?>
                   <!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
                   <svg version="1.1" id="Illustrations" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
@@ -272,18 +285,18 @@
                   		<polygon class="st5" points="166,132 172,126 169,121 166,124 163,121 160,126 		"/>
                   	</g>
                   	<polyline class="st3" points="177.3,121 185,121 180,133 175.8,133 	"/>
-                  	<g>
-                  		<line class="st3" x1="95" y1="92" x2="95" y2="98"/>
-                  		<line class="st3" x1="95" y1="102" x2="95" y2="104"/>
-                  		<line class="st3" x1="99" y1="90" x2="99" y2="96"/>
-                  		<line class="st3" x1="99" y1="100" x2="99" y2="102"/>
-                  		<line class="st3" x1="91" y1="90" x2="91" y2="96"/>
-                  		<line class="st3" x1="91" y1="100" x2="91" y2="102"/>
-                  		<line class="st3" x1="95" y1="108" x2="95" y2="109"/>
-                  		<line class="st3" x1="99" y1="106" x2="99" y2="107"/>
-                  		<line class="st3" x1="91" y1="106" x2="91" y2="107"/>
+                  	<g class="blast">
+                  		<line class="st3 streak" x1="95" y1="92" x2="95" y2="98"/>
+                  		<line class="st3 streak" x1="95" y1="102" x2="95" y2="104"/>
+                  		<line class="st3 streak" x1="99" y1="90" x2="99" y2="96"/>
+                  		<line class="st3 streak" x1="99" y1="100" x2="99" y2="102"/>
+                  		<line class="st3 streak" x1="91" y1="90" x2="91" y2="96"/>
+                  		<line class="st3 streak" x1="91" y1="100" x2="91" y2="102"/>
+                  		<line class="st3 streak" x1="95" y1="108" x2="95" y2="109"/>
+                  		<line class="st3 streak" x1="99" y1="106" x2="99" y2="107"/>
+                  		<line class="st3 streak" x1="91" y1="106" x2="91" y2="107"/>
                   	</g>
-                  	<g>
+                  	<g class="blast">
                   		<line class="st3" x1="79" y1="92" x2="79" y2="98"/>
                   		<line class="st3" x1="79" y1="102" x2="79" y2="104"/>
                   		<line class="st3" x1="83" y1="90" x2="83" y2="96"/>
@@ -294,7 +307,7 @@
                   		<line class="st3" x1="83" y1="106" x2="83" y2="107"/>
                   		<line class="st3" x1="75" y1="106" x2="75" y2="107"/>
                   	</g>
-                  	<g>
+                  	<g class="blast">
                   		<line class="st3" x1="111" y1="92" x2="111" y2="98"/>
                   		<line class="st3" x1="111" y1="102" x2="111" y2="104"/>
                   		<line class="st3" x1="115" y1="90" x2="115" y2="96"/>
@@ -313,7 +326,7 @@
                 <h1>
                   Welcome to DomaHub! Let's get your account set up.
                 </h1>
-                <p class="tip">
+                <p class="is-grey">
                   You're just a few steps away from accessing our platform.
                   But first, let us quickly guide you through the process of setting up your account.
                   Click the button on the bottom-right corner of your screen to get started.
@@ -342,8 +355,8 @@
               </div>
               <div class="content">
                 <h1>Tell us a little about yourself.</h1>
-                <p class="tip">
-                  This information is legally required for payments processing. DomaHub does not share this information with anyone except our payments processors.
+                <p class="is-grey">
+                  We require this information for payments processing. We don't share or store this information anywhere outside of our payments processors.
                 </p>
               </div>
               <form id="step-form-2" class="onboarding-step-form">
@@ -505,6 +518,11 @@
                     </select>
                   </div>
                 </div>
+                <div class="control">
+                  <small class="tip">
+                    All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-bold" title="Go to Stripe's website">Stripe</a>.
+                  </small>
+                </div>
               </form>
             </div>
             <div class="control step-buttons">
@@ -527,16 +545,16 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary is-underlined onboarding-skip-button">Skip this step for now</a>
+                  <a class="is-primary is-bold onboarding-skip-button">Skip this step for now</a>
                 </div>
               </div>
               <div class="content">
                 <h1>
                   Fill out your billing address.
                 </h1>
-                <p class="tip">
-                  This information is legally required for payments processing. DomaHub does not share this information with anyone except our payments processors.
-                  <a class="is-underlined" data-balloon="Only a select few countries are eligible for bank withdrawals. If you do not see your country listed, please skip this step and add other payout accounts." data-balloon-length="large" data-balloon-pos="up">Why is my country not listed?</a>
+                <p class="is-grey">
+                  We require this information for payments processing. We don't share or store this information anywhere outside of our payments processors.
+                  <a class="is-bold" data-balloon="Only a select few countries are eligible for bank withdrawals. If you do not see your country listed, please skip this step." data-balloon-length="large" data-balloon-pos="up">Why is my country not listed?</a>
                 </p>
               </div>
               <form id="step-form-3" class="onboarding-step-form">
@@ -594,6 +612,11 @@
                     <input required data-uservar="zip" id="postal_code-input" placeholder="12345" class="input stripe-account-input has-shadow" type="text" name="zip" autocomplete=""/>
                   </div>
                 </div>
+                <div class="control">
+                  <small class="tip">
+                    All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-bold" title="Go to Stripe's website">Stripe</a>.
+                  </small>
+                </div>
               </form>
             </div>
             <div class="control step-buttons">
@@ -612,8 +635,82 @@
             </div>
           </div>
 
-          <!-- STEP 4 (Bank Account) -->
+          <!-- STEP 4 (Finished Personal Information) -->
           <div id="onboarding-step-4" class="step onboarding-step-wrapper is-hidden">
+            <div class="step-content">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <p class="heading">
+                    Payout Method
+                  </p>
+                </div>
+              </div>
+              <div class="content">
+                <h1>
+                  How would you like to get paid?
+                </h1>
+                <p class="is-grey">
+                  Choose a payout method below. You can add as many methods as you want. Remove or change this information
+                  at any time.
+                </p>
+              </div>
+              <form id="step-form-4" class="onboarding-step-form">
+                <div class="columns">
+                  <div class="column is-6">
+                    <a id="go-step-5" class="box has-footer">
+                      <div class="box-content">
+                        <div class="content has-text-centered">
+                          <div class="icon is-primary is-circle is-medium">
+                            <i class="fal fa-university"></i>
+                          </div>
+                        </div>
+                        <div class="content has-text-centered">
+                          <p class="is-bold">Connect a Bank Account</p>
+                          <p class="is-grey">
+                            Get paid directly into a bank account. We currently provide support for 22 different countries.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <div class="button is-stylish is-primary">Select</div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="column is-6">
+                    <a id="go-step-6" class="box has-footer">
+                      <div class="box-content">
+                        <div class="content has-text-centered">
+                          <div class="icon is-info is-circle is-medium">
+                            <i class="fal fa-paypal"></i>
+                          </div>
+                        </div>
+                        <div class="content has-text-centered">
+                          <p class="is-bold">Link a PayPal Account</p>
+                          <p class="is-grey">
+                            You may link your PayPal account to DomaHub to accept payments through PayPal.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="box-footer">
+                        <div class="button is-stylish is-info">Select</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="control step-buttons">
+              <a class="button is-stylish is-black is-inverted onboarding-prev-button">
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-left"></i>
+                </div>
+                <span>Previous Step</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- STEP 5 (Bank Account) -->
+          <div id="onboarding-step-5" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
               <div class="control is-spaced">
                 <div class="control-left">
@@ -622,21 +719,22 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary is-underlined onboarding-skip-button">Skip this step for now</a>
+                  <a class="is-primary is-bold onboarding-skip-button">Skip this step for now</a>
                 </div>
               </div>
               <div class="content">
                 <h1>
-                  Set up a bank account so we can get you paid.
+                  Connect your bank account.
                 </h1>
-                <p>
-                  This information is legally required for payments processing. DomaHub does not share this information with anyone except our payments processors. <a class="is-underlined" data-balloon="Only a select few countries are eligible for bank withdrawals. If you do not see your country listed, please skip this step and add other payout accounts." data-balloon-length="large" data-balloon-pos="up">Why is my country not listed?</a>
+                <p class="is-grey">
+                  We require this information for payments processing. We don't share or store this information anywhere outside of our payments processors.
+                  <a class="is-bold" data-balloon="Only a select few countries are eligible for bank withdrawals. If you do not see your country listed, please skip this step." data-balloon-length="large" data-balloon-pos="up">Why is my country not listed?</a>
                 </p>
               </div>
               <div class="control">
                 <p id="existing-bank-details"></p>
               </div>
-              <form id="step-form-4" class="onboarding-step-form">
+              <form id="step-form-5" class="onboarding-step-form">
                 <div class="control existing-bank is-hidden"></div>
                 <div class="control">
                   <label class="label" for="country-input">Country of Bank Account</label>
@@ -717,7 +815,7 @@
                 </div>
                 <span>Previous Step</span>
               </a>
-              <button form="step-form-4" type="submit" class="button is-stylish is-primary onboarding-next-button">
+              <button form="step-form-5" type="submit" class="button is-stylish is-primary onboarding-next-button">
                 <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
@@ -726,8 +824,8 @@
             </div>
           </div>
 
-          <!-- STEP 5 (PayPal) -->
-          <div id="onboarding-step-5" class="step onboarding-step-wrapper is-hidden">
+          <!-- STEP 6 (PayPal) -->
+          <div id="onboarding-step-6" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
               <div class="control is-spaced">
                 <div class="control-left">
@@ -736,15 +834,18 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary is-underlined onboarding-skip-button">Skip this step for now</a>
+                  <a class="is-primary is-bold onboarding-skip-button">Skip this step for now</a>
                 </div>
               </div>
               <div class="content">
                 <h1>
-                  Do you have a PayPal account you would like to connect?
+                  Connect your PayPal account.
                 </h1>
+                <p class="is-grey">
+                  Just enter your PayPal email address below.
+                </p>
               </div>
-              <form id="step-form-5" class="onboarding-step-form">
+              <form id="step-form-6" class="onboarding-step-form">
                 <div class="control">
                   <label class="label" for="paypal_email-input">PayPal Email Address</label>
                   <input required id="paypal_email-input" data-uservar="paypal_email" class="account-input input has-shadow" type="email" name="paypal_email-input" />
@@ -758,100 +859,8 @@
                 </div>
                 <span>Previous Step</span>
               </a>
-              <button form="step-form-5" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span>Next Step</span>
-                <div class="icon is-small">
-                  <i class="fal fa-long-arrow-right"></i>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          <!-- STEP 6 (Premium) -->
-          <div id="onboarding-step-6" class="step onboarding-step-wrapper is-hidden">
-            <div class="step-content">
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <p class="heading">
-                    Premium Subscription
-                  </p>
-                </div>
-                <div class="control-right">
-                  <a class="is-primary onboarding-skip-button is-underlined">No, maybe some other time</a>
-                </div>
-              </div>
-              <div class="content">
-                <h1>
-                  Upgrade to Premium and get access to even more features!
-                </h1>
-                <p class="tip">
-                  Our <a class="is-primary is-underlined" target="_blank" href="/#pricing">Premium subscription</a> gives unlimited access to all of our features.
-                </p>
-              </div>
-              <div class="columns">
-                <div class="column is-6">
-                  <form id="step-form-6" class="onboarding-step-form">
-                    <div class="control">
-                      <label class="label" for="subscription-type-input">Billing Cycle</label>
-                      <div class="select is-fullwidth has-shadow">
-                        <select required name="subscription-type" id="subscription-type-input">
-                          <option selected value="" disabled>Please select your desired billing cycle</option>
-                          <option value="monthly">Monthly - $5 / month ($60 / year)</option>
-                          <option value="annual">Annually - $50 / year ($4.16 / month)</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="control">
-                      <label class="label">Card Number</label>
-                      <input id="cc-num" required tabindex="0" data-stripe="number" class="input modal-input has-shadow" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                    </div>
-                    <div class="control is-grouped">
-                      <div class="control is-expanded">
-                        <label class="label">Expiration Date</label>
-                        <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input modal-input has-shadow" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-                      </div>
-                      <div class="control is-expanded">
-                        <label class="label">Security Code</label>
-                        <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input modal-input has-shadow" type="tel" placeholder="•••" autocomplete="off"/>
-                      </div>
-                    </div>
-                    <div class="control">
-                      <small class="tip">
-                        All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-underlined">Stripe</a>.
-                      </small>
-                    </div>
-                  </form>
-                </div>
-                <div class="column is-3 is-offset-1">
-                  <div class="box">
-                    <div class="content has-text-centered">
-                      <div class="icon is-circle is-medium is-primary">
-                        <i class="fal fa-trophy-alt"></i>
-                      </div>
-                    </div>
-                    <div class="content has-text-centered">
-                      <p class="is-bold">
-                        DomaHub Premium
-                      </p>
-                      <p>
-                        Enjoy zero commission on all sales, unlock designs for landing pages and hubs,
-                        use custom URL's for all pages, SSL certificates, and much more!
-                      </p>
-                      <a class="is-primary is-underlined" target="_blank" href="/#pricing">Click here to learn more!</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="control step-buttons">
-              <a class="button is-stylish is-black is-inverted onboarding-prev-button">
-                <div class="icon is-small">
-                  <i class="fal fa-long-arrow-left"></i>
-                </div>
-                <span>Previous Step</span>
-              </a>
               <button form="step-form-6" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span>Next Step (Pay Now)</span>
+                <span>Next Step</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -871,9 +880,9 @@
               </div>
               <div class="content">
                 <h1>
-                  Great! Your information is set and ready. Let's add some domains!
+                  Let's add some domains to your account.
                 </h1>
-                <p class="tip">
+                <p class="is-grey">
                   You can connect a domain registrar and import your domains automatically, or you can
                   bulk upload your domains manually.
                 </p>
@@ -890,7 +899,7 @@
                         </div>
                         <div class="content has-text-centered">
                           <p class="is-bold">Connect A Registrar</p>
-                          <p class="tip">
+                          <p class="is-grey">
                             We currently provide support for the following registars: GoDaddy, Namecheap, and Namesilo.
                           </p>
                         </div>
@@ -910,7 +919,7 @@
                         </div>
                         <div class="content has-text-centered">
                           <p class="is-bold">Upload Domains Manually</p>
-                          <p class="tip">
+                          <p class="is-grey">
                             Easily upload domains in bulk with our upload tool. Best if you only have a handful of domains.
                           </p>
                         </div>
@@ -943,18 +952,18 @@
                   </p>
                 </div>
                 <div class="control-right">
-                  <a class="is-primary onboarding-skip-button is-underlined">Add domains manually</a>
+                  <a class="is-primary onboarding-skip-button is-bold">Add domains manually</a>
                 </div>
               </div>
               <div class="content">
                 <h1>
                   Please select a domain registrar to connect.
                 </h1>
-                <p class="tip">
+                <p class="is-grey">
                   By connecting your registrar, you'll be able to automatically create listings for all of your domains.
-                  If you'd like to see a different registrar added, <a href="/contact" target="_blank" class="contact-link is-primary is-underlined">let us know</a>!
+                  If you'd like to see a different registrar added, <a href="/contact" target="_blank" class="contact-link is-primary is-bold">let us know</a>!
                 </p>
-                <p class="tip">
+                <p class="is-grey">
                   DomaHub is not affiliated with any of the below listed registrars.
                 </p>
               </div>
@@ -967,8 +976,8 @@
                     <small data-registrar="godaddy" data-registrar_name="GoDaddy" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar="godaddy" class="add-registrar-button button is-stylish is-small is-primary">
-                      <span class="icon is-small"><i class="fal fa-link"></i></span>
+                    <a data-registrar="godaddy" class="add-registrar-button button is-stylish">
+                      <div class="icon is-small"><i class="fal fa-link"></i></div>
                       <span class="registrar-button-text" data-registrar_name="GoDaddy"></span>
                     </a>
                   </div>
@@ -981,8 +990,8 @@
                     <small data-registrar="namecheap" data-registrar_name="Namecheap" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar="namecheap" class="add-registrar-button button is-stylish is-small is-primary">
-                      <span class="icon is-small"><i class="fal fa-link"></i></span>
+                    <a data-registrar="namecheap" class="add-registrar-button button is-stylish">
+                      <div class="icon is-small"><i class="fal fa-link"></i></div>
                       <span class="registrar-button-text" data-registrar_name="Namecheap"></span>
                     </a>
                   </div>
@@ -995,8 +1004,8 @@
                     <small data-registrar="namesilo" data-registrar_name="Namesilo" class="tip registrar-tip"></small>
                   </div>
                   <div class="control-right">
-                    <a data-registrar="namesilo" class="add-registrar-button button is-stylish is-small is-primary">
-                      <span class="icon is-small"><i class="fal fa-link"></i></span>
+                    <a data-registrar="namesilo" class="add-registrar-button button is-stylish">
+                      <div class="icon is-small"><i class="fal fa-link"></i></div>
                       <span class="registrar-button-text" data-registrar_name="NameSilo"></span>
                     </a>
                   </div>
@@ -1011,7 +1020,7 @@
                 <span>Previous Step</span>
               </a>
               <button form="step-form-8" type="submit" class="button is-stylish is-primary onboarding-next-button">
-                <span>Lookup Domain Names</span>
+                <span>Submit Registrar(s)</span>
                 <div class="icon is-small">
                   <i class="fal fa-long-arrow-right"></i>
                 </div>
@@ -1030,8 +1039,8 @@
                 </div>
               </div>
               <div class="content">
-                <h1>Upload your domains below.</h1>
-                <p class="tip">
+                <h1>Add your domains below.</h1>
+                <p class="is-grey">
                   Enter up to 100 domain names in the box below <strong>separated
                   by commas</strong>. You must include TLD extensions such as .com, .org, or .net at the end.
                 </p>
@@ -1063,12 +1072,12 @@
             <div class="step-content">
               <div class="control">
                 <p class="heading">
-                  Review and Edit
+                  Review Domains
                 </p>
               </div>
               <div class="content">
                 <h1>Review and edit your domains.</h1>
-                <p class="tip">
+                <p class="is-grey">
                   Take a moment to review your domains and enter optional pricing information.
                 </p>
               </div>
@@ -1079,15 +1088,15 @@
                       <th class='td-domain'>Domain Name</th>
                       <th class="td-price is-hidden-mobile">
                         <span>Minimum Price</span>
-                        <span class="icon is-tooltip is-small" data-balloon="The minimum offer you will consider selling this domain for. Leave blank for no minimum price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+                        <div class="icon is-tooltip is-small" data-balloon="The minimum offer you will consider selling this domain for. Leave blank for no minimum price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
                           <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                        </span>
+                        </div>
                       </th>
                       <th class="td-price is-hidden-mobile">
                         <span>Buy It Now Price</span>
-                        <span class="icon is-tooltip is-small" data-balloon="The price you are willing to sell this domain for immediately. Leave blank to disable the buy it now option. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+                        <div class="icon is-tooltip is-small" data-balloon="The price you are willing to sell this domain for immediately. Leave blank to disable the buy it now option. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
                           <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                        </span>
+                        </div>
                       </th>
                     </tr>
                   </thead>
@@ -1130,8 +1139,73 @@
             </div>
           </div>
 
-          <!-- STEP 11 (After Successfully Creating A Listing) -->
+          <!-- STEP 11 (Premium) -->
           <div id="onboarding-step-11" class="step onboarding-step-wrapper is-hidden">
+            <div class="step-content">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <p class="heading">
+                    DomaHub Subscription
+                  </p>
+                </div>
+              </div>
+              <div class="content">
+                <h1>
+                  You're almost done - just one more step!
+                </h1>
+                <p class="is-grey">
+                  DomaHub is a subscription-based service. Your contribution allows us to keep
+                  developing and producing great features for you! Select an annual
+                  billing cycle and save 15%!
+                </p>
+                <p class="is-grey">
+                  Don't want to commit just yet? Try DomaHub free for 30 days. <a class="is-primary is-bold">
+                    Start my free trial.
+                  </a>
+                </p>
+              </div>
+              <form id="step-form-11" class="onboarding-step-form">
+                <div class="control">
+                  <label class="label" for="subscription-type-input">Billing Cycle</label>
+                  <div class="select is-fullwidth has-shadow">
+                    <select required name="subscription-type" id="subscription-type-input">
+                      <option selected value="" disabled>Please select your desired billing cycle</option>
+                      <option value="monthly">Monthly - $5 / month ($60 / year)</option>
+                      <option value="annual">Annually - $50 / year ($4.16 / month)</option>
+                    </select>
+                  </div>
+                </div>
+                <label class="label" for="cc-num">Card Information</label>
+                <div class="control has-addons">
+                  <input id="cc-num" required tabindex="0" data-stripe="number" class="input has-shadow" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                  <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input has-shadow" type="tel" placeholder="MM / YY" autocomplete="cc-exp"/>
+                  <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input has-shadow" type="tel" placeholder="CVC" autocomplete="off"/>
+                </div>
+                <div class="control">
+                  <small class="tip">
+                    All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-primary is-bold">Stripe</a>.
+                  </small>
+                </div>
+              </form>
+            </div>
+            <div class="control step-buttons">
+              <a class="button is-stylish is-black is-inverted onboarding-prev-button">
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-left"></i>
+                </div>
+                <span>Previous Step</span>
+              </a>
+              <button form="step-form-11" type="submit" class="button is-stylish is-primary onboarding-next-button">
+                <span>Next Step (Pay Now)</span>
+                <div class="icon is-small">
+                  <i class="fal fa-long-arrow-right"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 12 (After Successfully Creating A Listing) -->
+          <div id="onboarding-step-12" class="step onboarding-step-wrapper is-hidden">
             <div class="step-content">
               <div class="control">
                 <p class="heading">
@@ -1142,12 +1216,12 @@
                 <h1>
                   Congratulations! You've created <span id="total-created-listings">some domain listings</span> and set up your account.
                 </h1>
-                <p class="tip">
+                <p class="is-grey">
                   This next part will guide you through each part of the DomaHub interface, so you understand how everything
                   fits together!
                 </p>
               </div>
-              <form id="step-form-11" class="onboarding-step-form">
+              <form id="step-form-12" class="onboarding-step-form">
               </form>
               <div class="control">
                 <button id="goto-tutorial-button" class="button is-stylish is-primary is-large">

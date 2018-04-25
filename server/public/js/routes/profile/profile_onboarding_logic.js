@@ -29,7 +29,7 @@ $(document).ready(function() {
   });
 
   //navigate to a step in the side menu
-  $(".step-link:not(#step-link-no-handler)").on("click", function() {
+  $(".step-link").on("click", function() {
     $(".step-link").removeClass("is-active");
     $(this).addClass("is-active");
     showSpecificStep(true, $(this).data("step").toString());
@@ -123,7 +123,7 @@ function showSpecificStep(push, step_to_show, backwards, refreshing){
   }
 
   //finished, don't let them go back in steps
-  if (user.onboarding_step >= 11){
+  if (user.onboarding_step >= 12){
     step_to_show = user.onboarding_step;
     refreshing = true;
   }
@@ -135,11 +135,6 @@ function showSpecificStep(push, step_to_show, backwards, refreshing){
 
   //run step specific logic then show step. (needed bc some steps skip others)
   runStepSpecificLogic(step_to_show, backwards, function(){
-
-    //check previous form submits and show check icon accordingly
-    for (var i = 1; i < step_to_show; i++) {
-      checkFormInputs(i);
-    }
 
     //update step-link active
     $(".step-link").removeClass("is-active");
@@ -208,6 +203,49 @@ function setBackEndStep(step_number, cb, button){
   }
 }
 
+//add checks or minuses
+function checkPreviousStep(step_number) {
+  if (step_number == 1) {
+    $(".step-tracker[data-tracker='1']").addClass("is-hidden");
+    if (user.stripe_account) {
+      $(".step-link[data-step='2']").find(".icon.is-primary").removeClass("is-hidden");
+    }
+    else {
+      $(".step-link[data-step='2']").find(".icon.is-danger").removeClass("is-hidden");
+    }
+  }
+
+  if (step_number == 2) {
+    $(".step-tracker[data-tracker='2']").addClass("is-hidden");
+    if (user.stripe_bank || user.paypal_email) {
+      $(".step-link[data-step='4']").find(".icon.is-primary").removeClass("is-hidden");
+      return checkPreviousStep(1);
+    }
+    else {
+      $(".step-link[data-step='4']").find(".icon.is-danger").removeClass("is-hidden");
+      return checkPreviousStep(1);
+    }
+  }
+
+  if (step_number == 3) {
+    $(".step-tracker[data-tracker='3']").addClass("is-hidden");
+    if (user.listings.length > 0 || user.registrars.length > 0) {
+      $(".step-link[data-step='7']").find(".icon.is-primary").removeClass("is-hidden");
+      return checkPreviousStep(2);
+    }
+    else {
+      $(".step-link[data-step='7']").find(".icon.is-danger").removeClass("is-hidden");
+      return checkPreviousStep(2);
+    }
+  }
+}
+
+//change sub-step number (1 of 2)
+function subStepHandler(step_number, substep, total_steps) {
+  $(`.step-tracker[data-tracker=${step_number}]`).next(".icon").addClass("is-hidden");
+  $(`.step-tracker[data-tracker=${step_number}]`).removeClass("is-hidden").html(`${substep} of ${total_steps}`);
+}
+
 //runs step-specific logic for each step
 function runStepSpecificLogic(step_number, backwards, cb){
   clearNotification();
@@ -241,6 +279,9 @@ function runStepSpecificLogic(step_number, backwards, cb){
       break;
     case ("10"):
       stepTenLogic(backwards, cb);
+      break;
+    case ("11"):
+      stepElevenLogic(backwards, cb);
       break;
     default:
       finishedAllStepsLogic(cb);
@@ -282,49 +323,9 @@ function submitSpecificStepForm(form_elem, step_number){
     case ("10"):
       stepTenSubmitFormLogic(form_elem);
       break;
-  }
-}
-
-//check to see if a form has all input values filled
-function checkFormInputs(step_number) {
-  var formInputs = $("#step-form-" + step_number).find(".input");
-  var formSelects = $("#step-form-" + step_number).find("select");
-  var counter = 0;
-
-  //check each input
-  formInputs.each(function(element) {
-    if ($(formInputs[element]).val()) {
-      // console.log(element + "st input complete");
-      counter++;
-    }
-    else {
-      // console.log(element + "st input incomplete");
-      counter--;
-    }
-  });
-
-  //check each select
-  formSelects.each(function(element) {
-    if ($(formSelects[element]).val()) {
-      // console.log(element + "st select complete");
-      counter++;
-    }
-    else {
-      // console.log(element + "st select incomplete");
-      counter--;
-    }
-  });
-
-  //show check or minus icon accordingly
-  if (counter < 0) {
-    // console.log("Showing minuses");
-    $(".step-link[data-step=" + step_number + "]").find(".is-primary").addClass("is-hidden");
-    $(".step-link[data-step=" + step_number + "]").find(".is-danger").removeClass("is-hidden");
-  }
-  else {
-    // console.log("Showing checks");
-    $(".step-link[data-step=" + step_number + "]").find(".is-danger").addClass("is-hidden");
-    $(".step-link[data-step=" + step_number + "]").find(".is-primary").removeClass("is-hidden");
+    case ("11"):
+      stepElevenSubmitFormLogic(backwards, cb);
+      break;
   }
 }
 
@@ -372,7 +373,8 @@ function toggleLoadingScreen(current_form, show, message) {
   //<editor-fold>-------------------------------STEP 2 (PERSONAL DETAILS)-------------------------------
 
   function stepTwoLogic(backwards, cb){
-    //console.log("step 2 specific logic");
+    //set substep number
+    subStepHandler("1", 1, 2);
 
     //advance progress bar
     $(".progress").attr("value", 10);
@@ -393,7 +395,8 @@ function toggleLoadingScreen(current_form, show, message) {
   //<editor-fold>-------------------------------STEP 3 (ADDRESS DETAILS)-------------------------------
 
   function stepThreeLogic(backwards, cb){
-    //console.log("step 3 specific logic");
+    //set substep number
+    subStepHandler("1", 2, 2);
 
     //advance progress bar
     $(".progress").attr("value", 20);
@@ -430,18 +433,52 @@ function toggleLoadingScreen(current_form, show, message) {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------STEP 4 (BANK ACCOUNT)-------------------------------
+  //<editor-fold>-------------------------------STEP 4 (PAYOUT METHODS)-------------------------------
 
   function stepFourLogic(backwards, cb){
-    //console.log("step 4 specific logic");
+    //check previous step and change substep for current
+    checkPreviousStep(1);
+    subStepHandler("2", 1, 2);
 
     //advance progress bar
     $(".progress").attr("value", 30);
 
+    //create listing buttons
+    $("#go-step-5, #go-step-6").off().on("click", function() {
+      $("#payout-step-tracker").html("2 of 2");
+      if ($(this).attr("id") == "go-step-5") {
+        showSpecificStep(true, "5");
+      }
+      else {
+        showSpecificStep(true, "6");
+      }
+    });
+
+    //show step
+    cb();
+  }
+
+  //no next button on this step
+  function stepFourSubmitFormLogic(form_elem){
+    // console.log("step 4 specific form submission");
+  }
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------STEP 5 (BANK ACCOUNT)-------------------------------
+
+  function stepFiveLogic(backwards, cb){
+    //check previous step and change substep for current
+    checkPreviousStep(1);
+    subStepHandler("2", 2, 2);
+
+    //advance progress bar
+    $(".progress").attr("value", 40);
+
     //if we dont have a stripe account, skip bank account
     if (!user.stripe_account && !user.stripe_account_id){
       if (backwards){
-        showSpecificStep(true, "3");
+        showSpecificStep(true, "4");
       }
       else {
         showSpecificStep(true, "5");
@@ -459,8 +496,8 @@ function toggleLoadingScreen(current_form, show, message) {
     }
   }
 
-  function stepFourSubmitFormLogic(form_elem){
-    //console.log("step 4 specific form submission");
+  function stepFiveSubmitFormLogic(form_elem){
+    //console.log("step 5 specific form submission");
 
     toggleLoadingScreen(form_elem, true, "Submitting your information...");
 
@@ -584,10 +621,10 @@ function toggleLoadingScreen(current_form, show, message) {
         }
         $("#change-bank-modal").removeClass('is-active');
         if (updating_bank){
-          showSpecificStep(true, "5");
+          showSpecificStep(true, "7");
         }
         else {
-          showSpecificStep(true, "5");
+          showSpecificStep(true, "7");
         }
       }
       else {
@@ -599,10 +636,12 @@ function toggleLoadingScreen(current_form, show, message) {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------STEP 5 (PAYPAL)-------------------------------
+  //<editor-fold>-------------------------------STEP 6 (PAYPAL)-------------------------------
 
-  function stepFiveLogic(backwards, cb){
-    //console.log("step 5 specific logic");
+  function stepSixLogic(backwards, cb){
+    //check previous step and change substep for current
+    checkPreviousStep(1);
+    subStepHandler("2", 2, 2);
 
     //advance progress bar
     $(".progress").attr("value", 40);
@@ -611,8 +650,8 @@ function toggleLoadingScreen(current_form, show, message) {
     cb();
   }
 
-  function stepFiveSubmitFormLogic(form_elem){
-    //console.log("step 5 specific form submission");
+  function stepSixSubmitFormLogic(form_elem){
+    //console.log("step 6 specific form submission");
 
     //submit changes to server
     form_elem.find(".onboarding-next-button").addClass('is-loading');
@@ -628,7 +667,7 @@ function toggleLoadingScreen(current_form, show, message) {
         if (data.user){
           user = data.user;
         }
-        showSpecificStep(true, "6");
+        showSpecificStep(true, "7");
       }
       else {
         errorMessage(data.message);
@@ -638,68 +677,15 @@ function toggleLoadingScreen(current_form, show, message) {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------STEP 6 (PREMIUM)-------------------------------
-
-  function stepSixLogic(backwards, cb){
-    //console.log("step 6 specific logic");
-
-    //advance progress bar
-    $(".progress").attr("value", 50);
-
-    //if already premium, skip this step
-    if (user.stripe_subscription_id && user.stripe_subscription){
-      if (backwards){
-        showSpecificStep(true, "5");
-      }
-      else {
-        showSpecificStep(true, "7", false, true);
-      }
-    }
-    else {
-      //reset values of CC inputs
-      $('#cc-num').val("");
-      $('#cc-exp').val("");
-      $('#cc-cvc').val("");
-
-      //show step
-      cb();
-    }
-  }
-
-  function stepSixSubmitFormLogic(form_elem){
-    //console.log("step 6 specific form submission");
-
-    form_elem.find(".onboarding-next-button").addClass('is-loading');
-    $.ajax({
-      url: "/profile/upgrade",
-      method: "POST",
-      data: {
-        annual : $("#subscription-type-input").val() == "annual"
-      }
-    }).done(function(data){
-      form_elem.find(".onboarding-next-button").removeClass('is-loading');
-      if (data.state == "success"){
-        if (data.user){
-          user = data.user;
-        }
-        showSpecificStep(true, "7");
-      }
-      else {
-        var error_msg = data.message || "Something went wrong with the payment! Please refresh the page and try again.";
-        errorMessage(error_msg);
-      }
-    });
-  }
-
-  //</editor-fold>
-
   //<editor-fold>-------------------------------STEP 7 (ACCOUNT SETUP FINISHED)-------------------------------
 
   function stepSevenLogic(backwards, cb){
-    //console.log("step 7 specific logic");
+    //check previous step and change substep for current
+    checkPreviousStep(2);
+    subStepHandler("3", 1, 3);
 
     //advance progress bar
-    $(".progress").attr("value", 60);
+    $(".progress").attr("value", 50);
 
     //create listing buttons
     $("#go-step-8, #go-step-9").off().on("click", function() {
@@ -727,10 +713,12 @@ function toggleLoadingScreen(current_form, show, message) {
   //<editor-fold>-------------------------------STEP 8 (CONNECT REGISTRAR)-------------------------------
 
   function stepEightLogic(backwards, cb){
-    //console.log("step 8 specific logic");
+    //check previous step and change substep for current
+    checkPreviousStep(2);
+    subStepHandler("3", 2, 3);
 
     //advance progress bar
-    $(".progress").attr("value", 70);
+    $(".progress").attr("value", 65);
 
     //backwards but nothing selected (refreshed on manual creation)
     if (backwards && (domain_created_by == "manual" || domain_created_by == "")){
@@ -795,10 +783,12 @@ function toggleLoadingScreen(current_form, show, message) {
   //<editor-fold>-------------------------------STEP 9 (MANUAL DOMAIN ENTRY)-------------------------------
 
   function stepNineLogic(backwards, cb){
-    //console.log("step 9 specific logic");
+    //check previous step and change substep for current
+    checkPreviousStep(2);
+    subStepHandler("3", 2, 3);
 
     //advance progress bar
-    $(".progress").attr("value", 80);
+    $(".progress").attr("value", 65);
 
     //show step 8 if going backwards and using "connect registrar"
     if (backwards && domain_created_by == "connect"){
@@ -849,10 +839,12 @@ function toggleLoadingScreen(current_form, show, message) {
   //<editor-fold>-------------------------------STEP 10 (DOMAIN TABLE)-------------------------------
 
   function stepTenLogic(backwards, cb){
-    // console.log("step 10 specific logic");
+    //check previous step and change substep for current
+    checkPreviousStep(2);
+    subStepHandler("3", 3, 3);
 
     //advance progress bar
-    $(".progress").attr("value", 90);
+    $(".progress").attr("value", 80);
 
     //if we refreshed and came to this step, show step 7 instead
     if (domain_created_by == ""){
@@ -1111,6 +1103,62 @@ function toggleLoadingScreen(current_form, show, message) {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------STEP 11 (CHECKOUT)-------------------------------
+
+  function stepElevenLogic(backwards, cb){
+    //check previous step
+    checkPreviousStep(3);
+
+    //advance progress bar
+    $(".progress").attr("value", 90);
+
+    //if already premium, skip this step
+    if (user.stripe_subscription_id && user.stripe_subscription){
+      if (backwards){
+        showSpecificStep(true, "10");
+      }
+      else {
+        showSpecificStep(true, "12", false, true);
+      }
+    }
+    else {
+      //reset values of CC inputs
+      $('#cc-num').val("");
+      $('#cc-exp').val("");
+      $('#cc-cvc').val("");
+
+      //show step
+      cb();
+    }
+  }
+
+  function stepElevenSubmitFormLogic(form_elem){
+    //console.log("step 11 specific form submission");
+
+    form_elem.find(".onboarding-next-button").addClass('is-loading');
+    $.ajax({
+      url: "/profile/upgrade",
+      method: "POST",
+      data: {
+        annual : $("#subscription-type-input").val() == "annual"
+      }
+    }).done(function(data){
+      form_elem.find(".onboarding-next-button").removeClass('is-loading');
+      if (data.state == "success"){
+        if (data.user){
+          user = data.user;
+        }
+        showSpecificStep(true, "12");
+      }
+      else {
+        var error_msg = data.message || "Something went wrong with the payment! Please refresh the page and try again.";
+        errorMessage(error_msg);
+      }
+    });
+  }
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------STEP FINAL-------------------------------
 
   //logic for after all steps are finished
@@ -1130,7 +1178,6 @@ function toggleLoadingScreen(current_form, show, message) {
     });
 
     //show final check
-    $("#step-link-no-handler").find(".is-primary").removeClass("is-hidden");
     $(".step-link").off("click");
 
     //set the user.onboarding_step to 12 (so we don't get forced to this page again) and redirect to /dashboard
