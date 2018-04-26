@@ -1293,10 +1293,19 @@ function showSectionByURL(){
     temp_row.data("sale", transaction.transaction_type == "sale");
     temp_row.data("rental", transaction.transaction_type == "rental");
     temp_row.data("expense", transaction.transaction_type == "expense");
+    temp_row.data("renewal", transaction.transaction_type == "renewal");
     temp_row.data("exists", true);
 
+    //date created, no date if it's a renewal cost but has no registration date
+    var date_created_moment = moment(new Date(transaction.date_created));
+    if (date_created_moment.isValid()){
+      temp_row.find(".transactions-row-date").text(date_created_moment.format("YYYY-MM-DD")).attr("title", date_created_moment.format("YYYY-MM-DD"));
+    }
+    else {
+      temp_row.find(".transactions-row-date").text("No date").attr("title", "Please enter a valid registration date for this domain.");
+    }
+
     //all other row info
-    temp_row.find(".transactions-row-date").text(moment(transaction.date_created).format("YYYY-MM-DD")).attr("title", moment(transaction.date_created).format("YYYY-MM-DD HH:mm"));
     temp_row.find(".transactions-row-type").text(transaction.transaction_type.substr(0,1).toUpperCase() + transaction.transaction_type.substr(1));
     var listing_href = (user.stripe_subscription_id) ? "https://" + transaction.domain_name.toLowerCase() : "/listing/" + transaction.domain_name.toLowerCase();
     temp_row.find(".transactions-row-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + transaction.domain_name + "</a>");
@@ -1360,9 +1369,14 @@ function showSectionByURL(){
       else {
 
         //tooltip for prices
-        if (transaction.transaction_type == "expense"){
+        if (transaction.transaction_type == "expense" || transaction.transaction_type == "renewal"){
+          if (transaction.transaction_type == "expense"){
+            temp_row.find(".transactions-row-available").text("Expense Recorded");
+          }
+          else {
+            temp_row.find(".transactions-row-available").text("Domain Renewal");
+          }
           temp_row.find(".transactions-row-amount").text(moneyFormat.to(-total_profit)).addClass('is-danger');
-          temp_row.find(".transactions-row-available").text("Expense Recorded")
           temp_row.data("total_earned", -total_earned);
           temp_row.data("total_fees", 0);
         }
@@ -1429,7 +1443,7 @@ function showSectionByURL(){
       total_fees += $(this).data("total_fees");
 
       //count towards revenue if its not an expense
-      if (!$(this).data("expense")){
+      if (!$(this).data("expense") || !$(this).data('renewal')){
         total_earned += $(this).data("total_earned");
       }
       else {
@@ -1571,17 +1585,28 @@ function showSectionByURL(){
 
     var modal_timestamp_text = ""
 
-    if (transaction.transaction_type == "expense"){
-      modal_timestamp_text = "Recorded on " + moment(transaction.date_created).format("YYYY-MM-DD");
-    }
-    else if (transaction.transaction_type == "rental" && transaction.transaction_cost == null){
-      modal_timestamp_text = "Created on " + moment(transaction.date_created).format("YYYY-MM-DD");
+    var date_created_moment = moment(new Date(transaction.date_created));
+    if (date_created_moment.isValid()){
+      if (transaction.transaction_type == "expense"){
+        modal_timestamp_text = "Recorded on " + date_created_moment.format("YYYY-MM-DD");
+      }
+      else if (transaction.transaction_type == "renewal"){
+        modal_timestamp_text = "Renewal paid on " + date_created_moment.format("YYYY-MM-DD");
+      }
+      else if (transaction.transaction_type == "rental" && transaction.transaction_cost == null){
+        modal_timestamp_text = "Created on " + date_created_moment.format("YYYY-MM-DD");
+      }
+      else {
+        modal_timestamp_text = "Received on " + date_created_moment.format("YYYY-MM-DD") + " via " + payment_method_text;
+      }
+      $("#transactions-modal-timestamp").attr('title', date_created_moment.format("YYYY-MM-DD HH:mm"));
     }
     else {
-      modal_timestamp_text = "Received on " + moment(transaction.date_created).format("YYYY-MM-DD") + " via " + payment_method_text;
+      modal_timestamp_text = "No registration date associated with this domain";
+      $("#transactions-modal-timestamp").attr('title', "Please enter a valid registration date for this domain.");
     }
 
-    $("#transactions-modal-timestamp").text(modal_timestamp_text).attr('title', moment(transaction.date_created).format("YYYY-MM-DD HH:mm"));
+    $("#transactions-modal-timestamp").text(modal_timestamp_text)
     $("#transactions-modal-domain").text("Domain " + transaction.transaction_type + " for " + transaction.domain_name);
 
     //calculate fees and profit
@@ -1716,7 +1741,12 @@ function showSectionByURL(){
     }
     //domain expense related stuff
     else {
-      $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid" + ((transaction.transaction_details) ? ' for "' + transaction.transaction_details + '"': ""));
+      if (transaction.transaction_type == "expense"){
+        $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid" + ((transaction.transaction_details) ? ' for "' + transaction.transaction_details + '"': ""));
+      }
+      else {
+        $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid for annual domain renewal");
+      }
       $("#commission-promo-message, #pending-transfer-wrapper, #available-on-wrapper, #payment-fees-wrapper").addClass("is-hidden");
 
       //button for edit / delete
