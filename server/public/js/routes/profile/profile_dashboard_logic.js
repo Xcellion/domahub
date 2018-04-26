@@ -24,22 +24,6 @@ $(document).ready(function() {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------REFERRAL LINK-------------------------------
-
-  $("#referral-link").on("focus", function(){
-    $(this).select();
-  });
-
-  $("#referral-link-copy").on("click", function(){
-    $("#referral-link").select();
-    document.execCommand("copy");
-    $("#referral-link").blur();
-    $(this).find("svg").attr("data-icon", "check");
-    $("#referral-link-text").text("Copied!");
-  });
-
-  //</editor-fold>
-
   //<editor-fold>-------------------------------TRAFFIC OVERVIEW-------------------------------
 
   //when analytics has finished loading

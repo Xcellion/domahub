@@ -31,8 +31,20 @@
 
       <div class="right-content">
 
-        <%- include("profile_navbar_top.ejs"); %>
         <div class="right-content-items">
+          <div class="control is-spaced">
+            <div class="control-left">
+              <div class="content">
+                <h2>Hello, <%= user.username %></h2>
+                <p class="is-grey">
+                  Last visit <%= user.date_accessed %>
+                </p>
+              </div>
+            </div>
+
+            <%- include("templates/profile_nav_buttons.ejs"); %>
+
+          </div>
           <div class="stat-columns">
             <div id="dashboard-traffic-card" class="stat-column-large">
               <div class="portfolio-table">
@@ -111,7 +123,7 @@
               </div>
               <div class="card is-fullwidth">
                 <div class="card-header no-border-bottom">
-                  <h3 class="is-bold">
+                  <h3 class="">
                     Domain Traffic
                   </h3>
                   <div class="control is-mobile">
