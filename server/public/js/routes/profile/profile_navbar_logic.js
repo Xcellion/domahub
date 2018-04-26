@@ -34,8 +34,6 @@ $(document).ready(function() {
     }
   });
 
-  //update page view name in navbar
-  getCurrentView();
 
   //</editor-fold>
 
