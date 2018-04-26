@@ -127,6 +127,9 @@ function setupFooter(){
   else if (listing_info.premium){
     $(".page-contents #listing-footer").text("Buy this domain today!");
   }
+  else {
+    $(".page-contents #listing-footer").text("Sell more domains with DomaHub landing pages.");
+  }
 
   //</editor-fold>
 
