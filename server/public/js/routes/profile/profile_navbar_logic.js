@@ -6,13 +6,13 @@ $(document).ready(function() {
 
   //toggle user drop down menu on icon button click
   $(".nav-button").on("click", function() {
-    $(".nav-menu").removeClass('is-active');
+    $(".hamburger").removeClass('is-active');
     $(".nav-drop:not(#" + $(this).data("menu") + ")").addClass("is-hidden");
     $("#" + $(this).data("menu")).toggleClass("is-hidden").find("textarea").focus();
   });
 
   //mobile view nav menu
-  $(".nav-toggle").on("click", function() {
+  $(".hamburger").on("click", function() {
     $(this).toggleClass("is-active");
     $(".hover-menu").toggleClass("is-active");
   });
@@ -26,10 +26,10 @@ $(document).ready(function() {
       }
     }
 
-    if (!$(event.target).closest(".nav-toggle").length && !$(event.target).closest(".profile-nav-link").length) {
+    if (!$(event.target).closest(".hamburger").length && !$(event.target).closest(".hover-menu-link").length) {
       if ($(".hover-menu").is(":visible")) {
         $(".hover-menu").removeClass("is-active");
-        $(".nav-toggle").toggleClass("is-active").blur();
+        $(".hamburger").toggleClass("is-active").blur();
       }
     }
   });

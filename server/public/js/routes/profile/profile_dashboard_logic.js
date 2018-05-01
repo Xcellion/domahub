@@ -69,7 +69,7 @@ function updatePortfolioOverviewCounters(){
   }, 0) || 0;
   $("#unverified-counter").text(num_total_unverified);
   if (num_total_unverified > 0){
-    $("#unverified-counter").addClass('is-danger');
+    $("#unverified-counter");
   }
 
   //figure out total expiring
@@ -83,7 +83,7 @@ function updatePortfolioOverviewCounters(){
   }, 0) || 0;
   $("#expiring-counter").text(num_total_expiring);
   if (num_total_expiring > 0){
-    $("#expiring-counter").addClass('is-danger');
+    $("#expiring-counter");
   }
 
   //figure out total profit
@@ -113,7 +113,7 @@ function updatePortfolioOverviewCounters(){
     }
   }
 
-  $("#revenue-counter").addClass("is-primary").text(wNumb({
+  $("#revenue-counter").text(wNumb({
     prefix: '$',
     decimals: 2,
     thousand: ','
@@ -126,7 +126,7 @@ function updatePortfolioOverviewCounters(){
     thousand: ','
   }).to(total_expenses/100));
   if (total_expenses < 0){
-    $("#expenses-counter").addClass("is-danger").removeClass("is-primary");
+    $("#expenses-counter");
   }
 
   //total profit counter
@@ -136,10 +136,10 @@ function updatePortfolioOverviewCounters(){
     thousand: ','
   }).to(total_profit/100));
   if (total_profit < 0){
-    $("#profit-counter").addClass("is-danger").removeClass("is-primary");
+    $("#profit-counter");
   }
   else if (total_profit > 0){
-    $("#profit-counter").removeClass("is-danger").addClass("is-primary");
+    $("#profit-counter");
   }
 }
 
@@ -671,11 +671,11 @@ function updatePortfolioOverviewCounters(){
         var data = [];
         var labels = [];
         var backgroundColors = [
-          "rgba(60,188,141,1)",       //primary
-          "rgba(255,87,34,1)",        //accent
-          "rgba(33,150,243,1)",       //info
-          "rgba(255,235,59,1)",       //yellow
-          "rgba(229,57,53,1)"         //red
+          "#00bfa5",
+          "#F38181",
+          "#FCE38A",
+          "#3F4B83",
+          "#95E1D3"
         ];
 
         //sort the results by listing name and filter out not owner domains and sort by country name
@@ -727,7 +727,7 @@ function updatePortfolioOverviewCounters(){
               responsive : true,
               maintainAspectRatio : false,
               legend : {
-                position: "bottom"
+                position: "left"
               },
               tooltips: {
                 backgroundColor: 'rgba(17, 17, 17, 0.9)',
@@ -741,7 +741,7 @@ function updatePortfolioOverviewCounters(){
                 {
                   data : data,
                   backgroundColor : backgroundColors,
-                  borderWidth: 0
+                  borderWidth: 3
                 }
               ]
             }
@@ -797,11 +797,11 @@ function updatePortfolioOverviewCounters(){
         var data = [];
         var labels = [];
         var backgroundColors = [
-          "rgba(60,188,141,1)",       //primary
-          "rgba(255,87,34,1)",        //accent
-          "rgba(33,150,243,1)",       //info
-          "rgba(255,235,59,1)",       //yellow
-          "rgba(229,57,53,1)"         //red
+          "#00bfa5",
+          "#F38181",
+          "#FCE38A",
+          "#3F4B83",
+          "#95E1D3"
         ];
 
         //sort the results by listing name and filter out not owner domains and sort by country name
@@ -851,9 +851,9 @@ function updatePortfolioOverviewCounters(){
             type : "pie",
             options : {
               responsive : true,
-              maintainAspectRatio : false,
+              maintainAspectRatio : true,
               legend : {
-                position: "bottom"
+                position: "left"
               },
               tooltips: {
                 backgroundColor: 'rgba(17, 17, 17, 0.9)',
@@ -867,7 +867,7 @@ function updatePortfolioOverviewCounters(){
                 {
                   data : data,
                   backgroundColor : backgroundColors,
-                  borderWidth: 0
+                  borderWidth: 3
                 }
               ]
             }
@@ -922,11 +922,11 @@ function updatePortfolioOverviewCounters(){
         var data = [];
         var labels = [];
         var backgroundColors = [
-          "rgba(60,188,141,1)",       //primary
-          "rgba(255,87,34,1)",        //accent
-          "rgba(33,150,243,1)",       //info
-          "rgba(255,235,59,1)",       //yellow
-          "rgba(229,57,53,1)"         //red
+          "#00bfa5",
+          "#F38181",
+          "#FCE38A",
+          "#3F4B83",
+          "#95E1D3"
         ];
 
         //sort the results by listing name and filter out not owner domains
@@ -972,10 +972,10 @@ function updatePortfolioOverviewCounters(){
 
           //make chart
           var chartOptions = {
-            type : "horizontalBar",
+            type : "bar",
             options : {
               responsive : true,
-              maintainAspectRatio : false,
+              maintainAspectRatio : true,
               legend : {
                 display: false
               },

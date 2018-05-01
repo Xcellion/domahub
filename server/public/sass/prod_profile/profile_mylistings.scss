@@ -3,7 +3,6 @@
 @import '../bulma/base/base.sass';
 @import '../bulma/components/grid.sass';
 @import '../bulma/components/modal.sass';
-@import '../bulma/components/nav.sass';
 @import '../bulma/components/menu.sass';
 @import '../bulma/components/media.sass';
 @import '../bulma/components/card.sass';
@@ -19,10 +18,10 @@
 @import '../bulma/elements/button.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/switch.sass';
-@import '../bulma/elements/hamburger.sass';
 @import '../bulma/elements/icon.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
+@import '../checkbox';
 
 //domain expenses
 .expense-button-wrapper {
@@ -42,6 +41,17 @@
   tr:last-child td {
     padding-bottom:0;
   }
+}
+
+.listings-toolbar {
+  padding-bottom: 20px;
+  border-bottom: 1px solid $border;
+  margin-bottom: 10px !important;
+}
+
+#current-selected-count {
+  vertical-align: -webkit-baseline-middle;
+  vertical-align: -moz-middle-with-baseline;
 }
 
 //domain registrar info icon
@@ -276,11 +286,6 @@ td > .icon, th > .icon {
 
 .table-row,
 .offer-row {
-  &.has-hover-effect {
-    &:hover {
-      background-color: $lighter;
-    }
-  }
   &.is-selected {
     background-color:rgba(60,188,141,0.12);
   }
@@ -326,6 +331,20 @@ td > .icon, th > .icon {
   }
 }
 
+.button {
+  &.is-flexible {
+    @media screen and (max-width: 1200px) {
+      .icon {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      span {
+        display: none;
+      }
+    }
+  }
+}
+
 .checkbox-form {
   height: 17px;
   position: relative;
@@ -344,6 +363,12 @@ td > .icon, th > .icon {
       outline: 1px solid transparent;
     }
   }
+}
+
+.table-box {
+  @include box-shadow(0,2px,8px,$border,0);
+  background-color: $white;
+  padding: 20px;
 }
 
 //categories dropdown

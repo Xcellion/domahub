@@ -1,8 +1,24 @@
+<div class="control is-spaced">
+  <div class="control-left">
+    <div class="content">
+      <h2>My Listings</h2>
+    </div>
+  </div>
+  <div class="control-right">
+    <a class="button is-primary is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
+      <div class="icon is-small">
+        <i class="fal fa-plus"></i>
+      </div>
+      <span>Create New Listings</span>
+    </a>
+  </div>
+</div>
+
 <div id="domain-selector" class="is-hidden">
-  <div id="domain-selector-toolbox" class="content">
+  <div id="domain-selector-toolbox" class="control is-spaced is-mobile listings-toolbar">
 
     <!-- BUTTON MENU -->
-    <div class="yes-listings-elem button-wrapper is-mobile control">
+    <div class="yes-listings-elem button-wrapper is-mobile control-left">
       <div id="select-all-wrapper">
         <a id="selector-select-button" class="button is-black is-inverted" tabindex="0" title="Select">
           <form class="checkbox-form">
@@ -26,29 +42,29 @@
         </div>
       </div>
 
-      <a id="selector-edit-button" class="selector-button button is-primary is-stylish is-inverted is-small is-hidden" tabindex="0" title="Edit Details">
+      <a id="selector-edit-button" class="selector-button button is-flexible is-stylish is-black is-inverted is-small is-hidden" tabindex="0" title="Edit Details">
         <div class="icon is-small">
           <i class="fal fa-edit"></i>
         </div>
-        <span class="is-hidden-mobile">Edit Details</span>
+        <span>Edit Details</span>
       </a>
-      <a id="selector-verify-button" class="selector-button button is-primary is-stylish is-inverted is-small is-hidden" tabindex="0" title="Verify Ownership">
+      <a id="selector-verify-button" class="selector-button button is-flexible is-stylish is-black is-inverted is-small is-hidden" tabindex="0" title="Verify Ownership">
         <div class="icon is-small">
           <i class="fal fa-check-circle"></i>
         </div>
-        <span class="is-hidden-mobile">Verify Ownership</span>
+        <span>Verify Ownership</span>
       </a>
-      <a id="selector-offers-button" class="selector-button button is-info is-stylish is-inverted is-small is-hidden" tabindex="0" title="View Offers">
+      <a id="selector-offers-button" class="selector-button button is-flexible is-stylish is-black is-inverted is-small is-hidden" tabindex="0" title="View Offers">
         <div class="icon is-small">
           <i class="fal fa-shopping-basket"></i>
         </div>
-        <span class="is-hidden-mobile">View Offers</span>
+        <span>View Offers</span>
       </a>
-      <a id="selector-delete-button" class="selector-button button is-danger is-stylish is-inverted is-small is-hidden" tabindex="0" title="Delete Listing(s)">
+      <a id="selector-delete-button" class="selector-button button is-flexible is-stylish is-black is-inverted is-small is-hidden" tabindex="0" title="Delete Listing(s)">
         <div class="icon is-small">
-          <i class="fal fa-trash"></i>
+          <i class="fal fa-trash-alt"></i>
         </div>
-        <span class="is-hidden-mobile">Delete</span>
+        <span>Delete</span>
       </a>
       <%# <a id="selector-stats-button" class="selector-verified-button button is-hidden" tabindex="0" title="View Statistics">
         <div class="icon is-small">
@@ -57,11 +73,11 @@
         <span>View Statistics</span>
       </a>%>
       <div id="hub-selector-wrapper" class="selector-button">
-        <a id="hub-select-button" class="is-hidden button is-stylish is-small is-purple is-inverted" tabindex="0" title="Add to a listing hub">
+        <a id="hub-select-button" class="button is-flexible is-stylish is-small is-black is-inverted is-hidden" tabindex="0" title="Add to a listing hub">
           <div class="icon is-small">
             <i class="fal fa-object-group"></i>
           </div>
-          <span class="is-hidden-mobile">Add To A Hub</span>
+          <span>Add To A Hub</span>
           <div class="icon"><i class="fal fa-angle-down"></i></div>
         </a>
         <div id="hub-drop" class="is-hidden domain-tooltip">
@@ -77,19 +93,13 @@
           <a id="hub-drop-apply" class="button is-primary is-fullwidth is-hidden">Apply</a>
         </div>
       </div>
-      <a class="button is-black is-inverted is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
-        <div class="icon is-small">
-          <i class="fal fa-plus-circle"></i>
-        </div>
-        <span class="is-hidden-mobile">Create New Listings</span>
-      </a>
     </div>
 
     <!-- FITER MENU -->
-    <div id="filter-menu" class="yes-listings-elem control">
+    <div id="filter-menu" class="yes-listings-elem control-right">
       <div class="control is-grouped">
         <div class="control">
-          <span class="select is-stylish is-narrow has-shadow">
+          <span class="select is-stylish is-transparent is-narrow">
             <select id="filter-select" tabindex="0">
               <option selected value="id">View All</option>
               <option value="unverified">Unverified</option>
@@ -104,7 +114,7 @@
           </span>
         </div>
         <div class="control is-mobile">
-          <button id="refresh-listings-button" class="button is-stylish is-small" title="Refresh Listings" tabindex="0">
+          <button id="refresh-listings-button" class="button is-flexible is-stylish is-small is-black is-inverted" title="Refresh Listings" tabindex="0">
             <div class="icon is-small">
               <i class="fal fa-sync-alt"></i>
             </div>
@@ -122,18 +132,18 @@
   </div>
 
   <!-- DOMAINS TABLE -->
-  <table id="listings-table" class="table is-fixed has-shadow">
-    <thead class="yes-listings-elem has-hover-effect">
+  <table id="listings-table" class="table has-shadow is-fixed no-borders">
+    <thead class="yes-listings-elem has-hover-effect is-pastel no-border-bottom">
       <tr>
         <th class="checkbox-col has-text-centered">
           <span id="current-selected-count"></span>
         </th>
         <th data-value="domain_name" class="listing-header-sort">
-          <span>Domain Name</span>
+          <span>Domain</span>
           <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="status" class="td-status listing-header-sort">
-          <span>Status/Type</span>
+          <span>Status</span>
           <div class="listing-header-sort icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="registrar_name" class="is-hidden-mobile listing-header-sort">
@@ -145,15 +155,15 @@
           <div class="listing-header-sort icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="date_expire" class="is-hidden-mobile listing-header-sort">
-          <span>Expiring</span>
+          <span>Expires</span>
           <div class="listing-header-sort icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="min_price" class="is-hidden-456px listing-header-sort">
-          <span>Minimum Price</span>
+          <span>Min. Price</span>
           <div class="listing-header-sort icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
         </th>
         <th data-value="buy_price" class="is-hidden-456px listing-header-sort">
-          <span>Buy It Now Price</span>
+          <span>BIN Price</span>
           <div class="listing-header-sort icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
         </th>
       </tr>
@@ -191,7 +201,7 @@
             <div class="icon is-large is-danger">
               <i class="fal fa-exclamation-circle"></i>
             </div>
-            <p>Oh, no! There are no matching listings!</p>
+            <p>There are no matching listings.</p>
           </div>
         </td>
       </tr>
@@ -250,7 +260,7 @@
         <div class="notification no-shadow has-icon is-danger">
           <div class="icon-box">
             <div class="icon is-white">
-              <i class="far fa-exclamation-triangle"></i>
+              <i class="fal fa-exclamation-triangle"></i>
             </div>
           </div>
           <div class="content">

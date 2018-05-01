@@ -1,18 +1,11 @@
+@import 'bulma/elements/hamburger.sass';
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 100%;
-  }
-}
-
-@keyframes delayShow {
-  0%, 40% {
-    display: none;
-  }
-  100% {
-    display: block;
   }
 }
 
@@ -66,17 +59,17 @@
   @include mobile {
     @include translate(-70px,0);
   }
-  @include laptop {
+  @media screen and (max-width: 1650px) {
     width: 70px;
   }
 }
 
 .left-menu-tab {
+  @include keyframes (fadeIn 1s forwards);
   color: $grey;
   display: none;
   font-size: 14px;
-  @include widescreen {
-    @include keyframes(fadeIn 1s forwards);
+  @media screen and (min-width: 1651px) {
     display: block;
   }
 }
@@ -94,12 +87,11 @@
   }
 }
 
-.circle-logo {
-  background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 30px !important;
-  height: 30px !important;
+.username {
+  word-break: break-all;
+  @media screen and (max-width: 1650px) {
+    display: none;
+  }
 }
 
 .right-content {
@@ -113,7 +105,7 @@
   .tabs {
     min-height: 36px;
   }
-  @include laptop {
+  @media screen and (max-width: 1650px) {
     @include translate(70px,0);
     width: calc(100% - 70px);
   }
@@ -124,9 +116,30 @@
 }
 
 .right-content-items {
-  padding: 20px 60px 20px;
+  padding: 40px 60px;
   @include mobile {
-    padding: 10px 20px 20px;
+    padding: 40px 20px;
+  }
+}
+
+.circle-logo {
+  background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.profile-nav {
+  @include box-shadow(0,3px,5px,$border,0);
+  align-items: stretch;
+  background-color: $white;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 50px;
+  position: relative;
+  @include mobile {
+    padding: 0 20px 0 0;
   }
 }
 
@@ -136,24 +149,29 @@
   }
 }
 
-.nav {
-  &.is-profile {
-    background-color: transparent;
-    padding: 20px 50px;
-    position: relative;
-    @include mobile {
-      padding: 0;
-    }
-    .nav-toggle {
-      width: 60px;
-      height: 60px;
-    }
-    .hover-menu {
-      left: 0;
-    }
+.hover-menu {
+  @include box-shadow(3px,3px,12px,$border,0);
+  background-color: $white;
+  border-radius: $radius;
+  display: none;
+  left: 0;
+  position: absolute;
+  top: 100%;
+  z-index: 11;
+  &.is-active {
+    display: block;
   }
 }
 
+.hover-menu-link {
+  a {
+    display: block;
+    padding: 12px 8px;
+    &:hover {
+      background-color: $pastel;
+    }
+  }
+}
 
 .nav-item {
   &.is-toggle {
@@ -163,32 +181,33 @@
 
 .user-button {
   padding: 10px 5px;
-  &:last-child {
-    padding-left: 10px;
-  }
+  position: relative;
 }
 
 .nav-button {
   border-radius: 100%;
-  font-size: 22px;
   height: auto;
   padding: 5px;
+  border-color: transparent;
   .icon {
     margin: 0 !important;
+    font-size: 20px;
+    color: $grey;
   }
   &:focus {
     @include box-shadow(0,0,4px,#5E9ED6,0);
     outline: none;
-    border-color: $blue !important;
+    border: 1px solid $blue !important;
   }
 }
 
 .nav-drop {
-  @include box-shadow(0,3px,15px,$border,2px);
+  @include box-shadow(3px,3px,12px,$border,0);
   background-color: $white;
   border-radius: $radius;
   position: absolute;
   top: calc(100% + 20px);
+  z-index: 10;
   @include mobile {
     top: 100%;
   }
@@ -248,18 +267,5 @@
   width: 200px;
   @include mobile {
     right: 0;
-  }
-}
-
-.columns {
-  &.is-laptop {
-    @include laptop {
-      display: block;
-      .column {
-        flex: auto;
-        padding: 20px;
-        width: 100%;
-      }
-    }
   }
 }

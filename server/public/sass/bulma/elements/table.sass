@@ -6,23 +6,6 @@
   border: 1px solid $border
   box-shadow: none
   width: 100%
-  &.is-fixed
-    table-layout: fixed
-  &.is-narrow
-    width: auto
-  &.no-borders
-    td,
-    th
-      border-bottom: none
-  &.is-transparent-head
-    background-color: transparent
-    border: none
-    thead
-      background-color: transparent
-      th
-        border-bottom: none
-    tbody
-      background-color: #fff
   td,
   th
     text-align: left
@@ -35,14 +18,16 @@
       font-size: 14px
   th
     border-bottom: none
-    font-size: $size-7
+    color: $grey
+    font-size: 11px
     font-weight: 700
-    padding: 10px 12px
-    &.is-400
-      font-weight: 400
+    letter-spacing: 1px
+    padding: 15px 12px
+    text-transform: uppercase
   td
     border-bottom: 1px solid $border
-    padding: 15px 12px
+    font-size: $size-7
+    padding: 20px 12px
     a
       word-break: break-all
     &.is-danger
@@ -52,10 +37,15 @@
   thead
     th
       border-bottom: 1px solid $border
+    &.no-border-bottom
+      th
+        border-bottom: none
     &.has-hover-effect
       th
         &:hover
           cursor: pointer
+    &.is-pastel
+      background-color: $pastel
   tbody
     tr
       &:last-child
@@ -65,22 +55,22 @@
         cursor: pointer
       &.is-active
         background-color: #efefef
+      &.has-hover-effect
+        &:hover
+          background-color: rgba(60,188,141,0.06)
       &.no-hover-effect
         &:hover
           cursor: auto
   // Modifiers
+  &.is-fixed
+    table-layout: fixed
+  &.is-narrow
+    width: auto
   &.has-shadow
-    +box-shadow(0,2px,4px,$border,0)
-    thead
-      background-color: #e5ecf1
-  &.is-bordered
-    td,
-    th
-      border-width: 1px
-    tr
-      &:last-child
-        td
-          border-bottom-width: 0
+    tbody
+      +box-shadow(0,2px,4px,$border,0)
+  &.no-borders
+    border: none
   &.is-striped
     tbody
       tr

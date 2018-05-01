@@ -1,0 +1,93 @@
+<div class="profile-nav">
+  <div class="hamburger is-black is-hidden-tablet">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <ul class="hover-menu">
+    <li class="hover-menu-link">
+      <a tabindex="0" title="Dashboard" href="/profile/dashboard">Dashboard</a>
+    </li>
+    <li class="hover-menu-link">
+      <a tabindex="0" title="Listings" href="/profile/mylistings">My Listings</a>
+    </li>
+    <li class="hover-menu-link">
+      <a tabindex="0" title="Create Listing" href="/listings/create">Create Listing</a>
+    </li>
+    <li class="hover-menu-link">
+      <a tabindex="0" title="View Offers" href="/profile/mylistings?tab=offers">View Offers</a>
+    </li>
+    <li class="hover-menu-link">
+      <a tabindex="0" title="Settings" href="/profile/settings">Settings</a>
+    </li>
+  </ul>
+  <div>
+
+  </div>
+  <div class="user-panel">
+    <div class="control is-grouped">
+      <div class="user-button" title="Send feedback">
+        <button tabindex="0" id="contact-button" class="button nav-button no-shadow" data-menu="contact-dropdown-menu">
+          <div class="icon">
+            <i class="fal fa-comments"></i>
+          </div>
+        </button>
+        <div id="contact-dropdown-menu" class="nav-drop expand-out is-hidden">
+          <form id="contact-form">
+            <textarea id="contact_message" required class="textarea no-shadow" placeholder="Send us your feedback!"></textarea>
+            <div class="control">
+              <button id="contact-submit-button" class="button is-stylish is-small is-fullwidth is-primary" type="submit" form="contact-form">
+                <div class="icon is-small">
+                  <i class="fal fa-check-circle"></i>
+                </div>
+                <span id="contact-submit-text">Send Message</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="user-button" title="Check Your Notifications">
+        <button tabindex="0" id="notification-dropdown-button" class="button nav-button no-shadow" data-menu="notification-dropdown-menu">
+          <span id="notification-counter" class="is-hidden"></span>
+          <div class="icon">
+            <i class="fal fa-bell"></i>
+          </div>
+        </button>
+        <aside id="notification-dropdown-menu" class="nav-drop menu expand-out is-hidden">
+          <p class="menu-label">
+            Notifications
+            <span id="notification-number" class="is-pulled-right"></span>
+          </p>
+          <ul id="notification-tray" class="menu-list"></ul>
+        </aside>
+      </div>
+      <div class="user-button" title="Other Links">
+        <button tabindex="0" id="user-dropdown-button" class="button nav-button no-shadow" data-menu="user-dropdown-menu">
+          <div class="icon">
+            <i class="fal fa-user"></i>
+          </div>
+        </button>
+        <aside id="user-dropdown-menu" class="nav-drop expand-out is-hidden">
+          <p class="menu-label">Support</p>
+          <ul class="menu-list">
+            <li><a href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
+            <li><a href="/faq" title="FAQ">FAQ</a></li>
+            <li><a href="/features#pricing" title="Pricing">Pricing</a></li>
+          </ul>
+          <p class="menu-label">Company</p>
+          <ul class="menu-list">
+            <li><a href="/contact" title="Contact Us">Contact</a></li>
+            <li><a href="/blog" title="Medium Blog">Blog</a></li>
+          </ul>
+          <p class="menu-label">Account</p>
+          <ul class="menu-list">
+            <% if (process.env.NODE_ENV == "dev" || (user.email == "won2blee@gmail.com" && user.id == 1)) { %>
+              <li><a href="/admin" title="Admin">Admin Panel</a></li>
+            <% } %>
+            <li><a href="/logout" title="Log Out">Log Out</a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>
