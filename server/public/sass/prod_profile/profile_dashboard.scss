@@ -7,6 +7,7 @@
 @import '../bulma/components/modal.sass';
 @import '../bulma/elements/alert.sass';
 @import '../bulma/elements/button.sass';
+@import '../bulma/elements/box.sass';
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/delete.sass';
 @import '../bulma/elements/form.sass';
@@ -18,60 +19,6 @@
 @import '../bulma/elements/title.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
-
-.stat-columns {
-  display: flex;
-  @include laptop {
-    display: block;
-  }
-}
-
-//centered icons for mobile
-.control.is-mobile {
-  @include mobile {
-    .button {
-      .icon {
-        &:first-child {
-          margin-left: 0;
-          margin-right: 0;
-        }
-      }
-    }
-  }
-}
-
-.stat-column-large {
-  width: 75%;
-  margin-right: 20px;
-  .traffic-chart {
-    min-height: 500px;
-  }
-  @include laptop {
-    margin-right: 0;
-    margin-bottom: 20px;
-    width: 100%;
-  }
-  @include mobile {
-    .traffic-chart {
-      min-height: 350px;
-    }
-  }
-}
-
-.stat-column-small {
-  width: 25%;
-  @include laptop {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-  }
-  @include mobile {
-    display: block;
-    .traffic-chart {
-      height: 150px;
-    }
-  }
-}
 
 .chart-tabs {
   @include overflow-touch;
@@ -85,32 +32,79 @@
 .heading {
   @include transition(color 0.2s ease);
   display: block;
-  color: $grey;
   font-size: 13px;
   font-weight: 400;
   margin-bottom: 5px;
 }
 
 .portfolio-table {
-  @include box-shadow(0,2px,8px,$border,0);
-  background-color: $white;
-  border-radius: $radius-large;
   display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  a {
-    padding: 10px 20px;
+  justify-content: flex-start;
+  .box {
     flex-grow: 1;
-    &:hover,
-    &:focus {
-      background-color: $pastel;
-      .heading {
-        color: $text;
-      }
+    &:first-child {
+      background-color: $info;
+    }
+    &:nth-child(2) {
+      background-color: $accent;
+    }
+    &:not(:last-child) {
+      margin-right: 20px;
     }
   }
 }
 
+.fac {
+  display: flex;
+  align-items: center;
+}
+
+.fas {
+  display: flex;
+  align-items: baseline;
+  padding: 12px 0;
+  .tag {
+    margin-right: 10px;
+  }
+  &:not(:last-child) {
+    border-bottom: 1px solid $border;
+  }
+}
+
+.icon + .box-heading {
+  margin-left: 20px;
+}
+
+.box-heading {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.box-link {
+  border-radius: 3px;
+  display: block;
+  padding: 8px;
+  position: relative;
+  flex-grow: 1;
+  &::before {
+    @include transition(all 0.2s ease);
+    content: "";
+    background-color: $white-disabled;
+    height: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  &:hover {
+    &::before {
+      height: 5px;
+    }
+  }
+  &:not(:last-child){
+    margin-right: 10px;
+  }
+}
 
 .traffic-chart-wrapper {
   position: relative;
@@ -161,13 +155,18 @@
   }
 }
 
+.chart-wrapper {
+  display: flex;
+}
+
 .small-chart {
   @include box-shadow(0,2px,8px,$border,0);
   background-color: $white;
   border-radius: $radius-large;
-  padding: 10px;
+  padding: 20px;
+  width: 100%;
   &:not(:last-child) {
-    margin-bottom: 20px;
+    margin-right: 20px;
   }
   @include laptop {
     width: 33%;

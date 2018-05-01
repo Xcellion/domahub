@@ -1151,31 +1151,23 @@
 
   <!-- OFFERS -->
   <div id="offers-section" class="offer-elem non-edit-elem non-verify-elem is-hidden">
-    <div class="content">
-      <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
-        <div class="icon is-small">
-          <i class="fal fa-long-arrow-left"></i>
-        </div>
-        <span>Go Back To Listings</span>
-      </a>
-    </div>
-    <div class="content">
-      <div class="content">
-        <h2 class="title-wrapper is-bold">
+    <div class="control is-spaced listings-toolbar">
+      <div class="control-left">
+        <p class="title-wrapper is-grey">
           <span class="editor-title">My Offers</span>
           <span class="current-domain-name"></span>
-        </h2>
+        </p>
       </div>
-      <div id="offers-toolbar">
+      <div id="offers-toolbar" class="control-right">
         <div class="offer-button control is-grouped">
           <div class="control is-mobile">
-            <a id="refresh-offers-button" class="is-hidden button is-stylish is-small" title="Refresh Offers">
+            <a id="refresh-offers-button" class="button is-stylish is-black is-inverted is-small is-hidden" title="Refresh Offers">
               <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
-              <span class="is-hidden-mobile">Refresh Offers</span>
+              <span class="is-hidden-mobile">Refresh</span>
             </a>
           </div>
           <div class="control is-mobile">
-            <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-stylish is-small">
+            <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-stylish is-small is-black is-inverted">
               <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
               <span class="is-hidden-mobile">Show Rejected</span>
             </a>
@@ -1267,14 +1259,14 @@
         <div class="card is-fullwidth-mobile">
           <div id="accepted-offer" class="whats-next-offer is-hidden">
             <div class="card-image">
-              <div class="notification no-shadow has-icon is-info">
+              <div class="notification no-shadow has-icon is-primary">
                 <div class="icon-box">
                   <div class="icon is-white">
                     <i class="fal fa-question-circle"></i>
                   </div>
                 </div>
                 <div class="content">
-                  <p class="is-white">I accepted the offer--what's next for me?</p>
+                  <p class="is-white">I have accepted the offer, now what do I do?</p>
                 </div>
               </div>
             </div>
@@ -1287,15 +1279,15 @@
                   Once payment has been verified, you will need to manually transfer the ownership of <span class="this-domain">this domain</span> to the buyer.
                 </p>
                 <p>
-                  If you have changed your mind about this offer, please <a href="/contact" class="is-primary is-underlined contact-link">let us know</a>.
+                  If you have changed your mind about this offer, please <a href="/contact" class="is-primary is-bold contact-link">let us know</a>.
                 </p>
-                <div class="resend-wrapper">
-                  <a class="button is-stylish is-fullwidth is-small resend-offer-email-button">
-                    <div class="icon is-small"><i class="fal fa-repeat"></i></div>
-                    <span>Resend Payment Reminder Email</span>
-                  </a>
-                </div>
               </div>
+            </div>
+            <div class="card-footer">
+              <a class="button is-stylish is-fullwidth is-small resend-offer-email-button">
+                <div class="icon is-small"><i class="fal fa-repeat"></i></div>
+                <span>Resend Payment Reminder Email</span>
+              </a>
             </div>
           </div>
           <div id="deposited-offer" class="whats-next-offer is-hidden">
@@ -1429,46 +1421,43 @@
             </tr>
           </tbody>
         </table>
-        <table id="offers-table" class="is-hidden has-shadow has-shadow hidden-while-loading-offers table is-fixed is-bordered">
-              <thead class="has-hover-effect">
-                <tr>
-                  <th class="offer-header-sort" data-value="domain_name">
-                    <span>Domain Name</span>
-                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
-                  </th>
-                  <th class="offer-header-sort" data-value="offer">
-                    <span>Offer</span>
-                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
-                  </th>
-                  <th class="offer-header-sort" data-value="accepted">
-                    <span>Status</span>
-                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
-                  </th>
-                  <th class="offer-header-sort is-hidden-mobile" data-value="timestamp">
-                    <span>Date</span>
-                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
-                  </th>
-                  <th class="offer-header-sort is-hidden-456px" data-value="name">
-                    <span>Name</span>
-                    <div class="icon is-small"><i class="fal fa-sort"></i></div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody id="offers-wrapper">
-                <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
-                  <td>
-                    <span class="td-offer-domain break-all"></span>
-                    <div class="icon is-tooltip is-inline is-small" data-balloon-length="medium" data-balloon="Click on this offer to view more details or respond to it." data-balloon-pos="right">
-                      <i class="fal fa-question-circle"></i>
-                    </div>
-                  </td>
-                  <td class="td-offer-offer"></td>
-                  <td class="td-offer-status"></td>
-                  <td class="td-offer-timestamp is-hidden-mobile"></td>
-                  <td class="td-offer-name is-hidden-456px"></td>
-                </tr>
-              </tbody>
-            </table>
+        <table id="offers-table" class="table has-shadow is-fixed no-borders is-hidden hidden-while-loading-offers">
+          <thead class="has-hover-effect is-pastel no-border-bottom">
+            <tr>
+              <th class="offer-header-sort" data-value="domain_name">
+                <span>Domain</span>
+                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+              </th>
+              <th class="offer-header-sort" data-value="offer">
+                <span>Offer</span>
+                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+              </th>
+              <th class="offer-header-sort" data-value="accepted">
+                <span>Status</span>
+                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+              </th>
+              <th class="offer-header-sort is-hidden-mobile" data-value="timestamp">
+                <span>Date</span>
+                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+              </th>
+              <th class="offer-header-sort is-hidden-456px" data-value="name">
+                <span>Name</span>
+                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="offers-wrapper">
+            <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
+              <td>
+                <span class="td-offer-domain break-all is-bold"></span>
+              </td>
+              <td class="td-offer-offer"></td>
+              <td class="td-offer-status"></td>
+              <td class="td-offer-timestamp is-hidden-mobile"></td>
+              <td class="td-offer-name is-hidden-456px"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 

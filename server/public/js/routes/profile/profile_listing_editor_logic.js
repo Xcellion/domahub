@@ -1751,7 +1751,7 @@ function resendAcceptEmail(resend_button, listing_info, offer_id, deposit){
         resend_button.addClass('is-hidden');
 
         //remove the resend button (for margin bottom on previous p)
-        $(".resend-wrapper").addClass("is-hidden remove-margin-bottom-content");
+        $(".resend-offer-email-button").addClass("is-hidden");
       }
       else {
         errorMessage(data.message);
@@ -1830,7 +1830,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
   $("#offer-modal").removeClass('is-active');
   $("#whats-next-offer-wrapper").removeClass('is-hidden');
   $(".unaccepted-offer").addClass('is-hidden');
-  $(".resend-wrapper").removeClass("is-hidden");
+  $(".resend-offer-email-button").removeClass("is-hidden");
 
   //recreate rows and only select this listing if necessary
   if (!dont_reselect){
