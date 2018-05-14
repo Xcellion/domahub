@@ -56,7 +56,8 @@ $(document).ready(function() {
 
   //<editor-fold>---------------------------------TUTORIAL--------------------------------------------------
 
-  tutorial_tour = new Tour({
+  if (getParameterByName("tutorial") != "false"){
+    tutorial_tour = new Tour({
     storage: false,
     orphan: true,
     backdrop: true,
@@ -447,8 +448,6 @@ $(document).ready(function() {
 
     ]
   });
-
-  if (getParameterByName("tutorial") != "false"){
     tutorial_tour.init();
     tutorial_tour.start();
   }
