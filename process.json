@@ -6,7 +6,7 @@
       "NODE_ENV": "prod",
     },
 	watch: ["./server"],
-	ignore_watch : ["../node_modules", "../uploads"],
+	ignore_watch : ["../node_modules", "../uploads", "../server/lib/current-exchange-rates.json"],
 	watch_options: {
 		followSymlinks: false
 	}
@@ -18,7 +18,7 @@
       "NODE_ENV": "prod",
     },
 	watch: ["./server"],
-	ignore_watch : ["../node_modules", "../uploads"],
+	ignore_watch : ["../node_modules", "../uploads", "../server/lib/current-exchange-rates.json"],
 	watch_options: {
 		followSymlinks: false
 	}

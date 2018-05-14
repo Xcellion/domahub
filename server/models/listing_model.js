@@ -104,6 +104,7 @@ module.exports = {
           min_price, \
           buy_price, \
           description, \
+          default_currency, \
           date_expire, \
           date_registered, \
           registrar_name \
@@ -257,10 +258,12 @@ module.exports = {
     var query = "INSERT INTO domain_expenses ( \
       listing_id, \
       expense_name, \
+      expense_currency, \
       expense_cost, \
       expense_date \
     ) VALUES ? ON DUPLICATE KEY UPDATE \
     expense_name = VALUES(expense_name), \
+    expense_currency = VALUES(expense_currency), \
     expense_cost = VALUES(expense_cost), \
     expense_date = VALUES(expense_date)"
     database.query(query, "Failed to create new expenses!", callback, [domain_expenses]);

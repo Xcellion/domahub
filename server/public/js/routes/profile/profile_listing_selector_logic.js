@@ -480,8 +480,8 @@ function updateDomainRow(tempRow, listing_info, now){
   }
 
   tempRow.find(".td-status").text(status_text);
-  tempRow.find(".td-min").text((listing_info.min_price) ? moneyFormat.to(parseFloat(listing_info.min_price)) : "-");
-  tempRow.find(".td-bin").text((listing_info.buy_price) ? moneyFormat.to(parseFloat(listing_info.buy_price)) : "-");
+  tempRow.find(".td-min").text((listing_info.min_price) ? formatCurrency(parseFloat(listing_info.min_price), listing_info.default_currency) : "-");
+  tempRow.find(".td-bin").text((listing_info.buy_price) ? formatCurrency(parseFloat(listing_info.buy_price), listing_info.default_currency) : "-");
   tempRow.find(".select-button").off().on('click', function(e){
     e.stopPropagation();
     toggleSelectRow(tempRow, e);
@@ -496,7 +496,7 @@ function updateDomainRow(tempRow, listing_info, now){
 function createHubRow(listing_info){
   var hub_drop_clone = $("#hub-drop-clone").clone().removeAttr("id").removeClass('is-hidden');
   var hub_title = listing_info.hub_title || listing_info.domain_name;
-  hub_title = (hub_title.length > 30) ? hub_title.substr(0, 27) + "..." : hub_title;
+  hub_title = (hub_title.length > 30) ? hub_title.substr(0, 25) + "..." : hub_title;
   hub_drop_clone.find(".hub-drop-domain-name").text(hub_title);
   hub_drop_clone.find(".select-button").attr("id", "hub-drop-listing_id" + listing_info.id).attr("title", "Add to listing hub " + (listing_info.hub_title || listing_info.domain_name));
   hub_drop_clone.find(".hub-drop-label").attr("for", "hub-drop-listing_id" + listing_info.id);
@@ -894,12 +894,35 @@ function viewDomainDNS(push){
 
 //<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
 
-//to format a number for $$$$
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 2
-});
+//get the multiplier of a currency
+function multiplier(code){
+  return (code && currency_codes[code.toUpperCase()]) ? Math.pow(10, currency_codes[code.toUpperCase()].fractionSize) : 1;
+}
+
+//to format a number for currency
+function formatCurrency(number, currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes[user.default_currency.toUpperCase()];
+  var currency_details = {
+    thousand: ',',
+    decimals: default_currency_details.fractionSize,
+  }
+
+  //right aligned symbol
+  if (default_currency_details.symbol && default_currency_details.symbol.rtl){
+    currency_details.suffix = default_currency_details.symbol.grapheme;
+  }
+  else if (default_currency_details.symbol && !default_currency_details.symbol.rtl){
+    currency_details.prefix = default_currency_details.symbol.grapheme;
+  }
+
+  return wNumb(currency_details).to(number / Math.pow(10, default_currency_details.fractionSize));
+}
+
+//get the currency multiplier
+function getCurrencyMultiplier(currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes[user.default_currency.toUpperCase()];
+  return Math.pow(10, default_currency_details.fractionSize);
+}
 
 //get domain_name or ID of all selected rows
 function getSelectedDomains(data_name, verified, editable){

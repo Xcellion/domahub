@@ -4,6 +4,9 @@ td.today {
 td.free-times {
     /*background-color: blue !important;*/
 }
+th.available {
+  vertical-align:middle;
+}
 
 .calendar.right, .calendar.left {
   padding-top: 5px;

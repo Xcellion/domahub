@@ -30,7 +30,7 @@
 
               <!-- RENT TAG -->
               <div id="rent-price-tag" class="is-hidden tag main-price-tag is-primary is-outlined is-bordered">
-                <span>Rent now - </span><span id="rent-price-text"></span>
+                <span>Rent now</span><span id="rent-price-text"></span>
                 <span id="free-until" class='is-hidden'></span>
               </div>
             </div>
@@ -183,13 +183,13 @@
               </div>
               <div class="control has-icon">
                 <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" oninvalid="this.setCustomValidity('Please enter a valid domain offer!')" oninput="setCustomValidity('')"/>
-                <label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
+                <label class="error_message label" for="contact_offer"><span id="offer-currency"></span></label>
                 <div class="icon">
                   <i class="fal fa-usd-circle"></i>
                 </div>
               </div>
               <div class="control">
-                <textarea id="contact_message" required class="contact-input textarea break-all" name="contact_message" oninvalid="this.setCustomValidity('Please enter a message for the domain owner!')" oninput="setCustomValidity('')"></textarea>
+                <textarea id="contact_message" required class="contact-input textarea" name="contact_message" oninvalid="this.setCustomValidity('Please enter a message for the domain owner!')" oninput="setCustomValidity('')"></textarea>
               </div>
 
               <div class="control is-grouped">
@@ -252,7 +252,7 @@
             <div class="control">
               <a id="checkout-button" tabindex="0" class="is-disabled is-fullwidth button is-primary is-stylish">
                 <div class="icon is-small"><i class="fal fa-shopping-cart"></i></div>
-                <span>Checkout<span class="total-price is-hidden"> - </span><span class="actual-price"></span></span>
+                <span>Checkout - <span class="actual-price"></span></span>
               </a>
             </div>
           </div>

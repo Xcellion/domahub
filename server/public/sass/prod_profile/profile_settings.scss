@@ -27,6 +27,20 @@
   word-wrap:break-word;
 }
 
+.white-space-no-wrap {
+  white-space:nowrap;
+}
+
+#loading-transactions-card {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  padding-top: 40%;
+  margin: -20px;
+  z-index: 999;
+  background-color: white;
+}
+
 .text-line-through {
   text-decoration: line-through;
 }
@@ -50,6 +64,12 @@
       }
     }
   }
+}
+
+//tooltip ? icon for table
+.bubble-tooltip {
+  display:inline-block;
+  margin-right:5px;
 }
 
 .columns {

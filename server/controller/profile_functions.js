@@ -12,6 +12,7 @@ var passport = require('../lib/passport.js').passport;
 
 var Categories = require("../lib/categories.js");
 var Fonts = require("../lib/fonts.js");
+var Currencies = require("../lib/currencies.js");
 var error = require('../lib/error.js');
 var encryptor = require('../lib/encryptor.js');
 
@@ -194,23 +195,30 @@ module.exports = {
         //renewal transactions
         if (req.user.listings && req.user.listings.length > 0){
           for (var x = 0 ; x < req.user.listings.length ; x++){
-            if (req.user.listings[x].registrar_cost){
-              req.user.transactions.push({
-                available : 0,
-                date_created : (req.user.listings[x].date_registered) ? req.user.listings[x].date_registered : "No date",
-                doma_fees : null,
-                domain_name : req.user.listings[x].domain_name,
-                id : null,
-                listing_id : req.user.listings[x].id,
-                payment_fees : null,
-                payment_type : null,
-                transaction_cost : req.user.listings[x].registrar_cost * 100,
-                transaction_cost_refunded : null,
-                transaction_details : "Annual renewal cost",
-                transaction_id : null,
-                transaction_type : "renewal",
-                withdrawn_on : null
-              });
+            if (req.user.listings[x].registrar_cost && req.user.listings[x].date_registered){
+              var date_registered_moment = moment(req.user.listings[x].date_registered)
+              var years_registered = (date_registered_moment.isValid()) ? moment.duration(moment().diff(date_registered_moment)).asYears() : 0;
+
+              //per year until now since registered
+              for (var y = 0 ; y < years_registered ; y++){
+                req.user.transactions.push({
+                  available : 0,
+                  date_created : moment(req.user.listings[x].date_registered).add(y, "year").valueOf(),
+                  doma_fees : null,
+                  domain_name : req.user.listings[x].domain_name,
+                  id : null,
+                  listing_id : req.user.listings[x].id,
+                  payment_fees : null,
+                  payment_type : null,
+                  transaction_cost : req.user.listings[x].registrar_cost,
+                  transaction_cost_currency : req.user.listings[x].registrar_cost_currency,
+                  transaction_cost_refunded : null,
+                  transaction_details : "Annual renewal cost",
+                  transaction_id : null,
+                  transaction_type : "renewal",
+                  withdrawn_on : null
+                });
+              }
             }
           }
         }
@@ -251,24 +259,81 @@ module.exports = {
       }))).then(function(results) {
         for (var y = 0 ; y < results.length ; y++){
           if (results[y].state == "fulfilled"){
-            updateUserTransactionDetails(req.user.transactions[results[y].value.index], results[y].value.payment_obj, results[y].value.payment_type);
+            updateUserTransactionDetails(req.user.transactions[results[y].value.index], results[y].value.payment_obj, results[y].value.payment_type, req.user.default_currency);
           }
         }
 
         //to mark that we got remote transactions
         req.user.transactions_remote = true;
-
-        //for button to refresh transactions / withdraw from bank
-        if (req.method == "POST"){
-          res.send({
-            state : "success",
-            user : req.user
-          });
-        }
-        else {
-          next();
-        }
+        next();
       });
+    }
+    else {
+      next();
+    }
+  },
+
+  //exchange currencies for all transactions
+  convertCurrencyTransactions : function(req, res, next){
+    if (req.user.transactions){
+      console.log("PF: Converting account transactions into user default currency...");
+
+      var user_default_multiplier = Currencies.multiplier(req.user.default_currency);
+      for (var x = 0 ; x < req.user.transactions.length ; x++){
+        if (req.user.transactions[x].transaction_cost){
+          req.user.transactions[x].default_currency_multiplier = Currencies.multiplier(req.user.transactions[x].transaction_cost_currency);
+
+          //convert currency cost (if it cost something)
+          if (req.user.transactions[x].transaction_cost_currency != req.user.default_currency){
+            var original_cost_currency = req.user.transactions[x].transaction_cost_currency;
+            var original_multiplier = Currencies.multiplier(original_cost_currency);
+
+            //exchange rate used
+            req.user.transactions[x].transaction_cost_exchange_rate = Currencies.exchange(user_default_multiplier / original_multiplier, original_cost_currency, req.user.default_currency) * user_default_multiplier;
+
+            //convert transaction cost
+            var original_cost = req.user.transactions[x].transaction_cost;
+            req.user.transactions[x].transaction_cost_original = original_cost;
+            req.user.transactions[x].transaction_cost_original_currency = original_cost_currency;
+
+            req.user.transactions[x].transaction_cost = Currencies.exchange(original_cost / original_multiplier, original_cost_currency, req.user.default_currency) * user_default_multiplier;
+            req.user.transactions[x].transaction_cost_currency = req.user.default_currency;
+
+            //convert doma / payment fees
+            var original_doma_fees = req.user.transactions[x].doma_fees;
+            var original_payment_fees = req.user.transactions[x].payment_fees;
+            req.user.transactions[x].doma_fees_original = original_doma_fees;
+            req.user.transactions[x].payment_fees_original = original_payment_fees;
+
+            req.user.transactions[x].doma_fees = Currencies.exchange(original_doma_fees / original_multiplier, original_cost_currency, req.user.default_currency) * user_default_multiplier;
+            req.user.transactions[x].payment_fees = Currencies.exchange(original_payment_fees / original_multiplier, original_cost_currency, req.user.default_currency) * user_default_multiplier;
+
+            //convert paypal fees (if exists)
+            if (req.user.transactions[x].paypal_fee){
+              var paypal_fee_flat = req.user.transactions[x].paypal_fee;
+              req.user.transactions[x].paypal_fee = Currencies.exchange(paypal_fee_flat / original_multiplier, original_cost_currency, req.user.default_currency) * user_default_multiplier;
+              req.user.transactions[x].paypal_fee_original = paypal_fee_flat;
+            }
+
+            //convert refund leftover
+            if (req.user.transactions[x].transaction_cost_refunded){
+              var refund_leftover = original_cost - req.user.transactions[x].transaction_cost_refunded;
+              req.user.transactions[x].transaction_cost_refund_leftover = Currencies.exchange(refund_leftover / original_multiplier, original_cost_currency, req.user.default_currency) * user_default_multiplier;
+            }
+          }
+        }
+      }
+
+      //for button to refresh transactions / withdraw from bank
+      if (req.method == "POST"){
+        res.send({
+          state : "success",
+          user : req.user
+        });
+      }
+      else {
+        next();
+      }
     }
     else {
       //for button to refresh transactions / withdraw from bank
@@ -1124,6 +1189,26 @@ module.exports = {
           for (var y = 0; y < req.user.listings.length; y++){
             for (var z in offers_object){
               if (z == req.user.listings[y].id){
+
+                //convert currency if different
+                for (var s = 0; s < offers_object[z].length ; s++){
+                  if (offers_object[z][s].offer_currency != req.user.default_currency){
+
+                    var original_currency = offers_object[z][s].offer_currency;
+                    var original_offer = offers_object[z][s].offer;
+                    var user_default_multiplier = Currencies.multiplier(req.user.default_currency);
+                    var original_multiplier = Currencies.multiplier(original_currency);
+
+                    offers_object[z][s].offer_original = original_offer;
+                    offers_object[z][s].offer_original_currency = original_currency;
+
+                    offers_object[z][s].offer = Currencies.exchange(original_offer / original_multiplier, original_currency, req.user.default_currency) * user_default_multiplier;
+                    offers_object[z][s].offer_currency = req.user.default_currency;
+
+                    offers_object[z][s].offer_exchange_rate = Currencies.exchange(user_default_multiplier / original_multiplier, original_currency, req.user.default_currency) * user_default_multiplier;
+                  }
+                }
+
                 req.user.listings[y].offers = offers_object[z];
                 break;
               }
@@ -1177,6 +1262,14 @@ module.exports = {
     else if (req.body.new_password && req.body.password.length < 6){
       error.handler(req, res, "The new password is too short!", "json");
     }
+    //paypal email
+    else if (req.body.paypal_email && !validator.isEmail(req.body.paypal_email)){
+      error.handler(req, res, "Please provide a valid PayPal email address!", "json");
+    }
+    //payoneer email
+    else if (req.body.payoneer_email && !validator.isEmail(req.body.payoneer_email)){
+      error.handler(req, res, "Please provide a valid Payoneer email address!", "json");
+    }
     //check the pw
     else if (req.body.new_password){
       req.body.email = req.body.email || req.user.email;
@@ -1189,13 +1282,8 @@ module.exports = {
         }
       })(req, res, next);
     }
-    //paypal email
-    else if (req.body.paypal_email && !validator.isEmail(req.body.paypal_email)){
-      error.handler(req, res, "Please provide a valid PayPal email address!", "json");
-    }
-    //payoneer email
-    else if (req.body.payoneer_email && !validator.isEmail(req.body.payoneer_email)){
-      error.handler(req, res, "Please provide a valid Payoneer email address!", "json");
+    else if (req.body.default_currency && (!req.user.currencies || !req.user.currencies.payment_currencies || req.user.currencies.payment_currencies.indexOf(req.body.default_currency) == -1)){
+      error.handler(req, res, "Please provide a valid default currency!", "json");
     }
     else {
       next();
@@ -1261,6 +1349,10 @@ module.exports = {
     }
     if (req.body.bitcoin_address || req.body.bitcoin_address == ""){
       new_account_info.bitcoin_address = (req.body.bitcoin_address) ? req.body.bitcoin_address : null;
+    }
+    if (req.body.default_currency){
+      new_account_info.default_currency = req.body.default_currency;
+      delete req.user.transactions;
     }
 
     //any changes from other routes (stripe upgrade)
@@ -1725,7 +1817,7 @@ module.exports = {
   withdrawToBitcoin : function(req, res, next){
     if (req.body.destination_account == "bitcoin"){
       var total_amount_available = req.session.withdrawal_obj.total_amount_available;
-      var total_amount_available_formatted = moneyFormat.to(req.session.withdrawal_obj.total_amount_available / 100);
+      var total_amount_available_formatted = moneyFormat.to(req.session.withdrawal_obj.total_amount_available);
       console.log("PF: Attempting to transfer " + total_amount_available_formatted + " to Bitcoin wallet - " + req.user.bitcoin_address + "...");
 
       //notify us
@@ -2340,7 +2432,7 @@ function updateUserRegistrar(user, registrars){
 }
 
 //update the user object with registrar details
-function updateUserTransactionDetails(user_transaction_obj, transaction_details, payment_type){
+function updateUserTransactionDetails(user_transaction_obj, transaction_details, payment_type, default_currency){
   if (transaction_details){
 
     //dev for debug
@@ -2374,12 +2466,17 @@ function updateUserTransactionDetails(user_transaction_obj, transaction_details,
       //refunded
       try {
         if (transaction_details.payments[0].transactions[0].related_resources[1]){
-          user_transaction_obj.transaction_cost_refunded = transaction_details.payments[0].transactions[0].amount.total * 100;
+
           user_transaction_obj.date_refunded = new Date(transaction_details.payments[0].transactions[0].related_resources[1].refund.create_time).getTime();
+
+          //paypal doesnt refund flat fee
+          var paypal_fee_original_currency = transaction_details.payments[0].transactions[0].amount.currency;
+          var paypal_fee_flat = Currencies.paypalFee(paypal_fee_original_currency) * Currencies.multiplier(paypal_fee_original_currency);
+          user_transaction_obj.paypal_fee = paypal_fee_flat;
         }
       }
-      catch(e){
-        error.log(e, "Error in getting PayPal refunded payment details!");
+      catch(err){
+        error.log(err, "Error in getting PayPal refunded payment details!");
       }
 
       //sales ID for refund

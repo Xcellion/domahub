@@ -6,6 +6,7 @@ var data_model = require('../models/data_model.js');
 
 var Categories = require("../lib/categories.js");
 var Fonts = require("../lib/fonts.js");
+var Currencies = require("../lib/currencies.js");
 var Descriptions = require("../lib/descriptions.js");
 var error = require('../lib/error.js');
 var encryptor = require('../lib/encryptor.js');
@@ -147,6 +148,7 @@ module.exports = {
       var domains_sofar = [];
       var date_now = new Date().getTime();
       var db_object = [];
+      var default_currency = (req.user.default_currency) ? req.user.default_currency : "usd";
 
       //loop through and check all posted domain names
       for (var x = 0; x < posted_domain_names.length; x++){
@@ -172,6 +174,7 @@ module.exports = {
             parseFloat(posted_domain_names[x].min_price) || 0,
             parseFloat(posted_domain_names[x].buy_price) || 0,
             Descriptions.random(),    //random default description
+            default_currency,         //user default currency
             null,
             null,
             null
@@ -280,7 +283,7 @@ module.exports = {
 
       var whois_promises = [];
       for (var x = 0 ; x < req.session.new_listings.db_object.length ; x++){
-        whois_promises.push(check_whois_promise(req.session.new_listings.db_object[x][2], x));
+        whois_promises.push(check_whois_promise(req.session.new_listings.db_object[x][2].toLowerCase(), x));
       }
 
       //all whois data received!
@@ -294,9 +297,9 @@ module.exports = {
             var registrar_exp_date = moment(results[y].value.whois["Registrar Registration Expiration Date"], "YYYY-MM-DDTHH:mm Z");
             var registrar_create_date = moment(results[y].value.whois["Creation Date"], "YYYY-MM-DDTHH:mm Z");
 
-            req.session.new_listings.db_object[results[y].value.index][7] = (registrar_exp_date.isValid()) ? registrar_exp_date.valueOf() : null;
-            req.session.new_listings.db_object[results[y].value.index][8] = (registrar_create_date.isValid()) ? registrar_create_date.valueOf() : null;
-            req.session.new_listings.db_object[results[y].value.index][9] = results[y].value.whois["Registrar"];
+            req.session.new_listings.db_object[results[y].value.index][8] = (registrar_exp_date.isValid()) ? registrar_exp_date.valueOf() : null;
+            req.session.new_listings.db_object[results[y].value.index][9] = (registrar_create_date.isValid()) ? registrar_create_date.valueOf() : null;
+            req.session.new_listings.db_object[results[y].value.index][10] = results[y].value.whois["Registrar"];
           }
         }
         next();
@@ -414,6 +417,12 @@ module.exports = {
 
     //<editor-fold>-------------------------------CHECKS (UPDATE LISTINGS)------------------------------
 
+    //create a new listing info object to make changes to
+    createNewListingInfoObj : function(req, res, next){
+      req.session.new_listing_info = {};
+      next();
+    },
+
     //check if posted selected IDs are numbers
     checkSelectedIDs : function(req, res, next){
       console.log("LOF: Checking posted domain IDs...");
@@ -503,10 +512,6 @@ module.exports = {
 
     //check the user image and upload to imgur
     checkListingImage : function(req, res, next){
-
-      //create a new listing info object to make changes to
-      req.session.new_listing_info = {};
-
       if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
 
         //custom image upload promise function
@@ -1098,7 +1103,7 @@ module.exports = {
       var status = parseFloat(req.body.status);
 
       //registrar info
-      var registrar_cost = parseFloat(req.body.registrar_cost).toFixed(2);
+      var registrar_cost = parseFloat(req.body.registrar_cost);
       var date_expire = moment(req.body.date_expire);
       var date_registered = moment(req.body.date_registered);
 
@@ -1169,6 +1174,10 @@ module.exports = {
       else if (req.body.categories && categories_clean.length == 0){
         error.handler(req, res, "You have selected invalid categories! Please try again.", "json");
       }
+      //invalid default currency
+      else if (req.body.default_currency && (!req.user.currencies || !req.user.currencies.payment_currencies || req.user.currencies.payment_currencies.indexOf(req.body.default_currency) == -1)){
+        error.handler(req, res, "You have selected an invalid currency! Please provide a valid default currency!", "json");
+      }
       //invalid price type
       else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
         error.handler(req, res, "You have selected an invalid rental price type! Please try again.", "json");
@@ -1191,8 +1200,11 @@ module.exports = {
       else if (req.body.date_registered != "" && !date_registered.isValid()){
         error.handler(req, res, "You have entered an invalid registration date! Please try a different date.", "json");
       }
-      else if (req.body.registrar_cost && !validator.isFloat(registrar_cost)){
+      else if (req.body.registrar_cost && !validator.isFloat(req.body.registrar_cost)){
         error.handler(req, res, "You have entered an invalid annual renewal cost! Please try a different price.", "json");
+      }
+      else if (req.body.registrar_cost_currency && (!req.user.currencies || !req.user.currencies.payment_currencies || req.user.currencies.payment_currencies.indexOf(req.body.registrar_cost_currency) == -1)){
+        error.handler(req, res, "You have selected an invalid currency for your registrar renewal costs! Please provide a valid currency!", "json");
       }
       else if (rentable && rentable != 1 && rentable != 0){
         error.handler(req, res, "You have selected an invalid option! Please refresh the page and try again!", "json");
@@ -1247,20 +1259,32 @@ module.exports = {
         if (!req.session.new_listing_info) {
           req.session.new_listing_info = {};
         }
+
+        //description
         req.session.new_listing_info.status = status;
         req.session.new_listing_info.description = req.body.description;
         req.session.new_listing_info.description_hook = req.body.description_hook;
-        req.session.new_listing_info.price_type = req.body.price_type;
-        req.session.new_listing_info.price_rate = req.body.price_rate;
-        req.session.new_listing_info.buy_price = (req.body.buy_price == "" || req.body.buy_price == 0) ? "0" : req.body.buy_price;
-        req.session.new_listing_info.min_price = (req.body.min_price == "" || req.body.min_price == 0) ? "0" : req.body.min_price;
         req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
-        req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
+
+        //pricing (multiply by currency multiplier)
+        req.session.new_listing_info.default_currency = req.body.default_currency;
+        req.session.new_listing_info.buy_price = (req.body.buy_price == "" || req.body.buy_price == 0) ? 0 : req.body.buy_price * req.session.new_listing_info.default_currency_multiplier;
+        req.session.new_listing_info.min_price = (req.body.min_price == "" || req.body.min_price == 0) ? 0 : req.body.min_price * req.session.new_listing_info.default_currency_multiplier;
+        req.session.new_listing_info.price_type = req.body.price_type;
+        req.session.new_listing_info.price_rate = req.body.price_rate * req.session.new_listing_info.default_currency_multiplier;
+
+        //rent
         req.session.new_listing_info.rentable = rentable;
+        req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
+
+        //dates
         req.session.new_listing_info.date_expire = (req.body.date_expire == "" || !date_expire.isValid()) ? null : date_expire.valueOf();
         req.session.new_listing_info.date_registered = (req.body.date_registered == "" || !date_registered.isValid()) ? null : date_registered.valueOf();
+
+        //registrar (multiply cost by currency multiplier)
         req.session.new_listing_info.registrar_name = req.body.registrar_name;
-        req.session.new_listing_info.registrar_cost = registrar_cost;
+        req.session.new_listing_info.registrar_cost = (req.body.registrar_cost == "") ? 0 : registrar_cost * req.session.new_listing_info.default_registrar_currency_multiplier;
+        req.session.new_listing_info.registrar_cost_currency = req.body.registrar_cost_currency;
 
         //registrar contact administrator details
         req.session.new_listing_info.registrar_admin_name = req.body.registrar_admin_name;
@@ -1289,9 +1313,81 @@ module.exports = {
             delete req.session.new_listing_info[x];
           }
         }
+
         next();
       }
     },
+
+    //prevent multi-edit of single-only details (capitalization)
+    checkListingMultiDetails : function(req, res, next){
+      console.log("LOF: Checking posted listing multi details...");
+
+      //can't edit capitalization for multi
+      if (req.body.domain_name) {
+        error.handler(req, res, "You cannot edit capitalization for multiple domains. Please select a single domain to edit.", "json");
+      }
+      else {
+        next();
+      }
+    },
+
+    //check currency and make sure they are all same
+    checkListingCurrencyDetails : function(req, res, next){
+      console.log("LOF: Checking posted listing currency details...");
+
+      //multiple listings edit
+      var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
+      if (selected_ids){
+
+        var selected_listings = req.user.listings.filter(function(elem){
+          return selected_ids.indexOf(String(elem.id)) != -1;
+        });
+
+        //check if currencies of all listings are not the same
+        var currencies_same = selected_listings[0].default_currency;
+        var registrar_currencies_same = selected_listings[0].registrar_cost_currency;
+        for (var x = 0 ; x < selected_listings.length ; x++){
+          if (selected_listings[x].default_currency != currencies_same){
+            currencies_same = false;
+          }
+          if (selected_listings[x].registrar_cost_currency != registrar_currencies_same){
+            registrar_currencies_same = false;
+          }
+        }
+
+      }
+      //single listing edit
+      else {
+        var current_listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name)
+        var currencies_same = current_listing_info.default_currency;
+        var registrar_currencies_same = current_listing_info.registrar_cost_currency;
+      }
+
+      if (!currencies_same &&                                                      //current default currencies are different
+        !req.body.default_currency &&                                              //not changing currency with this call
+        (req.body.min_price || req.body.buy_price || req.body.price_rate)          //trying to change a price
+      ){
+        error.handler(req, res, "You cannot edit pricing for multiple listings with differing default currencies. Please change the default currency as well.", "json");
+      }
+      else if (!registrar_currencies_same &&          //current default currencies are different
+        !req.body.registrar_cost_currency &&          //not changing currency with this call
+        req.body.registrar_cost                       //trying to change a price
+      ){
+        error.handler(req, res, "You cannot edit the registrar renewal cost for multiple listings with differing currencies. Please change the currency of the registrar renewal cost as well.", "json");
+      }
+      else {
+
+        //multiplier for listing default currency
+        var default_currency = (req.body.default_currency) ? req.body.default_currency : ((currencies_same) ? currencies_same : "USD");
+        req.session.new_listing_info.default_currency_multiplier = Currencies.multiplier(default_currency);
+
+        //multiplier for listing registrar currency
+        var default_registrar_currency = (req.body.registrar_cost_currency) ? req.body.registrar_cost_currency : ((registrar_currencies_same) ? registrar_currencies_same : "USD");
+        req.session.new_listing_info.default_registrar_currency_multiplier = Currencies.multiplier(default_registrar_currency);
+        next();
+      }
+    },
+
 
     //</editor-fold>
 
@@ -1438,6 +1534,10 @@ module.exports = {
     else if (!req.body.expense_cost || !validator.isFloat(req.body.expense_cost)){
       error.handler(req, res, "That's an invalid cost for a domain expense! Please enter something else and try again.", "json");
     }
+    //invalid default currency
+    else if (req.body.default_currency && (!req.user.currencies || !req.user.currencies.payment_currencies || req.user.currencies.payment_currencies.indexOf(req.body.default_currency) == -1)){
+      error.handler(req, res, "That's an invalid default currency for a domain expense! Please select something else and try again.", "json");
+    }
     else {
       next();
     }
@@ -1473,6 +1573,7 @@ module.exports = {
             id : result_expense.id,
             expense_name : result_expense.expense_name,
             expense_date : result_expense.expense_date,
+            expense_currency : result_expense.expense_currency,
             expense_cost : result_expense.expense_cost
           }
           if (!current_listing || current_listing.id != result_expense.listing_id){
@@ -1484,11 +1585,16 @@ module.exports = {
           }
         }
 
-        //nothing found! delete any existing expenses property
+        //nothing found! set to empty
         if (result.info.length == 0){
           for (var x = 0 ; x < selected_ids.length ; x++){
             getUserListingObjByID(req.user.listings, selected_ids[x]).expenses = [];
           }
+        }
+
+        //get new transactions
+        if (req.user.transactions){
+          delete req.user.transactions;
         }
 
         res.send({
@@ -1509,7 +1615,8 @@ module.exports = {
     var selected_ids = req.body.selected_ids.split(",");
     var new_expense_obj = {
       expense_name : req.body.expense_name,
-      expense_cost : Math.round(100 * parseFloat(req.body.expense_cost)) / 100,
+      expense_currency : req.body.expense_currency,
+      expense_cost : parseFloat(req.body.expense_cost) * Currencies.multiplier(req.body.expense_currency),
       expense_date : moment(req.body.expense_date).valueOf()
     }
 
@@ -1518,6 +1625,7 @@ module.exports = {
       domain_expenses.push([
         selected_ids[x],
         new_expense_obj.expense_name,
+        new_expense_obj.expense_currency,
         new_expense_obj.expense_cost,
         new_expense_obj.expense_date
       ]);
@@ -1542,6 +1650,13 @@ module.exports = {
     console.log("LOF: Deleting an existing domain expense...");
     listing_model.deleteDomainExpenses(req.body.expense_ids, function(result){
       if (result.state == "success"){
+
+        //delete all existing expenses in listing objs
+        var selected_ids = req.body.selected_ids.split(",");
+        for (var x = 0 ; x < selected_ids.length ; x++){
+          getUserListingObjByID(req.user.listings, selected_ids[x]).expenses = [];
+        }
+
         //after deletion, get expenses again
         next();
       }

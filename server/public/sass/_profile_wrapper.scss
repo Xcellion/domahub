@@ -131,7 +131,7 @@
 .nav {
   &.is-profile {
     background-color: transparent;
-    padding: 20px 50px;
+    padding: 25px 50px;
     position: relative;
     @include mobile {
       padding: 0;
@@ -226,7 +226,7 @@
 
 #notification-dropdown-menu {
   right: -41px;
-  width: 250px;
+  width: 300px;
   .content {
     padding: 5px 12px;
   }

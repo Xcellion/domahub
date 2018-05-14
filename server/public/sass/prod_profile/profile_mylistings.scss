@@ -21,8 +21,19 @@
 @import '../bulma/elements/switch.sass';
 @import '../bulma/elements/hamburger.sass';
 @import '../bulma/elements/icon.sass';
+@import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
+
+//display inline block for tooltip icons
+.control .icon.is-tooltip {
+  display: inline-block!important;
+}
+
+//tooltip ? icon for table (exchanged currency tooltip)
+.bubble-tooltip {
+  margin-right:5px;
+}
 
 //domain expenses
 .expense-button-wrapper {
@@ -139,7 +150,6 @@
   @include translate(-50%,50%);
   left: 50%;
   position: absolute;
-  top: 10%;
 }
 
 .blackscreen {
@@ -149,6 +159,7 @@
   left: 0;
   background-color: $black-secondary;
   z-index: 5;
+  box-shadow: 0 0 5px #000;
 }
 
 .td-domain a {
@@ -165,22 +176,29 @@ td > .icon, th > .icon {
 
 // edit listing tabs
 #edit-toolbar {
-  margin-bottom: 20px;
   .tabs {
     margin-top: 20px;
     overflow: visible;
     overflow-x: visible;
     ul {
       flex-wrap: wrap;
-    }
-    @include mobile {
-      li {
-        &:not(:last-child) {
-          margin-right: 10px;
+      li:first-child {
+        a {
+          padding-left:0px;
         }
       }
     }
   }
+}
+
+#loading-offers-card {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  padding-top: 20%;
+  margin: -20px;
+  z-index: 999;
+  background-color: white;
 }
 
 .sub-tabs {
@@ -265,7 +283,8 @@ td > .icon, th > .icon {
 .domain-tooltip {
   position: absolute;
   top: 100%;
-  right: 10px;
+  left:0;
+  margin-top:5px;
   z-index:99;
   overflow-y: auto;
   overflow-x: hidden;
@@ -372,8 +391,8 @@ td > .icon, th > .icon {
 }
 
 #example-logo {
-  max-width:200px;
-  max-height:125px;
+  max-height:48px;
+  margin:0;
 }
 
 #example-wrapper {

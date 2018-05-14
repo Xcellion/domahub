@@ -5,6 +5,7 @@ var listing_model = require('../models/listing_model.js');
 
 var error = require('../lib/error.js');
 var mailer = require('../lib/mailer.js');
+var Currencies = require('../lib/currencies.js');
 
 //</editor-fold>
 
@@ -18,11 +19,6 @@ var validator = require('validator');
 var path = require("path");
 
 var wNumb = require("wnumb");
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 2
-});
 
 //</editor-fold>
 
@@ -389,12 +385,17 @@ module.exports = {
         if (!account){
           console.log("SF: Not a real Stripe account! Updating our database appropriately...");
           deleteDHStripeDetails(req, "stripe_account_id", true);
+          next();
         }
         else {
-          updateUserStripeAccount(req.user, account);
-          updateUserStripeBank(req.user, account);
+          //get supported currencies for this country
+          stripe.countrySpecs.retrieve(account.country,function(err, countrySpec){
+            updateUserStripeCurrencies(req.user, countrySpec);
+            updateUserStripeAccount(req.user, account);
+            updateUserStripeBank(req.user, account);
+            next();
+          });
         }
-        next();
       });
     }
     else {
@@ -579,7 +580,7 @@ module.exports = {
   withdrawToStripeBank : function(req, res, next){
     if (req.body.destination_account == "bank"){
       var total_amount_available = req.session.withdrawal_obj.total_amount_available;
-      var total_amount_available_formatted = moneyFormat.to(req.session.withdrawal_obj.total_amount_available / 100);
+      var total_amount_available_formatted = Currencies.format(req.session.withdrawal_obj.total_amount_available, req.user.default_currency);
       console.log("SF: Attempting to transfer " + total_amount_available_formatted + " to Stripe bank account...");
 
       //notify us
@@ -639,7 +640,7 @@ module.exports = {
         error.handler(req, res, "Something went wrong with your card payment! Please refresh the page and try again.", "json");
       }
       else {
-        var total_price = Math.round(req.session.new_rental_info.price * 100);    //USD in cents
+        var total_price = Math.round(req.session.new_rental_info.price);
 
         //doma fee if the account owner is basic (aka premium hasn't expired)
         var doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(total_price);
@@ -654,7 +655,7 @@ module.exports = {
 
           var stripe_options = {
             amount: total_price,
-            currency: "usd",
+            currency: req.session.new_rental_info.default_currency,
             source: req.body.stripeToken,
             description: "Rental for " + req.params.domain_name,
             transfer_group : req.session.listing_info.owner_id,
@@ -664,14 +665,15 @@ module.exports = {
               "rental_id" : req.session.new_rental_info.rental_id,
               "doma_fees" : doma_fees,
               "stripe_fees" : stripe_fees
-            }
+            },
+            expand: ['balance_transaction']
           }
 
           //charge the end user and take doma fees if its a basic listing
           stripe.charges.create(stripe_options, function(err, charge) {
             if (err) {
               error.log(err, "Failed to create Stripe charge.");
-              error.handler(req, res, "Something went wrong with your card payment! Please refresh the page and try again.", "json");
+              error.handler(req, res, "Something went wrong with your payment! Please refresh the page and try again.", "json");
             }
             else {
 
@@ -680,9 +682,10 @@ module.exports = {
               req.session.new_rental_info.rental_transaction_id = charge.id;
               req.session.new_rental_info.rental_cost = charge.amount;
               req.session.new_rental_info.rental_doma_fees = doma_fees;
-              req.session.new_rental_info.rental_payment_fees = stripe_fees;
+              req.session.new_rental_info.rental_payment_fees = charge.balance_transaction.fee;
+              req.session.new_rental_info.rental_exchange_rate = charge.balance_transaction.exchange_rate;
 
-              console.log("SF: Payment processed! Customer paid " + moneyFormat.to(total_price/100) + " with " +  moneyFormat.to(doma_fees/100) + " in Doma fees and " + moneyFormat.to(stripe_fees/100) + " in Stripe fees.");
+              console.log("SF: Payment processed! Customer paid " + Currencies.format(total_price, req.session.new_rental_info.default_currency) + " with " +  Currencies.format(doma_fees, req.session.new_rental_info.default_currency) + " in Doma fees and " + Currencies.format(stripe_fees, req.session.new_rental_info.default_currency) + " in Stripe fees.");
               next();
             }
           });
@@ -701,16 +704,16 @@ module.exports = {
         error.handler(req, res, "Something went wrong with your card payment! Please refresh the page and try again.", "json");
       }
       else {
-        //BIN or buying acter accepting an offer
+        //BIN or buying actor accepting an offer
         var price_of_listing = (req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price;
-        var total_price = Math.round(price_of_listing * 100);    //USD in cents
+        var total_price = Math.round(price_of_listing);
 
         //doma fee if the account owner is basic (aka premium hasn't expired)
         var doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(total_price);
         var stripe_fees = getStripeFees(total_price);
 
         //something went wrong with the price
-        if (isNaN(total_price)){
+        if (isNaN(total_price) || isNaN(stripe_fees) || isNaN(doma_fees)){
           error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again.", 'json');
         }
         else {
@@ -718,7 +721,7 @@ module.exports = {
 
           var stripeOptions = {
             amount: total_price,
-            currency: "usd",
+            currency: req.session.listing_info.default_currency,
             source: req.body.stripeToken,
             description: "Purchasing " + req.params.domain_name,
             transfer_group : req.session.listing_info.owner_id,
@@ -733,7 +736,8 @@ module.exports = {
               "doma_fees" : doma_fees,
               "stripe_fees" : stripe_fees,
               "pending_transfer" : true
-            }
+            },
+            expand: ['balance_transaction']
           }
 
           //charge the end user, transfer to the owner, take doma fees if its a basic listing
@@ -748,9 +752,10 @@ module.exports = {
               req.session.new_buying_info.purchase_payment_type = "stripe";
               req.session.new_buying_info.purchase_transaction_id = charge.id;
               req.session.new_buying_info.purchase_doma_fees = doma_fees;
-              req.session.new_buying_info.purchase_payment_fees = stripe_fees;
+              req.session.new_buying_info.purchase_payment_fees = charge.balance_transaction.fee;
+              req.session.new_buying_info.purchase_exchange_rate = charge.balance_transaction.exchange_rate;
 
-              console.log("SF: Payment processed! Received " + moneyFormat.to(total_price/100));
+              console.log("SF: Payment processed! Received " + Currencies.format(total_price, req.session.new_buying_info.default_currency));
               next();
             }
           });
@@ -917,15 +922,19 @@ function newStripeAccount(req, res, next, legal_entity){
       error.handler(req, res, err.message, "json");
     }
     else {
-      updateUserStripeAccount(req.user, account);
+      //get supported currencies for this country
+      stripe.countrySpecs.retrieve(account.country,function(err, countrySpec){
+        updateUserStripeCurrencies(req.user, countrySpec);
+        updateUserStripeAccount(req.user, account);
 
-      //update our database with new stripe account ID and type = 2
-      req.session.new_account_info = {
-        stripe_account_id : account.id,
-        type : 2
-      }
+        //update our database with new stripe account ID and type = 2
+        req.session.new_account_info = {
+          stripe_account_id : account.id,
+          type : 2
+        }
 
-      next();
+        next();
+      });
     }
   });
 }
@@ -1027,6 +1036,33 @@ function updateUserStripeSubscription(user, subscription){
   }
 }
 
+//update req.user default currencies with stripe countrySpec object
+function updateUserStripeCurrencies(user, countrySpec){
+  if (countrySpec){
+    if (process.env.NODE_ENV == "dev"){
+      user.dev_currencies = countrySpec;
+    }
+
+    //stripe countrySpec details for list of acceptable currencies
+    if (countrySpec){
+
+      //we only support what stripe + paypal both support
+      var supported_payment_currencies = [];
+      for (var x = 0 ; x < countrySpec.supported_payment_currencies.length ; x++){
+        // console.log(Currencies.paypalFee(countrySpec.supported_payment_currencies[x].toUpperCase()), countrySpec.supported_payment_currencies[x])
+        if (Currencies.paypalFee(countrySpec.supported_payment_currencies[x].toUpperCase())){
+          supported_payment_currencies.push(countrySpec.supported_payment_currencies[x]);
+        }
+      }
+
+      user.currencies = {
+        bank_currencies : countrySpec.supported_bank_account_currencies,
+        payment_currencies : supported_payment_currencies.sort()
+      }
+    }
+  }
+}
+
 //update req.user with stripe account object
 function updateUserStripeAccount(user, account){
   if (account){
@@ -1034,7 +1070,7 @@ function updateUserStripeAccount(user, account){
       user.dev_stripe_account = account;
     }
 
-    //managed stripe account details for getting paid
+    //stripe account details for getting paid
     if (account && account.legal_entity){
       user.stripe_account = {
         country : account.legal_entity.address.country,
