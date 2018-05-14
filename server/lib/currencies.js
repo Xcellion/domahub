@@ -2067,12 +2067,44 @@ var fs = require('fs');
 
 module.exports = {
 
-  //return all currencies
-  all : function(){
-    return currency_codes;
+  //<editor-fold>-------------------------------SETUP-------------------------------
+
+  //check if current exchange rates are legit, if not update to today's exchange rates
+  checkExchangeRates : function(req, res, next){
+    console.log("CF: Checking exchange rates...");
+    var current_exchange_rates = JSON.parse(fs.readFileSync(__dirname + "/current-exchange-rates.json"));
+
+    //if exchange rates are still good (last time rates gotten is less than an hour)
+    if (process.env.NODE_ENV != "dev" && current_exchange_rates && current_exchange_rates.date && moment.duration(moment().diff(moment(current_exchange_rates.date))).asHours() < 1){
+      fx.rates = current_exchange_rates.rates;
+    	fx.base = current_exchange_rates.base;
+
+      next();
+    }
+    else {
+      console.log("CF: Getting new exchange rates...");
+      oxr.latest(function() {
+        var current_exchange_rates = {
+          rates : oxr.rates,
+          base : oxr.base,
+          date : moment().format("YYYY-MM-DD HH:mm")
+        }
+
+        //rewrite old file
+        fs.writeFileSync(__dirname + "/current-exchange-rates.json", JSON.stringify(current_exchange_rates, null, 4), "utf8");
+        fx.rates = current_exchange_rates.rates;
+      	fx.base = current_exchange_rates.base;
+      });
+
+      next();
+    }
   },
 
-  //returns if a currency exists
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------FUNCTIONS-------------------------------
+
+  //does a currency exist
   exists : function(code){
     return typeof currency_codes[code.toUpperCase()] != "undefined";
   },
@@ -2111,34 +2143,6 @@ module.exports = {
     return (currency_codes[code].paypalFee) ? currency_codes[code].paypalFee : false;
   },
 
-  //check if current exchange rates are legit, if not update to today's exchange rates
-  checkExchangeRates : function(req, res, next){
-    console.log("CF: Checking exchange rates...");
-    var current_exchange_rates = JSON.parse(fs.readFileSync(__dirname + "/current-exchange-rates.json"));
+  //</editor-fold>
 
-    //if exchange rates are still good (last time rates gotten is less than an hour)
-    if (process.env.NODE_ENV != "dev" && current_exchange_rates && current_exchange_rates.date && moment.duration(moment().diff(moment(current_exchange_rates.date))).asHours() < 1){
-      fx.rates = current_exchange_rates.rates;
-    	fx.base = current_exchange_rates.base;
-
-      next();
-    }
-    else {
-      console.log("CF: Getting new exchange rates...");
-      oxr.latest(function() {
-        var current_exchange_rates = {
-          rates : oxr.rates,
-          base : oxr.base,
-          date : moment().format("YYYY-MM-DD HH:mm")
-        }
-
-        //rewrite old file
-        fs.writeFileSync(__dirname + "/current-exchange-rates.json", JSON.stringify(current_exchange_rates, null, 4), "utf8");
-        fx.rates = current_exchange_rates.rates;
-      	fx.base = current_exchange_rates.base;
-      });
-
-      next();
-    }
-  },
 }
