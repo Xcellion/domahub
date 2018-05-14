@@ -478,7 +478,7 @@ $(document).ready(function() {
 
 });
 
-//<editor-fold>-----------------------------------------------------------------------------------MENU
+//<editor-fold>---------------------------------MENU--------------------------------------------------
 
 //hide and show menu
 function menuButtonHandlers() {
@@ -523,7 +523,7 @@ function toggleMenu(show){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------THEMES
+//<editor-fold>---------------------------------THEMES--------------------------------------------------
 
 //switch theme
 function switchTheme(theme_name){
@@ -573,7 +573,7 @@ function switchTheme(theme_name){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------INFO TAB
+//<editor-fold>---------------------------------INFO TAB--------------------------------------------------
 
 //update the description / description footer
 function updateDescription(){
@@ -700,7 +700,7 @@ function updateBIN(){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------DESIGN TAB
+//<editor-fold>---------------------------------DESIGN TAB--------------------------------------------------
 
 //change URL to custom for premium v basic
 function loadPremiumAndBasicHandler(){
@@ -940,7 +940,7 @@ function checkBox(module_value, elem){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------MODULES
+//<editor-fold>---------------------------------MODULES--------------------------------------------------
 
 //create a test chart
 function createTestChart(){
@@ -1083,7 +1083,7 @@ function createTestRentals(){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------UPDATE HANDLERS
+//<editor-fold>---------------------------------UPDATE HANDLERS--------------------------------------------------
 
 //do submit buy handler
 function testSubmitBuyHandler(){
@@ -1121,11 +1121,14 @@ function testCalendarHandler(){
     }
     setUpCalendar(listing_info);
   }
+  else {
+    setUpCalendar(listing_info);
+  }
 }
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------HELPER FUNCTIONS
+//<editor-fold>---------------------------------HELPER FUNCTIONS--------------------------------------------------
 
 function randomIntFromInterval(min,max){
   return Math.floor(Math.random()*(max-min+1)+min);

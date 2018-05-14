@@ -1412,10 +1412,11 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.description_footer = "The greatest domains in the industry.";
         listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000)*1000;
         listing_info.buy_price = listing_info.min_price * 2;
+        listing_info.default_currency = "usd";
 
         //rental
         listing_info.rentable = 1;
-        listing_info.price_rate = Math.round(Math.random() * 250);
+        listing_info.price_rate = Math.round(Math.random() * 25000);
         listing_info.price_type = "day";
 
         //design
