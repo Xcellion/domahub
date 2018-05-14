@@ -1154,9 +1154,15 @@ function updateEditorDomains(selected_domain_ids){
 
     //registrar currency change reset cost to 0
     $("#annual-cost-currency-input").on("change", function(){
+
+      //if we're changing the currency
       if ($("#annual-cost-currency-input").val() != listing_info.registrar_cost_currency){
-        $("#annual-cost-input").val(0);
+        //something new was entered
+        if ($("#annual-cost-input").val() == listing_info.registrar_cost / Math.pow(10, currency_codes[$("#annual-cost-currency-input").val().toUpperCase()].fractionSize || 0)){
+          $("#annual-cost-input").val(0);
+        }
       }
+      //return to what it was if we're changing the currency back
       else {
         $("#annual-cost-input").val(listing_info.registrar_cost / Math.pow(10, currency_codes[$("#annual-cost-currency-input").val().toUpperCase()].fractionSize || 0));
       }

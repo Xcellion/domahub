@@ -2114,7 +2114,6 @@ module.exports = {
   //check if current exchange rates are legit, if not update to today's exchange rates
   checkExchangeRates : function(req, res, next){
     console.log("CF: Checking exchange rates...");
-
     var current_exchange_rates = JSON.parse(fs.readFileSync(__dirname + "/current-exchange-rates.json"));
 
     //if exchange rates are still good (last time rates gotten is less than an hour)
@@ -2125,6 +2124,7 @@ module.exports = {
       next();
     }
     else {
+      console.log("CF: Getting new exchange rates...");
       oxr.latest(function() {
         var current_exchange_rates = {
           rates : oxr.rates,
