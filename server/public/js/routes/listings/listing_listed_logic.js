@@ -717,6 +717,7 @@ function setupRightHalf(){
     //create a new range picker based on new path rental availability
     var start_date = moment();
     var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
+    $("#calendar-loading-message").addClass('is-hidden');
 
     $("#calendar-input").daterangepicker({
       opens: "center",
