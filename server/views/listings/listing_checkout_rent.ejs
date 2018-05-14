@@ -16,15 +16,87 @@
 
 <body>
 
-
   <section class="page-contents no-background section is-hidden is-medium min-height">
     <div class="container">
       <div class="columns">
+        <div class="column is-5">
+          <div class="card is-checkout">
+            <div class="card-image">
+              <figure class="image is-96x96">
+                <img src="<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : '/images/lib/inipagi/checkout.svg'%>" alt="Logo" />
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="content has-text-centered">
+                <h1 class="is-primary is-bold is-breakword"><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></h1>
+              </div>
+              <p id="rental-will-wrapper" class="content is-hidden">
+                <span id="rental-will-msg"></span>
+                <a target="_blank" id="rental-will-link" class="is-underlined is-info content"></a>
+              </p>
+              <p id="rental-will-duration-msg" class="content is-hidden">
+                For the duration of the rental below:
+              </p>
+              <div class="columns has-border-bottom">
+                <div class="column is-5">
+                  <p id="preview-start-dates">
+                    Rental Start
+                  </p>
+                  <p id="rental-start"></p>
+                </div>
+                <div class="column is-2 is-hidden-mobile">
+                  <div class="icon is-medium is-grey">
+                    <i class="fal fa-long-arrow-right"></i>
+                  </div>
+                </div>
+                <div class="column is-5">
+                  <p id="preview-end-dates">
+                    Rental End
+                  </p>
+                  <p id="rental-end"></p>
+                </div>
+              </div>
+              <div class="control-flex">
+                <p id="preview-rates">
+                  <span id="listing-price-rate"></span> x <span id="total-duration"></span>
+                </p>
+                <p id="sub-total-price" class="is-bold"></p>
+              </div>
+              <div class="control-flex discount-hidden is-hidden">
+                <p>
+                  <span>Discount </span> x <span id="discount-duration"></span>
+                </p>
+                <p id="discount-price" class="is-bold"></p>
+              </div>
+              <div class="control-flex">
+                <h3>Total Price</h3>
+                <h3 id="total-price" class="is-bold"></h3>
+              </div>
+            </div>
+            <footer id="edit-dates-button" class="card-footer">
+              <% if (listing_info.premium){ %>
+                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
+                  <div class="icon is-small">
+                    <i id="edit-dates-icon" class="fal fa-pencil"></i>
+                  </div>
+                  <span id="edit-dates-text">Edit Dates or Path</span>
+                </a>
+              <% } else { %>
+                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
+                  <div class="icon is-small">
+                    <i id="edit-dates-icon" class="fal fa-pencil"></i>
+                  </div>
+                  <span id="edit-dates-text">Edit Dates or Path</span>
+                </a>
+              <% } %>
+            </footer>
+          </div>
+        </div>
         <div class="column is-7">
 
           <!--BUILD SITE STEP-->
           <header id="step-header-site" class="checkout-track step-header header margin-top-15">
-            <h2>Customize Your Website</h2>
+            <h2>Step 1 : Customize Your Website</h2>
           </header>
 
           <div id="step-content-site" class="step-content">
@@ -46,7 +118,7 @@
             </div>
 
             <div id="site-choices-block" class="choices-block">
-              <div id="forward-choice" class="checkout-track box hover-effect choice-block forward-choice">
+              <div id="forward-choice" class="checkout-track box no-shadow hover-effect choice-block forward-choice">
                 <div class="content">
                   <div class="step-box">
                     <div class="icon is-primary">
@@ -64,7 +136,7 @@
                   </p>
                 </div>
               </div>
-              <div id="link-choice" class="checkout-track content box hover-effect choice-block link-choice">
+              <div id="link-choice" class="checkout-track content box no-shadow hover-effect choice-block link-choice">
                 <div class="content">
                   <div class="step-box">
                     <div class="icon is-info">
@@ -82,7 +154,7 @@
                   </p>
                 </div>
               </div>
-              <div id="build-choice" class="checkout-track content box hover-effect choice-block build-choice">
+              <div id="build-choice" class="checkout-track content box no-shadow hover-effect choice-block build-choice">
                 <div class="content">
                   <div class="step-box">
                     <div class="icon is-accent">
@@ -192,7 +264,7 @@
                     </a>
                     <div class="content">
                       <p>
-                        Display images, wallpapers, comics, etc.
+                        Display images, wallpapers, comics, PDFs, articles, etc.
                       </p>
                     </div>
                   </div>
@@ -290,6 +362,21 @@
                     </div>
                   </div>
                   <div class="provider-card">
+                    <a id="sitebuilder-example" href="https://www.sitebuilder.com/" title="SiteBuilder" class="checkout-track provider-img" style="background-color: rgb(255, 255, 255);">
+                      <img src="/images/companies/sitebuilder-logo.png" alt="SiteBuilder" height="35px"/>
+                    </a>
+                    <div class="content">
+                      <ul class="has-disc">
+                        <li>
+                          Free option
+                        </li>
+                        <li>
+                          eCommerce
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="provider-card">
                     <a id="shopify-example"   href="https://www.shopify.com/online" title="Shopify" class="checkout-track provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
                       <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px"/>
                     </a>
@@ -322,158 +409,38 @@
           <!--PAYMENT STEP-->
           <header id="step-header-payment" class="checkout-track step-header header is-disabled margin-top-15">
             <% if (new_rental_info.price != 0) { %>
-              <h2>Payment</h2>
+              <h2>Step 2 : Payment</h2>
             <% } else { %>
-              <h2>Confirmation</h2>
+              <h2>Step 2 : Confirmation</h2>
             <% } %>
           </header>
+
           <div id="step-content-payment" class='step-content is-hidden'>
             <div class="notification is-lighter no-shadow has-border">
               <p id="payment-regular-message" class="regular-message">
-                Please choose your preferred method of payment.</a>
+                <% if (new_rental_info.price != 0) { %>
+                  Please choose your preferred method of payment.</a>
+                <% } else { %>
+                  Please double check your domain rental details and click the confirmation button below to create your new domain rental.</a>
+                <% } %>
               </p>
               <p id="stripe-regular-message" class="is-hidden regular-message">
                 Please enter your payment information. By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>.
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-info'>Terms and Conditions</a>.
               </p>
               <p id="paypal-regular-message" class="is-hidden regular-message">
                 By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>. Clicking the button will bring you to the PayPal log in page where you can select your desired payment method.
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-info'>Terms and Conditions</a>. Clicking the button will bring you to the PayPal log in page where you can select your desired payment method.
               </p>
               <p id="bitcoin-regular-message" class="is-hidden regular-message">
                 Please enter your Bitcoin wallet address. By clicking the Confirm & Pay button,
-                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-primary'>Terms and Conditions</a>.
+                you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-underlined is-info'>Terms and Conditions</a>.
               </p>
               <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
               <p id="stripe-success-message" class="regular-message is-hidden"></p>
             </div>
 
-            <div id="payment-choices-block" class="choices-block">
-              <div id="stripe-choice" class="stripe-choice checkout-track box hover-effect choice-block">
-                <div class="content">
-                  <div class="step-box">
-                    <div class="icon is-primary">
-                      <i class="fal fa-credit-card"></i>
-                    </div>
-                    <h2>Pay with a card</h2>
-                  </div>
-                  <p>
-                    Pay with any major credit or debit card.
-                  </p>
-                </div>
-              </div>
-
-              <div id="paypal-choice" class="paypal-choice checkout-track box hover-effect choice-block">
-                <div class="content">
-                  <div class="step-box">
-                    <span class="icon is-medium is-info">
-                        <i class="fal fa-paypal"></i>
-                    </span>
-                    <h2>Pay via PayPal</h2>
-                  </div>
-                  <p>
-                    Pay instantly using your PayPal balance or any other saved payment methods.
-                  </p>
-                </div>
-              </div>
-
-              <!-- <div id="bitcoin-choice" class="bitcoin-choice checkout-track box hover-effect choice-block">
-                <div class="content">
-                  <div class="step-box">
-                    <span class="icon is-medium is-accent">
-                      <i class="fal fa-bitcoin"></i>
-                    </span>
-                    <h2>Pay with Bitcoin</h2>
-                  </div>
-                  <p>
-                    Harness the power of blockchain and pay securely using Bitcoin.
-                  </p>
-                </div>
-              </div> -->
-
-              <div class="control">
-                <button id="back-to-address-button" class="back-button checkout-track button is-stylish">
-                  <div class="icon is-small">
-                    <i class="fal fa-long-arrow-left"></i>
-                  </div>
-                  <span>Back to Edit Address</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="choices-selected" style="display:none;">
-              <div class="control is-hidden stripe-choice-column choice-column">
-                <form id="stripe-form" autocomplete="off" class="control">
-                  <label class="label">Card Number</label>
-                  <div class="control has-icon">
-                    <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                    <div class="icon">
-                      <i id="cc-icon" class="fal fa-credit-card"></i>
-                    </div>
-                  </div>
-                  <div class="control is-grouped">
-                    <div class="control is-expanded has-icon">
-                      <label class="label">Expiration Date</label>
-                      <div class="control has-icon">
-                        <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-                        <div class="icon">
-                          <i class="fal fa-calendar-alt"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="control">
-                      <label class="label">Security Code</label>
-                      <div class="control has-icon">
-                        <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
-                        <div class="icon">
-                          <i class="fal fa-lock"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <label class="label">Zip Code</label>
-                  <div class="control has-icon">
-                    <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                    <div class="icon">
-                      <i class="fal fa-map-marker-alt"></i>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div class="control is-hidden bitcoin-choice-column choice-column">
-                 BITCOIN WALLET FORM
-              </div>
-              <div class="control is-hidden paypal-choice-column choice-column">
-                <img style="display:block;" src="/images/lib/credit-card-logos.png" alt="Credit Card Badges">
-              </div>
-              <div class="control is-grouped">
-                <div class="control">
-                  <button id="payment-cancel" class="checkout-track button is-stylish back-button">
-                    <div class="icon is-small">
-                      <i class="fal fa-long-arrow-left"></i>
-                    </div>
-                    <span>Back to Payment Choices</span>
-                  </button>
-                </div>
-                <div class="control">
-                  <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
-                    <div class="icon is-small">
-                      <i class="fal fa-shopping-cart"></i>
-                    </div>
-                    <span>Confirm & Pay</span>
-                  </button>
-                  <div id="paypal-button" class="is-hidden"></div>
-                  <button id="paypal-button-loading" tabindex="0" class="is-loading is-fullwidth is-hidden checkout-track button is-black is-stylish">
-                    <div class="icon is-small">
-                      <i class="fal fa-shopping-cart"></i>
-                    </div>
-                    <span>PAYPAL CONFIRM & PAY LOADING BUTTON</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div id="checkout-success-content" class="success-hide is-hidden">
+            <div id="checkout-success-content" class="success-hide is-hidden" style="display:none;">
               <div class="content">
                 <p>
                   Below is the link to edit your rental.
@@ -494,79 +461,156 @@
                 <span>Preview Rental</span>
               </a>
             </div>
-          </div>
-        </div>
-        <div class="column is-5">
-          <div class="card is-checkout">
-            <div class="card-image">
-              <figure class="image is-96x96">
-                <img src="<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : '/images/lib/inipagi/checkout.svg'%>" alt="Logo" />
-              </figure>
-            </div>
-            <div class="card-content">
-              <div class="content has-text-centered">
-                <h1 class="is-primary is-bold is-breakword"><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></h1>
-              </div>
-              <p id="rental-will-wrapper" class="content is-hidden">
-                <span id="rental-will-msg"></span>
-                <a target="_blank" id="rental-will-link" class="is-underlined is-info content"></a>
-              </p>
-              <p id="rental-will-duration-msg" class="content is-hidden">
-                For the duration of the rental below:
-              </p>
-              <div class="columns has-border-bottom">
-                <div class="column is-5">
-                  <p id="preview-start-dates">
-                    Rental Start
-                  </p>
-                  <p id="rental-start"></p>
+
+              <% if (new_rental_info.price != 0) { %>
+
+                <div id="payment-choices-block" class="choices-block" style="display:none;">
+
+                  <div id="stripe-choice" class="stripe-choice checkout-track box no-shadow hover-effect choice-block">
+                    <div class="content">
+                      <div class="step-box">
+                        <div class="icon is-primary">
+                          <i class="fal fa-credit-card"></i>
+                        </div>
+                        <h2>Pay with a card</h2>
+                      </div>
+                      <p>
+                        Pay with any major credit or debit card.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div id="paypal-choice" class="paypal-choice checkout-track box no-shadow hover-effect choice-block">
+                    <div class="content">
+                      <div class="step-box">
+                        <span class="icon is-medium is-info">
+                            <i class="fal fa-paypal"></i>
+                        </span>
+                        <h2>Pay via PayPal</h2>
+                      </div>
+                      <p>
+                        Pay instantly using your PayPal balance or any other saved payment methods.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- <div id="bitcoin-choice" class="bitcoin-choice checkout-track box no-shadow hover-effect choice-block">
+                    <div class="content">
+                      <div class="step-box">
+                        <span class="icon is-medium is-accent">
+                          <i class="fal fa-bitcoin"></i>
+                        </span>
+                        <h2>Pay with Bitcoin</h2>
+                      </div>
+                      <p>
+                        Harness the power of blockchain and pay securely using Bitcoin.
+                      </p>
+                    </div>
+                  </div> -->
+
+                  <div class="control">
+                    <button id="back-to-address-button" class="back-step-button checkout-track button is-stylish">
+                      <div class="icon is-small">
+                        <i class="fal fa-long-arrow-left"></i>
+                      </div>
+                      <span>Back to Edit Address</span>
+                    </button>
+                  </div>
+
                 </div>
-                <div class="column is-2 is-hidden-mobile">
-                  <div class="icon is-medium is-grey">
-                    <i class="fal fa-long-arrow-right"></i>
+
+                <div class="choices-selected" style="display:none;">
+                  <div class="control is-hidden stripe-choice-column choice-column">
+                    <form id="stripe-form" autocomplete="off" class="control">
+                      <label class="label">Card Number</label>
+                      <div class="control has-icon">
+                        <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                        <div class="icon">
+                          <i id="cc-icon" class="fal fa-credit-card"></i>
+                        </div>
+                      </div>
+                      <div class="control is-grouped">
+                        <div class="control is-expanded has-icon">
+                          <label class="label">Expiration Date</label>
+                          <div class="control has-icon">
+                            <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                            <div class="icon">
+                              <i class="fal fa-calendar-alt"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="control">
+                          <label class="label">Security Code</label>
+                          <div class="control has-icon">
+                            <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                            <div class="icon">
+                              <i class="fal fa-lock"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <label class="label">Zip Code</label>
+                      <div class="control has-icon">
+                        <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                        <div class="icon">
+                          <i class="fal fa-map-marker-alt"></i>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="control is-hidden bitcoin-choice-column choice-column">
+                    BITCOIN WALLET FORM
+                  </div>
+                  <div class="control is-hidden paypal-choice-column choice-column">
+                    <img style="display:block;" src="/images/lib/credit-card-logos.png" alt="Credit Card Badges">
+                  </div>
+                  <div class="control is-grouped">
+                    <div class="control">
+                      <button id="payment-cancel" class="checkout-track button is-stylish back-button">
+                        <div class="icon is-small">
+                          <i class="fal fa-long-arrow-left"></i>
+                        </div>
+                        <span class="is-hidden-mobile">Back to Payment Selection</span>
+                      </button>
+                    </div>
+                    <div class="control">
+                      <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
+                        <div class="icon is-small">
+                          <i class="fal fa-shopping-cart"></i>
+                        </div>
+                        <span>Confirm & Pay</span>
+                      </button>
+                      <div id="paypal-button" class="is-hidden"></div>
+                      <button id="paypal-button-loading" tabindex="0" class="is-loading is-fullwidth is-hidden checkout-track button is-black is-stylish">
+                        <div class="icon is-small">
+                          <i class="fal fa-shopping-cart"></i>
+                        </div>
+                        <span>PAYPAL CONFIRM & PAY LOADING BUTTON</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div class="column is-5">
-                  <p id="preview-end-dates">
-                    Rental End
-                  </p>
-                  <p id="rental-end"></p>
-                </div>
-              </div>
-              <div class="control-flex">
-                <p id="preview-rates">
-                  <span id="listing-price-rate"></span> x <span id="total-duration"></span>
-                </p>
-                <p id="sub-total-price" class="is-bold"></p>
-              </div>
-              <div class="control-flex discount-hidden is-hidden">
-                <p>
-                  <span>Discount </span> x <span id="discount-duration"></span>
-                </p>
-                <p id="discount-price" class="is-bold"></p>
-              </div>
-              <div class="control-flex">
-                <h3>Total Price</h3>
-                <h3 id="total-price" class="is-bold"></h3>
-              </div>
-            </div>
-            <footer id="edit-dates-button" class="card-footer">
-              <% if (listing_info.premium){ %>
-                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
-                  <div class="icon is-small">
-                    <i id="edit-dates-icon" class="fal fa-pencil"></i>
-                  </div>
-                  <span id="edit-dates-text">Edit Dates or Path</span>
-                </a>
+
               <% } else { %>
-                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
-                  <div class="icon is-small">
-                    <i id="edit-dates-icon" class="fal fa-pencil"></i>
-                  </div>
-                  <span id="edit-dates-text">Edit Dates or Path</span>
-                </a>
+
+                <!-- FREE RENTAL CONFIRMATION -->
+                <div class="choices-selected control" style="display:none;">
+                  <button id="back-to-address-button" class="back-step-button checkout-track button is-stylish">
+                    <div class="icon is-small">
+                      <i class="fal fa-long-arrow-left"></i>
+                    </div>
+                    <span>Back to Edit Address</span>
+                  </button>
+                  <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
+                    <div class="icon is-small">
+                      <i class="fal fa-shopping-cart"></i>
+                    </div>
+                    <span>Confirm & Rent</span>
+                  </button>
+                </div>
+
               <% } %>
-            </footer>
+
           </div>
         </div>
       </div>
@@ -580,6 +624,7 @@
 
   <script src="/js/lib/moment.min.js" type="text/javascript"></script>
   <script src="/js/lib/wNumb.js" type="text/javascript"></script>
+  <script src="/js/lib/currencies.json" type="text/javascript"></script>
   <script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
   <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
   <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>

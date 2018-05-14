@@ -184,7 +184,8 @@ module.exports = {
                   stats_contact_history.withdrawn_on as withdrawn_on, \
                   stats_contact_history.transaction_id as transaction_id, \
                   stats_contact_history.payment_type as payment_type, \
-                  (stats_contact_history.offer * 100) as transaction_cost, \
+                  stats_contact_history.offer as transaction_cost, \
+                  stats_contact_history.offer_currency as transaction_cost_currency, \
                   NULL as transaction_details, \
                   0 as transaction_cost_refunded, \
                   stats_contact_history.doma_fees as doma_fees, \
@@ -205,8 +206,9 @@ module.exports = {
                   rentals.transaction_id as transaction_id, \
                   rentals.payment_type as payment_type, \
                   rentals.total_cost as transaction_cost, \
-                  rentals.amount_refunded as transaction_cost_refunded, \
+                  rentals.total_cost_currency as transaction_cost_currency, \
                   NULL as transaction_details, \
+                  rentals.amount_refunded as transaction_cost_refunded, \
                   rentals.doma_fees as doma_fees, \
                   rentals.payment_fees as payment_fees, \
                   (rentals.amount_refunded IS NULL && rentals.withdrawn_on IS NULL) as available \
@@ -224,7 +226,8 @@ module.exports = {
                   NULL as withdrawn_on, \
                   NULL as transaction_id, \
                   NULL as payment_type, \
-                  ROUND(domain_expenses.expense_cost * 100) as transaction_cost, \
+                  domain_expenses.expense_cost as transaction_cost, \
+                  domain_expenses.expense_currency as transaction_cost_currency, \
                   domain_expenses.expense_name as transaction_details, \
                   NULL as transaction_cost_refunded, \
                   NULL as doma_fees, \
@@ -234,7 +237,7 @@ module.exports = {
                 INNER JOIN listings \
                   ON listings.id = domain_expenses.listing_id \
                 WHERE domain_expenses.listing_id IN (SELECT id FROM listings WHERE owner_id = ?) ) dummy \
-                ORDER BY date_created ";
+                ORDER BY date_created DESC ";
     database.query(query, "Failed to get all transactions connected to account " + account_id + "!", callback, [account_id, account_id, account_id]);
   },
 

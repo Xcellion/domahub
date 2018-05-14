@@ -1,11 +1,6 @@
 //<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var myPath;
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 0
-});
 var traffic_chart = false;
 var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
 
@@ -67,13 +62,11 @@ function setupPriceTags(){
     var price_tag_text = "Unavailable";
   }
   else if (listing_info.buy_price > 0 && listing_info.rented != 1){
-    var price_tag_text = "Buy now - " + moneyFormat.to(listing_info.buy_price);
+    var price_tag_text = "Buy now - " + formatCurrency(listing_info.buy_price, listing_info.default_currency);
   }
-  //minimum price
   else if (listing_info.min_price > 0){
-    var price_tag_text = "Available - " + moneyFormat.to(listing_info.min_price);
+    var price_tag_text = "Available - " + formatCurrency(listing_info.min_price, listing_info.default_currency);
   }
-  //neither min or bin
   else {
     var price_tag_text = "Now available";
   }
@@ -111,7 +104,16 @@ function setupPriceTags(){
   //rental price tag
   if (listing_info.rentable && listing_info.status == 1){
     $("#rent-price-tag").removeClass('is-hidden');
-    $("#rent-price-text").text(moneyFormat.to(listing_info.price_rate) + " / " + listing_info.price_type);
+
+    //free rental
+    if (listing_info.price_rate == 0){
+      $("#rent-price-text").text("");
+      $(".actual-price").text("Free!");
+    }
+    else {
+      $("#rent-price-text").text(" - " + formatCurrency(listing_info.price_rate, listing_info.default_currency) + " / " + listing_info.price_type);
+      $(".actual-price").text(formatCurrency(0, listing_info.default_currency, true));
+    }
   }
   else {
     $("#rent-price-tag").addClass('is-hidden');
@@ -362,8 +364,11 @@ function setupRightHalf(){
 
       //placeholder + minimum on contact form
       if (listing_info.min_price > 0){
-        $("#contact_offer").attr("min", listing_info.min_price).attr("placeholder", listing_info.min_price);
+        $("#contact_offer").attr("min", listing_info.min_price / getCurrencyMultiplier(listing_info.default_currency)).attr("placeholder", "Minimum " + formatCurrency(listing_info.min_price,  listing_info.default_currency));
       }
+
+      //offer currency
+      $("#offer-currency").text("Offer in " + currency_codes[listing_info.default_currency.toUpperCase()].name + " (" + listing_info.default_currency + ")");
 
       //click buy tab (tutorial / focus)
       $("#contact-form-tab").off().on("click", function(e){
@@ -845,6 +850,9 @@ function setupRightHalf(){
 
         countPrice($(".actual-price"), totalPrice);
       }
+      else {
+        $(".actual-price").text("Free!");
+      }
     }
   }
 
@@ -860,7 +868,7 @@ function setupRightHalf(){
           $(this).text("Free");
         }
         else {
-          $(this).text(" $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+          $(this).text(formatCurrency(now, listing_info.default_currency, true));
         }
       }
     });
@@ -1592,12 +1600,12 @@ function setupRightHalf(){
 
       //available to buy now
       if (other_listings[x].buy_price > 0){
-        var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
+        var buy_price = formatCurrency(parseFloat(other_listings[x].buy_price), listing_info.default_currency);
         cloned_similar_listing.find(".otherowner-domain-price").text("Buy Now: " + buy_price);
       }
       //available to buy at a specific minimum price
       else if (other_listings[x].min_price > 0){
-        var min_price = moneyFormat.to(parseFloat(other_listings[x].min_price));
+        var min_price = formatCurrency(parseFloat(other_listings[x].min_price), listing_info.default_currency);
         cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
       }
       //else available for rent
@@ -1714,6 +1722,36 @@ function removeURLParameter(parameter, push) {
       window.history.replaceState({}, "", url);
     }
   }
+}
+
+//to format a number for currency
+function formatCurrency(number, currency_code, decimals){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  var currency_details = {
+    thousand: ',',
+    decimals: 0,
+  }
+
+  //show decimals
+  if (decimals){
+    currency_details.decimals = default_currency_details.fractionSize;
+  }
+
+  //right aligned symbol
+  if (default_currency_details.symbol && default_currency_details.symbol.rtl){
+    currency_details.suffix = default_currency_details.symbol.grapheme;
+  }
+  else if (default_currency_details.symbol && !default_currency_details.symbol.rtl){
+    currency_details.prefix = default_currency_details.symbol.grapheme;
+  }
+
+  return wNumb(currency_details).to(number / Math.pow(10, default_currency_details.fractionSize));
+}
+
+//get multiplier of a currency
+function getCurrencyMultiplier(currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  return Math.pow(10, default_currency_details.fractionSize);
 }
 
 //</editor-fold>

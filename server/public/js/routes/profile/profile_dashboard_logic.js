@@ -118,45 +118,63 @@ function updatePortfolioOverviewCounters(){
 
       //update totals
       if (user.transactions[x].transaction_type != "expense" && user.transactions[x].transaction_type != "renewal"){
-        total_revenue += (transaction_cost - transaction_cost_refunded);
-        total_profit += transaction_cost - doma_fees - payment_fees;
+
+        //if it has a price
+        if (user.transactions[x].transaction_cost){
+          if (user.transactions[x].transaction_cost_refunded <= 0){
+            total_revenue += (transaction_cost - transaction_cost_refunded);
+            total_profit += transaction_cost - doma_fees - payment_fees;
+            total_expenses -= (doma_fees + payment_fees);
+          }
+          //refunded
+          else {
+            total_expenses -= user.transactions[x].transaction_cost_refund_leftover;
+            total_profit -= user.transactions[x].transaction_cost_refund_leftover;
+          }
+        }
       }
       else {
         total_expenses -= transaction_cost;
         total_profit -= transaction_cost - doma_fees - payment_fees;
       }
-      total_expenses -= (doma_fees + payment_fees);
     }
   }
 
-  $("#revenue-counter").addClass("is-primary").text(wNumb({
-    prefix: '$',
-    decimals: 2,
-    thousand: ','
-  }).to(total_revenue/100));
+  $("#revenue-counter").addClass("is-primary").text(formatCurrency(total_revenue/100));
 
   //total expense counter
-  $("#expenses-counter").text(wNumb({
-    prefix: '$',
-    decimals: 2,
-    thousand: ','
-  }).to(total_expenses/100));
+  $("#expenses-counter").text(formatCurrency(total_expenses/100));
   if (total_expenses < 0){
     $("#expenses-counter").addClass("is-danger").removeClass("is-primary");
   }
 
   //total profit counter
-  $("#profit-counter").text(wNumb({
-    prefix: '$',
-    decimals: 2,
-    thousand: ','
-  }).to(total_profit/100));
+  $("#profit-counter").text(formatCurrency(total_profit/100));
   if (total_profit < 0){
     $("#profit-counter").addClass("is-danger").removeClass("is-primary");
   }
   else if (total_profit > 0){
     $("#profit-counter").removeClass("is-danger").addClass("is-primary");
   }
+}
+
+//to format a number for currency
+function formatCurrency(number){
+  var default_currency_details = currency_codes[user.default_currency.toUpperCase()];
+  var currency_details = {
+    thousand: ',',
+    decimals: default_currency_details.fractionSize,
+  }
+
+  //right aligned symbol
+  if (default_currency_details.symbol && default_currency_details.symbol.rtl){
+    currency_details.suffix = default_currency_details.symbol.grapheme;
+  }
+  else if (default_currency_details.symbol && !default_currency_details.symbol.rtl){
+    currency_details.prefix = default_currency_details.symbol.grapheme;
+  }
+
+  return wNumb(currency_details).to(number);
 }
 
 //</editor-fold>
@@ -213,15 +231,20 @@ function updatePortfolioOverviewCounters(){
   }
 
   //error handler for google
-  function gaErrorHandler(err){
-    console.log(err);
-    // $.ajax({
-    //   url : "/profile/refreshGoogleAPI",
-    //   method : "POST"
-    // }).done(function(data){
-    //   location.reload();
-    // });
-  }
+  var gaErrorHandler = (function() {
+    var executed = false;
+    return function() {
+      if (!executed) {
+        executed = true;
+        $.ajax({
+          url : "/profile/refreshGoogleAPI",
+          method : "POST"
+        }).done(function(data){
+          location.reload();
+        });
+      }
+    };
+  })();
 
   //</editor-fold>
 

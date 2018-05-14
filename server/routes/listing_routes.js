@@ -70,9 +70,11 @@ module.exports = function(app){
       owner_functions.checkListingPurchased,
       stripe_functions.checkStripeSubscriptionForOwner,
       profile_functions.updateAccountSettingsPassthrough,
+      owner_functions.createNewListingInfoObj,
       owner_functions.checkImageUploadSize,
       owner_functions.checkListingImage,
       owner_functions.checkListingStatus,
+      owner_functions.checkListingCurrencyDetails,
       owner_functions.checkListingPremiumDetails,
       owner_functions.checkListingDetails,
       owner_functions.updateListingHubRanks,
@@ -89,8 +91,11 @@ module.exports = function(app){
       owner_functions.checkPostedListingInfoMulti,
       stripe_functions.checkStripeSubscriptionForOwner,
       profile_functions.updateAccountSettingsPassthrough,
+      owner_functions.createNewListingInfoObj,
+      owner_functions.checkListingMultiDetails,
       owner_functions.checkListingImage,
       owner_functions.checkListingStatus,
+      owner_functions.checkListingCurrencyDetails,
       owner_functions.checkListingPremiumDetails,
       owner_functions.checkListingDetails,
       owner_functions.updateListingsInfo
@@ -257,27 +262,6 @@ module.exports = function(app){
 
     //<editor-fold>-------------------------------BUY-------------------------------
 
-    //buy a listing
-    app.post('/listing/:domain_name/buy', [
-      general_functions.urlencodedParser,
-      listing_general_functions.checkDomainValid,
-      listing_general_functions.checkDomainListed,
-      renter_functions.checkSessionListingInfoPost,
-      renter_functions.checkListingRented,
-      stripe_functions.checkStripeSubscriptionForUser,
-      profile_functions.updateAccountSettingsPassthrough,
-      buyer_functions.checkPaymentType,
-      stripe_functions.chargeMoneyBuy,
-      paypal_functions.chargeMoneyBuy,
-      buyer_functions.checkPaymentSuccessful,
-      buyer_functions.createBuyContactRecord,
-      buyer_functions.alertOwnerBIN,
-      buyer_functions.alertBuyerNextSteps,
-      buyer_functions.deleteBINInfo,
-      buyer_functions.disableListing,
-      owner_functions.updateListingsInfo
-    ]);
-
     //new buy it now (render the BIN checkout page)
     app.post("/listing/:domain_name/contact/buy", [
       general_functions.urlencodedParser,
@@ -299,10 +283,33 @@ module.exports = function(app){
     app.post('/listing/:domain_name/buy/paypalID', [
       general_functions.urlencodedParser,
       renter_functions.checkSessionListingInfoPost,
+      buyer_functions.checkBuyerObjectInfo,
       renter_functions.checkListingRented,
       stripe_functions.checkStripeSubscriptionForUser,
       profile_functions.updateAccountSettingsPassthrough,
       paypal_functions.createPaymentIDBuy
+    ]);
+
+    //buy a listing
+    app.post('/listing/:domain_name/buy', [
+      general_functions.urlencodedParser,
+      listing_general_functions.checkDomainValid,
+      listing_general_functions.checkDomainListed,
+      renter_functions.checkSessionListingInfoPost,
+      renter_functions.checkListingRented,
+      buyer_functions.checkBuyerObjectInfo,
+      stripe_functions.checkStripeSubscriptionForUser,
+      profile_functions.updateAccountSettingsPassthrough,
+      buyer_functions.checkPaymentType,
+      stripe_functions.chargeMoneyBuy,
+      paypal_functions.chargeMoneyBuy,
+      buyer_functions.checkPaymentSuccessful,
+      buyer_functions.createBuyContactRecord,
+      buyer_functions.alertOwnerBIN,
+      buyer_functions.alertBuyerNextSteps,
+      buyer_functions.deleteBINInfo,
+      buyer_functions.disableListing,
+      owner_functions.updateListingsInfo
     ]);
 
     //</editor-fold>

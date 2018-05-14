@@ -62,7 +62,7 @@ var listing_themes = [
   {
     theme_name : "Desert",
     primary_color : "#944444",
-    secondary_color : "449494",
+    secondary_color : "#449494",
     tertiary_color : "#d9d9d9",
     font_name : "Verdana",
     font_color : "#FFF",
@@ -70,6 +70,42 @@ var listing_themes = [
     background_image : "https://images.unsplash.com/photo-1492018706134-e84b8fafbc31?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
     footer_color : "#FFFFFF",
     footer_background_color : "#080808",
+  },
+  {
+    theme_name : "Dubai",
+    primary_color : "#FFFFFF",
+    secondary_color : "#000000",
+    tertiary_color : "#EDDD00",
+    font_name : "Nunito Sans",
+    font_color : "#EDEDED",
+    background_color : "#000000",
+    background_image : "https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    footer_color : "#FFFFFF",
+    footer_background_color : "#000000",
+  },
+  {
+    theme_name : "Mt. Fuji",
+    primary_color : "#FFFFFF",
+    secondary_color : "#75BCFF",
+    tertiary_color : "#FFC4FC",
+    font_name : "Verdana",
+    font_color : "#FFFFFF",
+    background_color : "#FFFFFF",
+    background_image : "https://images.unsplash.com/photo-1525635569544-610f9540664a?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    footer_color : "#FFFFFF",
+    footer_background_color : "#00214D",
+  },
+  {
+    theme_name : "Hong Kong",
+    primary_color : "#FF7070",
+    secondary_color : "#222222",
+    tertiary_color : "#FF7070",
+    font_name : "Impact",
+    font_color : "#FFFFFF",
+    background_color : "#222222",
+    background_image : "https://images.unsplash.com/photo-1500727833614-b1d4cdd9f691?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    footer_color : "#FFFFFF",
+    footer_background_color : "#222222",
   },
   {
     theme_name : "Inverse",
@@ -130,6 +166,18 @@ var listing_themes = [
     footer_background_color : "#2E242A",
   },
   {
+    theme_name : "New York City",
+    primary_color : "#F7B731",
+    secondary_color : "#000000",
+    tertiary_color : "#F7B731",
+    font_name : "Times New Roman",
+    font_color : "#FFFFFF",
+    background_color : "#000000",
+    background_image : "https://images.unsplash.com/photo-1488787256181-7a912bdc0e4a?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20",
+    footer_color : "#FFFFFF",
+    footer_background_color : "#171717",
+  },
+  {
     theme_name : "Ocean",
     primary_color : "#994F00",
     secondary_color : "#53BCD6",
@@ -184,7 +232,7 @@ function populateThemeDropdown(){
   $("#theme-input").empty();
   for (var x = 0; x < listing_themes.length; x++){
     var theme_name_display = (listing_themes[x].theme_name == "DomaHub") ? "DomaHub (Basic)" : listing_themes[x].theme_name;
-    $("#theme-input").append($("<option value=" + listing_themes[x].theme_name + ">" + theme_name_display + "</option>"));
+    $("#theme-input").append($("<option value='" + listing_themes[x].theme_name + "'>" + theme_name_display + "</option>"));
   }
   $("#theme-input").prepend($("<option value='Custom'>Custom</option>"));
 }

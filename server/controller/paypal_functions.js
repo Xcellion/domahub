@@ -5,6 +5,7 @@ var listing_model = require('../models/listing_model.js');
 
 var error = require('../lib/error.js');
 var mailer = require('../lib/mailer.js');
+var Currencies = require('../lib/currencies.js');
 
 //</editor-fold>
 
@@ -38,11 +39,11 @@ module.exports = {
   //create a payment ID via paypal (rental)
   createPaymentIDRent : function(req, res, next){
     if (req.session.new_rental_info.price != 0){
-      var total_price = Math.round(req.session.new_rental_info.price * 100);    //USD in cents
+      var total_price = Math.round(req.session.new_rental_info.price);
 
       //doma fee if the account owner is basic (aka premium hasn't expired)
       var doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(total_price);
-      var paypal_fees = getPaypalFees(total_price);
+      var paypal_fees = getPaypalFees(total_price, req.session.listing_info.default_currency);
 
       //something went wrong with the price
       if (isNaN(total_price) || isNaN(paypal_fees) || isNaN(doma_fees)){
@@ -76,8 +77,8 @@ module.exports = {
               "items": [{
                 "name": "Rental for " + req.params.domain_name,
                 "sku": "Rental for " + req.params.domain_name,
-                "price": total_price / 100,
-                "currency": "USD",
+                "price": total_price / Currencies.multiplier(req.session.new_rental_info.default_currency),
+                "currency": req.session.new_rental_info.default_currency.toUpperCase(),
                 "quantity": 1
               }]
             },
@@ -85,12 +86,12 @@ module.exports = {
               "domain_name" : req.params.domain_name,
               "renter_name" : (req.user) ? req.user.username : "Guest",
               "rental_id" : req.session.new_rental_info.rental_id,
-              "doma_fees" : doma_fees,
-              "paypal_fees" : paypal_fees
+              "doma_fees" : doma_fees / Currencies.multiplier(req.session.new_rental_info.default_currency),
+              "paypal_fees" : paypal_fees / Currencies.multiplier(req.session.new_rental_info.default_currency)
             }),
             "amount": {
-              "currency": "USD",
-              "total": total_price / 100
+              "currency": req.session.new_rental_info.default_currency.toUpperCase(),
+              "total": total_price / Currencies.multiplier(req.session.new_rental_info.default_currency)
             },
             "description": "Rental for " + req.params.domain_name
           }]
@@ -103,7 +104,7 @@ module.exports = {
             error.handler(req, res, "Something went wrong with your PayPal payment! Please refresh the page and try again.", "json");
           }
           else {
-            console.log("PFF: Payment created! Customer will pay " + moneyFormat.to(total_price/100) + " with " +  moneyFormat.to(doma_fees/100) + " in Doma fees and " + moneyFormat.to(paypal_fees/100) + " in PayPal fees.");
+            console.log("PFF: Payment ID created! Customer will pay " + Currencies.format(total_price, req.session.new_rental_info.default_currency) + " with " +  Currencies.format(doma_fees, req.session.new_rental_info.default_currency) + " in Doma fees and " + Currencies.format(paypal_fees, req.session.new_rental_info.default_currency) + " in PayPal fees.");
             res.send({
               state : "success",
               payment : payment
@@ -135,13 +136,24 @@ module.exports = {
             error.handler(req, res, "Something went wrong with your PayPal payment! Please refresh the page and try again.", "json");
           }
           else if (payment && payment.state == "approved"){
-
             //various info for keeping track of transactions on our end
-            req.session.new_rental_info.rental_payment_type = "paypal";
-            req.session.new_rental_info.rental_transaction_id = payment.id;
-            req.session.new_rental_info.rental_cost = payment.transactions[0].amount.total * 100;
-            req.session.new_rental_info.rental_doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees((payment.transactions[0].amount.total * 100));
-            req.session.new_rental_info.rental_payment_fees = getPaypalFees((payment.transactions[0].amount.total * 100));
+            try {
+              req.session.new_rental_info.rental_payment_type = "paypal";
+              req.session.new_rental_info.rental_transaction_id = payment.id;
+              req.session.new_rental_info.rental_cost = payment.transactions[0].amount.total * Currencies.multiplier(payment.transactions[0].amount.currency.toUpperCase());
+              req.session.new_rental_info.rental_doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(payment.transactions[0].amount.total);
+
+              //payment fees
+              if (payment.transactions[0].related_resources[0].sale.transaction_fee){
+                req.session.new_rental_info.rental_payment_fees = payment.transactions[0].related_resources[0].sale.transaction_fee.value * Currencies.multiplier(payment.transactions[0].amount.currency.toUpperCase());
+              }
+              else {
+                req.session.new_rental_info.rental_payment_fees = getPaypalFees(payment.transactions[0].amount.total, payment.transactions[0].amount.currency);
+              }
+            }
+            catch(err){
+              error.log(err, "Failed to get PayPal payment details after execution.");
+            }
 
             next();
           }
@@ -158,12 +170,15 @@ module.exports = {
 
   //create a payment ID via paypal (BIN)
   createPaymentIDBuy : function(req, res, next){
-    if (req.session.listing_info.buy_price && req.session.listing_info.buy_price > 0){
-      var total_price = Math.round(req.session.listing_info.buy_price * 100);    //USD in cents
+
+    //check if there is a BIN price or if the offer was accepted
+    if (req.session.listing_info.buy_price && req.session.listing_info.buy_price > 0 || req.session.new_buying_info.accepted == 1 && req.session.new_buying_info.offer > 0){
+      var price_of_listing = (req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price;
+      var total_price = Math.round(price_of_listing);
 
       //doma fee if the account owner is basic (aka premium hasn't expired)
       var doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(total_price);
-      var paypal_fees = getPaypalFees(total_price);
+      var paypal_fees = getPaypalFees(total_price, req.session.listing_info.default_currency);
 
       //something went wrong with the price
       if (isNaN(total_price) || isNaN(paypal_fees) || isNaN(doma_fees)){
@@ -197,8 +212,8 @@ module.exports = {
               "items": [{
                 "name": "Purchasing " + req.params.domain_name,
                 "sku": "Purchasing " + req.params.domain_name,
-                "price": total_price / 100,
-                "currency": "USD",
+                "price": total_price / Currencies.multiplier(req.session.new_buying_info.default_currency),
+                "currency": req.session.new_buying_info.default_currency.toUpperCase(),
                 "quantity": 1
               }]
             },
@@ -215,8 +230,8 @@ module.exports = {
               "pending_transfer" : true
             }),
             "amount": {
-              "currency": "USD",
-              "total": total_price / 100
+              "currency": req.session.new_buying_info.default_currency.toUpperCase(),
+              "total": total_price / Currencies.multiplier(req.session.new_buying_info.default_currency)
             },
             "description": "Purchasing " + req.params.domain_name
           }]
@@ -229,7 +244,7 @@ module.exports = {
             error.handler(req, res, "Something went wrong with your PayPal payment! Please refresh the page and try again.", "json");
           }
           else {
-            console.log("PFF: Payment created! Customer will pay " + moneyFormat.to(total_price/100) + " with " +  moneyFormat.to(doma_fees/100) + " in Doma fees and " + moneyFormat.to(paypal_fees/100) + " in PayPal fees.");
+            console.log("PFF: Payment created! Customer will pay " + Currencies.format(total_price, req.session.new_buying_info.default_currency) + " with " +  Currencies.format(doma_fees, req.session.new_buying_info.default_currency) + " in Doma fees and " + Currencies.format(paypal_fees, req.session.new_buying_info.default_currency) + " in PayPal fees.");
             res.send({
               state : "success",
               payment : payment
@@ -263,10 +278,15 @@ module.exports = {
           else if (payment && payment.state == "approved"){
 
             //various info for keeping track of transactions on our end
-            req.session.new_buying_info.purchase_transaction_id = payment.id;
-            req.session.new_buying_info.purchase_payment_type = "paypal";
-            req.session.new_buying_info.purchase_doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees((payment.transactions[0].amount.total * 100));
-            req.session.new_buying_info.purchase_payment_fees = getPaypalFees((payment.transactions[0].amount.total * 100));
+            try {
+              req.session.new_buying_info.purchase_payment_type = "paypal";
+              req.session.new_buying_info.purchase_transaction_id = payment.id;
+              req.session.new_buying_info.purchase_doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(payment.transactions[0].amount.total);
+              req.session.new_rental_info.purchase_payment_fees = payment.transactions[0].related_resources[0].sale.transaction_fee.value * Currencies.multiplier(payment.transactions[0].amount.currency.toUpperCase());;
+            }
+            catch(err){
+              error.log(err, "Failed to get PayPal payment details after execution.");
+            }
 
             next();
           }
@@ -285,10 +305,11 @@ module.exports = {
   refundRental : function(req, res, next){
     if (req.session.rental_info.payment_type == "paypal"){
       console.log("SF: Refunding with PayPal...");
+      var rental_currency = req.session.rental_info.total_cost_currency.toUpperCase();
       paypal.sale.refund(req.body.transaction_id, {
         "amount": {
-          "currency": "USD",
-          "total": req.session.rental_info.total_cost / 100
+          "currency": rental_currency,
+          "total": req.session.rental_info.total_cost / Currencies.multiplier(rental_currency)
         }
       }, function (err, refund) {
         if (err) {
@@ -314,7 +335,7 @@ module.exports = {
   withdrawToPayPal : function(req, res, next){
     if (req.body.destination_account == "paypal"){
       var total_amount_available = req.session.withdrawal_obj.total_amount_available;
-      var total_amount_available_formatted = moneyFormat.to(req.session.withdrawal_obj.total_amount_available / 100);
+      var total_amount_available_formatted = Currencies.format(req.session.withdrawal_obj.total_amount_available, req.user.default_currency);
       console.log("PPF: Attempting to transfer " + total_amount_available_formatted + " to PayPal account - " + req.user.paypal_email + "...");
 
       //notify us
@@ -368,8 +389,16 @@ function getDomaFees(amount){
 }
 
 //get the paypal fees
-function getPaypalFees(amount){
-  return Math.round(amount * 0.029) + 30;
+function getPaypalFees(amount, currency){
+  if (currency){
+    var paypal_flat_fee = Currencies.paypalFee(currency.toUpperCase())
+  }
+  if (paypal_flat_fee){
+    return Math.round(amount * 0.029) + paypal_flat_fee;
+  }
+  else {
+    return Math.round(amount * 0.029) + 30;
+  }
 }
 
 //</editor-fold>

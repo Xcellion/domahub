@@ -1,5 +1,4 @@
 <html>
-
 	<head>
     <% if (listing_info.premium) { %>
       <title><%= listing_info.domain_name %></title>
@@ -12,7 +11,6 @@
 
 	<body>
 
-    
     <script type="text/javascript">
       var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
       var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
@@ -39,7 +37,8 @@
     <div class="page-contents">
       <%- include("listing_footer.ejs") %>
     </div>
-
+    
+    <script src="/js/lib/currencies.json" type="text/javascript"></script>
     <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
 
 	</body>

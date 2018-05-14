@@ -4,15 +4,15 @@ $(document).ready(function () {
 
   //set purchase price
   if (new_buying_info.id){
-    $("#total-price").text(moneyFormat.to(new_buying_info.offer));
+    $("#total-price").text(formatCurrency(new_buying_info.offer, listing_info.default_currency));
   }
   else {
-    $("#total-price").text(moneyFormat.to(listing_info.buy_price));
+    $("#total-price").text(formatCurrency(listing_info.buy_price, listing_info.default_currency));
   }
 
-  // $(".checkout-track").on("click", function(){
-  //     trackCheckoutBehavior($(this).attr("id"));
-  // });
+  $(".checkout-track").on("click", function(){
+      trackCheckoutBehavior($(this).attr("id"));
+  });
 
   //</editor-fold>
 
@@ -135,7 +135,7 @@ function createPayPalButton(){
     style : {
       color : 'black',
       shape : 'rect',
-      size : 'large',
+      size : 'responsive',
       label : "checkout",
       tagline : false
     },
@@ -153,9 +153,11 @@ function createPayPalButton(){
             resolve(data.payment.id);
           }
           else {
+            errorHandler("Something went wrong with your PayPal payment! Please refresh the page and try again.");
             reject(new Error(data.message));
           }
         }).fail(function(err){
+          errorHandler("Something went wrong with your PayPal payment! Please refresh the page and try again.");
           reject(new Error(err));
         });
       });
@@ -278,7 +280,7 @@ function errorHandler(message){
   });
 }
 
-//handler for successful rental
+//handler for successful purchase
 function successHandler(rental_id, owner_hash_id){
   //hide certain stuff
   $("#choices-selected").remove();
@@ -318,11 +320,29 @@ function showMessage(message_id, text){
   }
 }
 
-//to format a number for $$$$
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 2
-});
+//to format a number for currency
+function formatCurrency(number, currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  var currency_details = {
+    thousand: ',',
+    decimals: 0,
+  }
+
+  //right aligned symbol
+  if (default_currency_details.symbol && default_currency_details.symbol.rtl){
+    currency_details.suffix = default_currency_details.symbol.grapheme;
+  }
+  else if (default_currency_details.symbol && !default_currency_details.symbol.rtl){
+    currency_details.prefix = default_currency_details.symbol.grapheme;
+  }
+
+  return wNumb(currency_details).to(number / Math.pow(10, default_currency_details.fractionSize));
+}
+
+//get multiplier of a currency
+function getCurrencyMultiplier(currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  return Math.pow(10, default_currency_details.fractionSize);
+}
 
 //</editor-fold>

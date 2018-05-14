@@ -1,5 +1,5 @@
 {
-  "ignore": ["server/public/*", "uploads/*", "other/*"],
+  "ignore": ["server/lib/current-exchange-rates.json", "server/public/*", "uploads/*", "other/*"],
   "exec" : "node server/server.js",
   "env" : {
     "NODE_ENV": "dev"
