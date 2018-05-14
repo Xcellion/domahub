@@ -398,7 +398,7 @@ function setupRightHalf(){
 
           //comparison only, no need for AJAX
           if (compare){
-            testSubmitBuyHandler();
+            testSubmitBuyHandler(button_id);
           }
           else {
             //send an offer / or buy it now request

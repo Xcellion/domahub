@@ -1085,9 +1085,9 @@ function createTestRentals(){
 //<editor-fold>---------------------------------UPDATE HANDLERS--------------------------------------------------
 
 //do submit buy handler
-function testSubmitBuyHandler(){
+function testSubmitBuyHandler(button_id){
   setTimeout(function(){
-    $("button[type=submit][clicked=true]").removeClass('is-loading');
+    $("#" + button_id).removeClass('is-loading');
     successMessage("Success! If this were your real domain, you would receive a notification with the details of this new offer once it has been verified.");
   }, 500);
 }
