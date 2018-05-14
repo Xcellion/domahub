@@ -109,33 +109,43 @@ function updatePortfolioOverviewCounters(){
 
   //any transactions
   if (user.transactions){
+    var moment_now = moment();
     for (var x = 0 ; x < user.transactions.length ; x++){
-      //profit + fees in money format
-      var doma_fees = (user.transactions[x].doma_fees) ? user.transactions[x].doma_fees : 0;
-      var payment_fees = (user.transactions[x].payment_fees) ? user.transactions[x].payment_fees : 0;
-      var transaction_cost = (user.transactions[x].transaction_cost) ? user.transactions[x].transaction_cost : 0;
-      var transaction_cost_refunded = (user.transactions[x].transaction_cost_refunded) ? user.transactions[x].transaction_cost_refunded : 0;
 
-      //update totals
-      if (user.transactions[x].transaction_type != "expense" && user.transactions[x].transaction_type != "renewal"){
+      //YTD
+      if (moment_now.year() == moment(user.transactions[x].date_created).year()){
 
-        //if it has a price
-        if (user.transactions[x].transaction_cost){
-          if (user.transactions[x].transaction_cost_refunded <= 0){
-            total_revenue += (transaction_cost - transaction_cost_refunded);
-            total_profit += transaction_cost - doma_fees - payment_fees;
-            total_expenses -= (doma_fees + payment_fees);
-          }
-          //refunded
-          else {
-            total_expenses -= user.transactions[x].transaction_cost_refund_leftover;
-            total_profit -= user.transactions[x].transaction_cost_refund_leftover;
+        //profit + fees in money format
+        var doma_fees = (user.transactions[x].doma_fees) ? user.transactions[x].doma_fees : 0;
+        var payment_fees = (user.transactions[x].payment_fees) ? user.transactions[x].payment_fees : 0;
+        var transaction_cost = (user.transactions[x].transaction_cost) ? user.transactions[x].transaction_cost : 0;
+        var transaction_cost_refunded = (user.transactions[x].transaction_cost_refunded) ? user.transactions[x].transaction_cost_refunded : 0;
+
+        //update totals
+        if (user.transactions[x].transaction_type != "expense" && user.transactions[x].transaction_type != "renewal"){
+
+          //if it has a price
+          if (user.transactions[x].transaction_cost){
+            if (user.transactions[x].transaction_cost_refunded <= 0){
+              total_revenue += (transaction_cost - transaction_cost_refunded);
+              total_profit += transaction_cost - doma_fees - payment_fees;
+              total_expenses -= (doma_fees + payment_fees);
+            }
+            //refunded
+            else if (user.transactions[x].transaction_cost_refund_leftover) {
+              total_expenses -= user.transactions[x].transaction_cost_refund_leftover;
+              total_profit -= user.transactions[x].transaction_cost_refund_leftover;
+            }
+            else {
+              total_expenses -= (transaction_cost - transaction_cost_refunded);
+              total_profit -= (transaction_cost - transaction_cost_refunded);
+            }
           }
         }
-      }
-      else {
-        total_expenses -= transaction_cost;
-        total_profit -= transaction_cost - doma_fees - payment_fees;
+        else {
+          total_expenses -= transaction_cost;
+          total_profit -= transaction_cost - doma_fees - payment_fees;
+        }
       }
     }
   }
