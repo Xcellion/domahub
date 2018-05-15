@@ -44,7 +44,7 @@ function showBlackscreen(type, message) {
 
   setTimeout(function() {
     return revertState();
-  }, 2000);
+  }, 3000);
 }
 
 //type a single line in the form (recursive)
@@ -124,6 +124,6 @@ function minimumPrice() {
 
   typeInput(0, elementsForm, stringsForm, function() {
     $("#send-offer-button").addClass("shrink");
-    showBlackscreen("danger", "Your offer is below the minimum price! Please enter at least $2500.")
+    showBlackscreen("danger", "Your offer is below the minimum price! Please enter at least $2,500.")
   });
 }

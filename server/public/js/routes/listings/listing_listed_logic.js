@@ -368,7 +368,7 @@ function setupRightHalf(){
       }
 
       //offer currency
-      $("#offer-currency").text("Offer in " + currency_codes[listing_info.default_currency.toUpperCase()].name + " (" + listing_info.default_currency + ")");
+      $("#offer-currency").text("Offer in " + listing_info.default_currency + " (" + currency_codes[listing_info.default_currency.toUpperCase()].name + ")");
 
       //click buy tab (tutorial / focus)
       $("#contact-form-tab").off().on("click", function(e){

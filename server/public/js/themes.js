@@ -155,7 +155,7 @@ var listing_themes = [
   },
   {
     theme_name : "Mountain",
-    primary_color : "#B35A00",
+    primary_color : "#FFB663",
     secondary_color : "#007866",
     tertiary_color : "#d9d9d9",
     font_name : "Trebuchet MS",
