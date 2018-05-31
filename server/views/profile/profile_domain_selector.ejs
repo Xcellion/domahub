@@ -18,7 +18,7 @@
   <div id="domain-selector-toolbox" class="control is-spaced is-mobile listings-toolbar">
 
     <!-- BUTTON MENU -->
-    <div class="yes-listings-elem button-wrapper is-mobile control-left">
+    <div class="yes-listings-elem button-wrapper control-left">
       <div id="select-all-wrapper">
         <a id="selector-select-button" class="button is-black is-inverted" tabindex="0" title="Select">
           <form class="checkbox-form">
@@ -113,7 +113,7 @@
             </select>
           </span>
         </div>
-        <div class="control is-mobile">
+        <div class="control">
           <button id="refresh-listings-button" class="button is-flexible is-stylish is-small is-black is-inverted" title="Refresh Listings" tabindex="0">
             <div class="icon is-small">
               <i class="fal fa-sync-alt"></i>
@@ -132,7 +132,9 @@
   </div>
 
   <!-- DOMAINS TABLE -->
-  <table id="listings-table" class="table has-shadow is-fixed no-borders">
+  <div style="overflow-x:auto;">
+
+  <table id="listings-table" class="table is-fixed no-borders">
     <thead class="yes-listings-elem has-hover-effect is-pastel no-border-bottom">
       <tr>
         <th class="checkbox-col has-text-centered">
@@ -168,7 +170,7 @@
         </th>
       </tr>
     </thead>
-    <tbody id="table-body">
+    <tbody id="table-body" class="has-shadow">
       <tr id="loading-listings-row" class="no-hover-effect">
         <td colspan="6">
           <div class="nothing-exists-row has-text-centered">
@@ -250,6 +252,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 </div>
 
 <div id="delete-modal" class="modal">

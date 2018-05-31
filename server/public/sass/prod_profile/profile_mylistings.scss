@@ -169,51 +169,9 @@ td.has-cursor-pointer {
   cursor:pointer;
 }
 
-td > .icon, th > .icon {
-  display:inline-block;
-}
-
 // edit listing tabs
 #edit-toolbar {
   margin-bottom: 20px;
-  .tabs {
-    margin-top: 20px;
-    overflow: visible;
-    overflow-x: visible;
-    ul {
-      flex-wrap: wrap;
-    }
-    @include mobile {
-      li {
-        &:not(:last-child) {
-          margin-right: 10px;
-        }
-      }
-    }
-  }
-}
-
-.sub-tabs {
-  position: relative;
-  padding-right: 20px;
-  &:after {
-    content: "";
-    position: absolute;
-    right: 0;
-    height: 50%;
-    top: 25%;
-    width: 2px;
-    background: $border;
-    @include mobile {
-      right: 15px;
-    }
-  }
-}
-
-.child-module {
-  &.is-disabled {
-    opacity:0.25;
-  }
 }
 
 #view-listings-button-drop {
@@ -312,22 +270,8 @@ td > .icon, th > .icon {
   flex-wrap: wrap;
   align-items: stretch;
   .button,
-  .select,
-  .field {
+  .select {
     margin-right: 10px;
-  }
-}
-
-.control.is-mobile {
-  @include mobile {
-    .button {
-      .icon {
-        &:first-child {
-          margin-left: 0;
-          margin-right: 0;
-        }
-      }
-    }
   }
 }
 
@@ -365,12 +309,6 @@ td > .icon, th > .icon {
   }
 }
 
-.table-box {
-  @include box-shadow(0,2px,8px,$border,0);
-  background-color: $white;
-  padding: 20px;
-}
-
 //categories dropdown
 #categories-dropdown {
   position:absolute;
@@ -387,13 +325,6 @@ td > .icon, th > .icon {
 .category-checkbox-wrapper {
   padding-top:4px;
   padding-bottom:4px;
-}
-
-// listing image
-.on-img {
-  top: 0;
-  right: 0;
-  position: absolute !important;
 }
 
 #example-logo {
@@ -505,10 +436,6 @@ td > .icon, th > .icon {
   }
 }
 
-.upload-label {
-  border-radius: 0 0 3px 3px !important;
-}
-
 .listing-img {
   width: 96px;
   height: auto;
@@ -519,21 +446,6 @@ td > .icon, th > .icon {
   &.has-text-centered {
     text-align: center;
   }
-}
-
-// category buttons
-.category-control {
-  display: flex;
-  flex-wrap: wrap;
-  .button {
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
-}
-
-.category-selector {
-  margin-right: 10px;
-  margin-bottom: 10px;
 }
 
 // file upload button

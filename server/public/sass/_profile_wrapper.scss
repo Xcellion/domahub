@@ -139,7 +139,7 @@
   padding: 0 50px;
   position: relative;
   @include mobile {
-    padding: 0 20px 0 0;
+    padding: 0;
   }
 }
 
@@ -204,13 +204,10 @@
 .nav-drop {
   @include box-shadow(3px,3px,12px,$border,0);
   background-color: $white;
-  border-radius: $radius;
+  border-radius: 0 0 $radius $radius;
   position: absolute;
-  top: calc(100% + 20px);
+  top: 100%;
   z-index: 10;
-  @include mobile {
-    top: 100%;
-  }
   .menu-label {
     color: $primary;
     padding: 8px 10px;

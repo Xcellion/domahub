@@ -6,6 +6,8 @@ var refreshing_charts = false;
 
 $(document).ready(function() {
 
+  $("#date-last-accessed").html(moment(user.data_accessed).format("MMMM DD, YYYY"));
+
   //<editor-fold>-------------------------------ANNOUNCEMENT-------------------------------
 
   //close announcement if already closed it

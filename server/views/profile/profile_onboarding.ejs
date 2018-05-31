@@ -49,19 +49,6 @@
               </div>
             </a>
           </li>
-          <!-- <li class="menu-item">
-            <a class="step-link" data-step="3">
-              <p>
-                Billing Address
-              </p>
-              <div class="icon is-primary is-hidden">
-                <i class="fal fa-check"></i>
-              </div>
-              <div class="icon is-danger is-hidden">
-                <i class="fal fa-minus"></i>
-              </div>
-            </a>
-          </li> -->
           <li class="menu-item">
             <a class="step-link" data-step="4">
               <p>
@@ -78,34 +65,6 @@
               </div>
             </a>
           </li>
-          <!-- <% if (user.stripe_account && user.stripe_account_id) { %>
-          <li class="menu-item">
-            <a class="step-link" data-step="5">
-              <p>
-                Bank Information
-              </p>
-              <div class="icon is-primary is-hidden">
-                <i class="fal fa-check"></i>
-              </div>
-              <div class="icon is-danger is-hidden">
-                <i class="fal fa-minus"></i>
-              </div>
-            </a>
-          </li>
-          <% } %>
-          <li class="menu-item">
-            <a class="step-link" data-step="6">
-              <p>
-                Connect PayPal
-              </p>
-              <div class="icon is-primary is-hidden">
-                <i class="fal fa-check"></i>
-              </div>
-              <div class="icon is-danger is-hidden">
-                <i class="fal fa-minus"></i>
-              </div>
-            </a>
-          </li> -->
           <li class="menu-item">
             <a class="step-link" data-step="7">
               <p>
@@ -122,32 +81,6 @@
               </div>
             </a>
           </li>
-          <!-- <li class="menu-item">
-            <a class="step-link" data-step="8">
-              <p>
-                Connect Registrar
-              </p>
-              <div class="icon is-primary is-hidden">
-                <i class="fal fa-check"></i>
-              </div>
-              <div class="icon is-danger is-hidden">
-                <i class="fal fa-minus"></i>
-              </div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a class="step-link" data-step="9">
-              <p>
-                Manual Upload
-              </p>
-              <div class="icon is-primary is-hidden">
-                <i class="fal fa-check"></i>
-              </div>
-              <div class="icon is-danger is-hidden">
-                <i class="fal fa-circle"></i>
-              </div>
-            </a>
-          </li> -->
           <% if (!(user.stripe_subscription_id && user.stripe_subscription)) { %>
           <li class="menu-item">
             <a class="step-link" data-step="11">
@@ -163,8 +96,10 @@
             </a>
           </li>
           <% } %>
+          <li class="menu-item">
+            <a class="step-link" href="/logout">Log Out</a>
+          </li>
         </ul>
-        <a class="" href="/logout">Log Out</a>
       </div>
 
       <div class="right-content">
@@ -655,47 +590,43 @@
                 </p>
               </div>
               <form id="step-form-4" class="onboarding-step-form">
-                <div class="columns">
-                  <div class="column is-6">
-                    <a id="go-step-5" class="box has-footer">
-                      <div class="box-content">
-                        <div class="content has-text-centered">
-                          <div class="icon is-primary is-circle is-medium">
-                            <i class="fal fa-university"></i>
-                          </div>
-                        </div>
-                        <div class="content has-text-centered">
-                          <p class="is-bold">Connect a Bank Account</p>
-                          <p class="is-grey">
-                            Get paid directly into a bank account. We currently provide support for 22 different countries.
-                          </p>
+                <div class="box-wrapper">
+                  <a id="go-step-5" class="box has-footer">
+                    <div class="box-content">
+                      <div class="content has-text-centered">
+                        <div class="icon is-primary is-circle is-medium">
+                          <i class="fal fa-university"></i>
                         </div>
                       </div>
-                      <div class="box-footer">
-                        <div class="button is-stylish is-primary">Select</div>
+                      <div class="content has-text-centered">
+                        <p class="is-bold">Connect a Bank Account</p>
+                        <p class="is-grey">
+                          Get paid directly into a bank account. We currently provide support for 22 different countries.
+                        </p>
                       </div>
-                    </a>
-                  </div>
-                  <div class="column is-6">
-                    <a id="go-step-6" class="box has-footer">
-                      <div class="box-content">
-                        <div class="content has-text-centered">
-                          <div class="icon is-info is-circle is-medium">
-                            <i class="fal fa-paypal"></i>
-                          </div>
-                        </div>
-                        <div class="content has-text-centered">
-                          <p class="is-bold">Link a PayPal Account</p>
-                          <p class="is-grey">
-                            You may link your PayPal account to DomaHub to accept payments through PayPal.
-                          </p>
+                    </div>
+                    <div class="box-footer">
+                      <div class="button is-stylish is-primary">Select</div>
+                    </div>
+                  </a>
+                  <a id="go-step-6" class="box has-footer">
+                    <div class="box-content">
+                      <div class="content has-text-centered">
+                        <div class="icon is-info is-circle is-medium">
+                          <i class="fal fa-paypal"></i>
                         </div>
                       </div>
-                      <div class="box-footer">
-                        <div class="button is-stylish is-info">Select</div>
+                      <div class="content has-text-centered">
+                        <p class="is-bold">Link a PayPal Account</p>
+                        <p class="is-grey">
+                          You may link your PayPal account to DomaHub to accept payments through PayPal.
+                        </p>
                       </div>
-                    </a>
-                  </div>
+                    </div>
+                    <div class="box-footer">
+                      <div class="button is-stylish is-info">Select</div>
+                    </div>
+                  </a>
                 </div>
               </form>
             </div>
@@ -888,47 +819,43 @@
                 </p>
               </div>
               <form id="step-form-7" class="onboarding-step-form">
-                <div class="columns">
-                  <div class="column is-6">
-                    <a id="go-step-8" class="box has-footer">
-                      <div class="box-content">
-                        <div class="content has-text-centered">
-                          <div class="icon is-primary is-circle is-medium">
-                            <i class="fal fa-server"></i>
-                          </div>
-                        </div>
-                        <div class="content has-text-centered">
-                          <p class="is-bold">Connect A Registrar</p>
-                          <p class="is-grey">
-                            We currently provide support for the following registars: GoDaddy, Namecheap, and Namesilo.
-                          </p>
+                <div class="box-wrapper">
+                  <a id="go-step-8" class="box has-footer">
+                    <div class="box-content">
+                      <div class="content has-text-centered">
+                        <div class="icon is-primary is-circle is-medium">
+                          <i class="fal fa-server"></i>
                         </div>
                       </div>
-                      <div class="box-footer">
-                        <div class="button is-stylish is-primary">Select</div>
+                      <div class="content has-text-centered">
+                        <p class="is-bold">Connect A Registrar</p>
+                        <p class="is-grey">
+                          We currently provide support for the following registars: GoDaddy, Namecheap, and Namesilo.
+                        </p>
                       </div>
-                    </a>
-                  </div>
-                  <div class="column is-6">
-                    <a id="go-step-9" class="box has-footer">
-                      <div class="box-content">
-                        <div class="content has-text-centered">
-                          <div class="icon is-accent is-circle is-medium">
-                            <i class="fal fa-keyboard"></i>
-                          </div>
-                        </div>
-                        <div class="content has-text-centered">
-                          <p class="is-bold">Upload Domains Manually</p>
-                          <p class="is-grey">
-                            Easily upload domains in bulk with our upload tool. Best if you only have a handful of domains.
-                          </p>
+                    </div>
+                    <div class="box-footer">
+                      <div class="button is-stylish is-primary">Select</div>
+                    </div>
+                  </a>
+                  <a id="go-step-9" class="box has-footer">
+                    <div class="box-content">
+                      <div class="content has-text-centered">
+                        <div class="icon is-accent is-circle is-medium">
+                          <i class="fal fa-keyboard"></i>
                         </div>
                       </div>
-                      <div class="box-footer">
-                        <div class="button is-stylish is-accent">Select</div>
+                      <div class="content has-text-centered">
+                        <p class="is-bold">Upload Domains Manually</p>
+                        <p class="is-grey">
+                          Easily upload domains in bulk with our upload tool. Best if you only have a handful of domains.
+                        </p>
                       </div>
-                    </a>
-                  </div>
+                    </div>
+                    <div class="box-footer">
+                      <div class="button is-stylish is-accent">Select</div>
+                    </div>
+                  </a>
                 </div>
               </form>
             </div>

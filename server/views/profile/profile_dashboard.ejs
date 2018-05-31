@@ -39,7 +39,7 @@
               <div class="content">
                 <h2>Hello, <%= user.username %></h2>
                 <p class="is-grey">
-                  Last visit <%= user.date_accessed %>
+                  Last visit on <span id="date-last-accessed"></span>
                 </p>
               </div>
             </div>
@@ -49,73 +49,73 @@
               <div class="portfolio-table control">
                 <div class="box">
                   <div class="content fac">
-                    <div class="icon is-circle is-info is-inverted is-medium">
+                    <div class="icon is-circle is-info is-medium">
                       <i class="fal fa-list-alt"></i>
                     </div>
-                    <p class="box-heading is-white is-bold">Domains</p>
+                    <p class="box-heading is-bold">Domains</p>
                   </div>
-                  <div class="fac">
+                  <div class="fac is-responsive">
                     <a class="box-link" title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Total
                       </p>
-                      <h3 class="is-white is-bold">
+                      <h3>
                         <%= user.listings.length %>
                       </h3>
                     </a>
                     <a class="box-link" title="View Sold" href="/profile/mylistings?tab=offers">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Sold
                       </p>
-                      <h3 id="sold-counter" class="is-white is-bold"></h3>
+                      <h3 id="sold-counter"></h3>
                     </a>
                     <a class="box-link" title="View Unverified" href="/profile/mylistings?tab=verify">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Unverified
                       </p>
-                      <h3 id="unverified-counter" class="is-white is-bold"></h3>
+                      <h3 id="unverified-counter"></h3>
                     </a>
                     <a class="box-link" title="View Expiring" href="/profile/mylistings">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Expiring
                       </p>
-                      <h3 id="expiring-counter" class="is-white is-bold"></h3>
+                      <h3 id="expiring-counter"></h3>
                     </a>
                   </div>
                 </div>
                 <div class="box">
                   <div class="fac content">
-                    <div class="icon is-circle is-inverted is-accent is-medium">
+                    <div class="icon is-circle is-accent is-medium">
                       <i class="fal fa-credit-card"></i>
                     </div>
-                    <p class="box-heading is-white is-bold">
+                    <p class="box-heading is-bold">
                       Finances
                     </p>
                   </div>
-                  <div class="fac">
+                  <div class="fac is-responsive">
                     <a class="box-link" title="View Revenue" href="/profile/settings#transactions">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Revenue YTD
                       </p>
-                      <h3 id="revenue-counter" class="is-white is-bold"></h3>
+                      <h3 id="revenue-counter"></h3>
                     </a>
                     <a class="box-link" title="View Expenses" href="/profile/settings#transactions">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Expenses YTD
                       </p>
-                      <h3 id="expenses-counter" class="is-white is-bold"></h3>
+                      <h3 id="expenses-counter"></h3>
                     </a>
                     <a class="box-link" title="View Profit" href="/profile/settings#transactions">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Profit YTD
                       </p>
-                      <h3 id="profit-counter" class="is-white is-bold"></h3>
+                      <h3 id="profit-counter"></h3>
                     </a>
                     <a class="box-link" title="View Offers" href="/profile/mylistings?tab=offers">
-                      <p class="heading is-white">
+                      <p class="heading is-grey">
                         Offers
                       </p>
-                      <h3 id="offers-counter" class="is-white is-bold"></h3>
+                      <h3 id="offers-counter"></h3>
                     </a>
                   </div>
                 </div>
@@ -170,7 +170,127 @@
                   </div>
                 </div>
               </div>
-              <div class="small-chart">
+              <div class="card is-fullwidth">
+                <div class="card-header no-border-bottom">
+                  <p class="box-heading is-bold">
+                    Domain Traffic
+                  </p>
+                  <div class="control is-mobile">
+                    <button id="refresh-tables-button" class="button is-stylish is-small no-shadow" title="Refresh Tables" tabindex="0">
+                      <div class="icon is-small">
+                        <i class="fal fa-sync-alt"></i>
+                      </div>
+                      <span class="is-hidden-mobile">Refresh</span>
+                    </button>
+                    <div class="select is-stylish">
+                      <select id="last-days-select">
+                        <option value="7">Last 7 Days</option>
+                        <option selected value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="180">Last 180 Days</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <!-- chart tabs -->
+                  <div class="chart-tabs">
+                    <a tabindex="0" data-additive="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active">
+                      <p class="heading">
+                        Unique Visitors
+                      </p>
+                      <div class="counter-link">
+                        <p id="users-counter">Loading...</p>
+                      </div>
+                    </a>
+                    <a tabindex="0" data-additive="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper">
+                      <p class="heading">
+                        Unique Sessions
+                      </p>
+                      <div class="counter-link">
+                        <p id="sessions-counter">Loading...</p>
+                      </div>
+                    </a>
+                    <a tabindex="0" data-additive="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper">
+                      <p class="heading">
+                        New Visitors
+                      </p>
+                      <div class="counter-link">
+                        <p id="new-users-counter">Loading...</p>
+                      </div>
+                    </a>
+                    <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions,ga:sessions" data-stat-desc="% New Sessions" class="stat-wrapper">
+                      <p class="heading">
+                        % New Sessions
+                      </p>
+                      <div class="counter-link">
+                        <p id="new-sessions-counter">Loading...</p>
+                      </div>
+                    </a>
+                    <a tabindex="0" data-additive="false" data-tooltip-type="sessionsPerUser" data-stat="ga:sessionsPerUser,ga:users" data-stat-desc="Sessions Per User" class="stat-wrapper">
+                      <p class="heading">
+                        Sessions Per User
+                      </p>
+                      <div class="counter-link">
+                        <p id="sessions-per-user-counter">Loading...</p>
+                      </div>
+                    </a>
+                    <a tabindex="0" data-additive="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper">
+                      <p class="heading">
+                        Session Duration
+                      </p>
+                      <div class="counter-link">
+                        <p id="session-duration-counter">Loading...</p>
+                      </div>
+                    </a>
+                    <a tabindex="0" data-additive="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper">
+                      <p class="heading">
+                        Total Pageviews
+                      </p>
+                      <div class="counter-link">
+                        <p id="pageviews-counter">Loading...</p>
+                      </div>
+                    </a>
+                    <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:bounceRate,ga:sessions" data-stat-desc="Bounce Rate" class="stat-wrapper">
+                      <p class="heading">
+                        Bounce Rate
+                      </p>
+                      <div class="counter-link">
+                        <p id="bounce-rate-counter">Loading...</p>
+                      </div>
+                    </a>
+                  </div>
+                  <!-- sessions chart -->
+                  <div class="content">
+                    <div class="content has-text-centered">
+                      <h3 class="is-hidden">
+                        <span id="current-stat-name">Unique Users</span> Over Time
+                      </h3>
+                    </div>
+                    <div class="traffic-chart-wrapper">
+                      <canvas id="time-chart" class="traffic-chart"></canvas>
+                      <div id="time-chart-overlay" class="traffic-overlay content">
+                        <div id="time-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
+                          <figure class="image is-48x48">
+                            <img src="/images/lib/ggface.png">
+                          </figure>
+                          <p>
+                            There is not enough data!
+                          </p>
+                          <p>
+                            Please try changing the date range.
+                          </p>
+                        </div>
+                        <div id="time-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                          <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
+                          <p>Now loading <span id="current-stat-name-loading">unique users</span> data.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%#<div class="small-chart">
                 <div class="content">
                   <p class="box-heading is-bold">
                     Popular Domains
@@ -193,53 +313,65 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>%>
             </div>
             <div class="column is-4">
-              <div class="card">
+              <div class="card is-fullwidth">
                 <div class="card-header no-border-bottom">
                   <div class="content">
                     <p class="box-heading is-bold">
                       Announcements
                     </p>
                     <p class="is-grey">
-                      Latest news
+                      Latest blog posts
                     </p>
                   </div>
                 </div>
                 <div class="card-content">
                   <ul>
                     <li class="fas">
-                      <div class="tag is-dot is-warning is-outlined">
-
-                      </div>
+                      <div class="tag is-dot is-accent is-outlined"></div>
                       <div class="content">
-                        <p>
-                          New DomaHub dashboard design
-                        </p>
-                        <small class="tip">4/27/18</small>
+                        <a href="https://medium.com/domahub/several-new-themes-on-domahub-72670976c87f" rel="noopener noreferrer">
+                          Several new themes on DomaHub!
+                        </a>
+                        <small class="tip">May 15, 2018</small>
                       </div>
                     </li>
                     <li class="fas">
-                      <div class="tag is-dot is-primary is-outlined">
-
-                      </div>
+                      <div class="tag is-dot is-primary is-outlined"></div>
                       <div class="content">
-                        <p>
-                          PayPal integration now live
-                        </p>
-                        <small class="tip">4/2/18</small>
+                        <a href="https://medium.com/domahub/paypal-meets-domahub-509a266a3c0c" rel="noopener noreferrer">
+                          PayPal meets DomaHub!
+                        </a>
+                        <small class="tip">March 29, 2018</small>
                       </div>
                     </li>
                     <li class="fas">
-                      <div class="tag is-dot is-info is-outlined">
-
-                      </div>
+                      <div class="tag is-dot is-info is-outlined"></div>
                       <div class="content">
-                        <p>
-                          DomaHub now pay to win
-                        </p>
-                        <small class="tip">3/15/18</small>
+                        <a href="https://medium.com/domahub/keeping-track-of-your-domain-related-expenses-63d7f0347c90" rel="noopener noreferrer">
+                          Keeping track of your domain related expenses.
+                        </a>
+                        <small class="tip">February 28, 2018</small>
+                      </div>
+                    </li>
+                    <li class="fas">
+                      <div class="tag is-dot is-primary is-outlined"></div>
+                      <div class="content">
+                        <a href="https://medium.com/domahub/how-many-clicks-does-it-take-to-get-to-the-owner-of-a-domain-name-cedbf162874a" rel="noopener noreferrer">
+                          How many clicks does it take to get to the owner of a domain name?
+                        </a>
+                        <small class="tip">January 30, 2018</small>
+                      </div>
+                    </li>
+                    <li class="fas">
+                      <div class="tag is-dot is-accent is-outlined"></div>
+                      <div class="content">
+                        <a href="https://medium.com/domahub/introducing-domain-hubs-635eccb2202f" rel="noopener noreferrer">
+                          Introducing Domain Hubs!
+                        </a>
+                        <small class="tip">January 23, 2018</small>
                       </div>
                     </li>
                   </ul>
@@ -251,127 +383,6 @@
       </div>
     </div>
   </section>
-
-  <div class="card is-fullwidth">
-    <div class="card-header no-border-bottom">
-      <h3 class="">
-        Domain Traffic
-      </h3>
-      <div class="control is-mobile">
-        <button id="refresh-tables-button" class="button is-stylish is-small no-shadow" title="Refresh Tables" tabindex="0">
-          <div class="icon is-small">
-            <i class="fal fa-sync-alt"></i>
-          </div>
-          <span class="is-hidden-mobile">Refresh</span>
-        </button>
-        <div class="select is-stylish">
-          <select id="last-days-select">
-            <option value="7">Last 7 Days</option>
-            <option selected value="30">Last 30 Days</option>
-            <option value="90">Last 90 Days</option>
-            <option value="180">Last 180 Days</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="card-content">
-      <!-- chart tabs -->
-      <div class="chart-tabs">
-        <a tabindex="0" data-additive="true" data-stat="ga:users" data-stat-desc="Unique Users" class="stat-wrapper is-active">
-          <p class="heading">
-            Unique Visitors
-          </p>
-          <div class="counter-link">
-            <p id="users-counter">Loading...</p>
-          </div>
-        </a>
-        <a tabindex="0" data-additive="true" data-stat="ga:sessions" data-stat-desc="Unique Sessions" class="stat-wrapper">
-          <p class="heading">
-            Unique Sessions
-          </p>
-          <div class="counter-link">
-            <p id="sessions-counter">Loading...</p>
-          </div>
-        </a>
-        <a tabindex="0" data-additive="true" data-stat="ga:newUsers" data-stat-desc="New Users" class="stat-wrapper">
-          <p class="heading">
-            New Visitors
-          </p>
-          <div class="counter-link">
-            <p id="new-users-counter">Loading...</p>
-          </div>
-        </a>
-        <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:percentNewSessions,ga:sessions" data-stat-desc="% New Sessions" class="stat-wrapper">
-          <p class="heading">
-            % New Sessions
-          </p>
-          <div class="counter-link">
-            <p id="new-sessions-counter">Loading...</p>
-          </div>
-        </a>
-        <a tabindex="0" data-additive="false" data-tooltip-type="sessionsPerUser" data-stat="ga:sessionsPerUser,ga:users" data-stat-desc="Sessions Per User" class="stat-wrapper">
-          <p class="heading">
-            Sessions Per User
-          </p>
-          <div class="counter-link">
-            <p id="sessions-per-user-counter">Loading...</p>
-          </div>
-        </a>
-        <a tabindex="0" data-additive="false" data-tooltip-type="time" data-stat="ga:avgSessionDuration" data-stat-desc="Session Duration" class="stat-wrapper">
-          <p class="heading">
-            Session Duration
-          </p>
-          <div class="counter-link">
-            <p id="session-duration-counter">Loading...</p>
-          </div>
-        </a>
-        <a tabindex="0" data-additive="true" data-stat="ga:pageviews" data-stat-desc="Pageviews" class="stat-wrapper">
-          <p class="heading">
-            Total Pageviews
-          </p>
-          <div class="counter-link">
-            <p id="pageviews-counter">Loading...</p>
-          </div>
-        </a>
-        <a tabindex="0" data-additive="false" data-tooltip-type="percent" data-stat="ga:bounceRate,ga:sessions" data-stat-desc="Bounce Rate" class="stat-wrapper">
-          <p class="heading">
-            Bounce Rate
-          </p>
-          <div class="counter-link">
-            <p id="bounce-rate-counter">Loading...</p>
-          </div>
-        </a>
-      </div>
-      <!-- sessions chart -->
-      <div class="content">
-        <div class="content has-text-centered">
-          <h3 class="is-hidden">
-            <span id="current-stat-name">Unique Users</span> Over Time
-          </h3>
-        </div>
-        <div class="traffic-chart-wrapper">
-          <canvas id="time-chart" class="traffic-chart"></canvas>
-          <div id="time-chart-overlay" class="traffic-overlay content">
-            <div id="time-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
-              <figure class="image is-48x48">
-                <img src="/images/lib/ggface.png">
-              </figure>
-              <p>
-                There is not enough data!
-              </p>
-              <p>
-                Please try changing the date range.
-              </p>
-            </div>
-            <div id="time-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-              <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
-              <p>Now loading <span id="current-stat-name-loading">unique users</span> data.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <% if (new Date(user.date_accessed).getTime() < new Date("2018-01-23").getTime()){ %>
     <%- include("templates/announcements.ejs"); %>
