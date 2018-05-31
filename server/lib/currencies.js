@@ -2075,7 +2075,7 @@ module.exports = {
     var current_exchange_rates = JSON.parse(fs.readFileSync(__dirname + "/current-exchange-rates.json"));
 
     //if exchange rates are still good (last time rates gotten is less than an hour)
-    if (process.env.NODE_ENV != "dev" && current_exchange_rates && current_exchange_rates.date && moment.duration(moment().diff(moment(current_exchange_rates.date))).asHours() < 1){
+    if (process.env.NODE_ENV == "dev" || (current_exchange_rates && current_exchange_rates.date && moment.duration(moment().diff(moment(current_exchange_rates.date))).asHours() < 1)){
       fx.rates = current_exchange_rates.rates;
     	fx.base = current_exchange_rates.base;
 

@@ -2739,7 +2739,7 @@ function getCommonListingInfo(listing_ids){
       else {                                    //object afterwards (compare)
         for (var x in item){
           //categories special case
-          if (x == "categories" && item[x] == arr[x]){
+          if (x == "categories" && item[x] == arr[x] && arr[x]){
             arr[x] = arr[x].split(" ").filter(function(n){
               return item[x].split(" ").indexOf(n) != -1
             }).join(" ");
