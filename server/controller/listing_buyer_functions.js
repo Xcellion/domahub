@@ -5,6 +5,7 @@ var data_model = require('../models/data_model.js');
 
 var error = require('../lib/error.js');
 var mailer = require('../lib/mailer.js');
+var Currencies = require('../lib/currencies.js');
 
 //</editor-fold>
 
@@ -18,13 +19,6 @@ var validator = require("validator");
 var ejs = require('ejs');
 var path = require("path");
 var moment = require('moment');
-
-var wNumb = require("wnumb");
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 0
-});
 
 //</editor-fold>
 
@@ -53,8 +47,8 @@ module.exports = {
       error.handler(req, res, "Please enter a real phone number! Did you select the correct country for your phone number?", "json");
     }
     //if offer price is too low
-    else if (req.body.contact_offer && !validator.isInt(req.body.contact_offer, { min: req.session.listing_info.min_price })){
-      error.handler(req, res, "This is an invalid offer price! Please enter an amount greater than " + moneyFormat.to(parseFloat(req.session.listing_info.min_price)) + ".", "json");
+    else if (req.body.contact_offer && !validator.isInt(req.body.contact_offer, { min: (req.session.listing_info.min_price / Currencies.multiplier(req.session.listing_info.default_currency )) })){
+      error.handler(req, res, "This is an invalid offer price! Please enter an amount greater than " + Currencies.format(parseFloat(req.session.listing_info.min_price), req.session.listing_info.default_currency) + ".", "json");
     }
     else {
       next();
@@ -73,7 +67,8 @@ module.exports = {
       name : req.body.contact_name,
       email : req.body.contact_email,
       phone : phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
-      offer : req.body.contact_offer,
+      offer : req.body.contact_offer * Currencies.multiplier(req.session.listing_info.default_currency),
+      offer_currency : req.session.listing_info.default_currency,
       message : req.body.contact_message
     }
 
@@ -97,7 +92,7 @@ module.exports = {
       offerer_name: req.body.contact_name,
       offerer_email: req.body.contact_email,
       offerer_phone: phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
-      offer: moneyFormat.to(parseFloat(req.body.contact_offer)),
+      offer: Currencies.format(parseFloat(req.body.contact_offer) * Currencies.multiplier(req.session.listing_info.default_currency), req.session.listing_info.default_currency),
       message: req.body.contact_message,
       listing_info: req.session.listing_info
     }
@@ -143,7 +138,7 @@ module.exports = {
           getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
             if (offer_result){
               console.log("LBF: Emailing owner about new verified offer...");
-              var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
+              var offer_formatted = Currencies.format(parseFloat(offer_result.offer), offer_result.default_currency);
 
               //email the owner
               mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs'), {
@@ -208,16 +203,18 @@ module.exports = {
     //update the DB on accepted or rejected
     data_model.acceptRejectOffer(contact_item, req.params.domain_name, req.params.offer_id, function(offer_result){
       var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
       //set accepted variable if accepted
       if (accepted){
         listing_info.accepted = 1;
       }
+
       //delete offers object so we refresh it
       delete listing_info.offers;
 
       res.json({
         state: offer_result.state,
-        accepted: accepted
+        listings: req.user.listings
       });
 
       next();
@@ -234,7 +231,7 @@ module.exports = {
         if (offer_result.deposited){
           console.log("LBF: Sending email to the buyer for transfer verification / next steps!");
           var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
-          var price_formatted = moneyFormat.to(parseFloat(offer_result.offer));
+          var price_formatted = Currencies.format(parseFloat(offer_result.offer), offer_result.default_currency);
           listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
           //figure out luminance based on primary color
@@ -276,7 +273,7 @@ module.exports = {
           listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
 
           var accepted_text = (offer_result.accepted) ? "accepted" : "rejected";
-          var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
+          var offer_formatted = Currencies.format(parseFloat(offer_result.offer), offer_result.default_currency);
           var EJSVariables = {
             accepted: offer_result.accepted,
             domain_name: req.params.domain_name,
@@ -316,7 +313,8 @@ module.exports = {
       name : req.body.contact_name,
       email : req.body.contact_email,
       phone : phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
-      offer : req.body.contact_offer,
+      offer : req.session.listing_info.buy_price,
+      default_currency : req.session.listing_info.default_currency,
       message : req.body.contact_message
     };
 
@@ -376,6 +374,19 @@ module.exports = {
     else {
       console.log("LBF: Not checking out! Redirecting to listings page...");
       res.redirect("/listing/" + domain_name.toLowerCase());
+    }
+  },
+
+  //make sure that new_buying_info domain is correct as params
+  checkBuyerObjectInfo : function(req, res, next){
+    console.log("LRF: Checking if session listing info domain is same as buying domain...");
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined" && typeof req.params.domain_name == "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+
+    if (req.session.listing_info && req.session.new_buying_info.domain_name.toLowerCase() == domain_name.toLowerCase()){
+      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong with the purchase! Please refresh the page and try again!", 'json');
     }
   },
 
@@ -456,7 +467,7 @@ module.exports = {
 
     //get the listing owner contact information to email
     var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs');
-    var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
+    var price_formatted = Currencies.format(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price), req.session.listing_info.default_currency);
     var EJSVariables = {
       domain_name: req.session.listing_info.domain_name,
       owner_name: req.session.listing_info.username,
@@ -484,7 +495,7 @@ module.exports = {
 
     //get the listing owner contact information to email
     var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
-    var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
+    var price_formatted = Currencies.format(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price), req.session.listing_info.default_currency);
 
     //figure out luminance based on primary color
     req.session.listing_info.font_luminance = calculateLuminance(req.session.listing_info.primary_color);
@@ -539,8 +550,12 @@ module.exports = {
   checkPaymentType : function(req, res, next){
     console.log("LRF: Checking BIN payment type...");
 
+    //if paying after offer accepted
+    if (req.session.new_buying_info && req.session.new_buying_info.accepted == 1){
+      next();
+    }
     //not set for BIN
-    if (req.session.listing_info.buy_price <= 0 || !req.session.listing_info.buy_price){
+    else if (req.session.listing_info.buy_price <= 0 || !req.session.listing_info.buy_price){
       error.handler(req, res, "This domain is unavailable for buy it now! Please go back to the main page and create an offer for the owner.", "json");
     }
     //paying by stripe

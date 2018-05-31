@@ -39,13 +39,13 @@ function setupCustomColorsListing(){
   console.log("Setting up custom theme...");
 
   //title
-  stylize(listing_info.primary_color, ".page-contents h1", "color");
+  stylize(listing_info.primary_color, ".page-contents h1.title", "color");
 
   //click for more details
   stylize(listing_info.primary_color, ".page-contents #show-more-details", "color");
 
   //button
-  stylize(listing_info.primary_color, ".page-contents .is-primary.button", "background-color", true);
+  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents .is-primary.button", "background-color", true);
   stylize(listing_info.secondary_color, ".page-contents .is-accent.button", "background-color", true);
 
   //tertiary color (links)
@@ -60,6 +60,7 @@ function setupCustomColorsListing(){
   //basic font on page
   stylize(listing_info.primary_color, ".page-contents #listing-description", "border-color");
   stylize(listing_info.font_color, ".page-contents .regular-font", "color");
+  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents .card-content h1", "color");
 
   //tabs
   stylize(listing_info.font_color, ".page-contents .module-tab:not(.is-active) a", "color");
@@ -104,23 +105,26 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
 
-  $(".page-contents .logo-item").closest("a").attr('title', listing_info.domain_name);
-
   if (listing_info.premium && listing_info.logo){
     $(".page-contents #listing-footer-logo").attr("src", listing_info.logo);
+    $(".page-contents .logo-item").closest("a").attr('title', listing_info.domain_name);
   }
   else if (listing_info.premium){
+    $(".page-contents .logo-item").closest("a").attr('title', listing_info.domain_name);
     $(".page-contents .logo-item").closest("a").css("visibility", "hidden");
     $(".page-contents #listing-footer-logo").addClass('is-hidden');
   }
   else {
     $(".page-contents .logo-item").removeClass('is-hidden').attr("src", "/images/dh-assets/circle-logo/dh-circle-logo-primary.png");
+    $("#listing-footer-logo").closest("a").attr("href", "https://domahub.com");
+    $(".page-contents .logo-item").closest("a").attr('title', "DomaHub Domains");
   }
 
   //</editor-fold>
 
   //<editor-fold>-------------------------------FOOTER TEXT-------------------------------
 
+  //footer text
   if (listing_info.premium && listing_info.description_footer){
     $(".page-contents #listing-footer").text(listing_info.description_footer)
   }
@@ -129,6 +133,17 @@ function setupFooter(){
   }
   else {
     $(".page-contents #listing-footer").text("Sell more domains with DomaHub landing pages.");
+  }
+
+  //descriptive footer link
+  if (listing_info.premium && listing_info.description_footer_link){
+    $(".page-contents #listing-footer, #listing-footer-logo-link").attr("href", listing_info.description_footer_link).addClass("is-underlined");
+  }
+  else if (listing_info.premium){
+    $(".page-contents #listing-footer, #listing-footer-logo-link").removeAttr("href").removeClass("is-underlined");
+  }
+  else {
+    $(".page-contents #listing-footer, #listing-footer-logo-link").attr("href", "https://domahub.com").addClass("is-underlined");;
   }
 
   //</editor-fold>

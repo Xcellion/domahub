@@ -19,9 +19,26 @@
 @import '../bulma/elements/content.sass';
 @import '../bulma/elements/switch.sass';
 @import '../bulma/elements/icon.sass';
+@import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 @import '../checkbox';
+
+//appraisal checkbox margins
+.appraisal-checkboxes {
+  margin-bottom: 0 !important;
+  margin-top: 10px !important;
+}
+
+//display inline block for tooltip icons
+.control .icon.is-tooltip {
+  display: inline-block!important;
+}
+
+//tooltip ? icon for table (exchanged currency tooltip)
+.bubble-tooltip {
+  margin-right:5px;
+}
 
 //domain expenses
 .expense-button-wrapper {
@@ -149,7 +166,6 @@
   @include translate(-50%,50%);
   left: 50%;
   position: absolute;
-  top: 10%;
 }
 
 .blackscreen {
@@ -159,6 +175,7 @@
   left: 0;
   background-color: $black-secondary;
   z-index: 5;
+  box-shadow: 0 0 5px #000;
 }
 
 .td-domain a {
@@ -233,7 +250,8 @@ td.has-cursor-pointer {
 .domain-tooltip {
   position: absolute;
   top: 100%;
-  right: 10px;
+  left:0;
+  margin-top:5px;
   z-index:99;
   overflow-y: auto;
   overflow-x: hidden;
@@ -328,8 +346,8 @@ td.has-cursor-pointer {
 }
 
 #example-logo {
-  max-width:200px;
-  max-height:125px;
+  max-height:48px;
+  margin:0;
 }
 
 #example-wrapper {

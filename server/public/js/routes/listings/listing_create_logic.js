@@ -47,10 +47,11 @@ $(document).ready(function() {
     });
 
     //delete all errored rows
-    $(".delete-errors-button").on("click", function(e){
+    $("#clear-errored-button").on("click", function(e){
       deleteErroredRows();
       handleSubmitDisabled();
       clearNotification();
+      $("#clear-errored-button").addClass("is-hidden");
     });
 
     //submit to create listings

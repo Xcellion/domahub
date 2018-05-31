@@ -1,11 +1,6 @@
 //<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var myPath;
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 0
-});
 var traffic_chart = false;
 var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
 
@@ -67,13 +62,11 @@ function setupPriceTags(){
     var price_tag_text = "Unavailable";
   }
   else if (listing_info.buy_price > 0 && listing_info.rented != 1){
-    var price_tag_text = "Buy now - " + moneyFormat.to(listing_info.buy_price);
+    var price_tag_text = "Buy now - " + formatCurrency(listing_info.buy_price, listing_info.default_currency);
   }
-  //minimum price
   else if (listing_info.min_price > 0){
-    var price_tag_text = "Available - " + moneyFormat.to(listing_info.min_price);
+    var price_tag_text = "Available - " + formatCurrency(listing_info.min_price, listing_info.default_currency);
   }
-  //neither min or bin
   else {
     var price_tag_text = "Now available";
   }
@@ -111,7 +104,16 @@ function setupPriceTags(){
   //rental price tag
   if (listing_info.rentable && listing_info.status == 1){
     $("#rent-price-tag").removeClass('is-hidden');
-    $("#rent-price-text").text(moneyFormat.to(listing_info.price_rate) + " / " + listing_info.price_type);
+
+    //free rental
+    if (listing_info.price_rate == 0){
+      $("#rent-price-text").text("");
+      $(".actual-price").text("Free!");
+    }
+    else {
+      $("#rent-price-text").text(" - " + formatCurrency(listing_info.price_rate, listing_info.default_currency) + " / " + listing_info.price_type);
+      $(".actual-price").text(formatCurrency(0, listing_info.default_currency, true));
+    }
   }
   else {
     $("#rent-price-tag").addClass('is-hidden');
@@ -172,13 +174,47 @@ function setupCategories(){
 //<editor-fold>-------------------------------APPRAISAL-------------------------------
 
 function setupAppraisal(){
-  if (!listing_info.premium || (listing_info.show_appraisal == 1)){
-    $("#listing-appraisal").removeClass('is-hidden').find(".listing-detail-text").each(function(){
-      $(this).attr("href", $(this).attr("href") + listing_info.domain_name);
-    });
+
+  //premium and all are empty
+  if (listing_info.premium && (
+    !listing_info.show_godaddy_appraisal &&
+    !listing_info.show_domainindex_appraisal &&
+    !listing_info.show_freevaluator_appraisal &&
+    !listing_info.show_estibot_appraisal
+  )){
+    $("#listing-appraisal").addClass('is-hidden');
   }
   else {
-    $("#listing-appraisal").addClass('is-hidden');
+    $("#listing-appraisal").removeClass('is-hidden');
+  }
+
+  //show specific appraisal links
+  if (!listing_info.premium || (listing_info.show_godaddy_appraisal == 1)){
+    $("#godaddy-appraisal-link").removeClass('is-hidden').attr("href", "https://www.godaddy.com/domain-value-appraisal/appraisal/?checkAvail=1&tmskey=&domainToCheck=" + listing_info.domain_name);
+  }
+  else {
+    $("#godaddy-appraisal-link").addClass("is-hidden");
+  }
+
+  if (!listing_info.premium || (listing_info.show_domainindex_appraisal == 1)){
+    $("#domainindex-appraisal-link").removeClass('is-hidden').attr("href", "http://domainindex.com/domains/" + listing_info.domain_name);
+  }
+  else {
+    $("#domainindex-appraisal-link").addClass("is-hidden");
+  }
+
+  if (!listing_info.premium || (listing_info.show_freevaluator_appraisal == 1)){
+    $("#freevaluator-appraisal-link").removeClass('is-hidden').attr("href", "http://www.freevaluator.com/?domain=" + listing_info.domain_name);
+  }
+  else {
+    $("#freevaluator-appraisal-link").addClass("is-hidden");
+  }
+
+  if (!listing_info.premium || (listing_info.show_estibot_appraisal == 1)){
+    $("#estibot-appraisal-link").removeClass('is-hidden').attr("href", "https://www.estibot.com/verify.php?type=normal&data=" + listing_info.domain_name);
+  }
+  else {
+    $("#estibot-appraisal-link").addClass("is-hidden");
   }
 }
 
@@ -362,8 +398,11 @@ function setupRightHalf(){
 
       //placeholder + minimum on contact form
       if (listing_info.min_price > 0){
-        $("#contact_offer").attr("min", listing_info.min_price).attr("placeholder", listing_info.min_price);
+        $("#contact_offer").attr("min", listing_info.min_price / getCurrencyMultiplier(listing_info.default_currency)).attr("placeholder", "Minimum " + formatCurrency(listing_info.min_price,  listing_info.default_currency));
       }
+
+      //offer currency
+      $("#offer-currency").text("Offer in " + listing_info.default_currency + " (" + currency_codes[listing_info.default_currency.toUpperCase()].name + ")");
 
       //click buy tab (tutorial / focus)
       $("#contact-form-tab").off().on("click", function(e){
@@ -393,7 +432,7 @@ function setupRightHalf(){
 
           //comparison only, no need for AJAX
           if (compare){
-            testSubmitBuyHandler();
+            testSubmitBuyHandler(button_id);
           }
           else {
             //send an offer / or buy it now request
@@ -712,6 +751,7 @@ function setupRightHalf(){
     //create a new range picker based on new path rental availability
     var start_date = moment();
     var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
+    $("#calendar-loading-message").addClass('is-hidden');
 
     $("#calendar-input").daterangepicker({
       opens: "center",
@@ -845,6 +885,9 @@ function setupRightHalf(){
 
         countPrice($(".actual-price"), totalPrice);
       }
+      else {
+        $(".actual-price").text("Free!");
+      }
     }
   }
 
@@ -860,7 +903,7 @@ function setupRightHalf(){
           $(this).text("Free");
         }
         else {
-          $(this).text(" $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+          $(this).text(formatCurrency(now, listing_info.default_currency, true));
         }
       }
     });
@@ -1592,12 +1635,12 @@ function setupRightHalf(){
 
       //available to buy now
       if (other_listings[x].buy_price > 0){
-        var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
+        var buy_price = formatCurrency(parseFloat(other_listings[x].buy_price), listing_info.default_currency);
         cloned_similar_listing.find(".otherowner-domain-price").text("Buy Now: " + buy_price);
       }
       //available to buy at a specific minimum price
       else if (other_listings[x].min_price > 0){
-        var min_price = moneyFormat.to(parseFloat(other_listings[x].min_price));
+        var min_price = formatCurrency(parseFloat(other_listings[x].min_price), listing_info.default_currency);
         cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
       }
       //else available for rent
@@ -1714,6 +1757,36 @@ function removeURLParameter(parameter, push) {
       window.history.replaceState({}, "", url);
     }
   }
+}
+
+//to format a number for currency
+function formatCurrency(number, currency_code, decimals){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  var currency_details = {
+    thousand: ',',
+    decimals: 0,
+  }
+
+  //show decimals
+  if (decimals){
+    currency_details.decimals = default_currency_details.fractionSize;
+  }
+
+  //right aligned symbol
+  if (default_currency_details.symbol && default_currency_details.symbol.rtl){
+    currency_details.suffix = default_currency_details.symbol.grapheme;
+  }
+  else if (default_currency_details.symbol && !default_currency_details.symbol.rtl){
+    currency_details.prefix = default_currency_details.symbol.grapheme;
+  }
+
+  return wNumb(currency_details).to(number / Math.pow(10, default_currency_details.fractionSize));
+}
+
+//get multiplier of a currency
+function getCurrencyMultiplier(currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  return Math.pow(10, default_currency_details.fractionSize);
 }
 
 //</editor-fold>

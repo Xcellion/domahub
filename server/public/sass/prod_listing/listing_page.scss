@@ -21,6 +21,12 @@
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 
+//appraisal checkbox margins for compare module
+.appraisal-checkboxes {
+  margin-bottom: 0 !important;
+  margin-top: 10px !important;
+}
+
 .no-margin {
   margin :0 !important;
 }

@@ -56,7 +56,8 @@ $(document).ready(function() {
 
   //<editor-fold>---------------------------------TUTORIAL--------------------------------------------------
 
-  tutorial_tour = new Tour({
+  if (getParameterByName("tutorial") != "false"){
+    tutorial_tour = new Tour({
     storage: false,
     orphan: true,
     backdrop: true,
@@ -447,8 +448,6 @@ $(document).ready(function() {
 
     ]
   });
-
-  if (getParameterByName("tutorial") != "false"){
     tutorial_tour.init();
     tutorial_tour.start();
   }
@@ -478,7 +477,7 @@ $(document).ready(function() {
 
 });
 
-//<editor-fold>-----------------------------------------------------------------------------------MENU
+//<editor-fold>---------------------------------MENU--------------------------------------------------
 
 //hide and show menu
 function menuButtonHandlers() {
@@ -523,7 +522,7 @@ function toggleMenu(show){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------THEMES
+//<editor-fold>---------------------------------THEMES--------------------------------------------------
 
 //switch theme
 function switchTheme(theme_name){
@@ -573,7 +572,7 @@ function switchTheme(theme_name){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------INFO TAB
+//<editor-fold>---------------------------------INFO TAB--------------------------------------------------
 
 //update the description / description footer
 function updateDescription(){
@@ -700,7 +699,7 @@ function updateBIN(){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------DESIGN TAB
+//<editor-fold>---------------------------------DESIGN TAB--------------------------------------------------
 
 //change URL to custom for premium v basic
 function loadPremiumAndBasicHandler(){
@@ -910,8 +909,13 @@ function updateModules(){
   checkBox(listing_info.show_registrar, $("#show-registrar-input"));
   checkBox(listing_info.show_registration_date, $("#show-registration-date-input"));
   checkBox(listing_info.show_categories, $("#show-categories-input"));
-  checkBox(listing_info.show_appraisal, $("#show-appraisal-input"));
   checkBox(listing_info.show_social_sharing, $("#show-social-sharing-input"));
+
+  //appraisals
+  checkBox(listing_info.show_godaddy_appraisal, $("#show-godaddy-appraisal-input"));
+  checkBox(listing_info.show_domainindex_appraisal, $("#show-domainindex-appraisal-input"));
+  checkBox(listing_info.show_freevaluator_appraisal, $("#show-freevaluator-appraisal-input"));
+  checkBox(listing_info.show_estibot_appraisal, $("#show-estibot-appraisal-input"));
 
   //right
   checkBox(listing_info.show_placeholder, $("#placeholder-input"));
@@ -940,7 +944,7 @@ function checkBox(module_value, elem){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------MODULES
+//<editor-fold>---------------------------------MODULES--------------------------------------------------
 
 //create a test chart
 function createTestChart(){
@@ -1083,12 +1087,12 @@ function createTestRentals(){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------UPDATE HANDLERS
+//<editor-fold>---------------------------------UPDATE HANDLERS--------------------------------------------------
 
 //do submit buy handler
-function testSubmitBuyHandler(){
+function testSubmitBuyHandler(button_id){
   setTimeout(function(){
-    $("button[type=submit][clicked=true]").removeClass('is-loading');
+    $("#" + button_id).removeClass('is-loading');
     successMessage("Success! If this were your real domain, you would receive a notification with the details of this new offer once it has been verified.");
   }, 500);
 }
@@ -1121,11 +1125,14 @@ function testCalendarHandler(){
     }
     setUpCalendar(listing_info);
   }
+  else {
+    setUpCalendar(listing_info);
+  }
 }
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------HELPER FUNCTIONS
+//<editor-fold>---------------------------------HELPER FUNCTIONS--------------------------------------------------
 
 function randomIntFromInterval(min,max){
   return Math.floor(Math.random()*(max-min+1)+min);

@@ -65,7 +65,7 @@ module.exports = {
 
   //console log the error and send a mail to notify if production
   log : function(error, info){
-    console.log("\x1b[31m", "ERROR: " + JSON.stringify(error) + " INFO : " + info, '\x1b[0m');
+    console.log("\x1b[31m", "ERROR: " + error + JSON.stringify(error) + " INFO : " + info, '\x1b[0m');
 
     //notify via email of any errors
     if (process.env.NODE_ENV != "dev"){

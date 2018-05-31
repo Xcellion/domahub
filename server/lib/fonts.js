@@ -16,7 +16,7 @@ var all_fonts = [
   "Times New Roman",
   "Trebuchet MS",
   "Verdana",
-]
+];
 
 module.exports = {
 

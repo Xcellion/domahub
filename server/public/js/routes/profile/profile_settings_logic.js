@@ -293,6 +293,27 @@ $(document).ready(function() {
 
     //</editor-fold>
 
+    //<editor-fold>-------------------------------CURRENCY-------------------------------
+
+    //change default currency
+    $("#default_currency-input").on("input", function(){
+      clearNotification();
+      hideSaveCancelButtons();
+      if ($("#default_currency-input").val() != user.default_currency){
+        $("#currency-submit, #cancel-button").removeClass('is-hidden');
+      }
+    });
+
+    //submit payments contact form
+    $("#currency-form").submit(function(e){
+      e.preventDefault();
+      submitChanges({
+        default_currency: $("#default_currency-input").val().toLowerCase(),
+      });
+    });
+
+    //</editor-fold>
+
     //<editor-fold>-------------------------------PAYMENTS-------------------------------
 
     //account payments
@@ -703,7 +724,7 @@ function showSectionByURL(){
       for (var x = 0 ; x < user.stripe_customer.invoices.length ; x++){
         var payment_row = $("#payment-history-clone").clone().removeAttr("id").removeClass('is-hidden');
         payment_row.find(".payment-history-date").text(moment(user.stripe_customer.invoices[x].created).format("YYYY-MM-DD")).attr("title", moment(user.stripe_customer.invoices[x].created).format("YYYY-MM-DD HH:mm"));
-        payment_row.find(".payment-history-amount").html((user.stripe_customer.invoices[x].amount) ? moneyFormat.to(user.stripe_customer.invoices[x].amount / 100) : "<del>" + moneyFormat.to(user.stripe_customer.invoices[x].subtotal / 100) + "</del> Free!");
+        payment_row.find(".payment-history-amount").html((user.stripe_customer.invoices[x].amount) ? formatCurrency(user.stripe_customer.invoices[x].amount, "usd") : "<del>" + formatCurrency(user.stripe_customer.invoices[x].subtotal, "usd") + "</del> Free!");
         $("#payment-history-body").append(payment_row);
       }
     }
@@ -778,7 +799,7 @@ function showSectionByURL(){
   //set up next invoice charge
   function setupNextChargeTip(){
     if (user.stripe_customer && user.stripe_customer.upcoming_invoice){
-      var next_charge_text = "Your upcoming charge of " + moneyFormat.to(user.stripe_customer.upcoming_invoice.subtotal / 100) + " on " + moment(user.stripe_customer.upcoming_invoice.date).format("YYYY-MM-DD");
+      var next_charge_text = "Your upcoming charge of " + formatCurrency(user.stripe_customer.upcoming_invoice.subtotal, "usd") + " on " + moment(user.stripe_customer.upcoming_invoice.date).format("YYYY-MM-DD");
       if (user.stripe_customer.upcoming_invoice.amount_due > 0){
         next_charge_text += " will be posted to your " + user.stripe_customer.brand + " card ending in " + user.stripe_customer.last4 + "."
       }
@@ -963,7 +984,7 @@ function showSectionByURL(){
 
       for (var x = 0 ; x < user.referrals.length ; x++){
         var referral_clone = $("#referral-clone").clone().removeAttr("id").removeClass('is-hidden');
-        referral_clone.find(".referral-months").text(moneyFormat.to(user.referrals[x].amount_off / 100));
+        referral_clone.find(".referral-months").text(formatCurrency(user.referrals[x].amount_off, "usd"));
         referral_clone.find(".referral-created").text(moment(user.referrals[x].date_accessed).format("YYYY-MM-DD")).attr("title", moment(user.referrals[x].date_accessed).format("YYYY-MM-DD HH:mm"));
         referral_clone.find(".referral-redeemed").text((user.referrals[x].date_redeemed) ? "Used!" : "Not used!");
 
@@ -1010,8 +1031,8 @@ function showSectionByURL(){
       }
 
       //show referral table + total months free
-      $("#total-amount-redeemed").text(moneyFormat.to(total_redeemed / 100));
-      $(".unused-credits").text(moneyFormat.to(total_left / 100));
+      $("#total-amount-redeemed").text(formatCurrency(total_redeemed, "usd"));
+      $(".unused-credits").text(formatCurrency(total_left, "usd"));
 
       //show unused credit tip
       if (total_left > 0 && user.stripe_subscription && user.stripe_subscription.cancel_at_period_end){
@@ -1072,6 +1093,7 @@ function showSectionByURL(){
       $("#stripe-personal-form").children(".card").removeClass('is-danger');
       $("#bank-tooltip").removeClass('is-hidden');
       $(".existing-bank").text("Click the button to add a default bank account!");
+      $("#default-currency-tip").text("The default currency used when purchasing or renting your domains.");
     }
     else {
       $(".stripe-required-info").removeClass('is-hidden');
@@ -1079,6 +1101,32 @@ function showSectionByURL(){
       $("#bank-tooltip").addClass('is-hidden');
       $(".stripe-account-input").val("");
       $(".existing-bank").text("Please enter your legal information before you can add a bank account!");
+      $("#default-currency-tip").text("Please enter in your legal information before you can select a default currency!");
+    }
+
+    //supported currencies
+    if (user.currencies){
+      $("#default-currency-select").removeClass("is-hidden");
+
+      //create list of acceptable currencies
+      if (user.currencies.payment_currencies){
+        $("#default_currency-input").children().remove();
+        $("#default_currency-input").append("<option selected disabled>Please select your default currency</option>");
+        for (var x = 0 ; x < user.currencies.payment_currencies.length ; x++){
+          var current_currency = currency_codes[user.currencies.payment_currencies[x].toUpperCase()];
+          if (current_currency != undefined){
+            $("#default_currency-input").append("<option value=" + user.currencies.payment_currencies[x] + ">" + user.currencies.payment_currencies[x].toUpperCase() +" - " + current_currency.name + "</option>");
+          }
+          else {
+            $("#default_currency-input").append("<option value=" + user.currencies.payment_currencies[x] + ">(" + user.currencies.payment_currencies[x].toUpperCase() +")</option>");
+          }
+        }
+      }
+
+      //select the default currency
+      if (user.default_currency){
+        $("#default_currency-input").val(user.default_currency);
+      }
     }
 
     //stripe bank information
@@ -1208,12 +1256,13 @@ function showSectionByURL(){
   function getTransactions(){
 
     //show loading stuff
-    $("#loading-transactions-table").removeClass('is-hidden');
+    $("#loading-transactions-table, #loading-transactions-card").removeClass('is-hidden');
     $("#no-transactions-table, #transactions-table").addClass('is-hidden');
-    $(".total-loading").text("Loading...");
+    $(".total-loading").removeClass("is-danger").text("Loading...");
     $("span.withdrawal-available").text("");
     $("#refresh-transactions-button").addClass("is-loading");
     $("#transactions-toolbar").addClass("is-hidden");
+    $("#card-image-text").text("Now loading...")
 
     $.ajax({
       url: "/profile/gettransactions",
@@ -1241,8 +1290,9 @@ function showSectionByURL(){
 
     //hide modal
     $("#transactions-details-modal").removeClass('is-active');
-    $("#loading-transactions-table").addClass('is-hidden');
+    $("#loading-transactions-table, #loading-transactions-card").addClass('is-hidden');
     $("#transactions-toolbar").removeClass('is-hidden');
+    $("#card-image-text").text("Click a transaction for more details!")
 
     $(".transactions-row:not(#transactions-row-clone)").remove();
 
@@ -1295,11 +1345,12 @@ function showSectionByURL(){
     temp_row.data("expense", transaction.transaction_type == "expense");
     temp_row.data("renewal", transaction.transaction_type == "renewal");
     temp_row.data("exists", true);
+    temp_row.data("currency", transaction.transaction_cost_currency);
 
     //date created, no date if it's a renewal cost but has no registration date
     var date_created_moment = moment(new Date(transaction.date_created));
     if (date_created_moment.isValid()){
-      temp_row.find(".transactions-row-date").text(date_created_moment.format("YYYY-MM-DD")).attr("title", date_created_moment.format("YYYY-MM-DD"));
+      temp_row.find(".transactions-row-date").text(date_created_moment.format("YYYY-MM-DD")).attr("title", date_created_moment.format("YYYY-MM-DD HH:mm"));
     }
     else {
       temp_row.find(".transactions-row-date").text("No date").attr("title", "Please enter a valid registration date for this domain.");
@@ -1326,7 +1377,7 @@ function showSectionByURL(){
     if (!transaction.transaction_cost || transaction.transaction_cost == null){
       temp_row.find(".transactions-row-available").text("Free " + transaction.transaction_type.substr(0, 1).toUpperCase() + transaction.transaction_type.substr(1));
       temp_row.find(".transactions-row-amount").text("-");
-      temp_row.data("total_earned", 0);
+      temp_row.data("total_revenue", 0);
       temp_row.data("total_fees", 0);
       temp_row.data("total_profit", 0);
 
@@ -1343,32 +1394,32 @@ function showSectionByURL(){
       var payment_fees = (transaction.payment_fees) ? transaction.payment_fees : 0;
 
       //totals for prices
-      var total_fees = (doma_fees + payment_fees) / 100;
-      var total_profit = (transaction.transaction_cost) ? ((transaction.transaction_cost - doma_fees - payment_fees) / 100) : 0;
-      var total_earned = (transaction.transaction_cost) ? (transaction.transaction_cost / 100) : 0;
+      var total_fees = (doma_fees + payment_fees);
+      var total_profit = (transaction.transaction_cost) ? ((transaction.transaction_cost - doma_fees - payment_fees)) : 0;
+      var total_revenue = (transaction.transaction_cost) ? (transaction.transaction_cost) : 0;
 
       //refunded
-      if (transaction.transaction_cost - ((transaction.transaction_cost_refunded) ? transaction.transaction_cost_refunded : 0) <= 0){
+      if (transaction.transaction_cost_refunded > 0){
         temp_row.data("refunded", true);
         temp_row.data("available", false);
         temp_row.find(".transactions-row-available").text("Refunded");
 
         //price strikethrough (only for stripe)
         if (transaction.payment_type == "stripe"){
-          temp_row.find(".transactions-row-amount").text(moneyFormat.to(total_profit)).addClass("text-line-through");
+          temp_row.find(".transactions-row-amount").text(formatCurrency(total_profit, transaction.transaction_cost_currency)).addClass("text-line-through");
         }
         else if (transaction.payment_type == "paypal"){
-          temp_row.find(".transactions-row-amount").text(moneyFormat.to(-0.3)).addClass('is-danger');
+          temp_row.find(".transactions-row-amount").text(formatCurrency(transaction.paypal_fee, user.default_currency)).addClass('is-danger');
         }
 
         //for calculating totals later
-        temp_row.data("total_earned", 0);
-        temp_row.data("total_fees", ((transaction.payment_type == "paypal") ? 0.30 : 0));   //paypal doesnt refund 30 cent flat fee
+        temp_row.data("total_revenue", 0);
+        temp_row.data("total_fees", ((transaction.payment_type == "paypal") ? transaction.paypal_fee : 0));   //paypal doesnt refund flat fee
       }
       //not refunded
       else {
 
-        //tooltip for prices
+        //expenses or renewal
         if (transaction.transaction_type == "expense" || transaction.transaction_type == "renewal"){
           if (transaction.transaction_type == "expense"){
             temp_row.find(".transactions-row-available").text("Expense Recorded");
@@ -1376,19 +1427,18 @@ function showSectionByURL(){
           else {
             temp_row.find(".transactions-row-available").text("Domain Renewal");
           }
-          temp_row.find(".transactions-row-amount").text(moneyFormat.to(-total_profit)).addClass('is-danger');
-          temp_row.data("total_earned", -total_earned);
+          temp_row.find(".transactions-row-amount").text(formatCurrency(-total_profit, transaction.transaction_cost_currency)).addClass('is-danger');
+          temp_row.data("total_revenue", -total_revenue);
           temp_row.data("total_fees", 0);
         }
         else {
 
           //for calculating totals later
-          temp_row.data("total_earned", total_earned);
+          temp_row.data("total_revenue", total_revenue);
           temp_row.data("total_fees", total_fees);
 
           //total earned tooltip hover
-          var tooltip_text = "Total earned - " + moneyFormat.to(total_earned) + "&#10;" + "Total fees - " + moneyFormat.to(total_fees);
-          temp_row.find(".transactions-row-amount").html("<span data-balloon-break data-balloon='" + tooltip_text + "' data-balloon-pos='left'>" + moneyFormat.to(total_profit) + "</span>").addClass('is-primary');
+          temp_row.find(".transactions-row-amount").text(formatCurrency(total_profit, transaction.transaction_cost_currency)).addClass('is-primary');
 
           //if we can withdraw from bank
           var payment_available_on = moment(new Date(transaction.payment_available_on));
@@ -1421,9 +1471,12 @@ function showSectionByURL(){
             temp_row.find(".transactions-row-available").text("Not yet available");
           }
         }
-
       }
 
+      //original currency tooltip
+      if (transaction.transaction_cost_original && transaction.transaction_cost_original_currency){
+        temp_row.find(".transactions-row-amount").prepend("<div class='bubble-tooltip icon is-small is-tooltip' data-balloon-length='medium' data-balloon='Converted at " + formatCurrency(1 * multiplier(user.default_currency), transaction.transaction_cost_original_currency, 0) + " " + transaction.transaction_cost_original_currency.toUpperCase() + " to ~" + formatCurrency(transaction.transaction_cost_exchange_rate, user.default_currency) + " " + user.default_currency.toUpperCase() + "' data-balloon-pos='up'><i class='fal fa-question-circle'></i></div>");
+      }
     }
 
     return temp_row;
@@ -1431,7 +1484,7 @@ function showSectionByURL(){
 
   //calculate totals of all transactions
   function calculateTotals(){
-    var total_earned = 0;
+    var total_revenue = 0;
     var total_fees = 0;
     var total_available = 0;
     var total_unavailable = 0;
@@ -1440,34 +1493,38 @@ function showSectionByURL(){
 
     //loop through and figure it out
     $(".transactions-row:not(#transactions-row-clone)").each(function(){
-      total_fees += $(this).data("total_fees");
 
-      //count towards revenue if its not an expense
-      if (!$(this).data("expense") || !$(this).data('renewal')){
-        total_earned += $(this).data("total_earned");
-      }
-      else {
-        total_expenses += Math.abs($(this).data("total_earned"));
-      }
+      //only if default currency and this transaction currency are the same
+      if ($(this).data("currency") == user.default_currency){
+        total_fees -= $(this).data("total_fees");
 
-      //available to withdraw
-      if ($(this).data("available")){
-        total_available += ($(this).data("total_earned") - $(this).data("total_fees"));
-      }
-      if ($(this).data("notavailable")){
-        total_unavailable += ($(this).data("total_earned") - $(this).data("total_fees"));
-      }
+        //count towards revenue if its not an expense
+        if (!$(this).data("expense") && !$(this).data('renewal')){
+          total_revenue += $(this).data("total_revenue");
+        }
+        else {
+          total_expenses += $(this).data("total_revenue");
+        }
 
-      //count withdrawn
-      if ($(this).data("withdrawn")){
-        total_withdrawn += ($(this).data("total_earned") - $(this).data("total_fees"));
+        //available to withdraw
+        if ($(this).data("available")){
+          total_available += ($(this).data("total_revenue") - $(this).data("total_fees"));
+        }
+        if ($(this).data("notavailable")){
+          total_unavailable += ($(this).data("total_revenue") - $(this).data("total_fees"));
+        }
+
+        //count withdrawn
+        if ($(this).data("withdrawn")){
+          total_withdrawn += ($(this).data("total_revenue") - $(this).data("total_fees"));
+        }
       }
     });
 
-    var total_profit = total_earned - total_expenses - total_fees;
+    var total_profit = total_revenue - Math.abs(total_expenses) - Math.abs(total_fees);
 
     //totals
-    moneyCountAnimation($("#total-revenue"), total_earned);
+    moneyCountAnimation($("#total-revenue"), total_revenue);
     moneyCountAnimation($("#total-expense"), total_expenses);
     moneyCountAnimation($("#total-fees"), total_fees);
     moneyCountAnimation($("#total-profit"), total_profit);
@@ -1509,7 +1566,7 @@ function showSectionByURL(){
     var filter_val = $("#transactions-filter-select").val();
     var search_term = $("#transactions-search").val().toLowerCase();
     var sort_by = $(".transaction-header-sort .icon.is-primary").attr("data-sort-by") || "date_created";
-    var sort_direction = ($(".transaction-header-sort .icon.is-primary").data("sort_direction")) ? true : false;
+    var sort_direction = (typeof $(".transaction-header-sort .icon.is-primary").data("sort_direction") != "undefined") ? $(".transaction-header-sort .icon.is-primary").data("sort_direction") : true;
 
     //filter / search / free toggle
     $(".transactions-row:not(#transactions-row-clone)").filter(function(){
@@ -1525,8 +1582,8 @@ function showSectionByURL(){
     }}).removeClass('is-hidden').sort(function(a,b){
       if (sort_by){
         if (sort_by == "transaction_cost"){
-          var a_sort = parseFloat($(a).data("total_earned")) - parseFloat($(a).data("total_fees")) || 0;
-          var b_sort = parseFloat($(b).data("total_earned")) - parseFloat($(b).data("total_fees")) || 0;
+          var a_sort = parseFloat($(a).data("total_revenue")) - parseFloat($(a).data("total_fees")) || 0;
+          var b_sort = parseFloat($(b).data("total_revenue")) - parseFloat($(b).data("total_fees")) || 0;
         }
         else if (sort_by == "status" || sort_by == "domain_name"){
           var a_sort = $(a).find(".sort-by-" + sort_by).text().toLowerCase();
@@ -1548,7 +1605,7 @@ function showSectionByURL(){
 
     //change tooltip direction for first visible 4
     if ($(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").length < 4){
-      $(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").find(".bubble-tooltip").attr('data-balloon-pos', "right").attr('data-balloon-length', "large");
+      $(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").find(".bubble-tooltip").attr('data-balloon-pos', "left").attr('data-balloon-length', "large");
     }
     else {
       $(".transactions-row:not(#transactions-row-clone):not(.is-hidden)").find(".bubble-tooltip").attr('data-balloon-pos', "up").attr('data-balloon-length', "medium");
@@ -1612,7 +1669,22 @@ function showSectionByURL(){
     //calculate fees and profit
     var doma_fees = (transaction.doma_fees) ? transaction.doma_fees : 0;
     var payment_fees = (transaction.payment_fees) ? transaction.payment_fees : 0;
-    $("#transactions-modal-price").text(moneyFormat.to((transaction.transaction_cost - doma_fees - payment_fees) / 100) + " USD");
+    $("#transactions-modal-price").html(formatCurrency((transaction.transaction_cost - doma_fees - payment_fees), transaction.transaction_cost_currency) + " " + transaction.transaction_cost_currency.toUpperCase());
+
+    //transaction was exchanged
+    if (transaction.transaction_cost_original){
+
+      //transaction cost
+      $("#transactions-modal-price").attr("data-balloon-length", "medium").attr("data-balloon-pos", "up").attr("data-balloon", 'Original price: ' + formatCurrency(transaction.transaction_cost_original - transaction.doma_fees_original - transaction.payment_fees_original, transaction.transaction_cost_original_currency) + " " + transaction.transaction_cost_original_currency.toUpperCase());
+
+      //doma fees
+      if (transaction.doma_fees_original){
+        $("#transactions-modal-domafees").attr("data-balloon-length", "medium").attr("data-balloon-pos", "up").attr("data-balloon", 'Original price: ' + formatCurrency(transaction.doma_fees_original, transaction.transaction_cost_original_currency) + " " + transaction.transaction_cost_original_currency.toUpperCase());
+      }
+    }
+    else {
+      $("#transactions-modal-price, #transactions-modal-domafees").removeAttr("data-balloon-length").removeAttr("data-balloon-pos").removeAttr("data-balloon");
+    }
 
     //refunded!
     if (temp_row.data("refunded")){
@@ -1634,11 +1706,20 @@ function showSectionByURL(){
       //hide fees
       $("#transactions-modal-domafees").closest("li").addClass("is-hidden");
 
-      //paypal doesnt refund 30 cents flat fee
+      //paypal doesnt refund flat fee
       if (transaction.payment_type == "paypal"){
-        $("#transactions-modal-processfees").text(moneyFormat.to(0.30) + " paid in payments processing fees");
+        $("#transactions-modal-processfees").text(formatCurrency(transaction.paypal_fee, user.default_currency) + " paid in payments processing fees");
         $("#payment-fees-wrapper").removeClass("is-hidden");
         $("#paypal-refund-notice").removeClass('is-hidden');
+
+        //payment fees
+        if (transaction.paypal_fee_original){
+          $("#transactions-modal-processfees").attr("data-balloon-length", "medium").attr("data-balloon-pos", "up").attr("data-balloon", 'Original price: ' + formatCurrency(transaction.paypal_fee_original, transaction.transaction_cost_original_currency) + " " + transaction.transaction_cost_original_currency.toUpperCase());
+        }
+        else {
+          $("#transactions-modal-processfees").removeAttr("data-balloon-length").removeAttr("data-balloon-pos").removeAttr("data-balloon");
+        }
+
       }
       else {
         $("#payment-fees-wrapper").addClass("is-hidden");
@@ -1646,6 +1727,14 @@ function showSectionByURL(){
       }
     }
     else {
+
+      //payment fees
+      if (transaction.payment_fees_original){
+        $("#transactions-modal-processfees").attr("data-balloon-length", "medium").attr("data-balloon-pos", "up").attr("data-balloon", 'Original price: ' + formatCurrency(transaction.payment_fees_original, transaction.transaction_cost_original_currency) + " " + transaction.transaction_cost_original_currency.toUpperCase());
+      }
+      else {
+        $("#transactions-modal-processfees").removeAttr("data-balloon-length").removeAttr("data-balloon-pos").removeAttr("data-balloon");
+      }
 
       //remove strikethrough from refunded
       $("#transactions-modal-price").removeClass("text-line-through")
@@ -1675,8 +1764,11 @@ function showSectionByURL(){
       }
 
       //fees and profit text
-      $("#transactions-modal-domafees").text(moneyFormat.to(doma_fees / 100) + " paid in DomaHub fees*").closest("li").removeClass("is-hidden");
-      $("#transactions-modal-processfees").text(moneyFormat.to(payment_fees / 100) + " paid in payments processing fees").closest("li").removeClass("is-hidden");
+      $("#transactions-modal-domafees").text(formatCurrency(doma_fees, transaction.transaction_cost_currency) + " paid in DomaHub fees*").closest("li").removeClass("is-hidden");
+      $("#transactions-modal-processfees").text(formatCurrency(payment_fees, transaction.transaction_cost_currency) + " paid in payments processing fees").closest("li").removeClass("is-hidden");
+
+      //hide paypal notice tooltip
+      $("#paypal-refund-notice").addClass('is-hidden');
     }
 
     //domain rental related stuff
@@ -1742,10 +1834,10 @@ function showSectionByURL(){
     //domain expense related stuff
     else {
       if (transaction.transaction_type == "expense"){
-        $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid" + ((transaction.transaction_details) ? ' for "' + transaction.transaction_details + '"': ""));
+        $("#transactions-modal-domafees").text(formatCurrency((transaction.transaction_cost), transaction.transaction_cost_currency) + " paid" + ((transaction.transaction_details) ? ' for "' + transaction.transaction_details + '"': ""));
       }
       else {
-        $("#transactions-modal-domafees").text(moneyFormat.to((transaction.transaction_cost) / 100) + " paid for annual domain renewal");
+        $("#transactions-modal-domafees").text(formatCurrency((transaction.transaction_cost), transaction.transaction_cost_currency) + " paid for annual domain renewal");
       }
       $("#commission-promo-message, #pending-transfer-wrapper, #available-on-wrapper, #payment-fees-wrapper").addClass("is-hidden");
 
@@ -1753,6 +1845,15 @@ function showSectionByURL(){
       $("#transaction-modal-rental-buttons-wrapper").addClass("is-hidden");
       $("#transaction-modal-expense-buttons-wrapper").removeClass("is-hidden");
       $("#edit-domain-expense-button").attr("href", "/profile/mylistings?listings=" + transaction.listing_id + "&tab=domain-info");
+    }
+
+    //original currency stuff
+    if (transaction.transaction_cost_original && transaction.transaction_cost_original_currency){
+      $("#original-currency-wrapper").removeClass("is-hidden");
+      $("#transactions-original-cost").text("Prices converted at " + formatCurrency(1 * multiplier(user.default_currency), transaction.transaction_cost_original_currency, 0) + " " + transaction.transaction_cost_original_currency.toUpperCase() + " to " + formatCurrency(transaction.transaction_cost_exchange_rate, user.default_currency, 4) + " " + user.default_currency.toUpperCase());
+    }
+    else {
+      $("#original-currency-wrapper").addClass("is-hidden");
     }
   }
 
@@ -1839,7 +1940,7 @@ function showSectionByURL(){
       $("#withdrawal-modal-submit-button").removeClass('is-loading');
       if (data.state == "success"){
         var total_available = $(".withdrawal-available").data("total_available");
-        successMessage("Successfully submitted a withdrawal request for " + moneyFormat.to(total_available) + " to your " + destination_account_text + "!</br></br>Please look out for a follow-up email within the next few business days.");
+        successMessage("Successfully submitted a withdrawal request for " + formatCurrency(total_available) + " to your " + destination_account_text + "!</br></br>Please look out for a follow-up email within the next few business days.");
         $(".modal").removeClass("is-active");
         if (data.user){
           user = data.user;
@@ -1873,12 +1974,34 @@ function hideSaveCancelButtons(){
   $(".toolbar-button").addClass('is-hidden');
 }
 
-//to format a number for $$$$
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 2
-});
+//get the multiplier of a currency
+function multiplier(code){
+  return (code && currency_codes[code.toUpperCase()]) ? Math.pow(10, currency_codes[code.toUpperCase()].fractionSize) : 1;
+}
+
+//to format a number for currency
+function formatCurrency(number, currency_code, decimals){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes[user.default_currency.toUpperCase()];
+  var currency_details = {
+    thousand: ',',
+    decimals: default_currency_details.fractionSize,
+  }
+
+  //override currency decimals
+  if (decimals != undefined){
+    currency_details.decimals = decimals;
+  }
+
+  //right aligned symbol
+  if (default_currency_details.symbol && default_currency_details.symbol.rtl){
+    currency_details.suffix = default_currency_details.symbol.grapheme;
+  }
+  else if (default_currency_details.symbol && !default_currency_details.symbol.rtl){
+    currency_details.prefix = default_currency_details.symbol.grapheme;
+  }
+
+  return wNumb(currency_details).to(number / Math.pow(10, default_currency_details.fractionSize));
+}
 
 //count money animation
 function moneyCountAnimation(elem, number){
@@ -1888,7 +2011,10 @@ function moneyCountAnimation(elem, number){
     duration : 500,
     easing: 'swing',
     step: function (now) {
-      $(this).text(moneyFormat.to(parseFloat(now)));
+      if (now < 0){
+        elem.addClass("is-danger");
+      }
+      $(this).text(formatCurrency(parseFloat(now)));
     }
   });
 }

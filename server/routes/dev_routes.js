@@ -392,7 +392,7 @@ module.exports = function(app){
   var whois = require("whois");
   var parser = require('parse-whois');
   var moment = require('moment');
-  var Q = require("Q");
+  var Q = require("q");
   var qlimit = require("qlimit");
 
   //test mode or serious mode
@@ -594,7 +594,7 @@ module.exports = function(app){
 
     //if no parameter for date, get latest one
     if (!req.params.date){
-      var date_to_get = fs.readdirSync("./other/marketing/parkedcontacts/DailyResults/").filter(function(elem){
+      var date_to_get = fs.readdirSync("./other/Marketing/parkedcontacts/DailyResults/").filter(function(elem){
         return elem.indexOf(".json") != -1;
       }).sort(function(a, b){
         var date_a = moment(a.replace(".json", ""));
@@ -607,9 +607,9 @@ module.exports = function(app){
     }
 
     res.render("admin/admin_parked_script.ejs", {
-      script_running : fs.existsSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok"),
-      results_exist : fs.existsSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".json"),
-      csv_exists : fs.existsSync("./other/marketing/parkedcontacts/FinalCSV/" + date_to_get + "-checklist.csv"),
+      script_running : fs.existsSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok"),
+      results_exist : fs.existsSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".json"),
+      csv_exists : fs.existsSync("./other/Marketing/parkedcontacts/FinalCSV/" + date_to_get + "-checklist.csv"),
       date_to_get : date_to_get
     });
   }
@@ -618,7 +618,7 @@ module.exports = function(app){
   function rebuildCSV(req, res, next){
 
     //create a lock file
-    fs.writeFileSync("./other/marketing/parkedcontacts/DailyResults/" + req.params.date + ".lok", "");
+    fs.writeFileSync("./other/Marketing/parkedcontacts/DailyResults/" + req.params.date + ".lok", "");
 
     buildCSV(req.params.date);
     res.send({
@@ -646,7 +646,7 @@ module.exports = function(app){
 
       //original CSV contents
       var parked_contacts_for_sendgrid = [];
-      csv2json().fromFile("./other/marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv").on('json',(jsonObj)=>{
+      csv2json().fromFile("./other/Marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv").on('json',(jsonObj)=>{
         parked_contacts_for_sendgrid.push(jsonObj);
       }).on('done', (error)=>{
 
@@ -690,7 +690,7 @@ module.exports = function(app){
             }, function(err, parked_contacts_for_sendgrid_csv){
               if (!err){
                 //create final check list before adding to sendgrid
-                fs.writeFileSync("./other/marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv", parked_contacts_for_sendgrid_csv);
+                fs.writeFileSync("./other/Marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv", parked_contacts_for_sendgrid_csv);
 
                 console.log("--------------------------------------------------------------");
                 console.log("--------------------FINISHED SENDGRID CHECKLIST---------------");
@@ -723,7 +723,7 @@ module.exports = function(app){
     }
 
     //if lock file already exists, skip finding step
-    if (!fs.existsSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok")){
+    if (!fs.existsSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok")){
 
       //script is running
       res.send({
@@ -731,16 +731,16 @@ module.exports = function(app){
       });
 
       //create a lock file
-      fs.writeFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok", "");
+      fs.writeFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok", "");
 
       //hash for domains and emails already retrieved/seen
       var emails_seen = {};
-      fs.readFile("./other/marketing/parkedcontacts/MasterFiles/seen_domains.json", "utf8", function(err, data){
+      fs.readFile("./other/Marketing/parkedcontacts/MasterFiles/seen_domains.json", "utf8", function(err, data){
         if (err){
           console.log("No master domains history file!");
         }
         var domains_seen = (data) ? JSON.parse(data) : {};
-        fs.readFile("./other/marketing/parkedcontacts/MasterFiles/seen_emails.json", "utf8", function(err, data){
+        fs.readFile("./other/Marketing/parkedcontacts/MasterFiles/seen_emails.json", "utf8", function(err, data){
           if (err){
             console.log("No master emails history file!");
           }
@@ -754,10 +754,10 @@ module.exports = function(app){
           }
 
           //restart current date_to_get results
-          fs.writeFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", []);
+          fs.writeFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", []);
 
           //word bank (words_current is the one being used, words_master is the master list of all words)
-          var words = JSON.parse(fs.readFileSync("./other/marketing/parkedcontacts/MasterFiles/words_current.json", "utf8"));
+          var words = JSON.parse(fs.readFileSync("./other/Marketing/parkedcontacts/MasterFiles/words_current.json", "utf8"));
 
           //build domain list promises (get domains from domainscope)
           var domain_promises = [];
@@ -809,14 +809,14 @@ module.exports = function(app){
     }
 
     //if CSV file exists
-    if (fs.existsSync("./other/marketing/parkedcontacts/FinalCSV/" + date_to_get + "-checklist.csv")){
+    if (fs.existsSync("./other/Marketing/parkedcontacts/FinalCSV/" + date_to_get + "-checklist.csv")){
       console.log("--------------------------------------------------------------");
       console.log("----------------PARSING CSV FILE INTO JSON--------------------");
       console.log("-------------------------" + date_to_get + "---------------------------");
       console.log("--------------------------------------------------------------");
 
       var parked_contacts_for_sendgrid = [];
-      csv2json().fromFile("./other/marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv").on('json',(jsonObj)=>{
+      csv2json().fromFile("./other/Marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv").on('json',(jsonObj)=>{
         parked_contacts_for_sendgrid.push(jsonObj);
       }).on('done', (error)=>{
         console.log("--------------------------------------------------------------");
@@ -941,7 +941,7 @@ module.exports = function(app){
     }
 
     console.log("-----------------------------------Total domains parsed : " + Object.keys(domains_seen).length);
-    fs.writeFileSync("./other/marketing/parkedcontacts/MasterFiles/seen_domains.json", JSON.stringify(domains_seen, null, 4), "utf8");
+    fs.writeFileSync("./other/Marketing/parkedcontacts/MasterFiles/seen_domains.json", JSON.stringify(domains_seen, null, 4), "utf8");
 
     //go ahead and try new domains
     var limit = qlimit(1);     //limit parallel promises (throttle)
@@ -971,8 +971,8 @@ module.exports = function(app){
 
       //if we got an email
       if (successful_domains.length > 0){
-        overwriteEmailFile(word, "./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", successful_domains, function(){
-          overwriteEmailFile(false, "./other/marketing/parkedcontacts/MasterFiles/seen_emails.json", successful_domains, resolve);
+        overwriteEmailFile(word, "./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", successful_domains, function(){
+          overwriteEmailFile(false, "./other/Marketing/parkedcontacts/MasterFiles/seen_emails.json", successful_domains, resolve);
         });
       }
       else {
@@ -1188,7 +1188,7 @@ module.exports = function(app){
     console.log("-------------------------" + date_to_get + "---------------------------");
     console.log("--------------------------------------------------------------");
 
-    var emails_for_today = JSON.parse(fs.readFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", "utf8"));
+    var emails_for_today = JSON.parse(fs.readFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", "utf8"));
     emails_for_today = emails_for_today.filter(function(email_obj){
       //find and remove bad emails
       return no_bueno_email_strings.every(function(bad_email_str){
@@ -1214,7 +1214,7 @@ module.exports = function(app){
     });
 
     //move to results folder and delete the existing emails gotten
-    fs.writeFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get +  ".json", JSON.stringify(emails_for_today, null, 4));
+    fs.writeFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get +  ".json", JSON.stringify(emails_for_today, null, 4));
 
     if (callback){
       callback();
@@ -1269,7 +1269,7 @@ module.exports = function(app){
     console.log("-------------------------" + date_to_get + "---------------------------");
     console.log("--------------------------------------------------------------");
 
-    var emails_for_today = JSON.parse(fs.readFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", "utf8"));
+    var emails_for_today = JSON.parse(fs.readFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", "utf8"));
     if (emails_for_today){
       var screenshot_promises = [];
 
@@ -1315,7 +1315,7 @@ module.exports = function(app){
           }
 
           //write to results file for the day
-          fs.writeFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get +  ".json", JSON.stringify(emails_for_today, null, 4));
+          fs.writeFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get +  ".json", JSON.stringify(emails_for_today, null, 4));
 
           if (callback){
             callback();
@@ -1496,7 +1496,7 @@ module.exports = function(app){
     console.log("-------------------------" + date_to_get + "---------------------------");
     console.log("--------------------------------------------------------------");
 
-    var emails_for_today = JSON.parse(fs.readFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", "utf8"));
+    var emails_for_today = JSON.parse(fs.readFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".json", "utf8"));
     var parked_contacts_for_sendgrid = [];
 
     //create the contacts array
@@ -1535,12 +1535,12 @@ module.exports = function(app){
       }, function(err, parked_contacts_for_sendgrid_csv){
         if (!err){
           //create final check list before adding to sendgrid
-          fs.writeFileSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get +  ".json", JSON.stringify(emails_for_today, null, 4));
-          fs.writeFileSync("./other/marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv", parked_contacts_for_sendgrid_csv);
+          fs.writeFileSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get +  ".json", JSON.stringify(emails_for_today, null, 4));
+          fs.writeFileSync("./other/Marketing/parkedcontacts/FinalCSV/" + date_to_get +  "-checklist.csv", parked_contacts_for_sendgrid_csv);
 
           //remove lock file now that we're finished
-          if (fs.existsSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok")){
-            fs.unlinkSync("./other/marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok");
+          if (fs.existsSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok")){
+            fs.unlinkSync("./other/Marketing/parkedcontacts/DailyResults/" + date_to_get + ".lok");
           }
 
           console.log("--------------------------------------------------------------");

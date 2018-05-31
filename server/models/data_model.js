@@ -410,6 +410,7 @@ module.exports = {
           stats_contact_history.email, \
           stats_contact_history.phone, \
           stats_contact_history.offer, \
+          stats_contact_history.offer_currency as default_currency, \
           stats_contact_history.message, \
           stats_contact_history.response, \
           stats_contact_history.accepted, \
@@ -433,6 +434,7 @@ module.exports = {
           stats_contact_history.email, \
           stats_contact_history.phone, \
           stats_contact_history.offer, \
+          stats_contact_history.offer_currency as default_currency, \
           stats_contact_history.message, \
           stats_contact_history.accepted \
         FROM stats_contact_history \
@@ -458,9 +460,12 @@ module.exports = {
           stats_contact_history.email, \
           stats_contact_history.phone, \
           stats_contact_history.offer, \
+          stats_contact_history.offer_currency, \
           stats_contact_history.message, \
           stats_contact_history.response, \
           stats_contact_history.accepted, \
+          stats_contact_history.deposited, \
+          stats_contact_history.transferred, \
           stats_contact_history.bin \
         FROM stats_contact_history \
         INNER JOIN listings \
