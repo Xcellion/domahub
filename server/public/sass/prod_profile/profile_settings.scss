@@ -129,29 +129,10 @@ th.has-text-right, td.has-text-right{
   max-height:calc(100vh - 300px) !important;
 }
 
-.transactions-row-available {
-  @include widescreen {
-    width: 200px;
-  }
-}
 
 .transactions-row-domain {
   overflow-x: hidden;
   white-space: nowrap;
-}
-
-.transactions-row-date {
-  @include widescreen {
-    width:120px;
-  }
-}
-
-.transactions-row-type {
-  width: 90px;
-}
-
-.transactions-row-payment {
-  width: 110px;
 }
 
 #transactions-info {
@@ -164,16 +145,6 @@ th.has-text-right, td.has-text-right{
       display: flex;
     }
   }
-}
-
-.transactions-row-available .icon {
-  display: inline-block;
-  margin-left: 5px;
-}
-
-.no-border-bottom {
-  border-bottom-width: 0px !important;
-  margin-bottom:0;
 }
 
 .remove-margin-bottom-content {

@@ -23,12 +23,12 @@
           </h2>
         </div>
         <div class="control-right is-flex">
-          <a id="status-toggle-button" tabindex="0" class="button control-item is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
+          <a id="status-toggle-button" tabindex="0" class="button control-item is-flexible is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
             <div id="status-icon" class="icon is-small"><i class="fal fa-toggle-on"></i></div>
             <span id="status-text" class="is-hidden-mobile"></span>
           </a>
           <div id="view-listings-button-wrapper" class="control-item is-relative">
-            <a id="view-listings-button" class="button is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
+            <a id="view-listings-button" class="button is-flexible is-stylish is-black is-inverted is-small" target="_blank" rel="noopener" tabindex="0">
               <div class="icon is-small"><i class="fal fa-external-link"></i></div>
               <span class="is-hidden-mobile">View Page<span class="edit-domain-plural is-hidden">s</span></span>
             </a>
@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <div class="tabs is-boxed">
+      <div class="tabs is-primary">
         <ul>
           <li id="info-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
@@ -65,16 +65,16 @@
               <% } %>
             </a>
           </li>
-          <div class="button-wrapper is-mobile control">
+          <div class="button-wrapper control">
             <div class="control is-grouped">
               <div class="control is-marginless">
-                <a id="save-changes-button" class="button is-primary is-stylish is-small is-hidden">
+                <a id="save-changes-button" class="button is-flexible is-primary is-stylish is-small is-hidden">
                   <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
                   <span>Save</span>
                 </a>
               </div>
               <div class="control">
-                <a id="cancel-changes-button" class="button is-danger is-stylish is-small is-hidden">
+                <a id="cancel-changes-button" class="button is-flexible is-danger is-stylish is-small is-hidden">
                   <div class="icon is-small"><i class="fal fa-ban"></i></div>
                   <span>Cancel</span>
                 </a>
@@ -95,9 +95,6 @@
               <div class="control">
                 <label class="label" for="description">
                   Listing Description
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="A good description helps your potential customers understand the value of your domain name." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
-                  </div>
                 </label>
                 <small class="tip">Text description that will appear as a paragraph below the domain name on the listing page.</small>
                 <textarea id="description" class="description-input textarea changeable-input"
@@ -106,9 +103,6 @@
               <div class="control">
                 <label class="label" for="categories-input">
                   Categories
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
-                  </div>
                 </label>
                 <small class="tip">Categories or industries <span class="this-domain">this domain</span> belong to. Helpful for users to find similar domains.</small>
                 <input id="categories-input" class="input changeable-input" data-name="categories" type="text">
@@ -130,8 +124,8 @@
                       <i class="fal fa-trophy-alt"></i>
                     </div>
                   <% } %>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Maximum of 75 characters." data-balloon-pos="top">
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">Text that is displayed on the footer of the listing page. An ideal location for a slogan, phrase, or trademark.</small>
@@ -148,7 +142,7 @@
                 <label class="label" for="min-price-input">
                   Minimum Price
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">The minimum offer you will consider selling <span class="this-domain">this domain</span> for.</small>
@@ -158,7 +152,7 @@
                 <label class="label" for="buy-price-input">
                   Buy It Now Price
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">The price you are willing to sell <span class="this-domain">this domain</span> for immediately.</small>
@@ -171,7 +165,7 @@
           <div class="card is-fullwidth">
             <div class="card-header">
               <h3 class="card-header-title">Domain Rentals</h3>
-              <a target="_blank" rel="noopener" href="/faq#renting" class="is-primary is-underlined">Why should I rent my domain out?</a>
+              <a target="_blank" rel="noopener" href="/faq#renting" class="is-primary is-bold">Why should I rent my domain out?</a>
             </div>
             <div class="card-content">
               <div class="control is-spaced">
@@ -179,7 +173,7 @@
                   <label class="label" for="rentable-input">
                     Allow Rentals
                     <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="A rented domain cannot be purchased during the rental term. For more details, please check the DomaHub FAQ." data-balloon-pos="up">
-                      <i class="fal fa-question-circle"></i>
+                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                     </div>
                   </label>
                   <small class="tip">Allows users to rent usage of <span class="this-domain">this domain</span> for short amounts of time.</small>
@@ -194,7 +188,7 @@
               <label class="label">
                 Rental Price
                 <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for free rentals on your domain." data-balloon-pos="up">
-                  <i class="fal fa-question-circle"></i>
+                  <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                 </div>
               </label>
               <small class="tip">The price per unit of time for a domain rental.</small>
@@ -214,7 +208,7 @@
                 <label class="label">
                   <span>Example Paths</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must consist of either letters or numbers." data-balloon-pos="up">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">Example paths or subdirectories that users may want to rent on <span class="this-domain">this domain</span>.</small>
@@ -259,14 +253,14 @@
         <div class="control">
           <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize the listing page!</p>
         </div>
-        <div class="button-wrapper is-mobile control">
-          <a id="example-button-primary" class="preview-elem button is-stylish">
+        <div class="button-wrapper control">
+          <a id="example-button-primary" class="preview-elem button is-flexible is-stylish">
             <div class="icon is-small">
               <i class="fal fa-check-circle" aria-hidden="true"></i>
             </div>
             <span>Send Offer</span>
           </a>
-          <a id="example-button-accent" class="preview-elem button is-stylish">
+          <a id="example-button-accent" class="preview-elem button is-flexible is-stylish">
             <div class="icon is-small">
               <i class="fal fa-shopping-cart" aria-hidden="true"></i>
             </div>
@@ -350,7 +344,7 @@
                 <label class="label">
                   <span>Background Color</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <div class="control">
@@ -459,7 +453,7 @@
                 <label class="label">
                   <span>Background Image URL</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Dimensions can be whatever you wish, but keep in mind your customers will have different resolutions. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
@@ -488,7 +482,7 @@
                 <label class="label">
                   <span>Logo Image URL</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <div class="control">
@@ -531,7 +525,7 @@
                   <label class="label" for="placeholder-input">
                     Placeholder Text
                     <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The placeholder text is a light-hearted way of letting your users know what information to put in what form." data-balloon-pos="up">
-                      <i class="fal fa-question-circle"></i>
+                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                     </div>
                   </label>
                   <small class="tip">Enables the movie-quote placeholder text on the listing page contact form.</small>
@@ -588,7 +582,7 @@
                   <label class="label">
                     <span>Show Other Listings</span>
                     <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="There will be nothing to display if you do not have any active or unsold listings." data-balloon-pos="up">
-                      <i class="fal fa-question-circle"></i>
+                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                     </div>
                   </label>
                   <small class="tip">Displays a list of other <span class="is-bold">active</span> listings you own on DomaHub.</small>
@@ -610,12 +604,14 @@
         <div class="column is-6">
           <div class="card is-fullwidth">
             <div class="card-header">
-              <h3 class="card-header-title">
-                Registrar Information
-                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
-                  <i class="fal fa-exclamation-triangle"></i>
-                </div>
-              </h3>
+              <div class="">
+                <h3 class="card-header-title">
+                  Registrar Information
+                </h3>
+                <small class="tip">
+                  Changing this information does not change it on your registrar. It is for your information purposes only.
+                </small>
+              </div>
               <a id="lookup-dns-button" class="button is-icon no-shadow is-stylish is-small">
                 <span class="icon is-small"><i class="fal fa-search"></i></span>
                 <span>Lookup Missing Details</span>
@@ -729,8 +725,8 @@
                 <div class="control-left">
                   <label class="label">
                     Related Expenses
-                    <div class="icon is-tooltip is-small" style="display:inline-block;" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
-                      <i class="fal fa-question-circle"></i>
+                    <div class="icon is-tooltip is-small" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
+                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                     </div>
                   </label>
                   <small class="tip">Any expenses incurred related to <span class="this-domain">this domain</span>.</small>
@@ -744,7 +740,7 @@
               </div>
               <div id="domain-expense-table-wrapper" class="is-hidden control">
 
-                <table class="table no-borders is-transparent-head no-shadow">
+                <table class="table">
                   <tbody id="domain-expense-table">
                     <tr id="domain-expense-clone" class="clone-row is-hidden table-row no-hover-effect">
                       <td class="domain-expense-name break-word"></td>
@@ -1016,7 +1012,7 @@
                 <label class="label" for="hub-title-input">
                   <span>Hub Name</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">Main text that will appear as the page title and at the top of your listings hub.</small>
@@ -1027,7 +1023,7 @@
                   <label class="label" for="hub-email-input">
                     <span>Display email</span>
                     <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Uses the same email as your DomaHub email." data-balloon-pos="top">
-                      <i class="fal fa-question-circle"></i>
+                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                     </div>
                   </label>
                   <small class="tip">Displays your email address at the top of the page.</small>
@@ -1043,7 +1039,7 @@
                 <label class="label" for="hub-phone-input">
                   <span>Phone Number</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave blank for no phone number." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">Displays a phone number at the top of the page.</small>
@@ -1055,7 +1051,7 @@
                 <label class="label" for="hub-layout-count-input">
                   <span>Default Layout</span>
                   <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number greater than 10. There are 4 columns per row in the grid layout." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
                   </div>
                 </label>
                 <small class="tip">The number of domains shown in either a tiled or table layout.</small>
@@ -1160,14 +1156,14 @@
       </div>
       <div id="offers-toolbar" class="control-right">
         <div class="offer-button control is-grouped">
-          <div class="control is-mobile">
-            <a id="refresh-offers-button" class="button is-stylish is-black is-inverted is-small is-hidden" title="Refresh Offers">
+          <div class="control">
+            <a id="refresh-offers-button" class="button is-flexible is-stylish is-black is-inverted is-small is-hidden" title="Refresh Offers">
               <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
               <span class="is-hidden-mobile">Refresh</span>
             </a>
           </div>
-          <div class="control is-mobile">
-            <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-stylish is-small is-black is-inverted">
+          <div class="control">
+            <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-flexible is-stylish is-small is-black is-inverted">
               <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
               <span class="is-hidden-mobile">Show Rejected</span>
             </a>
@@ -1198,25 +1194,25 @@
             <ul id="offer-info" class="is-vertical offer-info">
               <li>
                 <div class="icon is-small" title="From">
-                  <i class="fal fa-user-alt fa-fw"></i></span>
+                  <i class="fal fa-user-alt fa-fw" data-fa-transform="down-3"></i></span>
                 </div>
                 <span id="offer-modal-name">
                 </li>
                 <li>
                   <div class="icon is-small" title="Email">
-                    <i class="fal fa-envelope fa-fw"></i></span>
+                    <i class="fal fa-envelope fa-fw" data-fa-transform="down-3"></i></span>
                   </div>
                   <span id="offer-modal-email">
                   </li>
                   <li>
                     <div class="icon is-small" title="Phone">
-                      <i class="fal fa-phone fa-fw"></i></span>
+                      <i class="fal fa-phone fa-fw" data-fa-transform="down-3"></i></span>
                     </div>
                     <span id="offer-modal-phone">
                     </li>
                     <li>
                       <div class="icon is-small" title="Message">
-                        <i class="fal fa-comment fa-fw"></i>
+                        <i class="fal fa-comment fa-fw" data-fa-transform="down-3"></i>
                       </div>
                       <p id="offer-modal-message" class="offer-msg"></p>
                     </li>
@@ -1355,7 +1351,7 @@
 
       <div class="column">
         <!-- OFFER TABLE -->
-        <table id="no-verified-listings-table" class="is-hidden has-shadow table is-fixed is-bordered">
+        <table id="no-verified-listings-table" class="table is-fixed is-hidden">
           <tbody>
             <tr class="no-hover-effect">
               <td colspan="5">
@@ -1393,7 +1389,7 @@
             </tr>
           </tbody>
         </table>
-        <table id="no-offers-table" class="hidden-while-loading-offers has-shadow is-hidden table is-fixed is-bordered">
+        <table id="no-offers-table" class="table is-fixed is-hidden hidden-while-loading-offers">
           <tbody>
             <tr class="no-hover-effect">
               <td colspan="5">
@@ -1401,14 +1397,14 @@
                   <div class="icon is-large is-danger">
                     <i class="fal fa-exclamation-circle"></i>
                   </div>
-                  <p>Oh, no! There are no existing/matching offers!</p>
+                  <p>There are no existing or matching offers.</p>
                   <p>Let's go out there and get some offers!</p>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <table id="loading-offers-table" class="is-hidden has-shadow table is-fixed is-bordered">
+        <table id="loading-offers-table" class="table is-fixed is-hidden">
           <tbody>
             <tr class="no-hover-effect">
               <td colspan="5">
@@ -1421,7 +1417,7 @@
             </tr>
           </tbody>
         </table>
-        <table id="offers-table" class="table has-shadow is-fixed no-borders is-hidden hidden-while-loading-offers">
+        <table id="offers-table" class="table is-fixed no-borders is-hidden hidden-while-loading-offers">
           <thead class="has-hover-effect is-pastel no-border-bottom">
             <tr>
               <th class="offer-header-sort" data-value="domain_name">
@@ -1446,7 +1442,7 @@
               </th>
             </tr>
           </thead>
-          <tbody id="offers-wrapper">
+          <tbody id="offers-wrapper" class="has-shadow">
             <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
               <td>
                 <span class="td-offer-domain break-all is-bold"></span>
@@ -1481,7 +1477,7 @@
         <p>
           Unique Referers
           <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="What website your users are coming from (where they are being referred from)." data-balloon-pos="up">
-            <i class="fal fa-question-circle"></i>
+            <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
           </div>
         </p>
         <div class="chart-min-height">
@@ -1526,9 +1522,9 @@
       <div class="column is-narrow">
         <div class="card is-fullwidth-mobile">
           <div class="card-image">
-            <div id="verification-left" class="notification no-shadow has-icon is-lighter">
+            <div id="verification-left" class="notification no-shadow has-icon is-pastel">
               <div class="icon-box">
-                <div id="verification-left-load" class="icon">
+                <div id="verification-left-load" class="icon is-black">
                   <i class="fal fa-spin fa-circle-notch"></i>
                 </div>
                 <div id="verification-left-danger" class="icon is-white">
@@ -1552,7 +1548,7 @@
                 Please note that DNS changes can take up to 72 hours to take effect.
               </p>
               <p>
-                If you require any assistance, please refer to our <a tabindex="0" target="_blank" class="is-primary is-underlined" href="https://medium.com/domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a>.
+                If you require any assistance, please refer to our <a tabindex="0" target="_blank" title="Link to Guide" class="is-primary is-bold" href="https://medium.com/domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a>.
               </p>
             </div>
           </div>
@@ -1562,24 +1558,24 @@
       <div class="column">
         <div class="content">
           <div class="control is-grouped">
-            <div class="control button-wrapper is-mobile">
-              <a id="refresh-dns-button" class="button is-stylish is-small" title="Refresh DNS Table">
+            <div class="control button-wrapper">
+              <a id="refresh-dns-button" class="button is-flexible is-stylish is-black is-inverted is-small" title="Refresh DNS Table">
                 <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
                 <span>Refresh Table<span class="verification-plural"></span></span>
               </a>
-              <a id="auto-dns-button" class="button is-stylish is-small is-hidden verify-hidden-while-loading" title="Automatically Set DNS">
+              <a id="auto-dns-button" class="button is-flexible is-stylish is-small is-hidden verify-hidden-while-loading" title="Automatically Set DNS">
                 <div class="icon is-small"><i class="fal fa-table"></i></div>
                 <span>Automatically Set DNS</span>
               </a>
-              <a id="verify-button" class="verify-hidden-while-loading button is-stylish is-small is-primary is-hidden" title="Verify domain(s)">
+              <a id="verify-button" class="verify-hidden-while-loading button is-flexible is-stylish is-small is-primary is-hidden" title="Verify domain(s)">
                 <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
                 <span>Verify Now</span>
               </a>
-              <a id="prev-dns-table-button" data-value="-1" class="verify-hidden-while-loading button is-stylish is-small" title="Previous Domain Name">
+              <a id="prev-dns-table-button" data-value="-1" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Previous Domain Name">
                 <div class="icon is-small"><i class="fal fa-angle-left"></i></div>
                 <span class="is-hidden-mobile">Previous</span>
               </a>
-              <a id="next-dns-table-button" data-value="1" class="verify-hidden-while-loading button is-stylish is-small" title="Next Domain Name">
+              <a id="next-dns-table-button" data-value="1" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Next Domain Name">
                 <span class="is-hidden-mobile">Next</span>
                 <div class="icon is-small"><i class="fal fa-angle-right"></i></div>
               </a>
@@ -1587,7 +1583,7 @@
           </div>
         </div>
         <div id="current-dns-tables">
-          <table id="loading-dns-table" class="has-shadow table">
+          <table id="loading-dns-table" class="table has-shadow no-borders">
             <tbody>
               <tr class="no-hover-effect">
                 <td class="has-text-centered">
@@ -1600,8 +1596,8 @@
               </tr>
             </tbody>
           </table>
-          <table id="current-dns-table-clone" class="has-shadow is-hidden table has-shadow no-border-bottom">
-            <thead>
+          <table id="current-dns-table-clone" class="table no-borders is-fixed is-hidden">
+            <thead class="is-pastel no-border-bottom">
               <tr>
                 <th class="table-header is-hidden-mobile" colspan=5></th>
                 <th class="table-header is-hidden-tablet" colspan=4></th>
@@ -1619,7 +1615,7 @@
                 <th class="is-hidden-mobile">Current Data</th>
               </tr>
             </thead>
-            <tbody class="dns-table-body">
+            <tbody class="dns-table-body has-shadow">
               <tr class='doma-a-record needs-action-row no-hover-effect'>
                 <td class="next_step is-danger"></td>
                 <td class="td-dns-host">@</td>

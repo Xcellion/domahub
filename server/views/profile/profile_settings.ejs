@@ -17,12 +17,14 @@
 
 			<div class="right-content">
 
-				<%- include("../profile/profile_navbar_top.ejs"); %>
+				<%- include("../profile/templates/profile_nav_top.ejs"); %>
 
 				<div class="right-content-items">
-
+					<div class="content">
+						<h2>Account Settings</h2>
+					</div>
 	        <div id="settings-toolbar">
-	          <div class="tabs is-boxed">
+	          <div class="tabs is-primary">
 	            <ul>
 	              <li id="account-tab" class="tab is-active">
 	                <a tabindex="0" title="Account">
@@ -151,7 +153,7 @@
                       <label class="label" for="ga_tracking_id-input">
                         Google Analytics Tracking ID
                       </label>
-                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-underlined" target="_blank" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
+                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-bold" target="_blank" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
                       <input id="ga_tracking_id-input" class="input account-input" data-uservar="ga_tracking_id" type="text" value="<%= user.ga_tracking_id %>" spellcheck="false" oninvalid="this.setCustomValidity('Please enter a valid Google Analytics tracking ID!')" oninput="setCustomValidity('')"/>
                     </div>
                   </form>
@@ -239,7 +241,7 @@
   									<div class="content">
   										<small class="is-white">
   											Sign up for Premium and gain access to additional features like no commission fees, design customization, unlimited domains, etc.
-  											<a tabindex="0" target="_blank" class="is-white is-underlined" href="/features#pricing">
+  											<a tabindex="0" target="_blank" class="is-white is-bold" href="/features#pricing">
   												Click here to learn more.
   											</a>
   										</small>
@@ -256,7 +258,7 @@
                       <div class="content">
                         <small class="is-white">
                           Your Premium account is currently set to expire on <span class="exp-date-text"></span>. You will lose access to additional features like no commission fees, design customization, unlimited domains, etc.
-                          <a tabindex="0" target="_blank" class="is-white is-underlined" href="/features#pricing">
+                          <a tabindex="0" target="_blank" class="is-white is-bold" href="/features#pricing">
                             Click here to learn more.
                           </a>
                         </small>
@@ -381,11 +383,11 @@
 	                <div class="control-right">
 	                  <form id="promo-form">
 	                    <div class="control has-icon has-addons">
-	                      <input id="promo-input" autocomplete="off" required tabindex="0" class="input has-shadow promo-input" type="text"  oninvalid="this.setCustomValidity('Please enter a valid promo code!')" oninput="setCustomValidity('')"/>
+	                      <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"  oninvalid="this.setCustomValidity('Please enter a valid promo code!')" oninput="setCustomValidity('')"/>
 	                      <div class="icon">
 													<i class="fal fa-tags"></i>
 												</div>
-	                      <button id="promo-submit" class="promo-input has-shadow button is-stylish is-small" text="Submit" type="submit" form="promo-form">
+	                      <button id="promo-submit" class="promo-input button is-stylish is-small no-shadow" text="Submit" type="submit" form="promo-form">
 													<div class="icon is-small">
 														<i class="fal fa-check-circle"></i>
 													</div>
@@ -406,8 +408,8 @@
 	          				These are people who have signed up using your referral link or any promotional codes you may have applied to your account.
 	          			</small>
 	                <div class="control has-addons">
-	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input has-shadow" placeholder="https://domahub.com/signup/<%= user.username.toLowerCase() %>" />
-	                  <a id="referral-link-copy" class="button is-stylish is-small" tabindex="0">
+	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input" placeholder="https://domahub.com/signup/<%= user.username.toLowerCase() %>" />
+	                  <a id="referral-link-copy" class="button is-stylish is-small no-shadow" tabindex="0">
 	                    <div class="icon is-small">
 												<i class="fal fa-clipboard"></i>
 											</div>
@@ -450,8 +452,8 @@
                       <th colspan="3">
                         Total earned: <span id="total-amount-redeemed"></span>
                       </th>
-                      <th>
-                        <a id="refresh-referral-table-button" class="button is-pulled-right is-stylish is-small is-outlined">
+                      <th class="has-button">
+                        <a id="refresh-referral-table-button" class="button is-pulled-right is-stylish is-small">
                           <div class="icon is-small">
                             <i class="fal fa-sync-alt"></i>
                           </div>
@@ -984,28 +986,28 @@
 	                </div>
 	              </div>
 	            </div>
-	            <table id="transactions-table" class="table has-shadow is-hidden">
-	              <thead>
+	            <table id="transactions-table" class="table is-fixed no-borders is-hidden">
+	              <thead class="no-border-bottom is-pastel">
 	                <tr>
                     <th class="transaction-header-sort transactions-row-available">
                       <span>Status</span>
-                      <div class="icon is-small" data-sort-by="status"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+                      <div class="icon is-small" data-sort-by="status"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
                     </th>
                     <th class="transaction-header-sort transactions-row-date">
                       <span>Date</span>
-                      <div class="icon is-small" data-sort-by="date_created"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+                      <div class="icon is-small" data-sort-by="date_created"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
                     </th>
                     <th class="transaction-header-sort transactions-row-domain">
                       <span>Domain Name</span>
-                      <div class="icon is-small" data-sort-by="domain_name"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+                      <div class="icon is-small" data-sort-by="domain_name"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
                     </th>
                     <th class="transaction-header-sort transactions-row-amount has-text-right">
                       <span>Earnings</span>
-                      <div class="icon is-small" data-sort-by="transaction_cost"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+                      <div class="icon is-small" data-sort-by="transaction_cost"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
                     </th>
                     <th class="transaction-header-sort transactions-row-type is-hidden-mobile">
                       <span>Type</span>
-                      <div class="icon is-small" data-sort-by="transaction_type" ><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+                      <div class="icon is-small" data-sort-by="transaction_type" ><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
                     </th>
                     <th class="transaction-header-sort transactions-row-payment is-hidden-mobile">
                       <span>Payment Method</span>
@@ -1013,7 +1015,7 @@
                     </th>
 	                </tr>
 	              </thead>
-	              <tbody id="transactions-table-body">
+	              <tbody id="transactions-table-body" class="has-shadow">
 	                <tr id="transactions-row-clone" class="transactions-row is-hidden">
                     <td class="transactions-row-available sort-by-status"></td>
 	                  <td class="transactions-row-date"></td>
@@ -1126,7 +1128,7 @@
 						<div class="content">
 							<p class="is-hidden existing-cc is-white"></p>
 							<small class="is-white">
-								All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-white is-underlined">Stripe</a>.
+								All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-white is-bold">Stripe</a>.
 							</small>
 						</div>
 					</div>
@@ -1273,7 +1275,7 @@
           <div class="content">
             <p class="is-hidden existing-cc is-white"></p>
             <small class="is-white">
-              All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-white is-underlined">Stripe</a>.
+              All information is stored with our third party payment provider, <a target="_blank" href="https://stripe.com" class="is-white is-bold">Stripe</a>.
             </small>
           </div>
         </div>
@@ -1394,7 +1396,7 @@
             <li id="pending-transfer-wrapper" class="is-hidden">
               <div class="icon is-small is-danger" title="Pending Transfer of Ownership">
 								<i class="fal fa-exclamation-circle fa-fw"></i></span>
-							</div>Please <a id="transfer-ownership-href" class="is-underlined is-primary">transfer ownership</a> of this domain to access these funds!</span>
+							</div>Please <a id="transfer-ownership-href" class="is-bold is-primary">transfer ownership</a> of this domain to access these funds!</span>
             </li>
             <li id="available-on-wrapper">
               <div class="icon is-small" title="Available For Withdrawal">
@@ -1446,7 +1448,7 @@
         </div>
         <div id="commission-promo-message" class="control is-hidden">
           <p class="basic-hidden">* Hurray! You paid 0% commission on this transaction!</p>
-          <p class="premium-hidden">* Upgrade to <a href="/profile/settings#premium" class="is-underlined is-primary">Premium</a> and pay 0% commission on future sales/rentals!</p>
+          <p class="premium-hidden">* Upgrade to <a href="/profile/settings#premium" class="is-bold is-primary">Premium</a> and pay 0% commission on future sales/rentals!</p>
         </div>
       </div>
     </div>

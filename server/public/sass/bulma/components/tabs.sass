@@ -11,22 +11,37 @@
   white-space: nowrap
   a
     align-items: center
-    border-bottom: 1px solid transparent
-    color: $text
+    color: $grey
     display: flex
     justify-content: center
-    margin-bottom: -1px
-    padding: 5px 8px 8px
+    padding: 12px
+    position: relative
     vertical-align: top
+    &::before
+      +transition(height 0.2s ease)
+      content: ''
+      background: $border
+      border-radius: 3px
+      position: absolute
+      top: calc(100% - 1px)
+      left: 0
+      height: 0px
+      width: 100%
     &:hover,
-    &:focus,
-    &:active
-      border-bottom-color: $black-secondary
+    &:focus
+      outline: none
+      &::before
+        height: 3px
   li
     display: block
+    &:not(:last-child)
+      margin-right: 10px
     &.is-active
       a
-        border-bottom-color: $black-primary
+        color: $text
+        &::before
+          background: $primary
+          height: 3px
   ul
     align-items: center
     border-bottom: 1px solid $border
@@ -62,50 +77,6 @@
       &.is-active
         a
           border-bottom-color: $primary
-  &.has-shadow
-    +box-shadow(0,3px,15px,$border,0)
-    background-color: $white
-    margin-bottom: 0
-    border-radius: $radius-large $radius-large 0 0
-    ul
-      border-bottom: none
-    li
-      width: 100%
-      a
-        border-bottom: none
-        text-transform: uppercase
-        font-size: 14px
-        font-weight: 700
-        letter-spacing: 1px
-      &.is-active
-        a
-          background-color: $white
-      &:not(.is-active)
-        a
-          background-color: $grey-lighter
-          &:hover,
-          &:focus
-            background-color: $grey-light
-      &:not(:last-child)
-        margin-right: 0
-  &.no-borders
-    ul
-      border-bottom: none
-    li
-      a
-        +transition(color .2s ease)
-        border-bottom: none
-        margin-bottom: 0
-        padding: 0
-        &:hover,
-        &:active,
-        &:focus
-          opacity: 0.6
-          outline: none
-      &.is-active
-        a
-          color: $primary
-          font-weight: 700
   &.is-boxed
     ul
       border-bottom: none
@@ -128,56 +99,18 @@
   &.is-fullwidth
     li
       flex-grow: 1
-  &.is-toggle
-    a
-      border: 1px solid $border
-      margin-bottom: 0
-      padding-bottom: 5px
-      padding-top: 5px
-      position: relative
-      &:hover,
-      &:focus
-        +box-shadow(0,0,0,$black,0)
-        z-index: 2
-        background-color: $grey-lighter
-    li
-      & + li
-        margin-left: -1px
-      &:first-child a
-        border-radius: $radius 0 0 $radius
-      &:last-child a
-        border-radius: 0 $radius $radius 0
-      &.is-attached
-        &:first-child a
-          border-radius: $radius 0 0 0
-        &:last-child a
-          border-radius: 0 $radius 0 0
-      &.is-active
-        a
-          +box-shadow(0,0,0,$black,0)
-          background-color: $primary
-          border-color: $primary
-          color: $primary-invert
-          z-index: 1
-          &:hover,
-          &:focus
-            +box-shadow(0,0,0,$black,0)
-    ul
-      border-bottom: none
   // Sizes
   &.is-small
     font-size: $size-small
     a
       padding: 2px 8px
-    &.is-boxed,
-    &.is-toggle
+    &.is-boxed
       a
         padding-bottom: 1px
         padding-top: 1px
   &.is-medium
     font-size: $size-medium
-    &.is-boxed,
-    &.is-toggle
+    &.is-boxed
       a
         padding-bottom: 9px
         padding-top: 9px
@@ -185,8 +118,7 @@
     font-size: $size-large
     a
       padding: 14px 20px
-    &.is-boxed,
-    &.is-toggle
+    &.is-boxed
       a
         padding-bottom: 13px
         padding-top: 13px

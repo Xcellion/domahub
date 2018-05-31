@@ -2203,7 +2203,7 @@ function createDNSRecordRows(selected_domain_ids, force){
   $(".verify-hidden-while-loading").addClass("is-hidden");
   $("#refresh-dns-button").addClass('is-loading');
 
-  $("#verification-left").addClass('is-lighter').removeClass('is-primary is-danger');
+  $("#verification-left").addClass('is-pastel').removeClass('is-primary is-danger');
   $("#verification-left-danger, #verification-left-success").addClass('is-hidden');
   $("#verification-left-load").removeClass('is-hidden');
   $("#verification-left-text").removeClass('is-white').text("Now loading existing DNS records.");
@@ -2289,7 +2289,7 @@ function createDNSTable(listing_info, total_unverified, row_index){
     var regex_url = /^((http|https):\/\/)/;
     if (!regex_url.test(reg_url)) { reg_url = "http://" + reg_url; }
     if (reg_name && reg_url){
-      table_header_text += " (<a target='_blank' class='is-underlined is-primary' href='" + reg_url + "'>" + reg_name + "</a>)";
+      table_header_text += " (<a target='_blank' class='is-bold is-primary' href='" + reg_url + "'>" + reg_name + "</a>)";
     }
   }
 
@@ -2321,15 +2321,6 @@ function createDNSTable(listing_info, total_unverified, row_index){
   //no records found! just assume they need domahub records
   else {
     createDomaRecords(cloned_a_row, cloned_www_row);
-  }
-
-  //incomplete
-  if (cloned_table.find(".is-danger").length > 1){
-    table_header_text = "<span class='tag is-small is-danger dns-status'>Incomplete</span>" + table_header_text;
-  }
-  //complete
-  else {
-    table_header_text = "<span class='tag is-small is-primary dns-status'>Completed</span>" + table_header_text;
   }
 
   cloned_table.find(".existing-dns-row").remove();
@@ -2388,14 +2379,14 @@ function checkDNSAllDone(total_unverified){
     if ($(".cloned-dns-table .needs-action-row").length == 0){
       $("#verify-button").removeClass('is-hidden');
       $("#refresh-dns-button").addClass('is-hidden');
-      $("#verification-left").addClass('is-primary').removeClass('is-danger');
+      $("#verification-left").addClass('is-primary').removeClass('is-danger is-pastel');
       $("#verification-left-success").removeClass('is-hidden');
       $("#verification-left-text").addClass('is-white').text("All DNS settings look good! Please click the verify now button!");
     }
     else {
       $("#verify-button").addClass('is-hidden');
       $("#refresh-dns-button").removeClass('is-hidden');
-      $("#verification-left").addClass('is-danger').removeClass('is-primary');
+      $("#verification-left").addClass('is-danger').removeClass('is-primary is-pastel');
       $("#verification-left-danger").removeClass('is-hidden');
       $("#verification-left-text").addClass('is-white').text("You have " + $(".cloned-dns-table .needs-action-row").length + " entries left to modify.");
     }

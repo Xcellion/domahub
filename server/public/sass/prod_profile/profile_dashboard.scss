@@ -41,12 +41,14 @@
   display: flex;
   justify-content: flex-start;
   .box {
+    @include box-shadow(0,2px,8px,$border,0);
+    border-top: 5px solid;
     flex-grow: 1;
     &:first-child {
-      background-color: $info;
+      border-color: $info;
     }
     &:nth-child(2) {
-      background-color: $accent;
+      border-color: $accent;
     }
     &:not(:last-child) {
       margin-right: 20px;
@@ -57,6 +59,7 @@
 .fac {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .fas {
@@ -76,30 +79,20 @@
 }
 
 .box-heading {
-  text-transform: uppercase;
   letter-spacing: 1px;
+  line-height: 28px;
+  text-transform: uppercase;
 }
 
 .box-link {
+  @include transition(background-color 0.2s ease);
   border-radius: 3px;
   display: block;
   padding: 8px;
   position: relative;
   flex-grow: 1;
-  &::before {
-    @include transition(all 0.2s ease);
-    content: "";
-    background-color: $white-disabled;
-    height: 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
   &:hover {
-    &::before {
-      height: 5px;
-    }
+    background-color: $pastel;
   }
   &:not(:last-child){
     margin-right: 10px;
@@ -156,7 +149,20 @@
 }
 
 .chart-wrapper {
-  display: flex;
+  display: inline-flex;
+  width: 100%;
+  .small-chart {
+    width: 50%;
+  }
+  @media screen and (max-width: 1650px) {
+    flex-direction: column;
+    .small-chart {
+      width: 100%;
+      &:not(:last-child) {
+        margin-bottom: 25px;
+      }
+    }
+  }
 }
 
 .small-chart {
@@ -164,22 +170,24 @@
   background-color: $white;
   border-radius: $radius-large;
   padding: 20px;
-  width: 100%;
   &:not(:last-child) {
     margin-right: 20px;
   }
   @include laptop {
-    width: 33%;
     &:not(:last-child) {
       margin-bottom: 0;
       margin-right: 20px;
     }
   }
   @include mobile {
-    width: 100%;
     &:not(:last-child) {
       margin-bottom: 20px;
       margin-right: 0;
     }
   }
+}
+
+.columns {
+  margin-left:-20px;
+  margin-right:-20px;
 }

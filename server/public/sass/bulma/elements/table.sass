@@ -18,12 +18,13 @@
       font-size: 14px
   th
     border-bottom: none
-    color: $grey
-    font-size: 11px
-    font-weight: 700
-    letter-spacing: 1px
     padding: 15px 12px
-    text-transform: uppercase
+    &:not(.has-button)
+      color: $grey
+      font-size: 11px
+      letter-spacing: 1px
+      text-transform: uppercase
+      font-weight: 700
   td
     border-bottom: 1px solid $border
     font-size: $size-7
@@ -47,6 +48,8 @@
     &.is-pastel
       background-color: $pastel
   tbody
+    &.has-shadow
+      +box-shadow(0,2px,8px,$border,0)
     tr
       &:last-child
         td
@@ -67,8 +70,7 @@
   &.is-narrow
     width: auto
   &.has-shadow
-    tbody
-      +box-shadow(0,2px,4px,$border,0)
+    +box-shadow(0,2px,8px,$border,0)
   &.no-borders
     border: none
   &.is-striped
