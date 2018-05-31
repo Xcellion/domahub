@@ -222,36 +222,65 @@ function showNotifications() {
   //reset tray
   $("#notification-tray li").remove();
 
+  var listing_to_check = (typeof listings == "undefined") ? user.listings : listings;
+
   //if no listings
-  if (!user.listings || user.listings.length == 0){
+  if (!listing_to_check || listing_to_check.length == 0){
     appendNotification("listings-notification", "<a tabindex='0' class='is-primary' href='/listings/create'>Create DomaHub listings</a>");
   }
+  else {
+    //look through and check for unverified or date_created empty listings
+    var unverified_listings = 0;
+    var no_registration_date_listings = [];
+    var no_registration_cost_listings = [];
+    listing_to_check.forEach(function(listing) {
+      if (!listing.verified){
+        unverified_listings++;
+      }
+      if (!listing.date_registered){
+        no_registration_date_listings.push(listing.id);
+      }
+      if (!listing.registrar_cost || listing.registrar_cost == 0){
+        no_registration_cost_listings.push(listing.id);
+      }
+    });
 
-  //if unverified domains exist
-  var unverified_listings = user.listings.filter(function(listing) {
-    return !listing.verified;
-  });
-  if (unverified_listings.length > 0){
-    appendNotification("verify-notification", "<a tabindex='0' href='/profile/mylistings?tab=verify'>Verify " + unverified_listings.length + " unverified domains</a>");
+    //unverified listings
+    if (unverified_listings > 0){
+      appendNotification("verify-notification", "/profile/mylistings?tab=verify", "Verify " + unverified_listings + " unverified domains");
+    }
+
+    //listings with no date-registered
+    if (no_registration_date_listings.length > 0){
+      var plural_or_not = (no_registration_date_listings.length == 1) ? "" : "s";
+      appendNotification("listing-registered-notification", "/profile/mylistings?listings=" + no_registration_date_listings.join(",") + "&tab=domain-info", no_registration_date_listings.length + " listing" + plural_or_not + " missing registration date" + plural_or_not, "Please edit the domain registration date" + plural_or_not + " for your listing" + plural_or_not + "!");
+    }
+
+    //listings with no registered cost
+    if (no_registration_cost_listings.length > 0){
+      var plural_or_not = (no_registration_cost_listings.length == 1) ? "" : "s";
+      appendNotification("listing-cost-notification", "/profile/mylistings?listings=" + no_registration_cost_listings.join(",") + "&tab=domain-info", no_registration_cost_listings.length + " listing" + plural_or_not + " missing registration cost" + plural_or_not, "Please edit the annual registration renewal cost" + plural_or_not + " for your listing" + plural_or_not + "!");
+    }
   }
+
 
   //if stripe payout settings are not set
   if (!user.stripe_account) {
-    appendNotification("payout-details-notification", "<a tabindex='0' href='/profile/settings#payment'>Add payout details</a>");
+    appendNotification("payout-details-notification", "/profile/settings#payment", "Add payout details", "Add your payout details to ensure that you get paid!");
   }
 
   //if bank account is not connected
   if (!user.stripe_bank && !user.paypal_email) {
-    appendNotification("payout-account-notification", "<a tabindex='0' href='/profile/settings#payment'>Connect a payout method</a>");
+    appendNotification("payout-account-notification", "/profile/settings#payment", "Connect a payout method", "Connect an account to withdraw your earnings to!");
   }
 
   //if not premium
   if (!user.stripe_subscription){
-    appendNotification("premium-notification", "<a tabindex='0' href='/profile/settings#premium'>Upgrade to Premium</a>");
+    appendNotification("premium-notification", "/profile/settings#premium", "Upgrade to Premium", "Upgrade to DomaHub Premium to enjoy premium features!");
   }
   //if premium expiring
   else if (user.stripe_subscription.cancel_at_period_end){
-    appendNotification("expiring-notification", "<a tabindex='0' href='/profile/settings#premium'>Premium is expiring!</a>");
+    appendNotification("expiring-notification", "/profile/settings#premium", "Premium is expiring!", "You will lose access to premium features!");
   }
 
   calcNotificationCounter();
@@ -277,10 +306,11 @@ function calcNotificationCounter() {
   }
 }
 
-function appendNotification(id, msg) {
+function appendNotification(id, link, text, tooltip) {
   if ($("#" + id).length == 0){
     var tray = $("#notification-tray");
-    tray.append("<li id=" + id + ">" + msg + "</li>");
+    var append_tooltip = (tooltip) ? "data-balloon-length='medium' data-balloon='" + tooltip + "' data-balloon-pos='left'" : "";
+    tray.append("<li id=" + id + "><a tabindex='0' " + append_tooltip + " href='" + link + "'>" + text + "</a></li>");
   }
 }
 

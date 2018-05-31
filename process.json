@@ -6,19 +6,19 @@
       "NODE_ENV": "prod",
     },
 	watch: ["./server"],
-	ignore_watch : ["../node_modules", "../uploads"],
+	ignore_watch : ["./node_modules", "./uploads", "./server/lib/current-exchange-rates.*"],
 	watch_options: {
 		followSymlinks: false
 	}
   },
   {
-    name        : "DomaHub Server (LE Prod)",
+    name        : "DomaHub Server (LetsEncrypt Prod)",
     script      : "./server/api_server.js",
     env: {
       "NODE_ENV": "prod",
     },
 	watch: ["./server"],
-	ignore_watch : ["../node_modules", "../uploads"],
+	ignore_watch : ["./node_modules", "../uploads", "./server/lib/current-exchange-rates.*"],
 	watch_options: {
 		followSymlinks: false
 	}

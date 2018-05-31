@@ -26,20 +26,20 @@ $(document).ready(function () {
   total_duration = moment.duration(total_duration).as(listing_info.price_type);
   total_duration = Math.round(total_duration * 100) / 100;
   var duration_plural = (total_duration == 1) ? "" : "s";
-  $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
-  $("#listing-price-rate").text(moneyFormat.to(listing_info.price_rate));
+  $("#total-duration").text("~" + total_duration + ' ' + listing_info.price_type + duration_plural);
+  $("#listing-price-rate").text(formatCurrency(listing_info.price_rate, listing_info.default_currency));
 
   //total price of the rental
   var overlappedTime = anyFreeDayOverlap(starttime, endtime);
   var total_price = calculatePrice(starttime, endtime, overlappedTime, listing_info);
-  $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
-  $("#sub-total-price").text(moneyFormat.to(total_price));
+  $("#total-duration").text("~" + total_duration + ' ' + listing_info.price_type + duration_plural);
+  $("#sub-total-price").text(formatCurrency(total_price, listing_info.default_currency));
 
   //discounted times
   if (overlappedTime){
     var orig_price = calculatePrice(starttime, endtime, 0, listing_info);
     var discount_price = calculateDiscountPrice(moment.duration(overlappedTime));
-    $("#sub-total-price").text(moneyFormat.to(orig_price));
+    $("#sub-total-price").text(formatCurrency(orig_price, listing_info.default_currency));
 
     $(".discount-hidden").removeClass('is-hidden');
     discount_duration = moment.duration(overlappedTime).as(listing_info.price_type);
@@ -51,7 +51,7 @@ $(document).ready(function () {
 
   //free or not
   if (total_price != 0){
-    $("#total-price").text(moneyFormat.to(total_price));
+    $("#total-price").text(formatCurrency(total_price, listing_info.default_currency));
   }
   else {
     $("#total-price").text("Free");
@@ -155,47 +155,59 @@ $(document).ready(function () {
       choices_block.stop().fadeIn(250);
       step_content.find(".choice-column").addClass('is-hidden');
       showMessage(which_step);
-
-      //going back to address
-      if (which_step == "site-regular-message"){
-        $(".address-input").val("").removeClass('input-selected');
-        $("#rental-will-wrapper").addClass('is-hidden');
-        $("#rental-will-duration-msg").addClass('is-hidden');
-        $(".address-next-button").addClass('is-disabled');
-      }
     });
   });
 
   //submit the new address and go next to payment type selector
   $(".address-next-button").on('click', function(){
-    var address_input = $(this).parent(".control").parent(".control").find(".address-input");
+    var address_input = $(this).closest(".choice-column").find(".address-input");
     if (checkAddress(address_input.val())){
-      showStep("payment");
-      showMessage("payment-regular-message");
-      address_input.addClass('input-selected');
+
+      var next_step_content = (new_rental_info.price == 0) ? ".choices-selected" : ".choices-block";
+
+      //fade out address input selector and fade in payment selector
+      $("#step-content-site").find(".choices-selected").stop().fadeOut(250, function(){
+        showStep("payment");
+        showMessage("payment-regular-message");
+        address_input.addClass('input-selected');
+        $("#step-content-payment").find(next_step_content).stop().fadeIn(250);
+      });
     }
     else {
       showMessage("address-error-message");
     }
   });
 
-  //go back to address from payment type selector
-  $("#back-to-address-button").on('click', function(){
-    showStep("site");
-    showMessage("site-regular-message");
+  //back to address input from payment step
+  $(".back-step-button").on("click", function(){
+    var next_step_content = (new_rental_info.price == 0) ? ".choices-selected" : ".choices-block";
+
+    $("#step-content-payment").find(next_step_content).stop().fadeOut(250, function(){
+      showStep("site");
+      showMessage("site-regular-message");
+      $(".input-selected").closest(".choices-selected").stop().fadeIn(250);
+      $(".input-selected").removeClass('input-selected');
+    });
   });
 
   //</editor-fold>
 
   //<editor-fold>------------------------------------------PAYMENT----------------------------------------
 
-    //stripe submit checkout handler
-    $('#checkout-button').on("click", function(e){
-      submitStripe();
-    });
+  //submit checkout handler
+  $('#checkout-button').on("click", function(e){
+    submitCheckout();
+  });
 
-    //create paypal button
+  //if there is a price
+  if (new_rental_info.price != 0){
+
+    //<editor-fold>------------------------------------------PAYPAL----------------------------------------
+
+    //create a paypal button
     createPayPalButton();
+
+    //</editor-fold>
 
     //<editor-fold>------------------------------------------STRIPE----------------------------------------
 
@@ -251,9 +263,7 @@ $(document).ready(function () {
 
     //</editor-fold>
 
-    //<editor-fold>------------------------------------------PAYPAL----------------------------------------
-
-    //</editor-fold>
+  }
 
   //</editor-fold>
 
@@ -293,9 +303,9 @@ function checkCC(){
 
 //create a paypal checkout button
 function createPayPalButton(){
+  var local_or_prod = (window.location.host.indexOf("localhost:8080") != -1) ? "sandbox" : "production";
   paypal.Button.render({
-    env : 'sandbox',
-    // env: 'production',
+    env : local_or_prod,
     commit : true,
     style : {
       color : 'black',
@@ -354,16 +364,17 @@ function createPayPalButton(){
 //<editor-fold>------------------------------------------STRIPE----------------------------------------
 
 //client side check and then submit for a new stripe token
-function submitStripe(){
-  showMessage("stripe-regular-message");
+function submitCheckout(){
   $("#checkout-button").addClass('is-loading');
 
   //successfully passed address and CC test
   if (new_rental_info.price != 0 && checkCC() && checkAddress($(".input-selected").val())){
+    showMessage("stripe-regular-message");
     $("#stripe-form").submit();   //submit to get the stripe token
   }
   //free! so just submit
   else if (new_rental_info.price == 0 && checkAddress($(".input-selected").val())){
+    showMessage("payment-regular-message");
     submitNewRental();
   }
   //client side failed check
@@ -407,7 +418,6 @@ function submitNewRental(type, token){
     url: "/listing/" + listing_info.domain_name.toLowerCase() + "/rent",
     data: data_for_submit
   }).done(function(data){
-    $("#checkout-button").removeClass('is-loading');
 
     //handlers
     if (data.state == "success"){
@@ -425,6 +435,8 @@ function submitNewRental(type, token){
       $("#paypal-button-loading").addClass('is-hidden');
       $("#paypal-button").removeClass('is-hidden');
     }
+
+    $("#checkout-button").removeClass('is-loading');
   });
 }
 
@@ -473,42 +485,45 @@ function errorHandler(message){
 function successHandler(rental_id, owner_hash_id){
 
   //hide the payment choices section
-  $(".choices-selected").fadeOut(250, function(){
-    //show success message
-    var domain_and_path = (new_rental_info.path) ? listing_info.domain_name + "/" + new_rental_info.path : listing_info.domain_name;
-    var starttime_format = moment(new_rental_info.starttime).format("MMMM D, YYYY");
-    var endtime_format = moment(new_rental_info.endtime).format("MMMM D, YYYY");
-    showMessage("stripe-success-message", "Hurray! Your rental was successfully created for <strong>" + domain_and_path + "</strong>. It is scheduled to start on <strong>" + starttime_format + "</strong> and end on <strong>" + endtime_format + "</strong>.");
+  $(".choices-selected").stop().fadeOut(250, function(){
 
-    //hide certain stuff
-    $("#checkout-card-content").remove();
-    $("#checkout-success-content").removeClass('is-hidden');
-    $("#edit-dates-text").text('Rent again');
-    $("#edit-dates-icon").removeClass('fa-pencil').addClass('fa-check');
+    $("#checkout-success-content").stop().fadeIn(250, function(){
+      //show success message
+      var domain_and_path = (new_rental_info.path) ? listing_info.domain_name + "/" + new_rental_info.path : listing_info.domain_name;
+      var starttime_format = moment(new_rental_info.starttime).format("MMMM D, YYYY");
+      var endtime_format = moment(new_rental_info.endtime).format("MMMM D, YYYY");
+      showMessage("stripe-success-message", "Hurray! Your rental was successfully created for <strong>" + domain_and_path + "</strong>. It is scheduled to start on <strong>" + starttime_format + "</strong> and end on <strong>" + endtime_format + "</strong>.");
 
-    //remove click handler for going back to login/customize
-    $(".step-header").off();
+      //hide certain stuff
+      $("#checkout-card-content").remove();
+      $("#checkout-success-content").removeClass('is-hidden');
+      $("#edit-dates-text").text('Rent again');
+      $("#edit-dates-icon").removeClass('fa-pencil').addClass('fa-check');
 
-    var owner_hash_id = (owner_hash_id) ? "/" + owner_hash_id : "";
+      //remove click handler for going back to login/customize
+      $(".step-header").off();
 
-    //edit preview button
-    if (listing_info.premium){
-      $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
-      $("#rental-link-input").val("https://" + listing_info.domain_name.toLowerCase() + "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + owner_hash_id);
-    } else {
-      $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
-      $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + owner_hash_id);
-    }
+      var owner_hash_id = (owner_hash_id) ? "/" + owner_hash_id : "";
 
-    //copy ownership url
-    $("#rental-link-input").on("click", function(){
-      $(this).select();
-    });
-    $("#rental-link-copy").on("click", function(){
-      $("#rental-link-input").select();
-      document.execCommand("copy");
-      $("#rental-link-input").blur();
-      $(this).find("i").removeClass("fa-clipboard").addClass('fa-check-square-o');
+      //edit preview button
+      if (listing_info.premium){
+        $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
+        $("#rental-link-input").val("https://" + listing_info.domain_name.toLowerCase() + "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + owner_hash_id);
+      } else {
+        $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
+        $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + owner_hash_id);
+      }
+
+      //copy ownership url
+      $("#rental-link-input").on("click", function(){
+        $(this).select();
+      });
+      $("#rental-link-copy").on("click", function(){
+        $("#rental-link-input").select();
+        document.execCommand("copy");
+        $("#rental-link-input").blur();
+        $(this).find("svg").attr("data-icon", "check");
+      });
     });
   });
 }
@@ -517,12 +532,30 @@ function successHandler(rental_id, owner_hash_id){
 
 //<editor-fold>------------------------------------------HELPERS----------------------------------------
 
-//to format a number for $$$$
-var moneyFormat = wNumb({
-  thousand: ',',
-  prefix: '$',
-  decimals: 2
-});
+//to format a number for currency
+function formatCurrency(number, currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  var currency_details = {
+    thousand: ',',
+    decimals: default_currency_details.fractionSize,
+  }
+
+  //right aligned symbol
+  if (default_currency_details.symbol && default_currency_details.symbol.rtl){
+    currency_details.suffix = default_currency_details.symbol.grapheme;
+  }
+  else if (default_currency_details.symbol && !default_currency_details.symbol.rtl){
+    currency_details.prefix = default_currency_details.symbol.grapheme;
+  }
+
+  return wNumb(currency_details).to(number / Math.pow(10, default_currency_details.fractionSize));
+}
+
+//get multiplier of a currency
+function getCurrencyMultiplier(currency_code){
+  var default_currency_details = (currency_code) ? currency_codes[currency_code.toUpperCase()] : currency_codes["USD"];
+  return Math.pow(10, default_currency_details.fractionSize);
+}
 
 //used to see what people are doing on this checkout page
 function trackCheckoutBehavior(id){
@@ -552,12 +585,9 @@ function showMessage(message_id, text){
 }
 
 //show step
-function showStep(step_id){
+function showStep(step_id, callback){
   $(".step-header").addClass('is-disabled');
   $(".step-content").addClass('is-hidden');
-  if (step_id == "site"){
-    var coming_step_id = "log";
-  }
   $("#step-header-" + step_id).removeClass('is-disabled');
   $("#step-content-" + step_id).removeClass("is-hidden");
 

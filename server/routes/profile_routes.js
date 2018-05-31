@@ -47,6 +47,7 @@ module.exports = function(app){
     profile_functions.updateAccountSettingsPassthrough,
     profile_functions.getAccountListings,
     profile_functions.getAccountTransactionsLocal,
+    profile_functions.convertCurrencyTransactions,
     profile_functions.authWithGoogle,
     profile_functions.renderDashboard
   ]);
@@ -64,6 +65,7 @@ module.exports = function(app){
   app.get("/profile/mylistings", [
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
+    stripe_functions.getStripeAccount,
     stripe_functions.getStripeSubscription,
     profile_functions.renderMyListings
   ]);
@@ -179,7 +181,8 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
     profile_functions.getAccountTransactionsLocal,
-    profile_functions.getAccountTransactionsRemote
+    profile_functions.getAccountTransactionsRemote,
+    profile_functions.convertCurrencyTransactions
   ]);
 
   //</editor-fold>
@@ -283,7 +286,8 @@ module.exports = function(app){
     profile_functions.withdrawToBitcoin,
     profile_functions.markTransactionsWithdrawn,
     profile_functions.getAccountTransactionsLocal,
-    profile_functions.getAccountTransactionsRemote
+    profile_functions.getAccountTransactionsRemote,
+    profile_functions.convertCurrencyTransactions
   ]);
 
   //</editor-fold>

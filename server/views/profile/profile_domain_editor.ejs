@@ -1,4 +1,3 @@
-
 <div id="domain-editor" class="is-hidden">
 
   <!-- EDIT LISTING DETAILS -->
@@ -8,32 +7,32 @@
 
       <!-- CURRENT DOMAIN NAME -->
       <div class="content">
-        <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
-          <div class="icon is-small">
-            <i class="fal fa-long-arrow-left"></i>
-          </div>
-          <span>Go Back To Listings</span>
-        </a>
-      </div>
-      <div class="control is-spaced">
-        <div class="control-left content">
-          <h2 class="title-wrapper is-bold">
-            <span class="editor-title">My Offers</span>
-            <span class="current-domain-name"></span>
-          </h2>
-        </div>
-        <div class="control-right is-flex">
-          <a id="status-toggle-button" tabindex="0" class="button control-item is-flexible is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
+        <div class="control button-wrapper is-mobile">
+          <a class="show-selector-button button is-black is-inverted is-stylish is-small" tabindex="0" title="Back To My Listings">
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-left"></i>
+            </div>
+            <span class="is-hidden-mobile">Go Back To Listings</span>
+          </a>
+          <a id="status-toggle-button" tabindex="0" class="button control-item is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
             <div id="status-icon" class="icon is-small"><i class="fal fa-toggle-on"></i></div>
             <span id="status-text" class="is-hidden-mobile"></span>
           </a>
-          <div id="view-listings-button-wrapper" class="control-item is-relative">
-            <a id="view-listings-button" class="button is-flexible is-stylish is-black is-inverted is-small" target="_blank" rel="noopener" tabindex="0">
+          <div id="view-listings-button-wrapper" class="is-inline control-item is-relative">
+            <a id="view-listings-button" class="button is-black is-inverted is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
               <div class="icon is-small"><i class="fal fa-external-link"></i></div>
-              <span class="is-hidden-mobile">View Page<span class="edit-domain-plural is-hidden">s</span></span>
+              <span class="is-hidden-mobile">View Listing<span class="edit-domain-plural is-hidden">s</span></span>
             </a>
             <div id="view-listings-button-drop" class="box domain-tooltip is-hidden"></div>
           </div>
+          <a id="save-changes-button" class="button is-primary is-stylish is-small is-hidden">
+            <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
+            <span>Save</span>
+          </a>
+          <a id="cancel-changes-button" class="button is-danger is-stylish is-small is-hidden">
+            <div class="icon is-small"><i class="fal fa-ban"></i></div>
+            <span>Cancel</span>
+          </a>
         </div>
       </div>
 
@@ -44,17 +43,17 @@
               <span class="">Listing Info</span>
             </a>
           </li>
+          <li id="domain-info-tab" class="verified-elem unpurchased-elem tab">
+            <a tabindex="0" class="">
+              <span class="">Domain Info</span>
+            </a>
+          </li>
           <li id="design-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
               <span class="">Listing Design</span>
               <% if (!user.stripe_subscription_id) { %>
                 <span class="icon is-small"><i class="fal fa-trophy-alt"></i></span>
               <% } %>
-            </a>
-          </li>
-          <li id="domain-info-tab" class="verified-elem unpurchased-elem tab">
-            <a tabindex="0" class="">
-              <span class="">Domain Info</span>
             </a>
           </li>
           <li id="hub-tab" class="verified-elem unpurchased-elem tab">
@@ -118,7 +117,7 @@
               </div>
               <div class="control">
                 <label class="label" for="description-footer">
-                  <span>Footer Description</span>
+                  <span>Footer Text</span>
                   <% if (!user.stripe_subscription_id) { %>
                     <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
                       <i class="fal fa-trophy-alt"></i>
@@ -130,38 +129,78 @@
                 </label>
                 <small class="tip">Text that is displayed on the footer of the listing page. An ideal location for a slogan, phrase, or trademark.</small>
                 <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
-                </div>
-            </div>
-          </div>
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Pricing</h3>
-            </div>
-            <div class="card-content">
-              <div class="control">
-                <label class="label" for="min-price-input">
-                  Minimum Price
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                  </div>
-                </label>
-                <small class="tip">The minimum offer you will consider selling <span class="this-domain">this domain</span> for.</small>
-                <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
               </div>
               <div class="control">
-                <label class="label" for="buy-price-input">
-                  Buy It Now Price
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+                <label class="label" for="description-footer-link">
+                  <span>Footer URL</span>
+                  <% if (!user.stripe_subscription_id) { %>
+                    <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
+                      <i class="fal fa-trophy-alt"></i>
+                    </div>
+                  <% } %>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave empty for no links." data-balloon-pos="top">
+                    <i class="fal fa-question-circle"></i>
                   </div>
                 </label>
-                <small class="tip">The price you are willing to sell <span class="this-domain">this domain</span> for immediately.</small>
-                <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
+                <small class="tip">An optional link for your descriptive footer text and logo. Useful for linking to your listing hub.</small>
+                <input id="description-footer-link" data-name="description_footer_link" tabindex="0" class="premium-input input changeable-input" placeholder="https://link-to-my-listing-hub.com" />
               </div>
             </div>
           </div>
         </div>
         <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">
+                Pricing
+                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="We highly recommend that you turn your listing status to inactive before making any pricing changes." data-balloon-pos="up">
+                  <i class="fal fa-exclamation-triangle"></i>
+                </div>
+              </h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label" for="min-price-input">
+                  Default Currency
+                  <div class="icon is-tooltip is-small" data-balloon="Please contact us if you do not see your currency listed." data-balloon-pos="up" data-balloon-length="large">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">The default currency for <span class="this-domain">this domain</span>. Overrides account-wide default currency.</small>
+                <span class="select is-fullwidth">
+                  <select required name="default_currency" id="default_currency-input" data-name="default_currency" class="changeable-input currency-select"></select>
+                </span>
+              </div>
+              <div class="control">
+                <div class="columns">
+                  <div class="column is-6">
+                    <div class="control">
+                      <label class="label" for="min-price-input">
+                        Minimum Price
+                        <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+                      </label>
+                      <small class="tip">The absolute minimum price for <span class="this-domain">this domain</span>.</small>
+                      <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
+                    </div>
+                  </div>
+                  <div class="column is-6">
+                    <div class="control">
+                      <label class="label" for="buy-price-input">
+                        Buy It Now Price
+                        <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+                      </label>
+                      <small class="tip">The price to sell <span class="this-domain">this domain</span> for immediately.</small>
+                      <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="card is-fullwidth">
             <div class="card-header">
               <h3 class="card-header-title">Domain Rentals</h3>
@@ -219,399 +258,17 @@
         </div>
       </div>
     </div>
-    <div id="design-tab-drop" data-title="Edit Listing Design" class="tab-drop is-relative is-hidden">
-      <div id="premium-blackscreen-design" class="blackscreen">
-        <div id="premium-only-notification" class="box is-medium">
-          <div class="content has-text-centered">
-            <p>
-              A customized landing page helps to <strong>differentiate and legitimize your brand</strong> to customers. You must upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to change the design of your listing page!
-            </p>
-            <div class="control is-grouped has-text-centered">
-              <div class="control is-expanded">
-                <a href="/profile/settings#premium" class="button is-fullwidth is-small is-primary is-stylish">
-                  <div class="icon is-small">
-                    <i class="fal fa-trophy-alt"></i>
-                  </div>
-                  <span>Upgrade Now</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="example-wrapper" class="box preview-elem control has-border-bottom">
-        <figure class="image has-shadow is-pulled-right">
-          <img id="example-logo" src="" />
-        </figure>
-        <div class="control">
-          <span id="example-buy-price-tag" class="tag is-stylish has-shadow is-primary is-medium preview-elem"></span>
-          <span id="example-rent-price-tag" class="tag is-stylish has-shadow is-primary is-medium preview-elem"></span>
-        </div>
-        <div class="content">
-          <h1 id="example-domain-name" class="preview-elem is-bold"></h1>
-        </div>
-        <div class="control">
-          <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize the listing page!</p>
-        </div>
-        <div class="button-wrapper control">
-          <a id="example-button-primary" class="preview-elem button is-flexible is-stylish">
-            <div class="icon is-small">
-              <i class="fal fa-check-circle" aria-hidden="true"></i>
-            </div>
-            <span>Send Offer</span>
-          </a>
-          <a id="example-button-accent" class="preview-elem button is-flexible is-stylish">
-            <div class="icon is-small">
-              <i class="fal fa-shopping-cart" aria-hidden="true"></i>
-            </div>
-            <span>Buy Now</span>
-          </a>
-        </div>
-        <div class="control">
-          <a id="example-link-info" class="is-underlined preview-elem">This is a link on the listing page.</a>
-        </div>
-        <div id="example-footer-background" class="box">
-          <span id="example-footer-text">This is some text on the footer of the listing page.</span>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-6">
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Fonts and Colors</h3>
-            </div>
-            <div class="card-content">
-              <div class="control">
-                <label class="label" for="random-button">Theme</label>
-                <div class="control is-grouped">
-                  <div class="control has-icon">
-                    <span class="select no-shadow is-fullwidth is-stylish">
-                      <select tabindex="0" id="theme-input" class="premium-input"></select>
-                    </span>
-                    <div class="icon">
-                      <i class="fal fa-image"></i>
-                    </div>
-                  </div>
-                  <div class="control">
-                    <a id="random-theme-button" class="premium-input no-shadow button is-stylish is-small">
-                      <div class="icon is-small">
-                        <i class="fal fa-random"></i>
-                      </div>
-                      <span>Random Theme</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Color Scheme</span>
-                </label>
-                <small class="tip">The three main colors of the listing page.</small>
-                <div class="control">
-                  <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <input id="tertiary-color-input" data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input input changeable-input">
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Font Styling</span>
-                </label>
-                <div class="control is-grouped">
-                  <div class="control">
-                    <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input input changeable-input">
-                  </div>
-                  <div class="control has-icon">
-                    <span class="select no-shadow is-stylish is-fullwidth">
-                      <select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
-                        <%# make all the categories %>
-                        <% for (var x = 0; x < fonts.length; x++){ %>
-                          <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
-                        <% } %>
-                      </select>
-                    </span>
-                    <div class="icon">
-                      <i class="fal fa-font"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Background Color</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                  </div>
-                </label>
-                <div class="control">
-                  <input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input input changeable-input">
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Footer Styling</span>
-                </label>
-                <small class="tip">The color of the footer background color and the color of the footer text.</small>
-                <div class="control">
-                  <input id="footer-background-color-input" data-name="footer_background_color" placeholder="#F1F1F1" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <input id="footer-color-input" data-name="footer_color" placeholder="#565656" type="text" class="premium-input input changeable-input">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Display Listing Information</h3>
-            </div>
-            <div class="card-content">
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Registrar Name</span>
-                  </label>
-                  <small class="tip">Displays the name of this domain name's registrar.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="show-registrar-input" data-name="show_registrar" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="show-registrar-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Registration Date</span>
-                  </label>
-                  <small class="tip">Displays the original registration date of <span class="this-domain">this domain</span>.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="show-registration-date-input" data-name="show_registration_date" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="show-registration-date-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Appraisal Sites</span>
-                  </label>
-                  <small class="tip">Displays links to various domain appraisal sites.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="show-appraisal-input" data-name="show_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="show-appraisal-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Categories</span>
-                  </label>
-                  <small class="tip">Displays a list of your listing categories.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="show-categories-input" data-name="show_categories" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="show-categories-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Social Media Sharing Buttons</span>
-                  </label>
-                  <small class="tip">Displays buttons to share the listing on various social media sites.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="show-social-sharing-input" data-name="show_social_sharing" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="show-social-sharing-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="column is-6">
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Images</h3>
-            </div>
-            <div class="card-content">
-              <div class="control">
-                <label class="label">
-                  <span>Background Image URL</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Dimensions can be whatever you wish, but keep in mind your customers will have different resolutions. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                  </div>
-                </label>
-                <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
-                <div class="control">
-                  <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <button id="background-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
-                    <div class="icon is-small">
-                      <i class="fal fa-sync-alt"></i>
-                    </div>
-                    <span>Refresh Preview</span>
-                  </button>
-                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
-                    <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-                  </form>
-                  <label for="background-image-input" class="premium-input no-shadow button is-stylish is-small">
-                    <div class="icon is-small">
-                      <i class="fal fa-upload" aria-hidden="true"></i>
-                    </div>
-                    <span data-default-name="Upload Background Image" id="background-image-label" class="file-label">Upload Image</span>
-                  </label>
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Logo Image URL</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                  </div>
-                </label>
-                <div class="control">
-                  <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <button id="logo-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
-                    <div class="icon is-small">
-                      <i class="fal fa-sync-alt"></i>
-                    </div>
-                    <span>Refresh Preview</span>
-                  </button>
-                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
-                    <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-                  </form>
-                  <label for="logo-image-input" class="premium-input button no-shadow is-stylish is-small">
-                    <div class="icon is-small">
-                      <i class="fal fa-upload" aria-hidden="true"></i>
-                    </div>
-                    <span data-default-name="Upload Logo" id="logo-image-label" class="file-label">Upload Logo</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Content Design</h3>
-            </div>
-            <div class="card-content">
-              <div class="control">
-                <label class="label" for="domain-name-input">
-                  Domain Capitalization
-                </label>
-                <small id="domain-name-cap-missing" class="tip">Change the capitalization of your domain name to fit your custom domain branding.</small>
-                <input id="domain-name-input" class="input premium-input changeable-input" data-name="domain_name" type="text">
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label" for="placeholder-input">
-                    Placeholder Text
-                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The placeholder text is a light-hearted way of letting your users know what information to put in what form." data-balloon-pos="up">
-                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                    </div>
-                  </label>
-                  <small class="tip">Enables the movie-quote placeholder text on the listing page contact form.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="placeholder-input" data-name="show_placeholder" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="placeholder-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Traffic Graph</span>
-                  </label>
-                  <small class="tip">Displays a graph of the listing traffic.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="traffic-graph-input" data-name="show_traffic_graph" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="traffic-graph-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Alexa Statistics</span>
-                  </label>
-                  <small class="tip">Displays <a class="is-primary is-underlined" id="alexa_link">Alexa</a> traffic statistics.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="alexa-stats-input" data-name="show_alexa_stats" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="alexa-stats-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">Show History Ticker</label>
-                  <small class="tip">Displays a table of recent activity - useful if you have rentals enabled.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="show-history-ticker-input" data-name="show_history_ticker" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="show-history-ticker-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label">
-                    <span>Show Other Listings</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="There will be nothing to display if you do not have any active or unsold listings." data-balloon-pos="up">
-                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                    </div>
-                  </label>
-                  <small class="tip">Displays a list of other <span class="is-bold">active</span> listings you own on DomaHub.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="domain-list-input" data-name="show_domain_list" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="domain-list-input" class="premium-input"></label>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div id="domain-info-tab-drop" data-title="Edit Domain Information" class="tab-drop is-hidden">
       <div class="columns">
         <div class="column is-6">
           <div class="card is-fullwidth">
             <div class="card-header">
-              <div class="">
-                <h3 class="card-header-title">
-                  Registrar Information
-                </h3>
-                <small class="tip">
-                  Changing this information does not change it on your registrar. It is for your information purposes only.
-                </small>
-              </div>
+              <h3 class="card-header-title">
+                Registrar Information
+                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
+                  <i class="fal fa-exclamation-triangle"></i>
+                </div>
+              </h3>
               <a id="lookup-dns-button" class="button is-icon no-shadow is-stylish is-small">
                 <span class="icon is-small"><i class="fal fa-search"></i></span>
                 <span>Lookup Missing Details</span>
@@ -717,16 +374,24 @@
               <div class="control">
                 <label class="label" for="annual-cost-input">
                   Annual Renewal Cost
+                  <div class="icon is-tooltip is-small" data-balloon="Please contact us if you do not see your currency listed." data-balloon-pos="up" data-balloon-length="large">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
                 </label>
-                <small class="tip">How much it costs per year to renew <span class="this-domain">this domain</span> with your registrar.</small>
-                <input id="annual-cost-input" class="input changeable-input" data-name="registrar_cost" type="number" min="1" step="1">
+                <small class="tip">How much it costs per year (in what currency) to renew <span class="this-domain">this domain</span> with your registrar.</small>
+                <div class="control has-addons">
+                  <span class="select is-fullwidth">
+                    <select id="annual-cost-currency-input" required class="currency-select changeable-input" data-name="registrar_cost_currency"></select>
+                  </span>
+                  <input id="annual-cost-input" class="input changeable-input" data-name="registrar_cost" type="number" min="1" step="1">
+                </div>
               </div>
               <div id="related-expenses-wrapper" class="remove-margin-bottom-content control is-spaced">
                 <div class="control-left">
                   <label class="label">
                     Related Expenses
                     <div class="icon is-tooltip is-small" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
-                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+                      <i class="fal fa-question-circle"></i>
                     </div>
                   </label>
                   <small class="tip">Any expenses incurred related to <span class="this-domain">this domain</span>.</small>
@@ -740,7 +405,7 @@
               </div>
               <div id="domain-expense-table-wrapper" class="is-hidden control">
 
-                <table class="table">
+                <table class="table no-borders is-transparent-head no-shadow">
                   <tbody id="domain-expense-table">
                     <tr id="domain-expense-clone" class="clone-row is-hidden table-row no-hover-effect">
                       <td class="domain-expense-name break-word"></td>
@@ -860,6 +525,16 @@
                 <div class="control">
                   <div class="control">
                     <label class="label" for="domain-expense-cost-input">
+                      Expense Currency
+                    </label>
+                    <span class="select is-fullwidth">
+                      <select id="domain-expense-currency-input" required data-name="domain_expense_currency" class="currency-select"></select>
+                    </span>
+                  </div>
+                </div>
+                <div class="control">
+                  <div class="control">
+                    <label class="label" for="domain-expense-cost-input">
                       Expense Cost
                     </label>
                     <input required id="domain-expense-cost-input" class="input domain-expense-input" data-name="domain_expense_cost" type="number" min="1" step=".01">
@@ -944,7 +619,7 @@
                   </a>
                 </div>
                 <div class="control is-expanded">
-                  <a tabindex="0" class='cancel-expense-button button is-fullwidth is-stylish is-small is-outlined no-shadow'>
+                  <a tabindex="0" class='cancel-expense-button button is-fullwidth is-stylish is-small is-black is-outlined'>
                     <div class="icon is-small"><i class="fal fa-times"></i></div>
                     <span>Nevermind</span>
                   </a>
@@ -957,186 +632,635 @@
       </div>
 
     </div>
-    <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-relative is-hidden">
-      <div id="premium-blackscreen-hub" class="blackscreen">
-        <div id="premium-only-notification" class="box is-medium">
-          <div class="content has-text-centered">
-            <p>
-              A listing hub is a single landing page that <strong>showcases your entire portfolio</strong> of domain names. You must upgrade to a <a href="/features#pricing" class="is-underlined is-primary">Premium Account</a> to create and manage listing hubs.
-            </p>
-            <div class="control has-text-centered is-grouped">
-              <div class="control is-expanded">
-                <a href="/profile/settings#premium" class="button is-small is-fullwidth is-primary is-stylish">
-                  <div class="icon is-small">
-                    <i class="fal fa-trophy-alt"></i>
+    <div id="design-tab-drop" data-title="Edit Listing Design" class="tab-drop is-relative is-hidden">
+      <div class="columns">
+        <div class="column is-6">
+          <div id="premium-blackscreen-design" class="blackscreen">
+            <div id="premium-only-notification" class="box is-medium">
+              <div class="content has-text-centered">
+                <p>
+                  A customized landing page helps to <strong>differentiate and legitimize your brand</strong> to customers. You must upgrade to a <a target="_blank" href="/#pricing" class="is-underlined is-primary">Premium Account</a> to change the design of your listing page!
+                </p>
+                <div class="control is-grouped has-text-centered">
+                  <div class="control is-expanded">
+                    <a href="/profile/settings#premium" class="button is-fullwidth is-small is-primary is-stylish">
+                      <div class="icon is-small">
+                        <i class="fal fa-trophy-alt"></i>
+                      </div>
+                      <span>Upgrade Now</span>
+                    </a>
                   </div>
-                  <span>Upgrade Now</span>
+                  <div class="control is-expanded">
+                    <a href="/landing-pages" target="_blank" class="button is-small is-fullwidth is-accent is-stylish">
+                      <div class="icon is-small">
+                        <i class="fal fa-question-circle"></i>
+                      </div>
+                      <span>Learn More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="example-wrapper" class="card is-fullwidth">
+            <div class="card-image">
+              <h3 class="card-header-title notification no-shadow is-primary">Listing Design Preview</h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <h1 id="example-domain-name" class="preview-elem is-bold break-all"></h1>
+              </div>
+              <div class="control">
+                <span id="example-buy-price-tag" class="tag is-stylish has-shadow is-primary is-medium preview-elem"></span>
+                <span id="example-rent-price-tag" class="tag is-stylish has-shadow is-primary is-medium preview-elem"></span>
+              </div>
+              <div class="control">
+                <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize the listing page!</p>
+                </br>
+                <a id="example-link-info" class="is-underlined preview-elem">This is a link on the listing page.</a>
+              </div>
+              <div class="button-wrapper is-mobile control">
+                <a id="example-button-primary" class="preview-elem button is-stylish">
+                  <div class="icon is-small">
+                    <i class="fal fa-check-circle" aria-hidden="true"></i>
+                  </div>
+                  <span>Send Offer</span>
+                </a>
+                <a id="example-button-accent" class="preview-elem button is-stylish">
+                  <div class="icon is-small">
+                    <i class="fal fa-shopping-cart" aria-hidden="true"></i>
+                  </div>
+                  <span>Buy Now</span>
                 </a>
               </div>
-              <div class="control is-expanded">
-                <a href="" class="button is-small is-fullwidth is-accent is-stylish">
-                  <div class="icon is-small">
-                    <i class="fal fa-eye"></i>
-                  </div>
-                  <span>See An Example</span>
-                </a>
+            </div>
+            <div id="example-footer-background" class="card-footer footer-bar no-border-top">
+              <div class="bar-left">
+                <img id="example-logo" src="" />
               </div>
+              <div class="bar-right">
+                <span id="example-footer-text">This is some text on the footer of the listing page.</span>
+              </div>
+            </div>
+          </div>
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">Fonts and Colors</h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label" for="random-button">Theme</label>
+                <div class="control is-grouped">
+                  <div class="control has-icon">
+                    <span class="select no-shadow is-fullwidth is-stylish">
+                      <select tabindex="0" id="theme-input" class="premium-input"></select>
+                    </span>
+                    <div class="icon">
+                      <i class="fal fa-image"></i>
+                    </div>
+                  </div>
+                  <div class="control">
+                    <a id="random-theme-button" class="premium-input no-shadow button is-stylish is-small">
+                      <div class="icon is-small">
+                        <i class="fal fa-random"></i>
+                      </div>
+                      <span>Random Theme</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Color Scheme</span>
+                </label>
+                <small class="tip">The three main colors of the listing page.</small>
+                <div class="control">
+                  <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input input changeable-input">
+                </div>
+                <div class="control">
+                  <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input input changeable-input">
+                </div>
+                <div class="control">
+                  <input id="tertiary-color-input" data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input input changeable-input">
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Font Styling</span>
+                </label>
+                <div class="control is-grouped">
+                  <div class="control">
+                    <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input input changeable-input">
+                  </div>
+                  <div class="control has-icon">
+                    <span class="select no-shadow is-stylish is-fullwidth">
+                      <select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
+                        <%# make all the categories %>
+                        <% for (var x = 0; x < fonts.length; x++){ %>
+                          <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
+                        <% } %>
+                      </select>
+                    </span>
+                    <div class="icon">
+                      <i class="fal fa-font"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Background Color</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </label>
+                <div class="control">
+                  <input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input input changeable-input">
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Footer Styling</span>
+                </label>
+                <small class="tip">The color of the footer background color and the color of the footer text.</small>
+                <div class="control">
+                  <input id="footer-background-color-input" data-name="footer_background_color" placeholder="#F1F1F1" type="text" class="premium-input input changeable-input">
+                </div>
+                <div class="control">
+                  <input id="footer-color-input" data-name="footer_color" placeholder="#565656" type="text" class="premium-input input changeable-input">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">Images</h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label">
+                  <span>Background Image URL</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Dimensions can be whatever you wish, but keep in mind your customers may have different resolution screens. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
+                <div class="control has-addons">
+                  <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
+                  <button id="background-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
+                    <div class="icon is-small">
+                      <i class="fal fa-sync-alt"></i>
+                    </div>
+                    <span class="is-hidden-mobile">Refresh Preview</span>
+                  </button>
+                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                    <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                  </form>
+                  <label for="background-image-input" class="premium-input no-shadow button is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-upload" aria-hidden="true"></i>
+                    </div>
+                    <span data-default-name="Upload Background Image" id="background-image-label" class="is-hidden-mobile file-label">Upload Image</span>
+                  </label>
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Logo Image URL</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The logo will be utilized for email communications and branding. The ideal dimensions are 45 x 45 pixels. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
+                <div class="control has-addons">
+                  <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
+                  <button id="logo-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
+                    <div class="icon is-small">
+                      <i class="fal fa-sync-alt"></i>
+                    </div>
+                    <span class="is-hidden-mobile">Refresh Preview</span>
+                  </button>
+                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                    <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                  </form>
+                  <label for="logo-image-input" class="premium-input button no-shadow is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-upload" aria-hidden="true"></i>
+                    </div>
+                    <span data-default-name="Upload Logo" id="logo-image-label" class="is-hidden-mobile file-label">Upload Logo</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-6">
+              <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">Content Design</h3>
+            </div>
+            <div class="card-content">
+              <div class="control">
+                <label class="label" for="domain-name-input">
+                  Domain Capitalization
+                </label>
+                <small id="domain-name-cap-missing" class="tip">Change the capitalization of your domain name to fit your custom domain branding.</small>
+                <input id="domain-name-input" class="input premium-input changeable-input" data-name="domain_name" type="text">
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label" for="placeholder-input">
+                    Placeholder Text
+                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The placeholder text is a light-hearted way of letting your users know what information to put in what form." data-balloon-pos="up">
+                      <i class="fal fa-question-circle"></i>
+                    </div>
+                  </label>
+                  <small class="tip">Enables the movie-quote placeholder text on the listing page contact form.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="placeholder-input" data-name="show_placeholder" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="placeholder-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Traffic Graph</span>
+                  </label>
+                  <small class="tip">Displays a graph of the listing traffic.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="traffic-graph-input" data-name="show_traffic_graph" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="traffic-graph-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Alexa Statistics</span>
+                  </label>
+                  <small class="tip">Displays <a class="is-primary is-underlined" id="alexa_link">Alexa</a> traffic statistics.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="alexa-stats-input" data-name="show_alexa_stats" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="alexa-stats-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">Show History Ticker</label>
+                  <small class="tip">Displays a table of recent activity - useful if you have rentals enabled.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="show-history-ticker-input" data-name="show_history_ticker" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-history-ticker-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Other Listings</span>
+                    <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="There will be nothing to display if you do not have any active or unsold listings." data-balloon-pos="up">
+                      <i class="fal fa-question-circle"></i>
+                    </div>
+                  </label>
+                  <small class="tip">Displays a list of other <span class="is-bold">active</span> listings you own on DomaHub.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="domain-list-input" data-name="show_domain_list" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="domain-list-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+            <div class="column is-6">
+              <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">Display Listing Information</h3>
+            </div>
+            <div class="card-content">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Registrar Name</span>
+                  </label>
+                  <small class="tip">Displays the name of this domain name's registrar.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="show-registrar-input" data-name="show_registrar" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-registrar-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Registration Date</span>
+                  </label>
+                  <small class="tip">Displays the original registration date of <span class="this-domain">this domain</span>.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="show-registration-date-input" data-name="show_registration_date" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-registration-date-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced remove-margin-bottom-content">
+                <div class="control">
+                  <label class="label">
+                    <span>Show Appraisal Sites</span>
+                  </label>
+                  <small class="tip">Displays links to various domain appraisal sites.</small>
+                </div>
+              </div>
+              <div class="control">
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="godaddy-appraisal-label" href="" class="is-primary is-underlined">GoDaddy</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-godaddy-appraisal-input" data-name="show_godaddy_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-godaddy-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
+                </div>
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="domainindex-appraisal-label" href="" class="is-primary is-underlined">Domain Index</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-domainindex-appraisal-input" data-name="show_domainindex_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-domainindex-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
+                </div>
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="freevaluator-appraisal-label" href="" class="is-primary is-underlined">Free Valuator</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-freevaluator-appraisal-input" data-name="show_freevaluator_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-freevaluator-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
+                </div>
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="estibot-appraisal-label" href="" class="is-primary is-underlined">EstiBot</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-estibot-appraisal-input" data-name="show_estibot_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-estibot-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Categories</span>
+                  </label>
+                  <small class="tip">Displays a list of your listing categories.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="show-categories-input" data-name="show_categories" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-categories-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <label class="label">
+                    <span>Show Social Media Sharing Buttons</span>
+                  </label>
+                  <small class="tip">Displays buttons to share the listing on various social media sites.</small>
+                </div>
+                <div class="control-right">
+                  <form class="checkbox-form">
+                    <input id="show-social-sharing-input" data-name="show_social_sharing" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                    <label for="show-social-sharing-input" class="premium-input"></label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-relative is-hidden">
       <div class="columns">
-        <div class="column is-6">
-          <div class="card is-fullwidth tile is-child">
-            <div class="card-header">
-              <h3 class="card-header-title">
-                Listing Hub Details
-              </h3>
-            </div>
-            <div class="card-content">
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label" for="hub-input">
-                    <span>Enable Hub</span>
-                  </label>
-                  <small class="tip">Changes this listing into a domain hub for displaying multiple domain names.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="hub-input" data-name="hub" type="checkbox" class="hub-input checkbox-input changeable-input" tabindex="0" />
-                    <label for="hub-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control">
-                <label class="label" for="hub-title-input">
-                  <span>Hub Name</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+        <div class="column">
+          <div id="premium-blackscreen-hub" class="blackscreen">
+            <div id="premium-only-notification" class="box is-medium">
+              <div class="content has-text-centered">
+                <p>
+                  A listing hub is a single landing page that <strong>showcases your entire portfolio</strong> of domain names. You must upgrade to a <a target="_blank" href="/#pricing" class="is-underlined is-primary">Premium Account</a> to create and manage listing hubs.
+                </p>
+                <div class="control has-text-centered is-grouped">
+                  <div class="control is-expanded">
+                    <a href="/profile/settings#premium" class="button is-small is-fullwidth is-primary is-stylish">
+                      <div class="icon is-small">
+                        <i class="fal fa-trophy-alt"></i>
+                      </div>
+                      <span>Upgrade Now</span>
+                    </a>
                   </div>
-                </label>
-                <small class="tip">Main text that will appear as the page title and at the top of your listings hub.</small>
-                <input id="hub-title-input" data-name="hub_title" tabindex="0" class="hub-input input changeable-input" placeholder="Welcome to my domain hub!" />
-              </div>
-              <div class="control is-spaced">
-                <div class="control-left">
-                  <label class="label" for="hub-email-input">
-                    <span>Display email</span>
-                    <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Uses the same email as your DomaHub email." data-balloon-pos="top">
-                      <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                    </div>
-                  </label>
-                  <small class="tip">Displays your email address at the top of the page.</small>
-                </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="hub-email-input" data-name="hub_email" type="checkbox" class="hub-input checkbox-input changeable-input" tabindex="0" />
-                    <label for="hub-email-input"></label>
-                  </form>
-                </div>
-              </div>
-              <div class="control">
-                <label class="label" for="hub-phone-input">
-                  <span>Phone Number</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave blank for no phone number." data-balloon-pos="top">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+                  <div class="control is-expanded">
+                    <a href="/domain-hub" target="_blank" class="button is-small is-fullwidth is-accent is-stylish">
+                      <div class="icon is-small">
+                        <i class="fal fa-question-circle"></i>
+                      </div>
+                      <span>Learn More</span>
+                    </a>
                   </div>
-                </label>
-                <small class="tip">Displays a phone number at the top of the page.</small>
-                <div class="control">
-                  <input id="hub-phone-input" data-name="hub_phone" class="hub-input input changeable-input" />
-                </div>
-              </div>
-              <div class="control">
-                <label class="label" for="hub-layout-count-input">
-                  <span>Default Layout</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number greater than 10. There are 4 columns per row in the grid layout." data-balloon-pos="top">
-                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-                  </div>
-                </label>
-                <small class="tip">The number of domains shown in either a tiled or table layout.</small>
-                <div class="control has-addons">
-                  <input id="hub-layout-count-input" data-name="hub_layout_count" placeholder="10" type="number" min="10" step="1" class="input changeable-input premium-input hub-input" />
-                  <span class="select is-stylish no-shadow">
-                    <select id="hub-layout-type-input" data-name="hub_layout_type" class="hub-input changeable-input">
-                      <option value="0">Table</option>
-                      <option value="1">Tiled</option>
-                    </select>
-                  </span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="column is-6">
-          <div class="card is-fullwidth tile is-child">
-            <div class="card-header is-block">
-              <h3 class="card-header-title">Domain List Order</h3>
-              <small class="tip">Change the default order of domains that belong to this listing hub.</small>
+          <div class="columns">
+            <div class="column is-6">
+              <div class="card is-fullwidth tile is-child">
+                <div class="card-header">
+                  <h3 class="card-header-title">
+                    Listing Hub Details
+                  </h3>
+                </div>
+                <div class="card-content">
+                  <div class="control is-spaced">
+                    <div class="control-left">
+                      <label class="label" for="hub-input">
+                        <span>Enable Hub</span>
+                      </label>
+                      <small class="tip">Changes this listing into a domain hub for displaying multiple domain names.</small>
+                    </div>
+                    <div class="control-right">
+                      <form class="checkbox-form">
+                        <input id="hub-input" data-name="hub" type="checkbox" class="hub-input checkbox-input changeable-input" tabindex="0" />
+                        <label for="hub-input"></label>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="control">
+                    <label class="label" for="hub-title-input">
+                      <span>Hub Name</span>
+                      <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Must be a maximum of 75 characters." data-balloon-pos="top">
+                        <i class="fal fa-question-circle"></i>
+                      </div>
+                    </label>
+                    <small class="tip">Main text that will appear as the page title and at the top of your listings hub.</small>
+                    <input id="hub-title-input" data-name="hub_title" tabindex="0" class="hub-input input changeable-input" placeholder="Welcome to my domain hub!" />
+                  </div>
+                  <div class="control is-spaced">
+                    <div class="control-left">
+                      <label class="label" for="hub-email-input">
+                        <span>Display email</span>
+                        <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Uses the same email as your DomaHub email." data-balloon-pos="top">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+                      </label>
+                      <small class="tip">Displays your email address at the top of the page.</small>
+                    </div>
+                    <div class="control-right">
+                      <form class="checkbox-form">
+                        <input id="hub-email-input" data-name="hub_email" type="checkbox" class="hub-input checkbox-input changeable-input" tabindex="0" />
+                        <label for="hub-email-input"></label>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="control">
+                    <label class="label" for="hub-phone-input">
+                      <span>Phone Number</span>
+                      <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave blank for no phone number." data-balloon-pos="top">
+                        <i class="fal fa-question-circle"></i>
+                      </div>
+                    </label>
+                    <small class="tip">Displays a phone number at the top of the page.</small>
+                    <div class="control">
+                      <input id="hub-phone-input" data-name="hub_phone" class="hub-input input changeable-input" />
+                    </div>
+                  </div>
+                  <div class="control">
+                    <label class="label" for="hub-layout-count-input">
+                      <span>Default Layout</span>
+                      <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number greater than 10. There are 4 columns per row in the grid layout." data-balloon-pos="top">
+                        <i class="fal fa-question-circle"></i>
+                      </div>
+                    </label>
+                    <small class="tip">The number of domains shown in either a tiled or table layout.</small>
+                    <div class="control has-addons">
+                      <input id="hub-layout-count-input" data-name="hub_layout_count" placeholder="10" type="number" min="10" step="1" class="input changeable-input premium-input hub-input" />
+                      <span class="select is-stylish no-shadow">
+                        <select id="hub-layout-type-input" data-name="hub_layout_type" class="hub-input changeable-input">
+                          <option value="0">Table</option>
+                          <option value="1">Tiled</option>
+                        </select>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="card-content">
-              <div id="sortable-clone" class="is-hidden">
-                <div class="control is-grouped hub-domain-wrapper">
-                  <div class="icon divider-right is-small is-black">
-                    <i class="fal fa-bars"></i>
-                  </div>
-                  <div class="domain_name divider-right"></div>
-                  <div class="categories"></div>
+            <div class="column is-6">
+              <div class="card is-fullwidth tile is-child">
+                <div class="card-header is-block">
+                  <h3 class="card-header-title">Domain List Order</h3>
+                  <small class="tip">Change the default order of domains that belong to this listing hub.</small>
                 </div>
-              </div>
-              <input id="hub-listing-ids-input" data-name="hub_listing_ids" type="hidden" class="input changeable-input premium-input hub-input" />
-              <div id="sortable-wrapper">
-              </div>
-              <div id="no-domains-in-hub" class="is-hidden has-text-centered">
-                <div class="control has-text-centered">
-                  <div class="icon is-large is-primary">
-                    <i class="fal fa-exclamation-circle"></i>
+                <div class="card-content">
+                  <div id="sortable-clone" class="is-hidden">
+                    <div class="control is-grouped hub-domain-wrapper">
+                      <div class="icon divider-right is-small is-black">
+                        <i class="fal fa-bars"></i>
+                      </div>
+                      <div class="domain_name divider-right"></div>
+                      <div class="categories"></div>
+                    </div>
+                  </div>
+                  <input id="hub-listing-ids-input" data-name="hub_listing_ids" type="hidden" class="input changeable-input premium-input hub-input" />
+                  <div id="sortable-wrapper">
+                  </div>
+                  <div id="no-domains-in-hub" class="is-hidden has-text-centered">
+                    <div class="control has-text-centered">
+                      <div class="icon is-large is-primary">
+                        <i class="fal fa-exclamation-circle"></i>
+                      </div>
+                    </div>
+                    <p class="control has-text-centered">
+                      You have no domains in this listing hub!
+                    </p>
+                    <p class="control has-text-centered">
+                      Click the button below to go back and add some domains.
+                    </p>
+                    <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
+                      <div class="icon is-small">
+                        <i class="fal fa-long-arrow-left"></i>
+                      </div>
+                      <span>Go Back To My Listings</span>
+                    </a>
+                  </div>
+                  <div id="multiple-edit-hub" class="is-hidden has-text-centered">
+                    <div class="control has-text-centered">
+                      <div class="icon is-large is-primary">
+                        <i class="fal fa-exclamation-circle"></i>
+                      </div>
+                    </div>
+                    <p class="control has-text-centered">
+                      You cannot edit or change the domain list order for multiple hubs at the same time.
+                    </p>
+                    <p class="control has-text-centered">
+                      Click the button below to go back and select a single listing hub to edit.
+                    </p>
+                    <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
+                      <div class="icon is-small">
+                        <i class="fal fa-long-arrow-left"></i>
+                      </div>
+                      <span>Go Back To My Listings</span>
+                    </a>
+                  </div>
+                  <div id="not-a-hub" class="is-hidden has-text-centered">
+                    <div class="control has-text-centered">
+                      <div class="icon is-large is-primary">
+                        <i class="fal fa-exclamation-circle"></i>
+                      </div>
+                    </div>
+                    <p class="control has-text-centered">
+                      This domain is not enabled as a listing hub!
+                    </p>
+                    <p class="control has-text-centered">
+                      You must first change this domain listing into a hub before you can add other domains to it.
+                    </p>
                   </div>
                 </div>
-                <p class="control has-text-centered">
-                  You have no domains in this listing hub!
-                </p>
-                <p class="control has-text-centered">
-                  Click the button below to go back and add some domains.
-                </p>
-                <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
-                  <div class="icon is-small">
-                    <i class="fal fa-long-arrow-left"></i>
-                  </div>
-                  <span>Go Back To My Listings</span>
-                </a>
-              </div>
-              <div id="multiple-edit-hub" class="is-hidden has-text-centered">
-                <div class="control has-text-centered">
-                  <div class="icon is-large is-primary">
-                    <i class="fal fa-exclamation-circle"></i>
-                  </div>
-                </div>
-                <p class="control has-text-centered">
-                  You cannot edit or change the domain list order for multiple hubs at the same time.
-                </p>
-                <p class="control has-text-centered">
-                  Click the button below to go back and select a single listing hub to edit.
-                </p>
-                <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
-                  <div class="icon is-small">
-                    <i class="fal fa-long-arrow-left"></i>
-                  </div>
-                  <span>Go Back To My Listings</span>
-                </a>
-              </div>
-              <div id="not-a-hub" class="is-hidden has-text-centered">
-                <div class="control has-text-centered">
-                  <div class="icon is-large is-primary">
-                    <i class="fal fa-exclamation-circle"></i>
-                  </div>
-                </div>
-                <p class="control has-text-centered">
-                  This domain is not enabled as a listing hub!
-                </p>
-                <p class="control has-text-centered">
-                  You must first change this domain listing into a hub before you can add other domains to it.
-                </p>
               </div>
             </div>
           </div>
@@ -1147,35 +1271,13 @@
 
   <!-- OFFERS -->
   <div id="offers-section" class="offer-elem non-edit-elem non-verify-elem is-hidden">
-    <div class="control is-spaced listings-toolbar">
-      <div class="control-left">
-        <p class="title-wrapper is-grey">
-          <span class="editor-title">My Offers</span>
-          <span class="current-domain-name"></span>
-        </p>
-      </div>
-      <div id="offers-toolbar" class="control-right">
-        <div class="offer-button control is-grouped">
-          <div class="control">
-            <a id="refresh-offers-button" class="button is-flexible is-stylish is-black is-inverted is-small is-hidden" title="Refresh Offers">
-              <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
-              <span class="is-hidden-mobile">Refresh</span>
-            </a>
-          </div>
-          <div class="control">
-            <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-flexible is-stylish is-small is-black is-inverted">
-              <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
-              <span class="is-hidden-mobile">Show Rejected</span>
-            </a>
-          </div>
-          <div class="control has-icon is-expanded">
-            <div class="icon">
-              <i class="fal fa-search"></i>
-            </div>
-            <input id="offer-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search Offers" />
-          </div>
+    <div class="content">
+      <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
+        <div class="icon is-small">
+          <i class="fal fa-long-arrow-left"></i>
         </div>
-      </div>
+        <span>Go Back To Listings</span>
+      </a>
     </div>
 
     <!-- OFFER MODAL -->
@@ -1251,7 +1353,7 @@
 
     <div class="columns">
       <!-- OFFER ACCEPT / DEPOSIT BOXES -->
-      <div id="whats-next-offer-wrapper" class="column is-narrow is-hidden">
+      <div class="column is-narrow">
         <div class="card is-fullwidth-mobile">
           <div id="accepted-offer" class="whats-next-offer is-hidden">
             <div class="card-image">
@@ -1346,12 +1448,106 @@
               </p>
             </div>
           </div>
+          <div id="regular-offer">
+            <div class="card-image">
+              <div class="notification no-shadow has-icon is-primary">
+                <div class="icon-box">
+                  <div class="icon is-white">
+                    <i class="fal fa-handshake"></i>
+                  </div>
+                </div>
+                <div class="content">
+                  <p class="is-white remove-margin-bottom-content">Verified Offers</p>
+                  <small class="is-white">Click on an offer for more details!</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-content is-relative">
+              <div id="loading-offers-card">
+                <div class="has-text-centered">
+                  <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
+                  <p>Now loading your offers.</p>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <p>
+                    Total Received
+                  </p>
+                </div>
+                <div class="control-right">
+                  <p id="total-offers" class="total-loading">
+                    Loading...
+                  </p>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <p>
+                    Total Accepted
+                  </p>
+                </div>
+                <div class="control-right">
+                  <p id="total-accepted" class="total-loading">
+                    Loading...
+                  </p>
+                </div>
+              </div>
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <p>
+                    Total Rejected
+                  </p>
+                </div>
+                <div class="control-right">
+                  <p id="total-rejected" class="total-loading">
+                    Loading...
+                  </p>
+                </div>
+              </div>
+              <hr />
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <p class="is-bold">
+                    Total Outstanding
+                  </p>
+                </div>
+                <div class="control-right">
+                  <p id="total-outstanding" class="total-loading is-bold">
+                    Loading...
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
+      <!-- OFFER TABLES -->
       <div class="column">
-        <!-- OFFER TABLE -->
-        <table id="no-verified-listings-table" class="table is-fixed is-hidden">
+        <div id="offers-toolbar" class="content" >
+          <div class="offer-button control is-grouped">
+            <div class="control is-mobile">
+              <a id="refresh-offers-button" class="is-hidden button is-stylish is-small" title="Refresh Offers">
+                <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
+                <span class="is-hidden-mobile">Refresh Offers</span>
+              </a>
+            </div>
+            <div class="control is-mobile">
+              <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-stylish is-small">
+                <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
+                <span class="is-hidden-mobile">Show Rejected</span>
+              </a>
+            </div>
+            <div class="control has-icon is-expanded">
+              <div class="icon">
+                <i class="fal fa-search"></i>
+              </div>
+              <input id="offer-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search Offers" />
+            </div>
+          </div>
+        </div>
+        <table id="no-verified-listings-table" class="is-hidden has-shadow table is-fixed is-bordered">
           <tbody>
             <tr class="no-hover-effect">
               <td colspan="5">
@@ -1389,8 +1585,8 @@
             </tr>
           </tbody>
         </table>
-        <table id="no-offers-table" class="table is-fixed is-hidden hidden-while-loading-offers">
-          <tbody>
+        <table id="no-offers-table" class="table is-fixed no-borders is-hidden hidden-while-loading-offers">
+          <tbody class="has-shadow">
             <tr class="no-hover-effect">
               <td colspan="5">
                 <div class="nothing-exists-row has-text-centered">
@@ -1404,8 +1600,8 @@
             </tr>
           </tbody>
         </table>
-        <table id="loading-offers-table" class="table is-fixed is-hidden">
-          <tbody>
+        <table id="loading-offers-table" class="table is-fixed no-borders is-hidden">
+          <tbody class="has-shadow">
             <tr class="no-hover-effect">
               <td colspan="5">
                 <div class="nothing-exists-row has-text-centered">
@@ -1421,31 +1617,31 @@
           <thead class="has-hover-effect is-pastel no-border-bottom">
             <tr>
               <th class="offer-header-sort" data-value="domain_name">
-                <span>Domain</span>
-                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                <span>Domain Name</span>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
               </th>
               <th class="offer-header-sort" data-value="offer">
                 <span>Offer</span>
-                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
               </th>
               <th class="offer-header-sort" data-value="accepted">
                 <span>Status</span>
-                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
               </th>
               <th class="offer-header-sort is-hidden-mobile" data-value="timestamp">
                 <span>Date</span>
-                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
               </th>
               <th class="offer-header-sort is-hidden-456px" data-value="name">
                 <span>Name</span>
-                <div class="icon is-small"><i class="fal fa-sort"></i></div>
+                <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
               </th>
             </tr>
           </thead>
           <tbody id="offers-wrapper" class="has-shadow">
             <tr id="offer-clone" class="offer-row has-hover-effect is-hidden">
               <td>
-                <span class="td-offer-domain break-all is-bold"></span>
+                <span class="td-offer-domain break-all"></span>
               </td>
               <td class="td-offer-offer"></td>
               <td class="td-offer-status"></td>
@@ -1502,22 +1698,14 @@
 
   <!-- VERIFICATION -->
   <div id="verify-section" class="verify-elem non-offer-elem non-edit-elem is-hidden">
-
     <div class="content">
-      <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
+      <a class="show-selector-button button is-black is-inverted is-stylish is-small" tabindex="0" title="Back To My Listings">
         <div class="icon is-small">
           <i class="fal fa-long-arrow-left"></i>
         </div>
         <span>Go Back To Listings</span>
       </a>
     </div>
-    <div class="content">
-      <h2 class="title-wrapper is-bold">
-        <span class="editor-title"></span>
-        <span class="current-domain-name"></span>
-      </h2>
-    </div>
-
     <div class="columns">
       <div class="column is-narrow">
         <div class="card is-fullwidth-mobile">
@@ -1645,4 +1833,5 @@
       </div>
     </div>
   </div>
+
 </div>

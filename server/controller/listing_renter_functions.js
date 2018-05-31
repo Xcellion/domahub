@@ -6,6 +6,7 @@ var data_model = require('../models/data_model.js');
 
 var Descriptions = require("../lib/descriptions.js");
 var Categories = require("../lib/categories.js");
+var Currencies = require("../lib/currencies.js");
 var Fonts = require("../lib/fonts.js");
 var error = require('../lib/error.js');
 
@@ -215,10 +216,15 @@ module.exports = {
 
       //check for price
       if (price == "Not a valid price" || isNaN(price)){
-        error.handler(req, res, "Invalid price!", "json");
+        error.handler(req, res, "Invalid rental price!", "json");
+      }
+      //check currency
+      else if (!Currencies.exists(req.session.listing_info.default_currency)){
+        error.handler(req, res, "Invalid rental currency!", "json");
       }
       else {
         req.session.new_rental_info.price = price;
+        req.session.new_rental_info.default_currency = req.session.listing_info.default_currency;
         next();
       }
     }
@@ -336,11 +342,13 @@ module.exports = {
       new_rental_info.transaction_id = req.session.new_rental_info.rental_transaction_id;
     }
 
-    //total cost in USD cents (stripe + paypal)
+    //total cost and currency (stripe + paypal)
     if (req.session.new_rental_info.rental_cost){
       new_rental_info.total_cost = req.session.new_rental_info.rental_cost;
+      new_rental_info.total_cost_currency = req.session.new_rental_info.default_currency;
       new_rental_info.doma_fees = req.session.new_rental_info.rental_doma_fees;
       new_rental_info.payment_fees = req.session.new_rental_info.rental_payment_fees;
+      new_rental_info.exchange_rate = req.session.new_rental_info.rental_exchange_rate;
     }
 
     //payment type (stripe + paypal)
@@ -995,13 +1003,7 @@ module.exports = {
       next();
     }
     else {
-      console.log("LRF: Not the correct domain! Getting new session listing info...");
-      getVerifiedListing(req, res, domain_name, function(result){
-        error.handler(req, res, "Something went wrong with this domain! Please refresh the page and try again.", "json");
-      }, function(result){
-        req.session.listing_info = result.info[0];
-        next();
-      });
+      error.handler(req, res, "Something went wrong with this domain! Please refresh the page and try again.", "json");
     }
   },
 
@@ -1219,7 +1221,7 @@ module.exports = {
     res.render("listings" + listing_hub, {
       user: req.user,
       listing_info: req.session.listing_info,
-      compare : (!req.session.listing_info.premium && req.query.compare == "true") ? true : false,
+      compare : (!req.session.listing_info.deposited && !req.session.listing_info.premium && req.query.compare == "true") ? true : false,
       fonts : Fonts.all(),
       categories : Categories.all()
     });
@@ -1410,10 +1412,11 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.description_footer = "The greatest domains in the industry.";
         listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000)*1000;
         listing_info.buy_price = listing_info.min_price * 2;
+        listing_info.default_currency = "usd";
 
         //rental
         listing_info.rentable = 1;
-        listing_info.price_rate = Math.round(Math.random() * 250);
+        listing_info.price_rate = Math.round(Math.random() * 25000);
         listing_info.price_type = "day";
 
         //design
@@ -1430,8 +1433,12 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.show_registrar = 1;
         listing_info.show_registration_date = 1;
         listing_info.show_categories = 1;
-        listing_info.show_appraisal = 1;
+        listing_info.show_godaddy_appraisal = 1;
+        listing_info.show_domainindex_appraisal = 1;
+        listing_info.show_freevaluator_appraisal = 1;
+        listing_info.show_estibot_appraisal = 1;
         listing_info.show_placeholder = 1;
+        
         //right side
         listing_info.show_social_sharing = 1;
         listing_info.show_traffic_graph = 1;

@@ -42,7 +42,7 @@ function successMessage(message){
     $("#popup-notification-message").html(message);
 
     //refresh notifications
-    if (showNotifications){
+    if (typeof showNotifications != "undefined"){
       showNotifications();
     }
   }

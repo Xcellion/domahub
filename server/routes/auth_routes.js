@@ -2,6 +2,7 @@
 
 var general_functions = require('../controller/general_functions.js');
 var auth_functions = require('../controller/auth_functions.js');
+var currencies = require('../lib/currencies.js');
 
 //</editor-fold>>
 
@@ -53,6 +54,7 @@ module.exports = function(app){
   app.post("/login", [
     general_functions.urlencodedParser,
     auth_functions.isNotLoggedIn,
+    currencies.checkExchangeRates,
     auth_functions.loginPost
   ]);
 

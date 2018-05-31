@@ -51,7 +51,7 @@
 	            </span>
 	            <span class="is-hidden-mobile">Remove All</span>
 	          </button>
-	          <button title="Remove All Errored Rows" id='clear-errored-button' tabindex="0" class="is-hidden delete-errors-button button is-stylish is-small is-black is-inverted">
+	          <button title="Remove All Errored Rows" id='clear-errored-button' tabindex="0" class="is-hidden button is-stylish is-small">
 	            <span class='icon is-small'>
 	              <i class='fal fa-ban'></i>
 	            </span>
@@ -97,8 +97,8 @@
 
 	          <!-- DOMAIN TABLE -->
 	          <div id="table-columns" class="manual-listing-table-elem is-hidden column">
-	            <table id="domain-input-table" class="table has-shadow">
-	              <thead>
+	            <table id="domain-input-table" class="table is-fixed no-borders">
+	              <thead class="has-hover-effect is-pastel no-border-bottom">
 	                <tr>
 	                  <th class='td-domain'>Domain Name</th>
 	                  <th class="td-price is-hidden-mobile">
@@ -115,7 +115,7 @@
 	                  </th>
 	                </tr>
 	              </thead>
-	              <tbody id="domain-input-body" data-rows="0">
+	              <tbody id="domain-input-body" class="has-shadow" data-rows="0">
 	                <tr id="clone-row" class="is-hidden table-row no-hover-effect">
 	                  <td class="td-domain aligned">
 	                    <div class='control has-addons is-marginless'>

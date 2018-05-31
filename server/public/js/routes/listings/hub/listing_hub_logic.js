@@ -50,6 +50,8 @@ $(document).ready(function() {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------HUB FOOTER-------------------------------
+
   //footer text
   if (listing_hub_info.description_footer){
     $("#listing-footer").text(listing_hub_info.description_footer);
@@ -57,6 +59,19 @@ $(document).ready(function() {
   else {
     $("#listing-footer").text("");
   }
+
+  //descriptive footer link
+  if (listing_hub_info.premium && listing_hub_info.description_footer_link){
+    $("#listing-footer, #listing-footer-logo-link").attr("href", listing_hub_info.description_footer_link).addClass("is-underlined");
+  }
+  else if (listing_hub_info.premium){
+    $("#listing-footer, #listing-footer-logo-link").removeAttr("href").removeClass("is-underlined");
+  }
+  else {
+    $("#listing-footer, #listing-footer-logo-link").attr("href", "https://domahub.com").addClass("is-underlined");;
+  }
+
+  //</editor-fold>
 
 });
 
