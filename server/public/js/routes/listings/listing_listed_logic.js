@@ -188,6 +188,7 @@ function setupAppraisal(){
     $("#listing-appraisal").removeClass('is-hidden');
   }
 
+  //show specific appraisal links
   if (!listing_info.premium || (listing_info.show_godaddy_appraisal == 1)){
     $("#godaddy-appraisal-link").removeClass('is-hidden').attr("href", "https://www.godaddy.com/domain-value-appraisal/appraisal/?checkAvail=1&tmskey=&domainToCheck=" + listing_info.domain_name);
   }
