@@ -299,18 +299,66 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           </form>
         </div>
       </div>
-      <div class="control is-spaced">
-        <div class="control-left">
+      <div class="control is-spaced no-margin">
+        <div class="control">
           <label class="label">
-            <span>Show Categories</span>
+            <span>Show Appraisal Sites</span>
           </label>
-          <small class="tip">Displays a list of your listing categories.</small>
+          <small class="tip">Displays links to various domain appraisal sites.</small>
         </div>
-        <div class="control-right">
-          <form class="checkbox-form">
-            <input id="show-categories-input" data-name="show_categories" type="checkbox" class="checkbox-input" tabindex="0" />
-            <label for="show-categories-input" class="premium-input"></label>
-          </form>
+      </div>
+      <div class="control">
+        <div class="control is-spaced appraisal-checkboxes">
+          <div class="control-left">
+            <label class="label">
+              <span>GoDaddy</span>
+            </label>
+          </div>
+          <div class="control-right">
+            <form class="checkbox-form">
+              <input id="godaddy-appraisal-input" data-name="show_godaddy_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+              <label for="show-godaddy-appraisal-input" class="premium-input"></label>
+            </form>
+          </div>
+        </div>
+        <div class="control is-spaced appraisal-checkboxes">
+          <div class="control-left">
+            <label class="label">
+              <span>Domain Index</span>
+            </label>
+          </div>
+          <div class="control-right">
+            <form class="checkbox-form">
+              <input id="domainindex-appraisal-input" data-name="show_domainindex_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+              <label for="show-domainindex-appraisal-input" class="premium-input"></label>
+            </form>
+          </div>
+        </div>
+        <div class="control is-spaced appraisal-checkboxes">
+          <div class="control-left">
+            <label class="label">
+              <span>Free Valuator</span>
+            </label>
+          </div>
+          <div class="control-right">
+            <form class="checkbox-form">
+              <input id="freevaluator-appraisal-input" data-name="show_freevaluator_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+              <label for="show-freevaluator-appraisal-input" class="premium-input"></label>
+            </form>
+          </div>
+        </div>
+        <div class="control is-spaced appraisal-checkboxes">
+          <div class="control-left">
+            <label class="label">
+              <span>EstiBot</span>
+            </label>
+          </div>
+          <div class="control-right">
+            <form class="checkbox-form">
+              <input id="estibot-appraisal-input" data-name="show_estibot_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+              <label for="show-estibot-appraisal-input" class="premium-input"></label>
+            </form>
+          </div>
         </div>
       </div>
       <div class="control is-spaced">

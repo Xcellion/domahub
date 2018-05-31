@@ -105,7 +105,6 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
 
-
   if (listing_info.premium && listing_info.logo){
     $(".page-contents #listing-footer-logo").attr("src", listing_info.logo);
     $(".page-contents .logo-item").closest("a").attr('title', listing_info.domain_name);
@@ -125,6 +124,7 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------FOOTER TEXT-------------------------------
 
+  //footer text
   if (listing_info.premium && listing_info.description_footer){
     $(".page-contents #listing-footer").text(listing_info.description_footer)
   }
@@ -133,6 +133,17 @@ function setupFooter(){
   }
   else {
     $(".page-contents #listing-footer").text("Sell more domains with DomaHub landing pages.");
+  }
+
+  //descriptive footer link
+  if (listing_info.premium && listing_info.description_footer_link){
+    $(".page-contents #listing-footer, #listing-footer-logo-link").attr("href", listing_info.description_footer_link).addClass("is-underlined");
+  }
+  else if (listing_info.premium){
+    $(".page-contents #listing-footer, #listing-footer-logo-link").removeAttr("href").removeClass("is-underlined");
+  }
+  else {
+    $(".page-contents #listing-footer, #listing-footer-logo-link").attr("href", "https://domahub.com").addClass("is-underlined");;
   }
 
   //</editor-fold>

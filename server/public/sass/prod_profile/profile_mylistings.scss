@@ -25,6 +25,12 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+//appraisal checkbox margins
+.appraisal-checkboxes {
+  margin-bottom: 0 !important;
+  margin-top: 10px !important;
+}
+
 //display inline block for tooltip icons
 .control .icon.is-tooltip {
   display: inline-block!important;

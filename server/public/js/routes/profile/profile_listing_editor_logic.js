@@ -685,7 +685,7 @@ function updateEditorDomains(selected_domain_ids){
     });
 
     //add custom class so we can gray it out if not rentable
-    $(".tagit.textarea").addClass('rentable-input');
+    $(".tagit.input").addClass('rentable-input');
     updateRentalInputsDisabled(listing_info.rentable);
   }
   function updateRentalInputsDisabled(rentable){
@@ -880,9 +880,19 @@ function updateEditorDomains(selected_domain_ids){
     //info module
     checkBox(listing_info.show_registrar, $("#show-registrar-input"));
     checkBox(listing_info.show_registration_date, $("#show-registration-date-input"));
-    checkBox(listing_info.show_appraisal, $("#show-appraisal-input"));
     checkBox(listing_info.show_social_sharing, $("#show-social-sharing-input"));
     checkBox(listing_info.show_categories, $("#show-categories-input"));
+
+    //appraisal links
+    checkBox(listing_info.show_godaddy_appraisal, $("#show-godaddy-appraisal-input"));
+    checkBox(listing_info.show_domainindex_appraisal, $("#show-domainindex-appraisal-input"));
+    checkBox(listing_info.show_freevaluator_appraisal, $("#show-freevaluator-appraisal-input"));
+    checkBox(listing_info.show_estibot_appraisal, $("#show-estibot-appraisal-input"));
+
+    $("#godaddy-appraisal-label").attr("href", "https://www.godaddy.com/domain-value-appraisal/appraisal/?checkAvail=1&tmskey=&domainToCheck=" + listing_info.domain_name);
+    $("#domainindex-appraisal-label").attr("href", "http://domainindex.com/domains/" + listing_info.domain_name);
+    $("#freevaluator-appraisal-label").attr("href", "http://www.freevaluator.com/?domain=" + listing_info.domain_name);
+    $("#estibot-appraisal-label").attr("href", "https://www.estibot.com/verify.php?type=normal&data=" + listing_info.domain_name);
 
     //alexa link
     if (listing_info.domain_name){

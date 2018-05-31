@@ -909,8 +909,13 @@ function updateModules(){
   checkBox(listing_info.show_registrar, $("#show-registrar-input"));
   checkBox(listing_info.show_registration_date, $("#show-registration-date-input"));
   checkBox(listing_info.show_categories, $("#show-categories-input"));
-  checkBox(listing_info.show_appraisal, $("#show-appraisal-input"));
   checkBox(listing_info.show_social_sharing, $("#show-social-sharing-input"));
+
+  //appraisals
+  checkBox(listing_info.show_godaddy_appraisal, $("#show-godaddy-appraisal-input"));
+  checkBox(listing_info.show_domainindex_appraisal, $("#show-domainindex-appraisal-input"));
+  checkBox(listing_info.show_freevaluator_appraisal, $("#show-freevaluator-appraisal-input"));
+  checkBox(listing_info.show_estibot_appraisal, $("#show-estibot-appraisal-input"));
 
   //right
   checkBox(listing_info.show_placeholder, $("#placeholder-input"));
