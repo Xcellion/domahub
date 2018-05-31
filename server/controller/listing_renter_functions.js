@@ -1433,8 +1433,12 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.show_registrar = 1;
         listing_info.show_registration_date = 1;
         listing_info.show_categories = 1;
-        listing_info.show_appraisal = 1;
+        listing_info.show_godaddy_appraisal = 1;
+        listing_info.show_domainindex_appraisal = 1;
+        listing_info.show_freevaluator_appraisal = 1;
+        listing_info.show_estibot_appraisal = 1;
         listing_info.show_placeholder = 1;
+        
         //right side
         listing_info.show_social_sharing = 1;
         listing_info.show_traffic_graph = 1;

@@ -1,6 +1,22 @@
 //alphabetical please
 var all_categories = [
   {
+    back: "2letters",
+    front: "2 Letters"
+  },
+  {
+    back: "3letters",
+    front: "3 Letters"
+  },
+  {
+    back: "4letters",
+    front: "4 Letters"
+  },
+  {
+    back: "5letters",
+    front: "5 Letters"
+  },
+  {
     back: "adult",
     front: "Adult"
   },
@@ -21,6 +37,10 @@ var all_categories = [
     front: "Automotive"
   },
   {
+    back: "beauty",
+    front: "Beauty"
+  },
+  {
     back: "brandable",
     front: "Brandable"
   },
@@ -37,8 +57,16 @@ var all_categories = [
     front: "Currency"
   },
   {
+    back: "crypto",
+    front: "Crypto"
+  },
+  {
     back: "dating",
     front: "Dating"
+  },
+  {
+    back: "design",
+    front: "Design"
   },
   {
     back: "drones",
@@ -61,6 +89,14 @@ var all_categories = [
     front: "Emoji"
   },
   {
+    back: "entertainment",
+    front: "Entertainment"
+  },
+  {
+    back: "environment",
+    front: "Environment"
+  },
+  {
     back: "event",
     front: "Event"
   },
@@ -79,6 +115,10 @@ var all_categories = [
   {
     back: "food",
     front: "Food"
+  },
+  {
+    back: "fun",
+    front: "Fun"
   },
   {
     back: "gaming",
@@ -105,6 +145,10 @@ var all_categories = [
     front: "Home"
   },
   {
+    back: "idn",
+    front: "IDN"
+  },
+  {
     back: "industry",
     front: "Industry"
   },
@@ -115,6 +159,14 @@ var all_categories = [
   {
     back: "insurance",
     front: "Insurance"
+  },
+  {
+    back: "international",
+    front: "International"
+  },
+  {
+    back: "internet",
+    front: "Internet"
   },
   {
     back: "kids",
@@ -133,6 +185,14 @@ var all_categories = [
     front: "Legal"
   },
   {
+    back: "logistics",
+    front: "Logistics"
+  },
+  {
+    back: "luxury",
+    front: "Luxury"
+  },
+  {
     back: "news",
     front: "News",
   },
@@ -149,12 +209,40 @@ var all_categories = [
     front: "Marketing"
   },
   {
+    back: "media",
+    front: "Media"
+  },
+  {
+    back: "medicine",
+    front: "Medicine"
+  },
+  {
+    back: "mine",
+    front: "Mine"
+  },
+  {
+    back: "mining",
+    front: "Mining"
+  },
+  {
+    back: "mobile",
+    front: "Mobile"
+  },
+  {
     back: "movies",
     front: "Movies"
   },
   {
     back: "music",
     front: "Music"
+  },
+  {
+    back: "new",
+    front: "New"
+  },
+  {
+    back: "nonprofit",
+    front: "Non-Profit"
   },
   {
     back: "other",
@@ -185,8 +273,20 @@ var all_categories = [
     front: "Robot"
   },
   {
+    back: "sales",
+    front: "Sales"
+  },
+  {
     back: "science",
     front: "Science"
+  },
+  {
+    back: "security",
+    front: "Security"
+  },
+  {
+    back: "services",
+    front: "Services"
   },
   {
     back: "shopping",
@@ -195,6 +295,14 @@ var all_categories = [
   {
     back: "short",
     front: "Short"
+  },
+  {
+    back: "social",
+    front: "Social"
+  },
+  {
+    back: "software",
+    front: "Software"
   },
   {
     back: "sports",
@@ -209,6 +317,10 @@ var all_categories = [
     front: "Technology"
   },
   {
+    back: "telecommunication",
+    front: "Telecommunication"
+  },
+  {
     back: "toys",
     front: "Toys"
   },
@@ -217,9 +329,25 @@ var all_categories = [
     front: "Travel"
   },
   {
+    back: "transportation",
+    front: "Transportation"
+  },
+  {
+    back: "video",
+    front: "Video"
+  },
+  {
     back: "vr",
     front: "VR"
-  }
+  },
+  {
+    back: "wellness",
+    front: "Wellness"
+  },
+  {
+    back: "yours",
+    front: "Yours"
+  },
 ]
 
 module.exports = {

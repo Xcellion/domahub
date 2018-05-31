@@ -846,8 +846,13 @@ module.exports = {
         var show_registrar = parseFloat(req.body.show_registrar);
         var show_registration_date = parseFloat(req.body.show_registration_date);
         var show_categories = parseFloat(req.body.show_categories);
-        var show_appraisal = parseFloat(req.body.show_appraisal);
         var show_social_sharing = parseFloat(req.body.show_social_sharing);
+
+        //appraisal links
+        var show_godaddy_appraisal = parseFloat(req.body.show_godaddy_appraisal);
+        var show_domainindex_appraisal = parseFloat(req.body.show_domainindex_appraisal);
+        var show_freevaluator_appraisal = parseFloat(req.body.show_freevaluator_appraisal);
+        var show_estibot_appraisal = parseFloat(req.body.show_estibot_appraisal);
 
         //right side
         var show_placeholder = parseFloat(req.body.show_placeholder);
@@ -881,6 +886,10 @@ module.exports = {
         //invalid footer description
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
+        }
+        //invalid footer link
+        else if (req.body.description_footer_link && !validator.isURL(req.body.description_footer_link)){
+          error.handler(req, res, "That's an invalid footer URL! Please enter a different URL and try again!", "json");
         }
         //invalid domain capitalization
         else if (req.body.domain_name && req.body.domain_name.toLowerCase() != getUserListingObjByName(req.user.listings, req.params.domain_name).domain_name.toLowerCase()){
@@ -943,8 +952,20 @@ module.exports = {
           error.handler(req, res, "That's an invalid show categories selection! Please refresh the page and try again!", "json");
         }
         //invalid domain appraisal
-        else if (req.body.show_appraisal && (show_appraisal != 0 && show_appraisal != 1)){
-          error.handler(req, res, "That's an invalid domain appraisal selection! Please refresh the page and try again!", "json");
+        else if (req.body.show_godaddy_appraisal && (show_godaddy_appraisal != 0 && show_godaddy_appraisal != 1)){
+          error.handler(req, res, "That's an invalid GoDaddy appraisal selection! Please refresh the page and try again!", "json");
+        }
+        //invalid domain appraisal
+        else if (req.body.show_domainindex_appraisal && (show_domainindex_appraisal != 0 && show_domainindex_appraisal != 1)){
+          error.handler(req, res, "That's an invalid Domain Index appraisal selection! Please refresh the page and try again!", "json");
+        }
+        //invalid domain appraisal
+        else if (req.body.show_freevaluator_appraisal && (show_freevaluator_appraisal != 0 && show_freevaluator_appraisal != 1)){
+          error.handler(req, res, "That's an invalid Free Valuator appraisal selection! Please refresh the page and try again!", "json");
+        }
+        //invalid domain appraisal
+        else if (req.body.show_estibot_appraisal && (show_estibot_appraisal != 0 && show_estibot_appraisal != 1)){
+          error.handler(req, res, "That's an invalid EstiBot appraisal selection! Please refresh the page and try again!", "json");
         }
         //invalid social sharing
         else if (req.body.show_social_sharing && (show_social_sharing != 0 && show_social_sharing != 1)){
@@ -1008,6 +1029,7 @@ module.exports = {
 
           //info
           req.session.new_listing_info.description_footer = req.body.description_footer;
+          req.session.new_listing_info.description_footer_link = req.body.description_footer_link;
           req.session.new_listing_info.domain_name = req.body.domain_name;
 
           //design
@@ -1024,8 +1046,13 @@ module.exports = {
           req.session.new_listing_info.show_registrar = show_registrar;
           req.session.new_listing_info.show_registration_date = show_registration_date;
           req.session.new_listing_info.show_categories = show_categories;
-          req.session.new_listing_info.show_appraisal = show_appraisal;
           req.session.new_listing_info.show_social_sharing = show_social_sharing;
+
+          //appraisal
+          req.session.new_listing_info.show_godaddy_appraisal = show_godaddy_appraisal;
+          req.session.new_listing_info.show_domainindex_appraisal = show_domainindex_appraisal;
+          req.session.new_listing_info.show_freevaluator_appraisal = show_freevaluator_appraisal;
+          req.session.new_listing_info.show_estibot_appraisal = show_estibot_appraisal;
 
           //right side
           req.session.new_listing_info.show_placeholder = show_placeholder;
@@ -1060,6 +1087,7 @@ module.exports = {
         if (
           req.body.domain_name ||
           req.body.description_footer ||
+          req.body.description_footer_link ||
           req.body.primary_color ||
           req.body.secondary_color ||
           req.body.tertiary_color ||
@@ -1074,7 +1102,10 @@ module.exports = {
           req.body.show_registration_date ||
           req.body.show_domain_list ||
           req.body.show_categories ||
-          req.body.show_appraisal ||
+          req.body.show_godaddy_appraisal ||
+          req.body.show_domainindex_appraisal ||
+          req.body.show_freevaluator_appraisal ||
+          req.body.show_estibot_appraisal ||
           req.body.show_social_sharing ||
           req.body.show_traffic_graph ||
           req.body.show_alexa_stats ||

@@ -106,7 +106,7 @@
               </div>
               <div class="control">
                 <label class="label" for="description-footer">
-                  <span>Footer Description</span>
+                  <span>Footer Text</span>
                   <% if (!user.stripe_subscription_id) { %>
                     <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
                       <i class="fal fa-trophy-alt"></i>
@@ -118,9 +118,26 @@
                 </label>
                 <small class="tip">Text that is displayed on the footer of the listing page. An ideal location for a slogan, phrase, or trademark.</small>
                 <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
-                </div>
+              </div>
+              <div class="control">
+                <label class="label" for="description-footer-link">
+                  <span>Footer URL</span>
+                  <% if (!user.stripe_subscription_id) { %>
+                    <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
+                      <i class="fal fa-trophy-alt"></i>
+                    </div>
+                  <% } %>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave empty for no links." data-balloon-pos="top">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">An optional link for your descriptive footer text and logo. Useful for linking to your listing hub.</small>
+                <input id="description-footer-link" data-name="description_footer_link" tabindex="0" class="premium-input input changeable-input" placeholder="https://link-to-my-listing-hub.com" />
+              </div>
             </div>
           </div>
+        </div>
+        <div class="column is-6">
           <div class="card is-fullwidth">
             <div class="card-header">
               <h3 class="card-header-title">
@@ -144,29 +161,35 @@
                 </span>
               </div>
               <div class="control">
-                <label class="label" for="min-price-input">
-                  Minimum Price
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                <div class="columns">
+                  <div class="column is-6">
+                    <div class="control">
+                      <label class="label" for="min-price-input">
+                        Minimum Price
+                        <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 for no minimum price." data-balloon-pos="top">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+                      </label>
+                      <small class="tip">The absolute minimum price for <span class="this-domain">this domain</span>.</small>
+                      <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
+                    </div>
                   </div>
-                </label>
-                <small class="tip">The minimum offer you will consider selling <span class="this-domain">this domain</span> for.</small>
-                <input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
-              </div>
-              <div class="control">
-                <label class="label" for="buy-price-input">
-                  Buy It Now Price
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
-                    <i class="fal fa-question-circle"></i>
+                  <div class="column is-6">
+                    <div class="control">
+                      <label class="label" for="buy-price-input">
+                        Buy It Now Price
+                        <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Must be a whole number. Leave blank or set to 0 to disable the buy-it-now option." data-balloon-pos="top">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+                      </label>
+                      <small class="tip">The price to sell <span class="this-domain">this domain</span> for immediately.</small>
+                      <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
+                    </div>
                   </div>
-                </label>
-                <small class="tip">The price you are willing to sell <span class="this-domain">this domain</span> for immediately.</small>
-                <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="column is-6">
           <div class="card is-fullwidth">
             <div class="card-header">
               <h3 class="card-header-title">Domain Rentals</h3>
@@ -634,7 +657,7 @@
             </div>
             <div class="card-content">
               <div class="control">
-                <h1 id="example-domain-name" class="preview-elem is-bold"></h1>
+                <h1 id="example-domain-name" class="preview-elem is-bold break-all"></h1>
               </div>
               <div class="control">
                 <span id="example-buy-price-tag" class="tag is-stylish has-shadow is-primary is-medium preview-elem"></span>
@@ -779,7 +802,7 @@
                     <div class="icon is-small">
                       <i class="fal fa-sync-alt"></i>
                     </div>
-                    <span>Refresh Preview</span>
+                    <span class="is-hidden-mobile">Refresh Preview</span>
                   </button>
                   <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
                     <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
@@ -788,7 +811,7 @@
                     <div class="icon is-small">
                       <i class="fal fa-upload" aria-hidden="true"></i>
                     </div>
-                    <span data-default-name="Upload Background Image" id="background-image-label" class="file-label">Upload Image</span>
+                    <span data-default-name="Upload Background Image" id="background-image-label" class="is-hidden-mobile file-label">Upload Image</span>
                   </label>
                 </div>
               </div>
@@ -806,7 +829,7 @@
                     <div class="icon is-small">
                       <i class="fal fa-sync-alt"></i>
                     </div>
-                    <span>Refresh Preview</span>
+                    <span class="is-hidden-mobile">Refresh Preview</span>
                   </button>
                   <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
                     <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
@@ -815,7 +838,7 @@
                     <div class="icon is-small">
                       <i class="fal fa-upload" aria-hidden="true"></i>
                     </div>
-                    <span data-default-name="Upload Logo" id="logo-image-label" class="file-label">Upload Logo</span>
+                    <span data-default-name="Upload Logo" id="logo-image-label" class="is-hidden-mobile file-label">Upload Logo</span>
                   </label>
                 </div>
               </div>
@@ -946,18 +969,66 @@
                   </form>
                 </div>
               </div>
-              <div class="control is-spaced">
-                <div class="control-left">
+              <div class="control is-spaced remove-margin-bottom-content">
+                <div class="control">
                   <label class="label">
                     <span>Show Appraisal Sites</span>
                   </label>
                   <small class="tip">Displays links to various domain appraisal sites.</small>
                 </div>
-                <div class="control-right">
-                  <form class="checkbox-form">
-                    <input id="show-appraisal-input" data-name="show_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                    <label for="show-appraisal-input" class="premium-input"></label>
-                  </form>
+              </div>
+              <div class="control">
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="godaddy-appraisal-label" href="" class="is-primary is-underlined">GoDaddy</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-godaddy-appraisal-input" data-name="show_godaddy_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-godaddy-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
+                </div>
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="domainindex-appraisal-label" href="" class="is-primary is-underlined">Domain Index</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-domainindex-appraisal-input" data-name="show_domainindex_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-domainindex-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
+                </div>
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="freevaluator-appraisal-label" href="" class="is-primary is-underlined">Free Valuator</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-freevaluator-appraisal-input" data-name="show_freevaluator_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-freevaluator-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
+                </div>
+                <div class="control is-spaced appraisal-checkboxes">
+                  <div class="control-left">
+                    <label class="label">
+                      <a id="estibot-appraisal-label" href="" class="is-primary is-underlined">EstiBot</a>
+                    </label>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="show-estibot-appraisal-input" data-name="show_estibot_appraisal" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="show-estibot-appraisal-input" class="premium-input"></label>
+                    </form>
+                  </div>
                 </div>
               </div>
               <div class="control is-spaced">

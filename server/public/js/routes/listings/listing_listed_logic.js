@@ -174,13 +174,46 @@ function setupCategories(){
 //<editor-fold>-------------------------------APPRAISAL-------------------------------
 
 function setupAppraisal(){
-  if (!listing_info.premium || (listing_info.show_appraisal == 1)){
-    $("#listing-appraisal").removeClass('is-hidden').find(".listing-detail-text").each(function(){
-      $(this).attr("href", $(this).attr("href") + listing_info.domain_name);
-    });
+
+  //premium and all are empty
+  if (listing_info.premium && (
+    !listing_info.show_godaddy_appraisal &&
+    !listing_info.show_domainindex_appraisal &&
+    !listing_info.show_freevaluator_appraisal &&
+    !listing_info.show_estibot_appraisal
+  )){
+    $("#listing-appraisal").addClass('is-hidden');
   }
   else {
-    $("#listing-appraisal").addClass('is-hidden');
+    $("#listing-appraisal").removeClass('is-hidden');
+  }
+
+  if (!listing_info.premium || (listing_info.show_godaddy_appraisal == 1)){
+    $("#godaddy-appraisal-link").removeClass('is-hidden').attr("href", "https://www.godaddy.com/domain-value-appraisal/appraisal/?checkAvail=1&tmskey=&domainToCheck=" + listing_info.domain_name);
+  }
+  else {
+    $("#godaddy-appraisal-link").addClass("is-hidden");
+  }
+
+  if (!listing_info.premium || (listing_info.show_domainindex_appraisal == 1)){
+    $("#domainindex-appraisal-link").removeClass('is-hidden').attr("href", "http://domainindex.com/domains/" + listing_info.domain_name);
+  }
+  else {
+    $("#domainindex-appraisal-link").addClass("is-hidden");
+  }
+
+  if (!listing_info.premium || (listing_info.show_freevaluator_appraisal == 1)){
+    $("#freevaluator-appraisal-link").removeClass('is-hidden').attr("href", "http://www.freevaluator.com/?domain=" + listing_info.domain_name);
+  }
+  else {
+    $("#freevaluator-appraisal-link").addClass("is-hidden");
+  }
+
+  if (!listing_info.premium || (listing_info.show_estibot_appraisal == 1)){
+    $("#estibot-appraisal-link").removeClass('is-hidden').attr("href", "https://www.estibot.com/verify.php?type=normal&data=" + listing_info.domain_name);
+  }
+  else {
+    $("#estibot-appraisal-link").addClass("is-hidden");
   }
 }
 
