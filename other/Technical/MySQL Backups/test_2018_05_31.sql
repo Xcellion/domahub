@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 13, 2018 at 11:50 PM
+-- Generation Time: May 31, 2018 at 08:47 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -59,13 +59,13 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `date_created`, `date_accessed`, `type`, `token`, `token_exp`, `onboarding_step`, `stripe_account_id`, `stripe_customer_id`, `stripe_subscription_id`, `ga_tracking_id`, `paypal_email`, `bitcoin_address`, `payoneer_email`, `default_currency`) VALUES
-(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2018-05-12 23:39:41', 2, NULL, NULL, NULL, 'acct_1C5ITfEpVgQoC6Fs', NULL, NULL, NULL, 'won2blee@gmail.com', NULL, NULL, 'thb'),
+(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2018-05-31 20:07:10', 2, NULL, NULL, NULL, 'acct_1C5ITfEpVgQoC6Fs', NULL, NULL, NULL, 'won2blee@gmail.com', NULL, NULL, 'eur'),
 (2, 'DomaHub', 'general@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2018-04-09 19:22:50', 2, NULL, NULL, NULL, 'acct_1CB5H0JjMkKlUdaL', NULL, NULL, NULL, 'general@domahub.com', NULL, NULL, 'usd'),
 (5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2018-03-29 01:13:55', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wonq33@gmail.com', NULL, NULL, 'usd'),
 (35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2018-03-30 06:04:17', '2018-04-22 19:05:32', 1, NULL, NULL, 7, NULL, NULL, NULL, NULL, 'test@test.com', NULL, NULL, 'usd'),
 (37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2018-03-30 20:07:44', 0, 'e235b675fd', '2018-03-30 21:07:46', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'usd'),
 (41, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2018-04-24 22:55:43', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'usd'),
-(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2018-03-13 01:21:07', '2018-05-11 00:26:58', 2, NULL, NULL, NULL, 'acct_1C5IMuDnRmMzAdyH', 'cus_CUMPk4do5qCpTR', 'sub_CUMRkROfoT8id3', NULL, NULL, NULL, NULL, 'eur');
+(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2018-03-13 01:21:07', '2018-06-01 00:36:58', 2, NULL, NULL, NULL, 'acct_1C5IMuDnRmMzAdyH', 'cus_CUMPk4do5qCpTR', 'sub_CUMRkROfoT8id3', NULL, NULL, NULL, NULL, 'eur');
 
 -- --------------------------------------------------------
 
@@ -129,8 +129,8 @@ CREATE TABLE IF NOT EXISTS `domain_expenses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `listing_id` int(11) NOT NULL,
   `expense_name` varchar(100) NOT NULL,
-  `expense_currency` varchar(3) NOT NULL DEFAULT 'usd',
   `expense_cost` float NOT NULL,
+  `expense_currency` varchar(3) NOT NULL DEFAULT 'usd',
   `expense_date` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `domain_expense_listing_id_fk` (`listing_id`)
@@ -140,13 +140,13 @@ CREATE TABLE IF NOT EXISTS `domain_expenses` (
 -- Dumping data for table `domain_expenses`
 --
 
-INSERT INTO `domain_expenses` (`id`, `listing_id`, `expense_name`, `expense_currency`, `expense_cost`, `expense_date`) VALUES
-(52, 50, 'After market purchase fees', 'usd', 25.99, 1480568340000),
-(53, 50, 'Escrow fees (One time)', 'usd', 4.99, 1480568340000),
-(54, 1609, 'Extra \"fee\" for friend', 'usd', 10, 1511845140000),
-(57, 1615, 'One time cost', 'aed', 12, 1546318740000),
-(58, 1615, 'One time foreign transaction fee', 'usd', 50, 1546318680000),
-(69, 5, 'One time cost', 'eur', 1500, 1546318740000);
+INSERT INTO `domain_expenses` (`id`, `listing_id`, `expense_name`, `expense_cost`, `expense_currency`, `expense_date`) VALUES
+(52, 50, 'After market purchase fees', 25.99, 'usd', 1480568340000),
+(53, 50, 'Escrow fees (One time)', 4.99, 'usd', 1480568340000),
+(54, 1609, 'Extra \"fee\" for friend', 10, 'usd', 1511845140000),
+(57, 1615, 'One time cost', 12, 'aed', 1546318740000),
+(58, 1615, 'One time foreign transaction fee', 50, 'usd', 1546318680000),
+(69, 5, 'One time cost', 1500, 'eur', 1546318740000);
 
 -- --------------------------------------------------------
 
@@ -193,6 +193,7 @@ CREATE TABLE IF NOT EXISTS `listings` (
   `description` text CHARACTER SET utf8 COLLATE utf8_bin,
   `description_hook` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `description_footer` varchar(75) DEFAULT NULL,
+  `description_footer_link` text,
   `categories` text,
   `paths` text CHARACTER SET utf8 COLLATE utf8_bin,
   `background_image` text,
@@ -207,7 +208,10 @@ CREATE TABLE IF NOT EXISTS `listings` (
   `footer_color` varchar(7) DEFAULT '#565656',
   `show_registrar` tinyint(1) NOT NULL DEFAULT '1',
   `show_registration_date` tinyint(1) NOT NULL DEFAULT '1',
-  `show_appraisal` tinyint(1) NOT NULL DEFAULT '1',
+  `show_godaddy_appraisal` tinyint(1) NOT NULL DEFAULT '1',
+  `show_domainindex_appraisal` tinyint(4) NOT NULL DEFAULT '1',
+  `show_freevaluator_appraisal` tinyint(4) NOT NULL DEFAULT '1',
+  `show_estibot_appraisal` tinyint(4) NOT NULL DEFAULT '1',
   `show_categories` tinyint(1) NOT NULL DEFAULT '1',
   `show_social_sharing` tinyint(1) NOT NULL DEFAULT '1',
   `show_placeholder` tinyint(1) NOT NULL DEFAULT '1',
@@ -227,26 +231,30 @@ CREATE TABLE IF NOT EXISTS `listings` (
   UNIQUE KEY `listings_unique_domain` (`domain_name`,`verified`),
   KEY `listings_owner_fk_idx` (`owner_id`),
   KEY `registrar_id_fk` (`registrar_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1942 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1620 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `listings`
 --
 
-INSERT INTO `listings` (`id`, `date_created`, `date_expire`, `date_registered`, `domain_name`, `owner_id`, `status`, `deleted`, `verified`, `registrar_name`, `registrar_id`, `registrar_cost`, `registrar_cost_currency`, `registrar_admin_name`, `registrar_admin_org`, `registrar_admin_email`, `registrar_admin_address`, `registrar_admin_phone`, `registrar_registrant_name`, `registrar_registrant_org`, `registrar_registrant_email`, `registrar_registrant_address`, `registrar_registrant_phone`, `registrar_tech_name`, `registrar_tech_org`, `registrar_tech_email`, `registrar_tech_address`, `registrar_tech_phone`, `rentable`, `default_currency`, `price_type`, `price_rate`, `buy_price`, `min_price`, `description`, `description_hook`, `description_footer`, `categories`, `paths`, `background_image`, `background_color`, `logo`, `primary_color`, `secondary_color`, `tertiary_color`, `font_name`, `font_color`, `footer_background_color`, `footer_color`, `show_registrar`, `show_registration_date`, `show_appraisal`, `show_categories`, `show_social_sharing`, `show_placeholder`, `show_traffic_graph`, `show_alexa_stats`, `show_history_ticker`, `show_domain_list`, `hub`, `hub_title`, `hub_email`, `hub_phone`, `hub_layout_count`, `hub_layout_type`) VALUES
-(5, 1497056062817, NULL, NULL, 'imsorryimdumb.com', 1, 1, NULL, 1, 'Google LLC', NULL, 0, 'jpy', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 0, 'eur', 'day', 0, 50000, 5000, 'The best way to apologize to your friends and family! Nothing quite says \"I\'m sorry\" like an entire website dedicated to saying just that! Use this website today and apologize away!!', 'Use this website to apologize to your friends and family!', 'Best domain names for rentals.', 'ecard niche other personal promotion', 'alex,boss,connor,honey,lisa,madam,sarah,sir,mom,dad,peter,charles,matthew,vivian,chief,director,president,david', NULL, '#FFFFFF', NULL, '#C72E2E', '#FF9E1F', '#2196F3', 'Garamond', '#000000', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(7, 1476762961342, NULL, NULL, 'YoureACutie.com', 1, 1, NULL, 1, 'Google Inc.', NULL, 0, 'usd', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', NULL, 0, 'twd', 'day', 0, 0, 0, 'Let your loved ones know what a cutie they are by sending them a website showing just exactly that! Let them know how you feel and that they are the one and only cutie in your life!', 'Use this website to let that special person know what a cutie they are!', 'The greatest most awesome domains ever!!!', 'ecard niche personal', 'emma,olivia,sophia,ava,mia,jack,sam,noah,liam,mason,ash,isabelle,adam,matthew,charles,brian,abigail,emily,charlotte,madison,amelia,elizabeth,sofia', NULL, '#FFFFFF', NULL, '#222222', '#878787', '#0645AD', 'Nunito Sans', '#222222', '#211B14', '#FFFFFF', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(8, 1490044814955, 1553115989000, 1490044814955, 'YoureToxic.com', 5, 0, NULL, NULL, 'Google Inc.', NULL, 0, 'usd', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', NULL, 1, 'usd', 'month', 25, 5000, 2500, 'Perfect for telling someone they\'re toxic.', 'Use this website to flame your opponents!', 'Don\'t be toxic kids.', 'animals holiday keywords lifestyle marketing movies music realestate religion robot science', '', NULL, '#FFFFFF', 'https://68.media.tumblr.com/avatar_eb57388f82bd_128.png', '#FF5454', '#000000', '#570000', 'Trebuchet MS', '#000000', NULL, NULL, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 10, 0),
-(9, 1490758098071, NULL, NULL, 'ERAisAwesome.com', 5, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'day', 1, 5000, 2500, NULL, NULL, 'Electronic Rodeo Association?', 'event promotion', '', NULL, '#222222', NULL, '#E8CF61', '#540000', '#6B6B6B', 'Courier', '#FFFFFF', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, NULL, 0, NULL, 10, 0),
-(50, 1512071198950, 1519168174000, 1077318574000, 'amazingdomain.com', 2, 1, NULL, 1, 'eNom, Inc.', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 500, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, 'https://upload.wikimedia.org/wikipedia/commons/5/58/Sunset_2007-1.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(51, 1512071198950, 1519587202000, 1077737602000, 'greatestdomain.com', 2, 1, NULL, 1, 'GoDaddy, LLC.', NULL, 0, 'usd', 'Domain Admin', 'DomaHub', 'general@domahub.com', '33 Doma Road, Hub City, NY ', '+1 201-555-0123', 'Test', 'DomaHub', 'general@domahub.com', NULL, NULL, 'Domain Tech', 'DomaHub', 'general@domahub.com', NULL, NULL, 0, 'usd', 'month', 250, 0, 500, 'Best value domain name. Period.', NULL, NULL, '', '', NULL, NULL, 'https://c.tadst.com/gfx/1200x630/sunrise-sunset-sun-calculator.jpg?1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(52, 1508882908519, NULL, NULL, 'unverifieddomain.com', 2, 0, NULL, NULL, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(53, 1512071198950, 1516639529000, 1453481129000, 'myawesomedomain.com', 2, 1, NULL, 1, 'GoDaddy.com, LLC', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 2500, 500, 'This is the perfect domain for your next venture or company.', NULL, NULL, '', '', NULL, NULL, 'https://i.pinimg.com/736x/21/11/df/2111df9c610db190f6fb7ad4c713e08a--logo-circular-sun-tattoos.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1609, 1516331413049, NULL, NULL, 'MyAwesomeMarketplace.com', 2, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 500, 'Choose from some of the most amazing domains below!', NULL, 'The greatest domains at the most affordable prices.', NULL, NULL, 'https://images.unsplash.com/photo-1500111609242-145a52dcc944?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20', '#FFFFFF', 'https://seeklogo.com/images/B/blue-sun-logo-6003C806FC-seeklogo.com.png', '#85D6FF', '#FFAE84', '#85D6FF', 'Nunito Sans', '#FFFFFF', '#E0F4FF', '#222222', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'My Great Domain Hub', 0, '+1 201-555-0123', 10, 1),
-(1611, 1516331413049, 1541906144000, 839476800000, 'GreatDomains.com', 2, 1, NULL, 1, 'RegistryGate GmbH', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 250, 0, 500, 'The greatest domain for your next project.', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1613, 1516331413049, NULL, NULL, 'GreatAwesomeDomains.com', 2, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 250, 250, 500, 'Buy this domain today and start your next adventure!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', 'https://i.pinimg.com/736x/8e/0f/bd/8e0fbdf32b7662080ba4288cee3e03d0--fried-rice-wolves-art.jpg', '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1614, 1516331413049, NULL, NULL, 'CoolFunDomains.com', 2, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 25, 250, 500, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1615, 1512087238865, NULL, 1516225913032, '12345678901234567890123456789012345678901234567890.com', 42, 1, NULL, 1, NULL, NULL, 1600, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 1500, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, 'career food gambling gaming hightraffic holiday', NULL, 'https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20', '#000000', NULL, '#FFFFFF', '#000000', '#EDDD00', 'Nunito Sans', '#EDEDED', '#000000', '#FFFFFF', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, 0, NULL, 10, 0);
+INSERT INTO `listings` (`id`, `date_created`, `date_expire`, `date_registered`, `domain_name`, `owner_id`, `status`, `deleted`, `verified`, `registrar_name`, `registrar_id`, `registrar_cost`, `registrar_cost_currency`, `registrar_admin_name`, `registrar_admin_org`, `registrar_admin_email`, `registrar_admin_address`, `registrar_admin_phone`, `registrar_registrant_name`, `registrar_registrant_org`, `registrar_registrant_email`, `registrar_registrant_address`, `registrar_registrant_phone`, `registrar_tech_name`, `registrar_tech_org`, `registrar_tech_email`, `registrar_tech_address`, `registrar_tech_phone`, `rentable`, `default_currency`, `price_type`, `price_rate`, `buy_price`, `min_price`, `description`, `description_hook`, `description_footer`, `description_footer_link`, `categories`, `paths`, `background_image`, `background_color`, `logo`, `primary_color`, `secondary_color`, `tertiary_color`, `font_name`, `font_color`, `footer_background_color`, `footer_color`, `show_registrar`, `show_registration_date`, `show_godaddy_appraisal`, `show_domainindex_appraisal`, `show_freevaluator_appraisal`, `show_estibot_appraisal`, `show_categories`, `show_social_sharing`, `show_placeholder`, `show_traffic_graph`, `show_alexa_stats`, `show_history_ticker`, `show_domain_list`, `hub`, `hub_title`, `hub_email`, `hub_phone`, `hub_layout_count`, `hub_layout_type`) VALUES
+(5, 1497056062817, 1526867520000, 1463795520000, 'imsorryimdumb.com', 1, 1, NULL, 1, 'Google LLC', NULL, 1200, 'usd', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 1, 'usd', 'day', 5000, 0, 0, 'The best way to apologize to your friends and family! Nothing quite says \"I\'m sorry\" like an entire website dedicated to saying just that! Use this website today and apologize away!!', 'Use this website to apologize to your friends and family!', 'Best domain names for rentals.', NULL, 'ecard niche other personal promotion', 'alex,boss,connor,honey,lisa,madam,sarah,sir,mom,dad,peter,charles,matthew,vivian,chief,director,president,david', NULL, '#FFFFFF', NULL, '#C72E2E', '#FF9E1F', '#2196F3', 'Garamond', '#000000', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(7, 1476762961342, 1527734700000, 1464662700000, 'YoureACutie.com', 1, 1, NULL, 1, 'Google Inc.', NULL, 1200, 'usd', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 1, 'usd', 'day', 5000, 0, 0, 'Let your loved ones know what a cutie they are by sending them a website showing just exactly that! Let them know how you feel and that they are the one and only cutie in your life!', 'Use this website to let that special person know what a cutie they are!', 'The greatest most awesome domains ever!!!', NULL, 'ecard niche personal', 'emma,olivia,sophia,ava,mia,jack,sam,noah,liam,mason,ash,isabelle,adam,matthew,charles,brian,abigail,emily,charlotte,madison,amelia,elizabeth,sofia', NULL, '#FFFFFF', NULL, '#222222', '#878787', '#0645AD', 'Nunito Sans', '#222222', '#211B14', '#FFFFFF', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(8, 1490044814955, 1553115989000, 1490044814955, 'YoureToxic.com', 5, 0, NULL, NULL, 'Google Inc.', NULL, 0, 'usd', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', NULL, 1, 'usd', 'month', 25, 5000, 2500, 'Perfect for telling someone they\'re toxic.', 'Use this website to flame your opponents!', 'Don\'t be toxic kids.', NULL, 'animals holiday keywords lifestyle marketing movies music realestate religion robot science', '', NULL, '#FFFFFF', 'https://68.media.tumblr.com/avatar_eb57388f82bd_128.png', '#FF5454', '#000000', '#570000', 'Trebuchet MS', '#000000', NULL, NULL, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 10, 0),
+(9, 1490758098071, NULL, NULL, 'ERAisAwesome.com', 5, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'day', 1, 5000, 2500, NULL, NULL, 'Electronic Rodeo Association?', NULL, 'event promotion', '', NULL, '#222222', NULL, '#E8CF61', '#540000', '#6B6B6B', 'Courier', '#FFFFFF', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, NULL, 0, NULL, 10, 0),
+(50, 1512071198950, 1519168174000, 1077318574000, 'amazingdomain.com', 2, 1, NULL, 1, 'eNom, Inc.', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 500, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, '', '', NULL, NULL, 'https://upload.wikimedia.org/wikipedia/commons/5/58/Sunset_2007-1.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(51, 1512071198950, 1519587202000, 1077737602000, 'greatestdomain.com', 2, 1, NULL, 1, 'GoDaddy, LLC.', NULL, 0, 'usd', 'Domain Admin', 'DomaHub', 'general@domahub.com', '33 Doma Road, Hub City, NY ', '+1 201-555-0123', 'Test', 'DomaHub', 'general@domahub.com', NULL, NULL, 'Domain Tech', 'DomaHub', 'general@domahub.com', NULL, NULL, 0, 'usd', 'month', 250, 0, 500, 'Best value domain name. Period.', NULL, NULL, NULL, '', '', NULL, NULL, 'https://c.tadst.com/gfx/1200x630/sunrise-sunset-sun-calculator.jpg?1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(52, 1508882908519, NULL, NULL, 'unverifieddomain.com', 2, 0, NULL, NULL, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(53, 1512071198950, 1516639529000, 1453481129000, 'myawesomedomain.com', 2, 1, NULL, 1, 'GoDaddy.com, LLC', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 2500, 500, 'This is the perfect domain for your next venture or company.', NULL, NULL, NULL, '', '', NULL, NULL, 'https://i.pinimg.com/736x/21/11/df/2111df9c610db190f6fb7ad4c713e08a--logo-circular-sun-tattoos.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1609, 1516331413049, NULL, NULL, 'MyAwesomeMarketplace.com', 2, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 500, 'Choose from some of the most amazing domains below!', NULL, 'The greatest domains at the most affordable prices.', NULL, NULL, NULL, 'https://images.unsplash.com/photo-1500111609242-145a52dcc944?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20', '#FFFFFF', 'https://seeklogo.com/images/B/blue-sun-logo-6003C806FC-seeklogo.com.png', '#85D6FF', '#FFAE84', '#85D6FF', 'Nunito Sans', '#FFFFFF', '#E0F4FF', '#222222', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'My Great Domain Hub', 0, '+1 201-555-0123', 10, 1),
+(1611, 1516331413049, 1541906144000, 839476800000, 'GreatDomains.com', 2, 1, NULL, 1, 'RegistryGate GmbH', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 250, 0, 500, 'The greatest domain for your next project.', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1613, 1516331413049, NULL, NULL, 'GreatAwesomeDomains.com', 2, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 250, 250, 500, 'Buy this domain today and start your next adventure!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', 'https://i.pinimg.com/736x/8e/0f/bd/8e0fbdf32b7662080ba4288cee3e03d0--fried-rice-wolves-art.jpg', '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1614, 1516331413049, NULL, NULL, 'CoolFunDomains.com', 2, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 25, 250, 500, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1615, 1512087238865, NULL, 1516225913032, '12345678901234567890123456789012345678901234567890.com', 42, 1, NULL, 1, NULL, NULL, 1600, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 1500, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, 'dsad', '', 'career food gambling gaming hightraffic holiday', NULL, 'https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20', '#000000', 'https://cdn.britannica.com/700x450/77/170477-004-B774BDDF.jpg', '#FFFFFF', '#000000', '#EDDD00', 'Nunito Sans', '#EDEDED', '#000000', '#FFFFFF', 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1616, 1527797953539, NULL, NULL, 'arcore.group', 42, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1617, 1527797978906, 1535587140000, 1504027320000, 'arcore.tech', 42, 0, NULL, 1, 'UNIREGISTRAR CORP', NULL, 0, 'usd', 'PRIVACYDOTLINK CUSTOMER 3070556', NULL, '3070556@PRIVACY-LINK.COM', 'PO BOX 30485, SEVEN MILE BEACH, GRAND CAYMAN, KY1-1202, KY', '+1.3457495465', 'PRIVACYDOTLINK CUSTOMER 3070556', NULL, '3070556@PRIVACY-LINK.COM', 'PO BOX 30485, SEVEN MILE BEACH, GRAND CAYMAN, KY1-1202, KY', '+1.3457495465', 'PRIVACYDOTLINK CUSTOMER 3070556', NULL, '3070556@PRIVACY-LINK.COM', 'PO BOX 30485, SEVEN MILE BEACH, GRAND CAYMAN, KY1-1202, KY', '+1.3457495465', 0, 'eur', 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1618, 1527797978906, NULL, NULL, 'future.show', 42, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1619, 1527797978906, NULL, NULL, 'do.guru', 42, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 25, 0, 0, 'The greatest domain for your next project.', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -790,6 +798,7 @@ CREATE TABLE IF NOT EXISTS `stats_checkout_history` (
   `starttime` bigint(20) NOT NULL,
   `endtime` bigint(20) NOT NULL,
   `price` int(11) NOT NULL,
+  `default_currency` varchar(3) NOT NULL DEFAULT 'usd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
 
@@ -797,48 +806,48 @@ CREATE TABLE IF NOT EXISTS `stats_checkout_history` (
 -- Dumping data for table `stats_checkout_history`
 --
 
-INSERT INTO `stats_checkout_history` (`id`, `domain_name`, `timestamp`, `rental_id`, `account_id`, `user_ip`, `path`, `starttime`, `endtime`, `price`) VALUES
-(1, 'youretoxic.com', 1493761674645, 378, NULL, '2.26.214.218', '65gfh', 1493938800000, 1496358000000, 0),
-(2, 'youretoxic.com', 1493761727605, 378, NULL, '2.26.214.218', 'dfghdfgh', 1493766000000, 1493852400000, 0),
-(3, 'youretoxic.com', 1493761728857, 378, NULL, '83.53.168.196', 'yousuck', 1493762400000, 1494108000000, 0),
-(10, 'imsorryimdumb.com', 1494031202706, NULL, NULL, '24.254.120.29', 'Josh', 1495083600000, 1495256400000, 10),
-(11, 'youretoxic.com', 1494037649367, NULL, NULL, '67.213.212.240', 'prince', 1494036000000, 1494054000000, 0),
-(12, 'youreacutie.com', 1494038845284, NULL, NULL, '208.72.12.4', 'bitch', 1494036000000, 1494658800000, 36),
-(13, 'boycotttrump.com', 1494044045233, NULL, NULL, '152.118.24.140', 'nowthis', 1494090000000, 1496336400000, 1855),
-(14, 'boycotttrump.com', 1494051043255, NULL, NULL, '101.100.134.186', 'today', 1494244800000, 1496577600000, 1930),
-(15, 'youretoxic.com', 1494051191648, NULL, NULL, '101.100.134.186', 'skytv', 1494050400000, 1494158400000, 0),
-(16, 'youretoxic.com', 1494055492953, NULL, NULL, '172.91.131.159', 'peru', 1495263600000, 1496300400000, 0),
-(17, 'youretoxic.com', 1494055517423, NULL, NULL, '172.91.131.159', 'peru', 1494226800000, 1495090800000, 0),
-(18, 'youreacutie.com', 1494078678417, NULL, NULL, '173.23.113.100', 'Vikram', 1494565200000, 1495861200000, 75),
-(19, 'youretoxic.com', 1494090975217, NULL, NULL, '176.115.245.6', 'noob', 1494626400000, 1496268000000, 0),
-(20, 'youreacutie.com', 1494222515050, NULL, NULL, '49.49.8.185', 'tesing', 1494349200000, 1494608400000, 15),
-(21, 'imsorryimdumb.com', 1494253454735, NULL, 73, '78.90.107.157', '', 1494709200000, 1494795600000, 5),
-(22, 'boycotttrump.com', 1494331750749, NULL, 79, '110.171.184.150', 'huge', 1497459600000, 1497718800000, 215),
-(23, 'youretoxic.com', 1494485314796, NULL, NULL, '108.216.152.186', 'trump', 1494572400000, 1497337200000, 12),
-(24, 'beyourmagnificence.com', 1494815343946, NULL, 59, '68.14.244.13', '', 1494831600000, 1498892400000, 940),
-(25, 'makesamericagreat.com', 1494816373303, NULL, 59, '68.14.244.13', '', 1494831600000, 1498892400000, 1175),
-(26, 'smartwatchesonline.net', 1496938620646, NULL, NULL, '94.133.242.163', 'buy', 1496937600000, 1498863600000, 19),
-(27, 'smartwatchesonline.net', 1496938636658, NULL, NULL, '94.133.242.163', 'buy', 1496937600000, 1497049200000, 1),
-(28, 'changeyourbeliefs.com', 1497636632364, NULL, NULL, '67.212.98.235', '', 1500440400000, 1500526800000, 20),
-(29, 'boycotttrump.com', 1498475454263, NULL, NULL, '217.175.201.130', 'info', 1498773600000, 1498860000000, 70),
-(30, 'bhuman1o1.org', 1498663074371, NULL, NULL, '117.212.33.192', '', 1499884200000, 1499970600000, 1),
-(31, 'mycompetency.com', 1498895025845, NULL, 92, '14.139.239.74', '', 1499279400000, 1503513000000, 490),
-(32, 'mycompetency.com', 1499178172869, NULL, 92, '223.176.246.204', '', 1499410800000, 1504249200000, 560),
-(33, 'mycompetency.com', 1499335359613, NULL, 92, '223.176.223.252', '', 1499884200000, 1513794600000, 1610),
-(34, 'mycompetency.com', 1499335474824, NULL, NULL, '223.176.223.252', '', 1499884200000, 1530815400000, 3580),
-(35, 'milehighcab.com', 1500948644780, NULL, NULL, '174.51.225.118', '', 1500948000000, 1501567200000, 128),
-(36, 'milehighcab.com', 1501875184297, NULL, NULL, '172.58.83.96', '', 1501912800000, 1506146400000, 875),
-(37, 'youreacutie.com', 1505188507681, NULL, NULL, '74.108.133.133', '', 1505188800000, 1505448000000, 15),
-(38, 'youretoxic.com', 1505253186533, NULL, NULL, '74.108.133.133', '', 1505250000000, 1505448000000, 2),
-(39, 'youretoxic.com', 1505253204749, NULL, NULL, '74.108.133.133', '', 1505250000000, 1505448000000, 2),
-(40, 'youretoxic.com', 1505273752777, NULL, NULL, '74.108.133.133', '', 1505275200000, 1505534400000, 3),
-(41, 'youretoxic.com', 1506063251902, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506484800000, 4),
-(42, 'youretoxic.com', 1506063336528, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506657600000, 6),
-(43, 'youretoxic.com', 1506063422675, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506657600000, 6),
-(44, 'imsorryimdumb.com', 1506063433693, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506657600000, 35),
-(45, 'youretoxic.com', 1506607300205, NULL, NULL, '96.239.121.88', '', 1506607200000, 1506830400000, 2),
-(46, 'youretoxic.com', 1506607376910, NULL, NULL, '96.239.121.88', '', 1506607200000, 1506830400000, 2),
-(47, 'admiration.club', 1507148243308, NULL, NULL, '96.239.121.88', '', 1507147200000, 1507435200000, 0);
+INSERT INTO `stats_checkout_history` (`id`, `domain_name`, `timestamp`, `rental_id`, `account_id`, `user_ip`, `path`, `starttime`, `endtime`, `price`, `default_currency`) VALUES
+(1, 'youretoxic.com', 1493761674645, 378, NULL, '2.26.214.218', '65gfh', 1493938800000, 1496358000000, 0, 'usd'),
+(2, 'youretoxic.com', 1493761727605, 378, NULL, '2.26.214.218', 'dfghdfgh', 1493766000000, 1493852400000, 0, 'usd'),
+(3, 'youretoxic.com', 1493761728857, 378, NULL, '83.53.168.196', 'yousuck', 1493762400000, 1494108000000, 0, 'usd'),
+(10, 'imsorryimdumb.com', 1494031202706, NULL, NULL, '24.254.120.29', 'Josh', 1495083600000, 1495256400000, 10, 'usd'),
+(11, 'youretoxic.com', 1494037649367, NULL, NULL, '67.213.212.240', 'prince', 1494036000000, 1494054000000, 0, 'usd'),
+(12, 'youreacutie.com', 1494038845284, NULL, NULL, '208.72.12.4', 'bitch', 1494036000000, 1494658800000, 36, 'usd'),
+(13, 'boycotttrump.com', 1494044045233, NULL, NULL, '152.118.24.140', 'nowthis', 1494090000000, 1496336400000, 1855, 'usd'),
+(14, 'boycotttrump.com', 1494051043255, NULL, NULL, '101.100.134.186', 'today', 1494244800000, 1496577600000, 1930, 'usd'),
+(15, 'youretoxic.com', 1494051191648, NULL, NULL, '101.100.134.186', 'skytv', 1494050400000, 1494158400000, 0, 'usd'),
+(16, 'youretoxic.com', 1494055492953, NULL, NULL, '172.91.131.159', 'peru', 1495263600000, 1496300400000, 0, 'usd'),
+(17, 'youretoxic.com', 1494055517423, NULL, NULL, '172.91.131.159', 'peru', 1494226800000, 1495090800000, 0, 'usd'),
+(18, 'youreacutie.com', 1494078678417, NULL, NULL, '173.23.113.100', 'Vikram', 1494565200000, 1495861200000, 75, 'usd'),
+(19, 'youretoxic.com', 1494090975217, NULL, NULL, '176.115.245.6', 'noob', 1494626400000, 1496268000000, 0, 'usd'),
+(20, 'youreacutie.com', 1494222515050, NULL, NULL, '49.49.8.185', 'tesing', 1494349200000, 1494608400000, 15, 'usd'),
+(21, 'imsorryimdumb.com', 1494253454735, NULL, 73, '78.90.107.157', '', 1494709200000, 1494795600000, 5, 'usd'),
+(22, 'boycotttrump.com', 1494331750749, NULL, 79, '110.171.184.150', 'huge', 1497459600000, 1497718800000, 215, 'usd'),
+(23, 'youretoxic.com', 1494485314796, NULL, NULL, '108.216.152.186', 'trump', 1494572400000, 1497337200000, 12, 'usd'),
+(24, 'beyourmagnificence.com', 1494815343946, NULL, 59, '68.14.244.13', '', 1494831600000, 1498892400000, 940, 'usd'),
+(25, 'makesamericagreat.com', 1494816373303, NULL, 59, '68.14.244.13', '', 1494831600000, 1498892400000, 1175, 'usd'),
+(26, 'smartwatchesonline.net', 1496938620646, NULL, NULL, '94.133.242.163', 'buy', 1496937600000, 1498863600000, 19, 'usd'),
+(27, 'smartwatchesonline.net', 1496938636658, NULL, NULL, '94.133.242.163', 'buy', 1496937600000, 1497049200000, 1, 'usd'),
+(28, 'changeyourbeliefs.com', 1497636632364, NULL, NULL, '67.212.98.235', '', 1500440400000, 1500526800000, 20, 'usd'),
+(29, 'boycotttrump.com', 1498475454263, NULL, NULL, '217.175.201.130', 'info', 1498773600000, 1498860000000, 70, 'usd'),
+(30, 'bhuman1o1.org', 1498663074371, NULL, NULL, '117.212.33.192', '', 1499884200000, 1499970600000, 1, 'usd'),
+(31, 'mycompetency.com', 1498895025845, NULL, 92, '14.139.239.74', '', 1499279400000, 1503513000000, 490, 'usd'),
+(32, 'mycompetency.com', 1499178172869, NULL, 92, '223.176.246.204', '', 1499410800000, 1504249200000, 560, 'usd'),
+(33, 'mycompetency.com', 1499335359613, NULL, 92, '223.176.223.252', '', 1499884200000, 1513794600000, 1610, 'usd'),
+(34, 'mycompetency.com', 1499335474824, NULL, NULL, '223.176.223.252', '', 1499884200000, 1530815400000, 3580, 'usd'),
+(35, 'milehighcab.com', 1500948644780, NULL, NULL, '174.51.225.118', '', 1500948000000, 1501567200000, 128, 'usd'),
+(36, 'milehighcab.com', 1501875184297, NULL, NULL, '172.58.83.96', '', 1501912800000, 1506146400000, 875, 'usd'),
+(37, 'youreacutie.com', 1505188507681, NULL, NULL, '74.108.133.133', '', 1505188800000, 1505448000000, 15, 'usd'),
+(38, 'youretoxic.com', 1505253186533, NULL, NULL, '74.108.133.133', '', 1505250000000, 1505448000000, 2, 'usd'),
+(39, 'youretoxic.com', 1505253204749, NULL, NULL, '74.108.133.133', '', 1505250000000, 1505448000000, 2, 'usd'),
+(40, 'youretoxic.com', 1505273752777, NULL, NULL, '74.108.133.133', '', 1505275200000, 1505534400000, 3, 'usd'),
+(41, 'youretoxic.com', 1506063251902, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506484800000, 4, 'usd'),
+(42, 'youretoxic.com', 1506063336528, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506657600000, 6, 'usd'),
+(43, 'youretoxic.com', 1506063422675, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506657600000, 6, 'usd'),
+(44, 'imsorryimdumb.com', 1506063433693, NULL, NULL, '96.239.121.88', '', 1506060000000, 1506657600000, 35, 'usd'),
+(45, 'youretoxic.com', 1506607300205, NULL, NULL, '96.239.121.88', '', 1506607200000, 1506830400000, 2, 'usd'),
+(46, 'youretoxic.com', 1506607376910, NULL, NULL, '96.239.121.88', '', 1506607200000, 1506830400000, 2, 'usd'),
+(47, 'admiration.club', 1507148243308, NULL, NULL, '96.239.121.88', '', 1507147200000, 1507435200000, 0, 'usd');
 
 -- --------------------------------------------------------
 
@@ -874,7 +883,7 @@ CREATE TABLE IF NOT EXISTS `stats_contact_history` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `verification_code` (`verification_code`),
   KEY `listing_id_contact_idx` (`listing_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stats_contact_history`
@@ -882,7 +891,8 @@ CREATE TABLE IF NOT EXISTS `stats_contact_history` (
 
 INSERT INTO `stats_contact_history` (`id`, `listing_id`, `timestamp`, `deadline`, `user_ip`, `name`, `email`, `phone`, `offer`, `offer_currency`, `message`, `response`, `verification_code`, `bin`, `verified`, `accepted`, `deposited`, `transferred`, `withdrawn_on`, `payment_type`, `transaction_id`, `doma_fees`, `payment_fees`) VALUES
 (4, 50, 1516334914743, NULL, NULL, 'test', 'won2blee@gmail.com', '+1 718-309-7773', 500, 'usd', 'tests', NULL, 'F2kuSDd5AI', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(11, 5, 1525971050899, NULL, NULL, 'Won', 'won2blee@gmail.com', '+1 718-309-7773', 1500, 'jpy', 'Tree', '', '10ltIGMXwe', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(11, 5, 1525971050899, NULL, NULL, 'Won', 'won2blee@gmail.com', '+1 718-309-7773', 1500, 'jpy', 'Tree', '', '10ltIGMXwe', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(18, 7, 1526259532117, NULL, NULL, 'Won', 'won2blee@gmail.com', '+1 718-309-7773', 5000, 'usd', 'FHJds', NULL, 'eu8z7oC3tu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
