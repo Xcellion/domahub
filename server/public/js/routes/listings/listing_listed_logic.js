@@ -1612,9 +1612,11 @@ function setupRightHalf(){
         }
       }).done(function(data){
         if (data.state == "success" && data.listings.length > 0){
+          listing_info.other_listings = data.listings;
           createOtherDomains(data.listings);
         }
         else {
+          listing_info.other_listings = [];
           $("#domainlist-tab").addClass('is-hidden');
           $("#domainlist-module").addClass("is-hidden");
         }
