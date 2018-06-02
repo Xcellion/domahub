@@ -44,14 +44,18 @@
     @include box-shadow(0,2px,8px,$border,0);
     border-top: 5px solid;
     flex-grow: 1;
-    &:first-child {
-      border-color: $info;
-    }
-    &:nth-child(2) {
-      border-color: $accent;
-    }
     &:not(:last-child) {
       margin-right: 20px;
+    }
+  }
+  &.is-info {
+    .box {
+      border-color: $info;
+    }
+  }
+  &.is-accent {
+    .box {
+      border-color: $accent;
     }
   }
 }
@@ -66,11 +70,15 @@
   display: flex;
   align-items: baseline;
   padding: 12px 0;
+  border-top: 1px solid $border;
   .tag {
     margin-right: 10px;
   }
-  &:not(:last-child) {
+  &:last-child {
     border-bottom: 1px solid $border;
+  }
+  &:hover {
+    background-color: $pastel;
   }
 }
 
@@ -152,7 +160,13 @@
   display: inline-flex;
   width: 100%;
   .small-chart {
-    width: 50%;
+    width: calc(33% - 10px);
+    @include mobile {
+      width: 100%;
+    }
+    .traffic-chart {
+      height:169px;
+    }
   }
   @media screen and (max-width: 1650px) {
     flex-direction: column;

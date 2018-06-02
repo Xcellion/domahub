@@ -7,13 +7,16 @@
   +keyframes(pop 0.1s forwards)
   background-color: $white
   border-radius: $radius-large
-  max-height: calc(100vh - 120px)
+  max-height: calc(100vh - 60px)
+  overflow-y: auto
+  overflow-x: hidden
   padding: 20px
   position: relative
   width: 100%
   // Responsiveness
   &.is-small
-    width: 400px
+    width: 350px
+    margin: auto
   &.is-medium
     width: 500px
   &.is-login

@@ -32,96 +32,105 @@
 
       <div class="right-content">
 
-        <%- include("templates/profile_nav_top.ejs"); %>
-
         <div class="right-content-items">
           <div class="control is-spaced">
             <div class="control-left">
-              <div class="content">
-                <h2>Hello, <%= user.username %></h2>
-                <p class="is-grey">
-                  Last visit on <span id="date-last-accessed"></span>
-                </p>
-              </div>
+              <h2 id="current-view-name" class="is-inline">My Dashboard</h2>
+            </div>
+            <div class="control-right">
+              <a class="button is-hidden is-primary is-flexible is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
+                <div class="icon is-small">
+                  <i class="fal fa-plus"></i>
+                </div>
+                <span class="is-hidden-mobile">Create New Listings</span>
+              </a>
             </div>
           </div>
           <div class="columns">
             <div id="dashboard-traffic-card" class="column is-8">
-              <div class="portfolio-table control">
-                <div class="box">
-                  <div class="content fac">
-                    <div class="icon is-circle is-info is-medium">
-                      <i class="fal fa-list-alt"></i>
+              <div class="columns">
+                <div class="column is-6">
+                  <div class="portfolio-table is-accent control">
+                    <div class="box">
+                      <div class="fac content">
+                        <div class="icon is-circle is-accent is-medium">
+                          <i class="fal fa-credit-card"></i>
+                        </div>
+                        <p class="box-heading is-bold">
+                          Finances YTD
+                        </p>
+                      </div>
+                      <div class="fac is-responsive">
+                        <a class="box-link" title="View Revenue" href="/profile/settings#transactions">
+                          <p class="heading is-grey">
+                            Revenue
+                          </p>
+                          <h3 id="revenue-counter"></h3>
+                        </a>
+                        <a class="box-link" title="View Expenses" href="/profile/settings#transactions">
+                          <p class="heading is-grey">
+                            Expenses
+                          </p>
+                          <h3 id="expenses-counter"></h3>
+                        </a>
+                        <a class="box-link" title="View Profit" href="/profile/settings#transactions">
+                          <p class="heading is-grey">
+                            Profit
+                          </p>
+                          <h3 id="profit-counter"></h3>
+                        </a>
+                        <a class="box-link" title="View Offers" href="/profile/mylistings?tab=offers">
+                          <p class="heading is-grey">
+                            Offers
+                          </p>
+                          <h3 id="offers-counter"></h3>
+                        </a>
+                      </div>
                     </div>
-                    <p class="box-heading is-bold">Domains</p>
-                  </div>
-                  <div class="fac is-responsive">
-                    <a class="box-link" title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
-                      <p class="heading is-grey">
-                        Total
-                      </p>
-                      <h3>
-                        <%= user.listings.length %>
-                      </h3>
-                    </a>
-                    <a class="box-link" title="View Sold" href="/profile/mylistings?tab=offers">
-                      <p class="heading is-grey">
-                        Sold
-                      </p>
-                      <h3 id="sold-counter"></h3>
-                    </a>
-                    <a class="box-link" title="View Unverified" href="/profile/mylistings?tab=verify">
-                      <p class="heading is-grey">
-                        Unverified
-                      </p>
-                      <h3 id="unverified-counter"></h3>
-                    </a>
-                    <a class="box-link" title="View Expiring" href="/profile/mylistings">
-                      <p class="heading is-grey">
-                        Expiring
-                      </p>
-                      <h3 id="expiring-counter"></h3>
-                    </a>
                   </div>
                 </div>
-                <div class="box">
-                  <div class="fac content">
-                    <div class="icon is-circle is-accent is-medium">
-                      <i class="fal fa-credit-card"></i>
+                <div class="column is-6">
+                  <div class="portfolio-table is-info control">
+                    <div class="box">
+                      <div class="content fac">
+                        <div class="icon is-circle is-info is-medium">
+                          <i class="fal fa-list-alt"></i>
+                        </div>
+                        <p class="box-heading is-bold">Domain Portfolio</p>
+                      </div>
+                      <div class="fac is-responsive">
+                        <a class="box-link" title="View Listings" href="<%= (user.listings.length > 0) ? "/profile/mylistings" : "/listings/create" %>">
+                          <p class="heading is-grey">
+                            Total
+                          </p>
+                          <h3>
+                            <%= user.listings.length %>
+                          </h3>
+                        </a>
+                        <a class="box-link" title="View Sold" href="/profile/mylistings?tab=offers">
+                          <p class="heading is-grey">
+                            Sold
+                          </p>
+                          <h3 id="sold-counter"></h3>
+                        </a>
+                        <a class="box-link" title="View Unverified" href="/profile/mylistings?tab=verify">
+                          <p class="heading is-grey">
+                            Unverified
+                          </p>
+                          <h3 id="unverified-counter"></h3>
+                        </a>
+                        <a class="box-link" title="View Expiring" href="/profile/mylistings">
+                          <p class="heading is-grey">
+                            Expiring
+                          </p>
+                          <h3 id="expiring-counter"></h3>
+                        </a>
+                      </div>
                     </div>
-                    <p class="box-heading is-bold">
-                      Finances
-                    </p>
-                  </div>
-                  <div class="fac is-responsive">
-                    <a class="box-link" title="View Revenue" href="/profile/settings#transactions">
-                      <p class="heading is-grey">
-                        Revenue YTD
-                      </p>
-                      <h3 id="revenue-counter"></h3>
-                    </a>
-                    <a class="box-link" title="View Expenses" href="/profile/settings#transactions">
-                      <p class="heading is-grey">
-                        Expenses YTD
-                      </p>
-                      <h3 id="expenses-counter"></h3>
-                    </a>
-                    <a class="box-link" title="View Profit" href="/profile/settings#transactions">
-                      <p class="heading is-grey">
-                        Profit YTD
-                      </p>
-                      <h3 id="profit-counter"></h3>
-                    </a>
-                    <a class="box-link" title="View Offers" href="/profile/mylistings?tab=offers">
-                      <p class="heading is-grey">
-                        Offers
-                      </p>
-                      <h3 id="offers-counter"></h3>
-                    </a>
                   </div>
                 </div>
               </div>
-              <div class="chart-wrapper control">
+              <div class="chart-wrapper is-relative control">
                 <div class="small-chart">
                   <div class="content">
                     <p class="box-heading is-bold">
@@ -170,13 +179,37 @@
                     </div>
                   </div>
                 </div>
+                <div class="small-chart">
+                  <div class="content">
+                    <p class="box-heading is-bold">
+                      Popular Domains
+                    </p>
+                  </div>
+                  <div class="traffic-chart-wrapper">
+                    <canvas id="popular-chart" class="traffic-chart"></canvas>
+                    <div id="popular-chart-overlay" class="traffic-overlay content">
+                      <div id="popular-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
+                        <div class="icon is-medium is-danger">
+                          <i class="fal fa-exclamation-circle"></i>
+                        </div>
+                        <p>
+                          There is not enough data!
+                        </p>
+                      </div>
+                      <div id="popular-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
+                        <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
+                        <p>Now loading listing data.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="card is-fullwidth">
                 <div class="card-header no-border-bottom">
                   <p class="box-heading is-bold">
                     Domain Traffic
                   </p>
-                  <div class="control is-mobile">
+                  <div class="control is-mobile is-grouped">
                     <button id="refresh-tables-button" class="button is-stylish is-small no-shadow" title="Refresh Tables" tabindex="0">
                       <div class="icon is-small">
                         <i class="fal fa-sync-alt"></i>
@@ -291,34 +324,10 @@
                   </div>
                 </div>
               </div>
-              <%#<div class="small-chart">
-                <div class="content">
-                  <p class="box-heading is-bold">
-                    Popular Domains
-                  </p>
-                </div>
-                <div class="traffic-chart-wrapper">
-                  <canvas id="popular-chart" class="traffic-chart"></canvas>
-                  <div id="popular-chart-overlay" class="traffic-overlay content">
-                    <div id="popular-chart-overlay-none" class='has-text-centered traffic-overlay-text is-hidden'>
-                      <div class="icon is-medium is-danger">
-                        <i class="fal fa-exclamation-circle"></i>
-                      </div>
-                      <p>
-                        There is not enough data!
-                      </p>
-                    </div>
-                    <div id="popular-chart-overlay-load" class='traffic-overlay-text has-text-centered'>
-                      <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
-                      <p>Now loading listing data.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>%>
             </div>
             <div class="column is-4">
               <div class="card is-fullwidth">
-                <div class="card-header no-border-bottom">
+                <div class="card-header no-border-bottom is-primary">
                   <div class="content">
                     <p class="box-heading is-bold">
                       Announcements
@@ -328,54 +337,77 @@
                     </p>
                   </div>
                 </div>
-                <div class="card-content">
+                <div style="padding-top:0;" class="card-content">
                   <ul>
-                    <li class="fas">
+                    <a href="https://medium.com/domahub/several-new-themes-on-domahub-72670976c87f" rel="noopener noreferrer" class="fas">
                       <div class="tag is-dot is-accent is-outlined"></div>
-                      <div class="content">
-                        <a href="https://medium.com/domahub/several-new-themes-on-domahub-72670976c87f" rel="noopener noreferrer">
+                      <li>
+                        <div class="content">
                           Several new themes on DomaHub!
-                        </a>
-                        <small class="tip">May 15, 2018</small>
-                      </div>
-                    </li>
-                    <li class="fas">
+                          <small class="tip">May 15, 2018</small>
+                        </div>
+                      </li>
+                    </a>
+                    <a href="https://medium.com/domahub/paypal-meets-domahub-509a266a3c0c" rel="noopener noreferrer" class="fas">
                       <div class="tag is-dot is-primary is-outlined"></div>
-                      <div class="content">
-                        <a href="https://medium.com/domahub/paypal-meets-domahub-509a266a3c0c" rel="noopener noreferrer">
+                      <li>
+                        <div class="content">
                           PayPal meets DomaHub!
-                        </a>
-                        <small class="tip">March 29, 2018</small>
-                      </div>
-                    </li>
-                    <li class="fas">
+                          <small class="tip">March 29, 2018</small>
+                        </div>
+                      </li>
+                    </a>
+                    <a href="https://medium.com/domahub/keeping-track-of-your-domain-related-expenses-63d7f0347c90" rel="noopener noreferrer" class="fas">
                       <div class="tag is-dot is-info is-outlined"></div>
-                      <div class="content">
-                        <a href="https://medium.com/domahub/keeping-track-of-your-domain-related-expenses-63d7f0347c90" rel="noopener noreferrer">
+                      <li>
+                        <div class="content">
                           Keeping track of your domain related expenses.
-                        </a>
-                        <small class="tip">February 28, 2018</small>
-                      </div>
-                    </li>
-                    <li class="fas">
+                          <small class="tip">February 28, 2018</small>
+                        </div>
+                      </li>
+                    </a>
+                    <a href="https://medium.com/domahub/how-many-clicks-does-it-take-to-get-to-the-owner-of-a-domain-name-cedbf162874a" rel="noopener noreferrer" class="fas">
                       <div class="tag is-dot is-primary is-outlined"></div>
-                      <div class="content">
-                        <a href="https://medium.com/domahub/how-many-clicks-does-it-take-to-get-to-the-owner-of-a-domain-name-cedbf162874a" rel="noopener noreferrer">
+                      <li>
+                        <div class="content">
                           How many clicks does it take to get to the owner of a domain name?
-                        </a>
-                        <small class="tip">January 30, 2018</small>
-                      </div>
-                    </li>
-                    <li class="fas">
+                          <small class="tip">January 30, 2018</small>
+                        </div>
+                      </li>
+                    </a>
+                    <a href="https://medium.com/domahub/introducing-domain-hubs-635eccb2202f" rel="noopener noreferrer" class="fas">
                       <div class="tag is-dot is-accent is-outlined"></div>
-                      <div class="content">
-                        <a href="https://medium.com/domahub/introducing-domain-hubs-635eccb2202f" rel="noopener noreferrer">
+                      <li>
+                        <div class="content">
                           Introducing Domain Hubs!
-                        </a>
-                        <small class="tip">January 23, 2018</small>
-                      </div>
-                    </li>
+                          <small class="tip">January 23, 2018</small>
+                        </div>
+                      </li>
+                    </a>
                   </ul>
+                </div>
+              </div>
+              <div class="card is-info is-fullwidth">
+                <div class="card-header">
+                  <div class="content">
+                    <p class="box-heading is-bold">
+                      Refer a friend
+                    </p>
+                    <p class="is-grey">
+                      Earn a free month for both you and your friend!
+                    </p>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="control has-addons">
+	                  <input id="referral-link" value="https://domahub.com/signup/<%= user.username.toLowerCase() %>" class="input" placeholder="https://domahub.com/signup/<%= user.username.toLowerCase() %>" />
+	                  <a id="referral-link-copy" class="button is-stylish is-small no-shadow" tabindex="0">
+	                    <div class="icon is-small">
+												<i class="fal fa-clipboard"></i>
+											</div>
+	                    <span id="referral-link-text">Copy Link</span>
+	                  </a>
+	                </div>
                 </div>
               </div>
             </div>

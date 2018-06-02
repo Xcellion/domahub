@@ -17,28 +17,63 @@
 
 			<div class="right-content">
 
-				<%- include("../profile/templates/profile_nav_top.ejs"); %>
-
 				<div class="right-content-items">
 					<div class="content">
-						<h2>Account Settings</h2>
+            <div class="control is-spaced">
+              <div class="control-left">
+                <h2 id="current-view-name">Account Settings</h2>
+              </div>
+              <div class="control-right">
+                <div class="control is-grouped">
+                    <div class="control">
+                      <button id="account-submit" type="submit" form="account-details-form" class="is-flexible toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
+                        <div class="icon is-small">
+                          <i class="fal fa-check-circle"></i>
+                        </div>
+                        <span>Save</span>
+                      </button>
+                      <button id="stripe-account-submit" type="submit" form="stripe-personal-form" class="is-flexible toolbar-button is-hidden button is-primary is-stylish is-small">
+                        <div class="icon is-small">
+                          <i class="fal fa-check-circle"></i>
+                        </div>
+                        <span>Save</span>
+                      </button>
+                      <button id="payments-submit" type="submit" form="payments-form" class="is-flexible toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
+                        <div class="icon is-small">
+                          <i class="fal fa-check-circle"></i>
+                        </div>
+                        <span>Save</span>
+                      </button>
+                      <button id="currency-submit" type="submit" form="currency-form" class="is-flexible toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
+                        <div class="icon is-small">
+                          <i class="fal fa-check-circle"></i>
+                        </div>
+                        <span>Save</span>
+                      </button>
+                    </div>
+                    <div class="control">
+                      <a id="cancel-button" class="is-flexible toolbar-button is-hidden button is-danger is-stylish is-small">
+                        <div class="icon is-small">
+                          <i class="fal fa-ban"></i>
+                        </div>
+                        <span>Cancel</span>
+                      </a>
+                    </div>
+                  </div>
+              </div>
+            </div>
 					</div>
-	        <div id="settings-toolbar">
+	        <div id="settings-toolbar" class="content">
 	          <div class="tabs is-primary">
 	            <ul>
 	              <li id="account-tab" class="tab is-active">
 	                <a tabindex="0" title="Account">
-	                  <div class="icon is-hidden-tablet">
-											<i class="fal fa-user"></i>
-										</div>
-	                  <span class="is-hidden-mobile">Account</span>
+	                  <span>Account</span>
 	                </a>
 	              </li>
 	              <li id="premium-tab" class="tab">
 	                <a tabindex="0" title="Premium Status">
-	                  <div class="icon is-hidden-tablet">
-											<i class="fal fa-trophy-alt"></i>
-										</div>
+                    <span class="is-hidden-tablet">Premium</span>
 	                  <span class="is-hidden-mobile">
 	                    <% if (user.stripe_subscription_id) { %>
 	                      Premium Status
@@ -50,11 +85,8 @@
 	              </li>
 	              <li id="payment-tab" class="tab">
 	                <a tabindex="0" title="Payments">
-	                  <div class="icon is-relative is-hidden-tablet">
-											<i class="fal fa-university"></i>
-										</div>
 	                  <span class="is-relative">
-                      <span class="is-hidden-mobile">Payment</span>
+                      <span>Payment</span>
 											<div class="stripe-required-info is-hidden icon is-small is-danger" data-balloon="Information required!" data-balloon-pos="up" data-balloon-length="medium">
 		                    <i class="fal fa-exclamation-circle" data-fa-transform="up-3 left-4"></i>
 		                  </div>
@@ -63,49 +95,8 @@
 	              </li>
 	              <li id="transactions-tab" class="tab">
 	                <a tabindex="0" title="Transactions">
-	                  <div class="icon is-hidden-tablet">
-											<i class="fal fa-money-bill"></i>
-										</div>
-	                  <span class="is-hidden-mobile">Transactions</span>
+	                  <span>Transactions</span>
 	                </a>
-	              </li>
-	              <li>
-	                <div class="control is-grouped">
-	                  <div class="control">
-	                    <button id="account-submit" type="submit" form="account-details-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
-	                      <div class="icon is-small">
-													<i class="fal fa-check-circle"></i>
-												</div>
-	                      <span>Save</span>
-	                    </button>
-	                    <button id="stripe-account-submit" type="submit" form="stripe-personal-form" class="toolbar-button is-hidden button is-primary is-stylish is-small">
-	                      <div class="icon is-small">
-													<i class="fal fa-check-circle"></i>
-												</div>
-	                      <span>Save</span>
-	                    </button>
-	                    <button id="payments-submit" type="submit" form="payments-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
-	                      <div class="icon is-small">
-													<i class="fal fa-check-circle"></i>
-												</div>
-	                      <span>Save</span>
-	                    </button>
-	                    <button id="currency-submit" type="submit" form="currency-form" class="toolbar-submit-button toolbar-button is-hidden button is-primary is-stylish is-small">
-	                      <div class="icon is-small">
-													<i class="fal fa-check-circle"></i>
-												</div>
-	                      <span>Save</span>
-	                    </button>
-	                  </div>
-	                  <div class="control">
-	                    <a id="cancel-button" class="toolbar-button is-hidden button is-danger is-stylish is-small">
-	                      <div class="icon is-small">
-													<i class="fal fa-ban"></i>
-												</div>
-	                      <span>Cancel</span>
-	                    </a>
-	                  </div>
-	                </div>
 	              </li>
 	            </ul>
 	          </div>
@@ -231,7 +222,7 @@
           <!-- PREMIUM / REFERRAL / PROMO CODE TAB -->
 	        <div id="premium" class="columns is-laptop is-hidden drop-tab">
 	          <div class="column">
-		          <div class="card is-fullwidth">
+		          <div id="premium-upgrade-card" class="card is-fullwidth remove-margin-bottom-content">
 	          		<div id="premium-card-header" class="card-header">
 		          		<h3 id="upgrade-tab-header" class="card-header-title">
 		          			<span>Premium Status</span>
@@ -255,22 +246,22 @@
   								</div>
   							</div>
                 <div id="premium-expire-notification" class="is-hidden card-image">
-                    <div class="notification no-shadow has-icon is-danger">
-                      <div class="icon-box">
-                        <div class="icon is-white">
-                          <i class="fal fa-exclamation-triangle"></i>
-                        </div>
-                      </div>
-                      <div class="content">
-                        <small class="is-white">
-                          Your Premium account is currently set to expire on <span class="exp-date-text"></span>. You will lose access to additional features like no commission fees, design customization, unlimited domains, etc.
-                          <a tabindex="0" target="_blank" class="is-white is-bold" href="/features#pricing">
-                            Click here to learn more.
-                          </a>
-                        </small>
+                  <div class="notification no-shadow has-icon is-danger">
+                    <div class="icon-box">
+                      <div class="icon is-white">
+                        <i class="fal fa-exclamation-triangle"></i>
                       </div>
                     </div>
+                    <div class="content">
+                      <small class="is-white">
+                        Your Premium account is currently set to expire on <span class="exp-date-text"></span>. You will lose access to additional features like no commission fees, design customization, unlimited domains, etc.
+                        <a tabindex="0" target="_blank" class="is-white is-bold" href="/features#pricing">
+                          Click here to learn more.
+                        </a>
+                      </small>
+                    </div>
                   </div>
+                </div>
 		          	<div class="card-content">
 		          		<div class="control is-spaced">
 		          			<div class="control-left">

@@ -7,32 +7,37 @@
 
       <!-- CURRENT DOMAIN NAME -->
       <div class="content">
-        <div class="control button-wrapper is-mobile">
-          <a class="show-selector-button button is-black is-inverted is-stylish is-small" tabindex="0" title="Back To My Listings">
-            <div class="icon is-small">
-              <i class="fal fa-long-arrow-left"></i>
-            </div>
-            <span class="is-hidden-mobile">Go Back To Listings</span>
-          </a>
-          <a id="status-toggle-button" tabindex="0" class="button control-item is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
-            <div id="status-icon" class="icon is-small"><i class="fal fa-toggle-on"></i></div>
-            <span id="status-text" class="is-hidden-mobile"></span>
-          </a>
-          <div id="view-listings-button-wrapper" class="is-inline control-item is-relative">
-            <a id="view-listings-button" class="button is-black is-inverted is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
-              <div class="icon is-small"><i class="fal fa-external-link"></i></div>
-              <span class="is-hidden-mobile">View Listing<span class="edit-domain-plural is-hidden">s</span></span>
+        <div class="control is-spaced">
+          <div class="control-left">
+            <a class="show-selector-button button is-flexible is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
+              <div class="icon is-small">
+                <i class="fal fa-long-arrow-left"></i>
+              </div>
+              <span class="is-hidden-mobile">Go Back To Listings</span>
             </a>
-            <div id="view-listings-button-drop" class="box domain-tooltip is-hidden"></div>
           </div>
-          <a id="save-changes-button" class="button is-primary is-stylish is-small is-hidden">
-            <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
-            <span>Save</span>
-          </a>
-          <a id="cancel-changes-button" class="button is-danger is-stylish is-small is-hidden">
-            <div class="icon is-small"><i class="fal fa-ban"></i></div>
-            <span>Cancel</span>
-          </a>
+          <div class="control-right">
+            <a id="save-changes-button" class="button is-flexible is-primary is-stylish is-small is-hidden">
+              <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
+              <span>Save</span>
+            </a>
+            <a id="cancel-changes-button" class="button is-flexible is-danger is-stylish is-small is-hidden">
+              <div class="icon is-small"><i class="fal fa-ban"></i></div>
+              <span>Cancel</span>
+            </a>
+            <a id="status-toggle-button" tabindex="0" class="button is-flexible control-item is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
+              <div id="status-icon" class="icon is-small"><i class="fal fa-toggle-on"></i></div>
+              <span id="status-text" class="is-hidden-mobile"></span>
+            </a>
+            <div id="view-listings-button-wrapper" class="is-inline control-item is-relative">
+              <a id="view-listings-button" class="button is-flexible is-black is-inverted is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
+                <div class="icon is-small"><i class="fal fa-external-link"></i></div>
+                <span class="is-hidden-mobile">View Listing<span class="edit-domain-plural is-hidden">s</span></span>
+              </a>
+              <div id="view-listings-button-drop" class="box domain-tooltip is-hidden"></div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -40,19 +45,22 @@
         <ul>
           <li id="info-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <span class="">Listing Info</span>
+              <span class="">Listing</span>
+              <span class="is-hidden-mobile">&nbsp;Info</span>
             </a>
           </li>
           <li id="domain-info-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <span class="">Domain Info</span>
+              <span class="">Domain</span>
+              <span class="is-hidden-mobile">&nbsp;Info</span>
             </a>
           </li>
           <li id="design-tab" class="verified-elem unpurchased-elem tab">
             <a tabindex="0" class="">
-              <span class="">Listing Design</span>
+              <span class="is-hidden-mobile">Listing&nbsp;</span>
+              <span class="">Design</span>
               <% if (!user.stripe_subscription_id) { %>
-                <span class="icon is-small"><i class="fal fa-trophy-alt"></i></span>
+                <div class="icon is-small"><i class="fal fa-trophy-alt"></i></div>
               <% } %>
             </a>
           </li>
@@ -60,26 +68,10 @@
             <a tabindex="0" class="">
               <span class="">Hub</span>
               <% if (!user.stripe_subscription_id) { %>
-                <span class="icon is-small"><i class="fal fa-trophy-alt"></i></span>
+                <div class="icon is-small"><i class="fal fa-trophy-alt"></i></div>
               <% } %>
             </a>
           </li>
-          <div class="button-wrapper control">
-            <div class="control is-grouped">
-              <div class="control is-marginless">
-                <a id="save-changes-button" class="button is-flexible is-primary is-stylish is-small is-hidden">
-                  <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
-                  <span>Save</span>
-                </a>
-              </div>
-              <div class="control">
-                <a id="cancel-changes-button" class="button is-flexible is-danger is-stylish is-small is-hidden">
-                  <div class="icon is-small"><i class="fal fa-ban"></i></div>
-                  <span>Cancel</span>
-                </a>
-              </div>
-            </div>
-          </div>
         </ul>
       </div>
     </div>
@@ -265,13 +257,13 @@
             <div class="card-header">
               <h3 class="card-header-title">
                 Registrar Information
-                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
+                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Changing this information does not change it on your registrar." data-balloon-pos="up">
                   <i class="fal fa-exclamation-triangle"></i>
                 </div>
               </h3>
               <a id="lookup-dns-button" class="button is-icon no-shadow is-stylish is-small">
                 <span class="icon is-small"><i class="fal fa-search"></i></span>
-                <span>Lookup Missing Details</span>
+                <span class="is-hidden-mobile">Lookup Missing Details</span>
               </a>
             </div>
             <div class="card-content">
@@ -390,11 +382,8 @@
                 <div class="control-left">
                   <label class="label">
                     Related Expenses
-                    <div class="icon is-tooltip is-small" data-balloon-length="large" data-balloon="For example, any after-market fees, expenses for advertisements, or payments for domain-related services." data-balloon-pos="up">
-                      <i class="fal fa-question-circle"></i>
-                    </div>
                   </label>
-                  <small class="tip">Any expenses incurred related to <span class="this-domain">this domain</span>.</small>
+                  <small class="tip">Any expenses related to <span class="this-domain">this domain</span>. Such as fees, payments, or taxes.</small>
                 </div>
                 <div class="control-right has-text-right">
                   <a id="add-new-expense-button" tabindex="0" class='button no-shadow is-stylish is-small'>
@@ -411,12 +400,12 @@
                       <td class="domain-expense-name break-word"></td>
                       <td class="domain-expense-cost"></td>
                       <td class="domain-expense-date"></td>
-                      <td class="expense-button-wrapper">
-                        <a tabindex="0" class='domain-expense-delete-button button no-shadow is-stylish is-small is-pulled-right'>
+                      <td class="expense-button-wrapper control is-grouped is-pulled-right">
+                        <a tabindex="0" class='domain-expense-delete-button button is-flexible no-shadow is-stylish is-small is-pulled-right'>
                           <div class="icon is-small"><i class="fal fa-trash"></i></div>
                           <span class="is-hidden-mobile">Delete</span>
                         </a>
-                        <a tabindex="0" class='domain-expense-edit-button button no-shadow is-stylish is-small is-pulled-right'>
+                        <a tabindex="0" class='domain-expense-edit-button button is-flexible no-shadow is-stylish is-small is-pulled-right'>
                           <div class="icon is-small"><i class="fal fa-edit"></i></div>
                           <span class="is-hidden-mobile">Edit</span>
                         </a>
@@ -435,10 +424,10 @@
       <div id="registrar-contact-modal" class="modal">
         <div class="modal-background"></div>
         <div class="modal-container">
-          <div class="modal-content is-small">
+          <div class="modal-content">
             <div class="content has-text-centered">
               <h3 class="is-bold">Domain <span class="registrar-which-text"></span> Details
-                <div class="icon is-danger is-small" data-balloon-length="large" data-balloon="Please note, changing this information does not change it on your registrar. It is for your information purposes only." data-balloon-pos="up">
+                <div class="icon is-danger is-small" data-balloon-length="medium" data-balloon="Changing this does not change it on your registrar." data-balloon-pos="left">
                   <i class="fal fa-exclamation-triangle"></i>
                 </div>
               </h3>
@@ -508,7 +497,7 @@
       <div id="domain-expense-modal" class="modal">
         <div class="modal-background"></div>
         <div class="modal-container">
-          <div class="modal-content is-small">
+          <div class="modal-content">
             <div class="content has-text-centered">
               <h3 class="is-bold"><span id="how-change-domain-expense"></span>Domain Expense</h3>
             </div>
@@ -1221,7 +1210,7 @@
                     <p class="control has-text-centered">
                       Click the button below to go back and add some domains.
                     </p>
-                    <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
+                    <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
                       <div class="icon is-small">
                         <i class="fal fa-long-arrow-left"></i>
                       </div>
@@ -1240,7 +1229,7 @@
                     <p class="control has-text-centered">
                       Click the button below to go back and select a single listing hub to edit.
                     </p>
-                    <a class="show-selector-button is-stylish is-small button no-shadow" tabindex="0" title="Back To Domain Selector">
+                    <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
                       <div class="icon is-small">
                         <i class="fal fa-long-arrow-left"></i>
                       </div>
@@ -1271,20 +1260,48 @@
 
   <!-- OFFERS -->
   <div id="offers-section" class="offer-elem non-edit-elem non-verify-elem is-hidden">
-    <div class="content">
-      <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
-        <div class="icon is-small">
-          <i class="fal fa-long-arrow-left"></i>
+    <div class="listings-toolbar">
+      <div class="control is-spaced">
+        <div class="control-left">
+          <a class="show-selector-button button is-flexible is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-left"></i>
+            </div>
+            <span class="is-hidden-mobile">Go Back To Listings</span>
+          </a>
         </div>
-        <span>Go Back To Listings</span>
-      </a>
+        <div class="control-right">
+          <div id="offers-toolbar" class="content">
+            <div class="offer-button control is-grouped">
+              <div class="control is-mobile">
+                <a id="refresh-offers-button" class="is-hidden is-flexible button is-stylish is-small" title="Refresh Offers">
+                  <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
+                  <span class="is-hidden-mobile">Refresh Offers</span>
+                </a>
+              </div>
+              <div class="control is-mobile">
+                <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-flexible is-stylish is-small">
+                  <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
+                  <span class="is-hidden-mobile">Show Rejected</span>
+                </a>
+              </div>
+              <div class="control has-icon is-expanded">
+                <div class="icon">
+                  <i class="fal fa-search"></i>
+                </div>
+                <input id="offer-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search Offers" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- OFFER MODAL -->
     <div id="offer-modal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-container">
-        <div class="modal-content is-small">
+        <div class="modal-content">
           <div class="content has-text-centered">
             <h3 class="is-bold" id="offer-modal-domain"></h3>
             <p>Received on <span id="offer-modal-timestamp"></span></p>
@@ -1525,28 +1542,6 @@
 
       <!-- OFFER TABLES -->
       <div class="column">
-        <div id="offers-toolbar" class="content" >
-          <div class="offer-button control is-grouped">
-            <div class="control is-mobile">
-              <a id="refresh-offers-button" class="is-hidden button is-stylish is-small" title="Refresh Offers">
-                <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
-                <span class="is-hidden-mobile">Refresh Offers</span>
-              </a>
-            </div>
-            <div class="control is-mobile">
-              <a id="show-rejected-offers" title="Show Rejected Offers" class="button is-stylish is-small">
-                <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
-                <span class="is-hidden-mobile">Show Rejected</span>
-              </a>
-            </div>
-            <div class="control has-icon is-expanded">
-              <div class="icon">
-                <i class="fal fa-search"></i>
-              </div>
-              <input id="offer-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search Offers" />
-            </div>
-          </div>
-        </div>
         <table id="no-verified-listings-table" class="is-hidden has-shadow table is-fixed is-bordered">
           <tbody>
             <tr class="no-hover-effect">
@@ -1698,13 +1693,41 @@
 
   <!-- VERIFICATION -->
   <div id="verify-section" class="verify-elem non-offer-elem non-edit-elem is-hidden">
-    <div class="content">
-      <a class="show-selector-button button is-black is-inverted is-stylish is-small" tabindex="0" title="Back To My Listings">
-        <div class="icon is-small">
-          <i class="fal fa-long-arrow-left"></i>
+    <div class="listings-toolbar">
+      <div class="control is-spaced">
+        <div class="control-left">
+          <a class="show-selector-button button is-flexible is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-left"></i>
+            </div>
+            <span class="is-hidden-mobile">Go Back To Listings</span>
+          </a>
         </div>
-        <span>Go Back To Listings</span>
-      </a>
+        <div class="control-right">
+          <div class="control">
+            <a id="refresh-dns-button" class="button is-flexible is-stylish is-black is-inverted is-small" title="Refresh DNS Table">
+              <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
+              <span>Refresh Table<span class="verification-plural"></span></span>
+            </a>
+            <a id="auto-dns-button" class="button is-flexible is-stylish is-small is-hidden verify-hidden-while-loading" title="Automatically Set DNS">
+              <div class="icon is-small"><i class="fal fa-table"></i></div>
+              <span>Automatically Set DNS</span>
+            </a>
+            <a id="verify-button" class="verify-hidden-while-loading button is-flexible is-stylish is-small is-primary is-hidden" title="Verify domain(s)">
+              <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
+              <span>Verify Now</span>
+            </a>
+            <a id="prev-dns-table-button" data-value="-1" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Previous Domain Name">
+              <div class="icon is-small"><i class="fal fa-angle-left"></i></div>
+              <span class="is-hidden-mobile">Previous</span>
+            </a>
+            <a id="next-dns-table-button" data-value="1" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Next Domain Name">
+              <span class="is-hidden-mobile">Next</span>
+              <div class="icon is-small"><i class="fal fa-angle-right"></i></div>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="columns">
       <div class="column is-narrow">
@@ -1744,32 +1767,6 @@
         </div>
       </div>
       <div class="column">
-        <div class="content">
-          <div class="control is-grouped">
-            <div class="control button-wrapper">
-              <a id="refresh-dns-button" class="button is-flexible is-stylish is-black is-inverted is-small" title="Refresh DNS Table">
-                <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
-                <span>Refresh Table<span class="verification-plural"></span></span>
-              </a>
-              <a id="auto-dns-button" class="button is-flexible is-stylish is-small is-hidden verify-hidden-while-loading" title="Automatically Set DNS">
-                <div class="icon is-small"><i class="fal fa-table"></i></div>
-                <span>Automatically Set DNS</span>
-              </a>
-              <a id="verify-button" class="verify-hidden-while-loading button is-flexible is-stylish is-small is-primary is-hidden" title="Verify domain(s)">
-                <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
-                <span>Verify Now</span>
-              </a>
-              <a id="prev-dns-table-button" data-value="-1" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Previous Domain Name">
-                <div class="icon is-small"><i class="fal fa-angle-left"></i></div>
-                <span class="is-hidden-mobile">Previous</span>
-              </a>
-              <a id="next-dns-table-button" data-value="1" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Next Domain Name">
-                <span class="is-hidden-mobile">Next</span>
-                <div class="icon is-small"><i class="fal fa-angle-right"></i></div>
-              </a>
-            </div>
-          </div>
-        </div>
         <div id="current-dns-tables">
           <table id="loading-dns-table" class="table has-shadow no-borders">
             <tbody>
@@ -1796,35 +1793,35 @@
                 <th class="td-record">Record</th>
                 <th>
                   Required Data
-                  <div class="icon is-small is-danger" data-balloon-length="large" data-balloon="If your registrar doesn't let you input '@' as the required data, try entering in your domain name." data-balloon-pos="top">
-                    <i class="fal fa-exclamation-circle"></i>
-                  </div>
                 </th>
                 <th class="is-hidden-mobile">Current Data</th>
               </tr>
             </thead>
             <tbody class="dns-table-body has-shadow">
               <tr class='doma-a-record needs-action-row no-hover-effect'>
-                <td class="next_step is-danger"></td>
+                <td class="next_step is-danger break-word"></td>
                 <td class="td-dns-host">@</td>
                 <td class="td-record">A</td>
-                <td class='required_data'>208.68.37.82</td>
+                <td class='required_data break-all'>208.68.37.82</td>
                 <td class="existing_data is-hidden-mobile"></td>
               </tr>
               <tr class='doma-www-record needs-action-row no-hover-effect'>
-                <td class="next_step is-danger"></td>
-                <td class="td-dns-host">www</td>
-                <td class="td-record">CNAME</td>
+                <td class="next_step is-danger break-word"></td>
+                <td class="td-dns-host break-all">www</td>
+                <td class="td-record break-all">CNAME</td>
                 <td class='required_data'>
                   <span>@</span>
+                  <div style="display: inline-block;vertical-align:top;" class="icon is-inline is-small is-danger" data-balloon-length="large" data-balloon="If your registrar doesn't let you input '@' as the required data, try entering in your domain name." data-balloon-pos="top">
+                    <i class="fal fa-exclamation-circle"></i>
+                  </div>
                 </td>
                 <td class="existing_data is-hidden-mobile"></td>
               </tr>
               <tr class='existing-dns-row needs-action-row no-hover-effect'>
-                <td class="next_step is-danger"></td>
+                <td class="next_step is-danger break-word"></td>
                 <td class="td-dns-host">@</td>
                 <td class="td-record">A</td>
-                <td class='required_data'></td>
+                <td class='required_data break-all'></td>
                 <td class="existing_data is-hidden-mobile"></td>
               </tr>
             </tbody>

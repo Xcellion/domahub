@@ -27,6 +27,20 @@
   word-wrap:break-word;
 }
 
+.button {
+  &.is-flexible {
+    @media screen and (max-width: 1200px) {
+      .icon {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      span {
+        display: none;
+      }
+    }
+  }
+}
+
 .white-space-no-wrap {
   white-space:nowrap;
 }
@@ -80,6 +94,12 @@
 #settings-toolbar .tabs {
   overflow:visible;
   overflow-x:visible;
+}
+
+.tabs {
+  .icon:first-child {
+    margin-right:0;
+  }
 }
 
 .earnings-divider {
