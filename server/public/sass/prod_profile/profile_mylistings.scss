@@ -170,7 +170,7 @@
 
 .blackscreen {
   position: absolute;
-  height:100%;
+  height: calc(100% - 40px);
   width: 100%;
   left: 0;
   background-color: $black-secondary;
@@ -213,11 +213,11 @@ td.has-cursor-pointer {
 
 #table-body {
   display: block;
-  max-height: calc(100vh - 325px);
+  max-height: calc(100vh - 300px);
   overflow-y: auto;
   overflow-x: hidden;
   @include mobile {
-    max-height: calc(100vh - 345px);
+    max-height: calc(100vh - 260px);
   }
 }
 

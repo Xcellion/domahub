@@ -1,11 +1,12 @@
 var time_chart;
 var countries_chart;
 var channels_chart;
+var popular_chart;
 var refreshing_charts = false;
 
 $(document).ready(function() {
 
-  $("#date-last-accessed").html(moment(user.data_accessed).format("MMMM DD, YYYY"));
+  referralLinkCopy();
 
   //<editor-fold>-------------------------------ANNOUNCEMENT-------------------------------
 
@@ -44,6 +45,20 @@ $(document).ready(function() {
 });
 
 //<editor-fold>-------------------------------PORTFOLIO OVERVIEW-------------------------------
+
+//handle referral link copy
+function referralLinkCopy(){
+  $("#referral-link").on("focus", function(){
+    $(this).select();
+  });
+  $("#referral-link-copy").on("click", function(){
+    $("#referral-link").select();
+    document.execCommand("copy");
+    $("#referral-link").blur();
+    $(this).find("svg").attr("data-icon", "check");
+    $("#referral-link-text").text("Copied!");
+  });
+}
 
 //update the portfolio with counters
 function updatePortfolioOverviewCounters(){
@@ -301,9 +316,11 @@ function formatCurrency(number){
         var chart_data1 = splitDataToWeekly(days_to_go_back, parsed_data_1, average);
         var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
         var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
+
         //declare some global font styling
         Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Helvetica', sans-serif";
         Chart.defaults.global.defaultFontSize = 14;
+
         //make chart
         var chartOptions = {
           type : "line",
@@ -885,7 +902,7 @@ function formatCurrency(number){
             type : "pie",
             options : {
               responsive : true,
-              maintainAspectRatio : true,
+              maintainAspectRatio : false,
               legend : {
                 position: "left"
               },
@@ -923,6 +940,144 @@ function formatCurrency(number){
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------POPULAR CHART-------------------------------
+
+  //build the popular chart
+  function buildPopularChart(listing_regex, now, canvas_id){
+
+    //show loading if chart already exists (for changing date range)
+    if (popular_chart){
+      showLoadingOrNone(canvas_id, true);
+    }
+
+    //build the query
+    gaQuery({
+      'ids': 'ga:141565191',
+      'metrics': 'ga:users',
+      'dimensions': 'ga:pagePathLevel2',
+      'sort': '-ga:pagePathLevel2',
+      'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
+      'end-date': moment(now).format('YYYY-MM-DD'),
+      'include-empty-rows': false,
+    }).then(function(results) {
+      //no matching data
+      if (results.totalResults == 0){
+        showLoadingOrNone(canvas_id, false);
+        if (popular_chart){
+          popular_chart.destroy();
+        }
+      }
+      else {
+
+        //set colors
+        var data = [];
+        var labels = [];
+        var backgroundColors = [
+          "#00bfa5",
+          "#F38181",
+          "#FCE38A",
+          "#3F4B83",
+          "#95E1D3"
+        ];
+
+        //sort the results by listing name and filter out not owner domains
+        var listings_data_sorted = results.rows.map(function(row){
+          var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+          return [domain_name, row[1]];
+        }).filter(function(row){
+          return listing_regex.test(row[0]);
+        }).sort(function(a, b){
+          return ((a[0] > b[0]) ? -1 : ((a[0] == b[0]) ? 0 : 1));
+        });
+
+        //if nothing exists
+        if (listings_data_sorted.length == 0){
+          showLoadingOrNone(canvas_id, false);
+          if (popular_chart){
+            popular_chart.destroy();
+          }
+        }
+        else {
+          //collapse data by domain name and sort
+          var seen = {};
+          listings_data_sorted.forEach(function(row) {
+            if (seen.hasOwnProperty(row[0])){
+              seen[row[0]] += parseFloat(row[1]);
+            }
+            else {
+              seen[row[0]] = parseFloat(row[1]);
+            }
+          });
+          listings_data_sorted = [];
+          for (var x in seen){
+            listings_data_sorted.push([x, seen[x]]);
+          }
+
+          //sort by users and get top 5
+          listings_data_sorted.sort(function(a, b){
+            return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+          }).slice(0, 5).forEach(function(row){
+            labels.push(row[0]);
+            data.push(row[1]);
+          });
+
+          //make chart
+          var chartOptions = {
+            type : "horizontalBar",
+            options : {
+              responsive : true,
+              maintainAspectRatio : false,
+              legend : {
+                display: false
+              },
+              tooltips: {
+                backgroundColor: 'rgba(17, 17, 17, 0.9)',
+                xPadding: 10,
+                yPadding: 10,
+                titleMarginBottom: 10
+              },
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    suggestedMax: 5,
+                    beginAtZero: true,   // minimum value will be 0.
+                    callback: function(value, index, values){
+                      if (Math.floor(value) === value) {
+                        return value;
+                      }
+                    }
+                  }
+                }]
+              }
+            },
+            data : {
+              labels : labels,
+              datasets : [
+                {
+                  data : data,
+                  backgroundColor : backgroundColors,
+                }
+              ]
+            }
+          };
+
+          //remove loading overlay
+          $("#" + canvas_id + "-overlay").addClass('is-hidden');
+
+          var ctx = document.getElementById(canvas_id).getContext('2d');
+          if (popular_chart){
+            popular_chart.destroy();
+          }
+          popular_chart = new Chart(ctx, chartOptions);
+        }
+      }
+    }).catch(function(err){
+      gaErrorHandler(err);
+    });
+  }
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------CHART HELPERS-------------------------------
 
   //build all charts
@@ -931,6 +1086,7 @@ function formatCurrency(number){
     buildTimeChart(listing_regex, now, "time-chart");
     buildChannelsChart(listing_regex, now, "channels-chart");
     buildCountriesChart(listing_regex, now, "countries-chart");
+    buildPopularChart(listing_regex, now, "popular-chart");
     buildStats(listing_regex, now);
   }
 

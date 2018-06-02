@@ -1,15 +1,14 @@
 <div class="control is-spaced">
   <div class="control-left">
-    <div class="content">
-      <h2>My Listings</h2>
-    </div>
+    <h2 id="current-view-name" class="is-inline"></h2>
+    <h2 id="current-domain-name" class="is-inline"></h2>
   </div>
   <div class="control-right">
-    <a class="button is-primary is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
+    <a class="button is-primary is-flexible is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
       <div class="icon is-small">
         <i class="fal fa-plus"></i>
       </div>
-      <span>Create New Listings</span>
+      <span class="is-hidden-mobile">Create New Listings</span>
     </a>
   </div>
 </div>
@@ -98,8 +97,14 @@
     <!-- FITER MENU -->
     <div id="filter-menu" class="yes-listings-elem control-right">
       <div class="control is-grouped">
+        <div class="control has-icon is-expanded">
+          <div class="icon">
+            <i class="fal fa-search"></i>
+          </div>
+          <input id="domain-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search" />
+        </div>
         <div class="control">
-          <span class="select is-stylish is-transparent is-narrow">
+          <span class="select is-stylish is-narrow">
             <select id="filter-select" tabindex="0">
               <option selected value="id">View All</option>
               <option value="unverified">Unverified</option>
@@ -120,12 +125,6 @@
             </div>
             <span class="is-hidden-mobile">Refresh</span>
           </button>
-        </div>
-        <div class="control has-icon is-expanded">
-          <div class="icon">
-            <i class="fal fa-search"></i>
-          </div>
-          <input id="domain-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search" />
         </div>
       </div>
     </div>

@@ -718,6 +718,7 @@ function showSectionByURL(){
   //set up payments history card
   function setupPaymentsHistory(){
     $("#payments-history-card").removeClass('is-hidden');
+    $("#premium-upgrade-card").removeClass("remove-margin-bottom-content");
     $("#payment-history-body .payment-history-row:not(#payment-history-clone)").remove();
 
     if (user.stripe_customer.invoices.length){

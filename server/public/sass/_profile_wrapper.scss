@@ -1,26 +1,30 @@
 @import 'bulma/elements/hamburger.sass';
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 100%;
-  }
-}
-
 .wrapper {
   display: flex;
   height: 100%;
   width: 100%;
 }
 
+#current-view-name {
+  padding-top:5px;
+  display:inline-block;
+  height:36px;
+  @include mobile {
+    margin-left: 45px;
+  }
+}
+
 .left-menu {
+  @include translate(-250px,0);
+  width: 250px;
+  &.is-active {
+    @include translate(0,0);
+    @include box-shadow(2px,0,10px,$border,0);
+  }
   @include transition(width 0.3s ease, transform 0.2s ease);
-  @include box-shadow(2px,0,10px,$border,0);
   background-color: $white;
   height: 100%;
-  width: 250px;
   z-index: 100;
   .menu-list {
     .menu-item {
@@ -35,7 +39,6 @@
         margin-right: 10px;
         padding: 10px 0 10px 15px;
         .icon {
-          @include keyframes(fadeIn 1s forwards);
           color: $grey;
           font-size: 14px;
         }
@@ -56,91 +59,104 @@
       }
     }
   }
-  @include mobile {
-    @include translate(-70px,0);
-  }
-  @media screen and (max-width: 1650px) {
-    width: 70px;
-  }
+}
+
+#left-menu-buttons {
+  justify-content:space-around !important;
 }
 
 .left-menu-tab {
-  @include keyframes (fadeIn 1s forwards);
   color: $grey;
-  display: none;
   font-size: 14px;
-  @media screen and (min-width: 1651px) {
-    display: block;
-  }
+  display: block;
 }
 
 .menu-info {
-  padding: 15px 20px 40px 15px;
+  padding:10px 20px 0;
   p {
-    @include keyframes(fadeIn 1s forwards);
     color: $grey;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 1px;
-    margin-top: 10px;
+    height: 20px;
     text-transform: uppercase;
   }
 }
 
 .username {
   word-break: break-all;
-  @media screen and (max-width: 1650px) {
-    display: none;
-  }
 }
 
 .right-content {
-  @include transition(transform 0.3s ease);
-  @include translate(250px,0);
   background-color: $pastel;
   height: 100%;
+  width: 100%;
   overflow-x: hidden;
   position: absolute;
-  width: calc(100% - 250px);
   .tabs {
     min-height: 36px;
-  }
-  @media screen and (max-width: 1650px) {
-    @include translate(70px,0);
-    width: calc(100% - 70px);
-  }
-  @include mobile {
-    @include translate(0,0);
-    width: 100%;
   }
 }
 
 .right-content-items {
-  padding: 40px 60px;
+  padding: 80px 60px 15px;
+  height: 100%;
   @include mobile {
-    padding: 40px 20px;
+    padding: 15px;
+  }
+}
+
+.menu-button {
+  cursor:pointer;
+  .icon {
+    margin-top:4px;
+    @include mobile {
+      margin-left:4px;
+    }
+  }
+  &.is-open.is-circle {
+    @include mobile {
+      border-radius:100%;
+      background-color: $pastel;
+      @include box-shadow(0,0,4px,$border,0);
+      margin: 10px;
+      padding: 5px;
+      width: 42px;
+      height: 42px;
+    }
   }
 }
 
 .circle-logo {
+  margin:auto;
   background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
   background-repeat: no-repeat;
   background-size: cover;
-  width: 30px !important;
-  height: 30px !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.flat-logo {
+  margin:auto;
+  background-image: url("/images/dh-assets/flat-logo/dh-flat-logo-sprite.png");
+  background-repeat: no-repeat;
+  width: 131px !important;
+  height: 32px !important;
 }
 
 .profile-nav {
-  @include box-shadow(0,3px,5px,$border,0);
-  align-items: stretch;
-  background-color: $white;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 50px;
-  position: relative;
-  @include mobile {
-    padding: 0;
+  z-index:99;
+  top:0;
+  &.is-bar {
+    position:fixed;
   }
+}
+
+.nav-item {
+  display:inline-block;
+  margin:0;
+  vertical-align:middle;
+  padding:15px;
 }
 
 .user-panel {
@@ -150,7 +166,6 @@
 }
 
 .hover-menu {
-  @include box-shadow(3px,3px,12px,$border,0);
   background-color: $white;
   border-radius: $radius;
   display: none;
@@ -180,7 +195,7 @@
 }
 
 .user-button {
-  padding: 10px 5px;
+  padding: 0px 5px;
   position: relative;
 }
 
@@ -195,26 +210,17 @@
     color: $grey;
   }
   &:focus {
-    @include box-shadow(0,0,4px,#5E9ED6,0);
     outline: none;
-    border: 1px solid $blue !important;
+  }
+  &.is-active {
+    @include box-shadow(0,0,4px,$border,0);
+    outline: none;
+    border: 1px solid $primary !important;
   }
 }
 
-.nav-drop {
-  @include box-shadow(3px,3px,12px,$border,0);
-  background-color: $white;
-  border-radius: 0 0 $radius $radius;
-  position: absolute;
-  top: 100%;
-  z-index: 10;
-  .menu-label {
-    color: $primary;
-    padding: 8px 10px;
-  }
-}
-
-#notification-counter {
+.notification-counter {
+  text-align:center;
   background-color: $danger;
   border-radius: 100%;
   color: $white;
@@ -222,47 +228,37 @@
   height: 16px;
   line-height: 18px;
   position: absolute;
-  right: -5px;
-  top: -2px;
+  right: -7px;
+  top: -4px;
   width: 16px;
 }
 
-#announcement-dropdown-menu {
-  right: -133px;
-  width: 235px;
-}
-
-#contact-dropdown-menu {
-  right: -87px;
-  width: 350px;
+#contact-form-menu {
   .control {
-    padding: 8px;
+    padding: 0px 15px 15px;
   }
   textarea {
+    height:150px;
+    width: 235px;
+    padding: 0px 15px 15px;
+    font-size:14px;
     @include box-shadow(0,0,0,$border,0);
     border-radius: $radius $radius 0 0;
     border: none;
   }
-  @include mobile {
-    right: -97px;
-  }
 }
 
 #notification-dropdown-menu {
-  right: -41px;
-  width: 300px;
+  padding:15px;
+  padding-top:0;
+  font-size:14px;
   .content {
     padding: 5px 12px;
   }
-  @include mobile {
-    right: -52px;
-  }
 }
 
-#user-dropdown-menu {
-  right: 10px;
-  width: 200px;
-  @include mobile {
-    right: 0;
-  }
+#other-links-menu {
+  padding:15px;
+  padding-top:0;
+  font-size:14px;
 }
