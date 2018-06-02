@@ -329,20 +329,20 @@ function createDomainTable(listings_to_show, start_at, listings_per_page){
     clone_row.find(".domain-row-domain").text(listings_to_show[start_at + x].domain_name);
 
     if (listings_to_show[start_at + x].buy_price){
-      clone_row.find(".domain-row-bin").text(moneyFormat.to(listings_to_show[start_at + x].buy_price));
+      clone_row.find(".domain-row-bin").text(formatCurrency(listings_to_show[start_at + x].buy_price, listings_to_show[start_at + x].default_currency));
     }
     else {
       clone_row.find(".bin-col .control-item").addClass('is-hidden');
     }
     if (listings_to_show[start_at + x].min_price){
-      clone_row.find(".domain-row-min").text(moneyFormat.to(listings_to_show[start_at + x].min_price));
+      clone_row.find(".domain-row-min").text(formatCurrency(listings_to_show[start_at + x].min_price, listings_to_show[start_at + x].default_currency));
     }
     else {
       clone_row.find(".min-col .control-item").addClass('is-hidden');
     }
 
     if (listings_to_show[start_at + x].price_rate && listings_to_show[start_at + x].price_type && listings_to_show[start_at + x].rentable){
-      clone_row.find(".domain-row-rent").text(moneyFormat.to(listings_to_show[start_at + x].price_rate) + " / " + listings_to_show[start_at + x].price_type);
+      clone_row.find(".domain-row-rent").text(formatCurrency(listings_to_show[start_at + x].price_rate, listings_to_show[start_at + x].default_currency) + " / " + listings_to_show[start_at + x].price_type);
     }
     else {
       clone_row.find(".rent-col .control-item").addClass('is-hidden');
@@ -408,13 +408,13 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
 
     //price tag
     if (listings_to_show[start_at + x].buy_price){
-      var price_tag = "Buy now - " + moneyFormat.to(listings_to_show[start_at + x].buy_price);
+      var price_tag = "Buy now - " + formatCurrency(listings_to_show[start_at + x].buy_price, listings_to_show[start_at + x].default_currency);
     }
     else if (listings_to_show[start_at + x].min_price){
-      var price_tag = "Make offer - " + moneyFormat.to(listings_to_show[start_at + x].min_price);
+      var price_tag = "Make offer - " + formatCurrency(listings_to_show[start_at + x].min_price, listings_to_show[start_at + x].default_currency);
     }
     else if (listings_to_show[start_at + x].price_rate && listings_to_show[start_at + x].rentable){
-      var price_tag = "Rent now - " + moneyFormat.to(listings_to_show[start_at + x].price_rate) + " / " + listings_to_show[start_at + x].price_type;
+      var price_tag = "Rent now - " + formatCurrency(listings_to_show[start_at + x].price_rate, listings_to_show[start_at + x].default_currency) + " / " + listings_to_show[start_at + x].price_type;
     }
     else {
       var price_tag = "Available now!";

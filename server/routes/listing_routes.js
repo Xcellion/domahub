@@ -78,6 +78,7 @@ module.exports = function(app){
       owner_functions.checkListingPremiumDetails,
       owner_functions.checkListingDetails,
       owner_functions.updateListingHubRanks,
+      owner_functions.removeListingHubListings,
       owner_functions.updateListingsInfo
     ]);
 
@@ -98,6 +99,7 @@ module.exports = function(app){
       owner_functions.checkListingCurrencyDetails,
       owner_functions.checkListingPremiumDetails,
       owner_functions.checkListingDetails,
+      owner_functions.removeListingHubListings,
       owner_functions.updateListingsInfo
     ]);
 

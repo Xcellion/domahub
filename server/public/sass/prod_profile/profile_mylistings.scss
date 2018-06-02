@@ -24,6 +24,11 @@
 @import '../profile_wrapper';
 @import '../checkbox';
 
+//long domain name marquee in domain hub grouping
+.max-width-400 {
+  max-width: 400px;
+}
+
 //appraisal checkbox margins
 .appraisal-checkboxes {
   margin-bottom: 0 !important;

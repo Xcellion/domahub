@@ -1419,7 +1419,6 @@ module.exports = {
       }
     },
 
-
     //</editor-fold>
 
     //<editor-fold>-------------------------------EXECUTE------------------------------
@@ -1510,7 +1509,37 @@ module.exports = {
       });
     },
 
-    //update a listing hub's listind_id ranks
+    //remove all listings from an ex-hub
+    removeListingHubListings : function(req, res, next){
+      if (parseFloat(req.body.hub) == 0){
+        console.log("LOF: Attempting to remove all listings from ex-hub...");
+        var selected_ids = req.body.selected_ids.split(",");
+        listing_model.deleteHubGroupings(selected_ids, function(result){
+          if (result.state != "success"){
+            error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
+          }
+          else {
+
+            //update backend listing obj
+            for (var x = 0; x < req.user.listings.length; x++){
+              for (var y = 0 ; y < selected_ids.length ; y++){
+                if (req.user.listings[x].id == parseFloat(selected_ids[y])){
+                  delete req.user.listings[x].hub_listing_ids;
+                  break;
+                }
+              }
+            }
+
+            next();
+          }
+        });
+      }
+      else {
+        next();
+      }
+    },
+
+    //update a listing hub's listing_id ranks
     updateListingHubRanks : function(req, res, next){
 
       //if we're updating hub ranks

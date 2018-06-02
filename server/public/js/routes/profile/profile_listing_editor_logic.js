@@ -938,7 +938,7 @@ function updateEditorDomains(selected_domain_ids){
 
       //make the list of sortable domains
       $("#sortable-wrapper").empty();
-      if (listing_info.hub_listing_ids){
+      if (listing_info.hub_listing_ids && listing_info.hub_listing_ids.length > 0){
         $("#no-domains-in-hub").addClass('is-hidden');
         var domains_in_hub = listing_info.hub_listing_ids.split(",");
         var domain_names_in_hub = [];

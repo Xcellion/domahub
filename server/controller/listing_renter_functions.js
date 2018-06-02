@@ -1112,6 +1112,17 @@ module.exports = {
             });
           }
 
+          //remove duplicates
+          var seen_domain_ids = {};
+          var new_listings = [];
+          for (var x = 0 ; x < listings.length ; x++){
+            if (!seen_domain_ids[listings[x].id]){
+              new_listings.push(listings[x]);
+              seen_domain_ids[listings[x].id] = true;
+            }
+          }
+          listings = new_listings;
+
           //figure out sort
           if (sort_by == "random"){
             listings = listings.sort(function(a, b){return 0.5 - Math.random()});
@@ -1438,7 +1449,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.show_freevaluator_appraisal = 1;
         listing_info.show_estibot_appraisal = 1;
         listing_info.show_placeholder = 1;
-        
+
         //right side
         listing_info.show_social_sharing = 1;
         listing_info.show_traffic_graph = 1;
