@@ -1637,21 +1637,22 @@ function setupRightHalf(){
 
       //available to buy now
       if (other_listings[x].buy_price > 0){
-        var buy_price = formatCurrency(parseFloat(other_listings[x].buy_price), listing_info.default_currency);
+        var buy_price = formatCurrency(parseFloat(other_listings[x].buy_price), other_listings[x].default_currency);
         cloned_similar_listing.find(".otherowner-domain-price").text("Buy Now: " + buy_price);
       }
       //available to buy at a specific minimum price
       else if (other_listings[x].min_price > 0){
-        var min_price = formatCurrency(parseFloat(other_listings[x].min_price), listing_info.default_currency);
-        cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
+        var min_price = formatCurrency(parseFloat(other_listings[x].min_price), other_listings[x].default_currency);
+        cloned_similar_listing.find(".otherowner-domain-price").text("For sale: " + min_price);
       }
       //else available for rent
       else if (other_listings[x].rentable && other_listings[x].price_rate > 0){
-        cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + other_listings[x].price_rate + " / " + other_listings[x].price_type);
+        var rent_price = formatCurrency(parseFloat(other_listings[x].price_rate), other_listings[x].default_currency);
+        cloned_similar_listing.find(".otherowner-domain-price").text("For rent: " + rent_price + " / " + other_listings[x].price_type);
       }
       //else available for rent
       else if (other_listings[x].rentable && other_listings[x].price_rate <= 0){
-        cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
+        cloned_similar_listing.find(".otherowner-domain-price").text("For rent: Free");
       }
       //just available (no minimum price, no BIN)
       else if (other_listings[x].status > 0){
