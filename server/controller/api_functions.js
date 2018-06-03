@@ -41,7 +41,7 @@ function checkHost(req, res, next){
   else {
     var domain_name = "domahub.com";
   }
-  if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("listing") != -1){
+  if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("/listing") != -1){
     console.log("APF: Forwarding to the next route...");
     next("route");
   }
