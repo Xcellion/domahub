@@ -18,33 +18,14 @@ var path = require('path');
 
 //</editor-fold>
 
-//route
 module.exports = function(app){
   app.all("*", [
     checkHost,
     renter_functions.getListingInfo,
     stripe_functions.checkStripeSubscriptionForUser,
-    function(req,res,next){
-      console.log("WTFssssssss");
-      console.log(req.originalUrl, req.path);
-      next();
-    },
     checkForBasicRedirect,
-    function(req,res,next){
-      console.log("WTF");
-      console.log(req.originalUrl, req.path);
-      next();
-    },
     renter_functions.addToSearchHistory,
-    function(req,res,next){
-      console.log(req.originalUrl, req.path);
-      next();
-    },
     renter_functions.checkStillVerified,
-    function(req,res,next){
-      console.log(req.originalUrl, req.path);
-      next();
-    },
     renter_functions.renderListing
   ]);
 }
@@ -101,8 +82,6 @@ function checkHost(req, res, next){
 
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name, path, next){
-  console.log(req.originalUrl, req.path, "holy shit");
-
   //requesting something besides main page, pipe the request
   if (req.session.rented_info && req.session.rented_info.path == path){
     console.log("APF: Proxying rental request for an existing session for " + domain_name + "!");
@@ -137,8 +116,14 @@ function checkForBasicRedirect(req, res, next){
   //premium! go ahead and display listings on this URL
   if (req.session.listing_info && req.session.listing_info.premium){
     console.log("APF: Premium domain! Display listing on custom URL...");
+    console.log(req.query);
 
-    //redirect to base path if it's requesting something weird
+    //if its a hub and has listings query
+    if (req.session.listing_info.hub == 1 && req.query.listings){
+      req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+      next();
+    }
+    //redirect to base path if it's requesting something weird, or if there is no query for listings (listing hub)
     if (req.originalUrl != "/" || req.originalUrl == "/listing/" + req.session.listing_info.domain_name){
       res.redirect("/");
     }
