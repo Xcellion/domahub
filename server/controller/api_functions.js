@@ -22,11 +22,23 @@ var path = require('path');
 module.exports = function(app){
   app.all("*", [
     checkHost,
+    function(req,res,next){
+      console.log(req.originalUrl, req.path);
+      next();
+    },
     renter_functions.getListingInfo,
     stripe_functions.checkStripeSubscriptionForUser,
     checkForBasicRedirect,
+    function(req,res,next){
+      console.log(req.originalUrl, req.path);
+      next();
+    },
     renter_functions.addToSearchHistory,
     renter_functions.checkStillVerified,
+    function(req,res,next){
+      console.log(req.originalUrl, req.path);
+      next();
+    },
     renter_functions.renderListing
   ]);
 }
