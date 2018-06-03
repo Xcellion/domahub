@@ -101,6 +101,8 @@ function checkHost(req, res, next){
 
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name, path, next){
+  console.log(req.originalUrl, req.path, "holy shit");
+
   //requesting something besides main page, pipe the request
   if (req.session.rented_info && req.session.rented_info.path == path){
     console.log("APF: Proxying rental request for an existing session for " + domain_name + "!");
