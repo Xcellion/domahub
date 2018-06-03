@@ -116,7 +116,6 @@ function checkForBasicRedirect(req, res, next){
   //premium! go ahead and display listings on this URL
   if (req.session.listing_info && req.session.listing_info.premium){
     console.log("APF: Premium domain! Display listing on custom URL...");
-    console.log(req.query);
 
     //if its a hub and has listings query
     if (req.session.listing_info.hub == 1 && req.query.listings){
@@ -124,7 +123,7 @@ function checkForBasicRedirect(req, res, next){
       next();
     }
     //redirect to base path if it's requesting something weird, or if there is no query for listings (listing hub)
-    if (req.originalUrl != "/" || req.originalUrl == "/listing/" + req.session.listing_info.domain_name){
+    else if (req.originalUrl != "/" || req.originalUrl == "/listing/" + req.session.listing_info.domain_name){
       res.redirect("/");
     }
     else {
