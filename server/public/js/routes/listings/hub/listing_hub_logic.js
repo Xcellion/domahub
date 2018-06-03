@@ -75,8 +75,11 @@ $(document).ready(function() {
 
 });
 
+//<editor-fold>-------------------------------PAGE SETUP-------------------------------
+
 function showBasedOnURL(push){
   var domain_name = getParameterByName("listing");
+  console.log(domain_name);
   if (domain_name){
     showDetails(listing_hub_info.listings.filter(function(elem){
       if (elem.domain_name == domain_name){
@@ -89,8 +92,6 @@ function showBasedOnURL(push){
     showDomainListView(push);
   }
 }
-
-//<editor-fold>-------------------------------PAGE SETUP-------------------------------
 
 //search, sort, pagination, category, change layout handlers
 function setupHandlers(){
