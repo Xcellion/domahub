@@ -118,7 +118,7 @@ function checkForBasicRedirect(req, res, next){
     console.log("APF: Premium domain! Display listing on custom URL...");
 
     //if its a hub and has listings query
-    if (req.session.listing_info.hub == 1 && req.query.listings){
+    if (req.session.listing_info.hub == 1 && req.query.listing){
       req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
       next();
     }
