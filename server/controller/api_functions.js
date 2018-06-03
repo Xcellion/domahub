@@ -22,22 +22,16 @@ var path = require('path');
 module.exports = function(app){
   app.all("*", [
     checkHost,
-    function(req,res,next){
-      console.log(req.originalUrl, req.path);
-      next();
-    },
     renter_functions.getListingInfo,
-    function(req,res,next){
-      console.log(req.originalUrl, req.path);
-      next();
-    },
     stripe_functions.checkStripeSubscriptionForUser,
     function(req,res,next){
+      console.log("WTFssssssss");
       console.log(req.originalUrl, req.path);
       next();
     },
     checkForBasicRedirect,
     function(req,res,next){
+      console.log("WTF");
       console.log(req.originalUrl, req.path);
       next();
     },
