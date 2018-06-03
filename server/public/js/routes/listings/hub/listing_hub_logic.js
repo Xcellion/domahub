@@ -62,13 +62,13 @@ $(document).ready(function() {
 
   //descriptive footer link
   if (listing_hub_info.premium && listing_hub_info.description_footer_link){
-    $("#listing-footer, #listing-footer-logo-link").attr("href", listing_hub_info.description_footer_link).addClass("is-underlined");
+    $("#listing-footer, #listing-footer-logo-link, #listing-hub-logo-link").attr("href", listing_hub_info.description_footer_link).addClass("is-underlined");
   }
   else if (listing_hub_info.premium){
-    $("#listing-footer, #listing-footer-logo-link").removeAttr("href").removeClass("is-underlined");
+    $("#listing-footer, #listing-footer-logo-link, #listing-hub-logo-link").removeAttr("href").removeClass("is-underlined");
   }
   else {
-    $("#listing-footer, #listing-footer-logo-link").attr("href", "https://domahub.com").addClass("is-underlined");;
+    $("#listing-footer, #listing-footer-logo-link, #listing-hub-logo-link").attr("href", "https://domahub.com").addClass("is-underlined");;
   }
 
   //</editor-fold>
