@@ -338,6 +338,7 @@ function updateEditorDomains(selected_domain_ids){
     $("#description").val(listing_info.description);
     $("#description-hook").val(listing_info.description_hook);
     $("#description-footer").val(listing_info.description_footer);
+    $("#description-footer-link").val(listing_info.description_footer_link);
     $("#domain-name-input").attr("placeholder", listing_info.domain_name).val(listing_info.domain_name);
 
     //categories
@@ -1415,96 +1416,96 @@ function updateEditorDomains(selected_domain_ids){
       });
     }
 
-    // Display the key/value pairs
-    for (var pair of formData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]);
-    }
+    // // Display the key/value pairs
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0]+ ', ' + pair[1]);
+    // }
 
-    // $.ajax({
-    //   url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
-    //   type: "POST",
-    //   data: formData,
-    //   // Options to tell jQuery not to process data or worry about the content-type
-    //   cache: false,
-    //   contentType: false,
-    //   processData: false
-    // }, 'json').done(function(data){
-    //   if (data.listings){
-    //     listings = data.listings;
-    //   }
-    //   submit_button.removeClass('is-loading');
-    //   refreshSubmitButtons();
-    //
-    //   if (data.state == "success"){
-    //     $(".modal").removeClass("is-active");
-    //
-    //     //status only success message
-    //     if (status_only){
-    //       var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
-    //       var active_inactive_text = (new_status == 0) ? "inactive!" : "active!";
-    //       successMessage(plural_success_msg + " been set to " + active_inactive_text);
-    //     }
-    //     //editing success message
-    //     else {
-    //       var plural_success_msg = (selected_ids.length == 1) ? "this listing" : selected_ids.length + " listings";
-    //       successMessage("Successfully changed settings for " + plural_success_msg + "!");
-    //     }
-    //     createRows();
-    //   }
-    //   else {
-    //
-    //     //nothing was changed
-    //     if (data.message == "nothing-changed"){
-    //       var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "the selected listings";
-    //       infoMessage("No details were changed for " + plural_error_msg + ". Did you enter in the correct information?");
-    //     }
-    //     else {
-    //       //not premium but tried to update premium stuff
-    //       if (data.message == "not-premium"){
-    //         var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
-    //       }
-    //       else if (data.message == "dns-pending"){
-    //         var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
-    //       }
-    //       else {
-    //         //listing is no longer pointed to domahub, revert to verify tab
-    //         if (data.message == "verification-error"){
-    //           var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
-    //           var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
-    //           showSelector(true);
-    //           createRows(false);
-    //         }
-    //         else if (data.message == "ownership-error"){
-    //           var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
-    //           var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
-    //           showSelector(true);
-    //           createRows(false);
-    //         }
-    //         else if (data.message == "accepted-error"){
-    //           var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-    //           var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
-    //           showSelector(true);
-    //           createRows(false);
-    //         }
-    //         else if (data.message == "deposited-error" || data.message == "transferred-error"){
-    //           var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-    //           var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
-    //           showSelector(true);
-    //           createRows(false);
-    //         }
-    //         else {
-    //           var error_msg = data.message;
-    //         }
-    //
-    //       }
-    //
-    //       errorMessage(error_msg);
-    //     }
-    //
-    //   }
-    //
-    //   updateEditorEditing(selected_ids);
-    // });
+    $.ajax({
+      url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
+      type: "POST",
+      data: formData,
+      // Options to tell jQuery not to process data or worry about the content-type
+      cache: false,
+      contentType: false,
+      processData: false
+    }, 'json').done(function(data){
+      if (data.listings){
+        listings = data.listings;
+      }
+      submit_button.removeClass('is-loading');
+      refreshSubmitButtons();
+
+      if (data.state == "success"){
+        $(".modal").removeClass("is-active");
+
+        //status only success message
+        if (status_only){
+          var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
+          var active_inactive_text = (new_status == 0) ? "inactive!" : "active!";
+          successMessage(plural_success_msg + " been set to " + active_inactive_text);
+        }
+        //editing success message
+        else {
+          var plural_success_msg = (selected_ids.length == 1) ? "this listing" : selected_ids.length + " listings";
+          successMessage("Successfully changed settings for " + plural_success_msg + "!");
+        }
+        createRows();
+      }
+      else {
+
+        //nothing was changed
+        if (data.message == "nothing-changed"){
+          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "the selected listings";
+          infoMessage("No details were changed for " + plural_error_msg + ". Did you enter in the correct information?");
+        }
+        else {
+          //not premium but tried to update premium stuff
+          if (data.message == "not-premium"){
+            var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
+          }
+          else if (data.message == "dns-pending"){
+            var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
+          }
+          else {
+            //listing is no longer pointed to domahub, revert to verify tab
+            if (data.message == "verification-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
+              var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "ownership-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
+              var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "accepted-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "deposited-error" || data.message == "transferred-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else {
+              var error_msg = data.message;
+            }
+
+          }
+
+          errorMessage(error_msg);
+        }
+
+      }
+
+      updateEditorEditing(selected_ids);
+    });
   }
 
   //</editor-fold>
