@@ -486,6 +486,15 @@ function showDomainListView(push){
 
 //<editor-fold>-------------------------------HELPERS-------------------------------
 
+//encode and decode ROT13
+function rot13(s) {
+  return s.replace(/[A-Za-z]/g, function (c) {
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(
+    "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm".indexOf(c)
+    );
+  } );
+}
+
 //makes an array unique
 function arrayUnique(array) {
   var a = array.concat();
