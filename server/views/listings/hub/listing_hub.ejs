@@ -19,6 +19,14 @@
       var compare = false;
     </script>
 
+    <% function rot13(s) {
+      return s.replace(/[A-Za-z]/g, function (c) {
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(
+        "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm".indexOf(c)
+        );
+      } );
+    } %>
+
     <%- include("../../templates/notifications.ejs");%>
 
     <section class="hub-section hero is-medium gradient-left-right">
@@ -34,8 +42,9 @@
           </div>
           <div class="nav-right">
             <% if (listing_info.hub_email == 1){ %>
-              <a class="nav-item" href="mailto:<%= listing_info.owner_email %>">
-                <%= listing_info.owner_email %>
+              <a id="listing-hub-email" class="nav-item">
+                <span id="obf"><script>document.getElementById("obf").innerHTML="<n uers=\"znvygb:<%= rot13(listing_info.owner_email) %>\" gnetrg=\"_oynax\">Pyvpx urer gb fraq na rznvy!</n>".replace(/[a-zA-Z]/g,function(c){return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);});</script>
+                <noscript><span style="unicode-bidi:bidi-override;direction:rtl;">moc.liamg@eelb2now</span></noscript></span>
               </a>
             <% } %>
             <% if (listing_info.hub_phone){ %>

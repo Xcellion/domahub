@@ -1003,7 +1003,13 @@ module.exports = {
       next();
     }
     else {
-      error.handler(req, res, "Something went wrong with this domain! Please refresh the page and try again.", "json");
+      console.log("LRF: Not the correct domain! Getting new session listing info...");
+      getVerifiedListing(req, res, domain_name, function(result){
+        error.handler(req, res, "Something went wrong with this domain! Please refresh the page and try again.", "json");
+      }, function(result){
+        req.session.listing_info = result.info[0];
+        next();
+      });
     }
   },
 

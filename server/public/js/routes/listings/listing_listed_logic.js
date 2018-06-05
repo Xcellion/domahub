@@ -661,7 +661,7 @@ function setupRightHalf(){
             }
             else if (data.state == "error"){
               $("#checkout-button").removeClass('is-loading');
-              errorHandler(data.message);
+              rentalErrorHandler(data.message);
               getTimes();
             }
           });
@@ -670,12 +670,10 @@ function setupRightHalf(){
     }
 
     //handler for various error messages
-    function errorHandler(message){
-      $("#calendar-regular-message").addClass('is-hidden');
-
+    function rentalErrorHandler(message){
       switch (message){
         case "Dates are unavailable!":
-        $("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
+        errorMessage("Bummer! Someone just took that slot. Please select a different time.");
         break;
         case "Invalid dates!":
         case "Invalid dates! No times posted!":
@@ -684,10 +682,10 @@ function setupRightHalf(){
         case "Start time in the past!":
         case "Invalid end time!":
         case "Invalid start time!":
-        $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
+        errorMessage("You have selected an invalid time! Please refresh the page and try again.");
         break;
         default:
-        $("#calendar-error-message").removeClass('is-hidden').text("Oh no, something went wrong! Please refresh the page and try again.");
+        errorMessage("Oh no, something went wrong! Please refresh the page and try again.");
         break;
       }
     }
@@ -740,7 +738,7 @@ function setupRightHalf(){
           setUpCalendar(listing_info);
         }
         else {
-          errorHandler("");
+          rentalErrorHandler("");
         }
       });
     }
