@@ -72,7 +72,7 @@
 
   //custom GA tracking
   <% if (typeof listing_info != "undefined" && listing_info.ga_tracking_id) { %>
-    ga('create', <%= listing_info.ga_tracking_id %>, 'auto', "customUserGA");
+    ga('create', "<%= listing_info.ga_tracking_id %>", 'auto', "customUserGA");
     ga('customUserGA.send', 'pageview');
   <% } %>
 </script>
