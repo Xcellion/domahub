@@ -14,7 +14,6 @@
 <% } else { %>
   <%- include("domahub_metatags.ejs"); %>
 <% } %>
-
 <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,700" rel="stylesheet" />
 <script defer type="text/javascript" src="/js/lib/fa-light.min.js"></script>
 <script type="text/javascript" src="/js/lib/fontawesome.min.js"></script>
@@ -69,14 +68,11 @@
     ga('set', 'dimension2', user);
   }
   ga('send', 'pageview');
+
+  //Custom GA Tracking ID
+  if (listing_info.ga_tracking_id){
+    ga('create', 'UA-92778659-1', 'auto', "customUserGA");
+    ga('customUserGA.send', 'pageview');
+  }
 </script>
-<% if (typeof listing_info != "undefined" && listing_info.ga_tracking_id) { %>
-  <script>
-    //Custom GA Tracking ID
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', "<%= listing_info.ga_tracking_id %>");
-  </script>
-<% } %>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
