@@ -71,8 +71,8 @@
   ga('send', 'pageview');
 </script>
 <% if (typeof listing_info != "undefined" && listing_info.ga_tracking_id) { %>
-  //Custom GA Tracking ID
   <script>
+    //Custom GA Tracking ID
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
