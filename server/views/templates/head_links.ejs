@@ -71,7 +71,7 @@
 
   //Custom GA Tracking ID
   if (listing_info.ga_tracking_id){
-    ga('create', 'UA-92778659-1', 'auto', "customUserGA");
+    ga('create', listing_info.ga_tracking_id, 'auto', "customUserGA");
     ga('customUserGA.send', 'pageview');
   }
 </script>
