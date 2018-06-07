@@ -42,7 +42,7 @@
     background-image: url("/images/main/background.svg");
     background-size: cover;
     background-repeat: no-repeat;
-    width: 100vw;
+    width: calc(100vw + 25px);
     z-index: 0;
   }
 }
