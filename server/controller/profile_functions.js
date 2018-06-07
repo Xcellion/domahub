@@ -1560,6 +1560,14 @@ module.exports = {
     });
   },
 
+  renderTransactions: function(req, res){
+    console.log("PF: Rendering profile transactions...");
+    res.render("profile/profile_transactions.ejs", {
+      user: req.user,
+      listings: req.user.listings
+    });
+  },
+
   //redirect to appropriate profile page
   redirectProfile : function(req, res, next){
     console.log("PF: Redirecting to appropriate profile page...");
