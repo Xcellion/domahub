@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="prevent-scroll-jump">
+
+<head>
+	<title>Account Settings - DomaHub</title>
+	<link rel="stylesheet" href="/css/min/profile_transactions.min.css" type="text/css" />
+	<%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+  <section class="section is-fullscreen">
+		<div class="wrapper">
+
+			<%- include("profile_navbar.ejs"); %>
+
+			<div class="right-content">
+
+				<div class="right-content-items">
+					<div class="content">
+            <div class="control is-spaced">
+              <div class="control-left">
+                <h2 id="current-view-name">Transactions</h2>
+              </div>
+            </div>
+					</div>
+
+	        <!-- TRANSACTIONS TAB -->
+	        <div id="transactions" class="columns is-laptop drop-tab">
+	          <div class="column is-narrow">
+	            <div class="card is-fullwidth-mobile">
+                <div class="card-image">
+                  <div class="notification no-shadow has-icon is-success">
+                    <div class="icon-box">
+                      <div class="icon is-white">
+                        <i class="fal fa-chart-line"></i>
+                      </div>
+                    </div>
+                    <div class="content">
+                      <p class="is-white remove-margin-bottom-content">DomaHub Earnings Report</p>
+                      <small id="card-image-text" class="is-white">Now loading...</small>
+                    </div>
+                  </div>
+                </div>
+	              <div class="card-content is-relative">
+                  <div id="loading-transactions-card">
+                    <div class="has-text-centered">
+                      <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
+                      <p>Now loading your transactions.</p>
+                    </div>
+                  </div>
+									<div class="control is-spaced">
+										<div class="control-left">
+											<p>
+												Total Revenue
+											</p>
+										</div>
+										<div class="control-right">
+											<p id="total-revenue" class="total-loading">
+												Loading...
+											</p>
+										</div>
+									</div>
+									<div class="control is-spaced">
+										<div class="control-left ">
+											<p>
+												Total Expenses
+											</p>
+										</div>
+										<div class="control-right">
+											<p id="total-expense" class="total-loading">
+												Loading...
+											</p>
+										</div>
+									</div>
+									<div class="control is-spaced">
+										<div class="control-left is-flex">
+											<p>
+												Total Fees Paid
+											</p>
+											<div class="icon is-tooltip is-small control-item" data-balloon="There is a 2.9% + $0.30 fee for payments processing. Basic accounts have an additional 10% commission fee." data-balloon-pos="up" data-balloon-length="large">
+	                      <i class="fal fa-question-circle"></i>
+	                    </div>
+										</div>
+										<div class="control-right">
+											<p id="total-fees" class="total-loading">
+												Loading...
+											</p>
+										</div>
+									</div>
+									<div class="control is-spaced">
+										<div class="control-left">
+											<p class="is-bold">
+												Total Profit
+											</p>
+										</div>
+										<div class="control-right">
+											<p id="total-profit" class="is-bold total-loading">
+												Loading...
+											</p>
+										</div>
+									</div>
+                  <div id="withdrawal-wrapper" class="">
+                    <hr />
+  									<div class="control is-spaced">
+  										<div class="control-left">
+  											<p>
+  												Already Withdrawn
+  											</p>
+  										</div>
+  										<div class="control-right">
+  											<p id="total-withdrawn" class="total-loading">
+  												Loading...
+  											</p>
+  										</div>
+  									</div>
+  									<div class="control is-spaced">
+  										<div class="control-left">
+  											<p>
+  												Not Yet Withdrawn
+  											</p>
+  										</div>
+  										<div class="control-right">
+  											<p id="total-not-withdrawn" class="total-loading">
+  												Loading...
+  											</p>
+  										</div>
+  									</div>
+  									<div class="control is-spaced remove-margin-bottom-content">
+  										<div class="control-left is-flex">
+  											<p>Available For Withdrawal</p>
+                        <div class="icon is-tooltip is-small control-item" data-balloon="Your withdrawal will be blocked if there are any issues with your DomaHub or payment account." data-balloon-pos="up" data-balloon-length="large">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+  										</div>
+  										<div class="control-right">
+  											<p class="withdrawal-available total-loading">
+  												Loading...
+  											</p>
+  										</div>
+  									</div>
+  	                <a id="transfer-button" class="button is-fullwidth is-hidden is-stylish is-primary">
+  	                  <div class="icon is-small">
+  											<i class="fal fa-exchange-alt"></i>
+  										</div>
+  	                  <span>Request Withdrawal <span class="withdrawal-available"></span></span>
+  	                </a>
+                  </div>
+	            	</div>
+	            </div>
+	          </div>
+	          <div class="column">
+	            <div id="transactions-toolbar" class="control">
+	              <div class="control is-grouped">
+	                <div class="control">
+	                  <span class="select is-stylish has-shadow is-narrow">
+	                    <select id="transactions-filter-select" tabindex="0">
+	                      <option selected value="exists">View All</option>
+	                      <option value="sale">Domain Sales</option>
+	                      <option value="rental">Domain Rentals</option>
+	                      <option value="expense">Domain Expenses</option>
+	                      <option value="renewal">Domain Renewals</option>
+	                      <option value="available">Available For Withdrawal</option>
+	                      <option value="notavailable">Unavailable For Withdrawal</option>
+	                      <option value="withdrawn">Withdrawn</option>
+	                      <option value="actionable">Requires Action</option>
+	                      <option value="refunded">Refunded</option>
+	                      <option value="free">Free</option>
+	                    </select>
+	                  </span>
+	                </div>
+	                <div class="control is-mobile">
+	                  <a id="refresh-transactions-button" class="button is-stylish is-small" tabindex="0" title="Refresh Transactions">
+	                    <div class="icon is-small">
+	  										<i class="fal fa-sync-alt"></i>
+	  									</div>
+	                    <span class="is-hidden-mobile">Refresh</span>
+	                  </a>
+	                </div>
+                  <div class="control is-mobile">
+                    <a id="show-free-transactions" title="Show Free Transactions" class="button is-stylish is-small">
+                      <div class="icon is-small"><i class="fal fa-toggle-off"></i></div>
+                      <span class="is-hidden-mobile">Show Free Transactions</span>
+                    </a>
+                  </div>
+	                <div class="control has-icon is-expanded">
+	                  <div class="icon">
+											<i class="fal fa-search"></i>
+										</div>
+	                  <input id="transactions-search" tabindex="0" class="input is-stylish has-shadow" type="text" placeholder="Search Transactions" />
+	                </div>
+	              </div>
+	            </div>
+	            <table id="transactions-table" class="table is-fixed no-borders is-hidden">
+	              <thead class="no-border-bottom is-pastel">
+	                <tr>
+                    <th class="transaction-header-sort transactions-row-available">
+                      <span>Status</span>
+                      <div class="icon is-small" data-sort-by="status"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
+                    </th>
+                    <th class="transaction-header-sort transactions-row-date">
+                      <span>Date</span>
+                      <div class="icon is-small" data-sort-by="date_created"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
+                    </th>
+                    <th class="transaction-header-sort transactions-row-domain">
+                      <span>Domain Name</span>
+                      <div class="icon is-small" data-sort-by="domain_name"><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
+                    </th>
+                    <th class="transaction-header-sort transactions-row-amount has-text-right">
+                      <span>Profit</span>
+                      <div class="icon is-small" data-sort-by="transaction_cost"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+                    </th>
+                    <th class="transaction-header-sort transactions-row-type is-hidden-mobile">
+                      <span>Type</span>
+                      <div class="icon is-small" data-sort-by="transaction_type" ><i class="fal fa-sort" data-fa-transform="down-3"></i></div>
+                    </th>
+                    <th class="transaction-header-sort transactions-row-payment is-hidden-mobile">
+                      <span>Payment Method</span>
+                      <div class="icon is-small" data-sort-by="payment_type" ><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+                    </th>
+	                </tr>
+	              </thead>
+	              <tbody id="transactions-table-body" class="has-shadow">
+	                <tr id="transactions-row-clone" class="transactions-row is-hidden">
+                    <td class="transactions-row-available sort-by-status"></td>
+	                  <td class="transactions-row-date"></td>
+	                  <td class="transactions-row-domain sort-by-domain_name"></td>
+	                  <td class="transactions-row-amount sort-by-transaction_cost has-text-right"></td>
+                    <td class="transactions-row-type is-hidden-mobile"></td>
+                    <td class="transactions-row-payment is-hidden-mobile"></td>
+	                </tr>
+	              </tbody>
+	            </table>
+	            <table id="loading-transactions-table" class="table has-shadow">
+	              <tbody>
+	                <tr class="no-hover-effect">
+	                  <td>
+	                    <div class="nothing-exists-row has-text-centered">
+	                      <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
+	                      <p>Now loading your transactions.</p>
+	                      <p>This may take some time.</p>
+	                    </div>
+	                  </td>
+	                </tr>
+	              </tbody>
+	            </table>
+	            <table id="no-transactions-table" class="table has-shadow is-hidden">
+	              <tbody>
+	                <tr class="no-hover-effect">
+	                  <td>
+	                    <div class="nothing-exists-row content has-text-centered">
+	                      <figure class="image is-64x64">
+	                        <img src="/images/lib/ggface.png" />
+	                      </figure>
+	                      <p>
+                          There are no matching transactions!
+	                      </p>
+	                    </div>
+	                  </td>
+	                </tr>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+
+				</div>
+      </div>
+		</div>
+	</section>
+
+  <!-- TRANSACTIONS DETAILS MODAL -->
+  <div id="transactions-details-modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      <div class="modal-content is-small">
+        <div class="content has-text-centered">
+          <h3 class="is-bold" id="transactions-modal-domain"></h3>
+          <p><span id="transactions-modal-timestamp"></span></p>
+        </div>
+        <div class="content">
+          <h1 id="transactions-modal-price" class="has-text-centered"></h1>
+        </div>
+        <div class="content">
+          <ul id="transactions-info" class="is-vertical">
+            <li id="pending-transfer-wrapper" class="is-hidden">
+              <div class="icon is-small is-danger" title="Pending Transfer of Ownership">
+								<i class="fal fa-exclamation-circle fa-fw"></i></span>
+							</div>Please <a id="transfer-ownership-href" class="is-bold is-primary">transfer ownership</a> of this domain to access these funds!</span>
+            </li>
+            <li id="available-on-wrapper">
+              <div class="icon is-small" title="Withdrawal Details">
+								<i class="fal fa-exchange-alt fa-fw"></i>
+							</div><span id="transactions-modal-available"></span>
+            </li>
+            <li>
+              <div class="icon is-small" title="Extra Fees">
+								<i class="fal fa-money-bill-alt fa-fw"></i>
+							</div><span id="transactions-modal-domafees"></span>
+            </li>
+            <li id="payment-fees-wrapper">
+              <div class="icon is-small" title="Payment Processing Fees">
+								<i class="fal fa-tags fa-fw"></i>
+							</div><span id="transactions-modal-processfees"></span>
+              <div id="paypal-refund-notice" style="display:inline-block;" class="is-hidden icon is-small is-tooltip" data-balloon="PayPal does not refund the flat portion of their fees." data-balloon-pos="up" data-balloon-length="medium">
+                <i class="fal fa-question-circle"></i>
+              </div>
+            </li>
+            <li id="original-currency-wrapper" class="is-hidden">
+              <div class="icon is-small" title="Exchange Rate">
+                <i class="fal fa-money-bill fa-fw"></i>
+              </div><span id="transactions-original-cost"></span>
+            </li>
+          </ul>
+        </div>
+        <div id="transaction-modal-expense-buttons-wrapper" class="is-hidden control remove-margin-bottom-content">
+          <div class="control is-expanded">
+            <a target="_blank" id="edit-domain-expense-button" type="submit" class="button is-fullwidth is-stylish is-small">
+              <div class="icon is-small">
+                <i class="fal fa-edit"></i>
+              </div>
+              <span>Edit / Delete Expense</span>
+            </a>
+          </div>
+        </div>
+        <div id="transaction-modal-rental-buttons-wrapper" class="is-hidden control is-grouped">
+          <div class="control is-expanded">
+            <a target="_blank" id="view-rental-button" type="submit" class="button is-fullwidth is-stylish is-small">
+              <div class="icon is-small">
+								<i class="fal fa-search"></i>
+							</div>
+              <span>Preview Rental</span>
+            </a>
+          </div>
+          <div class="control is-expanded">
+            <a id="refund-rental-submit" type="submit" class="button is-fullwidth is-stylish is-small is-danger is-outlined">
+              <div class="icon is-small">
+								<i class="fal fa-repeat"></i>
+							</div>
+              <span>Refund Rental</span>
+            </a>
+          </div>
+        </div>
+        <div id="commission-promo-message" class="control is-hidden">
+          <p class="basic-hidden">* Hurray! You paid 0% commission on this transaction!</p>
+          <p class="premium-hidden">* Upgrade to <a href="/profile/settings#premium" class="is-bold is-primary">Premium</a> and pay 0% commission on future sales/rentals!</p>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+
+  <!-- WITHDRAWAL MODAL -->
+  <div id="withdrawal-modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      <div class="modal-content is-small">
+        <div class="content has-text-centered">
+          <h3 class="is-bold">Now requesting withdrawal</h3>
+        </div>
+        <div class="content">
+          <h1 class="withdrawal-available has-text-centered"></h1>
+        </div>
+        <div class="content">
+          <form id="withdrawal-modal-form">
+            <div class="control">
+              <label class="label">Please select an account for this withdrawal</label>
+              <div class="select is-fullwidth">
+                <select required id="withdrawal-destination-input">
+                  <option selected value="" disabled>Select an account</option>
+                  <option id="withdrawal-bank-option" value="bank">Bank account</option>
+                  <option id="withdrawal-paypal-option" value="paypal">PayPal</option>
+                  <option id="withdrawal-bitcoin-option" value="bitcoin">Bitcoin Wallet</option>
+                  <option id="withdrawal-payoneer-option" value="payoneer">Payoneer</option>
+                </select>
+              </div>
+            </div>
+            <div class="control is-grouped">
+              <div class="control is-expanded">
+                <button id="withdrawal-modal-submit-button" type="submit" class="button is-fullwidth is-primary is-stylish is-small">
+                  <div class="icon is-small">
+                    <i class="fal fa-exchange-alt"></i>
+                  </div>
+                  <span>Request</span>
+                </button>
+              </div>
+              <div class="control is-expanded">
+                <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
+                  <div class="icon is-small"><i class="fal fa-ban"></i></div>
+                  <span>Cancel</span>
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close"></button>
+  </div>
+
+	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
+  <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
+  <script src="/js/jquery/jquery.marquee.min.js" type="text/javascript"></script>
+  <script src="/js/lib/moment.min.js" type="text/javascript"></script>
+  <script src="/js/lib/currencies.json" type="text/javascript"></script>
+  <script src="/js/lib/wNumb.js" type="text/javascript"></script>
+	<script src="/js/routes/profile/profile_transactions_logic.js" type="text/javascript"></script>
+
+</body>
+</html>

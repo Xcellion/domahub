@@ -22,9 +22,9 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
-//remove any text transforms
-.text-normal {
-  text-transform: none !important;
+//transactions modal
+#transactions-details-modal .modal-content h3 {
+  word-wrap:break-word;
 }
 
 .button {
@@ -43,6 +43,16 @@
 
 .white-space-no-wrap {
   white-space:nowrap;
+}
+
+#loading-transactions-card {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  padding-top: 40%;
+  margin: -20px;
+  z-index: 999;
+  background-color: white;
 }
 
 .text-line-through {
@@ -81,17 +91,6 @@
   margin-right:-20px;
 }
 
-#settings-toolbar .tabs {
-  overflow:visible;
-  overflow-x:visible;
-}
-
-.tabs {
-  .icon:first-child {
-    margin-right:0;
-  }
-}
-
 .earnings-divider {
   padding-top:10px;
   border-top:1px solid $border;
@@ -99,25 +98,6 @@
 
 .has-border-right {
   border-right: 1px solid $border;
-}
-
-// form class in settings
-.form {
-  // stop ptr events on label
-  .label {
-    pointer-events: none;
-  }
-  .label-icon {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    label {
-      display: inline;
-    }
-    .icon {
-      margin-left: 2px;
-    }
-  }
 }
 
 .nothing-exists-row {
@@ -131,7 +111,7 @@
 }
 
 // table
-#referral-table, #payment-history-table {
+#transactions-table {
   thead,
   tbody tr {
     display: table;
@@ -150,6 +130,32 @@ th.has-text-right, td.has-text-right{
   text-align:right !important;
 }
 
+//transactions table
+.transaction-header-sort{
+  cursor:pointer;
+}
+
+#transactions-table-body {
+  max-height:calc(100vh - 300px) !important;
+}
+
+.transactions-row-domain {
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+#transactions-info {
+  li {
+    padding : 5px;
+    .icon {
+      margin-right: 10px;
+    }
+    &:last-child {
+      display: flex;
+    }
+  }
+}
+
 .remove-margin-bottom-content {
   margin-bottom:0 !important;
 }
@@ -159,15 +165,5 @@ th.has-text-right, td.has-text-right{
     select {
       width: 105px;
     }
-  }
-}
-
-.stripe-required-info {
-  &.icon {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-  &.tag {
-    margin-left: 10px;
   }
 }

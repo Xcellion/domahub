@@ -152,186 +152,213 @@ module.exports = function(app){
 
   //<editor-fold>-------------------------------ACCOUNT SETTINGS-------------------------------
 
-  //settings
-  app.get("/profile/settings", [
-    auth_functions.checkLoggedIn,
-    profile_functions.getAccountListings,
-    profile_functions.getAccountRegistrars,
-    stripe_functions.getStripeAccount,
-    stripe_functions.getStripeCustomer,
-    stripe_functions.getStripeCustomerInvoices,
-    profile_functions.getUnredeemedPromoCodes,
-    stripe_functions.getStripeCustomerNextInvoice,
-    stripe_functions.getStripeSubscription,
-    profile_functions.updateAccountSettingsPassthrough,
-    profile_functions.renderSettings
-  ]);
+    //<editor-fold>-------------------------------ACCOUNT DETAILS CHANGE-------------------------------
 
-  //post to change account settings
-  app.post("/profile/settings", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    profile_functions.checkAccountSettings,
-    profile_functions.updateAccountSettingsPost
-  ]);
+    //settings
+    app.get("/profile/settings", [
+      auth_functions.checkLoggedIn,
+      profile_functions.getAccountListings,
+      profile_functions.getAccountRegistrars,
+      stripe_functions.getStripeAccount,
+      stripe_functions.getStripeCustomer,
+      stripe_functions.getStripeCustomerInvoices,
+      profile_functions.getUnredeemedPromoCodes,
+      stripe_functions.getStripeCustomerNextInvoice,
+      stripe_functions.getStripeSubscription,
+      profile_functions.updateAccountSettingsPassthrough,
+      profile_functions.renderSettings
+    ]);
 
-  //get all existing transactions for user (sales / rentals / renewals)
-  app.post("/profile/gettransactions", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    profile_functions.getAccountListings,
-    profile_functions.getAccountTransactionsLocal,
-    profile_functions.getAccountTransactionsRemote,
-    profile_functions.convertCurrencyTransactions
-  ]);
+    //post to change account settings
+    app.post("/profile/settings", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      profile_functions.checkAccountSettings,
+      profile_functions.updateAccountSettingsPost
+    ]);
 
-  //</editor-fold>
+    //</editor-fold>
 
-  //<editor-fold>-------------------------------REGISTRAR-------------------------------
+    //<editor-fold>-------------------------------STRIPE SUBSCRIPTION-------------------------------
 
-  //post to update registrar
-  app.post("/profile/registrar", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    profile_functions.checkRegistrarInfo,
-    profile_functions.updateAccountRegistrar
-  ]);
+    //add a new card to user (stripe subscription)
+    app.post("/profile/newcard", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      stripe_functions.createStripeCustomer,
+      profile_functions.updateAccountSettingsPost
+    ]);
 
-  //lookup registrars and pull domain names
-  app.post("/profile/registrar/lookup", [
-    auth_functions.checkLoggedIn,
-    profile_functions.getAccountListings,
-    profile_functions.getRegistrarAPI,
-    profile_functions.getRegistrarDomains
-  ]);
+    //remove existing card for user (stripe customer)
+    app.post("/profile/deletecard", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      stripe_functions.deleteCustomerCard,
+      stripe_functions.cancelStripeSubscription
+    ]);
 
-  //</editor-fold>
+    //upgrade account to premium
+    app.post("/profile/upgrade", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      stripe_functions.createStripeSubscription,
+      stripe_functions.getStripeCustomerInvoices,
+      profile_functions.getUnredeemedPromoCodes,
+      stripe_functions.getStripeCustomerNextInvoice,
+      profile_functions.updateAccountSettingsPost
+    ]);
 
-  //<editor-fold>-------------------------------STRIPE SUBSCRIPTION-------------------------------
+    //cancel premium
+    app.post("/profile/downgrade", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      stripe_functions.cancelStripeSubscription
+    ]);
 
-  //add a new card to user (stripe subscription)
-  app.post("/profile/newcard", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.createStripeCustomer,
-    profile_functions.updateAccountSettingsPost
-  ]);
+    //</editor-fold>
 
-  //remove existing card for user (stripe customer)
-  app.post("/profile/deletecard", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.deleteCustomerCard,
-    stripe_functions.cancelStripeSubscription
-  ]);
+    //<editor-fold>-------------------------------STRIPE BANK-------------------------------
 
-  //upgrade account to premium
-  app.post("/profile/upgrade", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.createStripeSubscription,
-    stripe_functions.getStripeCustomerInvoices,
-    profile_functions.getUnredeemedPromoCodes,
-    stripe_functions.getStripeCustomerNextInvoice,
-    profile_functions.updateAccountSettingsPost
-  ]);
+    //post to create new stripe managed account or update stripe managed account
+    app.post("/profile/payout", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      stripe_functions.getStripeAccount,
+      stripe_functions.checkPayoutPersonal,
+      stripe_functions.checkPayoutAddress,
+      stripe_functions.createStripeAccount,
+      profile_functions.updateAccountSettingsPost
+    ]);
 
-  //cancel premium
-  app.post("/profile/downgrade", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.cancelStripeSubscription
-  ]);
+    //post to create new stripe managed account or update stripe managed account
+    app.post("/profile/bank", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      stripe_functions.getStripeAccount,
+      stripe_functions.checkPayoutBank,
+      stripe_functions.createStripeBank
+    ]);
 
-  //</editor-fold>
+    //</editor-fold>
 
-  //<editor-fold>-------------------------------STRIPE BANK-------------------------------
+    //<editor-fold>-------------------------------PROMO CODES-------------------------------
 
-  //post to create new stripe managed account or update stripe managed account
-  app.post("/profile/payout", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.getStripeAccount,
-    stripe_functions.checkPayoutPersonal,
-    stripe_functions.checkPayoutAddress,
-    stripe_functions.createStripeAccount,
-    profile_functions.updateAccountSettingsPost
-  ]);
+    //get all existing referral promo codes for user
+    app.post("/profile/getreferrals", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      profile_functions.getUnredeemedPromoCodes,
+      stripe_functions.getStripeCustomerNextInvoice,
+      profile_functions.getCouponsAndReferralsForUser,
+    ]);
 
-  //post to create new stripe managed account or update stripe managed account
-  app.post("/profile/bank", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.getStripeAccount,
-    stripe_functions.checkPayoutBank,
-    stripe_functions.createStripeBank
-  ]);
+    //posting a new promo code or referral
+    app.post("/profile/promocode", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      profile_functions.checkPromoCode,
+      profile_functions.applyPromoCode
+    ]);
+
+    //</editor-fold>
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------WITHDRAWAL-------------------------------
+  //<editor-fold>-------------------------------TRANSACTIONS-------------------------------
 
-  //transfer to bank
-  app.post("/profile/transfer", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    stripe_functions.getStripeAccount,
-    stripe_functions.getStripeCustomer,
-    stripe_functions.getStripeSubscription,
-    profile_functions.checkWithdrawalAccounts,
-    profile_functions.calculateWithdrawalAmount,
-    stripe_functions.withdrawToStripeBank,
-    paypal_functions.withdrawToPayPal,
-    profile_functions.withdrawToPayoneer,
-    profile_functions.withdrawToBitcoin,
-    profile_functions.markTransactionsWithdrawn,
-    profile_functions.getAccountTransactionsLocal,
-    profile_functions.getAccountTransactionsRemote,
-    profile_functions.convertCurrencyTransactions
-  ]);
+    //<editor-fold>-------------------------------RENDER-------------------------------
+
+    //settings
+    app.get("/profile/transactions", [
+      auth_functions.checkLoggedIn,
+      profile_functions.getAccountListings,
+      stripe_functions.getStripeCustomer,
+      stripe_functions.getStripeCustomerInvoices,
+      stripe_functions.getStripeSubscription,
+      profile_functions.updateAccountSettingsPassthrough,
+      profile_functions.renderTransactions
+    ]);
+
+    //get all existing transactions for user (sales / rentals / renewals)
+    app.post("/profile/gettransactions", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      profile_functions.getAccountListings,
+      profile_functions.getAccountTransactionsLocal,
+      profile_functions.getAccountTransactionsRemote,
+      profile_functions.convertCurrencyTransactions
+    ]);
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------WITHDRAWAL-------------------------------
+
+    //transfer to bank
+    app.post("/profile/transfer", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      stripe_functions.getStripeAccount,
+      stripe_functions.getStripeCustomer,
+      stripe_functions.getStripeSubscription,
+      profile_functions.checkWithdrawalAccounts,
+      profile_functions.calculateWithdrawalAmount,
+      stripe_functions.withdrawToStripeBank,
+      paypal_functions.withdrawToPayPal,
+      profile_functions.withdrawToPayoneer,
+      profile_functions.withdrawToBitcoin,
+      profile_functions.markTransactionsWithdrawn,
+      profile_functions.getAccountTransactionsLocal,
+      profile_functions.getAccountTransactionsRemote,
+      profile_functions.convertCurrencyTransactions
+    ]);
+
+    //</editor-fold>
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------PROMO CODES-------------------------------
+  //<editor-fold>-------------------------------OTHER-------------------------------
 
-  //get all existing referral promo codes for user
-  app.post("/profile/getreferrals", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    profile_functions.getUnredeemedPromoCodes,
-    stripe_functions.getStripeCustomerNextInvoice,
-    profile_functions.getCouponsAndReferralsForUser,
-  ]);
+    //<editor-fold>-------------------------------REGISTRAR-------------------------------
 
-  //posting a new promo code or referral
-  app.post("/profile/promocode", [
-    general_functions.urlencodedParser,
-    auth_functions.checkLoggedIn,
-    profile_functions.checkPromoCode,
-    profile_functions.applyPromoCode
-  ]);
+    //post to update registrar
+    app.post("/profile/registrar", [
+      general_functions.urlencodedParser,
+      auth_functions.checkLoggedIn,
+      profile_functions.checkRegistrarInfo,
+      profile_functions.updateAccountRegistrar
+    ]);
 
-  //</editor-fold>
+    //lookup registrars and pull domain names
+    app.post("/profile/registrar/lookup", [
+      auth_functions.checkLoggedIn,
+      profile_functions.getAccountListings,
+      profile_functions.getRegistrarAPI,
+      profile_functions.getRegistrarDomains
+    ]);
 
-  //<editor-fold>-------------------------------REDIRECT-------------------------------
+    //</editor-fold>
 
-  //redirect upgrade premium to right link
-  app.get([
-    "/premium"
-  ], [
-    function(req, res, next){
-      console.log("F: Redirecting to appropriate Premium link...");
-      if (req.isAuthenticated()){
-        res.redirect("/profile/settings#premium");
+    //<editor-fold>-------------------------------REDIRECT-------------------------------
+
+    //redirect upgrade premium to right link
+    app.get([
+      "/premium"
+    ], [
+      function(req, res, next){
+        console.log("F: Redirecting to appropriate Premium link...");
+        if (req.isAuthenticated()){
+          res.redirect("/profile/settings#premium");
+        }
+        else {
+          res.redirect("/features#pricing");
+        }
       }
-      else {
-        res.redirect("/features#pricing");
-      }
-    }
-  ]);
+    ]);
 
-  //redirect anything not caught above to /profile
-  app.get("/profile*", profile_functions.redirectProfile);
+    //redirect anything not caught above to /profile
+    app.get("/profile*", profile_functions.redirectProfile);
+
+    //</editor-fold>
 
   //</editor-fold>
 
