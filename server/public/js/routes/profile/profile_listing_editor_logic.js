@@ -1296,6 +1296,7 @@ function updateEditorDomains(selected_domain_ids){
   //helper function to bind to inputs to listen for any changes from existing listing info
   function changedValue(input_elem, listing_info, force){
     var name_of_attr = input_elem.data("name");
+    var value_of_input = input_elem.val();
 
     if (listing_info){
       if (name_of_attr == "background_image_link"){
@@ -1303,6 +1304,20 @@ function updateEditorDomains(selected_domain_ids){
       }
       else if (name_of_attr == "logo_image_link"){
         var listing_info_comparison = listing_info["logo"];
+      }
+      else if (["price_rate", "buy_price", "min_price"].indexOf(name_of_attr) != -1){
+        var listing_info_comparison = listing_info[name_of_attr];
+        value_of_input *= getCurrencyMultiplier($("#default_currency-input").val());
+        if ($("#default_currency-input").val() != listing_info["default_currency"]){
+          force = true;
+        }
+      }
+      else if (name_of_attr == "registrar_cost"){
+        var listing_info_comparison = listing_info[name_of_attr];
+        value_of_input *= getCurrencyMultiplier($("#annual-cost-currency-input").val());
+        if ($("#annual-cost-currency-input").val() != listing_info["registrar_cost_currency"]){
+          force = true;
+        }
       }
       else {
         var listing_info_comparison = listing_info[name_of_attr];
@@ -1313,7 +1328,7 @@ function updateEditorDomains(selected_domain_ids){
     clearNotification();
 
     //only change if the value changed from existing (and if premium elem, has premium)
-    if (force || (input_elem.val() != listing_info_comparison &&
+    if (force || (value_of_input != listing_info_comparison &&
       ((input_elem.hasClass('premium-input') && user.stripe_subscription_id) ||
       (!input_elem.hasClass('premium-input'))))
     ){
@@ -1401,6 +1416,12 @@ function updateEditorDomains(selected_domain_ids){
         else if (input_name == "date_registered"){
           var listing_comparison = (current_listing.date_registered) ? moment(current_listing.date_registered).format('YYYY-MM-DDTHH:mm') : "";
         }
+        else if (["price_rate", "buy_price", "min_price"].indexOf(input_name) != -1){
+          var listing_comparison = current_listing[input_name] * getCurrencyMultiplier($("#default_currency-input").val());
+        }
+        else if (input_name == "registrar_cost"){
+          var listing_comparison = current_listing[input_name] * getCurrencyMultiplier($("#annual-cost-currency-input").val());
+        }
         else {
           var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
         }
@@ -1420,6 +1441,7 @@ function updateEditorDomains(selected_domain_ids){
     // for (var pair of formData.entries()) {
     //   console.log(pair[0]+ ', ' + pair[1]);
     // }
+    // submit_button.removeClass('is-loading');
 
     $.ajax({
       url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
@@ -1451,6 +1473,7 @@ function updateEditorDomains(selected_domain_ids){
           successMessage("Successfully changed settings for " + plural_success_msg + "!");
         }
         createRows();
+        updateEditorEditing(selected_ids);
       }
       else {
 
@@ -1458,14 +1481,17 @@ function updateEditorDomains(selected_domain_ids){
         if (data.message == "nothing-changed"){
           var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "the selected listings";
           infoMessage("No details were changed for " + plural_error_msg + ". Did you enter in the correct information?");
+          updateEditorEditing(selected_ids);
         }
         else {
           //not premium but tried to update premium stuff
           if (data.message == "not-premium"){
             var error_msg = "You must <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium Account</a> to be able to edit that!";
+            updateEditorEditing(selected_ids);
           }
           else if (data.message == "dns-pending"){
             var error_msg = "The DNS changes on " + ((selected_ids.length == 1) ? "this domain" : "these domains") + " are still pending. Please wait up to 72 hours for the changes to set and try again.";
+            updateEditorEditing(selected_ids);
           }
           else {
             //listing is no longer pointed to domahub, revert to verify tab
@@ -1503,8 +1529,6 @@ function updateEditorDomains(selected_domain_ids){
         }
 
       }
-
-      updateEditorEditing(selected_ids);
     });
   }
 
