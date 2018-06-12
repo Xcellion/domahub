@@ -111,10 +111,10 @@ $(document).ready(function(){
     viewDomainOffers(true);
   });
 
-  // //go into stats mode
-  // $("#selector-stats-button").on('click', function(){
-  //   viewDomainStats();
-  // });
+  //go into stats mode
+  $("#selector-stats-button").on('click', function(){
+    viewDomainStats(true);
+  });
 
   //go into verify mode
   $("#selector-verify-button").on("click", function(e){
@@ -233,9 +233,9 @@ function showBasedOnURL(){
   else if (url_selected_listings != "" && url_tab == "offers"){
     viewDomainOffers(false);
   }
-  // else if (url_selected_listings != "" && url_tab == "stats"){
-  //   viewDomainStats();
-  // }
+  else if (url_selected_listings != "" && url_tab == "stats"){
+    viewDomainStats(false);
+  }
   else {
     showSelector();
   }
@@ -784,18 +784,12 @@ function viewDomainOffers(push){
   updateEditorOffers(selected_domain_ids);
 }
 
-// //view domain stats
-// function viewDomainStats(){
-//   var selected_domain_ids = getSelectedDomains("id", true);
-//   if (selected_domain_ids.length > 0){
-//     showEditor("stats", selected_domain_ids);
-//     updateEditorStats(selected_domain_ids);
-//   }
-//   else {
-//     window.history.replaceState({}, "", "/profile/mylistings");
-//     showSelector();
-//   }
-// }
+//view domain stats
+function viewDomainStats(push){
+  var selected_domain_ids = getSelectedDomains("id", true);
+  showEditor("stats", selected_domain_ids, push);
+  updateEditorStats(selected_domain_ids);
+}
 
 //change domain
 function viewDomainDNS(push){

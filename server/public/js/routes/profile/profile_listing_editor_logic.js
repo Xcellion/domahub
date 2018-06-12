@@ -2076,13 +2076,17 @@ function whatsNextOfferView(listing_info, dont_reselect){
 function updateEditorStats(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
 
-  //change domain name header
+  //select verified rows here if none selected already
   if (selected_domain_ids.length == 0){
-    $("#current-view-name").text("My Listing Stats");
+    selectSpecificRows("verified", 1);
+    selected_domain_ids = getSelectedDomains("id", true);
   }
-  else {
-    $("#current-view-name").html("Viewing Stats");
-  }
+
+  $("#current-view-name").text("My Statistics");
+
+  updateStats(selected_domain_ids);
+  $(".non-stats-elem").addClass('is-hidden');
+  $(".stats-elem").removeClass('is-hidden');
 }
 
 //get stats on a domain
@@ -2427,9 +2431,6 @@ function createDNSRecordRows(selected_domain_ids, force){
     getDNSRecords(selected_listings, selected_domain_ids, true, function(data){
       if (data.state == "success"){
         listings = data.listings;
-      }
-      else {
-        errorMessage(data.message);
       }
 
       //make tables for domains we didnt yet

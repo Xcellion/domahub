@@ -739,25 +739,25 @@ module.exports = {
                 {
                   prop_name : "registrar_name",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Registrar"];
+                    return (results[x].value.whois["Registrar"] && results[x].value.whois["Registrar"].length < 100) ? results[x].value.whois["Registrar"] : "";
                   }
                 },
                 {
                   prop_name : "registrar_admin_name",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Admin Name"];
+                    return (results[x].value.whois["Admin Name"] && results[x].value.whois["Admin Name"].length < 100) ? results[x].value.whois["Admin Name"] : "";
                   }
                 },
                 {
                   prop_name : "registrar_admin_org",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Admin Organization"];
+                    return (results[x].value.whois["Admin Organization"] && results[x].value.whois["Admin Organization"].length < 100) ? results[x].value.whois["Admin Organization"] : "";
                   }
                 },
                 {
                   prop_name : "registrar_admin_email",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Admin Email"];
+                    return (results[x].value.whois["Admin Email"] && results[x].value.whois["Admin Email"].length < 100) ? results[x].value.whois["Admin Email"] : "";
                   }
                 },
                 {
@@ -779,7 +779,7 @@ module.exports = {
                     if (results[x].value.whois["Admin Country"] != "" && results[x].value.whois["Admin Country"]){
                       address_to_return += ", " + results[x].value.whois["Admin Country"];
                     }
-                    return address_to_return.replace(",,", ",");
+                    return address_to_return.replace(",,", ",").substr(0, 200);;
                   }
                 },
                 {
@@ -800,19 +800,19 @@ module.exports = {
                 {
                   prop_name : "registrar_registrant_name",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Registrant Name"];
+                    return (results[x].value.whois["Registrant Name"] && results[x].value.whois["Registrant Name"].length < 100) ? results[x].value.whois["Registrant Name"] : "";
                   }
                 },
                 {
                   prop_name : "registrar_registrant_org",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Registrant Organization"];
+                    return (results[x].value.whois["Registrant Organization"] && results[x].value.whois["Registrant Organization"].length < 100) ? results[x].value.whois["Registrant Organization"] : "";
                   }
                 },
                 {
                   prop_name : "registrar_registrant_email",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Registrant Email"];
+                    return (results[x].value.whois["Registrant Email"] && results[x].value.whois["Registrant Email"].length < 100) ? results[x].value.whois["Registrant Email"] : "";
                   }
                 },
                 {
@@ -834,7 +834,7 @@ module.exports = {
                     if (results[x].value.whois["Registrant Country"] != "" && results[x].value.whois["Registrant Country"]){
                       address_to_return += ", " + results[x].value.whois["Registrant Country"];
                     }
-                    return address_to_return.replace(",,", ",");
+                    return address_to_return.replace(",,", ",").substr(0, 200);
                   }
                 },
                 {
@@ -855,19 +855,19 @@ module.exports = {
                 {
                   prop_name : "registrar_tech_name",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Tech Name"];
+                    return (results[x].value.whois["Tech Name"] && results[x].value.whois["Tech Name"].length < 100) ? results[x].value.whois["Tech Name"] : "";
                   }
                 },
                 {
                   prop_name : "registrar_tech_org",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Tech Organization"];
+                    return (results[x].value.whois["Tech Organization"] && results[x].value.whois["Tech Organization"].length < 100) ? results[x].value.whois["Tech Organization"] : "";
                   }
                 },
                 {
                   prop_name : "registrar_tech_email",
                   function_to_run_if_current_is_blank : function(){
-                    return results[x].value.whois["Tech Email"];
+                    return (results[x].value.whois["Tech Email"] && results[x].value.whois["Tech Email"].length < 100) ? results[x].value.whois["Tech Email"] : "";
                   }
                 },
                 {
@@ -889,7 +889,7 @@ module.exports = {
                     if (results[x].value.whois["Tech Country"] != "" && results[x].value.whois["Tech Country"]){
                       address_to_return += ", " + results[x].value.whois["Tech Country"];
                     }
-                    return address_to_return.replace(",,", ",");
+                    return address_to_return.replace(",,", ",").substr(0, 200);;
                   }
                 },
                 {
