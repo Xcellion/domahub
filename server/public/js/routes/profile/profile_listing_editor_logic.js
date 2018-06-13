@@ -343,7 +343,9 @@ function updateEditorDomains(selected_domain_ids){
     $("#description-hook").val(listing_info.description_hook);
     $("#description-footer").val(listing_info.description_footer);
     $("#description-footer-link").val(listing_info.description_footer_link);
-    $("#domain-name-input").attr("placeholder", punycode.toUnicode(listing_info.domain_name)).val(punycode.toUnicode(listing_info.domain_name));
+    if (listing_info.domain_name){
+      $("#domain-name-input").attr("placeholder", punycode.toUnicode(listing_info.domain_name)).val(punycode.toUnicode(listing_info.domain_name));
+    }
 
     //categories
     $("#categories-input").val(listing_info.categories);
