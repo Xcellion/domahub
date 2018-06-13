@@ -133,8 +133,8 @@ function setupDescription(){
 //<editor-fold>-------------------------------REGISTRAR-------------------------------
 
 function setupRegistrar(){
-  if ((!listing_info.premium || (listing_info.show_registrar == 1 && listing_info.registrar)) && listing_info.registrar){
-    $("#listing-domain-registrar").removeClass('is-hidden').find(".listing-detail-text").text(listing_info.registrar);
+  if ((!listing_info.premium || (listing_info.show_registrar == 1 && listing_info.registrar_name)) && listing_info.registrar_name){
+    $("#listing-domain-registrar").removeClass('is-hidden').find(".listing-detail-text").text(listing_info.registrar_name);
   }
   else {
     $("#listing-domain-registrar").addClass('is-hidden');

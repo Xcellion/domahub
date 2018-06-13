@@ -245,6 +245,10 @@ var all_categories = [
     front: "Non-Profit"
   },
   {
+    back: "numbers",
+    front: "Numbers"
+  },
+  {
     back: "other",
     front: "Other"
   },

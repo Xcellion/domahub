@@ -1490,8 +1490,6 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       }
 
       req.session.listing_info.date_updated = whoisObj["Updated Date"];
-      req.session.listing_info.date_registered = whoisObj["Creation Date"];
-      req.session.listing_info.registrar = whoisObj["Registrar"],
 
       next();
     }
