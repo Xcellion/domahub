@@ -30,6 +30,7 @@ var moment = require('moment');
 
 var multer = require("multer");
 var parseDomain = require("parse-domain");
+var punycode = require("punycode");
 var Q = require('q');
 var qlimit = require("qlimit");
 var fs = require('fs');
@@ -60,31 +61,6 @@ module.exports = {
   renderCreateListingMultiple : function(req, res, next){
     res.render("listings/listing_create_multiple.ejs", {
       user: req.user
-    });
-  },
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------GETS------------------------------
-
-  //gets all statistics for a specific domain
-  getListingStats : function(req, res, next){
-    console.log("LOF: Finding the all verified statistics for " + req.params.domain_name + "...");
-    var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    data_model.getListingStats(req.params.domain_name, function(result){
-
-      //set server side stats
-      if (result.state == "success"){
-        listing_obj.stats = result.info;
-      }
-      else {
-        listing_obj.stats = false;
-      }
-
-      res.send({
-        state: "success",
-        listings: req.user.listings
-      });
     });
   },
 
@@ -165,11 +141,14 @@ module.exports = {
         else {
           domains_sofar.push(posted_domain_names[x].domain_name);
 
+          var domain_name_to_create = (req.user.stripe_subscription_id) ? posted_domain_names[x].domain_name : posted_domain_names[x].domain_name.toLowerCase();
+          domain_name_to_create = punycode.toASCII(domain_name_to_create);
+
           //format the object for DB insert
           db_object.push([
             req.user.id,
             date_now,
-            (req.user.stripe_subscription_id) ? posted_domain_names[x].domain_name : posted_domain_names[x].domain_name.toLowerCase(),
+            domain_name_to_create,
             null,    //registrar_id, changes later if we're using a registrar to auto update DNS
             parseFloat(posted_domain_names[x].min_price) || 0,
             parseFloat(posted_domain_names[x].buy_price) || 0,
@@ -883,6 +862,9 @@ module.exports = {
           }
         }
 
+        //punycode domain
+        var domain_punycode = (req.body.domain_name) ? punycode.toASCII(req.body.domain_name) : false;
+
         //invalid footer description
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
@@ -892,7 +874,7 @@ module.exports = {
           error.handler(req, res, "That's an invalid footer URL! Please enter a different URL and try again!", "json");
         }
         //invalid domain capitalization
-        else if (req.body.domain_name && req.body.domain_name.toLowerCase() != getUserListingObjByName(req.user.listings, req.params.domain_name).domain_name.toLowerCase()){
+        else if (req.body.domain_name && domain_punycode.toLowerCase() != getUserListingObjByName(req.user.listings, req.params.domain_name).domain_name.toLowerCase()){
           error.handler(req, res, "That's an invalid domain name capitalization. Please try again!", "json");
         }
         //invalid primary color
@@ -1030,7 +1012,7 @@ module.exports = {
           //info
           req.session.new_listing_info.description_footer = req.body.description_footer;
           req.session.new_listing_info.description_footer_link = req.body.description_footer_link;
-          req.session.new_listing_info.domain_name = req.body.domain_name;
+          req.session.new_listing_info.domain_name = domain_punycode;
 
           //design
           req.session.new_listing_info.primary_color = req.body.primary_color;
@@ -1792,10 +1774,11 @@ function getUserListingObjByID(listings, id){
 //check to see if domain name is legit
 function checkPostedDomainName(user, domains_sofar, domain_name, min_price, buy_price){
   var bad_reasons = [];
-  var parsed_domain = parseDomain(domain_name);
+  var parsed_domain = punycode.toASCII(domain_name);
+  parsed_domain = parseDomain(parsed_domain);
 
   //check domain
-  if (parsed_domain == null || !validator.isFQDN(domain_name) || !validator.isAscii(domain_name)){
+  if (parsed_domain == null || !validator.isFQDN(domain_name)){
     bad_reasons.push("Invalid domain name!");
   }
   //subdomains are not allowed
@@ -1925,6 +1908,7 @@ function checkForCreatedListings(new_listings, inserted_domains, inserted_ids){
   }
 
   new_listings.good_listings = good_listings;
+  new_listings.bad_listings = bad_listings;
   new_listings.check_dns_promises = check_dns_promises;
 }
 

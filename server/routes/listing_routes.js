@@ -153,21 +153,6 @@ module.exports = function(app){
 
     //</editor-fold>
 
-    //<editor-fold>-------------------------------LISTING STATISTICS-------------------------------
-
-    //get stats for a verified domain
-    // app.post('/listing/:domain_name/getstats', [
-    //   auth_functions.checkLoggedIn,
-    //   general_functions.urlencodedParser,
-    //   listing_general_functions.checkDomainValid,
-    //   listing_general_functions.checkDomainListed,
-    //   profile_functions.getAccountListings,
-    //   owner_functions.checkListingOwnerPost,
-    //   owner_functions.getListingStats
-    // ]);
-
-    //</editor-fold>
-
   //</editor-fold>
 
   //<editor-fold>-------------------------------BUYING RELATED-------------------------------

@@ -160,7 +160,7 @@ $(document).ready(function() {
 
     //set row domain data
     if (data && data.domain_name){
-      temp_table_row.attr("data-domain_name", data.domain_name.toLowerCase());
+      temp_table_row.attr("data-domain_name", punycode.toASCII(data.domain_name.toLowerCase()));
     }
 
     temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){

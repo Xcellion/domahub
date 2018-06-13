@@ -982,7 +982,7 @@ function formatCurrency(number){
 
         //sort the results by listing name and filter out not owner domains
         var listings_data_sorted = results.rows.map(function(row){
-          var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+          var domain_name = punycode.toUnicode(row[0].replace(/\//g, "").split("?")[0].toLowerCase());
           return [domain_name, row[1]];
         }).filter(function(row){
           return listing_regex.test(row[0]);

@@ -26,6 +26,7 @@ dns.setServers([
 var alexaData = require('alexa-traffic-rank');
 var parser = require('parse-whois');
 var moment = require('moment');
+var punycode = require('punycode');
 
 var request = require('request');
 var fs = require('fs');

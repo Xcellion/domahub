@@ -17,6 +17,11 @@ window.onpopstate = function(event) {
 
 $(document).ready(function() {
 
+  //punycode the domain name
+  $(".punycode-domain").each(function(){
+    $(this).text(punycode.toUnicode($(this).text()));
+  });
+
   //<editor-fold>-------------------------------DOMAIN TABLE-------------------------------
 
   findOtherDomainsHub(false);
@@ -324,9 +329,9 @@ function createDomainTable(listings_to_show, start_at, listings_per_page){
     else {
       var background_color = (listing_hub_info.background_color) ? listing_hub_info.background_color.replace("#", "") : "";
       var primary_color = (listing_hub_info.primary_color) ? listing_hub_info.primary_color.replace("#", "") : "";
-      clone_row.find(".domain-row-logo").attr("src", "https://placeholdit.imgix.net/~text?txtsize=22&w=48&h=48&txt=" + listings_to_show[start_at + x].domain_name.substr(0, 1).toUpperCase() + "&bg=" + background_color + "&txtclr=" + primary_color);
+      clone_row.find(".domain-row-logo").attr("src", "https://placeholdit.imgix.net/~text?txtsize=22&w=48&h=48&txt=" + punycode.toUnicode(listings_to_show[start_at + x].domain_name).substr(0, 1).toUpperCase() + "&bg=" + background_color + "&txtclr=" + primary_color);
     }
-    clone_row.find(".domain-row-domain").text(listings_to_show[start_at + x].domain_name);
+    clone_row.find(".domain-row-domain").text(punycode.toUnicode(listings_to_show[start_at + x].domain_name));
 
     if (listings_to_show[start_at + x].buy_price){
       clone_row.find(".domain-row-bin").text(formatCurrency(listings_to_show[start_at + x].buy_price, listings_to_show[start_at + x].default_currency));
@@ -400,11 +405,11 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
     else {
       var background_color = (listing_hub_info.background_color) ? listing_hub_info.background_color.replace("#", "") : "";
       var primary_color = (listing_hub_info.primary_color) ? listing_hub_info.primary_color.replace("#", "") : "";
-      clone_col.find(".logo-image").attr("src", "https://placeholdit.imgix.net/~text?txtsize=25&txtclip=end,ellipsis&w=255&h=128&txtfit=max&txt=" + listings_to_show[start_at + x].domain_name + "&bg=" + background_color + "&txtclr=" + primary_color);
+      clone_col.find(".logo-image").attr("src", "https://placeholdit.imgix.net/~text?txtsize=25&txtclip=end,ellipsis&w=255&h=128&txtfit=max&txt=" + punycode.toUnicode(listings_to_show[start_at + x].domain_name) + "&bg=" + background_color + "&txtclr=" + primary_color);
     }
 
     //domain name
-    clone_col.find(".domain-name").text(listings_to_show[start_at + x].domain_name);
+    clone_col.find(".domain-name").text(punycode.toUnicode(listings_to_show[start_at + x].domain_name));
 
     //price tag
     if (listings_to_show[start_at + x].buy_price){

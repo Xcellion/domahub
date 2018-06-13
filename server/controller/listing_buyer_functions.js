@@ -15,6 +15,7 @@ var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 var randomstring = require("randomstring");
 var validator = require("validator");
+var punycode = require("punycode");
 
 var ejs = require('ejs');
 var path = require("path");
@@ -85,9 +86,12 @@ module.exports = {
     //figure out luminance based on primary color
     req.session.listing_info.font_luminance = calculateLuminance(req.session.listing_info.primary_color);
 
+    var puny_domain_name = punycode.toUnicode(req.session.listing_info.domain_name)
+
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,
-      domain_name: req.session.listing_info.domain_name,
+      domain_name: puny_domain_name,
+      domain_name_non_puny: req.session.listing_info.domain_name,
       verification_code: req.session.contact_verification_code,
       offerer_name: req.body.contact_name,
       offerer_email: req.body.contact_email,
@@ -104,7 +108,7 @@ module.exports = {
     var emailDetails = {
       to: req.body.contact_email,
       from: email_from,
-      subject: "Hi, " + req.body.contact_name + '! Please verify your offer for ' + req.session.listing_info.domain_name,
+      subject: "Hi, " + req.body.contact_name + '! Please verify your offer for ' + puny_domain_name,
     };
 
     //set premium options
@@ -139,10 +143,11 @@ module.exports = {
             if (offer_result){
               console.log("LBF: Emailing owner about new verified offer...");
               var offer_formatted = Currencies.format(parseFloat(offer_result.offer), offer_result.default_currency);
+              var puny_domain_name = punycode.toUnicode(req.session.listing_info.domain_name)
 
               //email the owner
               mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs'), {
-                domain_name: req.params.domain_name,
+                domain_name: puny_domain_name,
                 owner_name: owner_result.username,
                 offerer_name: offer_result.name,
                 offerer_email: offer_result.email,
@@ -153,7 +158,7 @@ module.exports = {
               }, {
                 to: owner_result.email,
                 from: '"DomaHub Domains" <general@domahub.com>',
-                subject: 'You have a new ' + offer_formatted + ' offer for ' + req.params.domain_name + "!"
+                subject: 'You have a new ' + offer_formatted + ' offer for ' + puny_domain_name + "!"
               }, false);
 
               //notify domahub
@@ -162,7 +167,7 @@ module.exports = {
                   to: "general@domahub.com",
                   from: 'general@domahub.com',
                   subject: "New verified offer for a listing on DomaHub!",
-                  html: "There was a new offer for - " + req.params.domain_name + "<br />From - " + offer_result.name + "<br />Email - " + offer_result.email + "<br />Message - " + offer_result.message + "<br />Offer - " + offer_formatted
+                  html: "There was a new offer for - " + puny_domain_name + "<br />From - " + offer_result.name + "<br />Email - " + offer_result.email + "<br />Message - " + offer_result.message + "<br />Offer - " + offer_formatted
                 });
               }
             }
@@ -173,6 +178,7 @@ module.exports = {
       //render the redirect page to notify offerer that offer was successfully sent
       res.render("listings/offer_verify.ejs", {
         listing_info : req.session.listing_info,
+        domain_name_puny : punycode.toUnicode(req.session.listing_info.domain_name),
         compare : false
       });
     });
@@ -212,8 +218,11 @@ module.exports = {
       //delete offers object so we refresh it
       delete listing_info.offers;
 
+      var accept_or_reject_text = (accepted) ? "accepted" : "rejected";
+
       res.json({
         state: offer_result.state,
+        message : "Successfully " + accept_or_reject_text + " the offer!",
         listings: req.user.listings
       });
 
@@ -232,13 +241,15 @@ module.exports = {
           console.log("LBF: Sending email to the buyer for transfer verification / next steps!");
           var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
           var price_formatted = Currencies.format(parseFloat(offer_result.offer), offer_result.default_currency);
-          listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+          var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+          var puny_domain_name = punycode.toUnicode(listing_info.domain_name);
 
           //figure out luminance based on primary color
           listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
 
           var EJSVariables = {
-            domain_name: req.params.domain_name,
+            domain_name: puny_domain_name,
+            domain_name_non_puny : listing_info.domain_name,
             owner_name: req.user.username,
             owner_email: req.user.email,
             price: price_formatted,
@@ -259,7 +270,7 @@ module.exports = {
           var emailDetails = {
             to: offer_result.email,
             from: email_from,
-            subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
+            subject: 'Congratulations on your recent purchase of ' + puny_domain_name + " for " + price_formatted + "!"
           };
         }
 
@@ -268,6 +279,7 @@ module.exports = {
           console.log("LBF: Sending email to offerer to notify of accept/reject status...");
           var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
           var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+          var puny_domain_name = punycode.toUnicode(listing_info.domain_name);
 
           //figure out luminance based on primary color
           listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
@@ -276,7 +288,8 @@ module.exports = {
           var offer_formatted = Currencies.format(parseFloat(offer_result.offer), offer_result.default_currency);
           var EJSVariables = {
             accepted: offer_result.accepted,
-            domain_name: req.params.domain_name,
+            domain_name: puny_domain_name,
+            domain_name_non_puny: listing_info.domain_name,
             offer_id: offer_result.id,
             offerer_name: offer_result.name,
             offerer_email: offer_result.email,
@@ -293,7 +306,7 @@ module.exports = {
           var emailDetails = {
             to: offer_result.email,
             from: email_from,
-            subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
+            subject: 'Your ' + offer_formatted + ' offer for ' + puny_domain_name + " was " + accepted_text + "!"
           };
         }
 
@@ -468,8 +481,10 @@ module.exports = {
     //get the listing owner contact information to email
     var pathEJSTemplate = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs');
     var price_formatted = Currencies.format(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price), req.session.listing_info.default_currency);
+    var puny_domain_name = punycode.toUnicode(req.session.listing_info.domain_name);
+
     var EJSVariables = {
-      domain_name: req.session.listing_info.domain_name,
+      domain_name: puny_domain_name,
       owner_name: req.session.listing_info.username,
       price: price_formatted,
       offerer_name: req.session.new_buying_info.name,
@@ -480,7 +495,7 @@ module.exports = {
     var emailDetails = {
       to: req.session.listing_info.owner_email,
       from: '"DomaHub Domains" <general@domahub.com>',
-      subject: 'Somebody just purchased ' + req.params.domain_name + " for " + price_formatted + "!"
+      subject: 'Somebody just purchased ' + puny_domain_name + " for " + price_formatted + "!"
     };
 
     //email the owner
@@ -499,9 +514,12 @@ module.exports = {
 
     //figure out luminance based on primary color
     req.session.listing_info.font_luminance = calculateLuminance(req.session.listing_info.primary_color);
+    var puny_domain_name = punycode.toUnicode(req.session.listing_info.domain_name);
 
     var EJSVariables = {
-      domain_name: req.session.listing_info.domain_name,
+      domain_name: puny_domain_name,
+      domain_name_non_puny: req.session.listing_info.domain_name,
+
       owner_name: req.session.listing_info.username,
       owner_email: req.session.listing_info.owner_email,
       price: price_formatted,
@@ -522,7 +540,7 @@ module.exports = {
     var emailDetails = {
       to: req.session.new_buying_info.email,
       from: email_from,
-      subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
+      subject: 'Congratulations on your recent purchase of ' + puny_domain_name + " for " + price_formatted + "!"
     };
 
     //email the buyer of next steps
@@ -632,8 +650,10 @@ module.exports = {
   //render the transfer ownership verifcation page
   renderVerificationPage : function(req, res, next){
     getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
+      offer_result.verification_code = req.params.verification_code;
       res.render("listings/transfer_verify.ejs", {
         listing_info: req.session.listing_info,
+        domain_name_puny : punycode.toUnicode(req.session.listing_info.domain_name),
         offer_info: offer_result,
         compare: false
       });
@@ -642,6 +662,17 @@ module.exports = {
 
   //verify that ownership transferred
   verifyTransferOwnership : function(req, res, next){
+
+    //notify domahub
+    if (process.env.NODE_ENV != "dev"){
+      mailer.sendBasicMail({
+        to: "general@domahub.com",
+        from: 'general@domahub.com',
+        subject: "Successful transfer of domain for a listing on DomaHub!",
+        html: "Somebody verified the successful transfer of - " + punycode.toUnicode(req.session.listing_info.domain_name)
+      });
+    }
+
     res.send({
       state: "success"
     });

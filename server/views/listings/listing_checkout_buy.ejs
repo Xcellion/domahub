@@ -28,7 +28,7 @@
             </div>
             <div class="card-content">
               <div class="content has-text-centered">
-                <h1 class="is-primary is-bold is-breakword"><%= listing_info.domain_name %></h1>
+                <h1 class="is-primary is-bold is-breakword punycode-domain"><%= listing_info.domain_name %></h1>
               </div>
               <div class="control-flex">
                 <p>Name</p>
@@ -51,12 +51,12 @@
               <% if (listing_info.premium){ %>
                 <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
                   <div class="icon is-small"><i class="fal fa-long-arrow-left"></i></div>
-                  <span>Back to <%= listing_info.domain_name %></span>
+                  <span>Back to <span class="punycode-domain"><%= listing_info.domain_name %></span></span>
                 </a>
               <% } else { %>
                 <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
                   <div class="icon is-small"><i class="fal fa-long-arrow-left"></i></div>
-                  <span>Back to <%= listing_info.domain_name %></span>
+                  <span class="punycode-domain">Back to <span class="punycode-domain"><%= listing_info.domain_name %></span></span>
                 </a>
               <% } %>
             </footer>
@@ -208,7 +208,7 @@
             <div id="checkout-success-content" class="success-hide is-hidden">
               <div class="content">
                 <p>
-                  The owner of <strong><%= listing_info.domain_name %></strong> has been notified of your purchase and will reach out to you with details on how to take ownership of the domain.
+                  The owner of <strong class="punycode-domain"><%= listing_info.domain_name %></strong> has been notified of your purchase and will reach out to you with details on how to take ownership of the domain.
                 </p>
                 <p>
                   If you do not receive any communications from the domain owner, please do not hesitate to <a class="is-primary is-underlined" href="/contact/">contact us</a>.
@@ -228,6 +228,7 @@
 
   <script src="/js/lib/moment.min.js" type="text/javascript"></script>
   <script src="/js/lib/wNumb.js" type="text/javascript"></script>
+  <script src="/js/lib/punycode.min.js" type="text/javascript"></script>
   <script src="/js/lib/currencies.json" type="text/javascript"></script>
   <script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
   <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>

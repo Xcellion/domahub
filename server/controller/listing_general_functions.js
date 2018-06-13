@@ -21,7 +21,7 @@ module.exports = {
   checkDomainValid : function(req, res, next){
     console.log("LGF: Checking domain FQDN validity...");
     var domain_name = req.params.domain_name || req.body["domain-name"];
-    if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
+    if (!validator.isFQDN(domain_name) || !validator.isAscii(domain_name)){
       error.handler(req, res, "Invalid domain name!");
     }
 

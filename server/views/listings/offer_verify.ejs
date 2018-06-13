@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= listing_info.domain_name %> - Offer Verification</title>
+  <title><%= domain_name_puny %> - Offer Verification</title>
   <%- include("../templates/head_links.ejs"); %>
   <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
   <link rel="stylesheet" href="/css/min/listing_page.min.css" type="text/css" />
@@ -21,7 +21,7 @@
           <div class="content has-text-centered clear-nav">
             <h1 class="margin-bottom-5 has-text-centered">
               <% if (listing_info.premium) { %>
-                <a href="http://<%= listing_info.domain_name %>" class="is-primary"><%= listing_info.domain_name %></a>
+                <a href="http://<%= domain_name_puny %>" class="is-primary"><%= domain_name_puny %></a>
               <% } else { %>
                 <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
                   <div class='is-inline-block flat-logo is-primary'></div>
@@ -33,16 +33,16 @@
           <div class="box">
             <div class="content">
               <p>
-                Your offer has been verified and the owner of <%= listing_info.domain_name %> has been notified!
+                Your offer has been verified and the owner of <%= domain_name_puny %> has been notified!
               </p>
               <p>
                 There is no further action required on your end. Please wait for the owner to accept or reject your offer.
               </p>
             </div>
             <div class="has-text-centered">
-              <a href="http://www.<%= listing_info.domain_name %>" id="gohome-button" class='button is-stylish'>
+              <a href="http://<%= domain_name_puny %>" id="gohome-button" class='button is-stylish'>
                 <span class="icon is-small"><i class="fal fa-long-arrow-left"></i></span>
-                <span>Back to <%= listing_info.domain_name %></span>
+                <span>Back to <%= domain_name_puny %></span>
               </a>
             </div>
           </div>
