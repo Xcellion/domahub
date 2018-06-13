@@ -41,6 +41,7 @@ function setupCustomColorsHub(){
 
   //listing hub footer
   stylize(listing_hub_info.footer_color, ".hub-section .footer-item", "color");
+  stylize(listing_hub_info.footer_color, ".hub-section #listing-hub-email > #obf > a", "color");
   stylize(listing_hub_info.footer_background_color, ".hub-section .footer", "background-color");
   stylize(listing_hub_info.primary_color, ".hub-section .page-contents .tabs li a", "color");
 }

@@ -104,6 +104,14 @@ module.exports = function(app){
     profile_functions.getOffersMulti
   ]);
 
+  //mylistings multi stats
+  app.post("/profile/mylistings/stats", [
+    general_functions.urlencodedParser,
+    auth_functions.checkLoggedIn,
+    profile_functions.getAccountListings,
+    profile_functions.getStatsMulti
+  ]);
+
   //mylistings multi DNS records
   app.post("/profile/mylistings/dnsrecords", [
     general_functions.urlencodedParser,

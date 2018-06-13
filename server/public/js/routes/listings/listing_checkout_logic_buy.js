@@ -2,6 +2,11 @@ $(document).ready(function () {
 
   //<editor-fold>------------------------------------------PAGE SETUP----------------------------------------
 
+  //punycode the domain name
+  $(".punycode-domain").each(function(){
+    $(this).text(punycode.toUnicode($(this).text()));
+  });
+
   //set purchase price
   if (new_buying_info.id){
     $("#total-price").text(formatCurrency(new_buying_info.offer, listing_info.default_currency));

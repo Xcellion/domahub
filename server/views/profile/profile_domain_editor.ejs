@@ -1301,7 +1301,7 @@
     <div id="offer-modal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-container">
-        <div class="modal-content">
+        <div class="modal-content is-small">
           <div class="content has-text-centered">
             <h3 class="is-bold" id="offer-modal-domain"></h3>
             <p>Received on <span id="offer-modal-timestamp"></span></p>
@@ -1652,41 +1652,32 @@
 
   <!-- STATS -->
   <div id="stats-section" class="stats-elem non-edit-elem non-verify-elem non-offer-elem is-hidden">
-    <div id="loading-stats" class="content">
-      <p>
-        <div class="icon is-small"><i class="fal fa-spin fa-refresh"></i></div>
-        <span>Now loading listing statistics...</span>
-      </p>
-    </div>
-    <div id="no-stats" class="content is-hidden">
-      <p>
-        There is no activity on <span class="this-domain">this domain</span> yet. Need some tips? Check out our <a href="/faq" class="is-primary is-underlined">FAQ</a>.
-      </p>
-    </div>
-    <div class='stats-loading control'>
-      <div class="content">
-        <p>
-          Unique Referers
-          <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="What website your users are coming from (where they are being referred from)." data-balloon-pos="up">
-            <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
-          </div>
-        </p>
-        <div class="chart-min-height">
-          <canvas id="referer-chart"></canvas>
+
+    <div class="listings-toolbar">
+      <div class="control is-spaced">
+        <div class="control-left">
+          <a class="show-selector-button button is-flexible is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
+            <div class="icon is-small">
+              <i class="fal fa-long-arrow-left"></i>
+            </div>
+            <span class="is-hidden-mobile">Go Back To Listings</span>
+          </a>
+        </div>
+        <div class="control-right">
+
         </div>
       </div>
-      <div class="content">
-        <p>
-          Traffic
-        </p>
-        <div class="chart-min-height">
-          <canvas id="traffic-chart"></canvas>
+    </div>
+
+    <div class="columns">
+      <div class="column is-narrow">
+        <div class="card is-fullwidth-mobile">
+
         </div>
       </div>
-      <div class="content">
-        <p>
-          Is there a specific statistic you would like to see for your domains? Please <a class="is-primary contact-link is-underlined" href="/contact">let us know</a>!
-        </p>
+
+      <div class="column">
+
       </div>
     </div>
   </div>

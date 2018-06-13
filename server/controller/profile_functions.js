@@ -1230,6 +1230,64 @@ module.exports = {
 
     //</editor-fold>
 
+    //<editor-fold>-------------------------------------STATS-------------------------------
+
+    //gets all stats for multiple listings
+    getStatsMulti : function(req, res, next){
+      console.log("PF: Finding the all statistics for the posted domains...");
+
+      var listing_ids = [];
+      for (var x = 0; x < req.body.selected_listings.length; x++){
+        for (var y = 0; y < req.user.listings.length; y++){
+          //user object has the same listing id as the listing being verified
+          if (req.user.listings[y].domain_name.toLowerCase() == req.body.selected_listings[x].domain_name.toLowerCase()
+          && req.user.listings[y].id == req.body.selected_listings[x].id){
+            listing_ids.push(req.body.selected_listings[x].id);
+            break;
+          }
+        }
+      }
+      data_model.getStatsMulti(listing_ids, function(result){
+
+        //update req.user.listings
+        if (result.state == "success"){
+
+          //create hash table of result offers
+          var stats_object = {};
+          for (var x = 0; x < result.info.length; x++){
+            if (stats_object[result.info[x].listing_id]){
+              stats_object[result.info[x].listing_id].push(result.info[x]);
+            }
+            else {
+              stats_object[result.info[x].listing_id] = [result.info[x]];
+            }
+          }
+
+          //set listings obj to the results
+          for (var y = 0; y < req.user.listings.length; y++){
+            for (var z in stats_object){
+              if (z == req.user.listings[y].id){
+                req.user.listings[y].stats = stats_object[z];
+                break;
+              }
+            }
+
+            //empty array if no offers
+            if (!req.user.listings[y].stats){
+              req.user.listings[y].stats = [];
+            }
+          }
+        }
+
+        res.send({
+          state: "success",
+          listings: req.user.listings
+        });
+      });
+    },
+
+    //</editor-fold>
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------------UPDATE ACCOUNT-------------------------------

@@ -475,7 +475,25 @@ module.exports = {
     database.query(query, "Failed to get offers for posted domains!", callback, [domain_ids]);
   },
 
-  //gets view statistics for a specific domain
+  //gets view statistics for specific domains
+  getStatsMulti : function(domain_ids, callback){
+    console.log("DB: Attempting to get all statistics for posted domains...");
+    var query = 'SELECT \
+          stats_search_history.timestamp, \
+          stats_search_history.rental_id, \
+          stats_search_history.user_ip, \
+          IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(stats_search_history.referer, "/", 3), "://", -1), "/", 1), "www", 1), "") AS referer, \
+          stats_search_history.compare, \
+          accounts.username \
+        FROM stats_search_history \
+        LEFT JOIN accounts \
+        ON accounts.id = stats_search_history.account_id \
+        WHERE stats_search_history.domain_name = ? \
+        ORDER BY stats_search_history.timestamp DESC'
+    database.query(query, "Failed to get stats for posted domains!", callback, [domain_ids]);
+  },
+
+  //gets view statistics for a specific domain (domahub database request count)
   getListingStats : function(domain_name, callback){
     console.log("DB: Attempting to get statistics for domain: " + domain_name + "...");
     var query = 'SELECT \

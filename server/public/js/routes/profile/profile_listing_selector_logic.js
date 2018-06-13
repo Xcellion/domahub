@@ -419,7 +419,7 @@ function updateDomainRow(tempRow, listing_info, now){
     var listing_href = "http://localhost:8080/listing/" + listing_info.domain_name.toLowerCase();
   }
 
-  tempRow.find(".td-domain").html("<a class='is-bold' target='_blank' href='" + listing_href + "'>" + listing_info.domain_name + "</a>").attr("title", listing_info.domain_name);
+  tempRow.find(".td-domain").html("<a class='is-bold' target='_blank' href='" + listing_href + "'>" + punycode.toUnicode(listing_info.domain_name) + "</a>").attr("title", punycode.toUnicode(listing_info.domain_name));
   tempRow.find(".td-registrar").text((listing_info.registrar_name) ? listing_info.registrar_name : "-");
 
   if (listing_info.date_registered){
@@ -497,6 +497,7 @@ function updateDomainRow(tempRow, listing_info, now){
 function createHubRow(listing_info){
   var hub_drop_clone = $("#hub-drop-clone").clone().removeAttr("id").removeClass('is-hidden');
   var hub_title = listing_info.hub_title || listing_info.domain_name;
+  hub_title = punycode.toUnicode(hub_title);
   hub_title = (hub_title.length > 30) ? hub_title.substr(0, 25) + "..." : hub_title;
   hub_drop_clone.find(".hub-drop-domain-name").text(hub_title);
   hub_drop_clone.find(".select-button").attr("id", "hub-drop-listing_id" + listing_info.id).attr("title", "Add to listing hub " + (listing_info.hub_title || listing_info.domain_name));

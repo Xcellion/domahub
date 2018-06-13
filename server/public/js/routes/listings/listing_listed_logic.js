@@ -43,7 +43,7 @@ function setupListedPage(){
 
 function setupLeftHalf(){
   //domain name
-  $(".domain-title").text(listing_info.domain_name);
+  $(".domain-title").text(punycode.toUnicode(listing_info.domain_name));
 
   setupPriceTags();
   setupDescription();
@@ -388,12 +388,12 @@ function setupRightHalf(){
       if (!listing_info.premium || (listing_info.premium && listing_info.show_placeholder == 1)){
         $("#contact_name").attr("placeholder", random_char.name);
         $("#contact_email").attr("placeholder", random_char.email);
-        $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+        $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + punycode.toUnicode(listing_info.domain_name) + ". Let's chat.");
       }
       else {
         $("#contact_name").attr("placeholder", "John Smith");
         $("#contact_email").attr("placeholder", "john@smith.com");
-        $("#contact_message").attr("placeholder", "Hey! I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+        $("#contact_message").attr("placeholder", "Hey! I'm interested in buying " + punycode.toUnicode(listing_info.domain_name) + ". Let's chat.");
       }
 
       //placeholder + minimum on contact form
@@ -583,7 +583,7 @@ function setupRightHalf(){
 
       //rental input domain title (middle ellipsis crop)
       var rental_domain_title = (listing_info.domain_name.length > 20) ? listing_info.domain_name.substr(0,12) + "..." + listing_info.domain_name.substr(-8) : listing_info.domain_name;
-      $("#rental-domain-title").text(rental_domain_title);
+      $("#rental-domain-title").text(punycode.toUnicode(rental_domain_title));
 
       //</editor-fold>
 
@@ -1631,7 +1631,7 @@ function setupRightHalf(){
       cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
 
       //edit it based on new listing info
-      var sliced_domain = other_listings[x].domain_name;
+      var sliced_domain = punycode.toUnicode(other_listings[x].domain_name);
 
       //available to buy now
       if (other_listings[x].buy_price > 0){
