@@ -958,58 +958,66 @@ function updateEditorDomains(selected_domain_ids){
       $("#sortable-wrapper").empty();
       if (listing_info.hub_listing_ids && listing_info.hub_listing_ids.length > 0){
         $("#no-domains-in-hub").addClass('is-hidden');
-        var domains_in_hub = listing_info.hub_listing_ids.split(",");
-        var domain_names_in_hub = [];
-        var categories_in_hub = [];
-        domains_in_hub.map(function(elem){
-          var listing_id = elem;
-          var listing_info = listings.find(function(elem){
-            return elem.id == listing_id
+        var domain_ids_in_hub = listing_info.hub_listing_ids.split(",");
+        var domains_in_hub = [];
+        domain_ids_in_hub.filter(function(elem){
+          var listing_info = listings.find(function(e){
+            return e.id == elem
           });
 
-          domain_names_in_hub.push(listing_info.domain_name);
-          categories_in_hub.push(listing_info.categories);
+          if (listing_info){
+            domains_in_hub.push(listing_info);
+            return true;
+          }
+          else {
+            return false;
+          }
         });
 
         //create the rows
-        for (var x = 0 ; x < domains_in_hub.length ; x++){
-          var domain_clone = $("#sortable-clone").clone().removeAttr("id").removeClass('is-hidden');
-          domain_clone.find(".domain_name").addClass("sortable-marquee").text(punycode.toUnicode(domain_names_in_hub[x]));
-          domain_clone.data("listing_id", domains_in_hub[x]);
+        if (domains_in_hub.length > 0){
+          for (var x = 0 ; x < domains_in_hub.length ; x++){
+            var domain_clone = $("#sortable-clone").clone().removeAttr("id").removeClass('is-hidden');
+            domain_clone.find(".domain_name").addClass("sortable-marquee").text(punycode.toUnicode(domains_in_hub[x].domain_name));
+            domain_clone.data("listing_id", domains_in_hub[x].id);
 
-          //get front-end categories
-          if (categories_in_hub[x]){
-            categories_for_sortable = categories_in_hub[x].split(" ").map(function(elem){
-              return "<span class='marquee-category-tag'>" + categories_hash[elem] + "<span>";
-            }).join(" ");
-          }
-          else {
-            categories_for_sortable = "";
+            //get front-end categories
+            if (domains_in_hub[x].categories){
+              var categories_for_sortable = domains_in_hub[x].categories.split(" ").map(function(elem){
+                return "<span class='marquee-category-tag'>" + categories_hash[elem] + "<span>";
+              }).join(" ");
+            }
+            else {
+              var categories_for_sortable = "";
+            }
+
+            domain_clone.find(".categories").addClass("sortable-marquee").html(categories_for_sortable);
+            $("#sortable-wrapper").append(domain_clone);
           }
 
-          domain_clone.find(".categories").addClass("sortable-marquee").html(categories_for_sortable);
-          $("#sortable-wrapper").append(domain_clone);
+          //make them sortable
+          $("#sortable-wrapper").sortable({
+            cursor: "pointer",
+            stop : function(){
+              var ranked_ids = "";
+              $("#sortable-wrapper > div").each(function(){
+                ranked_ids += $(this).data("listing_id") + ",";
+              });
+              ranked_ids = ranked_ids.slice(0, -1);
+              $("#hub-listing-ids-input").val(ranked_ids);
+              changedValue($("#hub-listing-ids-input"), listing_info);
+            }
+          });
+          $("#sortable-wrapper").disableSelection();
+
+          //marquee when necessary
+          $(document).ready(function () {
+            updateMarqueeHandlers($(".sortable-marquee"));
+          });
         }
-
-        //make them sortable
-        $("#sortable-wrapper").sortable({
-          cursor: "pointer",
-          stop : function(){
-            var ranked_ids = "";
-            $("#sortable-wrapper > div").each(function(){
-              ranked_ids += $(this).data("listing_id") + ",";
-            });
-            ranked_ids = ranked_ids.slice(0, -1);
-            $("#hub-listing-ids-input").val(ranked_ids);
-            changedValue($("#hub-listing-ids-input"), listing_info);
-          }
-        });
-        $("#sortable-wrapper").disableSelection();
-
-        //marquee when necessary
-        $(document).ready(function () {
-          updateMarqueeHandlers($(".sortable-marquee"));
-        });
+        else {
+          $("#no-domains-in-hub").removeClass('is-hidden');
+        }
       }
       else if (listing_info.hub) {
         $("#no-domains-in-hub").removeClass('is-hidden');
