@@ -525,7 +525,8 @@ function updateEditorDomains(selected_domain_ids){
     if (listing_info.expenses){
       createDomainExpenseTable(listing_info);
     }
-    else {
+    //get expenses if not demo
+    else if (user.id){
       getDomainExpenses(listing_info, selected_domain_ids);
     }
   }
