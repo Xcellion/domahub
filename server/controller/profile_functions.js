@@ -193,38 +193,16 @@ module.exports = {
         req.user.transactions_remote = false;
 
         //renewal transactions
-        if (req.user.listings && req.user.listings.length > 0){
-          for (var x = 0 ; x < req.user.listings.length ; x++){
-            if (req.user.listings[x].registrar_cost && req.user.listings[x].date_registered){
-              var date_registered_moment = moment(req.user.listings[x].date_registered)
-              var years_registered = (date_registered_moment.isValid()) ? moment.duration(moment().diff(date_registered_moment)).asYears() : 0;
-
-              //per year until now since registered
-              for (var y = 0 ; y < years_registered ; y++){
-                req.user.transactions.push({
-                  available : 0,
-                  date_created : moment(req.user.listings[x].date_registered).add(y, "year").valueOf(),
-                  doma_fees : null,
-                  domain_name : req.user.listings[x].domain_name,
-                  id : null,
-                  listing_id : req.user.listings[x].id,
-                  payment_fees : null,
-                  payment_type : null,
-                  transaction_cost : req.user.listings[x].registrar_cost,
-                  transaction_cost_currency : req.user.listings[x].registrar_cost_currency,
-                  transaction_cost_refunded : null,
-                  transaction_details : "Annual renewal cost",
-                  transaction_id : null,
-                  transaction_type : "renewal",
-                  withdrawn_on : null
-                });
-              }
-            }
-          }
-        }
+        updateTransactionsWithRenewals(req);
 
         next();
       });
+    }
+    //demo, add renewals to transactions
+    else if (req.user.username == "DomaHubDemo" && !req.user.renewals_done){
+      req.user.renewals_done = true;
+      updateTransactionsWithRenewals(req);
+      next();
     }
     else {
       next();
@@ -2552,6 +2530,39 @@ function updateUserTransactionDetails(user_transaction_obj, transaction_details,
       catch(e) {
         user_transaction_obj.sales_id = "";
         error.log(e, "Error in getting PayPal refunded sales ID!");
+      }
+    }
+  }
+}
+
+//add renewal details to user.transactions
+function updateTransactionsWithRenewals(req){
+  if (req.user.listings && req.user.listings.length > 0){
+    for (var x = 0 ; x < req.user.listings.length ; x++){
+      if (req.user.listings[x].registrar_cost && req.user.listings[x].date_registered){
+        var date_registered_moment = moment(req.user.listings[x].date_registered)
+        var years_registered = (date_registered_moment.isValid()) ? moment.duration(moment().diff(date_registered_moment)).asYears() : 0;
+
+        //per year until now since registered
+        for (var y = 0 ; y < years_registered ; y++){
+          req.user.transactions.push({
+            available : 0,
+            date_created : moment(req.user.listings[x].date_registered).add(y, "year").valueOf(),
+            doma_fees : null,
+            domain_name : req.user.listings[x].domain_name,
+            id : null,
+            listing_id : req.user.listings[x].id,
+            payment_fees : null,
+            payment_type : null,
+            transaction_cost : req.user.listings[x].registrar_cost,
+            transaction_cost_currency : req.user.listings[x].registrar_cost_currency,
+            transaction_cost_refunded : null,
+            transaction_details : "Annual renewal cost",
+            transaction_id : null,
+            transaction_type : "renewal",
+            withdrawn_on : null
+          });
+        }
       }
     }
   }
