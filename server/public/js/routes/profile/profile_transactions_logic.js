@@ -188,7 +188,7 @@ $(document).ready(function() {
     //all other row info
     temp_row.find(".transactions-row-type").text(transaction.transaction_type.substr(0,1).toUpperCase() + transaction.transaction_type.substr(1));
     var listing_href = (user.stripe_subscription_id) ? "https://" + transaction.domain_name.toLowerCase() : "/listing/" + transaction.domain_name.toLowerCase();
-    temp_row.find(".transactions-row-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + transaction.domain_name + "</a>");
+    temp_row.find(".transactions-row-domain").html("<a target='_blank' class='is-underlined' href='" + listing_href + "'>" + punycode.toUnicode(transaction.domain_name) + "</a>");
 
     //payment type
     if (transaction.payment_type == "paypal"){
@@ -493,7 +493,7 @@ $(document).ready(function() {
     }
 
     $("#transactions-modal-timestamp").text(modal_timestamp_text)
-    $("#transactions-modal-domain").text("Domain " + transaction.transaction_type + " for " + transaction.domain_name);
+    $("#transactions-modal-domain").text("Domain " + transaction.transaction_type + " for " + punycode.toUnicode(transaction.domain_name));
 
     //calculate fees and profit
     var doma_fees = (transaction.doma_fees) ? transaction.doma_fees : 0;
