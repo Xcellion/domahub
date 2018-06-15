@@ -741,8 +741,8 @@ module.exports = {
             Q.allSettled(to_verify_promises)
              .then(function(results) {
                var still_pointing = [];
-               var not_pointing = [];
-               var still_pending = [];
+               var not_pointing_ids = [];
+               var still_pending_ids = [];
 
                //figure out if any failed, push to new promise array
                for (var x = 0; x < results.length; x++){
@@ -751,25 +751,25 @@ module.exports = {
                      still_pointing.push(x);
                    }
                    else if (results[x].value.status != 3){
-                     not_pointing.push(results[x].value.listing_id.toString());
+                     not_pointing_ids.push(results[x].value.listing_id.toString());
                    }
                    else {
                      still_pending.push(results[x].value.listing_id.toString());
                    }
                  }
                  else if (results[x].reason.status != 3){
-                   not_pointing.push(results[x].reason.listing_id.toString());
+                   not_pointing_ids.push(results[x].reason.listing_id.toString());
                  }
                  else {
-                   still_pending.push(results[x].reason.listing_id.toString());
+                   still_pending_ids.push(results[x].reason.listing_id.toString());
                  }
                }
 
                //some of the domains aren't pointing anymore
-               if (not_pointing.length > 0){
+               if (not_pointing_ids.length > 0){
                  console.log("LOF: Some domain(s) are not pointing to DomaHub! Reverting...");
                  //update not pointing domains
-                 listing_model.updateListingsInfo(not_pointing, {
+                 listing_model.updateListingsInfoByID(not_pointing_ids, {
                    verified : null,
                    status : 0
                  }, function(result){
@@ -1416,7 +1416,7 @@ module.exports = {
         console.log("LOF: Updating domain details...");
         var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
 
-        listing_model.updateListingsInfo(domain_names, req.session.new_listing_info, function(result){
+        listing_model.updateListingsInfoByDomain(domain_names, req.session.new_listing_info, function(result){
           if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
           else {
             updateUserListingsObject(req, res, domain_names);
@@ -1951,7 +1951,7 @@ function checkInsertedIDs(req, res, inserted_ids){
     var verified_dns_promise = Q.defer();
     if (various_ids.verified_ids.length > 0){
       console.log("LOF: Now setting status for successful DNS changes...");
-      listing_model.updateListingsInfo(various_ids.verified_ids, {
+      listing_model.updateListingsInfoByID(various_ids.verified_ids, {
         status : 1,
         verified : 1
       }, function(result){
@@ -1981,7 +1981,7 @@ function checkInsertedIDs(req, res, inserted_ids){
 
     if (various_ids.pending_dns_ids.length > 0){
       console.log("LOF: Now setting status to pending DNS changes...");
-      listing_model.updateListingsInfo(various_ids.pending_dns_ids, {
+      listing_model.updateListingsInfoByID(various_ids.pending_dns_ids, {
         status : 3,
         verified : 1
       }, function(result){

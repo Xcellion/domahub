@@ -1146,10 +1146,10 @@ function switchStripeEvents(event, res){
 //subscription was cancelled, check for over 100 listings and remove it locally
 function handleSubscriptionCancel(customer_id, subscription_id){
   console.log('F: Checking if user has over 100 listings...');
-  listing_model.selectAbove100Listings(customer_id, function(result){
+  listing_model.selectIDsAbove100Listings(customer_id, function(result){
     if (result.info.length > 100){
       console.log('F: Ex-Premium user has over 100 listings! Now setting some as inactive...');
-      listing_model.updateListingsInfo(result.info,{
+      listing_model.updateListingsInfoByID(result.info,{
         status : 0
       }, function(result){
         //done!

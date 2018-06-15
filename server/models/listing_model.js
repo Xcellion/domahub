@@ -69,7 +69,7 @@ module.exports = {
   },
 
   //turns off listings above 100 count (for cancellation of premium)
-  selectAbove100Listings : function(stripe_customer_id, callback){
+  selectIDsAbove100Listings : function(stripe_customer_id, callback){
     console.log("DB: Attempting to get any listings above 100 basic limit...");
     var query = "SELECT listings.id \
     FROM listings \
@@ -126,14 +126,22 @@ module.exports = {
     database.query(query, "Failed to create " + listing_info_array.length + " new listings! Please refresh the page and try again.", callback, [listing_info_array]);
   },
 
-  //updates listing info
-  updateListingsInfo : function(domains, listing_info, callback){
-    console.log("DB: Attempting to update domain(s)...");
+  //updates listing info by the domain name
+  updateListingsInfoByDomain : function(domain_names, listing_info, callback){
+    console.log("DB: Attempting to update domain(s) via domain name...");
     var query = "UPDATE listings \
         SET ? \
-        WHERE (listings.domain_name IN (?) OR listings.id IN (?))"
-        // WHERE (listings.domain_name IN (?) OR listings.id IN (CAST(? AS CHAR)))"
-    database.query(query, "Failed to update domain(s)!", callback, [listing_info, domains, domains]);
+        WHERE listings.domain_name IN (?)"
+    database.query(query, "Failed to update domain(s) via domain name!", callback, [listing_info, domain_names]);
+  },
+
+  //updates listing info by the listing ID
+  updateListingsInfoByID : function(domain_ids, listing_info, callback){
+    console.log("DB: Attempting to update domain(s) via listing ID...");
+    var query = "UPDATE listings \
+        SET ? \
+        WHERE listings.id IN (?)"
+    database.query(query, "Failed to update domain(s) via listing ID!", callback, [listing_info, domain_ids]);
   },
 
   //updates listing registrar info (for getting registrar related info after creation)
