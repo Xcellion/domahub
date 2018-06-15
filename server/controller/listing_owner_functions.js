@@ -1416,18 +1416,35 @@ module.exports = {
       }
       else {
         console.log("LOF: Updating domain details...");
-        var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
 
-        listing_model.updateListingsInfoByDomain(domain_names, req.session.new_listing_info, function(result){
-          if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
-          else {
-            updateUserListingsObject(req, res, domain_names);
-            res.json({
-              state: "success",
-              listings: (req.user) ? req.user.listings : false
-            });
-          }
-        });
+        //using IDs
+        if (req.path == "/listings/multiupdate"){
+          var domain_ids = req.body.selected_ids.split(",");
+          listing_model.updateListingsInfoByID(domain_ids, req.session.new_listing_info, function(result){
+            if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
+            else {
+              updateUserListingsObject(req, res, domain_ids);
+              res.json({
+                state: "success",
+                listings: (req.user) ? req.user.listings : false
+              });
+            }
+          });
+        }
+        //using domain name
+        else {
+          var domain_names = [req.params.domain_name];
+          listing_model.updateListingsInfoByDomain(domain_names, req.session.new_listing_info, function(result){
+            if (result.state=="error"){ error.handler(req, res, result.info, "json"); }
+            else {
+              updateUserListingsObject(req, res, domain_names);
+              res.json({
+                state: "success",
+                listings: (req.user) ? req.user.listings : false
+              });
+            }
+          });
+        }
       }
     },
 
