@@ -150,8 +150,8 @@ module.exports = {
             date_now,
             domain_name_to_create,
             null,    //registrar_id, changes later if we're using a registrar to auto update DNS
-            parseFloat(posted_domain_names[x].min_price) || 0,
-            parseFloat(posted_domain_names[x].buy_price) || 0,
+            parseFloat(posted_domain_names[x].min_price) * 100 || 0,
+            parseFloat(posted_domain_names[x].buy_price) * 100 || 0,
             Descriptions.random(),    //random default description
             default_currency,         //user default currency
             null,
