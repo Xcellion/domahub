@@ -212,6 +212,51 @@
     <!-- REGISTRAR MODAL -->
     <%- include("../templates/registrar_modal.ejs"); %>
 
+    <div id="api-confirmation-modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-container">
+        <div class="modal-content is-small">
+          <div class="notification no-shadow has-icon is-info">
+            <div class="icon-box">
+              <div class="icon is-white">
+                <i class="fal fa-exclamation-triangle"></i>
+              </div>
+            </div>
+            <div class="content">
+              <p class="is-white">
+                Please note the following and confirm your action.
+              </p>
+            </div>
+          </div>
+          <div class="control">
+            <p>
+              By clicking submit, the DNS settings for these domains will be altered for automatic verification. This process <span class="is-bold">cannot</span> be reverted automatically.
+            </p>
+            </br>
+            <p>
+              If you do not wish to alter the DNS settings for any specific domain(s), please remove them from the list prior to submission.
+            </p>
+          </div>
+          <div class="control is-grouped">
+
+            <div class="control is-expanded">
+              <a id="api-confirm-button" tabindex="0" class='toolbar-submit-button button is-fullwidth is-primary is-stylish is-small'>
+                <div class="icon is-small"><i class="fal fa-check-circle"></i></div>
+                <span>Submit</span>
+              </a>
+            </div>
+            <div class="control is-expanded">
+              <a tabindex="0" class='button is-fullwidth is-outlined is-danger is-stylish is-small cancel-modal'>
+                <div class="icon is-small"><i class="fal fa-ban"></i></div>
+                <span>Nevermind</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close"></button>
+    </div>
+
   </section>
 
   <script src="/js/routes/listings/listing_create_logic.js" type="text/javascript"></script>

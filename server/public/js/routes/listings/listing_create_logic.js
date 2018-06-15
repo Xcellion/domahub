@@ -1,3 +1,5 @@
+var using_api = false;
+
 $(document).ready(function() {
 
   //function that runs when back button is pressed
@@ -57,6 +59,17 @@ $(document).ready(function() {
     //submit to create listings
     $("#domains-submit").on("click", function(e){
       e.preventDefault();
+      if (using_api){
+        successMessage(false);
+        $("#api-confirmation-modal").addClass("is-active");
+      }
+      else {
+        submitDomains();
+      }
+    });
+
+    //using API confirmation of DNS settings changes
+    $("#api-confirm-button").on("click", function(e){
       submitDomains();
     });
 
@@ -427,6 +440,7 @@ function lookupRegistrars(){
       $("#lookup-domains-button").removeClass('is-loading');
       if (data.state == "success"){
         if (data.good_listings.length > 0){
+          using_api = true;
           var total_good_domains = (data.good_listings.length == 1) ? "an unlisted domain" : data.good_listings.length + " unlisted domains"
           var excess_hundred = (data.good_listings.length > 20) ? " Now showing the first 20 listings." : "";
           successMessage("Successfully found " + total_good_domains + " from your connected registrars!" + excess_hundred);
