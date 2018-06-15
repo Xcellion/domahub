@@ -1939,7 +1939,9 @@ module.exports = {
       whois.lookup(listing_obj.domain_name, function(err, data){
         var whoisObj = {};
         if (err){
-          error.log(err, "Failed to look up whois information for table building during verification for domain " + listing_obj.domain_name);
+          if (err.code != "ETIMEDOUT") {
+            error.log(err, "Failed to look up whois information for table building during verification for domain " + listing_obj.domain_name);
+          }
         }
         else {
           var array = parser.parseWhoIsData(data);
