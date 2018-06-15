@@ -740,6 +740,8 @@ module.exports = {
             //wait for all promises to finish
             Q.allSettled(to_verify_promises)
              .then(function(results) {
+               console.log("LOF: Checking to see if domain(s) are still pointed to DomaHub...");
+
                var still_pointing = [];
                var not_pointing_ids = [];
                var still_pending_ids = [];
@@ -754,7 +756,7 @@ module.exports = {
                      not_pointing_ids.push(results[x].value.listing_id.toString());
                    }
                    else {
-                     still_pending.push(results[x].value.listing_id.toString());
+                     still_pending_ids.push(results[x].value.listing_id.toString());
                    }
                  }
                  else if (results[x].reason.status != 3){
@@ -790,7 +792,7 @@ module.exports = {
                  });
                }
                //some domains are still pending changes
-               else if (still_pending.length > 0){
+               else if (still_pending_ids.length > 0){
                  error.handler(req, res, "dns-pending", "json");
                }
                //all good
@@ -2011,7 +2013,7 @@ function checkInsertedIDs(req, res, inserted_ids){
       //look up whois info
       whois.lookup(domain_name, function(err, data){
         if (err){
-          error.log(err, "Failed to lookup WHOIS information for domain " + domain_name);
+          // error.log(err, "Failed to lookup WHOIS information for domain " + domain_name);
           reject(false);
         }
         else {

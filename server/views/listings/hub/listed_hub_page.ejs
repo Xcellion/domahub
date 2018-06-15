@@ -1,0 +1,270 @@
+<script type="text/javascript">
+  var listing_hub_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+  var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
+  var listing_info = false;
+  var compare = false;
+</script>
+
+<% function rot13(s) {
+  return s.replace(/[A-Za-z]/g, function (c) {
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(
+    "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm".indexOf(c)
+    );
+  } );
+} %>
+
+<body class="is-hidden">
+
+  <%- include("../../templates/notifications.ejs");%>
+
+  <section class="hub-section hero is-medium gradient-left-right">
+
+    <div class="hero-head">
+      <nav class="nav">
+        <div class="nav-left">
+          <a id="listing-hub-logo-link" class="nav-item">
+            <figure class="image is-32x32">
+              <img class="logo-item"/>
+            </figure>
+          </a>
+        </div>
+        <div class="nav-right">
+          <% if (listing_info.hub_email == 1){ %>
+            <a id="listing-hub-email" class="nav-item">
+              <span id="obf"><script>document.getElementById("obf").innerHTML="<n uers=\"znvygb:<%= rot13(listing_info.owner_email) %>\" gnetrg=\"_oynax\">Rznvy hf!</n>".replace(/[a-zA-Z]/g,function(c){return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);});</script>
+              <noscript><span style="unicode-bidi:bidi-override;direction:rtl;">moc.liamg@eelb2now</span></noscript></span>
+              </a>
+            <% } %>
+          <% if (listing_info.hub_phone){ %>
+            <a href="tel:<%= listing_info.hub_phone %>" class="nav-item"><%= listing_info.hub_phone %></a>
+          <% } %>
+        </div>
+      </nav>
+    </div>
+
+    <div class="hero-body">
+      <div class="container">
+        <div class="content has-text-centered">
+          <h1 class="title is-1 is-primary is-bold punycode-domain"><%= listing_info.hub_title || listing_info.domain_name %></h1>
+          <p class="subtitle is-5">
+            <%= listing_info.description %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="domain-search-section" class="hub-section section is-small is-pastel">
+    <div class="container">
+      <div class="control has-addons" style="max-width:500px;margin-left:auto;margin-right:auto;">
+        <input id="search-domain-main" class="input is-stylish has-shadow is-medium" type="text" placeholder="Search domains..."/>
+        <div class="select is-stylish has-shadow is-medium">
+          <select id="search-domain-tld"></select>
+        </div>
+      </div>
+      <div class="control is-spaced is-mobile">
+        <div class="control-left">
+          <p id="total-domain-count"></p>
+        </div>
+        <div class="control-right">
+          <div class="select is-stylish has-shadow no-borders">
+            <select id="categories-select">
+              <option value="" selected>
+                All Categories
+              </option>
+            </select>
+          </div>
+          <div class="select is-stylish has-shadow no-borders is-hidden-mobile">
+            <select id="views-select">
+              <option disabled>
+                Select View
+              </option>
+              <option value="0">
+                Table View
+              </option>
+              <option value="1">
+                Grid View
+              </option>
+            </select>
+          </div>
+          <div class="is-inline is-hidden-tablet" data-balloon="Switch View" data-balloon-pos="up">
+            <button id="layout-button" class="button is-icon">
+              <div class="icon">
+                <i class="fal fa-list"></i>
+              </div>
+            </button>
+          </div>
+          <button id="prev-page" class="is-disabled page-button button is-black is-inverted is-icon">
+            <div class="icon">
+              <i class="fal fa-angle-left"></i>
+            </div>
+          </button>
+          <button id="next-page" class="is-disabled page-button button is-black is-inverted is-icon">
+            <div class="icon">
+              <i class="fal fa-angle-right"></i>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="domain-list-section" class="hub-section section is-medium-top is-pastel">
+    <div class="container">
+      <table id="domains-table" class="table is-transparent-head">
+        <thead class="has-hover-effect">
+          <tr>
+            <th colspan="1" class="is-hidden-mobile"></th>
+            <th class="sort-header" data-sort-by="domain_name" colspan="2">
+              <span class="is-hidden-mobile">Domain Name</span>
+              <span class="is-hidden-tablet">Name</span>
+              <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+            </th>
+            <th class="sort-header" data-sort-by="buy_price" colspan="1">
+              <span class="is-hidden-mobile">Buy It Now Price</span>
+              <span class="is-hidden-tablet">BIN</span>
+              <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+            </th>
+            <th class="sort-header" data-sort-by="min_price" colspan="1">
+              <span class="is-hidden-mobile">Minimum Price</span>
+              <span class="is-hidden-tablet">Min$</span>
+              <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+            </th>
+            <th class="sort-header" data-sort-by="price_rate" colspan="1">
+              <span class="is-hidden-mobile">Rental Price</span>
+              <span class="is-hidden-tablet">Rent$</span>
+              <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="domain-table-body" class="is-hidden">
+          <tr id="clone-row" class="is-hidden table-row">
+            <td colspan="1" class="img-col is-hidden-mobile">
+              <figure class="image is-48x48 left-aligned">
+                <img class="domain-row-logo" alt="Domain Logo"/>
+              </figure>
+            </td>
+            <td colspan="2" class="domain-col">
+              <p class="domain-row-domain"></p>
+            </td>
+            <td colspan="1" class="bin-col">
+              <div class="control-item">
+                <span class="tag is-primary is-dot is-hidden-mobile"></span>
+                <p class="domain-row-bin"></p>
+              </div>
+            </td>
+            <td colspan="1" class="min-col">
+              <div class="control-item">
+                <span class="tag is-accent is-dot is-hidden-mobile"></span>
+                <p class="domain-row-min"></p>
+              </div>
+            </td>
+            <td colspan="1" class="rent-col">
+              <div class="control-item">
+                <span class="tag is-info is-dot is-hidden-mobile"></span>
+                <p class="domain-row-rent"></p>
+              </div>
+            </td>
+            <td colspan="1" class="misc-col is-hidden-mobile">
+              <button class="button no-shadow is-icon is-transparent is-black misc-button">
+                <div class="icon"><i class="fal fa-ellipsis-h"></i></div>
+              </button>
+              <div class="misc-options is-hidden">
+                <ul>
+                  <li>
+                    <div class="icon is-white is-small">
+                      <i class="fal fa-comment"></i>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="icon is-white is-small">
+                      <i class="fal fa-share"></i>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="icon is-white is-small">
+                      <i class="fal fa-exclamation-circle"></i>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table id="no-domains-table" class="domains-table is-hidden table is-transparent-head">
+        <tbody>
+          <tr class="no-hover-effect">
+            <td>
+              <div>
+                <div class="nothing-exists-row has-text-centered">
+                  <div class="icon is-dark is-large">
+                    <i class="fal fa-exclamation-circle"></i>
+                  </div>
+                  <p>Oh, no! There are no matching domains!</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table id="loading-domains-table" class="domains-table table is-transparent-head">
+        <tbody>
+          <tr class="no-hover-effect">
+            <td>
+              <div>
+                <div class="nothing-exists-row has-text-centered">
+                  <p class='icon is-medium is-primary'><i class="fal fa-spin fa-circle-notch"></i></p>
+                  <p>Now loading domains.</p>
+                  <p>This may take some time.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="domains-grid" class="is-hidden">
+        <div id="domains-grid-clone-col" class="is-hidden column">
+          <div class="card has-shadow-effect cursor-pointer">
+            <div class="card-image">
+              <figure class="image is-2by1">
+                <img class="logo-image" />
+              </figure>
+            </div>
+            <div class="card-content is-relative">
+              <h3 class="domain-name is-ellipsis"></h3>
+              <div class="price-tag">
+                <span class="price-text"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="domains-grid-clone-cols" class="is-hidden columns"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="detailed-view-section" class="is-hidden">
+    <a id="back-to-list-button" class="button no-shadow" tabindex="0" title="Back To List Of Domains">
+      <div class="icon is-small">
+        <i class="fal fa-long-arrow-left"></i>
+      </div>
+      <span>Go back to list</span>
+    </a>
+    <%- include("../listed_page.ejs") %>
+  </div>
+
+  <section class="hub-section">
+    <%- include("../listing_footer.ejs") %>
+  </section>
+
+  <script src="/js/lib/moment.min.js" type="text/javascript"></script>
+  <script src="/js/lib/wNumb.js" type="text/javascript"></script>
+  <script src="/js/lib/currencies.json" type="text/javascript"></script>
+  <script src="/js/lib/punycode.min.js" type="text/javascript"></script>
+  <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
+  <script src="/js/routes/listings/hub/listing_hub_logic.js" type="text/javascript"></script>
+  <script src="/js/routes/listings/hub/hub_theming.js" type="text/javascript"></script>
+
+</body>
