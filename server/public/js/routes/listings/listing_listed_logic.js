@@ -62,10 +62,10 @@ function setupPriceTags(){
     var price_tag_text = "Unavailable";
   }
   else if (listing_info.buy_price > 0 && listing_info.rented != 1){
-    var price_tag_text = "Buy now - " + formatCurrency(listing_info.buy_price, listing_info.default_currency);
+    var price_tag_text = "Buy now: " + formatCurrency(listing_info.buy_price, listing_info.default_currency);
   }
   else if (listing_info.min_price > 0){
-    var price_tag_text = "Available - " + formatCurrency(listing_info.min_price, listing_info.default_currency);
+    var price_tag_text = "Minimum offer: " + formatCurrency(listing_info.min_price, listing_info.default_currency);
   }
   else {
     var price_tag_text = "Now available";

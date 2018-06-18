@@ -32,7 +32,7 @@
 }
 
 .min-height {
-  min-height: 100vh;
+  min-height: calc(100vh - 110px);
 }
 
 #listed-page {
@@ -40,7 +40,7 @@
   background-attachment: fixed;
   background-color: $white;
   background-color: $white;
-  min-height: 100vh;
+  min-height: calc(100vh - 110px);
   width: 100%;
   &.is-active {
     @include translate(500px,0);

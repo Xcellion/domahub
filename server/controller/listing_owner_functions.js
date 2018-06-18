@@ -692,8 +692,8 @@ module.exports = {
           }
         });
       }
-      //check to see if its still pointed to domahub
-      else if (req.body.status == 1){
+      //check to see if its still pointed to domahub (only for production)
+      else if (req.body.status == 1 && process.env.NODE_ENV != "dev"){
         var domain_names = (req.path == "/listings/multiupdate") ? req.body.selected_ids.split(",") : [req.params.domain_name];
 
         //custom promise creation, get ip address of domain
