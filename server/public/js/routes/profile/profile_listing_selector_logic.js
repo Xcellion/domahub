@@ -261,6 +261,27 @@ function showRows(){
   else {
     $("#no-listings-row").removeClass('is-hidden');
   }
+
+  //highlight the search bar if there is something
+  if (search_term){
+    $("#domain-search").addClass("is-primary is-active");
+  }
+  else {
+    $("#domain-search").removeClass("is-primary is-active");
+  }
+
+  //highlight the filter bar if there is something
+  if (filter_val != "id"){
+    $("#filter-select").addClass("is-primary is-active");
+  }
+  else {
+    $("#filter-select").removeClass("is-primary is-active");
+  }
+
+  //de-select hidden rows
+  selectRow($(".table-row.is-hidden"), false);
+
+  multiSelectButtons();
 }
 
 //</editor-fold>
@@ -638,6 +659,7 @@ function selectRow(row, selected){
     }
   }
   row.find(".select-button").prop("checked", selected);
+  multiSelectButtons();
 }
 
 //toggle a row select
@@ -659,19 +681,19 @@ function toggleSelectRow(row, event){
   multiSelectButtons(row);
 }
 
-//select all rows
+//select all visible rows
 function selectAllRows(select){
   //select all
   if (select){
     $("#select-all").data('selected', true).prop("checked", true);
-    $(".table-row:not(.clone-row)").addClass('is-selected');
-    $(".table-row:not(.clone-row) .select-button").prop("checked", true);
+    $(".table-row:not(.clone-row):not(.is-hidden)").addClass('is-selected');
+    $(".table-row:not(.clone-row):not(.is-hidden) .select-button").prop("checked", true);
   }
   //deselect all
   else {
     $("#select-all").data('selected', false).prop("checked", false);
-    $(".table-row:not(.clone-row)").removeClass('is-selected');
-    $(".table-row:not(.clone-row) .select-button").prop("checked", false);
+    $(".table-row:not(.clone-row):not(.is-hidden)").removeClass('is-selected');
+    $(".table-row:not(.clone-row):not(.is-hidden) .select-button").prop("checked", false);
   }
   multiSelectButtons();
 }
@@ -686,8 +708,8 @@ function selectSpecificRows(type, value){
 
 //helper function to handle multi-select action buttons
 function multiSelectButtons(clicked_row){
-  var selected_rows = $(".table-row:not(.clone-row).is-selected");
-  var not_selected_rows = $(".table-row:not(.clone-row, .is-selected)");
+  var selected_rows = $(".table-row:not(.clone-row).is-selected:not(.is-hidden)");
+  var not_selected_rows = $(".table-row:not(.clone-row, .is-selected):not(.is-hidden)");
   var editable_selected_rows = selected_rows.filter(function(){
     return $(this).data("unverified") == false && $(this).data("accepted") == false
   });
@@ -742,7 +764,7 @@ function multiSelectButtons(clicked_row){
   }
 
   //every row is selected
-  if (not_selected_rows.length == 0 && listings.length > 0){
+  if (not_selected_rows.length == 0 && listings.length > 0 && selected_rows.length > 0){
     $("#select-all").data('selected', true).prop("checked", true);
   }
   else {

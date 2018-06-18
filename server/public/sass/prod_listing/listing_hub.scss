@@ -34,6 +34,12 @@
   @include mobile {
     padding-right:0 !important;
   }
+  &.has-text-right {
+    text-align: right !important;
+  }
+  &.has-text-center {
+    text-align: center !important;
+  }
 }
 
 #domain-search-section {

@@ -285,9 +285,15 @@ function createDomainView(){
   //create table
   if (listings_to_show.length > 0){
     if ($("#views-select").val() == 0){
+      $(".sort-header").removeClass("has-text-center");
+      $(".price-header").addClass("has-text-right");
+      $(".header-hide").removeClass("is-hidden");
       createDomainTable(listings_to_show, start_at, listings_per_page);
     }
     else {
+      $(".price-header").removeClass("has-text-right");
+      $(".sort-header").addClass("has-text-center");
+      $(".header-hide").addClass("is-hidden");
       createDomainTiles(listings_to_show, start_at, listings_per_page);
     }
 
