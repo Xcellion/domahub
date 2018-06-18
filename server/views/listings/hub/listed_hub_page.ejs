@@ -112,30 +112,31 @@
 
   <section id="domain-list-section" class="hub-section section is-medium-top is-pastel">
     <div class="container">
-      <table id="domains-table" class="table is-transparent-head">
+      <table id="domains-table" class="table no-border no-background is-transparent-head">
         <thead class="has-hover-effect">
           <tr>
-            <th colspan="1" class="is-hidden-mobile"></th>
+            <th colspan="1" class="header-hide is-hidden-mobile"></th>
             <th class="sort-header" data-sort-by="domain_name" colspan="2">
               <span class="is-hidden-mobile">Domain Name</span>
               <span class="is-hidden-tablet">Name</span>
               <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
             </th>
-            <th class="sort-header" data-sort-by="buy_price" colspan="1">
+            <th class="sort-header price-header" data-sort-by="buy_price" colspan="1">
               <span class="is-hidden-mobile">Buy It Now Price</span>
               <span class="is-hidden-tablet">BIN</span>
               <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
             </th>
-            <th class="sort-header" data-sort-by="min_price" colspan="1">
+            <th class="sort-header price-header" data-sort-by="min_price" colspan="1">
               <span class="is-hidden-mobile">Minimum Price</span>
               <span class="is-hidden-tablet">Min$</span>
               <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
             </th>
-            <th class="sort-header" data-sort-by="price_rate" colspan="1">
+            <th class="sort-header price-header" data-sort-by="price_rate" colspan="1">
               <span class="is-hidden-mobile">Rental Price</span>
               <span class="is-hidden-tablet">Rent$</span>
               <div class="icon is-small"><i class="fal fa-sort" data-fa-transform="down-2"></i></div>
             </th>
+            <th class="header-hide"></th>
           </tr>
         </thead>
         <tbody id="domain-table-body" class="is-hidden">
@@ -149,19 +150,19 @@
               <p class="domain-row-domain"></p>
             </td>
             <td colspan="1" class="bin-col">
-              <div class="control-item">
+              <div class="control-item is-pulled-right">
                 <span class="tag is-primary is-dot is-hidden-mobile"></span>
                 <p class="domain-row-bin"></p>
               </div>
             </td>
             <td colspan="1" class="min-col">
-              <div class="control-item">
+              <div class="control-item is-pulled-right">
                 <span class="tag is-accent is-dot is-hidden-mobile"></span>
                 <p class="domain-row-min"></p>
               </div>
             </td>
             <td colspan="1" class="rent-col">
-              <div class="control-item">
+              <div class="control-item is-pulled-right">
                 <span class="tag is-info is-dot is-hidden-mobile"></span>
                 <p class="domain-row-rent"></p>
               </div>

@@ -243,6 +243,7 @@ module.exports = {
     VALUES ? \
     ON DUPLICATE KEY UPDATE \
       deleted = 1, \
+      verified = NULL, \
       status = NULL "
     database.query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
   },

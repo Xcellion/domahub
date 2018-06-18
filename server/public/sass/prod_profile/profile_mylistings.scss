@@ -45,6 +45,12 @@
   margin-right:5px;
 }
 
+//there is an active filter
+select.is-active.is-primary {
+  border: 1px solid $primary !important;
+  outline: 0;
+}
+
 //domain expenses
 .expense-button-wrapper {
   padding-right:0 !important;
