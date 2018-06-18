@@ -158,7 +158,7 @@ module.exports = function(app){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------ACCOUNT SETTINGS-------------------------------
+  //<editor-fold>-------------------------------SETTINGS-------------------------------
 
     //<editor-fold>-------------------------------ACCOUNT DETAILS CHANGE-------------------------------
 

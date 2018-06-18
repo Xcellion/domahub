@@ -59,6 +59,101 @@ $(document).ready(function() {
 
     //</editor-fold>
 
+    //<editor-fold>-------------------------------EXPORT LISTINGS DATA-------------------------------
+
+    //export all listings details
+    $("#csv-export-button").on("click", function(){
+      $(this).addClass("is-loading");
+      let csvContent = "";
+      var headers = [
+        "domain_name",
+        "date_created",
+        "date_expire",
+        "date_registered",
+        "default_currency",
+        "rentable",
+        "price_type",
+        "price_rate",
+        "buy_price",
+        "min_price",
+        "description",
+        "description_footer",
+        "description_footer_link",
+        "categories",
+        "paths",
+        "background_image",
+        "background_color",
+        "logo",
+        "primary_color",
+        "secondary_color",
+        "tertiary_color",
+        "font_name",
+        "font_color",
+        "footer_background_color",
+        "footer_color",
+        "show_registrar",
+      	"show_registration_date",
+      	"show_godaddy_appraisal",
+      	"show_domainindex_appraisal",
+      	"show_freevaluator_appraisal",
+      	"show_estibot_appraisal",
+      	"show_categories",
+      	"show_social_sharing",
+      	"show_placeholder",
+      	"show_traffic_graph",
+      	"show_alexa_stats",
+      	"show_history_ticker",
+      	"show_domain_list",
+        "registrar_name",
+        "registrar_cost",
+        "registrar_cost_currency",
+        "registrar_admin_name",
+        "registrar_admin_org",
+        "registrar_admin_email",
+        "registrar_admin_address",
+        "registrar_admin_phone",
+        "registrar_registrant_name",
+        "registrar_registrant_org",
+        "registrar_registrant_email",
+        "registrar_registrant_address",
+        "registrar_registrant_phone",
+        "registrar_tech_name",
+        "registrar_tech_org",
+        "registrar_tech_email",
+        "registrar_tech_address",
+        "registrar_tech_phone",
+        "hub",
+        "hub_title",
+        "hub_email",
+        "hub_layout_count",
+        "hub_layout_type",
+      ]
+
+      //create headers
+      csvContent += headers.join(",") +"\r\n";
+
+      user.listings.forEach(function(row){
+        var row_details = [];
+        for (var x = 0; x < headers.length; x++){
+          row_details.push(row[headers[x]]);
+        }
+        csvContent += '"' + row_details.join('","') +'"\r\n';
+      });
+
+      //download
+      var downloadLink = document.createElement("a");
+      var blob = new Blob(["\ufeff", csvContent]);
+      var url = URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = "DomaHub_Export_" + user.username + ".csv";  //Name the file here
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      $(this).removeClass("is-loading");
+    });
+
+    //</editor-fold>
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------PREMIUM TAB-------------------------------

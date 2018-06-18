@@ -148,6 +148,22 @@
                       <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-bold" target="_blank" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
                       <input id="ga_tracking_id-input" class="input account-input" data-uservar="ga_tracking_id" type="text" value="<%= user.ga_tracking_id %>" spellcheck="false" oninvalid="this.setCustomValidity('Please enter a valid Google Analytics tracking ID!')" oninput="setCustomValidity('')"/>
                     </div>
+                    <div class="control is-spaced is-mobile">
+                      <div class="control-left">
+                        <p>
+                          Export Listings Data
+                        </p>
+                        <small class="tip">Download all of your DomaHub listings information as a CSV file.</a></small>
+                      </div>
+                      <div class="control-right">
+                        <a id="csv-export-button" class="button is-stylish is-small">
+                          <div class="icon is-small">
+                            <i class="fal fa-download"></i>
+                          </div>
+                          <span>Download</span>
+                        </a>
+                      </div>
+                    </div>
                   </form>
 								</div>
 							</div>
