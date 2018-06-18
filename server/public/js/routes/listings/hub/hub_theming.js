@@ -28,9 +28,9 @@ function setupCustomColorsHub(){
   stylize(listing_hub_info.primary_color, ".hub-section #search-domain-tld", "color");
   stylize(listing_hub_info.primary_color, ".hub-section .is-primary:not(.notification)", "color");
   stylize(listing_hub_info.primary_color, ".hub-section .is-primary.button", "background-color", true);
-  stylize(listing_hub_info.primary_color, ".hub-section .is-primary.tag.is-dot", "background-color");
+  stylize(hexToRgbA(listing_hub_info.primary_color, 1, true), ".hub-section .is-primary.tag.is-dot", "background-color");
   stylize(listing_hub_info.primary_color, ".hub-section .price-tag", "background-color", true);
-  stylize(hexToRgbA(listing_info.primary_color, 1, true), ".hub-section .sort-header .icon", "color");
+  stylize(hexToRgbA(listing_hub_info.primary_color, 1, true), ".hub-section .sort-header .icon", "color");
   stylize(listing_hub_info.primary_color, ".hub-section .price-tag", "background-color", true);
   stylize(listing_hub_info.primary_color, ".hub-section .price-tag::before", "background");
   stylize(listing_hub_info.secondary_color, ".hub-section .is-accent.tag.is-dot", "background-color");
