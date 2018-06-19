@@ -65,6 +65,7 @@ function setupCustomColorsListing(){
   //tabs
   stylize(listing_info.font_color, ".page-contents .module-tab:not(.is-active) a", "color");
   stylize(listing_info.primary_color, ".page-contents .module-tab.is-active a", "color");
+  $('head').append('<style>.page-contents .tabs li.is-active a::before{background:' + listing_info.primary_color + ' !important; }</style>');
 
   //other domains tags
   stylize(hexToRgbA(listing_info.primary_color, 1, true), ".page-contents .otherowner-domain-price", "color");

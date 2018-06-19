@@ -111,7 +111,7 @@ function setupPriceTags(){
       $(".actual-price").text("Free!");
     }
     else {
-      $("#rent-price-text").text(" - " + formatCurrency(listing_info.price_rate, listing_info.default_currency) + " / " + listing_info.price_type);
+      $("#rent-price-text").text(": " + formatCurrency(listing_info.price_rate, listing_info.default_currency) + " / " + listing_info.price_type);
       $(".actual-price").text(formatCurrency(0, listing_info.default_currency, true));
     }
   }
