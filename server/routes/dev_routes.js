@@ -151,7 +151,8 @@ module.exports = function(app){
     console.log("Checking WHOIS...");
     var domain_name = req.params.domain_name;
     whois.lookup(domain_name, {
-      "follow":  2    // number of times to follow redirects
+      "follow":  15,    // number of times to follow redirects
+      "timeout":  60000,    // timeout
     }, function(err, data){
       var whoisObj = {};
       if (data && !err){
@@ -160,6 +161,9 @@ module.exports = function(app){
           whoisObj[array[x].attribute.trim()] = array[x].value;
         }
         res.send(whoisObj);
+      }
+      else {
+        console.log(err);
       }
     });
   }

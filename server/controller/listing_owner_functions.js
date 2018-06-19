@@ -2028,7 +2028,9 @@ function checkInsertedIDs(req, res, inserted_ids){
       console.log("LOF: Looking up WHOIS info for domain - " + domain_name + "...");
 
       //look up whois info
-      whois.lookup(domain_name, function(err, data){
+      whois.lookup(domain_name, {
+        "timeout":  10000,    // timeout
+      }, function(err, data){
         if (err){
           // error.log(err, "Failed to lookup WHOIS information for domain " + domain_name);
           reject(false);

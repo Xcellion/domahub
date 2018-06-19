@@ -1033,7 +1033,6 @@ module.exports = {
     }
     else {
       console.log("LRF: Checking if " + domain_name + " is listed on DomaHub...");
-
       getVerifiedListing(req, res, domain_name, function(result){
         //if unlisted and hostname isn't domahub, redirect to domahub
         var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
@@ -1315,12 +1314,12 @@ function joinRentalTimes(rental_times){
 function getVerifiedListing(req, res, domain_name, callback_error, callback_success){
   listing_model.getVerifiedListing(domain_name, function(result){
     if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
-    else if (result.state=="success" && result.info.length <= 0){
+    else if (result.state == "success" && result.info.length <= 0){
       console.log("LRF: " + domain_name + " is NOT listed on DomaHub...");
       callback_error(result);
     }
     else {
-      console.log("LRF: " +domain_name + " is listed on DomaHub!");
+      console.log("LRF: " + domain_name + " is listed on DomaHub!");
       callback_success(result);
     }
   });
@@ -1378,12 +1377,15 @@ function googleSafeCheck(req, res, address, callback){
   });
 }
 
-//helper function to run whois since domain isn't listed but is a real domain
+//helper function to run WHOIS since domain isn't listed but is a real domain
 function getWhoIs(req, res, next, domain_name, unlisted){
-  whois.lookup(domain_name, function(err, data){
-    //look up domain owner info
+  whois.lookup(domain_name, {
+    "timeout":  10000,    // timeout
+  }, function(err, data){
+
+    //WHOIS info
     var whoisObj = {};
-    if (data){
+    if (data && !err){
       var array = parser.parseWhoIsData(data);
       for (var x = 0; x < array.length; x++){
         whoisObj[array[x].attribute.trim()] = array[x].value;
@@ -1392,18 +1394,9 @@ function getWhoIs(req, res, next, domain_name, unlisted){
 
     //who is for unlisted only
     if (unlisted){
-      var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-      var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Unknown";
-
-      var array_of_registrars = ["GoDaddy", "Google", "NameSilo", "NameCheap", "Bluehost", "HostGator", "Hover", "Gandi"];
       var listing_info = {
         domain_name: domain_name,
-        email: email,
-        username: owner_name,
         unlisted: true,
-        date_registered: whoisObj["Creation Date"] || moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm"),
-        date_updated: whoisObj["Updated Date"],
-        registrar: whoisObj["Registrar"],
       }
 
       //development troubleshooting for whoisobj
@@ -1412,23 +1405,25 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       }
 
       //COMPARE TOOL VARIABLES
-      //comparing, so make fake listing info
       if (req.query.compare == "true"){
         console.log("LRF: Rendering the comparison tool!");
 
-        //registrar if doesnt exist
-        listing_info.registrar = whoisObj["Registrar"] || array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)];
+        var array_of_registrars = ["GoDaddy", "Google", "NameSilo", "NameCheap", "Bluehost", "HostGator", "Hover", "Gandi"];
+        listing_info.registrar_name = array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)];
 
-        //info
+        //random info for compare tool
         listing_info.status = 1;
         listing_info.premium = true;
         listing_info.username = "The Domain Master";
         listing_info.owner_id = "compare";
+        listing_info.email = "domainowner@domains.com";
+        listing_info.date_registered = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
+        listing_info.date_updated = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
         listing_info.categories = Categories.randomBackAsString();
         listing_info.date_created = new Date().getTime();
         listing_info.description = Descriptions.random();
         listing_info.description_footer = "The greatest domains in the industry.";
-        listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000)*1000;
+        listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000) * 100000;
         listing_info.buy_price = listing_info.min_price * 2;
         listing_info.default_currency = "usd";
 
@@ -1465,12 +1460,6 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.show_domain_list = 1;
       }
 
-      //nobody owns it!
-      else if (whoisObj["End Text"] && whoisObj["End Text"].indexOf("No match for domain ") != -1 && owner_name == "Unknown" && data){
-        listing_info.available = true;
-        listing_info.username = "Nobody yet!";
-      }
-
       req.session.listing_info = listing_info;
 
       res.render("listings/listing.ejs", {
@@ -1489,7 +1478,9 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         req.session.listing_info.dev_whois = whoisObj;
       }
 
-      req.session.listing_info.date_updated = whoisObj["Updated Date"];
+      if (whoisObj["Updated Date"]){
+        req.session.listing_info.date_updated = whoisObj["Updated Date"];
+      }
 
       next();
     }
