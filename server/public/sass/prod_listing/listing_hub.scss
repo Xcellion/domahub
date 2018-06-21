@@ -651,7 +651,14 @@
 //<editor-fold>---------------------FOOTER---------------------
 
 #dh-footer {
-  height:128px;
+  .container {
+    width:100%;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    margin:0;
+  }
   @include transition(all 0.2s ease);
   .bar-right {
     @include mobile {

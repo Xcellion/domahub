@@ -90,7 +90,7 @@ $(document).ready(function(){
 
   //select specific rows
   $(".select-drop-button").on('click', function(){
-    selectSpecificRows($(this).data("type"), $(this).data("value"));
+    selectSpecificRows($(this).data("type"), $(this).data("value"), $(this).data("second-type"), $(this).data("second-value"));
     $("#select-all-drop").addClass('is-hidden');
   });
 
@@ -201,7 +201,7 @@ function showBasedOnURL(){
   //replace URL tab if not a good tab
   var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
   var url_tab = getParameterByName("tab");
-  if (["verify", "info", "hub", "design", "domain-info", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
+  if (["verify", "info", "hub", "design", "domain-info", "domain-stats", "traffic-stats", "rental-stats", "offers", "purchased"].indexOf(url_tab) == -1){
     removeURLParameter("tab");
     url_tab = "";
   }
@@ -233,7 +233,7 @@ function showBasedOnURL(){
   else if (url_selected_listings != "" && url_tab == "offers"){
     viewDomainOffers(false);
   }
-  else if (url_selected_listings != "" && url_tab == "stats"){
+  else if (url_selected_listings != "" && ["domain-stats", "traffic-stats", "rental-stats"].indexOf(url_tab) != -1){
     viewDomainStats(false);
   }
   else {
@@ -367,6 +367,7 @@ function createRows(selected_ids){
     $("#no-domains-row").removeClass('is-hidden');
     $(".yes-listings-elem").addClass('is-hidden');
   }
+
 }
 
 //create a listing row
@@ -395,7 +396,7 @@ function createRow(now, listing_info, rownum, selected){
   updateRowData(tempRow, listing_info);
 
   if (selected){
-    selectRow(tempRow, true);
+    selectRow(tempRow, true, true);
   }
 
   return tempRow;
@@ -414,6 +415,7 @@ function updateRowData(row, listing_info){
   row.data("all", true);
   row.data("unverified", (listing_info.verified) ? false : true);
   row.data("hub", (listing_info.hub) ? true : false);
+  row.data("not_hub", (!listing_info.hub && listing_info.verified) ? true : false);
   row.data("verified", (listing_info.verified) ? true : false);
   row.data("editable", (listing_info.verified && !listing_info.accepted) ? true : false);
   row.data("accepted", (listing_info.accepted) ? true : false);
@@ -649,7 +651,7 @@ function submitHubChanges(){
 //<editor-fold>-------------------------------SELECT ROW-------------------------------
 
 //select a row
-function selectRow(row, selected){
+function selectRow(row, selected, dont_update_buttons){
   if (row){
     if (selected){
       row.addClass('is-selected');
@@ -659,7 +661,10 @@ function selectRow(row, selected){
     }
   }
   row.find(".select-button").prop("checked", selected);
-  multiSelectButtons();
+
+  if (!dont_update_buttons){
+    multiSelectButtons();
+  }
 }
 
 //toggle a row select
@@ -699,9 +704,14 @@ function selectAllRows(select){
 }
 
 //select specific type of row
-function selectSpecificRows(type, value){
+function selectSpecificRows(type, value, second_type, second_value){
   $(".table-row:not('.clone-row')").each(function(){
-    selectRow($(this), $(this).data(type) == value);
+    if (second_type && second_value){
+      selectRow($(this), $(this).data(type) == value && $(this).data(second_type) == second_value);
+    }
+    else {
+      selectRow($(this), $(this).data(type) == value);
+    }
   });
   multiSelectButtons();
 }
@@ -728,10 +738,10 @@ function multiSelectButtons(clicked_row){
 
     //verified selections (show edit)
     if (editable_selected_rows.length == selected_rows.length){
-      $("#selector-edit-button").removeClass("is-hidden");
+      $("#selector-edit-button, #selector-stats-button").removeClass("is-hidden");
     }
     else {
-      $("#selector-edit-button").addClass("is-hidden");
+      $("#selector-edit-button, #selector-stats-button").addClass("is-hidden");
     }
 
     //add to hub (show hub dropdown only if no hubs are selected)
@@ -744,10 +754,10 @@ function multiSelectButtons(clicked_row){
 
     //accepted selections (show offer)
     if (offer_selected_rows.length == selected_rows.length){
-      $("#selector-offers-button").removeClass("is-hidden");
+      $("#selector-offers-button, #selector-stats-button").removeClass("is-hidden");
     }
     else {
-      $("#selector-offers-button").addClass("is-hidden");
+      $("#selector-offers-button, #selector-stats-button").addClass("is-hidden");
     }
 
     //if any unverified domains were selected
@@ -782,7 +792,7 @@ function multiSelectButtons(clicked_row){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------SELECTOR BUTTONS-------------------------------
+//<editor-fold>-------------------------------SELECTOR BUTTONS (EDIT, VERIFY, OFFERS, STATS)-------------------------------
 
 //view domain details and edit them
 function viewDomainDetails(push, url_tab){
@@ -810,7 +820,7 @@ function viewDomainOffers(push){
 //view domain stats
 function viewDomainStats(push){
   var selected_domain_ids = getSelectedDomains("id", true);
-  showEditor("stats", selected_domain_ids, push);
+  showEditor("domain-stats", selected_domain_ids, push);
   updateEditorStats(selected_domain_ids);
 }
 
