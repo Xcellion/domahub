@@ -3,7 +3,7 @@
   <!-- EDIT LISTING DETAILS -->
   <div id="editing-section" class="edit-elem non-offer-elem non-stats-elem non-verify-elem">
     <!-- LISTING EDIT TOOLBAR -->
-    <div id="edit-toolbar" class="edit-elem non-offer-elem non-verify-elem">
+    <div id="edit-toolbar">
 
       <!-- EDITING BUTTONS -->
       <div class="content">
@@ -40,7 +40,6 @@
 
         </div>
       </div>
-
       <div class="tabs is-primary">
         <ul>
           <li id="info-tab" class="verified-elem unpurchased-elem tab">
@@ -1653,33 +1652,117 @@
   <!-- STATS -->
   <div id="stats-section" class="stats-elem non-edit-elem non-verify-elem non-offer-elem is-hidden">
 
-    <div class="listings-toolbar">
-      <div class="control is-spaced">
-        <div class="control-left">
-          <a class="show-selector-button button is-flexible is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
-            <div class="icon is-small">
-              <i class="fal fa-long-arrow-left"></i>
+    <!-- STATS TOOLBAR -->
+    <div id="stats-toolbar">
+
+      <!-- STATS BUTTONS -->
+      <div class="content">
+        <div class="control is-spaced">
+          <div class="control-left">
+            <a class="show-selector-button button is-flexible is-black is-transparent no-shadow" tabindex="0" title="Back To My Listings">
+              <div class="icon is-small">
+                <i class="fal fa-long-arrow-left"></i>
+              </div>
+              <span class="is-hidden-mobile">Go Back To Listings</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs is-primary">
+        <ul>
+          <li id="domain-stats-tab" class="verified-elem unpurchased-elem tab">
+            <a tabindex="0" class="">
+              <span class="">Domain</span>
+              <span class="is-hidden-mobile">&nbsp;Details</span>
+            </a>
+          </li>
+          <li id="traffic-stats-tab" class="verified-elem unpurchased-elem tab">
+            <a tabindex="0" class="">
+              <span class="">Traffic</span>
+              <span class="is-hidden-mobile">&nbsp;Statistics</span>
+            </a>
+          </li>
+          <li id="rental-stats-tab" class="verified-elem unpurchased-elem tab">
+            <a tabindex="0" class="">
+              <span class="">Rental</span>
+              <span class="is-hidden-mobile">&nbsp;Statistics</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="domain-stats-tab-drop" data-title="View Domain Details" class="tab-drop is-hidden">
+      <div class="columns">
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">TLDs</h3>
             </div>
-            <span class="is-hidden-mobile">Go Back To Listings</span>
-          </a>
+            <div class="card-content">
+              domain name TLD chart
+            </div>
+          </div>
         </div>
-        <div class="control-right">
-
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title"></h3>
+            </div>
+            <div class="card-content">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="traffic-stats-tab-drop" data-title="View Domain Traffic Statistics" class="tab-drop is-hidden">
+      <div class="columns">
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">TLDs</h3>
+            </div>
+            <div class="card-content">
+              domain name TLD chart
+            </div>
+          </div>
+        </div>
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title"></h3>
+            </div>
+            <div class="card-content">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="rental-stats-tab-drop" data-title="View Domain Rental Statistics" class="tab-drop is-relative is-hidden">
+      <div class="columns">
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">TLDs</h3>
+            </div>
+            <div class="card-content">
+              domain name TLD chart
+            </div>
+          </div>
+        </div>
+        <div class="column is-6">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title"></h3>
+            </div>
+            <div class="card-content">
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="columns">
-      <div class="column is-narrow">
-        <div class="card is-fullwidth-mobile">
-
-        </div>
-      </div>
-
-      <div class="column">
-
-      </div>
-    </div>
   </div>
 
   <!-- VERIFICATION -->

@@ -228,7 +228,7 @@ function updateEditorDomains(selected_domain_ids){
 
     //change tabs for editing
     $("#edit-toolbar .tab").off().on("click", function(e){
-      var current_tab = $(".tab.is-active").attr("id").replace("-tab", "");
+      var current_tab = $("#edit-toolbar .tab.is-active").attr("id").replace("-tab", "");
       var new_tab = $(this).attr("id").replace("-tab", "");
 
       if (current_tab != new_tab){
@@ -1487,7 +1487,7 @@ function updateEditorDomains(selected_domain_ids){
           var plural_success_msg = (selected_ids.length == 1) ? "this listing" : selected_ids.length + " listings";
           successMessage("Successfully changed settings for " + plural_success_msg + "!");
         }
-        createRows();
+        createRows(selected_ids);
         updateEditorEditing(selected_ids);
       }
       else {
@@ -2091,6 +2091,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
 //view editor stats mode
 function updateEditorStats(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
+  updateEditorStatsButtons();
 
   //select verified rows here if none selected already
   if (selected_domain_ids.length == 0){
@@ -2102,6 +2103,30 @@ function updateEditorStats(selected_domain_ids){
   $(".non-stats-elem").addClass('is-hidden');
   $(".stats-elem").removeClass('is-hidden');
   createStatsTable(selected_domain_ids);
+}
+
+//change tabs for stats page
+function updateEditorStatsButtons(){
+  $("#stats-toolbar .tab").off().on("click", function(e){
+    var current_tab = $("#stats-toolbar .tab.is-active").attr("id").replace("-tab", "");
+    var new_tab = $(this).attr("id").replace("-tab", "");
+    console.log(current_tab, new_tab);
+
+    if (current_tab != new_tab){
+      //clear any existing messages
+      clearNotification();
+
+      //update tab URL
+      updateQueryStringParam("tab", new_tab, true);
+
+      //hide other tab selectors
+      $(".tab.verified-elem").removeClass('is-active');
+      $(this).addClass('is-active');
+
+      //show this new tab
+      showTab(new_tab);
+    }
+  });
 }
 
 //create offer rows
@@ -2189,189 +2214,193 @@ function updateStatsTable(listing_info, total_domains){
   }
 }
 
-//format the stats to the required format
-function formatDataset(stats, listing_info) {
+  //<editor-fold>-------------------------------STATS TABLES-------------------------------
 
-  //traffic dataset
-  var earliest_date = stats[stats.length - 1].timestamp;
-  var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
-  var months_since = [];
-  for (var x = 0 ; x < num_months_since ; x++){
-    var temp_month = moment().startOf("month").subtract(x, "month");
-    months_since.push({
-      label : temp_month.format("MMM"),
-      timestamp : temp_month._d.getTime(),
-      views : 0
-    });
-  }
+  //format the stats to the required format
+  function formatDataset(stats, listing_info) {
 
-  var views_per_month = [];
-  var cur_month_needle = 0;
-  var referer_dataset = stats.reduce(function (rv, cur) {
-    //sort into groups divided by months
-    if (cur_month_needle < num_months_since){
-      if (cur.timestamp > months_since[cur_month_needle].timestamp){
-        months_since[cur_month_needle].views++;
-      }
-      else {
-        cur_month_needle++;
-        if (cur_month_needle < num_months_since){
+    //traffic dataset
+    var earliest_date = stats[stats.length - 1].timestamp;
+    var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
+    var months_since = [];
+    for (var x = 0 ; x < num_months_since ; x++){
+      var temp_month = moment().startOf("month").subtract(x, "month");
+      months_since.push({
+        label : temp_month.format("MMM"),
+        timestamp : temp_month._d.getTime(),
+        views : 0
+      });
+    }
+
+    var views_per_month = [];
+    var cur_month_needle = 0;
+    var referer_dataset = stats.reduce(function (rv, cur) {
+      //sort into groups divided by months
+      if (cur_month_needle < num_months_since){
+        if (cur.timestamp > months_since[cur_month_needle].timestamp){
           months_since[cur_month_needle].views++;
         }
-      }
-    }
-
-    //group referer by similar domains
-    let v = "referer" instanceof Function ? key(cur) : cur["referer"];
-    var el = rv.find(function (r) {
-      return r && r["referer"] === v;
-    });
-    if (el) {
-      el["views"]++;
-    } else if (v != "" && v != listing_info.domain_name) {
-      //if not empty, we can show the stat
-      rv.push({ "referer": v, views: 1});
-    }
-    return rv;
-  }, []);
-
-  //sort the dataset (most views to least)
-  referer_dataset.sort(function(a,b) {return (a.views > b.views) ? -1 : ((b.views > a.views) ? 1 : 0);} );
-
-  //split into separate arrays for Chart JS
-  var referer_views = [];
-  var referer_labels = [];
-  for (var x = 0; x < referer_dataset.length; x++){
-    referer_views.push(referer_dataset[x].views);
-    referer_labels.push(referer_dataset[x]["referer"]);
-  }
-
-  //reverse the dates
-  months_since.reverse();
-
-  var traffic_views = [];
-  var traffic_labels = [];
-  for (var x = 0; x < months_since.length; x++){
-    traffic_views.push(months_since[x].views);
-    traffic_labels.push(months_since[x].label);
-  }
-
-  return {
-    referer_views : referer_views,
-    referer_labels : referer_labels,
-    traffic_views : traffic_views,
-    traffic_labels : traffic_labels
-  }
-}
-
-//create a chart
-function createRefererChart(formatted_dataset, listing_info){
-  //unique referer chart
-  var referer_dataset = {
-    label: "Hits",
-    borderColor: "#3CBC8D",
-    borderWidth: 1,
-    backgroundColor: "rgba(60, 188, 141, 0.65)",
-    data: formatted_dataset.referer_views
-  }
-
-  //destroy if we're making a new one
-  if (referer_chart){
-    referer_chart.destroy();
-  }
-
-  //create the new chart
-  referer_chart = new Chart($("#referer-chart"), {
-    type: 'horizontalBar',
-    data: {
-      labels: formatted_dataset.referer_labels,
-      datasets: [referer_dataset]
-    },
-    options: {
-      barPercentage: 1,
-      categoryPercentage : 1,
-      legend: {
-        display: false
-      }
-    }
-  });
-}
-
-//initiate chart only if uninitiated
-function createTrafficChart(formatted_dataset, listing_info){
-  if (traffic_chart){
-    traffic_chart.destroy();
-  }
-
-  traffic_chart = new Chart($("#traffic-chart"), {
-    type: 'line',
-    data: {
-      labels: formatted_dataset.traffic_labels,
-      datasets: [{
-        label: "Website Views",
-        borderColor: "#3CBC8D",
-        backgroundColor: "rgba(60, 188, 141, 0.65)",
-        data: formatted_dataset.traffic_views
-      }]
-    },
-    options: {
-      legend: {
-        display:false
-      },
-      hover: {
-        mode: "index"
-      },
-      tooltips: {
-        titleSpacing: 0,
-        callbacks: {
-          label: function(tooltipItems, data) {
-            if (formatted_dataset.traffic_labels.indexOf(tooltipItems.xLabel) != -1){
-              return tooltipItems.xLabel
-            }
-            else {
-              return moment(tooltipItems.xLabel).format("MMM DD");
-            }
-          },
-          title: function(tooltipItems, data){
-            if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-              return false;
-            }
-            else if (formatted_dataset.traffic_labels.indexOf(tooltipItems[0].xLabel) != -1){
-              return false;
-            }
-            else {
-              return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
-            }
-          },
-          footer: function(tooltipItems, data){
-            if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-              return false;
-            }
-            else {
-              var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views";
-              var views_formatted = wNumb({
-                thousand: ','
-              }).to(tooltipItems[0].yLabel);
-              return views_formatted + views_plural;
-            }
+        else {
+          cur_month_needle++;
+          if (cur_month_needle < num_months_since){
+            months_since[cur_month_needle].views++;
           }
         }
-      },
-      scales: {
-        xAxes: [{
-          type: "category"
-        }],
-        yAxes: [{
-          display: true,
-          type: 'linear',
-          ticks: {
-            beginAtZero: true   // minimum value will be 0.
-          }
-        }]
       }
+
+      //group referer by similar domains
+      let v = "referer" instanceof Function ? key(cur) : cur["referer"];
+      var el = rv.find(function (r) {
+        return r && r["referer"] === v;
+      });
+      if (el) {
+        el["views"]++;
+      } else if (v != "" && v != listing_info.domain_name) {
+        //if not empty, we can show the stat
+        rv.push({ "referer": v, views: 1});
+      }
+      return rv;
+    }, []);
+
+    //sort the dataset (most views to least)
+    referer_dataset.sort(function(a,b) {return (a.views > b.views) ? -1 : ((b.views > a.views) ? 1 : 0);} );
+
+    //split into separate arrays for Chart JS
+    var referer_views = [];
+    var referer_labels = [];
+    for (var x = 0; x < referer_dataset.length; x++){
+      referer_views.push(referer_dataset[x].views);
+      referer_labels.push(referer_dataset[x]["referer"]);
     }
-  });
-}
+
+    //reverse the dates
+    months_since.reverse();
+
+    var traffic_views = [];
+    var traffic_labels = [];
+    for (var x = 0; x < months_since.length; x++){
+      traffic_views.push(months_since[x].views);
+      traffic_labels.push(months_since[x].label);
+    }
+
+    return {
+      referer_views : referer_views,
+      referer_labels : referer_labels,
+      traffic_views : traffic_views,
+      traffic_labels : traffic_labels
+    }
+  }
+
+  //create a chart
+  function createRefererChart(formatted_dataset, listing_info){
+    //unique referer chart
+    var referer_dataset = {
+      label: "Hits",
+      borderColor: "#3CBC8D",
+      borderWidth: 1,
+      backgroundColor: "rgba(60, 188, 141, 0.65)",
+      data: formatted_dataset.referer_views
+    }
+
+    //destroy if we're making a new one
+    if (referer_chart){
+      referer_chart.destroy();
+    }
+
+    //create the new chart
+    referer_chart = new Chart($("#referer-chart"), {
+      type: 'horizontalBar',
+      data: {
+        labels: formatted_dataset.referer_labels,
+        datasets: [referer_dataset]
+      },
+      options: {
+        barPercentage: 1,
+        categoryPercentage : 1,
+        legend: {
+          display: false
+        }
+      }
+    });
+  }
+
+  //initiate chart only if uninitiated
+  function createTrafficChart(formatted_dataset, listing_info){
+    if (traffic_chart){
+      traffic_chart.destroy();
+    }
+
+    traffic_chart = new Chart($("#traffic-chart"), {
+      type: 'line',
+      data: {
+        labels: formatted_dataset.traffic_labels,
+        datasets: [{
+          label: "Website Views",
+          borderColor: "#3CBC8D",
+          backgroundColor: "rgba(60, 188, 141, 0.65)",
+          data: formatted_dataset.traffic_views
+        }]
+      },
+      options: {
+        legend: {
+          display:false
+        },
+        hover: {
+          mode: "index"
+        },
+        tooltips: {
+          titleSpacing: 0,
+          callbacks: {
+            label: function(tooltipItems, data) {
+              if (formatted_dataset.traffic_labels.indexOf(tooltipItems.xLabel) != -1){
+                return tooltipItems.xLabel
+              }
+              else {
+                return moment(tooltipItems.xLabel).format("MMM DD");
+              }
+            },
+            title: function(tooltipItems, data){
+              if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+                return false;
+              }
+              else if (formatted_dataset.traffic_labels.indexOf(tooltipItems[0].xLabel) != -1){
+                return false;
+              }
+              else {
+                return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
+              }
+            },
+            footer: function(tooltipItems, data){
+              if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+                return false;
+              }
+              else {
+                var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views";
+                var views_formatted = wNumb({
+                  thousand: ','
+                }).to(tooltipItems[0].yLabel);
+                return views_formatted + views_plural;
+              }
+            }
+          }
+        },
+        scales: {
+          xAxes: [{
+            type: "category"
+          }],
+          yAxes: [{
+            display: true,
+            type: 'linear',
+            ticks: {
+              beginAtZero: true   // minimum value will be 0.
+            }
+          }]
+        }
+      }
+    });
+  }
+
+  //</editor-fold>
 
 //</editor-fold>
 

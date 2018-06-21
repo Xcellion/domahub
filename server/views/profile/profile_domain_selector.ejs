@@ -33,6 +33,7 @@
           <a class="select-drop-button" data-type="unverified" data-value=true>Unverified</a>
           <a class="select-drop-button" data-type="status" data-value=true>Active (Verified)</a>
           <a class="select-drop-button" data-type="status" data-value=false>Inactive (Verified)</a>
+          <a class="select-drop-button" data-type="hub" data-value=0 data-second-type="verified" data-second-value=true>Regular Listings</a>
           <a class="select-drop-button" data-type="hub" data-value=1>Listing Hubs</a>
           <a class="select-drop-button" data-type="rented" data-value=1>Rented Now</a>
           <a class="select-drop-button" data-type="accepted" data-value=1>Accepted An Offer</a>
@@ -59,18 +60,18 @@
         </div>
         <span>View Offers</span>
       </a>
-      <a id="selector-delete-button" class="selector-button button is-flexible is-stylish is-black is-inverted is-small is-hidden" tabindex="0" title="Delete Listing(s)">
-        <div class="icon is-small">
-          <i class="fal fa-trash-alt"></i>
-        </div>
-        <span>Delete</span>
-      </a>
       <%# <a id="selector-stats-button" class="selector-button is-flexible button is-stylish is-black is-inverted is-small is-hidden" tabindex="0" title="View Statistics">
         <div class="icon is-small">
           <i class="fal fa-chart-bar"></i>
         </div>
         <span>View Statistics</span>
       </a> %>
+      <a id="selector-delete-button" class="selector-button button is-flexible is-stylish is-black is-inverted is-small is-hidden" tabindex="0" title="Delete Listing(s)">
+        <div class="icon is-small">
+          <i class="fal fa-trash-alt"></i>
+        </div>
+        <span>Delete</span>
+      </a>
       <div id="hub-selector-wrapper" class="selector-button">
         <a id="hub-select-button" class="button is-flexible is-stylish is-small is-black is-inverted is-hidden" tabindex="0" title="Add to a listing hub">
           <div class="icon is-small">
@@ -110,6 +111,7 @@
               <option value="unverified">Unverified</option>
               <option value="status">Active (Verified)</option>
               <option value="inactive">Inactive (Verified)</option>
+              <option value="not_hub">Regular Listings</option>
               <option value="hub">Listing Hubs</option>
               <option value="rented">Rented Now</option>
               <option value="accepted">Accepted An Offer</option>
