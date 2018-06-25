@@ -506,3 +506,12 @@ td.has-cursor-pointer {
 	outline: 1px dotted #000;
 	outline: -webkit-focus-ring-color auto 3px;
 }
+
+//stats charts
+.main-column {
+  .stat-chart-card {
+    .card-content {
+      min-height: 500px;
+    }
+  }
+}

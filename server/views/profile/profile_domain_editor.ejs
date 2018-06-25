@@ -1695,27 +1695,69 @@
 
     <div id="domain-stats-tab-drop" data-title="View Domain Details" class="tab-drop is-hidden">
       <div class="columns">
-        <div class="column is-6">
-          <div class="card is-fullwidth">
+        <div class="main-column column is-9">
+          <div id="tld-chart-card" class="stat-chart-card is-active card is-fullwidth">
             <div class="card-header">
-              <h3 class="card-header-title">TLDs</h3>
+              <h3 class="card-header-title">Top Level Domains</h3>
+              <a class="chart-more-details-button button is-hidden is-stylish is-small">
+                <div class="icon is-small">
+                  <i class="fal fa-search"></i>
+                </div>
+                <span>More Details</span>
+              </a>
             </div>
             <div class="card-content">
-              domain name TLD chart
+              <canvas id="tld-canvas"></canvas>
             </div>
           </div>
         </div>
-        <div class="column is-6">
-          <div class="card is-fullwidth">
+        <div class="side-column column is-3">
+          <div id="letter-chart-card" class="stat-chart-card card is-fullwidth">
             <div class="card-header">
-              <h3 class="card-header-title"></h3>
+              <h3 class="card-header-title">Letter Count</h3>
+              <a class="chart-more-details-button button is-stylish is-small">
+                <div class="icon is-small">
+                  <i class="fal fa-search"></i>
+                </div>
+                <span>More Details</span>
+              </a>
             </div>
             <div class="card-content">
+              <canvas id="letter-canvas"></canvas>
+            </div>
+          </div>
+          <div id="registrar-chart-card" class="stat-chart-card card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">Registrars</h3>
+              <a class="chart-more-details-button button is-stylish is-small">
+                <div class="icon is-small">
+                  <i class="fal fa-search"></i>
+                </div>
+                <span>More Details</span>
+              </a>
+            </div>
+            <div class="card-content">
+              <canvas id="registrar-canvas"></canvas>
+            </div>
+          </div>
+          <div id="registration-chart-card" class="stat-chart-card card is-fullwidth">
+            <div class="card-header">
+              <h3 class="card-header-title">Registration Date</h3>
+              <a class="chart-more-details-button button is-stylish is-small">
+                <div class="icon is-small">
+                  <i class="fal fa-search"></i>
+                </div>
+                <span>More Details</span>
+              </a>
+            </div>
+            <div class="card-content">
+              <canvas id="registration-canvas"></canvas>
             </div>
           </div>
         </div>
       </div>
     </div>
+
     <div id="traffic-stats-tab-drop" data-title="View Domain Traffic Statistics" class="tab-drop is-hidden">
       <div class="columns">
         <div class="column is-6">
@@ -1739,6 +1781,7 @@
         </div>
       </div>
     </div>
+
     <div id="rental-stats-tab-drop" data-title="View Domain Rental Statistics" class="tab-drop is-relative is-hidden">
       <div class="columns">
         <div class="column is-6">
