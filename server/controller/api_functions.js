@@ -122,6 +122,11 @@ function checkForBasicRedirect(req, res, next){
       req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
       next();
     }
+    //google analytics
+    else if (req.query.utm_source){
+      req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+      next();
+    }
     //redirect to base path if it's requesting something weird, or if there is no query for listings (listing hub)
     else if (req.originalUrl != "/" || req.originalUrl == "/listing/" + req.session.listing_info.domain_name){
       res.redirect("/");

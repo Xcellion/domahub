@@ -106,6 +106,44 @@ function updateEditorDomains(selected_domain_ids){
   }
 }
 
+  //<editor-fold>-------------------------------SHOW TAB-------------------------------
+
+  //show specific tab
+  function showTab(new_tab){
+    $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
+    $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
+
+    //update marquee if showing hub
+    if (new_tab == "hub"){
+      updateMarqueeHandlers($(".sortable-marquee"));
+    }
+  }
+
+  function updateShowTabHandler(){
+    //change tabs for editing
+    $("#edit-toolbar .tab, #stats-toolbar .tab").off().on("click", function(e){
+      var current_tab = $(".tab.is-active").attr("id").replace("-tab", "");
+      var new_tab = $(this).attr("id").replace("-tab", "");
+
+      if (current_tab != new_tab){
+        //clear any existing messages
+        clearNotification();
+
+        //update tab URL
+        updateQueryStringParam("tab", new_tab, true);
+
+        //hide other tab selectors
+        $(".tab.verified-elem").removeClass('is-active');
+        $(this).addClass('is-active');
+
+        //show this new tab
+        showTab(new_tab);
+      }
+    });
+  }
+
+  //</editor-fold>
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------UPDATE EDITOR EDITING-------------------------------
@@ -226,38 +264,8 @@ function updateEditorDomains(selected_domain_ids){
       $("#upgrade-tab").click();
     });
 
-    //change tabs for editing
-    $("#edit-toolbar .tab").off().on("click", function(e){
-      var current_tab = $("#edit-toolbar .tab.is-active").attr("id").replace("-tab", "");
-      var new_tab = $(this).attr("id").replace("-tab", "");
+    updateShowTabHandler();
 
-      if (current_tab != new_tab){
-        //clear any existing messages
-        clearNotification();
-
-        //update tab URL
-        updateQueryStringParam("tab", new_tab, true);
-
-        //hide other tab selectors
-        $(".tab.verified-elem").removeClass('is-active');
-        $(this).addClass('is-active');
-
-        //show this new tab
-        showTab(new_tab);
-      }
-    });
-
-  }
-
-  //show specific tab
-  function showTab(new_tab){
-    $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
-    $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
-
-    //update marquee if showing hub
-    if (new_tab == "hub"){
-      updateMarqueeHandlers($(".sortable-marquee"));
-    }
   }
 
   function updateStatus(listing_info){
@@ -2091,7 +2099,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
 //view editor stats mode
 function updateEditorStats(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
-  updateEditorStatsButtons();
+  updateShowTabHandler();
 
   //select verified rows here if none selected already
   if (selected_domain_ids.length == 0){
@@ -2099,78 +2107,69 @@ function updateEditorStats(selected_domain_ids){
     selected_domain_ids = getSelectedDomains("id", true);
   }
 
+  //get listing info for selected listings
+  var selected_listings = [];
+  for (var x = 0; x < selected_domain_ids.length; x++){
+    var listing_info = getDomainByID(selected_domain_ids[x]);
+
+    //if we havent gotten offers yet
+    if (listing_info.offers == undefined || force){
+      selected_listings.push(listing_info);
+    }
+  }
+
+  //setup stats tab
   $("#current-view-name").text("My Statistics");
   $(".non-stats-elem").addClass('is-hidden');
   $(".stats-elem").removeClass('is-hidden');
-  createStatsTable(selected_domain_ids);
-}
 
-//change tabs for stats page
-function updateEditorStatsButtons(){
-  $("#stats-toolbar .tab").off().on("click", function(e){
-    var current_tab = $("#stats-toolbar .tab.is-active").attr("id").replace("-tab", "");
-    var new_tab = $(this).attr("id").replace("-tab", "");
-    console.log(current_tab, new_tab);
+  //setup swap chart handler
+  $(".chart-more-details-button").off().on("click", function(){
+    var current_chart = $(".stat-chart-card.is-active");
+    var next_chart = $(this).closest(".stat-chart-card");
 
-    if (current_tab != new_tab){
-      //clear any existing messages
-      clearNotification();
+    var current_chart_id = current_chart.attr("id").replace("-chart-card", "");
+    var next_chart_id = next_chart.attr("id").replace("-chart-card", "");
 
-      //update tab URL
-      updateQueryStringParam("tab", new_tab, true);
+    if (current_chart_id != next_chart_id){
+      current_chart.removeClass("is-active");
+      next_chart.addClass("is-active");
+      $(".chart-more-details-button").removeClass("is-hidden");
+      $(this).addClass("is-hidden");
 
-      //hide other tab selectors
-      $(".tab.verified-elem").removeClass('is-active');
-      $(this).addClass('is-active');
+      //hide the charts as you move it
+      $("#" + current_chart_id + "-canvas").addClass("is-hidden");
+      $("#" + next_chart_id + "-canvas").addClass("is-hidden");
 
-      //show this new tab
-      showTab(new_tab);
+      current_chart.appendTo($("#stats-section .tab-drop:not(.is-hidden) .side-column"));
+      next_chart.appendTo($("#stats-section .tab-drop:not(.is-hidden) .main-column"));
+
+      createStatTable(selected_listings, current_chart_id, false);
+      createStatTable(selected_listings, next_chart_id, true);
+
+      $("#" + current_chart_id + "-canvas").removeClass("is-hidden");
+      $("#" + next_chart_id + "-canvas").removeClass("is-hidden");
     }
   });
-}
 
-//create offer rows
-function createStatsTable(selected_domain_ids, force){
-  var selected_listings = [];
-
-  //no selected listings to get offers (no verified or no listings)
-  if (selected_domain_ids.length == 0){
-
-    //no verified listings
-    if (listings.length > 0){
-
-    }
-    //no listings
-    else {
-
-    }
-  }
-  else {
-    showLoadingStats();
-    completed_domains_stats = 0;
-
-    for (var x = 0; x < selected_domain_ids.length; x++){
-      var listing_info = getDomainByID(selected_domain_ids[x]);
-
-      //if we havent gotten offers yet
-      if (listing_info.stats == undefined || force){
-        selected_listings.push(listing_info);
-      }
-      else {
-        updateStatsTable(listing_info, selected_domain_ids.length);
-      }
-    }
-  }
-
-  //if any stats to get
-  if (selected_listings.length > 0){
-    getListingStats(selected_listings, selected_domain_ids);
-  }
+  createStatsTables(selected_listings);
 }
 
 //loading messages to show while getting stats
-function showLoadingStats(){
+function showLoadingStats(chart_name){
 
+}
+
+//no info for chart
+function showEmptyChart(chart_name){
+
+}
+
+//create all stats tables
+function createStatsTables(selected_listings, force){
+  createStatTable(selected_listings, "tld", true);
+  createStatTable(selected_listings, "letter", false);
+  createStatTable(selected_listings, "registrar", false);
 }
 
 //get stats on a domain
@@ -2189,7 +2188,7 @@ function getListingStats(selected_listings, selected_domain_ids){
       errorMessage(data.message);
     }
 
-    //make offer rows for domains we didnt yet
+    //update the stats table with new stats gotten
     for (var x = 0 ; x < selected_listings.length ; x++){
       for (var y = 0 ; y < listings.length ; y++){
         if (listings[y].id == selected_listings[x].id){
@@ -2202,202 +2201,138 @@ function getListingStats(selected_listings, selected_domain_ids){
   });
 }
 
-//update the stats tab
-function updateStatsTable(listing_info, total_domains){
-  //no stats retrieved yet, show loading
-  if (listing_info.stats == undefined){
-    showLoadingStats(true);
-  }
-  //show stats if we have it, hide loading msg
-  else {
-
-  }
-}
-
   //<editor-fold>-------------------------------STATS TABLES-------------------------------
 
-  //format the stats to the required format
-  function formatDataset(stats, listing_info) {
+  //create a bar chart
+  function createStatBarChart(selected_listings, chart_name, function_for_data, show_details){
 
-    //traffic dataset
-    var earliest_date = stats[stats.length - 1].timestamp;
-    var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
-    var months_since = [];
-    for (var x = 0 ; x < num_months_since ; x++){
-      var temp_month = moment().startOf("month").subtract(x, "month");
-      months_since.push({
-        label : temp_month.format("MMM"),
-        timestamp : temp_month._d.getTime(),
-        views : 0
-      });
+    //no listings were selected
+    if (selected_listings.length == 0){
+      $("#" + chart_name + "-canvas").replaceWith("<canvas id='" + chart_name + "-canvas'></canvas>");
+      showEmptyChart(chart_name);
     }
+    else {
 
-    var views_per_month = [];
-    var cur_month_needle = 0;
-    var referer_dataset = stats.reduce(function (rv, cur) {
-      //sort into groups divided by months
-      if (cur_month_needle < num_months_since){
-        if (cur.timestamp > months_since[cur_month_needle].timestamp){
-          months_since[cur_month_needle].views++;
+      //objects for chart
+      var canvas_id = chart_name + "-canvas";
+      var chart_data = [];
+      var chart_labels = [];
+
+      //create temp data for chart
+      var seen = {};
+      var temp_data = [];
+      selected_listings.forEach(function(row) {
+        var temp_tld = function_for_data(row);
+        if (seen.hasOwnProperty(temp_tld)){
+          seen[temp_tld]++;
         }
         else {
-          cur_month_needle++;
-          if (cur_month_needle < num_months_since){
-            months_since[cur_month_needle].views++;
-          }
+          seen[temp_tld] = 1;
         }
-      }
-
-      //group referer by similar domains
-      let v = "referer" instanceof Function ? key(cur) : cur["referer"];
-      var el = rv.find(function (r) {
-        return r && r["referer"] === v;
       });
-      if (el) {
-        el["views"]++;
-      } else if (v != "" && v != listing_info.domain_name) {
-        //if not empty, we can show the stat
-        rv.push({ "referer": v, views: 1});
+      for (var x in seen){
+        temp_data.push([x, seen[x]]);
       }
-      return rv;
-    }, []);
 
-    //sort the dataset (most views to least)
-    referer_dataset.sort(function(a,b) {return (a.views > b.views) ? -1 : ((b.views > a.views) ? 1 : 0);} );
+      //sort by count and create the chart data
+      temp_data.sort(function(a, b){
+        return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+      });
+      for (var x = 0 ; x < temp_data.length ; x++){
 
-    //split into separate arrays for Chart JS
-    var referer_views = [];
-    var referer_labels = [];
-    for (var x = 0; x < referer_dataset.length; x++){
-      referer_views.push(referer_dataset[x].views);
-      referer_labels.push(referer_dataset[x]["referer"]);
-    }
+        //clip label if we're using small chart
+        var temp_label = (temp_data[x][0].length > 13 && !show_details) ? temp_data[x][0].substr(0, 10) + "..." : temp_data[x][0];
 
-    //reverse the dates
-    months_since.reverse();
+        chart_labels.push(temp_label);
+        chart_data.push(temp_data[x][1]);
+      }
 
-    var traffic_views = [];
-    var traffic_labels = [];
-    for (var x = 0; x < months_since.length; x++){
-      traffic_views.push(months_since[x].views);
-      traffic_labels.push(months_since[x].label);
-    }
+      var chart_colors = [
+        "#00bfa5",
+        "#F38181",
+        "#FCE38A",
+        "#3F4B83",
+        "#95E1D3"
+      ];
 
-    return {
-      referer_views : referer_views,
-      referer_labels : referer_labels,
-      traffic_views : traffic_views,
-      traffic_labels : traffic_labels
-    }
-  }
-
-  //create a chart
-  function createRefererChart(formatted_dataset, listing_info){
-    //unique referer chart
-    var referer_dataset = {
-      label: "Hits",
-      borderColor: "#3CBC8D",
-      borderWidth: 1,
-      backgroundColor: "rgba(60, 188, 141, 0.65)",
-      data: formatted_dataset.referer_views
-    }
-
-    //destroy if we're making a new one
-    if (referer_chart){
-      referer_chart.destroy();
-    }
-
-    //create the new chart
-    referer_chart = new Chart($("#referer-chart"), {
-      type: 'horizontalBar',
-      data: {
-        labels: formatted_dataset.referer_labels,
-        datasets: [referer_dataset]
-      },
-      options: {
-        barPercentage: 1,
-        categoryPercentage : 1,
-        legend: {
-          display: false
+      if (show_details && chart_labels.length > 5){
+        //colors depending on how many items
+        for (var x = 5 ; x < chart_labels.length ; x++){
+          chart_colors.push();
         }
       }
-    });
-  }
+      //cut to 5 if we're not showing more details
+      else if (!show_details && chart_labels.length > 5) {
+        chart_labels = chart_labels.slice(0,5);
+        chart_data = chart_data.slice(0,5);
+      }
 
-  //initiate chart only if uninitiated
-  function createTrafficChart(formatted_dataset, listing_info){
-    if (traffic_chart){
-      traffic_chart.destroy();
-    }
-
-    traffic_chart = new Chart($("#traffic-chart"), {
-      type: 'line',
-      data: {
-        labels: formatted_dataset.traffic_labels,
-        datasets: [{
-          label: "Website Views",
-          borderColor: "#3CBC8D",
-          backgroundColor: "rgba(60, 188, 141, 0.65)",
-          data: formatted_dataset.traffic_views
-        }]
-      },
-      options: {
-        legend: {
-          display:false
-        },
-        hover: {
-          mode: "index"
-        },
-        tooltips: {
-          titleSpacing: 0,
-          callbacks: {
-            label: function(tooltipItems, data) {
-              if (formatted_dataset.traffic_labels.indexOf(tooltipItems.xLabel) != -1){
-                return tooltipItems.xLabel
+      var chartOptions = {
+        type : "horizontalBar",
+        options : {
+          responsive : true,
+          maintainAspectRatio : true,
+          legend : {
+            display: false
+          },
+          tooltips: {
+            backgroundColor: 'rgba(17, 17, 17, 0.9)',
+            xPadding: 10,
+            yPadding: 10,
+            titleMarginBottom: 10
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                suggestedMax: 5,
+                beginAtZero: true,   // minimum value will be 0.
+                callback: function(value, index, values){
+                  if (Math.floor(value) === value) {
+                    return value;
+                  }
+                }
               }
-              else {
-                return moment(tooltipItems.xLabel).format("MMM DD");
-              }
-            },
-            title: function(tooltipItems, data){
-              if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-                return false;
-              }
-              else if (formatted_dataset.traffic_labels.indexOf(tooltipItems[0].xLabel) != -1){
-                return false;
-              }
-              else {
-                return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
-              }
-            },
-            footer: function(tooltipItems, data){
-              if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-                return false;
-              }
-              else {
-                var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views";
-                var views_formatted = wNumb({
-                  thousand: ','
-                }).to(tooltipItems[0].yLabel);
-                return views_formatted + views_plural;
-              }
-            }
+            }]
           }
         },
-        scales: {
-          xAxes: [{
-            type: "category"
-          }],
-          yAxes: [{
-            display: true,
-            type: 'linear',
-            ticks: {
-              beginAtZero: true   // minimum value will be 0.
+        data : {
+          labels : chart_labels,
+          datasets : [
+            {
+              data : chart_data,
+              backgroundColor : chart_colors,
             }
-          }]
+          ]
         }
-      }
-    });
+      };
+
+      //create the chart
+      $("#" + chart_name + "-canvas").replaceWith("<canvas id='" + chart_name + "-canvas'></canvas>");
+      var ctx = document.getElementById(canvas_id).getContext('2d');
+      chart_obj = new Chart(ctx, chartOptions);
+    }
+  }
+
+  //create / refresh build a specific table
+  function createStatTable(selected_listings, chart_name, show_details){
+    if (chart_name == "tld"){
+      createStatBarChart(selected_listings, chart_name, function(row){
+        return "." + row.domain_name.split(".")[1].toLowerCase();
+      }, show_details);
+    }
+    else if (chart_name == "letter"){
+      createStatBarChart(selected_listings, chart_name, function(row){
+        return punycode.toUnicode(row.domain_name).split(".")[0].length + " Letters";
+      }, show_details);
+    }
+    else if (chart_name == "registrar"){
+      createStatBarChart(selected_listings, chart_name, function(row){
+        return (!row.registrar_name) ? "None" : row.registrar_name;
+      }, show_details);
+    }
+    else if (chart_name == "registration"){
+
+    }
   }
 
   //</editor-fold>

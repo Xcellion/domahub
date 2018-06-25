@@ -1954,8 +1954,8 @@ module.exports = {
           //look up any existing DNS A Records
           console.log("PF: Now looking up DNS A records for " + listing_obj.domain_name + "...");
           dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
-            if (err && err.code != "ENOTFOUND" && err.code != "ENODATA"){
-              error.log(err, "Failed to look up A record information for table building during verification for domain " + listing_obj.domain_name);
+            if (err){
+              // error.log(err, "Failed to look up A record information for table building during verification for domain " + listing_obj.domain_name);
             }
             listing_obj.a_records = (addresses) ? addresses : false;
             resolve(listing_obj);
