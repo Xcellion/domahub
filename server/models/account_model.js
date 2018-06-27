@@ -180,6 +180,7 @@ module.exports = {
                   stats_contact_history.id as id, \
                   listings.domain_name, \
                   listings.id as listing_id, \
+                  listings.status as listing_status, \
                   stats_contact_history.timestamp as date_created, \
                   stats_contact_history.withdrawn_on as withdrawn_on, \
                   stats_contact_history.transaction_id as transaction_id, \
@@ -201,6 +202,7 @@ module.exports = {
                   rentals.rental_id as id, \
                   listings.domain_name, \
                   listings.id as listing_id, \
+                  listings.status as listing_status, \
                   rentals.date_created as date_created, \
                   rentals.withdrawn_on as withdrawn_on, \
                   rentals.transaction_id as transaction_id, \
@@ -218,10 +220,11 @@ module.exports = {
                 WHERE rentals.listing_id IN (SELECT id FROM listings WHERE owner_id = ?) \
               UNION ALL \
                 SELECT \
-                  'expense' as transaction_type, \
+                  transaction_type as transaction_type, \
                   domain_expenses.id as id, \
                   listings.domain_name, \
                   listings.id as listing_id, \
+                  listings.status as listing_status, \
                   domain_expenses.expense_date as date_created, \
                   NULL as withdrawn_on, \
                   NULL as transaction_id, \

@@ -25,11 +25,11 @@
               <div class="icon is-small"><i class="fal fa-ban"></i></div>
               <span>Cancel</span>
             </a>
-            <a id="status-toggle-button" tabindex="0" class="button is-flexible control-item is-primary is-inverted is-stylish is-small" title="Publicly hide or show listing page(s).">
+            <a id="status-toggle-button" tabindex="0" class="button is-flexible control-item is-primary is-inverted is-stylish is-small hide-for-unlisted" title="Publicly hide or show listing page(s).">
               <div id="status-icon" class="icon is-small"><i class="fal fa-toggle-on"></i></div>
               <span id="status-text" class="is-hidden-mobile"></span>
             </a>
-            <div id="view-listings-button-wrapper" class="is-inline control-item is-relative">
+            <div id="view-listings-button-wrapper" class="is-inline control-item is-relative hide-for-unlisted">
               <a id="view-listings-button" class="button is-flexible is-black is-inverted is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
                 <div class="icon is-small"><i class="fal fa-external-link"></i></div>
                 <span class="is-hidden-mobile">View Listing<span class="edit-domain-plural is-hidden">s</span></span>
@@ -42,7 +42,7 @@
       </div>
       <div class="tabs is-primary">
         <ul>
-          <li id="info-tab" class="verified-elem unpurchased-elem tab">
+          <li id="info-tab" class="verified-elem unpurchased-elem tab hide-for-unlisted">
             <a tabindex="0" class="">
               <span class="">Listing</span>
               <span class="is-hidden-mobile">&nbsp;Info</span>
@@ -54,7 +54,7 @@
               <span class="is-hidden-mobile">&nbsp;Info</span>
             </a>
           </li>
-          <li id="design-tab" class="verified-elem unpurchased-elem tab">
+          <li id="design-tab" class="verified-elem unpurchased-elem tab hide-for-unlisted">
             <a tabindex="0" class="">
               <span class="is-hidden-mobile">Listing&nbsp;</span>
               <span class="">Design</span>
@@ -63,7 +63,7 @@
               <% } %>
             </a>
           </li>
-          <li id="hub-tab" class="verified-elem unpurchased-elem tab">
+          <li id="hub-tab" class="verified-elem unpurchased-elem tab hide-for-unlisted">
             <a tabindex="0" class="">
               <span class="">Hub</span>
               <% if (!user.stripe_subscription_id) { %>
@@ -74,7 +74,7 @@
         </ul>
       </div>
     </div>
-    <div id="info-tab-drop" data-title="Edit Listing Information" class="tab-drop is-hidden">
+    <div id="info-tab-drop" data-title="Edit Listing Information" class="tab-drop hide-for-unlisted is-hidden">
       <div class="columns">
         <div class="column is-6">
           <div class="card is-fullwidth">
@@ -251,7 +251,7 @@
     </div>
     <div id="domain-info-tab-drop" data-title="Edit Domain Information" class="tab-drop is-hidden">
       <div class="columns">
-        <div class="column is-6">
+        <div class="column is-6 hide-for-unlisted">
           <div class="card is-fullwidth">
             <div class="card-header">
               <h3 class="card-header-title">
@@ -357,12 +357,12 @@
           <div class="card is-fullwidth">
             <div class="card-header is-block">
               <h3 class="card-header-title">
-                Domain Expenses
+                Domain Related Transactions
               </h3>
-              <small class="tip">Any costs, expenses, or invoices related to <span class="this-domain">this domain</span>.</small>
+              <small class="tip">Any transactions, expenses, or invoices related to <span class="this-domain">this domain</span>.</small>
             </div>
             <div class="card-content">
-              <div class="control">
+              <div class="control hide-for-unlisted">
                 <label class="label" for="annual-cost-input">
                   Annual Renewal Cost
                   <div class="icon is-tooltip is-small" data-balloon="Please contact us if you do not see your currency listed." data-balloon-pos="up" data-balloon-length="large">
@@ -380,14 +380,14 @@
               <div id="related-expenses-wrapper" class="remove-margin-bottom-content control is-spaced">
                 <div class="control-left">
                   <label class="label">
-                    Related Expenses
+                    Related Transactions
                   </label>
-                  <small class="tip">Any expenses related to <span class="this-domain">this domain</span>. Such as fees, payments, or taxes.</small>
+                  <small class="tip">Any transaction related to <span class="this-domain">this domain</span>. Such as fees, profits, or taxes.</small>
                 </div>
                 <div class="control-right has-text-right">
                   <a id="add-new-expense-button" tabindex="0" class='button no-shadow is-stylish is-small'>
                     <div class="icon is-small"><i class="fal fa-plus"></i></div>
-                    <span>Add New Expense</span>
+                    <span>Add New Transaction</span>
                   </a>
                 </div>
               </div>
@@ -396,10 +396,11 @@
                 <table class="table no-borders is-transparent-head no-shadow">
                   <tbody id="domain-expense-table">
                     <tr id="domain-expense-clone" class="clone-row is-hidden table-row no-hover-effect">
-                      <td class="domain-expense-name break-word"></td>
+                      <td class="domain-expense-name break-word" style="width:50%;"></td>
+                      <td class="domain-expense-type"></td>
                       <td class="domain-expense-cost"></td>
                       <td class="domain-expense-date"></td>
-                      <td class="expense-button-wrapper control is-grouped is-pulled-right">
+                      <td class="expense-button-wrapper control is-grouped" style="justify-content: flex-end;">
                         <a tabindex="0" class='domain-expense-delete-button button is-flexible no-shadow is-stylish is-small is-pulled-right'>
                           <div class="icon is-small"><i class="fal fa-trash"></i></div>
                           <span class="is-hidden-mobile">Delete</span>
@@ -498,14 +499,30 @@
         <div class="modal-container">
           <div class="modal-content">
             <div class="content has-text-centered">
-              <h3 class="is-bold"><span id="how-change-domain-expense"></span>Domain Expense</h3>
+              <h3 class="is-bold"><span id="how-change-domain-expense"></span>Domain Transaction</h3>
             </div>
             <div class="content">
               <form id="domain-expense-form">
                 <div class="control">
                   <div class="control">
+                    <label class="label" for="domain-expense-type-input">
+                      Transaction Type
+                    </label>
+                    <span class="select is-fullwidth">
+                      <select id="domain-expense-type-input" required data-name="domain_expense_type" class="">
+                        <option disabled selected>Please select a transaction type</option>
+                        <option value="sale">Domain Sale</option>
+                        <option value="rental">Domain Rental / Lease</option>
+                        <option value="expense">Domain Expense</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </span>
+                  </div>
+                </div>
+                <div class="control">
+                  <div class="control">
                     <label class="label" for="domain-expense-name-input">
-                      Expense Name
+                      Transaction Name
                     </label>
                     <input required id="domain-expense-name-input" class="input domain-expense-input" data-name="domain_expense_name" type="text">
                   </div>
@@ -513,7 +530,7 @@
                 <div class="control">
                   <div class="control">
                     <label class="label" for="domain-expense-cost-input">
-                      Expense Currency
+                      Transaction Currency
                     </label>
                     <span class="select is-fullwidth">
                       <select id="domain-expense-currency-input" required data-name="domain_expense_currency" class="currency-select"></select>
@@ -523,15 +540,15 @@
                 <div class="control">
                   <div class="control">
                     <label class="label" for="domain-expense-cost-input">
-                      Expense Cost
+                      Transaction Cost
                     </label>
-                    <input required id="domain-expense-cost-input" class="input domain-expense-input" data-name="domain_expense_cost" type="number" min="1" step=".01">
+                    <input required id="domain-expense-cost-input" class="input domain-expense-input" data-name="domain_expense_cost" type="number" step="1">
                   </div>
                 </div>
                 <div class="control">
                   <div class="control">
                     <label class="label" for="domain-expense-date-input">
-                      Expense Date
+                      Transaction Date
                     </label>
                     <input required id="domain-expense-date-input" class="input domain-expense-input" data-name="domain_expense_date" type="datetime-local">
                   </div>
@@ -570,7 +587,7 @@
                   </div>
                 </div>
                 <div class="content">
-                  <p class="is-white">Are you sure you want to delete the following domain expense for <span class="this-domain">this domain</span>?</p>
+                  <p class="is-white">Are you sure you want to delete the following domain transaction?</p>
                 </div>
               </div>
             </div>
@@ -578,7 +595,7 @@
               <div class="control">
                 <div class="control">
                   <label class="label" for="domain-expense-name-input">
-                    <span class="is-bold">Expense Name</span>
+                    <span class="is-bold">Transaction Name</span>
                     <span id="domain-expense-name-delete-text" class="is-pulled-right break-all"></span>
                   </label>
                 </div>
@@ -586,7 +603,7 @@
               <div class="control">
                 <div class="control">
                   <label class="label" for="domain-expense-cost-input">
-                    <span class="is-bold">Expense Cost</span>
+                    <span class="is-bold">Transaction Cost</span>
                     <span id="domain-expense-cost-delete-text" class="is-pulled-right break-all"></span>
                   </label>
                 </div>
@@ -594,7 +611,7 @@
               <div class="control">
                 <div class="control">
                   <label class="label" for="domain-expense-date-input">
-                    <span class="is-bold">Expense Date</span>
+                    <span class="is-bold">Transaction Date</span>
                     <span id="domain-expense-date-delete-text" class="is-pulled-right break-all"></span>
                   </label>
                 </div>
@@ -620,7 +637,7 @@
       </div>
 
     </div>
-    <div id="design-tab-drop" data-title="Edit Listing Design" class="tab-drop is-relative is-hidden">
+    <div id="design-tab-drop" data-title="Edit Listing Design" class="tab-drop is-relative hide-for-unlisted is-hidden">
       <div class="columns">
         <div class="column is-6">
           <div id="premium-blackscreen-design" class="blackscreen">
@@ -1065,7 +1082,7 @@
         </div>
       </div>
     </div>
-    <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-relative is-hidden">
+    <div id="hub-tab-drop" data-title="Edit Listing Hub Details" class="tab-drop is-relative hide-for-unlisted is-hidden">
       <div class="columns">
         <div class="column">
           <div id="premium-blackscreen-hub" class="blackscreen">
@@ -1822,7 +1839,11 @@
         </div>
         <div class="control-right">
           <div class="control">
-            <a id="refresh-dns-button" class="button is-flexible is-stylish is-black is-inverted is-small" title="Refresh DNS Table">
+            <a id="not-listed-button" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Mark Unlisted">
+              <div class="icon is-small"><i class="fal fa-bookmark"></i></div>
+              <span>Mark Unlisted</span>
+            </a>
+            <a id="refresh-dns-button" class="verify-hidden-while-loading button is-flexible is-stylish is-black is-inverted is-small" title="Refresh DNS Table">
               <div class="icon is-small"><i class="fal fa-sync-alt"></i></div>
               <span>Refresh Table<span class="verification-plural"></span></span>
             </a>
@@ -1846,6 +1867,7 @@
         </div>
       </div>
     </div>
+
     <div class="columns">
       <div class="column is-narrow">
         <div class="card is-fullwidth-mobile">
@@ -1946,6 +1968,51 @@
         </div>
       </div>
     </div>
+
+    <!-- CONFIRM UNLISTED MODAL -->
+    <div id="confirm-unlisted-modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-container">
+        <div class="modal-content is-small">
+          <div class="content">
+            <div class="notification no-shadow has-icon is-accent">
+              <div class="icon-box">
+                <div class="icon is-white">
+                  <i class="fal fa-exclamation-triangle"></i>
+                </div>
+              </div>
+              <div class="content">
+                <p class="is-white">Are you sure you want to mark this domain as unlisted?</p>
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            <p>
+              By marking this domain as unlisted, you are creating an unverified listing on DomaHub.
+            </p>
+            <p>
+              The listing will not be visible to the public until you verify your ownership. However, you can edit or add transactions related to this domain.
+            </p>
+          </div>
+          <div class="control is-grouped">
+            <div class="control is-expanded">
+              <a id="confirm-unlisted-button" tabindex="0" class='button is-fullwidth is-primary is-stylish is-small'>
+                <div class="icon is-small"><i class="fal fa-bookmark"></i></div>
+                <span>Mark Unlisted</span>
+              </a>
+            </div>
+            <div class="control is-expanded">
+              <a tabindex="0" class='button is-fullwidth is-stylish is-small is-outlined is-black cancel-modal'>
+                <div class="icon is-small"><i class="fal fa-times"></i></div>
+                <span>Nevermind</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close"></button>
+    </div>
+
   </div>
 
 </div>

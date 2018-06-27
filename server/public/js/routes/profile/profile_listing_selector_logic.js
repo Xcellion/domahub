@@ -180,6 +180,7 @@ function showEditor(url_tab, selected_domain_ids, push){
   if (selected_domain_ids.length > 0){
     updateQueryStringParam("listings", selected_domain_ids);
   }
+
   //clear any messages
   clearNotification();
   $("#domain-selector").addClass('is-hidden');
@@ -224,7 +225,7 @@ function showBasedOnURL(){
   }
 
   //requested specific tab
-  if (url_selected_listings != "" && ["info", "design", "hub", "domain-info"].indexOf(url_tab) != -1){
+  if (url_selected_listings != "" && ["info", "domain-info", "design", "hub"].indexOf(url_tab) != -1){
     viewDomainDetails(false, url_tab);
   }
   else if (url_selected_listings != "" && url_tab == "verify"){
@@ -373,7 +374,7 @@ function createRows(selected_ids){
 //create a listing row
 function createRow(now, listing_info, rownum, selected){
   //choose a row to clone (accepted listings are verified by default)
-  if (listing_info.verified || listing_info.status == 3){
+  if (listing_info.verified || listing_info.status == 3 || listing_info.status == 4){
     var tempRow = $("#verified-clone-row").clone();
   }
   else {
@@ -423,6 +424,7 @@ function updateRowData(row, listing_info){
   row.data("transferred", (listing_info.transferred) ? true : false);
   row.data("rented", listing_info.rented);
   row.data("status", (listing_info.status == 1) ? true : false);
+  row.data("unlisted", (listing_info.status == 4) ? true : false);
   row.data("inactive", ((listing_info.status == 0 || listing_info.status == 3) && listing_info.verified) ? true : false);
 }
 
@@ -498,6 +500,10 @@ function updateDomainRow(tempRow, listing_info, now){
   else if (listing_info.status == 3){
     var status_text = "Pending";
     tempRow.find(".pending-status-icon").removeClass('is-hidden');
+  }
+  else if (listing_info.status == 4){
+    var status_text = "Unlisted";
+    tempRow.find(".unlisted-status-icon").removeClass('is-hidden');
   }
   else {
     var status_text = "Unverified";
@@ -721,7 +727,7 @@ function multiSelectButtons(clicked_row){
   var selected_rows = $(".table-row:not(.clone-row).is-selected:not(.is-hidden)");
   var not_selected_rows = $(".table-row:not(.clone-row, .is-selected):not(.is-hidden)");
   var editable_selected_rows = selected_rows.filter(function(){
-    return $(this).data("unverified") == false && $(this).data("accepted") == false
+    return ($(this).data("unverified") == false && $(this).data("accepted") == false) || $(this).data("unlisted")
   });
   var offer_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == false });
   var unverified_selected_rows = selected_rows.filter(function(){ return $(this).data("unverified") == true });
@@ -798,9 +804,18 @@ function multiSelectButtons(clicked_row){
 function viewDomainDetails(push, url_tab){
   var selected_domain_ids = getSelectedDomains("id", true, true);
   if (selected_domain_ids.length > 0){
+
+    //auto select info or domain info depending on what listings we've selected
     if (!url_tab){
-      url_tab = "info";
+      if (selected_domain_ids.length > 1){
+        var temp_listing_info = getCommonListingInfo(selected_domain_ids);
+      }
+      else {
+        var temp_listing_info = getDomainByID(selected_domain_ids[0]);
+      }
+      url_tab = (temp_listing_info.status == 4) ? "domain-info" : "info";
     }
+
     showEditor(url_tab, selected_domain_ids, push);
     updateEditorEditing(selected_domain_ids);
   }
@@ -967,14 +982,14 @@ function getSelectedDomains(data_name, verified, editable){
     if (editable){
       //deselect other ones
       $(".table-row:not(.clone-row).is-selected").filter(function(){
-        return $(this).data("unverified") == verified && $(this).data("accepted") == editable
+        return $(this).data("unverified") == verified && $(this).data("accepted") == editable && !$(this).data("unlisted")
       }).each(function(){
         selectRow($(this), false);
       });
 
       //return selected ones
       return $(".table-row:not(.clone-row).is-selected").filter(function(){
-        return $(this).data("unverified") != verified && $(this).data("accepted") != editable
+        return ($(this).data("unverified") != verified && $(this).data("accepted") != editable) || $(this).data("unlisted")
       }).map(function(){
         return $(this).data(data_name)
       }).toArray();

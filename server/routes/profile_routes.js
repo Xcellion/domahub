@@ -149,6 +149,7 @@ module.exports = function(app){
     auth_functions.checkLoggedIn,
     profile_functions.getAccountListings,
     profile_functions.checkPostedRowOwnership,
+    profile_functions.checkPostedRowForHubValidity,
     stripe_functions.checkStripeSubscriptionForOwner,
     profile_functions.updateAccountSettingsPassthrough,
     profile_functions.checkPostedHubs,

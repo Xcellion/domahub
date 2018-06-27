@@ -218,8 +218,12 @@
         <td class="td-domain domain_name-sort-value"></td>
         <td class="status-sort-value">
           <span class="td-status"></span>
-          <span class="is-hidden pending-status-icon icon is-tooltip is-small" data-balloon-length="large"
+          <span class="is-hidden pending-status-icon icon is-tooltip is-small" style="display:inline;" data-balloon-length="large"
           data-balloon="There are some pending DNS changes to this domain, please wait a few hours before changing it to an active listing." data-balloon-pos="up">
+            <i class="fal fa-question-circle"></i>
+          </span>
+          <span class="is-hidden unlisted-status-icon icon is-tooltip is-small" style="display:inline;" data-balloon-length="large"
+          data-balloon="This listing cannot be viewed publicly until you verify ownership." data-balloon-pos="up">
             <i class="fal fa-question-circle"></i>
           </span>
         </td>
@@ -239,7 +243,7 @@
         <td class="td-domain domain_name-sort-value"></td>
         <td>
           <span class="td-status status-sort-value"></span>
-          <div class="unverified-icon icon is-danger is-inline is-small" data-balloon-length="large"
+          <div class="unverified-icon icon is-danger is-small" style="display:inline;" data-balloon-length="large"
           data-balloon="Please prove that you own this domain by selecting it and clicking 'Verify Ownership'"
           data-balloon-pos="up">
             <i class="fal fa-exclamation-circle" data-fa-transform="down-1"></i>
