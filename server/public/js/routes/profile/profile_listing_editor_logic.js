@@ -230,6 +230,11 @@ function updateEditorDomains(selected_domain_ids){
       $("#domain-name-input").removeClass('is-hidden');
     }
 
+    //unhide unlisted stuff if not
+    if (current_listing.status != 4){
+      $(".hide-for-unlisted").removeClass("is-hidden");
+    }
+
     //refresh all changeable inputs
     $(".changeable-input").val("");
 
@@ -240,6 +245,11 @@ function updateEditorDomains(selected_domain_ids){
     updateRentalTab(current_listing);
     updateHubTab(current_listing, selected_domain_ids);
     updateBindings(current_listing, selected_domain_ids);
+
+    //hide unlisted stuff
+    if (current_listing.status == 4){
+      $(".hide-for-unlisted").addClass("is-hidden");
+    }
   }
 
   function setupEditingButtons(){
@@ -545,7 +555,18 @@ function updateEditorDomains(selected_domain_ids){
       for (var x = 0 ; x < listing_info.expenses.length ; x++){
         var expense_clone = $("#domain-expense-clone").clone().removeAttr("id").removeClass("is-hidden").addClass("cloned-expense-row").data("domain_expense", listing_info.expenses[x]);
         expense_clone.find(".domain-expense-name").text(listing_info.expenses[x].expense_name);
-        expense_clone.find(".domain-expense-cost").text(formatCurrency(parseFloat(listing_info.expenses[x].expense_cost), listing_info.expenses[x].expense_currency));
+        expense_clone.find(".domain-expense-type").text(listing_info.expenses[x].transaction_type.substr(0,1).toUpperCase() + listing_info.expenses[x].transaction_type.substr(1));
+
+        //transaction cost
+        var expense_cost = parseFloat(listing_info.expenses[x].expense_cost);
+        if (expense_cost < 0){
+          expense_clone.find(".domain-expense-cost").addClass("is-danger");
+        }
+        else if (expense_cost > 0){
+         expense_clone.find(".domain-expense-cost").addClass("is-primary");
+        }
+        expense_clone.find(".domain-expense-cost").text(formatCurrency(expense_cost, listing_info.expenses[x].expense_currency));
+
         expense_clone.find(".domain-expense-date").text(moment(listing_info.expenses[x].expense_date).format("YYYY-MM-DD")).attr("title", moment(listing_info.expenses[x].expense_date).format("YYYY-MM-DD HH:mm"));
         expense_clone.find(".domain-expense-delete-button").on("click", function(){
           updateDeleteDomainExpenseModal($(this).closest(".cloned-expense-row").data("domain_expense"), listing_info);
@@ -590,7 +611,8 @@ function updateEditorDomains(selected_domain_ids){
     }
     else {
       $("#domain-expense-name-input").val(domain_expense.expense_name);
-      $("#domain-expense-cost-input").val(domain_expense.expense_cost);
+      $("#domain-expense-type-input").val(domain_expense.transaction_type);
+      $("#domain-expense-cost-input").val((domain_expense.expense_cost) / getCurrencyMultiplier(domain_expense.expense_currency));
       $("#domain-expense-currency-input").val(domain_expense.expense_currency);
       $("#domain-expense-date-input").val(moment(domain_expense.expense_date).format('YYYY-MM-DDTHH:mm'));
       var expense_display_text = "Editing ";
@@ -623,6 +645,7 @@ function updateEditorDomains(selected_domain_ids){
 
     //edit or create new
     if (expense_type != "delete"){
+      submit_data.expense_type = $("#domain-expense-type-input").val();
       submit_data.expense_name = $("#domain-expense-name-input").val();
       submit_data.expense_currency = $("#domain-expense-currency-input").val();
       submit_data.expense_cost = $("#domain-expense-cost-input").val();
@@ -1542,6 +1565,12 @@ function updateEditorDomains(selected_domain_ids){
               showSelector(true);
               createRows(false);
             }
+            else if (data.message == "unlisted-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "an unlisted listing" : "unlisted listings";
+              var error_msg = "You cannot edit the listing details of " + plural_error_msg + "! Please verify your ownership of these domains before editing.";
+              showSelector(true);
+              createRows(false);
+            }
             else {
               var error_msg = data.message;
             }
@@ -2388,6 +2417,7 @@ function setupVerificationButtons(selected_domain_ids){
 
       //show auto-DNS button if there is a registrar connected
       updateAutoDNSButton($(".cloned-dns-table").eq(upcoming_index));
+      updateMarkUnlistedButton();
     });
   });
 
@@ -2400,6 +2430,17 @@ function setupVerificationButtons(selected_domain_ids){
   $("#verify-button").off().on('click', function(){
     multiVerify($(this));
   });
+
+  //unlist a domain
+  $("#not-listed-button").off().on("click", function(){
+    $(".mark-unlisted-plural").text((selected_domain_ids.length == 1) ? "this domain" : "these domains");
+    $("#confirm-unlisted-modal").addClass("is-active");
+  });
+
+  //mark as unlisted
+  $("#confirm-unlisted-button").off().on("click", function(){
+    markUnlisted($(this));
+  });
 }
 
 //create DNS rows
@@ -2407,7 +2448,6 @@ function createDNSRecordRows(selected_domain_ids, force){
   //show loading
   $("#loading-dns-table").removeClass('is-hidden');
   $(".verify-hidden-while-loading").addClass("is-hidden");
-  $("#refresh-dns-button").addClass('is-loading');
 
   $("#verification-left").addClass('is-pastel').removeClass('is-primary is-danger');
   $("#verification-left-danger, #verification-left-success").addClass('is-hidden');
@@ -2426,7 +2466,8 @@ function createDNSRecordRows(selected_domain_ids, force){
         domain_name : listing_info.domain_name,
         id : selected_domain_ids[x],
         registrar_id : listing_info.registrar_id,
-        client_index : x
+        client_index : x,
+        status : listing_info.status
       });
     }
     else {
@@ -2475,6 +2516,9 @@ function createDNSTable(listing_info, total_unverified, row_index){
   var cloned_table = $("#current-dns-table-clone").clone().removeAttr('id').attr("id", "dns-table" + row_index).addClass("cloned-dns-table").data("index", row_index);
   var cloned_a_row = cloned_table.find(".doma-a-record");
   var cloned_www_row = cloned_table.find(".doma-www-record");
+
+  //table data for listing info
+  cloned_table.data("listing_info", listing_info);
 
   //should show auto DNS button
   cloned_table.data("show_auto", listing_info.registrar_id != null);
@@ -2558,7 +2602,6 @@ function checkDNSAllDone(total_unverified){
       $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
     }
 
-    $("#refresh-dns-button").removeClass('is-loading');
     $("#loading-dns-table").addClass('is-hidden');
 
     //sort by selected index
@@ -2576,6 +2619,7 @@ function checkDNSAllDone(total_unverified){
 
     //show auto-DNS button if there is a registrar connected
     updateAutoDNSButton($(".cloned-dns-table:not(.is-hidden)"));
+    updateMarkUnlistedButton();
 
     //all DNS settings are good
     $("#verification-left-load").addClass('is-hidden');
@@ -2703,6 +2747,59 @@ function updateAutoDNSButton(cloned_dns_table){
   }
   else {
     $("#auto-dns-button").addClass("is-hidden").off();
+  }
+}
+
+//show or hide mark unlisted button
+function updateMarkUnlistedButton(){
+  var current_visible_unverified_listing_info = $(".cloned-dns-table:not(.is-hidden)").data('listing_info');
+  if (current_visible_unverified_listing_info.status == 4){
+    $("#not-listed-button").addClass("is-hidden");
+  }
+  else {
+    $("#not-listed-button").removeClass("is-hidden");
+  }
+}
+
+//mark domains as unlisted
+function markUnlisted(submit_button){
+  clearNotification();
+  submit_button.addClass('is-loading');
+
+  //append data for editing
+  var formData = new FormData();
+  var current_unverified_listing_info = $(".cloned-dns-table:not(.is-hidden)").data('listing_info');
+  formData.append("selected_ids", [current_unverified_listing_info.id]);
+  formData.append("status", 4);
+
+  //if we have current listing info
+  if (current_unverified_listing_info && current_unverified_listing_info.domain_name){
+    $.ajax({
+      url: "/listing/" + current_unverified_listing_info.domain_name.toLowerCase() + "/update",
+      type: "POST",
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false
+    }, 'json').done(function(data){
+      if (data.listings){
+        listings = data.listings;
+      }
+      submit_button.removeClass('is-loading');
+      refreshSubmitButtons();
+
+      if (data.state == "success"){
+        $(".modal").removeClass("is-active");
+        createRows();
+        showSelector();
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
+  }
+  else {
+    errorMessage("Something went wrong with marking this domain as unlisted! Please refresh the page and try again!");
   }
 }
 

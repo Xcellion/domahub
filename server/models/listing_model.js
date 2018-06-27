@@ -266,6 +266,7 @@ module.exports = {
     console.log("DB: Attempting to create new domain expenses...");
     var query = "INSERT INTO domain_expenses ( \
       listing_id, \
+      transaction_type, \
       expense_name, \
       expense_currency, \
       expense_cost, \

@@ -5,6 +5,8 @@ $(window).resize(function(){
 
 $(document).ready(function() {
 
+  //<editor-fold>-------------------------------SET UP TRANSACTIONS-------------------------------
+
   //get transactions if we dont have it already
   if (!user.transactions || !user.transactions_remote){
     getTransactions();
@@ -12,8 +14,6 @@ $(document).ready(function() {
   else {
     createTransactionsTable();
   }
-
-  //<editor-fold>-------------------------------TRANSACTIONS TAB-------------------------------
 
   //show withdrawal modal
   $("#transfer-button").on("click", function(){
@@ -273,7 +273,14 @@ $(document).ready(function() {
           var payment_available_on = moment(new Date(transaction.payment_available_on));
 
           //withdrawn already
-          if (transaction.withdrawn_on){
+          //sales or rental made outside of domahub
+          if (transaction.listing_status == 4){
+            var sale_or_rental_text = transaction.transaction_type.substr(0,1).toUpperCase() + transaction.transaction_type.substr(1);
+            temp_row.find(".transactions-row-available").text("Recorded Outside DomaHub").append('<div style="margin-left:3px;" class="bubble-tooltip icon is-small is-tooltip" data-balloon-length="medium" data-balloon="This transaction was recorded for a domain not currently listed with DomaHub." data-balloon-pos="up"><i class="fal fa-question-circle"></i></div>');
+            temp_row.find(".transactions-row-amount").removeClass("is-primary");
+            temp_row.data("withdrawn", true);
+          }
+          else if (transaction.withdrawn_on){
             temp_row.find(".transactions-row-available").text("Withdrawn").append('<div class="bubble-tooltip icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Funds withdrawn on ' + moment(new Date(transaction.withdrawn_on)).format("YYYY-MM-DD") + '" data-balloon-pos="up"><i class="fal fa-question-circle"></i></div>');
             temp_row.find(".transactions-row-amount").removeClass("is-primary");
             temp_row.data("withdrawn", true);
@@ -482,7 +489,7 @@ $(document).ready(function() {
       else if (transaction.transaction_type == "rental" && transaction.transaction_cost == null){
         modal_timestamp_text = "Created on " + date_created_moment.format("YYYY-MM-DD");
       }
-      else {
+      else if (transaction.listing_status != 4) {
         modal_timestamp_text = "Received on " + date_created_moment.format("YYYY-MM-DD") + " via " + payment_method_text;
       }
       $("#transactions-modal-timestamp").attr('title', date_created_moment.format("YYYY-MM-DD HH:mm"));
@@ -600,8 +607,19 @@ $(document).ready(function() {
       $("#paypal-refund-notice").addClass('is-hidden');
     }
 
+    //recorded outside of domahub
+    if (transaction.listing_status == 4){
+      $("#transactions-modal-domafees").text(formatCurrency((transaction.transaction_cost), transaction.transaction_cost_currency) + " recorded outside of DomaHub");
+
+      $("#commission-promo-message, #pending-transfer-wrapper, #available-on-wrapper, #payment-fees-wrapper").addClass("is-hidden");
+
+      //button for edit / delete
+      $("#transaction-modal-rental-buttons-wrapper").addClass("is-hidden");
+      $("#transaction-modal-expense-buttons-wrapper").removeClass("is-hidden");
+      $("#edit-domain-expense-button").attr("href", "/profile/mylistings?listings=" + transaction.listing_id + "&tab=domain-info");
+    }
     //domain rental related stuff
-    if (transaction.transaction_type == "rental"){
+    else if (transaction.transaction_type == "rental"){
       //preview rental
       $("#view-rental-button").attr('href', "/listing/" + transaction.domain_name.toLowerCase() + "/" + transaction.id);
 

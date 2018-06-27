@@ -143,8 +143,8 @@ function updatePortfolioOverviewCounters(){
           }
         }
         else {
-          total_expenses -= transaction_cost;
-          total_profit -= transaction_cost - doma_fees - payment_fees;
+          total_expenses += transaction_cost;
+          total_profit += transaction_cost - doma_fees - payment_fees;
         }
       }
     }
@@ -155,16 +155,16 @@ function updatePortfolioOverviewCounters(){
   //total expense counter
   $("#expenses-counter").text(formatCurrency(total_expenses/100));
   if (total_expenses < 0){
-    $("#expenses-counter");
+    $("#expenses-counter").addClass("is-danger");
   }
 
   //total profit counter
   $("#profit-counter").text(formatCurrency(total_profit/100));
   if (total_profit < 0){
-    $("#profit-counter");
+    $("#profit-counter").addClass("is-danger");
   }
   else if (total_profit > 0){
-    $("#profit-counter");
+    $("#profit-counter").addClass("is-primary");
   }
 }
 

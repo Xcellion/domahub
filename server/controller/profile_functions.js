@@ -364,6 +364,83 @@ module.exports = {
 
     //<editor-fold>-------------------------------------HUB-------------------------------
 
+    //check that the domains being added are legit (not the same hub, not unlisted, not unverified)
+    checkPostedRowForHubValidity : function(req, res, next){
+      console.log("LOF: Checking listings for ownership, verification, or sold...");
+
+      var selected_ids = (req.body.ids) ? req.body.ids : false;
+      var owned_domains = 0;
+      var verified_domains = 0;
+      var accepted_domains = 0;
+      var deposited_domains = 0;
+      var transferred_domains = 0;
+      var unlisted_domains = 0;
+      var hub_domains = 0;
+
+      //loop through and check
+      for (var x = 0 ; x < req.user.listings.length ; x++){
+        //check ownership
+        for (var y = 0 ; y < selected_ids.length ; y++){
+          if (parseFloat(selected_ids[y]) == req.user.listings[x].id){
+            owned_domains++;
+
+            if (req.user.listings[x].verified == 1){
+              verified_domains++;
+            }
+
+            if (req.user.listings[x].accepted == 1){
+              accepted_domains++;
+            }
+
+            if (req.user.listings[x].deposited == 1){
+              deposited_domains++;
+            }
+
+            if (req.user.listings[x].transferred == 1){
+              transferred_domains++;
+            }
+
+            if (req.user.listings[x].status == 4 && !req.user.listings[x].verified){
+              unlisted_domains++;
+            }
+
+            if (req.user.listings[x].hub == 1){
+              hub_domains++;
+            }
+
+            break;
+          }
+        }
+      }
+
+      //all good!
+      var error_message_plural = (req.body.ids && req.body.ids.length == 1) ? "a listing" : "listings";
+      if (owned_domains != selected_ids.length){
+        error.handler(req, res, "You cannot add " + error_message_plural + " that you do not own to a hub! Please refresh the page and try again!", "json");
+      }
+      else if (verified_domains != selected_ids.length && req.query.unlisted == true){
+        error.handler(req, res, "You cannot add " + error_message_plural + " that is unverified to a hub! Please select a different listing and try again!", "json");
+      }
+      else if (accepted_domains != 0){
+        error.handler(req, res, "You cannot add " + error_message_plural + " that you have already accepted offers for to a hub! Please select a different listing and try again!", "json");
+      }
+      else if (deposited_domains != 0){
+        error.handler(req, res, "You cannot add " + error_message_plural + " that you have already sold to a hub! Please select a different listing and try again!", "json");
+      }
+      else if (transferred_domains != 0){
+        error.handler(req, res, "You cannot add " + error_message_plural + " that you have already sold to a hub! Please select a different listing and try again!", "json");
+      }
+      else if (unlisted_domains != 0){
+        error.handler(req, res, "You cannot add " + error_message_plural + " that is unverified to a hub! Please select a different listing and try again!", "json");
+      }
+      else if (hub_domains != 0){
+        error.handler(req, res, "You cannot add " + error_message_plural + " that is a hub to another hub! Please select a different listing and try again!", "json");
+      }
+      else {
+        next();
+      }
+    },
+
     //check that the posted hubs are actually hubs, check premium, check arrays
     checkPostedHubs : function(req, res, next){
       if (req.user.stripe_subscription_id){

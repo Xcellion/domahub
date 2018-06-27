@@ -566,6 +566,7 @@ module.exports = {
       var accepted_domains = 0;
       var deposited_domains = 0;
       var transferred_domains = 0;
+      var unlisted_domains = 0;
 
       //loop through and check
       for (var x = 0 ; x < req.user.listings.length ; x++){
@@ -590,18 +591,20 @@ module.exports = {
               transferred_domains++;
             }
 
+            if (req.user.listings[x].status == 4 && !req.user.listings[x].verified){
+              unlisted_domains++;
+            }
+
             break;
           }
         }
       }
 
       //all good!
-      var error_message_plural = (req.body.selected_ids.length == 1) ? "this domain" : "some or all of these domains";
-      error_message_plural += "! Please select different listings to edit!";
       if (owned_domains != selected_ids.length){
         error.handler(req, res, "ownership-error", "json");
       }
-      else if (verified_domains != selected_ids.length){
+      else if (verified_domains != selected_ids.length && req.query.unlisted == true){
         error.handler(req, res, "verification-error", "json");
       }
       else if (accepted_domains != 0){
@@ -613,6 +616,9 @@ module.exports = {
       else if (transferred_domains != 0){
         error.handler(req, res, "transferred-error", "json");
       }
+      else if (unlisted_domains != 0){
+        error.handler(req, res, "unlisted-error", "json");
+      }
       else {
         next();
       }
@@ -621,7 +627,7 @@ module.exports = {
     //check that the listing is verified
     checkListingVerified : function(req, res, next){
       console.log("LOF: Checking if listing is a verified listing...");
-      if (getUserListingObjByName(req.user.listings, req.params.domain_name).verified != 1){
+      if (getUserListingObjByName(req.user.listings, req.params.domain_name).verified != 1 && req.query.unlisted == true){
         error.handler(req, res, "Please verify that you own this domain!", "json");
       }
       else {
@@ -668,6 +674,18 @@ module.exports = {
       }
     },
 
+    //check if listing is unlisted (aka not verified)
+    checkListingUnlisted : function(req, res, next){
+      console.log("LOF: Checking if the listing is unlisted...");
+      var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
+      if (listing_obj.status == 4 && !listing_obj.verified){
+        error.handler(req, res, "unlisted-error", "json");
+      }
+      else {
+        next();
+      }
+    },
+
     //check the posted status change of a listing
     checkListingStatus : function(req, res, next){
       console.log("LOF: Checking posted listing status...");
@@ -675,7 +693,7 @@ module.exports = {
       var status = parseFloat(req.body.status);
 
       //if status exists and is not 1 or 0
-      if (req.body.status && status != 1 && status != 0){
+      if (req.body.status && status != 1 && status != 0 && status != 4){
         error.handler(req, res, "Invalid listing status!", "json");
       }
       //check to see if its currently rented
@@ -1584,20 +1602,23 @@ module.exports = {
 
   //check expense info if it's legit
   checkExpenseDetails : function(req, res, next){
-    console.log("LOF: Checking posted domain expense details...");
+    console.log("LOF: Checking posted domain transaction details...");
 
     if (!req.body.expense_name || req.body.expense_name.length > 100){
-      error.handler(req, res, "That's an invalid name for a domain expense! Please enter something else and try again.", "json");
+      error.handler(req, res, "That's an invalid name for a domain transaction! Please enter something smaller than 100 characters and try again.", "json");
+    }
+    else if (["sale", "rental", "expense", "other"].indexOf(req.body.expense_type) == -1){
+      error.handler(req, res, "That's an invalid transaction type for a domain transaction! Please select something else and try again.", "json");
     }
     else if (!req.body.expense_date || !moment(req.body.expense_date).isValid()){
-      error.handler(req, res, "That's an invalid date for a domain expense! Please enter something else and try again.", "json");
+      error.handler(req, res, "That's an invalid date for a domain transaction! Please enter something else and try again.", "json");
     }
     else if (!req.body.expense_cost || !validator.isFloat(req.body.expense_cost)){
-      error.handler(req, res, "That's an invalid cost for a domain expense! Please enter something else and try again.", "json");
+      error.handler(req, res, "That's an invalid cost for a domain transaction! Please enter something else and try again.", "json");
     }
     //invalid default currency
     else if (req.body.default_currency && (!req.user.currencies || !req.user.currencies.payment_currencies || req.user.currencies.payment_currencies.indexOf(req.body.default_currency) == -1)){
-      error.handler(req, res, "That's an invalid default currency for a domain expense! Please select something else and try again.", "json");
+      error.handler(req, res, "That's an invalid default currency for a domain transaction! Please select something else and try again.", "json");
     }
     else {
       next();
@@ -1633,6 +1654,7 @@ module.exports = {
           var temp_expense_obj = {
             id : result_expense.id,
             expense_name : result_expense.expense_name,
+            transaction_type : result_expense.transaction_type,
             expense_date : result_expense.expense_date,
             expense_currency : result_expense.expense_currency,
             expense_cost : result_expense.expense_cost
@@ -1647,9 +1669,10 @@ module.exports = {
         }
 
         //nothing found! set to empty
-        if (result.info.length == 0){
-          for (var x = 0 ; x < selected_ids.length ; x++){
-            getUserListingObjByID(req.user.listings, selected_ids[x]).expenses = [];
+        for (var x = 0 ; x < selected_ids.length ; x++){
+          var current_listing = getUserListingObjByID(req.user.listings, selected_ids[x])
+          if (!current_listing.expenses){
+            current_listing.expenses = [];
           }
         }
 
@@ -1676,15 +1699,22 @@ module.exports = {
     var selected_ids = req.body.selected_ids.split(",");
     var new_expense_obj = {
       expense_name : req.body.expense_name,
+      expense_type : req.body.expense_type,
       expense_currency : req.body.expense_currency,
       expense_cost : parseFloat(req.body.expense_cost) * Currencies.multiplier(req.body.expense_currency),
       expense_date : moment(req.body.expense_date).valueOf()
+    }
+
+    //expenses are always negative
+    if (req.body.expense_type == "expense"){
+      new_expense_obj.expense_cost = -Math.abs(new_expense_obj.expense_cost);
     }
 
     //for all selected ids
     for (var x = 0 ; x < selected_ids.length ; x++){
       domain_expenses.push([
         selected_ids[x],
+        new_expense_obj.expense_type,
         new_expense_obj.expense_name,
         new_expense_obj.expense_currency,
         new_expense_obj.expense_cost,

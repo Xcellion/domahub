@@ -68,6 +68,7 @@ module.exports = function(app){
       owner_functions.checkListingOwnerPost,
       owner_functions.checkListingVerified,
       owner_functions.checkListingPurchased,
+      owner_functions.checkListingUnlisted,
       stripe_functions.checkStripeSubscriptionForOwner,
       profile_functions.updateAccountSettingsPassthrough,
       owner_functions.createNewListingInfoObj,
