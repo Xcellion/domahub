@@ -2176,9 +2176,21 @@ function updateEditorStats(selected_domain_ids){
       createStatTable(selected_listings, current_chart_id, false);
       createStatTable(selected_listings, next_chart_id, true);
 
+      //show tip text
+      current_chart.find(".card-header-tip").addClass("is-hidden");
+      next_chart.find(".card-header-tip").removeClass("is-hidden");
+      current_chart.find(".chart-sort-button").addClass("is-hidden");
+      next_chart.find(".chart-sort-button").removeClass("is-hidden");
+
       $("#" + current_chart_id + "-canvas").removeClass("is-hidden");
       $("#" + next_chart_id + "-canvas").removeClass("is-hidden");
     }
+  });
+
+  //setup sort chart handler
+  $(".chart-sort-button").off().on("change", function(){
+    var card_elem = $(this).closest(".stat-chart-card");
+    createStatTable(selected_listings, card_elem.attr("id").replace("-chart-card", ""), card_elem.hasClass("is-active"));
   });
 
   createStatsTables(selected_listings);
@@ -2199,6 +2211,7 @@ function createStatsTables(selected_listings, force){
   createStatTable(selected_listings, "tld", true);
   createStatTable(selected_listings, "letter", false);
   createStatTable(selected_listings, "registrar", false);
+  createStatTable(selected_listings, "registration", false);
 }
 
 //get stats on a domain
@@ -2232,6 +2245,97 @@ function getListingStats(selected_listings, selected_domain_ids){
 
   //<editor-fold>-------------------------------STATS TABLES-------------------------------
 
+  //create / refresh build a specific table
+  function createStatTable(selected_listings, chart_name, show_details){
+    if (chart_name == "tld"){
+      var custom_function = function(row){
+        return "." + row.domain_name.split(".")[1].toLowerCase();
+      };
+    }
+    else if (chart_name == "letter"){
+      var custom_function = function(row){
+        return punycode.toUnicode(row.domain_name).split(".")[0].length + " Letters";
+      };
+    }
+    else if (chart_name == "registrar"){
+      var custom_function = function(row){
+        return (!row.registrar_name) ? "None" : row.registrar_name;
+      };
+    }
+    else if (chart_name == "registration"){
+
+      if (show_details){
+        var final_time_display = "25+ Years";
+        var time_periods = [
+          {
+            comparison : moment().year(),
+            display : "< 1 Year",
+          },
+          {
+            comparison : moment().year() - 3,
+            display : "1 - 3 Years",
+          },
+          {
+            comparison : moment().year() - 6,
+            display : "3 - 6 Years",
+          },
+          {
+            comparison : moment().year() - 10,
+            display : "6 - 10 Years",
+          },
+          {
+            comparison : moment().year() - 15,
+            display : "10 - 15 Years",
+          },
+          {
+            comparison : moment().year() - 20,
+            display : "15 - 20 Years",
+          },
+          {
+            comparison : moment().year() - 25,
+            display : "20 - 25 Years",
+          },
+        ]
+      }
+      else {
+        var final_time_display = "10+ Years";
+        var time_periods = [
+          {
+            comparison : moment().year(),
+            display : "< 1 Year",
+          },
+          {
+            comparison : moment().year() - 5,
+            display : "1 - 5 Years",
+          },
+          {
+            comparison : moment().year() - 10,
+            display : "5 - 10 Years",
+          },
+        ]
+      }
+
+      //custom function to split registration dates into 5 categories
+      var custom_function = function(row){
+        if (!row.date_registered){
+          return "None";
+        }
+        else {
+          var index_in_array;
+          for (var x = 0 ; x < time_periods.length ; x++){
+            if (moment(row.date_registered).year() >= time_periods[x].comparison){
+              index_in_array = x;
+              break;
+            }
+          }
+          return (typeof index_in_array != "undefined") ? time_periods[index_in_array].display : final_time_display;
+        }
+      };
+    }
+
+    createStatBarChart(selected_listings, chart_name, custom_function, show_details);
+  }
+
   //create a bar chart
   function createStatBarChart(selected_listings, chart_name, function_for_data, show_details){
 
@@ -2263,15 +2367,28 @@ function getListingStats(selected_listings, selected_domain_ids){
         temp_data.push([x, seen[x]]);
       }
 
-      //sort by count and create the chart data
-      temp_data.sort(function(a, b){
-        return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
-      });
+      var sort_type = $("#" + chart_name + "-chart-card").find(".chart-sort-button select").val();
+
+      //sort by label
+      if (sort_type == "label"){
+        temp_data.sort(function(a, b){
+          var comparison_a = a[0].toLowerCase();
+          var comparison_b = b[0].toLowerCase();
+          return ((comparison_a > comparison_b) ? 1 : ((comparison_a == comparison_b) ? 0 : -1));
+        });
+      }
+      //sort by count
+      else {
+        temp_data.sort(function(a, b){
+          return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+        });
+      }
+
+      //create data
       for (var x = 0 ; x < temp_data.length ; x++){
 
         //clip label if we're using small chart
         var temp_label = (temp_data[x][0].length > 13 && !show_details) ? temp_data[x][0].substr(0, 10) + "..." : temp_data[x][0];
-
         chart_labels.push(temp_label);
         chart_data.push(temp_data[x][1]);
       }
@@ -2284,10 +2401,10 @@ function getListingStats(selected_listings, selected_domain_ids){
         "#95E1D3"
       ];
 
+      //colors depending on how many items
       if (show_details && chart_labels.length > 5){
-        //colors depending on how many items
         for (var x = 5 ; x < chart_labels.length ; x++){
-          chart_colors.push();
+          chart_colors.push("rgba(60, 188, 141," + (1 - ((x-5)/10)) + ")");
         }
       }
       //cut to 5 if we're not showing more details
@@ -2339,28 +2456,6 @@ function getListingStats(selected_listings, selected_domain_ids){
       $("#" + chart_name + "-canvas").replaceWith("<canvas id='" + chart_name + "-canvas'></canvas>");
       var ctx = document.getElementById(canvas_id).getContext('2d');
       chart_obj = new Chart(ctx, chartOptions);
-    }
-  }
-
-  //create / refresh build a specific table
-  function createStatTable(selected_listings, chart_name, show_details){
-    if (chart_name == "tld"){
-      createStatBarChart(selected_listings, chart_name, function(row){
-        return "." + row.domain_name.split(".")[1].toLowerCase();
-      }, show_details);
-    }
-    else if (chart_name == "letter"){
-      createStatBarChart(selected_listings, chart_name, function(row){
-        return punycode.toUnicode(row.domain_name).split(".")[0].length + " Letters";
-      }, show_details);
-    }
-    else if (chart_name == "registrar"){
-      createStatBarChart(selected_listings, chart_name, function(row){
-        return (!row.registrar_name) ? "None" : row.registrar_name;
-      }, show_details);
-    }
-    else if (chart_name == "registration"){
-
     }
   }
 

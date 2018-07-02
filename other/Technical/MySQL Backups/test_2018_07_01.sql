@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 31, 2018 at 08:47 PM
+-- Generation Time: Jul 01, 2018 at 04:00 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `domahub`
 --
+CREATE DATABASE IF NOT EXISTS `domahub` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `domahub`;
 
 -- --------------------------------------------------------
 
@@ -59,13 +61,13 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `date_created`, `date_accessed`, `type`, `token`, `token_exp`, `onboarding_step`, `stripe_account_id`, `stripe_customer_id`, `stripe_subscription_id`, `ga_tracking_id`, `paypal_email`, `bitcoin_address`, `payoneer_email`, `default_currency`) VALUES
-(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2018-05-31 20:07:10', 2, NULL, NULL, NULL, 'acct_1C5ITfEpVgQoC6Fs', NULL, NULL, NULL, 'won2blee@gmail.com', NULL, NULL, 'eur'),
-(2, 'DomaHub', 'general@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2018-04-09 19:22:50', 2, NULL, NULL, NULL, 'acct_1CB5H0JjMkKlUdaL', NULL, NULL, NULL, 'general@domahub.com', NULL, NULL, 'usd'),
+(1, 'Wonmin', 'won2blee@gmail.com', '$2a$10$.uk2H.HrG.Cb0kKMZawFPu.bGc/WmaVsHqq5fpyxP0rCoyNFDDyQC', '2016-05-16 20:48:19', '2018-06-19 01:34:25', 2, NULL, NULL, NULL, 'acct_1C5ITfEpVgQoC6Fs', NULL, NULL, NULL, 'won2blee@gmail.com', NULL, NULL, 'eur'),
+(2, 'DomaHub', 'general@domahub.com', '$2a$10$w/y5163yI1L8JToLHigX0.CbX05v6Ggz/lUJAaslBFfj8OJMnzIf2', '2017-10-25 02:03:16', '2018-06-15 22:49:41', 2, NULL, NULL, NULL, 'acct_1CB5H0JjMkKlUdaL', NULL, NULL, NULL, 'general@domahub.com', NULL, NULL, 'usd'),
 (5, 'Wonkyu', 'wonq33@gmail.com', '$2a$10$RAj1nF8JYSnlbLUzbnCJOOcv2I8Zg1BKdBulpSoCsmukVlHZDaIfa', '2016-05-19 23:40:24', '2018-03-29 01:13:55', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wonq33@gmail.com', NULL, NULL, 'usd'),
-(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2018-03-30 06:04:17', '2018-04-22 19:05:32', 1, NULL, NULL, 7, NULL, NULL, NULL, NULL, 'test@test.com', NULL, NULL, 'usd'),
+(35, 'test-kun', 'test@email.com', '$2a$10$NrWjG9OaqoTvTrLWxEHdqe4CeN9AdH27rZbPc4AqDDHqcMJM6nhx6', '2018-03-30 06:04:17', '2018-06-23 00:02:59', 1, NULL, NULL, 7, NULL, NULL, NULL, NULL, 'test@test.com', NULL, NULL, 'usd'),
 (37, 'unverified', 'unverified@test.com', '$2a$10$UjH0eAVbkIR4Hrn6SOUKXuKzTZimeRcOFcar9OxxjICPFYTJ4tx2a', '2017-11-07 23:30:55', '2018-03-30 20:07:44', 0, 'e235b675fd', '2018-03-30 21:07:46', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'usd'),
 (41, 'verified', 'verified@test.com', '$2a$10$fTxlkTlWrWNCpJdvduh3he6tbLbY9BlyU5A35Q.muBfLDGm.OMsNW', '2017-11-08 01:33:10', '2018-04-24 22:55:43', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'usd'),
-(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2018-03-13 01:21:07', '2018-06-01 00:36:58', 2, NULL, NULL, NULL, 'acct_1C5IMuDnRmMzAdyH', 'cus_CUMPk4do5qCpTR', 'sub_CUMRkROfoT8id3', NULL, NULL, NULL, NULL, 'eur');
+(42, 'premium', 'premium@test.com', '$2a$10$9j2IYUISVRSdYcshXpx0LOzDyoRpNApzUrAsP8VZQwMqrj0Jb9qmC', '2018-03-13 01:21:07', '2018-06-28 23:05:30', 2, NULL, NULL, NULL, 'acct_1C5IMuDnRmMzAdyH', 'cus_CUMPk4do5qCpTR', 'sub_CUMRkROfoT8id3', NULL, 'test@test.com', NULL, NULL, 'eur');
 
 -- --------------------------------------------------------
 
@@ -128,25 +130,31 @@ DROP TABLE IF EXISTS `domain_expenses`;
 CREATE TABLE IF NOT EXISTS `domain_expenses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `listing_id` int(11) NOT NULL,
+  `transaction_type` varchar(10) NOT NULL DEFAULT 'expense',
   `expense_name` varchar(100) NOT NULL,
   `expense_cost` float NOT NULL,
   `expense_currency` varchar(3) NOT NULL DEFAULT 'usd',
   `expense_date` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `domain_expense_listing_id_fk` (`listing_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `domain_expenses`
 --
 
-INSERT INTO `domain_expenses` (`id`, `listing_id`, `expense_name`, `expense_cost`, `expense_currency`, `expense_date`) VALUES
-(52, 50, 'After market purchase fees', 25.99, 'usd', 1480568340000),
-(53, 50, 'Escrow fees (One time)', 4.99, 'usd', 1480568340000),
-(54, 1609, 'Extra \"fee\" for friend', 10, 'usd', 1511845140000),
-(57, 1615, 'One time cost', 12, 'aed', 1546318740000),
-(58, 1615, 'One time foreign transaction fee', 50, 'usd', 1546318680000),
-(69, 5, 'One time cost', 1500, 'eur', 1546318740000);
+INSERT INTO `domain_expenses` (`id`, `listing_id`, `transaction_type`, `expense_name`, `expense_cost`, `expense_currency`, `expense_date`) VALUES
+(52, 50, 'expense', 'After market purchase fees', -25.99, 'usd', 1480568340000),
+(53, 50, 'expense', 'Escrow fees (One time)', -4.99, 'usd', 1480568340000),
+(54, 1609, 'expense', 'Extra \"fee\" for friend', -10, 'usd', 1511845140000),
+(57, 1615, 'expense', 'One time cost', -12, 'aed', 1546318740000),
+(58, 1615, 'expense', 'One time foreign transaction fee', -50, 'usd', 1546318680000),
+(69, 5, 'expense', 'One time cost', -1500, 'eur', 1546318740000),
+(70, 1615, 'expense', 'One time cost', -1200, 'eur', 1528948800000),
+(88, 1659, 'expense', 'wow', -2500, 'eur', 1514786640000),
+(89, 1661, 'sale', 'One time cost', 1231400, 'eur', 1517633940000),
+(90, 1661, 'rental', 'rental', 21300, 'eur', 1517633940000),
+(91, 1659, 'expense', 'One time cost', -2550000, 'eur', 1517633940000);
 
 -- --------------------------------------------------------
 
@@ -160,52 +168,52 @@ CREATE TABLE IF NOT EXISTS `listings` (
   `date_created` bigint(20) DEFAULT NULL,
   `date_expire` bigint(20) DEFAULT NULL,
   `date_registered` bigint(20) DEFAULT NULL,
-  `domain_name` varchar(100) DEFAULT NULL,
+  `domain_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `owner_id` int(11) DEFAULT NULL,
   `status` tinyint(1) DEFAULT '0',
   `deleted` tinyint(1) DEFAULT NULL,
   `verified` tinyint(1) DEFAULT '1',
-  `registrar_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `registrar_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `registrar_id` int(11) DEFAULT NULL,
   `registrar_cost` int(11) NOT NULL DEFAULT '0',
-  `registrar_cost_currency` varchar(3) NOT NULL DEFAULT 'usd',
-  `registrar_admin_name` varchar(100) DEFAULT NULL,
-  `registrar_admin_org` varchar(100) DEFAULT NULL,
-  `registrar_admin_email` varchar(100) DEFAULT NULL,
-  `registrar_admin_address` varchar(200) DEFAULT NULL,
-  `registrar_admin_phone` varchar(20) DEFAULT NULL,
-  `registrar_registrant_name` varchar(100) DEFAULT NULL,
-  `registrar_registrant_org` varchar(100) DEFAULT NULL,
-  `registrar_registrant_email` varchar(100) DEFAULT NULL,
-  `registrar_registrant_address` varchar(200) DEFAULT NULL,
-  `registrar_registrant_phone` varchar(20) DEFAULT NULL,
-  `registrar_tech_name` varchar(100) DEFAULT NULL,
-  `registrar_tech_org` varchar(100) DEFAULT NULL,
-  `registrar_tech_email` varchar(100) DEFAULT NULL,
-  `registrar_tech_address` varchar(200) DEFAULT NULL,
-  `registrar_tech_phone` varchar(20) DEFAULT NULL,
+  `registrar_cost_currency` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'usd',
+  `registrar_admin_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_admin_org` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_admin_email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_admin_address` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_admin_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_registrant_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_registrant_org` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_registrant_email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_registrant_address` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_registrant_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_tech_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_tech_org` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_tech_email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_tech_address` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registrar_tech_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rentable` tinyint(1) NOT NULL DEFAULT '0',
-  `default_currency` varchar(3) NOT NULL DEFAULT 'usd',
-  `price_type` varchar(5) NOT NULL DEFAULT 'month',
-  `price_rate` int(11) NOT NULL DEFAULT '25',
+  `default_currency` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'usd',
+  `price_type` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'month',
+  `price_rate` int(11) NOT NULL DEFAULT '2500',
   `buy_price` bigint(11) NOT NULL DEFAULT '0',
   `min_price` bigint(11) NOT NULL DEFAULT '0',
-  `description` text CHARACTER SET utf8 COLLATE utf8_bin,
-  `description_hook` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `description_footer` varchar(75) DEFAULT NULL,
-  `description_footer_link` text,
-  `categories` text,
-  `paths` text CHARACTER SET utf8 COLLATE utf8_bin,
-  `background_image` text,
-  `background_color` varchar(7) DEFAULT '#FFFFFF',
-  `logo` text,
-  `primary_color` varchar(7) DEFAULT '#3CBC8D',
-  `secondary_color` varchar(7) DEFAULT '#FF5722',
-  `tertiary_color` varchar(7) DEFAULT '#2196F3',
-  `font_name` varchar(100) DEFAULT 'Rubik',
-  `font_color` varchar(7) DEFAULT '#000000',
-  `footer_background_color` varchar(7) DEFAULT '#F1F1F1',
-  `footer_color` varchar(7) DEFAULT '#565656',
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
+  `description_hook` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description_footer` mediumtext COLLATE utf8mb4_unicode_ci,
+  `description_footer_link` longtext COLLATE utf8mb4_unicode_ci,
+  `categories` longtext COLLATE utf8mb4_unicode_ci,
+  `paths` mediumtext COLLATE utf8mb4_unicode_ci,
+  `background_image` longtext COLLATE utf8mb4_unicode_ci,
+  `background_color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#FFFFFF',
+  `logo` longtext COLLATE utf8mb4_unicode_ci,
+  `primary_color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#3CBC8D',
+  `secondary_color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#FF5722',
+  `tertiary_color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#2196F3',
+  `font_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT 'Rubik',
+  `font_color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#000000',
+  `footer_background_color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#F1F1F1',
+  `footer_color` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT '#565656',
   `show_registrar` tinyint(1) NOT NULL DEFAULT '1',
   `show_registration_date` tinyint(1) NOT NULL DEFAULT '1',
   `show_godaddy_appraisal` tinyint(1) NOT NULL DEFAULT '1',
@@ -220,9 +228,9 @@ CREATE TABLE IF NOT EXISTS `listings` (
   `show_history_ticker` tinyint(1) NOT NULL DEFAULT '1',
   `show_domain_list` tinyint(1) NOT NULL DEFAULT '1',
   `hub` tinyint(1) NOT NULL DEFAULT '0',
-  `hub_title` varchar(75) DEFAULT NULL,
+  `hub_title` varchar(75) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hub_email` tinyint(1) NOT NULL DEFAULT '0',
-  `hub_phone` varchar(20) DEFAULT NULL,
+  `hub_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hub_layout_count` int(11) NOT NULL DEFAULT '10',
   `hub_layout_type` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -231,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `listings` (
   UNIQUE KEY `listings_unique_domain` (`domain_name`,`verified`),
   KEY `listings_owner_fk_idx` (`owner_id`),
   KEY `registrar_id_fk` (`registrar_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1620 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1662 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `listings`
@@ -239,9 +247,9 @@ CREATE TABLE IF NOT EXISTS `listings` (
 
 INSERT INTO `listings` (`id`, `date_created`, `date_expire`, `date_registered`, `domain_name`, `owner_id`, `status`, `deleted`, `verified`, `registrar_name`, `registrar_id`, `registrar_cost`, `registrar_cost_currency`, `registrar_admin_name`, `registrar_admin_org`, `registrar_admin_email`, `registrar_admin_address`, `registrar_admin_phone`, `registrar_registrant_name`, `registrar_registrant_org`, `registrar_registrant_email`, `registrar_registrant_address`, `registrar_registrant_phone`, `registrar_tech_name`, `registrar_tech_org`, `registrar_tech_email`, `registrar_tech_address`, `registrar_tech_phone`, `rentable`, `default_currency`, `price_type`, `price_rate`, `buy_price`, `min_price`, `description`, `description_hook`, `description_footer`, `description_footer_link`, `categories`, `paths`, `background_image`, `background_color`, `logo`, `primary_color`, `secondary_color`, `tertiary_color`, `font_name`, `font_color`, `footer_background_color`, `footer_color`, `show_registrar`, `show_registration_date`, `show_godaddy_appraisal`, `show_domainindex_appraisal`, `show_freevaluator_appraisal`, `show_estibot_appraisal`, `show_categories`, `show_social_sharing`, `show_placeholder`, `show_traffic_graph`, `show_alexa_stats`, `show_history_ticker`, `show_domain_list`, `hub`, `hub_title`, `hub_email`, `hub_phone`, `hub_layout_count`, `hub_layout_type`) VALUES
 (5, 1497056062817, 1526867520000, 1463795520000, 'imsorryimdumb.com', 1, 1, NULL, 1, 'Google LLC', NULL, 1200, 'usd', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124596281', 'Contact Privacy Inc. Customer 124596281', 'oafuefcadpzw@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 1, 'usd', 'day', 5000, 0, 0, 'The best way to apologize to your friends and family! Nothing quite says \"I\'m sorry\" like an entire website dedicated to saying just that! Use this website today and apologize away!!', 'Use this website to apologize to your friends and family!', 'Best domain names for rentals.', NULL, 'ecard niche other personal promotion', 'alex,boss,connor,honey,lisa,madam,sarah,sir,mom,dad,peter,charles,matthew,vivian,chief,director,president,david', NULL, '#FFFFFF', NULL, '#C72E2E', '#FF9E1F', '#2196F3', 'Garamond', '#000000', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(7, 1476762961342, 1527734700000, 1464662700000, 'YoureACutie.com', 1, 1, NULL, 1, 'Google Inc.', NULL, 1200, 'usd', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 1, 'usd', 'day', 5000, 0, 0, 'Let your loved ones know what a cutie they are by sending them a website showing just exactly that! Let them know how you feel and that they are the one and only cutie in your life!', 'Use this website to let that special person know what a cutie they are!', 'The greatest most awesome domains ever!!!', NULL, 'ecard niche personal', 'emma,olivia,sophia,ava,mia,jack,sam,noah,liam,mason,ash,isabelle,adam,matthew,charles,brian,abigail,emily,charlotte,madison,amelia,elizabeth,sofia', NULL, '#FFFFFF', NULL, '#222222', '#878787', '#0645AD', 'Nunito Sans', '#222222', '#211B14', '#FFFFFF', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(7, 1476762961342, 1527734700000, 1464662700000, 'YoureACutie.com', 1, NULL, 1, NULL, 'Google Inc.', NULL, 1200, 'usd', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 124614279', 'Contact Privacy Inc. Customer 124614279', 'xxtq5nogul6f@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 1, 'usd', 'day', 5000, 0, 0, 'Let your loved ones know what a cutie they are by sending them a website showing just exactly that! Let them know how you feel and that they are the one and only cutie in your life!', 'Use this website to let that special person know what a cutie they are!', 'The greatest most awesome domains ever!!!', NULL, 'ecard niche personal', 'emma,olivia,sophia,ava,mia,jack,sam,noah,liam,mason,ash,isabelle,adam,matthew,charles,brian,abigail,emily,charlotte,madison,amelia,elizabeth,sofia', NULL, '#FFFFFF', NULL, '#222222', '#878787', '#0645AD', 'Nunito Sans', '#222222', '#211B14', '#FFFFFF', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
 (8, 1490044814955, 1553115989000, 1490044814955, 'YoureToxic.com', 5, 0, NULL, NULL, 'Google Inc.', NULL, 0, 'usd', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', '+1.4165385487', 'Contact Privacy Inc. Customer 1241214949', 'Contact Privacy Inc. Customer 1241214949', 'ehzgybflyfmj@contactprivacy.email', '96 Mowat Ave, Toronto, ON, M4K 3K1, CA', NULL, 1, 'usd', 'month', 25, 5000, 2500, 'Perfect for telling someone they\'re toxic.', 'Use this website to flame your opponents!', 'Don\'t be toxic kids.', NULL, 'animals holiday keywords lifestyle marketing movies music realestate religion robot science', '', NULL, '#FFFFFF', 'https://68.media.tumblr.com/avatar_eb57388f82bd_128.png', '#FF5454', '#000000', '#570000', 'Trebuchet MS', '#000000', NULL, NULL, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 10, 0),
-(9, 1490758098071, NULL, NULL, 'ERAisAwesome.com', 5, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'day', 1, 5000, 2500, NULL, NULL, 'Electronic Rodeo Association?', NULL, 'event promotion', '', NULL, '#222222', NULL, '#E8CF61', '#540000', '#6B6B6B', 'Courier', '#FFFFFF', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, NULL, 0, NULL, 10, 0),
+(9, 1490758098071, NULL, NULL, 'ERAisAwesome.com', 5, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'day', 2500, 5000, 2500, 'The perfect domain for your next venture or company.!', NULL, 'Electronic Rodeo Association?', NULL, 'event promotion', '', NULL, '#222222', NULL, '#E8CF61', '#540000', '#6B6B6B', 'Courier', '#FFFFFF', NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, NULL, 0, NULL, 10, 0),
 (50, 1512071198950, 1519168174000, 1077318574000, 'amazingdomain.com', 2, 1, NULL, 1, 'eNom, Inc.', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 500, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, '', '', NULL, NULL, 'https://upload.wikimedia.org/wikipedia/commons/5/58/Sunset_2007-1.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
 (51, 1512071198950, 1519587202000, 1077737602000, 'greatestdomain.com', 2, 1, NULL, 1, 'GoDaddy, LLC.', NULL, 0, 'usd', 'Domain Admin', 'DomaHub', 'general@domahub.com', '33 Doma Road, Hub City, NY ', '+1 201-555-0123', 'Test', 'DomaHub', 'general@domahub.com', NULL, NULL, 'Domain Tech', 'DomaHub', 'general@domahub.com', NULL, NULL, 0, 'usd', 'month', 250, 0, 500, 'Best value domain name. Period.', NULL, NULL, NULL, '', '', NULL, NULL, 'https://c.tadst.com/gfx/1200x630/sunrise-sunset-sun-calculator.jpg?1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
 (52, 1508882908519, NULL, NULL, 'unverifieddomain.com', 2, 0, NULL, NULL, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
@@ -249,12 +257,15 @@ INSERT INTO `listings` (`id`, `date_created`, `date_expire`, `date_registered`, 
 (1609, 1516331413049, NULL, NULL, 'MyAwesomeMarketplace.com', 2, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 25, 0, 500, 'Choose from some of the most amazing domains below!', NULL, 'The greatest domains at the most affordable prices.', NULL, NULL, NULL, 'https://images.unsplash.com/photo-1500111609242-145a52dcc944?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20', '#FFFFFF', 'https://seeklogo.com/images/B/blue-sun-logo-6003C806FC-seeklogo.com.png', '#85D6FF', '#FFAE84', '#85D6FF', 'Nunito Sans', '#FFFFFF', '#E0F4FF', '#222222', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'My Great Domain Hub', 0, '+1 201-555-0123', 10, 1),
 (1611, 1516331413049, 1541906144000, 839476800000, 'GreatDomains.com', 2, 1, NULL, 1, 'RegistryGate GmbH', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 250, 0, 500, 'The greatest domain for your next project.', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
 (1613, 1516331413049, NULL, NULL, 'GreatAwesomeDomains.com', 2, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'usd', 'month', 250, 250, 500, 'Buy this domain today and start your next adventure!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', 'https://i.pinimg.com/736x/8e/0f/bd/8e0fbdf32b7662080ba4288cee3e03d0--fried-rice-wolves-art.jpg', '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1614, 1516331413049, NULL, NULL, 'CoolFunDomains.com', 2, 1, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 25, 250, 500, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1615, 1512087238865, NULL, 1516225913032, '12345678901234567890123456789012345678901234567890.com', 42, 1, NULL, 1, NULL, NULL, 1600, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'usd', 'month', 1500, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, 'dsad', '', 'career food gambling gaming hightraffic holiday', NULL, 'https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=20', '#000000', 'https://cdn.britannica.com/700x450/77/170477-004-B774BDDF.jpg', '#FFFFFF', '#000000', '#EDDD00', 'Nunito Sans', '#EDEDED', '#000000', '#FFFFFF', 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1616, 1527797953539, NULL, NULL, 'arcore.group', 42, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 25, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1617, 1527797978906, 1535587140000, 1504027320000, 'arcore.tech', 42, 0, NULL, 1, 'UNIREGISTRAR CORP', NULL, 0, 'usd', 'PRIVACYDOTLINK CUSTOMER 3070556', NULL, '3070556@PRIVACY-LINK.COM', 'PO BOX 30485, SEVEN MILE BEACH, GRAND CAYMAN, KY1-1202, KY', '+1.3457495465', 'PRIVACYDOTLINK CUSTOMER 3070556', NULL, '3070556@PRIVACY-LINK.COM', 'PO BOX 30485, SEVEN MILE BEACH, GRAND CAYMAN, KY1-1202, KY', '+1.3457495465', 'PRIVACYDOTLINK CUSTOMER 3070556', NULL, '3070556@PRIVACY-LINK.COM', 'PO BOX 30485, SEVEN MILE BEACH, GRAND CAYMAN, KY1-1202, KY', '+1.3457495465', 0, 'eur', 'month', 25, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1618, 1527797978906, NULL, NULL, 'future.show', 42, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 25, 0, 0, 'This is the greatest domain name to have ever existed--trust me.', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
-(1619, 1527797978906, NULL, NULL, 'do.guru', 42, 0, NULL, 1, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 25, 0, 0, 'The greatest domain for your next project.', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0);
+(1615, 1512087238865, 1483207140000, 1516225913032, '12345678901234567890123456789012345678901234567890.com', 42, 1, NULL, 1, 'Greatest Registrar', NULL, 1600, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'eur', 'month', 150200, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone!', NULL, 'dsad', '', 'career food gambling gaming hightraffic holiday', NULL, 'http://cuve-stockage-process-eta.com/wp-content/uploads/2018/05/test.png', '#000000', 'http://cuve-stockage-process-eta.com/wp-content/uploads/2018/05/test.png', '#FFFFFF', '#000000', '#EDDD00', 'Nunito Sans', '#EDEDED', '#000000', '#FFFFFF', 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, NULL, 0, NULL, 10, 0),
+(1636, 1528842521092, NULL, 1357016340000, 'xn----dqo34k.com', 42, 1, NULL, 1, 'Awesome Registrar', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'eur', 'month', 2500, 0, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, 0, NULL, 10, 0),
+(1650, 1529092440719, 1566619200000, 904017600000, 'irepublic.com', 42, 1, NULL, 1, 'GoDaddy.com, LLC', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, 'Won & Lee, Inc.', NULL, ', New York, US', NULL, NULL, NULL, NULL, NULL, NULL, 1, 'eur', 'month', 2500, 25600, 2500, '1234124312412313', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1651, 1529092973930, 1553985540000, 954459540000, 'ihan.com', 42, 1, NULL, 1, 'GoDaddy.com, LLC', NULL, 0, 'usd', NULL, NULL, 'Select Contact Domain Holder link at https://www.godaddy.com/whois/results.aspx?domain=ihan.com', NULL, NULL, NULL, 'Won & Lee, Inc.', 'Select Contact Domain Holder link at https://www.godaddy.com/whois/results.aspx?domain=ihan.com', ', New York, US', NULL, NULL, NULL, 'Select Contact Domain Holder link at https://www.godaddy.com/whois/results.aspx?domain=ihan.com', NULL, NULL, 1, 'eur', 'month', 2500, 2525252500, 252500, '1234124312412313', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1657, 1529432226164, NULL, NULL, 'meins.co', 42, 1, NULL, 1, 'Great Registrars', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 2500, 0, 0, '!!!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1658, 1529693261286, 1555977540000, 1272013920000, 'test.co', 42, 1, NULL, 1, 'Restricted and Reserved names .COInternet', NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, ', CO', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 2500, 0, 0, 'Best value domain name. Period.', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1659, 1529700894059, 1587859140000, 1272268200000, 'v.co', 42, 4, NULL, NULL, 'GoDaddy.com, LLC', NULL, 0, 'usd', 'Registration Private', 'Domains By Proxy, LLC', 'v.co@domainsbyproxy.com', '14455 N. Hayden Road, Scottsdale, Arizona, 85260, US', '+1.4806242599', 'Registration Private', 'Domains By Proxy, LLC', 'v.co@domainsbyproxy.com', '14455 N. Hayden Road, Scottsdale, Arizona, 85260, US', '+1.4806242599', 'Registration Private', 'Domains By Proxy, LLC', 'v.co@domainsbyproxy.com', '14455 N. Hayden Road, Scottsdale, Arizona, 85260, US', '+1.4806242599', 0, 'eur', 'month', 2500, 0, 0, '!!!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1660, 1529701685403, 1749614400000, 1497240000000, '123456.com', 42, 0, NULL, 1, 'eName Technology Co.,Ltd.', NULL, 0, 'usd', 'Xiamen PrivacyProtection Service Co. Ltd.', 'Xiamen Privacy Protection Service Co. Ltd.', 'kmm4mpdfkm@enamewhois.com', 'Software Park wanghai Road No. 19, 603, Xiamenshi, Fujian, 361000, CN', '+86.5922669759', 'Xiamen PrivacyProtection Service Co. Ltd.', 'Xiamen Privacy Protection Service Co. Ltd.', 'kmm4mpdfkm@enamewhois.com', 'Software Park wanghai Road No. 19, 603, Xiamenshi, Fujian, 361000, CN', '+86.5922669759', 'Xiamen PrivacyProtection Service Co. Ltd.', 'Xiamen Privacy Protection Service Co. Ltd.', 'kmm4mpdfkm@enamewhois.com', 'Software Park wanghai Road No. 19, 603, Xiamenshi, Fujian, 361000, CN', '+86.5922669759', 0, 'eur', 'month', 2500, 0, 0, 'The greatest domain name ever!', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0),
+(1661, 1529968454769, NULL, NULL, 'unv.com', 42, 4, NULL, NULL, NULL, NULL, 0, 'usd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'eur', 'month', 2500, 0, 0, '\"WOW! I cannot believe that this domain is available\" -- Everyone', NULL, NULL, NULL, NULL, NULL, NULL, '#FFFFFF', NULL, '#3CBC8D', '#FF5722', '#2196F3', 'Rubik', '#000000', '#F1F1F1', '#565656', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, NULL, 0, NULL, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -295,16 +306,7 @@ CREATE TABLE IF NOT EXISTS `listing_hub_grouping` (
   UNIQUE KEY `listing_unique_grouping` (`listing_hub_id`,`listing_id`),
   UNIQUE KEY `listing_hub_unique_rank` (`listing_hub_id`,`rank`),
   KEY `listing_id_fk` (`listing_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=338 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `listing_hub_grouping`
---
-
-INSERT INTO `listing_hub_grouping` (`id`, `listing_hub_id`, `listing_id`, `rank`) VALUES
-(335, 1609, 50, 0),
-(336, 1609, 51, 1),
-(337, 1609, 53, 2);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -883,7 +885,7 @@ CREATE TABLE IF NOT EXISTS `stats_contact_history` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `verification_code` (`verification_code`),
   KEY `listing_id_contact_idx` (`listing_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stats_contact_history`
@@ -892,7 +894,8 @@ CREATE TABLE IF NOT EXISTS `stats_contact_history` (
 INSERT INTO `stats_contact_history` (`id`, `listing_id`, `timestamp`, `deadline`, `user_ip`, `name`, `email`, `phone`, `offer`, `offer_currency`, `message`, `response`, `verification_code`, `bin`, `verified`, `accepted`, `deposited`, `transferred`, `withdrawn_on`, `payment_type`, `transaction_id`, `doma_fees`, `payment_fees`) VALUES
 (4, 50, 1516334914743, NULL, NULL, 'test', 'won2blee@gmail.com', '+1 718-309-7773', 500, 'usd', 'tests', NULL, 'F2kuSDd5AI', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (11, 5, 1525971050899, NULL, NULL, 'Won', 'won2blee@gmail.com', '+1 718-309-7773', 1500, 'jpy', 'Tree', '', '10ltIGMXwe', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(18, 7, 1526259532117, NULL, NULL, 'Won', 'won2blee@gmail.com', '+1 718-309-7773', 5000, 'usd', 'FHJds', NULL, 'eu8z7oC3tu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(18, 7, 1526259532117, NULL, NULL, 'Won', 'won2blee@gmail.com', '+1 718-309-7773', 5000, 'usd', 'FHJds', NULL, 'eu8z7oC3tu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 1615, 1528218848054, NULL, NULL, 'Won', 'won2blee@gmail.com', '+1 718-309-7773', 50100, 'usd', 'testroo', NULL, 'Fr3xiBKPQf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -13737,15 +13740,6 @@ ALTER TABLE `stats_rental_history`
 --
 ALTER TABLE `stats_search_history`
   ADD CONSTRAINT `search_history_account_fk_idx` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-DELIMITER $$
---
--- Events
---
-DROP EVENT `clean_unverified`$$
-CREATE DEFINER=`xcellion`@`localhost` EVENT `clean_unverified` ON SCHEDULE EVERY 1 WEEK STARTS '2017-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO DELETE FROM listings WHERE listings.verified IS NULL$$
-
-DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

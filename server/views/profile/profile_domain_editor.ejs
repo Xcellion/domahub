@@ -3,7 +3,7 @@
   <!-- EDIT LISTING DETAILS -->
   <div id="editing-section" class="edit-elem non-offer-elem non-stats-elem non-verify-elem">
     <!-- LISTING EDIT TOOLBAR -->
-    <div id="edit-toolbar">
+    <div id="edit-toolbar" class="tabs-toolbar">
 
       <!-- EDITING BUTTONS -->
       <div class="content">
@@ -1670,7 +1670,7 @@
   <div id="stats-section" class="stats-elem non-edit-elem non-verify-elem non-offer-elem is-hidden">
 
     <!-- STATS TOOLBAR -->
-    <div id="stats-toolbar">
+    <div id="stats-toolbar" class="tabs-toolbar">
 
       <!-- STATS BUTTONS -->
       <div class="content">
@@ -1714,14 +1714,28 @@
       <div class="columns">
         <div class="main-column column is-9">
           <div id="tld-chart-card" class="stat-chart-card is-active card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Top Level Domains</h3>
-              <a class="chart-more-details-button button is-hidden is-stylish is-small">
-                <div class="icon is-small">
-                  <i class="fal fa-search"></i>
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Top Level Domains</h3>
+                  <small class="card-header-tip tip">All the top level domains for your DomaHub listings.</small>
                 </div>
-                <span>More Details</span>
-              </a>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-hidden is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-content">
               <canvas id="tld-canvas"></canvas>
@@ -1730,42 +1744,84 @@
         </div>
         <div class="side-column column is-3">
           <div id="letter-chart-card" class="stat-chart-card card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Letter Count</h3>
-              <a class="chart-more-details-button button is-stylish is-small">
-                <div class="icon is-small">
-                  <i class="fal fa-search"></i>
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Letter Count</h3>
+                  <small class="card-header-tip tip is-hidden">The amount of letters in your DomaHub listings.</small>
                 </div>
-                <span>More Details</span>
-              </a>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-hidden is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-content">
               <canvas id="letter-canvas"></canvas>
             </div>
           </div>
           <div id="registrar-chart-card" class="stat-chart-card card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Registrars</h3>
-              <a class="chart-more-details-button button is-stylish is-small">
-                <div class="icon is-small">
-                  <i class="fal fa-search"></i>
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Registrars</h3>
+                  <small class="card-header-tip tip is-hidden">The various registrars for your DomaHub listings.</small>
                 </div>
-                <span>More Details</span>
-              </a>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-hidden is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-content">
               <canvas id="registrar-canvas"></canvas>
             </div>
           </div>
           <div id="registration-chart-card" class="stat-chart-card card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Registration Date</h3>
-              <a class="chart-more-details-button button is-stylish is-small">
-                <div class="icon is-small">
-                  <i class="fal fa-search"></i>
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Registration Date</h3>
+                  <small class="card-header-tip tip is-hidden">The registration dates for your DomaHub listings.</small>
                 </div>
-                <span>More Details</span>
-              </a>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-hidden is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-content">
               <canvas id="registration-canvas"></canvas>
