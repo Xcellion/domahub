@@ -2013,7 +2013,9 @@ module.exports = {
   function get_domain_dns(listing_obj, get_a){
     return Q.Promise(function(resolve, reject, notify){
       console.log("PF: Now looking up WHOIS info for " + listing_obj.domain_name + "...");
-      whois.lookup(listing_obj.domain_name, function(err, data){
+      whois.lookup(listing_obj.domain_name, {
+        "timeout":  10000,    // timeout
+      }, function(err, data){
         var whoisObj = {};
         if (err){
           // error.log(err, "Failed to look up WHOIS information for table building during verification for domain " + listing_obj.domain_name);
