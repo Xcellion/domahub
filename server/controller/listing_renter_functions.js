@@ -803,7 +803,7 @@ module.exports = {
                   delete getUserListingObj(req.user.listings, domain_name).verified;
                 }
 
-                getWhoIs(req, res, next, domain_name, true);
+                checkListedOrCompare(req, res, next, domain_name, true);
               });
             }
 
@@ -1028,7 +1028,7 @@ module.exports = {
         res.redirect("https://domahub.com/listing/" + hostname);
       }
       else {
-        getWhoIs(req, res, next, domain_name, true);
+        checkListedOrCompare(req, res, next, domain_name, true);
       }
     }
     else {
@@ -1041,12 +1041,12 @@ module.exports = {
           res.redirect("https://domahub.com/listing/" + hostname);
         }
         else {
-          getWhoIs(req, res, next, domain_name, true);
+          checkListedOrCompare(req, res, next, domain_name, true);
         }
       }, function(result){
         //listed! go on with routes
         req.session.listing_info = result.info[0];
-        getWhoIs(req, res, next, domain_name, false);
+        checkListedOrCompare(req, res, next, domain_name, false);
       });
     }
   },
@@ -1377,114 +1377,83 @@ function googleSafeCheck(req, res, address, callback){
   });
 }
 
-//helper function to run WHOIS since domain isn't listed but is a real domain
-function getWhoIs(req, res, next, domain_name, unlisted){
-  whois.lookup(domain_name, {
-    "timeout":  10000,    // timeout
-  }, function(err, data){
-
-    //WHOIS info
-    var whoisObj = {};
-    if (data && !err){
-      var array = parser.parseWhoIsData(data);
-      for (var x = 0; x < array.length; x++){
-        whoisObj[array[x].attribute.trim()] = array[x].value;
-      }
+//helper function check if domain is unlisted / compare tool active
+function checkListedOrCompare(req, res, next, domain_name, unlisted){
+  if (unlisted){
+    var listing_info = {
+      domain_name: domain_name,
+      unlisted: true,
     }
 
-    //who is for unlisted only
-    if (unlisted){
-      var listing_info = {
-        domain_name: domain_name,
-        unlisted: true,
-      }
+    //COMPARE TOOL VARIABLES
+    if (req.query.compare == "true"){
+      console.log("LRF: Rendering the comparison tool!");
 
-      //development troubleshooting for whoisobj
-      if (process.env.NODE_ENV == "dev"){
-        listing_info.dev_whois = whoisObj;
-      }
+      var array_of_registrars = ["GoDaddy", "Google", "NameSilo", "NameCheap", "Bluehost", "HostGator", "Hover", "Gandi"];
+      listing_info.registrar_name = array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)];
 
-      //COMPARE TOOL VARIABLES
-      if (req.query.compare == "true"){
-        console.log("LRF: Rendering the comparison tool!");
+      //random info for compare tool
+      listing_info.status = 1;
+      listing_info.premium = true;
+      listing_info.username = "The Domain Master";
+      listing_info.owner_id = "compare";
+      listing_info.email = "domainowner@domains.com";
+      listing_info.date_registered = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
+      listing_info.date_updated = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
+      listing_info.categories = Categories.randomBackAsString();
+      listing_info.date_created = new Date().getTime();
+      listing_info.description = Descriptions.random();
+      listing_info.description_footer = "The greatest domains in the industry.";
+      listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000) * 100000;
+      listing_info.buy_price = listing_info.min_price * 2;
+      listing_info.default_currency = "usd";
 
-        var array_of_registrars = ["GoDaddy", "Google", "NameSilo", "NameCheap", "Bluehost", "HostGator", "Hover", "Gandi"];
-        listing_info.registrar_name = array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)];
+      //rental
+      listing_info.rentable = 1;
+      listing_info.price_rate = Math.round(Math.random() * 25000);
+      listing_info.price_type = "day";
 
-        //random info for compare tool
-        listing_info.status = 1;
-        listing_info.premium = true;
-        listing_info.username = "The Domain Master";
-        listing_info.owner_id = "compare";
-        listing_info.email = "domainowner@domains.com";
-        listing_info.date_registered = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
-        listing_info.date_updated = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
-        listing_info.categories = Categories.randomBackAsString();
-        listing_info.date_created = new Date().getTime();
-        listing_info.description = Descriptions.random();
-        listing_info.description_footer = "The greatest domains in the industry.";
-        listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000) * 100000;
-        listing_info.buy_price = listing_info.min_price * 2;
-        listing_info.default_currency = "usd";
+      //design
+      listing_info.primary_color = "#3CBC8D";
+      listing_info.secondary_color = "#FF5722";
+      listing_info.tertiary_color = "#2196F3";
+      listing_info.font_color = "#000000";
+      listing_info.font_name = "Nunito Sans";
+      listing_info.background_color = "#FFFFFF";
+      listing_info.background_image = "";
+      listing_info.logo = "";
 
-        //rental
-        listing_info.rentable = 1;
-        listing_info.price_rate = Math.round(Math.random() * 25000);
-        listing_info.price_type = "day";
+      //left side
+      listing_info.show_registrar = 1;
+      listing_info.show_registration_date = 1;
+      listing_info.show_categories = 1;
+      listing_info.show_godaddy_appraisal = 1;
+      listing_info.show_domainindex_appraisal = 1;
+      listing_info.show_freevaluator_appraisal = 1;
+      listing_info.show_estibot_appraisal = 1;
+      listing_info.show_placeholder = 1;
 
-        //design
-        listing_info.primary_color = "#3CBC8D";
-        listing_info.secondary_color = "#FF5722";
-        listing_info.tertiary_color = "#2196F3";
-        listing_info.font_color = "#000000";
-        listing_info.font_name = "Nunito Sans";
-        listing_info.background_color = "#FFFFFF";
-        listing_info.background_image = "";
-        listing_info.logo = "";
-
-        //left side
-        listing_info.show_registrar = 1;
-        listing_info.show_registration_date = 1;
-        listing_info.show_categories = 1;
-        listing_info.show_godaddy_appraisal = 1;
-        listing_info.show_domainindex_appraisal = 1;
-        listing_info.show_freevaluator_appraisal = 1;
-        listing_info.show_estibot_appraisal = 1;
-        listing_info.show_placeholder = 1;
-
-        //right side
-        listing_info.show_social_sharing = 1;
-        listing_info.show_traffic_graph = 1;
-        listing_info.show_alexa_stats = 1;
-        listing_info.show_history_ticker = 1;
-        listing_info.show_domain_list = 1;
-      }
-
-      req.session.listing_info = listing_info;
-
-      res.render("listings/listing.ejs", {
-        user: req.user,
-        listing_info: listing_info,
-        compare : (req.query.compare == "true") ? true : false,
-        fonts : Fonts.all(),
-        categories : Categories.all()
-      });
+      //right side
+      listing_info.show_social_sharing = 1;
+      listing_info.show_traffic_graph = 1;
+      listing_info.show_alexa_stats = 1;
+      listing_info.show_history_ticker = 1;
+      listing_info.show_domain_list = 1;
     }
 
-    //domain is listed on DomaHub, we just need to get the registrar creation and last updated date
-    else {
-      //development troubleshooting for whoisobj
-      if (process.env.NODE_ENV == "dev"){
-        req.session.listing_info.dev_whois = whoisObj;
-      }
-
-      if (whoisObj["Updated Date"]){
-        req.session.listing_info.date_updated = whoisObj["Updated Date"];
-      }
-
-      next();
-    }
-  });
+    req.session.listing_info = listing_info;
+    res.render("listings/listing.ejs", {
+      user: req.user,
+      listing_info: listing_info,
+      compare : (req.query.compare == "true") ? true : false,
+      fonts : Fonts.all(),
+      categories : Categories.all()
+    });
+  }
+  //domain is listed on DomaHub, go next
+  else {
+    next();
+  }
 }
 
 //helper function to add http or https
