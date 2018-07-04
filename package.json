@@ -33,7 +33,7 @@
     "nodemailer-sendgrid-transport": "0.2.0",
     "nodemon": "1.15.0",
     "open-exchange-rates": "0.3.0",
-    "parse-domain": "1.0.0",
+    "parse-domain": "^2.1.2",
     "parse-whois": "1.0.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
