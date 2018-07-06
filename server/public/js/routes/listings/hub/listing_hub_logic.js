@@ -424,13 +424,19 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
     else if (listings_to_show[start_at + x].min_price){
       var price_tag = "Make offer - " + formatCurrency(listings_to_show[start_at + x].min_price, listings_to_show[start_at + x].default_currency);
     }
-    else if (listings_to_show[start_at + x].price_rate && listings_to_show[start_at + x].rentable){
-      var price_tag = "Rent now - " + formatCurrency(listings_to_show[start_at + x].price_rate, listings_to_show[start_at + x].default_currency) + " / " + listings_to_show[start_at + x].price_type;
+
+    //available now (no min, bin, or rent)
+    if (typeof price_tag_rent == "undefined" && typeof price_tag == "undefined"){
+      var price_tag = "Available now!"
     }
-    else {
-      var price_tag = "Available now!";
+
+    //also view rental tags
+    if (listings_to_show[start_at + x].price_rate && listings_to_show[start_at + x].rentable){
+      price_tag += "</br>Rent now - " + formatCurrency(listings_to_show[start_at + x].price_rate, listings_to_show[start_at + x].default_currency) + " / " + listings_to_show[start_at + x].price_type;
+      clone_col.find(".price-tag").addClass("rent-visible");
     }
-    clone_col.find(".price-text").text(price_tag);
+
+    clone_col.find(".price-text").html(price_tag);
 
     //click to see details
     clone_col.on("click", function(){

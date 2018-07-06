@@ -1828,7 +1828,6 @@ function checkPostedDomainName(user, domains_sofar, domain_name, min_price, buy_
 
   //check domain
   if (parsed_domain == null || !validator.isFQDN(domain_name)){
-    console.log(parsed_domain, domain_name, validator.isFQDN(domain_name));
     bad_reasons.push("Invalid domain name!");
   }
   //subdomains are not allowed
