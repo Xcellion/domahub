@@ -359,7 +359,6 @@ function setupRightHalf(){
       $("#domainlist-module").addClass("is-hidden");
     }
     else {
-      $("#domainlist-tab").removeClass("is-hidden");
       if ($("#domainlist-tab").hasClass('is-active')){
         $("#domainlist-module").removeClass("is-hidden");
       }
@@ -1624,6 +1623,7 @@ function setupRightHalf(){
         }
       }).done(function(data){
         if (data.state == "success" && data.listings.length > 0){
+          $("#domainlist-tab").removeClass('is-hidden');
           listing_info.other_listings = data.listings;
           createOtherDomains(data.listings);
         }
