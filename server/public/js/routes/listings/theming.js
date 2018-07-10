@@ -2,6 +2,7 @@ $(document).ready(function() {
   if (typeof listing_info != "undefined"){
     setupTheming();
     setupFooter();
+    setupListingHeader();
   }
 });
 
@@ -149,6 +150,31 @@ function setupFooter(){
 
   //</editor-fold>
 
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------SET UP HEADER-------------------------------
+
+function setupListingHeader(){
+  if (listing_info.premium && listing_info.description_header){
+    $("#listing-header-text").text(listing_info.description_header);
+    $("#dh-header").removeClass('is-hidden');
+
+    //show both header and footer if we're showing header
+    $("#listed-page").css("height", "calc(100vh - 220px)");
+
+    //theme header
+    if (listing_info.header_background_color){
+      stylize(listing_info.header_background_color, ".page-contents #dh-header", "background-color");
+    }
+    if (listing_info.header_color){
+      stylize(listing_info.header_color, ".page-contents #listing-header-text", "color");
+    }
+  }
+  else {
+    $("#dh-header").addClass('is-hidden');
+  }
 }
 
 //</editor-fold>

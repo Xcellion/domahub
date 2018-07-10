@@ -11,6 +11,18 @@
 <script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
 
 <div id="listed-page" class="page-contents is-hidden">
+
+  <header id="dh-header" class="footer is-hidden">
+    <div class="container">
+      <div class="footer-bar">
+        <div class="bar-left"></div>
+        <div class="bar-right">
+          <h2 id="listing-header-text" class="footer-item"></h2>
+        </div>
+      </div>
+    </div>
+  </header>
+
   <div class="listing-page min-height">
     <section class="listing-section">
       <div class="listing-wrapper">
@@ -20,6 +32,9 @@
 
           <!-- DOMAIN NAME & PRICE TAGS -->
           <div class="control">
+
+            <img id="main-image" class="is-hidden" />
+
             <h1 class="domain-title title is-1 is-bold is-primary"></h1>
             <div class="control">
 
@@ -137,6 +152,7 @@
 
         </div>
 
+        <!-- LISTING RIGHT SIDE -->
         <div class="listing-right">
 
           <!-- CLICK TO CHANGE MODULE TABS -->
@@ -385,6 +401,7 @@
           </div>
 
         </div>
+
       </div>
     </section>
   </div>

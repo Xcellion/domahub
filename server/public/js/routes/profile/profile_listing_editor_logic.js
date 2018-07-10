@@ -230,11 +230,6 @@ function updateEditorDomains(selected_domain_ids){
       $("#domain-name-input").removeClass('is-hidden');
     }
 
-    //unhide unlisted stuff if not
-    if (current_listing.status != 4){
-      $(".hide-for-unlisted").removeClass("is-hidden");
-    }
-
     //refresh all changeable inputs
     $(".changeable-input").val("");
 
@@ -359,6 +354,7 @@ function updateEditorDomains(selected_domain_ids){
     //domain descriptions
     $("#description").val(listing_info.description);
     $("#description-hook").val(listing_info.description_hook);
+    $("#description-header").val(listing_info.description_header);
     $("#description-footer").val(listing_info.description_footer);
     $("#description-footer-link").val(listing_info.description_footer_link);
     if (listing_info.domain_name){
@@ -759,9 +755,11 @@ function updateEditorDomains(selected_domain_ids){
     updatePremiumNotification();
     updateColorScheme(listing_info);
     updateFontStyling(listing_info);
+    updateHeaderStyling(listing_info);
     updateFooterStyling(listing_info);
     updateBackground(listing_info);
     updateLogo(listing_info);
+    updateMainImage(listing_info);
     updateModules(listing_info);
     updateContentDesign(listing_info);
     updatePriceInputs(listing_info);
@@ -877,6 +875,21 @@ function updateEditorDomains(selected_domain_ids){
     $("#example-footer-background").css("background-color", listing_info.footer_background_color);
     $("#example-footer-text").css("color", listing_info.footer_color);
   }
+  function updateHeaderStyling(listing_info){
+    var minicolor_options = {
+      letterCase: "uppercase",
+      swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
+    }
+
+    $("#header-background-color-input").val(listing_info.header_background_color)
+    $("#header-background-color-input").minicolors("destroy").minicolors(minicolor_options);
+    $("#header-color-input").val(listing_info.header_color);
+    $("#header-color-input").minicolors("destroy").minicolors(minicolor_options);
+
+    //update the preview
+    $("#header-footer-background").css("background-color", listing_info.header_background_color);
+    $("#header-footer-text").css("color", listing_info.header_color);
+  }
   function updateBackground(listing_info){
     //remove any input values on upload forms
     $("#background-image-input").val("");
@@ -918,6 +931,17 @@ function updateEditorDomains(selected_domain_ids){
 
     $("#logo-link-input").val(listing_info.logo);
     $("#example-logo").attr('src', logo);
+  }
+  function updateMainImage(listing_info){
+    //remove any input values on upload forms
+    $("#mainimage-image-input").val("");
+    $("#mainimage-link-refresh").removeClass('is-primary').addClass('is-disabled');
+
+    //main image
+    var main_image = (listing_info.main_image == null || listing_info.main_image == undefined || listing_info.main_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMAGE&w=200&h=125" : listing_info.main_image;
+
+    $("#mainimage-link-input").val(listing_info.main_image);
+    $("#example-main-image").attr('src', main_image);
   }
   function updateContentDesign(listing_info){
     checkBox(listing_info.show_placeholder, $("#placeholder-input"));
@@ -1321,6 +1345,19 @@ function updateEditorDomains(selected_domain_ids){
       }
     });
 
+    //remove uploading data and any uploaded images if typing the link (main)
+    $("#mainimage-link-input").on("input", function(){
+      $(this).data("uploading", false);
+      $("#main-image-input").val("");
+      var main_compare = (listing_info.main_image == null || listing_info.main_image == undefined) ? "" : listing_info.main_image;
+      if ($(this).val() != main_compare){
+        $("#mainimage-link-refresh").addClass('is-primary').removeClass('is-disabled');
+      }
+      else {
+        $("#mainimage-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      }
+    });
+
     //refresh background image (for preview)
     $("#background-link-refresh").off().on("click", function(){
       $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
@@ -1329,8 +1366,16 @@ function updateEditorDomains(selected_domain_ids){
 
     //refresh logo (for preview)
     $("#logo-link-refresh").off().on("click", function(){
+      var current_image = ($("#logo-link-input").val()) ? $("#logo-link-input").val() : "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=200&h=125";
       $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
-      $("#example-logo").attr('src', $("#logo-link-input").val());
+      $("#example-logo").attr('src', current_image);
+    });
+
+    //refresh main (for preview)
+    $("#mainimage-link-refresh").off().on("click", function(){
+      var current_image = ($("#mainimage-link-input").val()) ? $("#mainimage-link-input").val() : "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMAGE&w=200&h=125";
+      $("#mainimage-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      $("#example-main-image").attr('src', current_image);
     });
 
   }
@@ -1390,6 +1435,10 @@ function updateEditorDomains(selected_domain_ids){
         $("#logo-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
         $("#example-logo").attr("src-image", "https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING");
       }
+      else if (name_of_attr == "main_image" && input_elem[0].files[0]){
+        $("#mainimage-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
+        $("#example-main-image").attr("src-image", "https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING");
+      }
     }
     //hide the cancel / save
     else {
@@ -1443,7 +1492,7 @@ function updateEditorDomains(selected_domain_ids){
       var elements_list = (contact_modal) ? ".modal-input" : ".changeable-input, #paths-input";
       $(elements_list).each(function(e){
         var input_name = $(this).data("name");
-        var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
+        var input_val = (input_name == "background_image" || input_name == "logo" || input_name == "main_image") ? $(this)[0].files[0] : $(this).val();
 
         //if changing listing image link
         if (input_name == "background_image_link"){
@@ -1451,6 +1500,9 @@ function updateEditorDomains(selected_domain_ids){
         }
         else if (input_name == "logo_image_link"){
           var listing_comparison = current_listing["logo"];
+        }
+        else if (input_name == "main_image_link"){
+          var listing_comparison = current_listing["main_image"];
         }
         else if (input_name.indexOf("phone") != -1 && typeof intlTelInputUtils != "undefined"){
           var input_val = $(this).intlTelInput("getNumber", intlTelInputUtils.numberFormat.INTERNATIONAL);
@@ -1463,10 +1515,10 @@ function updateEditorDomains(selected_domain_ids){
           var listing_comparison = (current_listing.date_registered) ? moment(current_listing.date_registered).format('YYYY-MM-DDTHH:mm') : "";
         }
         else if (["price_rate", "buy_price", "min_price"].indexOf(input_name) != -1){
-          var listing_comparison = current_listing[input_name] * getCurrencyMultiplier($("#default_currency-input").val());
+          var listing_comparison = current_listing[input_name] / getCurrencyMultiplier($("#default_currency-input").val());
         }
         else if (input_name == "registrar_cost"){
-          var listing_comparison = current_listing[input_name] * getCurrencyMultiplier($("#annual-cost-currency-input").val());
+          var listing_comparison = current_listing[input_name] / getCurrencyMultiplier($("#annual-cost-currency-input").val());
         }
         else {
           var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
@@ -1474,7 +1526,7 @@ function updateEditorDomains(selected_domain_ids){
 
         //if null or undefined (or not uploading, for background/logo link input)
         if (input_val != listing_comparison && input_val != null && input_val != undefined && !$(this).data("uploading")){
-          if ((input_name == "logo_image_link" || input_name == "background_image_link") && input_val == "" && listing_comparison == undefined){
+          if ((input_name == "logo_image_link" || input_name == "background_image_link" || input_name == "main_image_link") && input_val == "" && listing_comparison == undefined){
           }
           else {
             formData.append(input_name, input_val);
@@ -1487,7 +1539,6 @@ function updateEditorDomains(selected_domain_ids){
     // for (var pair of formData.entries()) {
     //   console.log(pair[0]+ ', ' + pair[1]);
     // }
-    // submit_button.removeClass('is-loading');
 
     $.ajax({
       url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",

@@ -814,6 +814,11 @@ function viewDomainDetails(push, url_tab){
         var temp_listing_info = getDomainByID(selected_domain_ids[0]);
       }
       url_tab = (temp_listing_info.status == 4) ? "domain-info" : "info";
+
+      //unhide unlisted stuff if not
+      if (temp_listing_info.status != 4){
+        $(".hide-for-unlisted").removeClass("is-hidden");
+      }
     }
 
     showEditor(url_tab, selected_domain_ids, push);

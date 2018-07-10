@@ -465,7 +465,7 @@ module.exports = {
             cb(null, true);
           }
         }
-      }).fields([{ name: 'background_image', maxCount: 1 }, { name: 'logo', maxCount: 1 }]);
+      }).fields([{ name: 'background_image', maxCount: 1 }, { name: 'logo', maxCount: 1 }, { name: 'main_image', maxCount: 1 }]);
 
       upload_img(req, res, function(err){
         if (err){
@@ -491,7 +491,7 @@ module.exports = {
 
     //check the user image and upload to imgur
     checkListingImage : function(req, res, next){
-      if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
+      if (req.files && (req.files.background_image || req.files.logo || req.files.main_image) && !req.body.background_image_link && !req.body.logo_image_link && !req.body.main_image_link){
 
         //custom image upload promise function
         var q_function = function(formData){
@@ -551,6 +551,9 @@ module.exports = {
         }
         if (req.body.logo == "" || req.body.logo_image_link == ""){
           req.session.new_listing_info.logo = null;
+        }
+        if (req.body.main_image == "" || req.body.main_image_link == ""){
+          req.session.new_listing_info.main_image = null;
         }
         next();
       }
@@ -893,6 +896,10 @@ module.exports = {
         else if (req.body.description_footer_link && !validator.isURL(req.body.description_footer_link)){
           error.handler(req, res, "That's an invalid footer URL! Please enter a different URL and try again!", "json");
         }
+        //invalid header description
+        else if (req.body.description_header && (req.body.description_header.length < 0 || req.body.description_header.length > 75)){
+          error.handler(req, res, "The header description cannot be more than 75 characters!", "json");
+        }
         //invalid domain capitalization
         else if (req.body.domain_name && domain_punycode.toLowerCase() != getUserListingObjByName(req.user.listings, req.params.domain_name).domain_name.toLowerCase()){
           error.handler(req, res, "That's an invalid domain name capitalization. Please try again!", "json");
@@ -929,6 +936,14 @@ module.exports = {
         else if (req.body.footer_color && !validator.isHexColor(req.body.footer_color)){
           error.handler(req, res, "That's an invalid footer text color! Please choose a different color and try again!", "json");
         }
+        //invalid footer background color
+        else if (req.body.header_background_color && !validator.isHexColor(req.body.header_background_color)){
+          error.handler(req, res, "That's an invalid header background color! Please choose a different color and try again!", "json");
+        }
+        //invalid footer font color
+        else if (req.body.header_color && !validator.isHexColor(req.body.header_color)){
+          error.handler(req, res, "That's an invalid header text color! Please choose a different color and try again!", "json");
+        }
         //invalid background link
         else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
           error.handler(req, res, "That's an invalid background URL! Please enter a different URL and try again!", "json");
@@ -936,6 +951,10 @@ module.exports = {
         //invalid logo link
         else if (req.body.logo_image_link && !validator.isURL(req.body.logo_image_link)){
           error.handler(req, res, "That's an invalid logo URL! Please enter a different URL and try again!", "json");
+        }
+        //invalid main image link
+        else if (req.body.main_image_link && !validator.isURL(req.body.main_image_link)){
+          error.handler(req, res, "That's an invalid main image URL! Please enter a different URL and try again!", "json");
         }
         //invalid domain owner
         else if (req.body.show_registrar && (show_registrar != 0 && show_registrar != 1)){
@@ -1032,6 +1051,7 @@ module.exports = {
           //info
           req.session.new_listing_info.description_footer = req.body.description_footer;
           req.session.new_listing_info.description_footer_link = req.body.description_footer_link;
+          req.session.new_listing_info.description_header = req.body.description_header;
           req.session.new_listing_info.domain_name = domain_punycode;
 
           //design
@@ -1043,6 +1063,8 @@ module.exports = {
           req.session.new_listing_info.background_color = req.body.background_color;
           req.session.new_listing_info.footer_color = req.body.footer_color;
           req.session.new_listing_info.footer_background_color = req.body.footer_background_color;
+          req.session.new_listing_info.header_color = req.body.header_color;
+          req.session.new_listing_info.header_background_color = req.body.header_background_color;
 
           //left side
           req.session.new_listing_info.show_registrar = show_registrar;
@@ -1076,9 +1098,14 @@ module.exports = {
             req.session.new_listing_info.background_image = req.body.background_image_link;
           }
 
-          //posted a URL for background image, not upload
+          //posted a URL for logo, not upload
           if (req.body.logo_image_link){
             req.session.new_listing_info.logo = req.body.logo_image_link;
+          }
+
+          //posted a URL for main image, not upload
+          if (req.body.main_image_link){
+            req.session.new_listing_info.main_image = req.body.main_image_link;
           }
 
           next();
@@ -1089,6 +1116,7 @@ module.exports = {
         if (
           req.body.domain_name ||
           req.body.description_footer ||
+          req.body.description_header ||
           req.body.description_footer_link ||
           req.body.primary_color ||
           req.body.secondary_color ||
@@ -1098,8 +1126,11 @@ module.exports = {
           req.body.background_color ||
           req.body.footer_background_color ||
           req.body.footer_color ||
+          req.body.header_background_color ||
+          req.body.header_color ||
           req.body.background_image_link ||
           req.body.logo_image_link ||
+          req.body.main_image_link ||
           req.body.show_registrar ||
           req.body.show_registration_date ||
           req.body.show_domain_list ||
@@ -1342,7 +1373,7 @@ module.exports = {
 
         //delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
         for (var x in req.session.new_listing_info){
-          if (!req.body[x] && req.body[x] != "" && x != "background_image" && x != "logo"){
+          if (!req.body[x] && req.body[x] != "" && x != "background_image" && x != "logo" && x != "main_image"){
             delete req.session.new_listing_info[x];
           }
         }

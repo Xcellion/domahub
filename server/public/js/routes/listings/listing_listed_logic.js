@@ -45,6 +45,7 @@ function setupLeftHalf(){
   //domain name
   $(".domain-title").text(punycode.toUnicode(listing_info.domain_name));
 
+  setupMainImage();
   setupPriceTags();
   setupDescription();
   setupRegistrar();
@@ -53,6 +54,19 @@ function setupLeftHalf(){
   setupAppraisal();
   setupSocial();
 }
+
+//<editor-fold>-------------------------------MAIN IMAGE-------------------------------
+
+function setupMainImage(){
+  if (listing_info.premium && listing_info.main_image){
+    $("#main-image").removeClass('is-hidden').attr("src", listing_info.main_image);
+  }
+  else {
+    $("#main-image").addClass('is-hidden');
+  }
+}
+
+//</editor-fold>
 
 //<editor-fold>-------------------------------PRICE TAGS-------------------------------
 

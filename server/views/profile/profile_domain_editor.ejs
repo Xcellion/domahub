@@ -108,6 +108,21 @@
               </div>
               <div class="control">
                 <label class="label" for="description-footer">
+                  <span>Header Text</span>
+                  <% if (!user.stripe_subscription_id) { %>
+                    <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
+                      <i class="fal fa-trophy-alt"></i>
+                    </div>
+                  <% } %>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Maximum of 75 characters. Leave blank to hide the header." data-balloon-pos="top">
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+                  </div>
+                </label>
+                <small class="tip">Text that is displayed on the header of the listing page. An ideal location for an eye-catching phrase.</small>
+                <input id="description-header" data-name="description_header" tabindex="0" class="premium-input input changeable-input" placeholder="Buy this domain today!" />
+              </div>
+              <div class="control">
+                <label class="label" for="description-footer">
                   <span>Footer Text</span>
                   <% if (!user.stripe_subscription_id) { %>
                     <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
@@ -671,8 +686,14 @@
             <div class="card-image">
               <h3 class="card-header-title notification no-shadow is-primary">Listing Design Preview</h3>
             </div>
+            <div id="example-header-background" class="card-header has-text-right">
+              <h3 class="is-pulled-right">
+                This is some text on the header of the listing page.
+              </h3>
+            </div>
             <div class="card-content">
               <div class="control">
+                <img id="example-main-image" class="is-pulled-right" src="" />
                 <h1 id="example-domain-name" class="preview-elem is-bold break-all"></h1>
               </div>
               <div class="control">
@@ -708,96 +729,121 @@
               </div>
             </div>
           </div>
-          <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">Fonts and Colors</h3>
-            </div>
-            <div class="card-content">
-              <div class="control">
-                <label class="label" for="random-button">Theme</label>
-                <div class="control is-grouped">
-                  <div class="control has-icon">
-                    <span class="select no-shadow is-fullwidth is-stylish">
-                      <select tabindex="0" id="theme-input" class="premium-input"></select>
-                    </span>
-                    <div class="icon">
-                      <i class="fal fa-image"></i>
-                    </div>
-                  </div>
+          <div class="columns">
+            <div class="column is-7">
+              <div class="card is-fullwidth">
+                <div class="card-header">
+                  <h3 class="card-header-title">Fonts and Colors</h3>
+                </div>
+                <div class="card-content">
                   <div class="control">
-                    <a id="random-theme-button" class="premium-input no-shadow button is-stylish is-small">
-                      <div class="icon is-small">
-                        <i class="fal fa-random"></i>
+                    <label class="label" for="random-button">Theme</label>
+                    <div class="control is-grouped">
+                      <div class="control has-icon">
+                        <span class="select no-shadow is-fullwidth is-stylish">
+                          <select tabindex="0" id="theme-input" class="premium-input"></select>
+                        </span>
+                        <div class="icon">
+                          <i class="fal fa-image"></i>
+                        </div>
                       </div>
-                      <span>Random Theme</span>
-                    </a>
+                      <div class="control">
+                        <a id="random-theme-button" class="premium-input no-shadow button is-stylish is-small">
+                          <div class="icon is-small">
+                            <i class="fal fa-random"></i>
+                          </div>
+                          <span>Random Theme</span>
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Color Scheme</span>
-                </label>
-                <small class="tip">The three main colors of the listing page.</small>
-                <div class="control">
-                  <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <input id="tertiary-color-input" data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input input changeable-input">
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Font Styling</span>
-                </label>
-                <div class="control is-grouped">
                   <div class="control">
-                    <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input input changeable-input">
+                    <label class="label">
+                      <span>Color Scheme</span>
+                    </label>
+                    <small class="tip">The three main colors of the listing page.</small>
+                    <div class="control">
+                      <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input input changeable-input">
+                    </div>
+                    <div class="control">
+                      <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input input changeable-input">
+                    </div>
+                    <div class="control">
+                      <input id="tertiary-color-input" data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input input changeable-input">
+                    </div>
                   </div>
-                  <div class="control has-icon">
-                    <span class="select no-shadow is-stylish is-fullwidth">
-                      <select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
-                        <%# make all the categories %>
-                        <% for (var x = 0; x < fonts.length; x++){ %>
-                          <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
-                        <% } %>
-                      </select>
-                    </span>
-                    <div class="icon">
-                      <i class="fal fa-font"></i>
+                  <div class="control">
+                    <label class="label">
+                      <span>Font Styling</span>
+                    </label>
+                    <div class="control is-grouped">
+                      <div class="control">
+                        <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input input changeable-input">
+                      </div>
+                      <div class="control has-icon">
+                        <span class="select no-shadow is-stylish is-fullwidth">
+                          <select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
+                            <%# make all the categories %>
+                            <% for (var x = 0; x < fonts.length; x++){ %>
+                              <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
+                              <% } %>
+                            </select>
+                          </span>
+                          <div class="icon">
+                            <i class="fal fa-font"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="control">
+                      <label class="label">
+                        <span>Background Color</span>
+                        <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+                      </label>
+                      <div class="control">
+                        <input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input input changeable-input">
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="control">
-                <label class="label">
-                  <span>Background Color</span>
-                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="The background image takes precedence over the background color. The background color will appear through any transparent layers in the background image." data-balloon-pos="up">
-                    <i class="fal fa-question-circle"></i>
+              <div class="column is-5">
+                <div class="card is-fullwidth">
+                  <div class="card-header">
+                    <h3 class="card-header-title">Header and Footer</h3>
                   </div>
-                </label>
-                <div class="control">
-                  <input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input input changeable-input">
-                </div>
-              </div>
-              <div class="control">
-                <label class="label">
-                  <span>Footer Styling</span>
-                </label>
-                <small class="tip">The color of the footer background color and the color of the footer text.</small>
-                <div class="control">
-                  <input id="footer-background-color-input" data-name="footer_background_color" placeholder="#F1F1F1" type="text" class="premium-input input changeable-input">
-                </div>
-                <div class="control">
-                  <input id="footer-color-input" data-name="footer_color" placeholder="#565656" type="text" class="premium-input input changeable-input">
+                  <div class="card-content">
+                    <div class="control">
+                      <label class="label">
+                        <span>Header Styling</span>
+                      </label>
+                      <small class="tip">The color of the header background color and the color of the header text.</small>
+                      <div class="control">
+                        <input id="header-background-color-input" data-name="header_background_color" placeholder="#FFFFFF" type="text" class="premium-input input changeable-input">
+                      </div>
+                      <div class="control">
+                        <input id="header-color-input" data-name="header_color" placeholder="#000000" type="text" class="premium-input input changeable-input">
+                      </div>
+                    </div>
+                    <div class="control">
+                      <label class="label">
+                        <span>Footer Styling</span>
+                      </label>
+                      <small class="tip">The color of the footer background color and the color of the footer text.</small>
+                      <div class="control">
+                        <input id="footer-background-color-input" data-name="footer_background_color" placeholder="#F1F1F1" type="text" class="premium-input input changeable-input">
+                      </div>
+                      <div class="control">
+                        <input id="footer-color-input" data-name="footer_color" placeholder="#565656" type="text" class="premium-input input changeable-input">
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         <div class="column is-6">
           <div class="card is-fullwidth">
             <div class="card-header">
@@ -855,6 +901,33 @@
                       <i class="fal fa-upload" aria-hidden="true"></i>
                     </div>
                     <span data-default-name="Upload Logo" id="logo-image-label" class="is-hidden-mobile file-label">Upload Logo</span>
+                  </label>
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">
+                  <span>Main Image URL</span>
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Displayed right above your domain name. The ideal width is 580 pixels, the height can be whatever fits best with your listing branding. Uploaded images cannot be larger than 1MB." data-balloon-pos="up">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">Choose an existing image on the web or upload your own image using the upload button.</small>
+                <div class="control has-addons">
+                  <input id="mainimage-link-input" data-name="main_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
+                  <button id="mainimage-link-refresh" class='button no-shadow is-stylish is-small is-disabled is-outlined'>
+                    <div class="icon is-small">
+                      <i class="fal fa-sync-alt"></i>
+                    </div>
+                    <span class="is-hidden-mobile">Refresh Preview</span>
+                  </button>
+                  <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                    <input tabindex="0" id="mainimage-image-input" data-name="main_image" type="file" name="main_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                  </form>
+                  <label for="mainimage-image-input" class="premium-input button no-shadow is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-upload" aria-hidden="true"></i>
+                    </div>
+                    <span data-default-name="Upload Main Image" id="mainimage-image-label" class="is-hidden-mobile file-label">Upload Main Image</span>
                   </label>
                 </div>
               </div>
