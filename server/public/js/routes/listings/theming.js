@@ -1,8 +1,8 @@
 $(document).ready(function() {
   if (typeof listing_info != "undefined"){
     setupTheming();
-    setupFooter();
     setupListingHeader();
+    setupFooter();
   }
 });
 
@@ -89,8 +89,8 @@ function setupCustomColorsListing(){
   stylize(listing_info.font_name, ".page-contents h1.domain-title", "font-family");
 
   //footer
-  stylize(listing_info.footer_color, ".page-contents .footer-item", "color");
-  stylize(listing_info.footer_background_color, ".page-contents .footer", "background-color");
+  stylize(listing_info.footer_color, ".page-contents .footer-item:not(#listing-header-text)", "color");
+  stylize(listing_info.footer_background_color, ".page-contents .footer:not(#dh-header)", "background-color");
 
   //sold page notification
   stylize(hexToRgbA(listing_info.primary_color, 0.8), ".page-contents #sold-domain-notitication", "background-color", true);
