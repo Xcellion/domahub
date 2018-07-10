@@ -2,7 +2,14 @@ $(document).ready(function() {
 
   $("#contact-form").on("submit", function(e){
     e.preventDefault();
-    submitContact();
+    if (!validateCaptcha()){
+      errorMessage("Please prove that you are not a robot!");
+    }
+    else {
+      submitContact();
+    }
+  }).on("error", function(){
+
   });
 
   //hide any existing error messages
@@ -17,16 +24,22 @@ $(document).ready(function() {
   $("#contact_message").attr("placeholder", random_char.message);
 });
 
+//to validate recaptcha client side
+function validateCaptcha(){
+  var captcha_response = grecaptcha.getResponse();
+  return captcha_response.length != 0;
+}
+
 //submit contact form
 function submitContact(){
-  console.log("WTF");
   $("#submit-button").addClass('is-loading');
   $.ajax({
     url: "/contact",
     data: {
       contact_email: $("#contact_email").val(),
       contact_name: $("#contact_name").val(),
-      contact_message: $("#contact_message").val()
+      contact_message: $("#contact_message").val(),
+      "g-recaptcha-response": grecaptcha.getResponse(),
     },
     method: "POST"
   }).done(function(data){

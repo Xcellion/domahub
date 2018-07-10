@@ -50,6 +50,7 @@
             <div class="control">
               <textarea id="contact_message" required class="textarea" name="contact_message"></textarea>
             </div>
+            <div class="control g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
             <div class='control'>
               <button id="submit-button" type="submit" class="button has-icon is-primary is-stylish is-fullwidth">
                 <div class="icon is-small">
@@ -64,6 +65,7 @@
     </div>
   </section>
   <%- include("../templates/footer"); %>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
   <script src="/js/routes/main/main_contact_logic.js" type="text/javascript"></script>
   <script src="/js/routes/main/random_characters.js" type="text/javascript"></script>
 </body>
