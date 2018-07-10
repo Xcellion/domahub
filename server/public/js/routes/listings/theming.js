@@ -3,15 +3,16 @@ $(document).ready(function() {
     setupTheming();
     setupListingHeader();
     setupFooter();
+
+    //remove class to prevent screen flash DH green
+    $(".page-contents").removeClass('is-hidden');
+    $("#dh-footer").removeClass('is-hidden');
   }
 });
 
 //<editor-fold>-------------------------------SET UP THEMING-------------------------------
 
 function setupTheming(){
-  //remove class to prevent screen flash DH green
-  $(".page-contents").removeClass('is-hidden');
-  $("#dh-footer").removeClass('is-hidden');
 
   //if it's premium, check if theres any customization in the design
   if (listing_info.premium){
