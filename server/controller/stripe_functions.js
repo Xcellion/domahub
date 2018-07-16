@@ -205,23 +205,36 @@ module.exports = {
 
     //if subscription id exists in our database
     if (listing_info && listing_info.stripe_subscription_id){
-      console.log("SF: Checking if Stripe subscription for account is still active...");
+      console.log("SF: Checking if Stripe subscription for account is still active (user)...");
 
       //check it against stripe
       stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
+
+        //get rid of stripe sub ID on the object
         if (req.session.listing_info){
           delete req.session.listing_info.stripe_subscription_id;
         }
+
+        //log it if it's weird
+        if (err && err.code != "resource_missing"){
+          error.log(err, "Something went wrong with looking up Stripe subscription active");
+        }
+
+        //all good!
         if (!err && subscription && subscription.status == "active"){
           console.log("SF: Premium is still active!");
           listing_info.premium = true;
         }
-        //delete it from our database if it's wrong
         else {
           console.log("SF: Premium is NOT active!");
-          req.session.new_account_info = {
-            stripe_subscription_id : null
+
+          //delete it from our database if it's wrong
+          if ((err && err.code == "resource_missing") || (subscription && subscription.status != "active")){
+            req.session.new_account_info = {
+              stripe_subscription_id : null
+            }
           }
+
           listing_info.premium = false;
         }
         next();
@@ -240,7 +253,7 @@ module.exports = {
   checkStripeSubscriptionForOwner : function(req, res, next){
     //if subscription id exists in our database
     if (req.user.stripe_subscription_id){
-      console.log("SF: Checking if Stripe subscription for account is still active...");
+      console.log("SF: Checking if Stripe subscription for account is still active (owner)...");
 
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
