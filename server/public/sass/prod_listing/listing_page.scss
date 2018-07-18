@@ -21,6 +21,11 @@
 @import '../bulma/layout/footer.sass';
 @import '../bulma/layout/section.sass';
 
+//optional main image above domain name
+#main-image {
+  max-height: 400px;
+}
+
 //appraisal checkbox margins for compare module
 .appraisal-checkboxes {
   margin-bottom: 0 !important;
