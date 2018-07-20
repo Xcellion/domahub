@@ -189,6 +189,10 @@ var all_categories = [
     front: "Logistics"
   },
   {
+    back: "love",
+    front: "Love"
+  },
+  {
     back: "luxury",
     front: "Luxury"
   },

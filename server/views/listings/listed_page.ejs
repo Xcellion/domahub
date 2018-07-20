@@ -204,8 +204,20 @@
                   <i class="fal fa-usd-circle"></i>
                 </div>
               </div>
-              <div class="control">
+              <div class="control margin-bottom-ten">
                 <textarea id="contact_message" required class="contact-input textarea" name="contact_message" oninvalid="this.setCustomValidity('Please enter a message for the domain owner!')" oninput="setCustomValidity('')"></textarea>
+              </div>
+
+              <div class="control margin-bottom-ten">
+                <div class="checkbox-form is-inline">
+                  <input id="consent-checkbox" required type="checkbox" title="Consent Box">
+                  <label id="consent-checkbox-label" for="consent-checkbox" tabindex="0"></label>
+                </div>
+                <label id="consent-tip" class="tip" for="consent-checkbox">I consent to having my information stored.
+                  <div class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Your information will be stored for processing purposes and will never be shared with anyone except the owner of this domain." data-balloon-pos="top">
+                    <i class="fal fa-question-circle" data-fa-transform="down-3"></i>
+                  </div>
+                </label>
               </div>
 
               <div class="control is-grouped">
