@@ -1756,6 +1756,24 @@
               <span class="is-hidden-mobile">Go Back To Listings</span>
             </a>
           </div>
+          <div class="control-right">
+            <div class="control is-mobile">
+              <button id="refresh-tables-button" class="button is-stylish is-small no-shadow" title="Refresh Tables" tabindex="0">
+                <div class="icon is-small">
+                  <i class="fal fa-sync-alt"></i>
+                </div>
+                <span class="is-hidden-mobile">Refresh</span>
+              </button>
+              <div class="select is-stylish">
+                <select id="last-days-select">
+                  <option value="7">Last 7 Days</option>
+                  <option selected value="30">Last 30 Days</option>
+                  <option value="90">Last 90 Days</option>
+                  <option value="180">Last 180 Days</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1781,6 +1799,7 @@
           </li>
         </ul>
       </div>
+
     </div>
 
     <div id="domain-stats-tab-drop" data-title="View Domain Details" class="tab-drop is-hidden">
@@ -1906,22 +1925,119 @@
 
     <div id="traffic-stats-tab-drop" data-title="View Domain Traffic Statistics" class="tab-drop is-hidden">
       <div class="columns">
-        <div class="column is-6">
+        <div class="column is-9">
           <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title">TLDs</h3>
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Domain Traffic</h3>
+                  <small class="card-header-tip tip">All the traffic for DomaHub listings from Google Analytics.</small>
+                </div>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-hidden is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-content">
-              domain name TLD chart
+              <canvas id="time-chart" class="traffic-chart"></canvas>
             </div>
           </div>
         </div>
-        <div class="column is-6">
+        <div class="column is-3">
           <div class="card is-fullwidth">
-            <div class="card-header">
-              <h3 class="card-header-title"></h3>
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Domains Channels</h3>
+                  <small class="card-header-tip tip is-hidden">Where the traffic to your DomaHub listings is coming from.</small>
+                </div>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-hidden is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-content">
+              <canvas id="channels-chart" class="traffic-chart"></canvas>
+            </div>
+          </div>
+          <div class="card is-fullwidth">
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Domain Visitors</h3>
+                  <small class="card-header-tip tip is-hidden">What countries the traffic to your DomaHub listings is coming from</small>
+                </div>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-hidden is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-content">
+              <canvas id="countries-chart" class="traffic-chart"></canvas>
+            </div>
+          </div>
+          <div class="card is-fullwidth">
+            <div class="card-header is-block">
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <h3 class="card-header-title">Popular Domains</h3>
+                  <small class="card-header-tip tip is-hidden">The popularity of your DomaHub listings.</small>
+                </div>
+                <div class="control-right">
+                  <a class="chart-more-details-button no-shadow button is-stylish is-small">
+                    <div class="icon is-small">
+                      <i class="fal fa-search"></i>
+                    </div>
+                    <span>More Details</span>
+                  </a>
+                  <div class="chart-sort-button select is-hidden is-stylish">
+                    <select>
+                      <option disabled>Sort By</option>
+                      <option value="count">Count</option>
+                      <option value="label">Name</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-content">
+              <canvas id="popular-chart" class="traffic-chart"></canvas>
             </div>
           </div>
         </div>

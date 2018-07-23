@@ -235,7 +235,7 @@ function showBasedOnURL(){
     viewDomainOffers(false);
   }
   else if (url_selected_listings != "" && ["domain-stats", "traffic-stats", "rental-stats"].indexOf(url_tab) != -1){
-    viewDomainStats(false);
+    viewDomainStats(false, url_tab);
   }
   else {
     showSelector();
@@ -838,9 +838,14 @@ function viewDomainOffers(push){
 }
 
 //view domain stats
-function viewDomainStats(push){
+function viewDomainStats(push, url_tab){
   var selected_domain_ids = getSelectedDomains("id", true);
-  showEditor("domain-stats", selected_domain_ids, push);
+  if (url_tab){
+    showEditor(url_tab, selected_domain_ids, push);
+  }
+  else {
+    showEditor("domain-stats", selected_domain_ids, push);
+  }
   updateEditorStats(selected_domain_ids);
 }
 

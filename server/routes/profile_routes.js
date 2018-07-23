@@ -67,6 +67,7 @@ module.exports = function(app){
     profile_functions.getAccountListings,
     stripe_functions.getStripeAccount,
     stripe_functions.getStripeSubscription,
+    profile_functions.authWithGoogle,
     profile_functions.renderMyListings
   ]);
 
