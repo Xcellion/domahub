@@ -32,6 +32,14 @@ function setupListedPage(){
     $(this).text(($(this).text() == "Click for details...") ? "Hide details..." : "Click for details...");
   });
 
+  //change title of page
+  if (listing_info.premium){
+    document.title = punycode.toUnicode(listing_info.domain_name);
+  }
+  else {
+    document.title = punycode.toUnicode(listing_info.domain_name) + " - DomaHub Domains";
+  }
+
   setupLeftHalf();
   setupRightHalf();
   setupFooter();
