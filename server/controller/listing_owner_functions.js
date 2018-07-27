@@ -1461,7 +1461,15 @@ module.exports = {
 
       //check if we're changing anything
       if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
-        error.handler(req, res, "nothing-changed", "json");
+        if (!req.body.hub_listing_ids){
+          error.handler(req, res, "nothing-changed", "json");
+        }
+        else {
+          res.json({
+            state: "success",
+            listings: (req.user) ? req.user.listings : false
+          });
+        }
       }
       else {
         console.log("LOF: Updating domain details...");
