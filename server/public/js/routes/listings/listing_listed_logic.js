@@ -595,8 +595,9 @@ function setupRightHalf(){
       }
 
       //rental input domain title (middle ellipsis crop)
-      var rental_domain_title = (listing_info.domain_name.length > 20) ? listing_info.domain_name.substr(0,12) + "..." + listing_info.domain_name.substr(-8) : listing_info.domain_name;
-      $("#rental-domain-title").text(punycode.toUnicode(rental_domain_title));
+      var rental_domain_title = punycode.toUnicode(listing_info.domain_name)
+      rental_domain_title = (rental_domain_title.length > 20) ? rental_domain_title.substr(0,12) + "..." + rental_domain_title.substr(-8) : rental_domain_title;
+      $("#rental-domain-title").text(rental_domain_title);
 
       //</editor-fold>
 
