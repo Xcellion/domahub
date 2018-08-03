@@ -70,7 +70,6 @@ $(document).ready(function() {
       $("#contact-submit-button").removeClass('is-loading');
       $("#contact_message").val("");
       $("#contact-dropdown-menu").addClass('is-hidden');
-      console.log(data);
       if (data.state == "success"){
         successMessage("Message sent! We will get back to you as soon as possible. Thank you for your patience.");
       }
