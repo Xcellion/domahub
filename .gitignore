@@ -3,3 +3,6 @@ server/lib/current-exchange-rates.json
 other/analytics/
 other/marketing/
 other/technical/
+server/public/.well-known/
+server/lib/.api.js.swp
+domahub.json
