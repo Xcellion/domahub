@@ -6,3 +6,4 @@ other/technical/
 server/public/.well-known/
 server/lib/.api.js.swp
 domahub.json
+node_modules/
