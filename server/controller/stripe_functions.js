@@ -217,7 +217,7 @@ module.exports = {
 
         //log it if it's weird
         if (err && err.code != "resource_missing"){
-          error.log(err, "Something went wrong with looking up Stripe subscription active: domain - " + listing_info.domain_name);
+          error.log(err, "Something went wrong with looking up Stripe subscription active: domain - " + listing_info.domain_name + listing_info.owner_email);
         }
 
         //all good!

@@ -55,6 +55,7 @@ module.exports = {
     var contact_email = req.body.contact_email;
     var contact_message = req.body.contact_message;
     var recaptcha = req.body["g-recaptcha-response"];
+    var came_from = req.header("Referer");
 
     if (!contact_name){
       error.handler(req, res, "Please enter your name!", "json");
@@ -66,54 +67,36 @@ module.exports = {
       error.handler(req, res, "Please say something!", "json");
     }
     //recaptcha is empty
-    else if (!recaptcha){
-      error.handler(req, res, "Invalid captcha please refresh the page and try again!");
+    else if (!recaptcha && came_from.indexOf("/contact") != -1){
+      error.handler(req, res, "Invalid captcha please refresh the page and try again!", "json");
     }
     //verify with google
     else {
 
-      request.post({
-        url: 'https://www.google.com/recaptcha/api/siteverify',
-        form: {
-          secret: "6LdwpykTAAAAAEMcP-NUWJuVXMLEQx1fZLbcGfVO",
-          response: recaptcha
-        }
-      }, function (err, response, body) {
-        body = JSON.parse(body);
+      //if using public contact form
+      if (came_from.indexOf("/contact") != -1){
+        request.post({
+          url: 'https://www.google.com/recaptcha/api/siteverify',
+          form: {
+            secret: "6LdwpykTAAAAAEMcP-NUWJuVXMLEQx1fZLbcGfVO",
+            response: recaptcha
+          }
+        }, function (err, response, body) {
+          body = JSON.parse(body);
 
-        //all good with google!
-        if (!err && response.statusCode == 200 && body.success) {
-
-          //send email
-          mailer.sendBasicMail({
-            from: req.body.contact_email,
-            to: 'general@domahub.com',
-            subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
-            text: req.body.contact_message
-          }, function() {
-
-            //email thank you for contacting email
-            mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'thank_you_contact.ejs'), {
-              contact_name : req.body.contact_name
-            }, {
-              to: req.body.contact_email,
-              from: 'DomaHub <general@domahub.com>',
-              subject: 'Thank you for contacting DomaHub!',
-            }, function(state){
-              if (state != "success"){
-                error.log("Failed to send canned response to contact form email!");
-              }
-            });
-
-            res.send({
-              state: "success"
-            });
-          });
-        }
-        else {
-          error.handler(req, res, "Invalid captcha please refresh the page and try again!");
-        }
-      })
+          //all good with google!
+          if (!err && response.statusCode == 200 && body.success) {
+            sendDomaHubMail(req, res);
+          }
+          else {
+            error.handler(req, res, "Invalid captcha please refresh the page and try again!", "json");
+          }
+        });
+      }
+      //else logged in
+      else {
+        sendDomaHubMail(req, res);
+      }
     }
   },
 
@@ -130,4 +113,36 @@ module.exports = {
 
   //</editor-fold>
 
+}
+
+//send email to domahub
+function sendDomaHubMail(req, res, next){
+  mailer.sendBasicMail({
+    from: req.body.contact_email,
+    to: 'general@domahub.com',
+    subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
+    text: req.body.contact_message
+  }, function(state) {
+    if (state != "success"){
+      error.handler(req, res, "Something went wrong when contacting us! Please try emailing us at general@domahub.com for support.", "json");
+    }
+    else {
+      //email thank you for contacting email
+      mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'thank_you_contact.ejs'), {
+        contact_name : req.body.contact_name
+      }, {
+        to: req.body.contact_email,
+        from: 'DomaHub <general@domahub.com>',
+        subject: 'Thank you for contacting DomaHub!',
+      }, function(state){
+        if (state != "success"){
+          error.log("Failed to send canned response to contact form email!");
+        }
+      });
+
+      res.send({
+        state: "success"
+      });
+    }
+  });
 }
