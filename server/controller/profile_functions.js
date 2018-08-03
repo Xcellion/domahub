@@ -131,7 +131,7 @@ module.exports = {
       req.user.ga_access_token = (tokens) ? tokens.access_token : false;
       res.send({
         state : "success",
-        user : user
+        user : req.user
       });
     });
   },
