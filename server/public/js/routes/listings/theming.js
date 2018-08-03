@@ -163,7 +163,7 @@ function setupListingHeader(){
     $("#dh-header").removeClass('is-hidden');
 
     //show both header and footer if we're showing header
-    $("#listed-page").css("height", "calc(100vh - 220px)");
+    $("#listed-page").css("min-height", "calc(100vh - 220px)");
 
     //theme header
     if (listing_info.header_background_color){

@@ -65,12 +65,18 @@ $(document).ready(function() {
         contact_message: $("#contact_message").val()
       },
       method: "POST"
-    }).done(function(){
+    }).done(function(data){
       clearNotification();
       $("#contact-submit-button").removeClass('is-loading');
       $("#contact_message").val("");
       $("#contact-dropdown-menu").addClass('is-hidden');
-      successMessage("Message sent! We will get back to you as soon as possible. Thank you for your patience.");
+      console.log(data);
+      if (data.state == "success"){
+        successMessage("Message sent! We will get back to you as soon as possible. Thank you for your patience.");
+      }
+      else {
+        errorMessage(data.message);
+      }
     });
   });
 
