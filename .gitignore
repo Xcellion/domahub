@@ -1,3 +1,7 @@
 uploads/
 server/lib/current-exchange-rates.json
 other/analytics/
+server/public/.well-known/
+server/lib/.api.js.swp
+domahub.json
+other/technical/MySQL_Backups
