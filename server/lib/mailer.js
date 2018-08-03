@@ -21,9 +21,12 @@ module.exports = {
     mailer.sendMail(mailOptions, function(err){
       if (err){
         error.log(err, "Failed to send basic email.");
+        if (cb){
+          cb(false);
+        }
       }
       if (cb){
-        cb();
+        cb(true);
       }
     });
   },

@@ -123,7 +123,7 @@ function sendDomaHubMail(req, res, next){
     subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
     text: req.body.contact_message
   }, function(state) {
-    if (state != "success"){
+    if (!state){
       error.handler(req, res, "Something went wrong when contacting us! Please try emailing us at general@domahub.com for support.", "json");
     }
     else {
@@ -134,10 +134,6 @@ function sendDomaHubMail(req, res, next){
         to: req.body.contact_email,
         from: 'DomaHub <general@domahub.com>',
         subject: 'Thank you for contacting DomaHub!',
-      }, function(state){
-        if (state != "success"){
-          error.log("Failed to send canned response to contact form email!");
-        }
       });
 
       res.send({
