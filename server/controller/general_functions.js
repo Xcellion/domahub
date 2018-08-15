@@ -7,8 +7,8 @@ var error = require('../lib/error.js');
 //<editor-fold>-------------------------------VARIABLES-------------------------------
 
 var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: true });
+var jsonParser = bodyParser.json({limit: '50mb'});
+var urlencodedParser = bodyParser.urlencoded({ extended: true , limit: '50mb'});
 
 //</editor-fold>
 
