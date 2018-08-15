@@ -713,10 +713,10 @@ function selectAllRows(select){
 function selectSpecificRows(type, value, second_type, second_value){
   $(".table-row:not('.clone-row')").each(function(){
     if (second_type && second_value){
-      selectRow($(this), $(this).data(type) == value && $(this).data(second_type) == second_value);
+      selectRow($(this), $(this).data(type) == value && $(this).data(second_type) == second_value, true);
     }
     else {
-      selectRow($(this), $(this).data(type) == value);
+      selectRow($(this), $(this).data(type) == value, true);
     }
   });
   multiSelectButtons();
