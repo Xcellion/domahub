@@ -846,7 +846,11 @@ module.exports = {
   addToSearchHistory : function(req, res, next){
     //add to search only if not development
     if (process.env.NODE_ENV != "dev"){
+
+      //fix IDNs
       var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+      domain_name = punycode.toASCII(domain_name);
+
       var account_id = (typeof req.user == "undefined" || req.user != false) ? null : req.user.id;
       var now = new Date().getTime();
       var history_info = {
