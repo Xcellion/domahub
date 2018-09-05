@@ -320,6 +320,7 @@ module.exports = function(app){
       renter_functions.getListingInfo,
       renter_functions.checkStillVerified,
       stripe_functions.checkStripeSubscriptionForUser,
+      stripe_functions.checkStripeAccountForContactDetails,
       profile_functions.updateAccountSettingsPassthrough,
       // renter_functions.getListingFreeTimes,
       renter_functions.redirectPremium,
