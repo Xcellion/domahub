@@ -285,7 +285,6 @@ module.exports = {
               stripe_account_id : null
             }
           }
-
         }
         next();
       });
