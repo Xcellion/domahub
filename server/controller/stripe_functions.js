@@ -291,7 +291,6 @@ module.exports = {
       });
     }
     else {
-      console.log("JLFKDAJKFDAJFLKAJFJLKDAJFLKAJDLKFJLK")
       next();
     }
   },
