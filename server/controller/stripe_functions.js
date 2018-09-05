@@ -253,6 +253,7 @@ module.exports = {
   checkStripeAccountForContactDetails : function(req, res, next){
     var domain_name = (req.session.api_domain) ? req.session.api_domain : req.params.domain_name;
     var listing_info = (req.session.listing_info) ? req.session.listing_info : getUserListingObj(req.user.listings, domain_name);
+    console.log(listing_info);
 
     //if stripe account id exists in our database
     if (listing_info && listing_info.stripe_account_id){
