@@ -486,6 +486,8 @@
   }
   @include transition(all 0.2s ease);
   .bar-right {
+    display:initial;
+    text-align:right;
     @include mobile {
       flex-wrap: nowrap;
       flex-direction: column;

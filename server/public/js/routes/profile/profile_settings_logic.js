@@ -295,6 +295,11 @@ $(document).ready(function() {
     //fill out stripe info
     prefillStripeInfo();
 
+    //set up phone
+    $("#phone_number-input").intlTelInput({
+      utilsScript: "/js/jquery/utils.js"
+    });
+
     //to show submit/cancel when data changes for stripe inputs
     $(".stripe-account-input").on("input", function(e){
       clearNotification();
@@ -309,10 +314,19 @@ $(document).ready(function() {
       e.preventDefault();
       $("#stripe-account-submit").addClass('is-loading');
       clearNotification();
+
+      //replace phone number with correct format
+      var data = $(this).serializeArray();
+      for (var x = 0; x < data.length; x++){
+        if (data[x].name == "phone_number"){
+          data[x].value = $("#phone_number-input").intlTelInput("getNumber");
+        }
+      }
+
       $.ajax({
         url: "/profile/payout",
         method: "POST",
-        data: $(this).serialize()
+        data: $.param(data)
       }).done(function(data){
         hideSaveCancelButtons();
         if (data.state == "success"){
