@@ -23,9 +23,9 @@ $(document).ready(function() {
   //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
 
   //show legal message
-  $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
-    $("#legal-modal").addClass('is-active');
-  });
+  // $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
+  //   $("#legal-modal").addClass('is-active');
+  // });
 
   if (listing_hub_info.owner_address){
     var owner_address = listing_hub_info.owner_address.line1;
@@ -40,7 +40,11 @@ $(document).ready(function() {
 
 
   //contact
-  if (listing_hub_info.owner_name){
+  if (listing_hub_info.owner_business_name){
+    $("#legal-contact").text(listing_hub_info.owner_business_name);
+    $("#legal-contact-wrapper").removeClass("is-hidden");
+  }
+  else if (listing_hub_info.owner_name){
     $("#legal-contact").text(listing_hub_info.owner_name);
     $("#legal-contact-wrapper").removeClass("is-hidden");
   }

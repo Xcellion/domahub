@@ -276,6 +276,7 @@ module.exports = {
           listing_info.owner_address = account.legal_entity.address;
           listing_info.owner_phone = account.support_phone;
           listing_info.owner_name = account.legal_entity.first_name + " " + account.legal_entity.last_name;
+          listing_info.owner_business_name = account.legal_entity.business_name;
         }
         else {
 
@@ -429,7 +430,7 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------MANAGED-------------------------------
+  //<editor-fold>-------------------------------ACCOUNT-------------------------------
 
   //gets the stripe managed account info
   getStripeAccount : function(req, res, next){
@@ -578,6 +579,11 @@ module.exports = {
       "last_name": req.body.last_name,
     }
     var support_phone = req.body.phone_number;
+
+    //optional business name
+    if (req.body.business_name){
+      legal_entity.business_name = req.body.business_name;
+    }
 
     if (req.user.stripe_account_id){
       //cross reference with stripe
@@ -1146,7 +1152,8 @@ function updateUserStripeAccount(user, account){
         last_name : account.legal_entity.last_name,
         transfers_enabled : account.transfers_enabled,
         charges_enabled : account.charges_enabled,
-        phone_number : account.support_phone
+        phone_number : account.support_phone,
+        business_name : account.legal_entity.business_name,
       }
     }
   }
