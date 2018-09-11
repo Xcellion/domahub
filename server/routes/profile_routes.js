@@ -282,6 +282,7 @@ module.exports = function(app){
     app.get("/profile/transactions", [
       auth_functions.checkLoggedIn,
       profile_functions.getAccountListings,
+      stripe_functions.getStripeAccount,
       stripe_functions.getStripeCustomer,
       stripe_functions.getStripeCustomerInvoices,
       stripe_functions.getStripeSubscription,

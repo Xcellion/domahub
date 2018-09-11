@@ -1846,7 +1846,7 @@ module.exports = {
     else if (req.body.destination_account == "payoneer" && !req.user.payoneer_email){
       error.handler(req, res, "You don't have a valid Payoneer account connected to your DomaHub account! Please connect a Payoneer account and try again.", "json");
     }
-    else if (!req.user.transactions && !req.user.transactions.stripe_transactions){
+    else if (!req.user.transactions){
       error.handler(req, res, "You don't have any available funds to withdraw! Please refresh the page and verify your transactions.", "json");
     }
     else {
@@ -1889,6 +1889,7 @@ module.exports = {
 
           //add to total amount being withdrawn
           total_amount_available += parseFloat(temp_transaction.transaction_cost) - doma_fees - payment_fees;
+          total_amount_available = Math.round(total_amount_available);
 
           //mark as withdrawn on domahub database
           if (temp_transaction.transaction_type == "rental"){

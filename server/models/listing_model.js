@@ -430,6 +430,15 @@ module.exports = {
     database.query(query, "Failed to mark " + rental_ids.length + " rentals as having been withdrawn!", callback, [withdrawn_on, rental_ids]);
   },
 
+  //marks certain sales as having been withdrawn
+  markSalesWithdrawn : function(sale_ids, withdrawn_on, callback){
+    console.log("DB: Attempting to mark " + sale_ids.length + " sales as having been withdrawn...");
+    var query = "UPDATE stats_contact_history \
+      SET ? \
+      WHERE id IN (?)"
+    database.query(query, "Failed to mark " + sale_ids.length + " sales as having been withdrawn!", callback, [withdrawn_on, sale_ids]);
+  },
+
   //</editor-fold>
 
   //<editor-fold>-------------------------------DISPLAY A LISTING-------------------------------
