@@ -249,6 +249,52 @@ module.exports = {
     }
   },
 
+  //get stripe address and contact details for german law
+  checkStripeAccountForContactDetails : function(req, res, next){
+    var domain_name = (req.session.api_domain) ? req.session.api_domain : req.params.domain_name;
+    var listing_info = (req.session.listing_info) ? req.session.listing_info : getUserListingObj(req.user.listings, domain_name);
+
+    //if stripe account id exists in our database
+    if (listing_info && listing_info.stripe_account_id){
+      console.log("SF: Checking if Stripe account is still active for contact details...");
+
+      //check it against stripe
+      stripe.accounts.retrieve(listing_info.stripe_account_id, function(err, account) {
+
+        //get rid of stripe account ID on the object
+        if (req.session.listing_info){
+          delete req.session.listing_info.stripe_account_id;
+        }
+
+        //log it if it's weird
+        if (err && err.code != "resource_missing"){
+          error.log(err, "Something went wrong with looking up Stripe account: domain - " + listing_info.domain_name + listing_info.owner_email);
+        }
+
+        //all good!
+        if (!err && account){
+          listing_info.owner_address = account.legal_entity.address;
+          listing_info.owner_phone = account.support_phone;
+          listing_info.owner_name = account.legal_entity.first_name + " " + account.legal_entity.last_name;
+          listing_info.owner_business_name = account.legal_entity.business_name;
+        }
+        else {
+
+          //delete it from our database if it's wrong
+          if (err && err.code == "resource_missing"){
+            req.session.new_account_info = {
+              stripe_account_id : null
+            }
+          }
+        }
+        next();
+      });
+    }
+    else {
+      next();
+    }
+  },
+
   //check if stripe subscription is still valid (FOR LISTING OWNER TO EDIT INFO)
   checkStripeSubscriptionForOwner : function(req, res, next){
     //if subscription id exists in our database
@@ -384,7 +430,7 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------MANAGED-------------------------------
+  //<editor-fold>-------------------------------ACCOUNT-------------------------------
 
   //gets the stripe managed account info
   getStripeAccount : function(req, res, next){
@@ -530,7 +576,13 @@ module.exports = {
         "year": req.body.birthday_year
       },
       "first_name": req.body.first_name,
-      "last_name": req.body.last_name
+      "last_name": req.body.last_name,
+    }
+    var support_phone = req.body.phone_number;
+
+    //optional business name
+    if (req.body.business_name){
+      legal_entity.business_name = req.body.business_name;
     }
 
     if (req.user.stripe_account_id){
@@ -538,12 +590,13 @@ module.exports = {
       stripe.accounts.retrieve(req.user.stripe_account_id, function(err, account) {
         //our db is outdated, account doesnt exist or if we're changing country
         if (err || account.country != req.body.country){
-          newStripeAccount(req, res, next, legal_entity);
+          newStripeAccount(req, res, next, legal_entity, support_phone);
         }
         else {
           console.log('SF: Updating existing Stripe managed account...');
           stripe.accounts.update(req.user.stripe_account_id, {
-            legal_entity: legal_entity
+            legal_entity: legal_entity,
+            support_phone: support_phone
           }, function(err, account){
             if (err){
               error.log(err, "Failed to update Stripe account.");
@@ -1099,6 +1152,8 @@ function updateUserStripeAccount(user, account){
         last_name : account.legal_entity.last_name,
         transfers_enabled : account.transfers_enabled,
         charges_enabled : account.charges_enabled,
+        phone_number : account.support_phone,
+        business_name : account.legal_entity.business_name,
       }
     }
   }

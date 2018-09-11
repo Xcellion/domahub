@@ -461,6 +461,7 @@ module.exports = {
           accounts.username AS owner_username, \
           accounts.email AS owner_email, \
           accounts.stripe_subscription_id, \
+          accounts.stripe_account_id, \
           accounts.ga_tracking_id, \
           !ISNULL(accounts.stripe_account_id) AS stripe_connected, \
           accounts.date_created AS user_created, \

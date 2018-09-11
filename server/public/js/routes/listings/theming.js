@@ -8,6 +8,21 @@ $(document).ready(function() {
     $(".page-contents").removeClass('is-hidden');
     $("#dh-footer").removeClass('is-hidden');
   }
+
+  //<editor-fold>-------------------------------MODAL--------------------------------
+
+  $(document).on("keyup", function(e) {
+    if (e.which == 27) {
+      closeModals();
+    }
+  });
+
+  //close modal
+  $(".modal-close, .modal-background, .cancel-modal").on("click", function(){
+    closeModals();
+  });
+
+  //</editor-fold>
 });
 
 //<editor-fold>-------------------------------SET UP THEMING-------------------------------
@@ -95,7 +110,7 @@ function setupCustomColorsListing(){
 
   //sold page notification
   stylize(hexToRgbA(listing_info.primary_color, 0.8), ".page-contents #sold-domain-notitication", "background-color", true);
-  stylize(listing_info.primary_color, ".page-contents .icon-box", "background-color", true);
+  stylize(listing_info.primary_color, ".page-contents .icon-box:not(.legal-icon-box)", "background-color", true);
 }
 
 //</editor-fold>
@@ -151,6 +166,89 @@ function setupFooter(){
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
+
+  //show legal message
+  // $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
+  //   $("#legal-modal").addClass('is-active');
+  // });
+
+  if (listing_info.owner_address){
+    var owner_address = listing_info.owner_address.line1;
+    if (listing_info.owner_address.line2){
+      owner_address += listing_info.owner_address.line2;
+    }
+    owner_address += ", " + listing_info.owner_address.city;
+    owner_address += ", " + listing_info.owner_address.state;
+    owner_address += ", " + listing_info.owner_address.postal_code;
+    owner_address += ", " + listing_info.owner_address.country;
+  }
+
+
+  //contact
+  if (listing_info.owner_business_name){
+    $("#legal-contact").text(listing_info.owner_business_name);
+    $("#legal-contact-wrapper").removeClass("is-hidden");
+  }
+  else if (listing_info.owner_name){
+    $("#legal-contact").text(listing_info.owner_name);
+    $("#legal-contact-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-contact-wrapper").addClass("is-hidden");
+  }
+
+  //address
+  if (listing_info.owner_address){
+    $("#legal-address").text(owner_address);
+    $("#legal-address-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-address-wrapper").addClass("is-hidden");
+  }
+
+  //email
+  if (listing_info.owner_email){
+    $("#legal-email").text(listing_info.owner_email);
+    $("#legal-email-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-email-wrapper").addClass("is-hidden");
+  }
+
+  //phone
+  if (listing_info.owner_phone){
+    $("#legal-phone").text(listing_info.owner_phone);
+    $("#legal-phone-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-phone-wrapper").addClass("is-hidden");
+  }
+
+  //</editor-fold>
+
+}
+
+//</editor-fold>
+
+//<editor-fold>----------------------------------MODAL HELPERS-------------------------
+
+//close modals
+function closeModals(){
+  clearNotification();
+  $(".modal").find("input, textarea, select").val("");
+  $(".modal").removeClass('is-active');
+  $("#cancel-premium-button").addClass("is-disabled");
+
+  //closing announcement modal
+  if ($("#announcement-modal").length == 1){
+    bakeCookie("announcement", true);
+  }
+
+  //extra function for some pages
+  if (typeof extraCloseModal != "undefined"){
+    extraCloseModal();
+  }
 }
 
 //</editor-fold>
