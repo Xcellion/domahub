@@ -145,7 +145,7 @@
                       <label class="label" for="ga_tracking_id-input">
                         Google Analytics Tracking ID
                       </label>
-                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-bold" target="_blank" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find my tracking ID?</a></small>
+                      <small class="tip">Use a custom tracking ID to see additional traffic details on Google Analytics. <a class="is-primary is-bold" target="_blank" href="https://support.google.com/analytics/answer/1008080?hl=en#trackingID">Where can I find this?</a></small>
                       <input id="ga_tracking_id-input" class="input account-input" data-uservar="ga_tracking_id" type="text" value="<%= user.ga_tracking_id %>" spellcheck="false" oninvalid="this.setCustomValidity('Please enter a valid Google Analytics tracking ID!')" oninput="setCustomValidity('')"/>
                     </div>
                     <div class="control is-spaced is-mobile">
@@ -508,8 +508,8 @@
 										</h3>
 	                  <small class="tip">
 	                    This information is legally required for payments processing.
-											DomaHub does not share this information with anyone except our payments processors.
-	                  </small>
+											DomaHub does not share this information with anyone except our payments processors unless legally required.
+                    </small>
 	                </div>
 	                <div class="card-content">
 	                  <div class="control">
@@ -519,6 +519,10 @@
 	                  <div class="control">
 	                    <label class="label" for="last_name-input">Last Name</label>
 	                    <input required data-uservar="last_name" autocomplete="given-name" id="last_name-input" class="input stripe-account-input" type="text" name="last_name" oninvalid="this.setCustomValidity('Please enter a valid last name!')" oninput="setCustomValidity('')"/>
+	                  </div>
+	                  <div class="control">
+	                    <label class="label" for="last_name-input">Phone Number</label>
+	                    <input required data-uservar="phone_number" autocomplete="phone-number" id="phone_number-input" class="input stripe-account-input" type="text" name="phone_number" oninvalid="this.setCustomValidity('Please enter a valid phone number!')" oninput="setCustomValidity('')"/>
 	                  </div>
 	                  <div class="control">
 	                    <label class="label">Birth Date</label>
@@ -670,6 +674,15 @@
 	                      </select>
 	                    </div>
 	                  </div>
+                    <div class="control">
+                      <label class="label" for="last_name-input">
+                        Legal Entity
+                        <div style="display:inline-block;" class="icon is-tooltip is-small" data-balloon="Optional legal entity or business name that represents your domain portfolio." data-balloon-pos="up" data-balloon-length="large">
+                          <i class="fal fa-question-circle"></i>
+                        </div>
+                      </label>
+                      <input data-uservar="business_name" autocomplete="business_name" id="business_name-input" class="input stripe-account-input" type="text" name="business_name" oninvalid="this.setCustomValidity('Please enter a valid legal entity!')" oninput="setCustomValidity('')"/>
+                    </div>
 	                </div>
 	              </div>
 
@@ -682,7 +695,7 @@
 										</h3>
 	                  <small class="tip">
 											This information is legally required for payments processing.
-											DomaHub does not share this information with anyone except our payments processors.
+											DomaHub does not share this information with anyone except our payments processors unless  legally required.
 	                  </small>
 	                </div>
 	                <div class="card-content">
@@ -1180,6 +1193,7 @@
     <button class="modal-close"></button>
   </div>
 
+  <link rel="stylesheet" href="/css/lib/intlTelInput.css" type="text/css">
 	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
   <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
   <script src="/js/jquery/jquery.marquee.min.js" type="text/javascript"></script>
@@ -1187,6 +1201,7 @@
   <script src="/js/lib/currencies.json" type="text/javascript"></script>
   <script src="/js/lib/wNumb.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
+  <script src="/js/jquery/intlTelInput.min.js" type="text/javascript"></script>
 
 </body>
 </html>

@@ -23,6 +23,7 @@ module.exports = function(app){
     checkHost,
     renter_functions.getListingInfo,
     stripe_functions.checkStripeSubscriptionForUser,
+    stripe_functions.checkStripeAccountForContactDetails,
     checkForBasicRedirect,
     renter_functions.addToSearchHistory,
     renter_functions.checkStillVerified,

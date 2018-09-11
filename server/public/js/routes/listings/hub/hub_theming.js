@@ -19,6 +19,68 @@ $(document).ready(function() {
 
   //remove class to prevent screen flash DH green
   $("body").removeClass('is-hidden');
+
+  //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
+
+  //show legal message
+  // $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
+  //   $("#legal-modal").addClass('is-active');
+  // });
+
+  if (listing_hub_info.owner_address){
+    var owner_address = listing_hub_info.owner_address.line1;
+    if (listing_hub_info.owner_address.line2){
+      owner_address += listing_hub_info.owner_address.line2;
+    }
+    owner_address += ", " + listing_hub_info.owner_address.city;
+    owner_address += ", " + listing_hub_info.owner_address.state;
+    owner_address += ", " + listing_hub_info.owner_address.postal_code;
+    owner_address += ", " + listing_hub_info.owner_address.country;
+  }
+
+
+  //contact
+  if (listing_hub_info.owner_business_name){
+    $("#legal-contact").text(listing_hub_info.owner_business_name);
+    $("#legal-contact-wrapper").removeClass("is-hidden");
+  }
+  else if (listing_hub_info.owner_name){
+    $("#legal-contact").text(listing_hub_info.owner_name);
+    $("#legal-contact-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-contact-wrapper").addClass("is-hidden");
+  }
+
+  //address
+  if (listing_hub_info.owner_address){
+    $("#legal-address").text(owner_address);
+    $("#legal-address-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-address-wrapper").addClass("is-hidden");
+  }
+
+  //email
+  if (listing_hub_info.owner_email){
+    $("#legal-email").text(listing_hub_info.owner_email);
+    $("#legal-email-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-email-wrapper").addClass("is-hidden");
+  }
+
+  //phone
+  if (listing_hub_info.owner_phone){
+    $("#legal-phone").text(listing_hub_info.owner_phone);
+    $("#legal-phone-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-phone-wrapper").addClass("is-hidden");
+  }
+
+  //</editor-fold>
+
 });
 
 //setup any custom premium colors
