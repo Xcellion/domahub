@@ -29,6 +29,10 @@
               <div id="status-icon" class="icon is-small"><i class="fal fa-toggle-on"></i></div>
               <span id="status-text" class="is-hidden-mobile"></span>
             </a>
+            <a id="copy-listings-button" class="button is-flexible is-black is-inverted is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
+              <div class="icon is-small"><i class="fal fa-copy"></i></div>
+              <span class="is-hidden-mobile">Copy Details</span>
+            </a>
             <div id="view-listings-button-wrapper" class="is-inline control-item is-relative hide-for-unlisted">
               <a id="view-listings-button" class="button is-flexible is-black is-inverted is-stylish is-small" target="_blank" rel="noopener" tabindex="0">
                 <div class="icon is-small"><i class="fal fa-external-link"></i></div>
@@ -60,19 +64,60 @@
               <span class="">Design</span>
               <% if (!user.stripe_subscription_id) { %>
                 <div class="icon is-small"><i class="fal fa-trophy-alt"></i></div>
-              <% } %>
-            </a>
-          </li>
-          <li id="hub-tab" class="verified-elem unpurchased-elem tab hide-for-unlisted">
-            <a tabindex="0" class="">
-              <span class="">Hub</span>
-              <% if (!user.stripe_subscription_id) { %>
-                <div class="icon is-small"><i class="fal fa-trophy-alt"></i></div>
-              <% } %>
-            </a>
-          </li>
-        </ul>
+                <% } %>
+              </a>
+            </li>
+            <li id="hub-tab" class="verified-elem unpurchased-elem tab hide-for-unlisted">
+              <a tabindex="0" class="">
+                <span class="">Hub</span>
+                <% if (!user.stripe_subscription_id) { %>
+                  <div class="icon is-small"><i class="fal fa-trophy-alt"></i></div>
+                  <% } %>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+      <!-- COPY LISTING MODAL -->
+      <div id="copy-listings-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-container">
+          <div class="modal-content is-small">
+            <div class="content">
+              <div class="notification no-shadow has-icon is-primary">
+                <div class="icon-box">
+                  <div class="icon is-white">
+                    <i class="fal fa-copy"></i>
+                  </div>
+                </div>
+                <div class="content">
+                  <p class="is-white">Select a listing to copy over the listing design and all listing info.</p>
+                </div>
+              </div>
+            </div>
+            <div class="content">
+              <p>Any registrar details, domain expenses, or hub details will not be copied over.</p>
+              <div id="copy-listings-list">
+                <p id="copy-listings-list-clone" class="overflow-x-hidden cursor-default is-hidden">
+                  <a class="copy-listing-button is-underlined">Copy</a>
+                  <span class="copy-listing-status"></span>
+                  <a target="_blank" class="overflow-x-hidden copy-listing-domain_name is-underlined is-pulled-right"></a>
+                </p>
+              </div>
+            </div>
+            <div class="control is-grouped">
+              <div class="control is-expanded">
+                <a tabindex="0" class='button is-fullwidth is-stylish is-small is-outlined is-danger cancel-modal'>
+                  <div class="icon is-small"><i class="fal fa-times"></i></div>
+                  <span>Nevermind</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close"></button>
       </div>
+
     </div>
     <div id="info-tab-drop" data-title="Edit Listing Information" class="tab-drop hide-for-unlisted is-hidden">
       <div class="columns">

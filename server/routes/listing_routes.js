@@ -104,6 +104,27 @@ module.exports = function(app){
       owner_functions.updateListingsInfo
     ]);
 
+    //copy listing information
+    app.post('/listings/:domain_name/copydetails', [
+      auth_functions.checkLoggedIn,
+      general_functions.urlencodedParser,
+      profile_functions.getAccountListings,
+      //check if the listing you're copying from is legit
+      listing_general_functions.checkDomainValid,
+      listing_general_functions.checkDomainListed,
+      owner_functions.checkListingOwnerPost,
+      owner_functions.checkListingVerified,
+      //check if the listings we're changing are legit
+      owner_functions.checkImageUploadSize,
+      owner_functions.checkSelectedIDs,
+      owner_functions.checkPostedListingInfoMulti,
+      stripe_functions.checkStripeSubscriptionForOwner,
+      profile_functions.updateAccountSettingsPassthrough,
+      owner_functions.createNewListingInfoObj,
+      owner_functions.copyListingDetails,
+      owner_functions.updateListingsInfo
+    ]);
+
     //<editor-fold>-------------------------------DOMAIN EXPENSES-------------------------------
 
     //get any existing expenses
