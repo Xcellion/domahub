@@ -641,7 +641,8 @@ module.exports = {
     //check that the user owns the listing
     checkListingOwnerPost : function(req, res, next){
       console.log("LOF: Checking if current user is the owner...");
-      if (getUserListingObjByName(req.user.listings, req.params.domain_name).owner_id != req.user.id){
+      var listing_info = getUserListingObjByName(req.user.listings, req.params.domain_name);
+      if (!listing_info || listing_info.owner_id != req.user.id){
         error.handler(req, res, "You do not own this domain! Please refresh the page and try again!", "json");
       }
       else {
@@ -1456,6 +1457,75 @@ module.exports = {
 
     //<editor-fold>-------------------------------EXECUTE------------------------------
 
+    //copy listing details from an existing listing
+    copyListingDetails: function(req, res, next){
+      console.log("LOF: Copying domain details from " + req.params.domain_name + "...");
+      var listing_to_copy_from = getUserListingObjByName(req.user.listings, req.params.domain_name);
+
+      //description
+      req.session.new_listing_info.description = listing_to_copy_from.description;
+      req.session.new_listing_info.description_hook = listing_to_copy_from.description_hook;
+      req.session.new_listing_info.categories = listing_to_copy_from.categories;
+
+      //pricing (multiply by currency multiplier)
+      req.session.new_listing_info.default_currency = listing_to_copy_from.default_currency;
+      req.session.new_listing_info.buy_price = listing_to_copy_from.buy_price;
+      req.session.new_listing_info.min_price = listing_to_copy_from.min_price;
+      req.session.new_listing_info.price_type = listing_to_copy_from.price_type;
+      req.session.new_listing_info.price_rate = listing_to_copy_from.price_rate;
+
+      //rent
+      req.session.new_listing_info.rentable = listing_to_copy_from.rentable;
+      req.session.new_listing_info.paths = listing_to_copy_from.paths;
+
+      //premium Details
+      if (req.user.stripe_subscription_id){
+
+        //info
+        req.session.new_listing_info.description_footer = listing_to_copy_from.description_footer;
+        req.session.new_listing_info.description_footer_link = listing_to_copy_from.description_footer_link;
+        req.session.new_listing_info.description_header = listing_to_copy_from.description_header;
+
+        //design
+        req.session.new_listing_info.primary_color = listing_to_copy_from.primary_color;
+        req.session.new_listing_info.secondary_color = listing_to_copy_from.secondary_color;
+        req.session.new_listing_info.tertiary_color = listing_to_copy_from.tertiary_color;
+        req.session.new_listing_info.font_name = listing_to_copy_from.font_name;
+        req.session.new_listing_info.font_color = listing_to_copy_from.font_color;
+        req.session.new_listing_info.background_color = listing_to_copy_from.background_color;
+        req.session.new_listing_info.footer_color = listing_to_copy_from.footer_color;
+        req.session.new_listing_info.footer_background_color = listing_to_copy_from.footer_background_color;
+        req.session.new_listing_info.header_color = listing_to_copy_from.header_color;
+        req.session.new_listing_info.header_background_color = listing_to_copy_from.header_background_color;
+
+        //left side
+        req.session.new_listing_info.show_registrar = listing_to_copy_from.show_registrar;
+        req.session.new_listing_info.show_registration_date = listing_to_copy_from.show_registration_date;
+        req.session.new_listing_info.show_categories = listing_to_copy_from.show_categories;
+        req.session.new_listing_info.show_social_sharing = listing_to_copy_from.show_social_sharing;
+
+        //appraisal
+        req.session.new_listing_info.show_godaddy_appraisal = listing_to_copy_from.show_godaddy_appraisal;
+        req.session.new_listing_info.show_domainindex_appraisal = listing_to_copy_from.show_domainindex_appraisal;
+        req.session.new_listing_info.show_freevaluator_appraisal = listing_to_copy_from.show_freevaluator_appraisal;
+        req.session.new_listing_info.show_estibot_appraisal = listing_to_copy_from.show_estibot_appraisal;
+
+        //right side
+        req.session.new_listing_info.show_placeholder = listing_to_copy_from.show_placeholder;
+        req.session.new_listing_info.show_traffic_graph = listing_to_copy_from.show_traffic_graph;
+        req.session.new_listing_info.show_alexa_stats = listing_to_copy_from.show_alexa_stats;
+        req.session.new_listing_info.show_history_ticker = listing_to_copy_from.show_history_ticker;
+        req.session.new_listing_info.show_domain_list = listing_to_copy_from.show_domain_list;
+
+        //images
+        req.session.new_listing_info.background_image = listing_to_copy_from.background_image;
+        req.session.new_listing_info.logo = listing_to_copy_from.logo;
+        req.session.new_listing_info.main_image = listing_to_copy_from.main_image;
+      }
+
+      next();
+    },
+
     //update a listing
     updateListingsInfo: function(req, res, next){
 
@@ -1475,7 +1545,7 @@ module.exports = {
         console.log("LOF: Updating domain details...");
 
         //using IDs
-        if (req.path == "/listings/multiupdate"){
+        if (req.path == "/listings/multiupdate" || req.path.indexOf("copydetails") != -1){
           var domain_ids = req.body.selected_ids.split(",");
           listing_model.updateListingsInfoByID(domain_ids, req.session.new_listing_info, function(result){
             if (result.state=="error"){ error.handler(req, res, result.info, "json"); }

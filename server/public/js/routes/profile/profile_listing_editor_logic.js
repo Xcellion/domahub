@@ -255,6 +255,7 @@ function updateEditorDomains(selected_domain_ids){
     //refresh all changeable inputs
     $(".changeable-input").val("");
 
+    updateCopyListingDetails(current_listing);
     updateStatus(current_listing);
     updateInfoTab(current_listing);
     updateDesignTab(current_listing);
@@ -295,6 +296,116 @@ function updateEditorDomains(selected_domain_ids){
 
   }
 
+  //button to copy listing details from an existing listing
+  function updateCopyListingDetails(listing_info){
+
+    //tooltip to view existing listings
+    $("#copy-listings-button").off().on('click', function(){
+      $("#copy-listings-modal").toggleClass('is-active');
+    });
+
+    //empty the list
+    $(".copy-listings-modal-cloned-listing").remove();
+
+    //populate the list
+    var domain_names_list = getUnselectedDomains(false, true);
+    for (var x = 0 ; x < domain_names_list.length ; x++){
+
+      //create each row
+      var cloned_domain = $("#copy-listings-list-clone").clone().removeClass('is-hidden').addClass('copy-listings-modal-cloned-listing');
+
+      //if demo
+      if (!user.id){
+        var listing_href = ((window.location.hostname.indexOf("domahub") != -1) ? "https://domahub.com/listing/" + domain_names_list[x].domain_name.toLowerCase() : "http://localhost:8080/listing/" + domain_names_list[x].domain_name.toLowerCase()) + "?compare=true&theme=Random";
+      }
+      //if production
+      else if (window.location.hostname.indexOf("domahub") != -1){
+        var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].domain_name.toLowerCase() : "/listing/" + domain_names_list[x].domain_name.toLowerCase();
+      }
+      //testing
+      else {
+        var listing_href = "http://localhost:8080/listing/" + domain_names_list[x].domain_name.toLowerCase();
+      }
+
+      cloned_domain.find(".copy-listing-domain_name").text(punycode.toUnicode(domain_names_list[x].domain_name)).attr("href", listing_href);
+      cloned_domain.find(".copy-listing-status").text(getStatusText(domain_names_list[x]));
+      cloned_domain.data("listing_info", domain_names_list[x])
+
+      //click to copy
+      cloned_domain.find(".copy-listing-button").on("click", function(){
+        var listing_info_to_copy = $(this).closest(".copy-listings-modal-cloned-listing").data("listing_info");
+        $("#copy-listings-modal").removeClass('is-active');
+        $("#copy-listings-button").addClass("is-loading");
+        var selected_ids = getSelectedDomains("id", true, true);
+
+        //send the AJAX
+        $.ajax({
+          // url: "/listings/☃-⌘.com/copydetails",
+          url: "/listings/" + listing_info_to_copy.domain_name + "/copydetails",
+          method : "POST",
+          data : {
+            selected_ids : selected_ids.join(",")
+          }
+        }, 'json').done(function(data){
+          if (data.listings){
+            listings = data.listings;
+          }
+          $("#copy-listings-button").removeClass('is-loading');
+          refreshSubmitButtons();
+
+          if (data.state == "success"){
+            $(".modal").removeClass("is-active");
+            var plural_success_msg = (selected_ids.length == 1) ? "this listing" : selected_ids.length + " listings";
+            successMessage("Successfully copied settings from listing (" + punycode.toUnicode(listing_info_to_copy.domain_name) + ") for " + plural_success_msg + "!");
+            createRows(selected_ids);
+            updateEditorEditing(selected_ids);
+          }
+          else {
+            //listing is no longer pointed to domahub, revert to verify tab
+            if (data.message == "verification-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "This listing is" : "Some of the selected listings are";
+              var error_msg = plural_error_msg + " no longer pointing to DomaHub! Please verify that you are the owner by confirming your DNS settings.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "ownership-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
+              var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "accepted-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "deposited-error" || data.message == "transferred-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+              var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
+              showSelector(true);
+              createRows(false);
+            }
+            else if (data.message == "unlisted-error"){
+              var plural_error_msg = (selected_ids.length == 1) ? "an unlisted listing" : "unlisted listings";
+              var error_msg = "You cannot edit the listing details of " + plural_error_msg + "! Please verify your ownership of these domains before editing.";
+              showSelector(true);
+              createRows(false);
+            }
+            else {
+              var error_msg = data.message;
+            }
+
+            errorMessage(error_msg);
+          }
+        });
+      });
+
+      $("#copy-listings-list").append(cloned_domain);
+      updateMarqueeHandlers(cloned_domain.find(".copy-listing-domain_name"));
+    }
+
+  }
   function updateStatus(listing_info){
     //status
     $("#status-toggle-button").data("status", (listing_info.status) ? listing_info.status : 0);

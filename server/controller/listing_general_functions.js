@@ -46,7 +46,12 @@ module.exports = {
     var domain_name = req.params.domain_name || req.body["domain-name"];
     listing_model.checkListing(domain_name, function(result){
       if (!result.info.length || result.state == "error"){
-        error.handler(req, res, "Invalid domain name!");
+        if (req.method == "POST"){
+          error.handler(req, res, "Invalid domain name!", "json");
+        }
+        else {
+          error.handler(req, res, "Invalid domain name!");
+        }
       }
       else {
         next();

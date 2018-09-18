@@ -475,38 +475,14 @@ function updateDomainRow(tempRow, listing_info, now){
     tempRow.find(".td-date-expire").text("-").removeAttr("title");
   }
 
-  //status text
-  if (listing_info.transferred){
-    var status_text = "Sold (Transferred)";
-  }
-  else if (listing_info.deposited){
-    var status_text = "Sold (Not Transferred)";
-  }
-  else if (listing_info.accepted){
-    var status_text = "Accepted An Offer";
-  }
-  else if (listing_info.rented){
-    var status_text = "Currently Rented";
-  }
-  else if (listing_info.hub == 1 && user.stripe_subscription_id){
-    var status_text = "Listing Hub";
-  }
-  else if (listing_info.verified && listing_info.status == 1){
-    var status_text = "Active";
-  }
-  else if (listing_info.verified && listing_info.status == 0){
-    var status_text = "Inactive";
-  }
-  else if (listing_info.status == 3){
-    var status_text = "Pending";
+  //status text for the selector columns
+  var status_text = getStatusText(listing_info);
+
+  if (status_text == "Pending"){
     tempRow.find(".pending-status-icon").removeClass('is-hidden');
   }
-  else if (listing_info.status == 4){
-    var status_text = "Unlisted";
+  else if (status_text == "Unlisted"){
     tempRow.find(".unlisted-status-icon").removeClass('is-hidden');
-  }
-  else {
-    var status_text = "Unverified";
   }
 
   tempRow.find(".td-status").text(status_text);
@@ -889,8 +865,9 @@ function viewDomainDNS(push){
     //list of domains to delete
     $("#delete-modal-domains .delete-modal-cloned-domain").remove();
     for (var x = 0; x < selected_domain_names.length; x++){
-      var cloned_domain = $("#delete-modal-domain-name-clone").clone().removeClass('is-hidden').addClass('delete-modal-cloned-domain').text(selected_domain_names[x]);
+      var cloned_domain = $("#delete-modal-domain-name-clone").clone().removeClass('is-hidden').addClass('delete-modal-cloned-domain').text(punycode.toUnicode(selected_domain_names[x]));
       $("#delete-modal-domains").append(cloned_domain);
+      updateMarqueeHandlers(cloned_domain);
     }
   }
 
@@ -950,6 +927,42 @@ function viewDomainDNS(push){
 //get the multiplier of a currency
 function multiplier(code){
   return (code && currency_codes[code.toUpperCase()]) ? Math.pow(10, currency_codes[code.toUpperCase()].fractionSize) : 1;
+}
+
+function getStatusText(listing_info){
+  //status text
+  if (listing_info.transferred){
+    var status_text = "Sold (Transferred)";
+  }
+  else if (listing_info.deposited){
+    var status_text = "Sold (Not Transferred)";
+  }
+  else if (listing_info.accepted){
+    var status_text = "Accepted An Offer";
+  }
+  else if (listing_info.rented){
+    var status_text = "Currently Rented";
+  }
+  else if (listing_info.hub == 1 && user.stripe_subscription_id){
+    var status_text = "Listing Hub";
+  }
+  else if (listing_info.verified && listing_info.status == 1){
+    var status_text = "Active";
+  }
+  else if (listing_info.verified && listing_info.status == 0){
+    var status_text = "Inactive";
+  }
+  else if (listing_info.status == 3){
+    var status_text = "Pending";
+  }
+  else if (listing_info.status == 4){
+    var status_text = "Unlisted";
+  }
+  else {
+    var status_text = "Unverified";
+  }
+
+  return status_text;
 }
 
 //to format a number for currency
@@ -1014,6 +1027,51 @@ function getSelectedDomains(data_name, verified, editable){
 
       //return selected ones
       return $(".table-row:not(.clone-row).is-selected").filter(function(){
+        return $(this).data("unverified") != verified
+      }).map(function(){
+        return $(this).data(data_name)
+      }).toArray();
+    }
+  }
+}
+
+//get domain_name or ID of all unselected rows
+function getUnselectedDomains(data_name, verified, editable){
+
+  //return all selected data
+  if (typeof verified == undefined){
+    return $(".table-row:not(.clone-row):not(.is-selected)").map(function(){
+      return $(this).data(data_name)
+    }).toArray();
+  }
+
+  //return verified, unverified, editable, or offer-only
+  else {
+    if (editable){
+      //deselect other ones
+      $(".table-row:not(.clone-row):not(.is-selected)").filter(function(){
+        return $(this).data("unverified") == verified && $(this).data("accepted") == editable && !$(this).data("unlisted")
+      }).each(function(){
+        selectRow($(this), false);
+      });
+
+      //return selected ones
+      return $(".table-row:not(.clone-row):not(.is-selected)").filter(function(){
+        return ($(this).data("unverified") != verified && $(this).data("accepted") != editable) || $(this).data("unlisted")
+      }).map(function(){
+        return $(this).data(data_name)
+      }).toArray();
+    }
+    else {
+      //deselect other ones
+      $(".table-row:not(.clone-row):not(.is-selected)").filter(function(){
+        return $(this).data("unverified") == verified
+      }).each(function(){
+        selectRow($(this), false);
+      });
+
+      //return selected ones
+      return $(".table-row:not(.clone-row):not(.is-selected)").filter(function(){
         return $(this).data("unverified") != verified
       }).map(function(){
         return $(this).data(data_name)

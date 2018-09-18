@@ -135,7 +135,13 @@ $(document).ready(function() {
       user.listings.forEach(function(row){
         var row_details = [];
         for (var x = 0; x < headers.length; x++){
-          row_details.push(row[headers[x]]);
+          //format dates before pushing
+          if (row[headers[x]] && ["date_created", "date_expire", "date_registered"].indexOf(headers[x]) != -1){
+            row_details.push(moment(row[headers[x]]).format("YYYY/MM/DD hh:mm A"));
+          }
+          else {
+            row_details.push(row[headers[x]]);
+          }
         }
         csvContent += '"' + row_details.join('","') +'"\r\n';
       });
