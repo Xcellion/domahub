@@ -2397,7 +2397,7 @@ function mark_sales_withdrawn(withdrawal_obj){
             //if we havent gotten all domains yet, recursively keep getting more pages
             var paging_info = result.ApiResponse.CommandResponse[0].Paging[0];
             if (Math.ceil(parseFloat(paging_info.TotalItems) / parseFloat(paging_info.PageSize)) != current_page){
-              getDomainsPageNamecheap(resolve, reject, registrar_info, current_page + 1, good_domains);
+              get_domain_page_namecheap_promise(resolve, reject, registrar_info, current_page + 1, good_domains);
             }
             else {
               resolve({

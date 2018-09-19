@@ -143,12 +143,21 @@ function updatePortfolioOverviewCounters(){
           }
         }
         else {
-          total_expenses += transaction_cost;
-          total_profit += transaction_cost - doma_fees - payment_fees;
+          //expenses are negative
+          if (user.transactions[x].transaction_type == "expense"){
+            total_expenses += transaction_cost;
+            total_profit += transaction_cost - doma_fees - payment_fees;
+          }
+          //renewals are positive
+          else {
+            total_expenses -= transaction_cost;
+            total_profit -= transaction_cost - doma_fees - payment_fees;
+          }
         }
       }
     }
   }
+  console.log(total_expenses, total_profit)
 
   $("#revenue-counter").addClass("is-primary").text(formatCurrency(total_revenue/100));
 
