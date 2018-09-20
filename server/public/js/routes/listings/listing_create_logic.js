@@ -77,6 +77,53 @@ $(document).ready(function() {
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------CSV UPLOAD CREATE-------------------------------
+
+  //selecting a CSV file
+  $("#csv-select-input").on("input", function(){
+    if (!$(this)[0].files[0]){
+      $("#current-csv-file-name").text("None!");
+      $("#csv-submit-input").addClass("is-disabled");
+    }
+    else {
+      $("#current-csv-file-name").text($(this)[0].files[0].name);
+      $("#csv-submit-input").removeClass("is-disabled");
+    }
+  });
+
+  //submitting a CSV file
+  $("#csv-input-form").on("submit", function(e){
+    e.preventDefault();
+    var reader = new FileReader();
+    reader.readAsText($("#csv-select-input")[0].files[0]);
+    reader.onload = function(event){
+      var csv = event.target.result;
+      var data = $.csv.toObjects(csv);
+
+      //check all the data
+      var total_good = 0;
+      for (var x = 0 ; x < Math.min(data.length, 100) ; x++){
+        if (data[0].domain_name && data[0].min_price && data[0].buy_price){
+          total_good++;
+        }
+      }
+
+      //all good
+      if (total_good == data.length){
+        createDomainsTable([], data);
+      }
+      else if (data.length > 100){
+        errorMessage("You can only create up to 100 domain listings at a time!");
+      }
+      else {
+        errorMessage("There was an issue with the CSV file you submitted. Did you use the correct format? Please check your file and try again.");
+      }
+    };
+  });
+
+  //</editor-fold>
+
+
   //<editor-fold>-------------------------------LOOK UP REGISTAR-------------------------------
 
   updateRegistrars();
@@ -174,11 +221,22 @@ $(document).ready(function() {
     //set row domain data
     if (data && data.domain_name){
       temp_table_row.attr("data-domain_name", punycode.toASCII(data.domain_name.toLowerCase()));
+      temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
+        handleSubmitDisabled();
+      });
     }
 
-    temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
-      handleSubmitDisabled();
-    });
+    //set row min_price data
+    if (data && data.min_price){
+      temp_table_row.attr("data-min_price", data.min_price);
+      temp_table_row.find(".min-price-input").val(data.min_price)
+    }
+
+    //set row buy_price data
+    if (data && data.buy_price){
+      temp_table_row.attr("data-buy_price", data.buy_price);
+      temp_table_row.find(".buy-price-input").val(data.buy_price)
+    }
 
     //click handler for row delete
     temp_table_row.find(".delete-icon").on("click", function(){
@@ -391,7 +449,7 @@ $(document).ready(function() {
       for (var x = 0; x < bad_listings.length; x++){
         createBadReasons(
           bad_listings[x].reasons,
-          $(".table-row:not(#clone-row)[data-domain_name='" + bad_listings[x].domain_name + "']")
+          $(".table-row:not(#clone-row)").eq(bad_listings[x].index)
         );
       }
     }
@@ -423,6 +481,33 @@ $(document).ready(function() {
   }
 
   //</editor-fold>
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------CSV UPLOAD-------------------------------
+
+function isAPIAvailable() {
+  // Check for the various File API support.
+  if (window.File && window.FileReader && window.FileList && window.Blob) {
+    // Great success! All the File APIs are supported.
+    return true;
+  } else {
+    // source: File API availability - http://caniuse.com/#feat=fileapi
+    // source: <output> availability - http://html5doctor.com/the-output-element/
+    console.log('The HTML5 APIs used in this form are only available in the following browsers:<br />');
+    // 6.0 File API & 13.0 <output>
+    console.log(' - Google Chrome: 13.0 or later<br />');
+    // 3.6 File API & 6.0 <output>
+    console.log(' - Mozilla Firefox: 6.0 or later<br />');
+    // 10.0 File API & 10.0 <output>
+    console.log(' - Internet Explorer: Not supported (partial support expected in 10.0)<br />');
+    // ? File API & 5.1 <output>
+    console.log(' - Safari: Not supported<br />');
+    // ? File API & 9.2 <output>
+    console.log(' - Opera: Not supported');
+    return false;
+  }
+}
 
 //</editor-fold>
 

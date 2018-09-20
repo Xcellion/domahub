@@ -1,3 +1,4 @@
-bestdomain.com,We have the greatest domain name ever!
-worstdomain.com,This is the worst domain name in the world.
-neutraldomain.com,I have no strong feelings one way or the other about this domain.
+domain_name,buy_price,min_price
+exampledomain.com,250000,0
+exampledomain1.com,250000,100000
+exampledomain2.com,250000,100000

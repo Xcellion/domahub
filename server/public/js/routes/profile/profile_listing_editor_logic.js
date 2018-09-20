@@ -356,7 +356,7 @@ function updateEditorDomains(selected_domain_ids){
           if (data.state == "success"){
             $(".modal").removeClass("is-active");
             var plural_success_msg = (selected_ids.length == 1) ? "this listing" : selected_ids.length + " listings";
-            successMessage("Successfully copied settings from listing (" + punycode.toUnicode(listing_info_to_copy.domain_name) + ") for " + plural_success_msg + "!");
+            successMessage("Successfully copied settings from a listing for " + plural_success_msg + "!");
             createRows(selected_ids);
             updateEditorEditing(selected_ids);
           }
