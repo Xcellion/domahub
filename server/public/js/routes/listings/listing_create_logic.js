@@ -93,32 +93,40 @@ $(document).ready(function() {
 
   //submitting a CSV file
   $("#csv-input-form").on("submit", function(e){
+    clearNotification();
     e.preventDefault();
-    var reader = new FileReader();
-    reader.readAsText($("#csv-select-input")[0].files[0]);
-    reader.onload = function(event){
-      var csv = event.target.result;
-      var data = $.csv.toObjects(csv);
 
-      //check all the data
-      var total_good = 0;
-      for (var x = 0 ; x < Math.min(data.length, 100) ; x++){
-        if (data[0].domain_name && data[0].min_price && data[0].buy_price){
-          total_good++;
+    //if browser supports
+    if (isAPIAvailable()){
+      var reader = new FileReader();
+      reader.readAsText($("#csv-select-input")[0].files[0]);
+      reader.onload = function(event){
+        var csv = event.target.result;
+        var data = $.csv.toObjects(csv);
+
+        //check all the data
+        var total_good = 0;
+        for (var x = 0 ; x < Math.min(data.length, 100) ; x++){
+          if (data[0].domain_name && data[0].min_price && data[0].buy_price){
+            total_good++;
+          }
         }
-      }
 
-      //all good
-      if (total_good == data.length){
-        createDomainsTable([], data);
-      }
-      else if (data.length > 100){
-        errorMessage("You can only create up to 100 domain listings at a time!");
-      }
-      else {
-        errorMessage("There was an issue with the CSV file you submitted. Did you use the correct format? Please check your file and try again.");
-      }
-    };
+        //all good
+        if (total_good == data.length){
+          createDomainsTable([], data);
+        }
+        else if (data.length > 100){
+          errorMessage("You can only create up to 100 domain listings at a time!");
+        }
+        else {
+          errorMessage("There was an issue with the CSV file you submitted. Did you use the correct format? Please check your file and try again.");
+        }
+      };
+    }
+    else {
+      errorMessage("Unfortunately, your browser does not support CSV uploads. Please upgrade to the latest version of Chrome or Firefox to utilize this feature.");
+    }
   });
 
   //</editor-fold>
