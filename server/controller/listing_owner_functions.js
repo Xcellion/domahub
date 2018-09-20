@@ -91,7 +91,6 @@ module.exports = {
         var domains_sofar = [];
         for (var x = 0; x < posted_domain_names.length; x++){
           var bad_reasons = checkPostedDomainName(req.user, domains_sofar, posted_domain_names[x], false, false);
-
           //some were messed up
           if (bad_reasons.length > 0){
             bad_listings.push({
@@ -126,56 +125,69 @@ module.exports = {
       var db_object = [];
       var default_currency = (req.user.default_currency) ? req.user.default_currency : "usd";
 
-      //loop through and check all posted domain names
-      for (var x = 0; x < posted_domain_names.length; x++){
-        var bad_reasons = checkPostedDomainName(req.user, domains_sofar, posted_domain_names[x].domain_name, posted_domain_names[x].min_price, posted_domain_names[x].buy_price);
-
-        //this one is messed up for some reason(s)
-        if (bad_reasons.length > 0){
-          bad_listings.push({
-            reasons: bad_reasons,
-            domain_name : posted_domain_names[x].domain_name
-          });
-        }
-        //all good! format the db array
-        else {
-          domains_sofar.push(posted_domain_names[x].domain_name);
-
-          var domain_name_to_create = (req.user.stripe_subscription_id) ? posted_domain_names[x].domain_name : posted_domain_names[x].domain_name.toLowerCase();
-          domain_name_to_create = punycode.toASCII(domain_name_to_create);
-
-          //format the object for DB insert
-          db_object.push([
-            req.user.id,
-            date_now,
-            domain_name_to_create,
-            null,    //registrar_id, changes later if we're using a registrar to auto update DNS
-            parseFloat(posted_domain_names[x].min_price) * 100 || 0,
-            parseFloat(posted_domain_names[x].buy_price) * 100 || 0,
-            Descriptions.random(),    //random default description
-            default_currency,         //user default currency
-            null,
-            null,
-            null
-          ]);
-        }
+      if ((posted_domain_names.length + req.user.listings.length > 100) && !req.user.stripe_subscription_id){
+        error.handler(req, res, "max-domains-reached", "json");
       }
-
-      if (bad_listings.length > 0){
-        res.send({
-          bad_listings: bad_listings
-        });
+      else if (!posted_domain_names || posted_domain_names.length <= 0){
+        error.handler(req, res, "You can't create listings without any domain names!", "json");
+      }
+      else if (posted_domain_names.length > 100){
+        error.handler(req, res, "You can only create up to 100 domain listings at a time!", "json");
       }
       else {
-        //create an object for the session
-        req.session.new_listings = {
-          db_object : db_object,
-          good_listings : [],
-          bad_listings : [],
-          check_dns_promises : []
+        //loop through and check all posted domain names
+        for (var x = 0; x < posted_domain_names.length; x++){
+          var bad_reasons = checkPostedDomainName(req.user, domains_sofar, posted_domain_names[x].domain_name, posted_domain_names[x].min_price, posted_domain_names[x].buy_price);
+
+          //this one is messed up for some reason(s)
+          if (bad_reasons.length > 0){
+            bad_listings.push({
+              reasons: bad_reasons,
+              index: x,
+              domain_name : posted_domain_names[x].domain_name
+            });
+          }
+          //all good! format the db array
+          else {
+            domains_sofar.push(posted_domain_names[x].domain_name);
+
+            var domain_name_to_create = (req.user.stripe_subscription_id) ? posted_domain_names[x].domain_name : posted_domain_names[x].domain_name.toLowerCase();
+            domain_name_to_create = punycode.toASCII(domain_name_to_create);
+
+            //format the object for DB insert
+            db_object.push([
+              req.user.id,
+              date_now,
+              domain_name_to_create,
+              null,    //registrar_id, changes later if we're using a registrar to auto update DNS
+              parseFloat(posted_domain_names[x].min_price) * Currencies.multiplier(default_currency) || 0,
+              parseFloat(posted_domain_names[x].buy_price) * Currencies.multiplier(default_currency) || 0,
+              Descriptions.random(),    //random default description
+              default_currency,         //user default currency
+              null,
+              null,
+              null
+            ]);
+          }
         }
-        next();
+
+        if (bad_listings.length > 0){
+          res.send({
+            bad_listings: bad_listings
+          });
+        }
+        else {
+          //create an object for the session
+          req.session.new_listings = {
+            db_object : db_object,
+            good_listings : [],
+            bad_listings : [],
+            check_dns_promises : []
+          }
+          next();
+        }
       }
+
     },
 
     //</editor-fold>

@@ -63,8 +63,9 @@
 
 	        <div class="columns is-laptop">
 
-	          <!-- MANUAL TEXTAREA -->
 	          <div id="manual-create-card" class="create-type-selector column">
+
+              <!-- MANUAL TEXTAREA -->
 	            <div class="card is-fullwidth">
 	              <div class="card-header">
 	                <h3 class="card-header-title">
@@ -75,7 +76,7 @@
 	                <form id="domain-input-form">
 	                  <div class="content">
 	                    <p>
-	                      Enter up to 100 domain names in the box below <strong>separated
+	                      Enter up to a 100 domain names in the box below <strong>separated
 	                      by commas</strong>. You must include TLD extensions such as .com, .org, or .net at the end.
 	                    </p>
 	                  </div>
@@ -91,7 +92,47 @@
 	                </form>
 	              </div>
 	            </div>
+
+              <!-- CSV UPLOAD -->
+              <div class="card is-fullwidth">
+	              <div class="card-header">
+	                <h3 class="card-header-title">
+	                  <span>Upload CSV</span>
+	                </h3>
+	              </div>
+	              <div class="card-content">
+                  <div class="content">
+                    <p>
+                      Enter up to a 100 domain names using an existing CSV template file.
+                    </p>
+                    <p>
+                      Currently selected CSV file : <span class="break-all" id="current-csv-file-name">None!</span>
+                    </p>
+                  </div>
+                  <div class="content">
+                    <form id="csv-input-form" method="post" enctype="multipart/form-data">
+                      <input tabindex="0" required id="csv-select-input" type="file" name="domain_csv" accept=".csv" class="input-file">
+                      <label for="csv-select-input" class="no-shadow button is-stylish">
+                        <div class="icon is-small">
+                          <i class="fal fa-upload" aria-hidden="true"></i>
+                        </div>
+                        <span data-default-name="Select CSV File" id="csv-select-label" class="file-label">Select CSV File</span>
+                      </label>
+
+                      <button id="csv-submit-input" form="csv-input-form" tabindex="0" type="submit" class="is-disabled button is-fullwidth-mobile is-primary is-stylish" title="Submit CSV File">
+                        <span class="icon"><i class="fal fa-check-circle"></i></span>
+                        <span>Submit CSV</span>
+                      </button>
+                      <a href="/downloads/csv/Multiple_Upload_Template.csv" download tabindex="0" class="button is-pulled-right is-fullwidth-mobile is-accent is-stylish" title="Download CSV Template">
+                        <span class="icon"><i class="fal fa-download"></i></span>
+                        <span>Download CSV Template</span>
+                      </a>
+                    </form>
+                  </div>
+	              </div>
+	            </div>
 	          </div>
+
 
 	          <!-- DOMAIN TABLE -->
 	          <div id="table-columns" class="manual-listing-table-elem is-hidden column">
@@ -261,6 +302,7 @@
 
   <script src="/js/routes/listings/listing_create_logic.js" type="text/javascript"></script>
   <script src="/js/lib/punycode.min.js" type="text/javascript"></script>
+  <script src="/js/jquery/jquery.csv.min.js" type="text/javascript"></script>
 </body>
 
 </html>
