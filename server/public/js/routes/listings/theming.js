@@ -168,7 +168,7 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
 
-  //show legal message
+  // //show legal message
   // $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
   //   $("#legal-modal").addClass('is-active');
   // });
@@ -196,6 +196,15 @@ function setupFooter(){
   }
   else {
     $("#legal-contact-wrapper").addClass("is-hidden");
+  }
+
+  //address
+  if (listing_info.owner_vat_number){
+    $("#legal-vat").text(listing_info.owner_vat_number);
+    $("#legal-vat-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-vat-wrapper").addClass("is-hidden");
   }
 
   //address
@@ -231,7 +240,7 @@ function setupFooter(){
 
 //</editor-fold>
 
-//<editor-fold>----------------------------------MODAL HELPERS-------------------------
+//<editor-fold>-------------------------------MODAL HELPERS-------------------------
 
 //close modals
 function closeModals(){
