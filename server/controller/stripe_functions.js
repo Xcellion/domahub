@@ -279,6 +279,7 @@ module.exports = {
           listing_info.owner_phone = account.support_phone;
           listing_info.owner_name = account.legal_entity.first_name + " " + account.legal_entity.last_name;
           listing_info.owner_business_name = account.legal_entity.business_name;
+          listing_info.owner_vat_number = account.metadata.vat_number;
         }
         else {
 
@@ -580,11 +581,32 @@ module.exports = {
       "first_name": req.body.first_name,
       "last_name": req.body.last_name,
     }
-    var support_phone = req.body.phone_number;
 
     //optional business name
     if (req.body.business_name){
       legal_entity.business_name = req.body.business_name;
+    }
+
+    var stripe_account_info = {
+      country: req.body.country,
+      email: req.user.email,
+      type: "custom",
+      payout_schedule: {
+        "interval": "manual"
+      },
+      tos_acceptance : {
+        date: Math.floor(Date.now() / 1000),
+        ip: req.connection.remoteAddress
+      },
+      legal_entity: legal_entity,
+      support_phone: req.body.phone_number
+    }
+
+    //optional VAT number
+    if (req.body.vat_number){
+      stripe_account_info.metadata = {
+        vat_number : req.body.vat_number
+      }
     }
 
     if (req.user.stripe_account_id){
@@ -592,13 +614,16 @@ module.exports = {
       stripe.accounts.retrieve(req.user.stripe_account_id, function(err, account) {
         //our db is outdated, account doesnt exist or if we're changing country
         if (err || account.country != req.body.country){
-          newStripeAccount(req, res, next, legal_entity, support_phone);
+          newStripeAccount(req, res, next, stripe_account_info);
         }
         else {
           console.log('SF: Updating existing Stripe managed account...');
           stripe.accounts.update(req.user.stripe_account_id, {
             legal_entity: legal_entity,
-            support_phone: support_phone
+            support_phone: req.body.phone_number,
+            metadata : {
+              vat_number : req.body.vat_number
+            }
           }, function(err, account){
             if (err){
               error.log(err, "Failed to update Stripe account.");
@@ -616,7 +641,7 @@ module.exports = {
       });
     }
     else {
-      newStripeAccount(req, res, next, legal_entity);
+      newStripeAccount(req, res, next, stripe_account_info);
     }
   },
 
@@ -971,21 +996,9 @@ function newStripeSubscription(req, res, next){
 }
 
 //create a new stripe account
-function newStripeAccount(req, res, next, legal_entity){
+function newStripeAccount(req, res, next, stripe_account_info){
   console.log('SF: Creating a new Stripe managed account...');
-  stripe.accounts.create({
-    country: req.body.country,
-    email: req.user.email,
-    type: "custom",
-    payout_schedule: {
-      "interval": "manual"
-    },
-    tos_acceptance : {
-      date: Math.floor(Date.now() / 1000),
-      ip: req.connection.remoteAddress
-    },
-    legal_entity: legal_entity,
-  }, function(err, account){
+  stripe.accounts.create(stripe_account_info, function(err, account){
     if (err){
       error.handler(req, res, err.message, "json");
     }
@@ -1156,6 +1169,7 @@ function updateUserStripeAccount(user, account){
         charges_enabled : account.charges_enabled,
         phone_number : account.support_phone,
         business_name : account.legal_entity.business_name,
+        vat_number : account.metadata.vat_number,
       }
     }
   }
