@@ -858,7 +858,7 @@ module.exports = {
         domain_name: domain_name.toLowerCase(),    //what they searched for
         timestamp: now,    //when they searched for it
         user_ip : getIP(req),
-        referer : req.header("Referer") || req.headers.referer
+        referer : punycode.toASCII(req.header("Referer")) || punycode.toASCII(req.headers.referer)
       }
 
       //if it was a compare query
