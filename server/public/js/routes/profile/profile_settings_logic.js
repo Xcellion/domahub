@@ -70,12 +70,12 @@ $(document).ready(function() {
         "date_created",
         "date_expire",
         "date_registered",
-        "default_currency",
         "rentable",
         "price_type",
         "price_rate",
         "buy_price",
         "min_price",
+        "default_currency",
         "description",
         "description_footer",
         "description_footer_link",
@@ -138,6 +138,24 @@ $(document).ready(function() {
           //format dates before pushing
           if (row[headers[x]] && ["date_created", "date_expire", "date_registered"].indexOf(headers[x]) != -1){
             row_details.push(moment(row[headers[x]]).format("YYYY/MM/DD hh:mm A"));
+          }
+          //format currency before pushing
+          else if (row[headers[x]] && ["price_rate", "buy_price", "min_price"].indexOf(headers[x]) != -1){
+            if (row["default_currency"]){
+              row_details.push(formatCurrency(row[headers[x]], row["default_currency"]));
+            }
+            else {
+              row_details.push(formatCurrency(row[headers[x]], user.default_currency));
+            }
+          }
+          //format registrar cost currency before pushing
+          else if (row[headers[x]] && headers[x] == "registrar_cost"){
+            if (row["registrar_cost_currency"]){
+              row_details.push(formatCurrency(row[headers[x]], row["registrar_cost_currency"]));
+            }
+            else {
+              row_details.push(formatCurrency(row[headers[x]], user.default_currency));
+            }
           }
           else {
             row_details.push(row[headers[x]]);
