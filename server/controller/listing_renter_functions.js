@@ -857,8 +857,17 @@ module.exports = {
         account_id: account_id,      //who searched if who exists
         domain_name: domain_name.toLowerCase(),    //what they searched for
         timestamp: now,    //when they searched for it
-        user_ip : getIP(req),
-        referer : punycode.toASCII(req.header("Referer")) || punycode.toASCII(req.headers.referer)
+        user_ip : getIP(req)
+      }
+
+      //log the referer
+      if (req.header("Referer")){
+        var referer = (req.header("Referer")) ? req.header("Referer") : "";
+        history_info.referer = punycode.toASCII(referer);
+      }
+      else if (req.headers.referer){
+        var referer = (req.headers.referer) ? req.headers.referer : "";
+        history_info.referer = punycode.toASCII(referer);
       }
 
       //if it was a compare query
