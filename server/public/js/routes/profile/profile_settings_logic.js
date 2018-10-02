@@ -67,6 +67,7 @@ $(document).ready(function() {
       let csvContent = "";
       var headers = [
         "domain_name",
+        "status",
         "date_created",
         "date_expire",
         "date_registered",
