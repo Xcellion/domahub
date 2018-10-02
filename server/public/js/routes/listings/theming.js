@@ -168,10 +168,10 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
 
-  // //show legal message
-  // $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
-  //   $("#legal-modal").addClass('is-active');
-  // });
+  //show legal message
+  $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
+    $("#legal-modal").addClass('is-active');
+  });
 
   if (listing_info.owner_address){
     var owner_address = listing_info.owner_address.line1;
