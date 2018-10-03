@@ -66,8 +66,8 @@ function setupCustomColorsListing(){
   stylize(listing_info.secondary_color, ".page-contents .is-accent.button", "background-color", true);
 
   //tertiary color (links)
-  stylize(listing_info.tertiary_color, ".page-contents a.is-info:not(.button)", "color");
-  stylize(listing_info.primary_color, ".page-contents a.is-primary:not(.button)", "color");
+  stylize(listing_info.tertiary_color, ".page-contents a.is-info:not(.button):not(.no-theme)", "color");
+  stylize(listing_info.primary_color, ".page-contents a.is-primary:not(.button):not(.no-theme)", "color");
 
   //price tags
   stylize(listing_info.primary_color, ".page-contents .main-price-tag", "color");
@@ -185,17 +185,22 @@ function setupFooter(){
   }
 
 
-  //contact
+  //business name
   if (listing_info.owner_business_name){
     $("#legal-contact").text(listing_info.owner_business_name);
     $("#legal-contact-wrapper").removeClass("is-hidden");
   }
-  else if (listing_info.owner_name){
-    $("#legal-contact").text(listing_info.owner_name);
-    $("#legal-contact-wrapper").removeClass("is-hidden");
-  }
   else {
     $("#legal-contact-wrapper").addClass("is-hidden");
+  }
+
+  //represented by
+  if (listing_info.owner_name){
+    $("#legal-represented").text(listing_info.owner_name);
+    $("#legal-represented-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-represented-wrapper").addClass("is-hidden");
   }
 
   //address
