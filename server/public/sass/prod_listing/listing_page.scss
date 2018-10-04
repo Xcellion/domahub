@@ -47,6 +47,9 @@
   background-color: $white;
   min-height: calc(100vh - 110px);
   width: 100%;
+  @include mobile-456px {
+    min-height: calc(100vh - 150px);
+  }
   &.is-active {
     @include translate(500px,0);
     width: calc(100% - 500px);
@@ -387,7 +390,7 @@
     }
 
     .traffic-chart {
-      height: 360px;
+      height: 330px;
     }
 
     .alexa-data-wrapper {

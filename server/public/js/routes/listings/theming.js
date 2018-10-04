@@ -203,13 +203,36 @@ function setupFooter(){
     $("#legal-represented-wrapper").addClass("is-hidden");
   }
 
-  //address
+  //VAT NUMBER
   if (listing_info.owner_vat_number){
     $("#legal-vat").text(listing_info.owner_vat_number);
     $("#legal-vat-wrapper").removeClass("is-hidden");
   }
   else {
     $("#legal-vat-wrapper").addClass("is-hidden");
+  }
+
+  //COURT LOCALITY
+  if (listing_info.owner_court_locality){
+    $("#legal-court").text(listing_info.owner_court_locality);
+    $("#legal-court-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-court-wrapper").addClass("is-hidden");
+  }
+
+  //REGISTRATION NUMBER
+  if (listing_info.owner_registration_number){
+    $("#legal-registration").text(listing_info.owner_registration_number);
+    $("#legal-registration-wrapper").removeClass("is-hidden");
+  }
+  else {
+    $("#legal-registration-wrapper").addClass("is-hidden");
+  }
+
+  //show legal details
+  if (listing_info.owner_vat_number || listing_info.owner_court_locality || listing_info.owner_registration_number){
+    $("#legal-details-wrapper").removeClass("is-hidden");
   }
 
   //address

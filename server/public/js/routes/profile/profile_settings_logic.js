@@ -572,6 +572,11 @@ function showSectionByURL(){
     $(".account-input").each(function(){
       $(this).val(user[$(this).data("uservar")]);
     });
+
+    //if european
+    if (user.default_currency == "eur"){
+      $("#euro_legal_card").removeClass("is-hidden");
+    }
   }
 
   //<editor-fold>-------------------------------SUBMIT ACCOUNT CHANGES-------------------------------

@@ -108,9 +108,10 @@ function loadNotification() {
 //any link that says to contact us
 function contactLinkHandler(){
   $(".contact-link").off().on("click", function(e){
-    if ($("#contact-button").is(":visible")){
+    if (!$(".left-menu").hasClass("is-active")){
       e.preventDefault();
-      $("#contact-dropdown-menu").toggleClass('is-hidden');
+      $(".left-menu").addClass('is-active');
+      $("#contact-button").click();
       $("#contact_message").focus();
     }
   });
