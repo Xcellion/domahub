@@ -280,6 +280,8 @@ module.exports = {
           listing_info.owner_name = account.legal_entity.first_name + " " + account.legal_entity.last_name;
           listing_info.owner_business_name = account.legal_entity.business_name;
           listing_info.owner_vat_number = account.metadata.vat_number;
+          listing_info.owner_court_locality = account.metadata.court_locality;
+          listing_info.owner_registration_number = account.metadata.registration_number;
         }
         else {
 
@@ -599,15 +601,25 @@ module.exports = {
         ip: req.connection.remoteAddress
       },
       legal_entity: legal_entity,
-      support_phone: req.body.phone_number
+      support_phone: req.body.phone_number,
+      metadata : {}
     }
 
     //optional VAT number
     if (req.body.vat_number){
-      stripe_account_info.metadata = {
-        vat_number : req.body.vat_number
-      }
+      stripe_account_info.metadata.vat_number = req.body.vat_number;
     }
+
+    //optional court locality
+    if (req.body.court_locality){
+      stripe_account_info.metadata.court_locality = req.body.court_locality;
+    }
+
+    //optional registration number
+    if (req.body.registration_number){
+      stripe_account_info.metadata.registration_number = req.body.registration_number;
+    }
+    console.log(stripe_account_info.metadata)
 
     if (req.user.stripe_account_id){
       //cross reference with stripe
@@ -622,7 +634,9 @@ module.exports = {
             legal_entity: legal_entity,
             support_phone: req.body.phone_number,
             metadata : {
-              vat_number : req.body.vat_number
+              vat_number : req.body.vat_number,
+              court_locality : req.body.court_locality,
+              registration_number : req.body.registration_number
             }
           }, function(err, account){
             if (err){
@@ -1170,6 +1184,8 @@ function updateUserStripeAccount(user, account){
         phone_number : account.support_phone,
         business_name : account.legal_entity.business_name,
         vat_number : account.metadata.vat_number,
+        court_locality : account.metadata.court_locality,
+        registration_number : account.metadata.registration_number,
       }
     }
   }
