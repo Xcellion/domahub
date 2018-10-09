@@ -2623,7 +2623,7 @@ function whatsNextOfferView(listing_info, dont_reselect){
     });
 
     //filter out only user listings
-    var listing_filters = user.listings.map(function(listing){
+    var listing_filters = getSelectedDomains().map(function(listing){
       return listing.domain_name.toLowerCase();
     }).join("|");
     var listing_regex = (user.listings.length > 0) ? new RegExp("^(" + listing_filters + ")") : new RegExp("(?!)");
@@ -2735,12 +2735,11 @@ function whatsNextOfferView(listing_info, dont_reselect){
         //declare some global font styling
         Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Helvetica', sans-serif";
         Chart.defaults.global.defaultFontSize = 14;
-
         //make chart
         var chartOptions = {
           type : "line",
           options: {
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             layout: {
               padding: {
                 top: 20,
@@ -2883,15 +2882,40 @@ function whatsNextOfferView(listing_info, dont_reselect){
   function removeUnownedAddZeroCounts(start_time, end_time, rows, listing_regex, average){
     //create empty hash tables with 0 count for all days for past X days
     var empty_daily_hash_table = {};
+
+    //traffic data hash table by domain
+    var domain_hash_table = {};
+    var selected_domains = getSelectedDomains("domain_name");
+    for (var y = 0; y < selected_domains.length ; y++){
+      domain_hash_table[selected_domains[y]] = {};
+    }
+
+    //split into times
     for (var x = 0 ; x <= end_time.diff(start_time, "days") ; x++){
+      var temp_date = moment(start_time).add(x, "day").format("YYYYMMDD");
       if (average){
-        empty_daily_hash_table[moment(start_time).add(x, "day").format("YYYYMMDD")] = {
+
+        //total hash
+        empty_daily_hash_table[temp_date] = {
           value : 0,
           count : 0
         }
+
+        //domain specific hashes
+        for (var z in domain_hash_table){
+          domain_hash_table[z][temp_date] = {
+            value : 0,
+            count : 0
+          }
+        }
       }
       else {
-        empty_daily_hash_table[moment(start_time).add(x, "day").format("YYYYMMDD")] = 0;
+        empty_daily_hash_table[temp_date] = 0;
+
+        //domain specific hashes
+        for (var t in domain_hash_table){
+          domain_hash_table[t][temp_date] = 0;
+        }
       }
     }
 
@@ -2905,11 +2929,19 @@ function whatsNextOfferView(listing_info, dont_reselect){
       if (average){
         empty_daily_hash_table[row[1]].value += parseFloat(row[2]);
         empty_daily_hash_table[row[1]].count += parseFloat(row[3]);
+
+        //domain specific hash table
+        domain_hash_table[row[0]][row[1]].value += parseFloat(row[2]);
+        domain_hash_table[row[0]][row[1]].count += parseFloat(row[3]);
       }
       else {
         empty_daily_hash_table[row[1]] += parseFloat(row[2]);
+
+        //domain specific hash table
+        domain_hash_table[row[0]][row[1]] += parseFloat(row[2]);
       }
     });
+    console.log(domain_hash_table);
 
     //rebuild array from hash
     var parsed_array = [];

@@ -279,6 +279,7 @@ module.exports = {
           listing_info.owner_phone = account.support_phone;
           listing_info.owner_name = account.legal_entity.first_name + " " + account.legal_entity.last_name;
           listing_info.owner_business_name = account.legal_entity.business_name;
+          listing_info.owner_business_name_override = account.metadata.business_name_override;
           listing_info.owner_vat_number = account.metadata.vat_number;
           listing_info.owner_court_locality = account.metadata.court_locality;
           listing_info.owner_registration_number = account.metadata.registration_number;
@@ -610,6 +611,9 @@ module.exports = {
       stripe_account_info.metadata.vat_number = req.body.vat_number;
     }
 
+    //optional override legal entity
+    stripe_account_info.metadata.business_name_override = (req.body.business_name_override) ? "on" : "off";
+
     //optional court locality
     if (req.body.court_locality){
       stripe_account_info.metadata.court_locality = req.body.court_locality;
@@ -619,7 +623,6 @@ module.exports = {
     if (req.body.registration_number){
       stripe_account_info.metadata.registration_number = req.body.registration_number;
     }
-    console.log(stripe_account_info.metadata)
 
     if (req.user.stripe_account_id){
       //cross reference with stripe
@@ -635,6 +638,7 @@ module.exports = {
             support_phone: req.body.phone_number,
             metadata : {
               vat_number : req.body.vat_number,
+              business_name_override : (req.body.business_name_override) ? "on" : "off",
               court_locality : req.body.court_locality,
               registration_number : req.body.registration_number
             }
@@ -1183,6 +1187,7 @@ function updateUserStripeAccount(user, account){
         charges_enabled : account.charges_enabled,
         phone_number : account.support_phone,
         business_name : account.legal_entity.business_name,
+        business_name_override : account.metadata.business_name_override,
         vat_number : account.metadata.vat_number,
         court_locality : account.metadata.court_locality,
         registration_number : account.metadata.registration_number,

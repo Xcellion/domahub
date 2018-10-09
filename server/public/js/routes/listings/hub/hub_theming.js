@@ -22,62 +22,7 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
 
-  //show legal message
-  // $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
-  //   $("#legal-modal").addClass('is-active');
-  // });
-
-  if (listing_hub_info.owner_address){
-    var owner_address = listing_hub_info.owner_address.line1;
-    if (listing_hub_info.owner_address.line2){
-      owner_address += listing_hub_info.owner_address.line2;
-    }
-    owner_address += ", " + listing_hub_info.owner_address.city;
-    owner_address += ", " + listing_hub_info.owner_address.state;
-    owner_address += ", " + listing_hub_info.owner_address.postal_code;
-    owner_address += ", " + listing_hub_info.owner_address.country;
-  }
-
-
-  //contact
-  if (listing_hub_info.owner_business_name){
-    $("#legal-contact").text(listing_hub_info.owner_business_name);
-    $("#legal-contact-wrapper").removeClass("is-hidden");
-  }
-  else if (listing_hub_info.owner_name){
-    $("#legal-contact").text(listing_hub_info.owner_name);
-    $("#legal-contact-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-contact-wrapper").addClass("is-hidden");
-  }
-
-  //address
-  if (listing_hub_info.owner_address){
-    $("#legal-address").text(owner_address);
-    $("#legal-address-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-address-wrapper").addClass("is-hidden");
-  }
-
-  //email
-  if (listing_hub_info.owner_email){
-    $("#legal-email").text(listing_hub_info.owner_email);
-    $("#legal-email-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-email-wrapper").addClass("is-hidden");
-  }
-
-  //phone
-  if (listing_hub_info.owner_phone){
-    $("#legal-phone").text(listing_hub_info.owner_phone);
-    $("#legal-phone-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-phone-wrapper").addClass("is-hidden");
-  }
+  setupLegalMessage(listing_hub_info);
 
   //</editor-fold>
 
@@ -88,7 +33,7 @@ function setupCustomColorsHub(){
   console.log("Setting up custom theme for hub...");
   stylize(listing_hub_info.background_color, ".hub-section.hero", "background-color");
   stylize(listing_hub_info.primary_color, ".hub-section #search-domain-tld", "color");
-  stylize(listing_hub_info.primary_color, ".hub-section .is-primary:not(.notification)", "color");
+  stylize(listing_hub_info.primary_color, ".hub-section .is-primary:not(.notification):not(.no-theme)", "color");
   stylize(listing_hub_info.primary_color, ".hub-section .is-primary.button", "background-color", true);
   stylize(hexToRgbA(listing_hub_info.primary_color, 1, true), ".hub-section .is-primary.tag.is-dot", "background-color");
   stylize(listing_hub_info.primary_color, ".hub-section .price-tag", "background-color", true);

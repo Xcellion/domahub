@@ -168,102 +168,125 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
 
-  //show legal message
-  $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
-    $("#legal-modal").addClass('is-active');
-  });
-
-  if (listing_info.owner_address){
-    var owner_address = listing_info.owner_address.line1;
-    if (listing_info.owner_address.line2){
-      owner_address += listing_info.owner_address.line2;
-    }
-    owner_address += ", " + listing_info.owner_address.city;
-    owner_address += ", " + listing_info.owner_address.state;
-    owner_address += ", " + listing_info.owner_address.postal_code;
-    owner_address += ", " + listing_info.owner_address.country;
-  }
-
-
-  //business name
-  if (listing_info.owner_business_name){
-    $("#legal-contact").text(listing_info.owner_business_name);
-    $("#legal-contact-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-contact-wrapper").addClass("is-hidden");
-  }
-
-  //represented by
-  if (listing_info.owner_name){
-    $("#legal-represented").text(listing_info.owner_name);
-    $("#legal-represented-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-represented-wrapper").addClass("is-hidden");
-  }
-
-  //VAT NUMBER
-  if (listing_info.owner_vat_number){
-    $("#legal-vat").text(listing_info.owner_vat_number);
-    $("#legal-vat-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-vat-wrapper").addClass("is-hidden");
-  }
-
-  //COURT LOCALITY
-  if (listing_info.owner_court_locality){
-    $("#legal-court").text(listing_info.owner_court_locality);
-    $("#legal-court-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-court-wrapper").addClass("is-hidden");
-  }
-
-  //REGISTRATION NUMBER
-  if (listing_info.owner_registration_number){
-    $("#legal-registration").text(listing_info.owner_registration_number);
-    $("#legal-registration-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-registration-wrapper").addClass("is-hidden");
-  }
-
-  //show legal details
-  if (listing_info.owner_vat_number || listing_info.owner_court_locality || listing_info.owner_registration_number){
-    $("#legal-details-wrapper").removeClass("is-hidden");
-  }
-
-  //address
-  if (listing_info.owner_address){
-    $("#legal-address").text(owner_address);
-    $("#legal-address-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-address-wrapper").addClass("is-hidden");
-  }
-
-  //email
-  if (listing_info.owner_email){
-    $("#legal-email").text(listing_info.owner_email);
-    $("#legal-email-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-email-wrapper").addClass("is-hidden");
-  }
-
-  //phone
-  if (listing_info.owner_phone){
-    $("#legal-phone").text(listing_info.owner_phone);
-    $("#legal-phone-wrapper").removeClass("is-hidden");
-  }
-  else {
-    $("#legal-phone-wrapper").addClass("is-hidden");
-  }
+  setupLegalMessage(listing_info);
 
   //</editor-fold>
 
+}
+
+function setupLegalMessage(listing_legal_info){
+
+    //show legal message
+    $("#legal-info").removeClass("is-hidden").css("display", "block").on("click", function(){
+      $("#legal-modal").addClass('is-active');
+    });
+
+    if (listing_legal_info.owner_address){
+      var owner_address = listing_legal_info.owner_address.line1;
+      if (listing_legal_info.owner_address.line2){
+        owner_address += listing_legal_info.owner_address.line2;
+      }
+      owner_address += ", " + listing_legal_info.owner_address.city;
+      owner_address += ", " + listing_legal_info.owner_address.state;
+      owner_address += ", " + listing_legal_info.owner_address.postal_code;
+      owner_address += ", " + listing_legal_info.owner_address.country;
+    }
+
+    //override name
+    if (listing_legal_info.owner_business_name_override == "on"){
+
+      //business name
+      if (listing_legal_info.owner_business_name){
+        $("#legal-contact").text(listing_legal_info.owner_business_name);
+        $("#legal-contact-wrapper").removeClass("is-hidden");
+      }
+      else if (listing_legal_info.owner_name){
+        $("#legal-contact").text(listing_legal_info.owner_name);
+        $("#legal-contact-wrapper").removeClass("is-hidden");
+      }
+      else {
+        $("#legal-contact-wrapper").addClass("is-hidden");
+      }
+
+    }
+    else {
+      //business name
+      if (listing_legal_info.owner_business_name){
+        $("#legal-contact").text(listing_legal_info.owner_business_name);
+        $("#legal-contact-wrapper").removeClass("is-hidden");
+      }
+      else {
+        $("#legal-contact-wrapper").addClass("is-hidden");
+      }
+
+      //represented by
+      if (listing_legal_info.owner_name){
+        $("#legal-represented").text(listing_legal_info.owner_name);
+        $("#legal-represented-wrapper").removeClass("is-hidden");
+      }
+      else {
+        $("#legal-represented-wrapper").addClass("is-hidden");
+      }
+    }
+
+    //VAT NUMBER
+    if (listing_legal_info.owner_vat_number){
+      $("#legal-vat").text(listing_legal_info.owner_vat_number);
+      $("#legal-vat-wrapper").removeClass("is-hidden");
+    }
+    else {
+      $("#legal-vat-wrapper").addClass("is-hidden");
+    }
+
+    //COURT LOCALITY
+    if (listing_legal_info.owner_court_locality){
+      $("#legal-court").text(listing_legal_info.owner_court_locality);
+      $("#legal-court-wrapper").removeClass("is-hidden");
+    }
+    else {
+      $("#legal-court-wrapper").addClass("is-hidden");
+    }
+
+    //REGISTRATION NUMBER
+    if (listing_legal_info.owner_registration_number){
+      $("#legal-registration").text(listing_legal_info.owner_registration_number);
+      $("#legal-registration-wrapper").removeClass("is-hidden");
+    }
+    else {
+      $("#legal-registration-wrapper").addClass("is-hidden");
+    }
+
+    //show legal details
+    if (listing_legal_info.owner_vat_number || listing_legal_info.owner_court_locality || listing_legal_info.owner_registration_number){
+      $("#legal-details-wrapper").removeClass("is-hidden");
+    }
+
+    //address
+    if (listing_legal_info.owner_address){
+      $("#legal-address").text(owner_address);
+      $("#legal-address-wrapper").removeClass("is-hidden");
+    }
+    else {
+      $("#legal-address-wrapper").addClass("is-hidden");
+    }
+
+    //email
+    if (listing_legal_info.owner_email){
+      $("#legal-email").text(listing_legal_info.owner_email);
+      $("#legal-email-wrapper").removeClass("is-hidden");
+    }
+    else {
+      $("#legal-email-wrapper").addClass("is-hidden");
+    }
+
+    //phone
+    if (listing_legal_info.owner_phone){
+      $("#legal-phone").text(listing_legal_info.owner_phone);
+      $("#legal-phone-wrapper").removeClass("is-hidden");
+    }
+    else {
+      $("#legal-phone-wrapper").addClass("is-hidden");
+    }
 }
 
 //</editor-fold>

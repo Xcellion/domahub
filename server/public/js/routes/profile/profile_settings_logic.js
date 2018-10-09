@@ -329,7 +329,17 @@ $(document).ready(function() {
     $(".stripe-account-input").on("input", function(e){
       clearNotification();
       hideSaveCancelButtons();
-      if (!user.stripe_account_id || $(this).val() != user.stripe_account[$(this).data("uservar")]){
+
+      //the value to check against the existing value
+      if ($(this).attr("name") == "business_name_override"){
+        var value_to_check = ($(this).prop("checked")) ? "on" : "off";
+        $(this).val(value_to_check);
+      }
+      else {
+        var value_to_check = $(this).val();
+      }
+
+      if (!user.stripe_account_id || value_to_check != user.stripe_account[$(this).data("uservar")]){
         $("#stripe-account-submit, #cancel-button").removeClass("is-hidden");
       }
     });
@@ -572,11 +582,6 @@ function showSectionByURL(){
     $(".account-input").each(function(){
       $(this).val(user[$(this).data("uservar")]);
     });
-
-    //if european
-    if (user.default_currency == "eur"){
-      $("#euro_legal_card").removeClass("is-hidden");
-    }
   }
 
   //<editor-fold>-------------------------------SUBMIT ACCOUNT CHANGES-------------------------------
@@ -1138,6 +1143,16 @@ function showSectionByURL(){
 
   //<editor-fold>-------------------------------STRIPE ACCOUNT-------------------------------
 
+  //handle checkboxes
+  function checkBox(module_value, elem){
+    if (module_value == "off"){
+      elem.val(module_value).prop("checked", false);
+    }
+    else {
+      elem.val(module_value).prop("checked", true);
+    }
+  }
+
   //pre-fill existing stripe information
   function prefillStripeInfo(){
 
@@ -1149,6 +1164,8 @@ function showSectionByURL(){
       for (var x in user.stripe_account){
         $("#" + x + "-input").val(user.stripe_account[x]);
       }
+      checkBox(user.stripe_account.business_name_override, $("#business_name_override-input"));
+
       $("#change-bank-button").removeClass('is-hidden');
       $(".stripe-required-info").addClass('is-hidden');
       $("#stripe-personal-form").children(".card").removeClass('is-danger');

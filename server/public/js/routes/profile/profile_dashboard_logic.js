@@ -157,7 +157,6 @@ function updatePortfolioOverviewCounters(){
       }
     }
   }
-  console.log(total_expenses, total_profit)
 
   $("#revenue-counter").addClass("is-primary").text(formatCurrency(total_revenue/100));
 

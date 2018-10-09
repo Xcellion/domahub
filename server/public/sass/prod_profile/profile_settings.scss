@@ -21,6 +21,7 @@
 @import '../bulma/elements/icon.sass';
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
+@import '../checkbox';
 
 //remove any text transforms
 .text-normal {
@@ -169,5 +170,25 @@ th.has-text-right, td.has-text-right{
   }
   &.tag {
     margin-left: 10px;
+  }
+}
+
+.checkbox-form {
+  height: 17px;
+  position: relative;
+  width: 17px;
+  label {
+    &::before {
+      top: -4px;
+      left: -4px;
+    }
+  }
+  label {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    &:focus {
+      outline: 1px solid transparent;
+    }
   }
 }
