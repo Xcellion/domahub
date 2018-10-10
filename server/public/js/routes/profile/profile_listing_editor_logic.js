@@ -2941,7 +2941,6 @@ function whatsNextOfferView(listing_info, dont_reselect){
         domain_hash_table[row[0]][row[1]] += parseFloat(row[2]);
       }
     });
-    console.log(domain_hash_table);
 
     //rebuild array from hash
     var parsed_array = [];
@@ -3645,6 +3644,24 @@ function setupVerificationButtons(selected_domain_ids){
     });
   });
 
+  //next not pointing domain name
+  $("#next-not-pointing-table-button").off().on("click", function(){
+    var upcoming_index = $(".cloned-dns-table:not(.is-hidden)").next(".cloned-dns-table.is-not-pointing").data("index");
+    if (!upcoming_index){
+      upcoming_index = $(".cloned-dns-table.is-not-pointing").eq(0).data("index")
+    }
+    if (!upcoming_index){
+      upcoming_index = $(".cloned-dns-table").eq(0).data("index")
+    }
+    $(".cloned-dns-table:not(.is-hidden)").addClass('is-hidden').stop().fadeOut(300, function(){
+      $(".cloned-dns-table").eq(upcoming_index).stop().fadeIn(300).removeClass('is-hidden');
+
+      //show auto-DNS button if there is a registrar connected
+      updateAutoDNSButton($(".cloned-dns-table").eq(upcoming_index));
+      updateMarkUnlistedButton();
+    });
+  });
+
   //refresh the DNS table button
   $("#refresh-dns-button").off().on("click", function(){
     createDNSRecordRows(selected_domain_ids, true);
@@ -3740,6 +3757,7 @@ function createDNSTable(listing_info, total_unverified, row_index){
   var cloned_table = $("#current-dns-table-clone").clone().removeAttr('id').attr("id", "dns-table" + row_index).addClass("cloned-dns-table").data("index", row_index);
   var cloned_a_row = cloned_table.find(".doma-a-record");
   var cloned_www_row = cloned_table.find(".doma-www-record");
+  var is_this_domain_pointing = false;
 
   //table data for listing info
   cloned_table.data("listing_info", listing_info);
@@ -3749,11 +3767,13 @@ function createDNSTable(listing_info, total_unverified, row_index){
 
   var clipped_domain_name = (listing_info.domain_name.length > 25) ? listing_info.domain_name.substr(0, 15) + "..." + listing_info.domain_name.substr(listing_info.domain_name.length - 7, listing_info.domain_name.length - 1) : listing_info.domain_name;
 
-  //table header text
+  //table header text (domain #X of Y)
   var table_header_text = "<span class='is-hidden-mobile'>Current DNS Settings for </span><span>" + punycode.toUnicode(clipped_domain_name) + "</span>";
   if (total_unverified > 1){
     table_header_text = "<span class='is-hidden-mobile'>Domain " + (row_index + 1) + " / " + total_unverified + " - </span>" + table_header_text;
   }
+
+  //registrar name
   if (listing_info.whois){
     var reg_name = (listing_info.whois["Registrar"] && listing_info.whois["Registrar"].length > 25) ? listing_info.whois["Registrar"].substr(0, 25) + "..." : listing_info.whois["Registrar"];
     var reg_url = listing_info.whois["Registrar URL"];
@@ -3773,9 +3793,11 @@ function createDNSTable(listing_info, total_unverified, row_index){
       cloned_a_row.find(".next_step").removeClass('is-danger').addClass('is-primary').text("Done!");
       cloned_www_row.find(".existing_data").text("208.68.37.82");
       cloned_www_row.find(".next_step").removeClass('is-danger').addClass('is-primary').text("Done!");
+      is_this_domain_pointing = true;
     }
     else {
       createDomaRecords(cloned_a_row, cloned_www_row);
+      is_this_domain_pointing = false;
     }
 
     //must delete any existing records
@@ -3786,17 +3808,28 @@ function createDNSTable(listing_info, total_unverified, row_index){
         cloned_existing_row.find(".required_data").text("-");
         cloned_existing_row.find(".next_step").text("Delete this record.");
         cloned_table.append(cloned_existing_row);
+        is_this_domain_pointing = false;
       }
     }
   }
   //no records found! just assume they need domahub records
   else {
     createDomaRecords(cloned_a_row, cloned_www_row);
+    is_this_domain_pointing = false;
   }
 
   cloned_table.find(".existing-dns-row").remove();
   cloned_table.find(".table-header").html(table_header_text);
+  cloned_table.data("listing_info", listing_info);
   $("#current-dns-tables").append(cloned_table);
+
+  //is this domain pointing?
+  if (!is_this_domain_pointing){
+    cloned_table.addClass("is-not-pointing");
+  }
+  else {
+    cloned_table.addClass("is-pointing");
+  }
 
   //check if we can verify all listings
   checkDNSAllDone(total_unverified);
@@ -3813,10 +3846,14 @@ function createDomaRecords(cloned_a_row, cloned_www_row){
 }
 
 //check if we can verify everything
-function checkDNSAllDone(total_unverified){
+function checkDNSAllDone(total_unverified, not_pointing_domains){
   //remove loading from refresh, remove loading row, show all cloned rows
   if ($(".cloned-dns-table").length == total_unverified) {
-    $(".verify-hidden-while-loading").removeClass('is-hidden');
+
+    //sort by selected index
+    $(".cloned-dns-table").sort(function(a, b){
+      return ($(a).data("index") < $(b).data("index")) ? -1 : ($(a).data("index") > $(b).data("index")) ? 1 : 0;
+    }).appendTo("#current-dns-tables");
 
     //figure out hiding or show next/prev buttons
     if (total_unverified > 1){
@@ -3826,16 +3863,11 @@ function checkDNSAllDone(total_unverified){
       $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
     }
 
+    //show the first unfinished and hide loading
+    $(".verify-hidden-while-loading").removeClass('is-hidden');
     $("#loading-dns-table").addClass('is-hidden');
-
-    //sort by selected index
-    $(".cloned-dns-table").sort(function(a, b){
-      return ($(a).data("index") < $(b).data("index")) ? -1 : ($(a).data("index") > $(b).data("index")) ? 1 : 0;
-    }).appendTo("#current-dns-tables");
-
-    //show the first unfinished
-    if ($(".cloned-dns-table .is-danger").length){
-      $(".cloned-dns-table .is-danger").closest(".cloned-dns-table").eq(0).removeClass('is-hidden');
+    if ($(".cloned-dns-table.is-not-pointing").length){
+      $(".cloned-dns-table.is-not-pointing").eq(0).removeClass('is-hidden');
     }
     else {
       $(".cloned-dns-table").eq(0).removeClass('is-hidden');
@@ -3848,6 +3880,7 @@ function checkDNSAllDone(total_unverified){
     //all DNS settings are good
     $("#verification-left-load").addClass('is-hidden');
     if ($(".cloned-dns-table .needs-action-row").length == 0){
+      $("#next-not-pointing-table-button").addClass("is-hidden");
       $("#verify-button").removeClass('is-hidden');
       $("#refresh-dns-button").addClass('is-hidden');
       $("#verification-left").addClass('is-primary').removeClass('is-danger is-pastel');
@@ -3859,7 +3892,10 @@ function checkDNSAllDone(total_unverified){
       $("#refresh-dns-button").removeClass('is-hidden');
       $("#verification-left").addClass('is-danger').removeClass('is-primary is-pastel');
       $("#verification-left-danger").removeClass('is-hidden');
-      $("#verification-left-text").addClass('is-white').text("You have " + $(".cloned-dns-table .needs-action-row").length + " entries left to modify.");
+      $("#next-not-pointing-table-button").removeClass("is-hidden");
+
+      var domains_not_pointing_plural = $(".cloned-dns-table.is-not-pointing").length == 1 ? "domain" : "domains";
+      $("#verification-left-text").addClass('is-white').text("You have " + $(".cloned-dns-table .needs-action-row").length + " DNS entries left to modify for " + $(".cloned-dns-table.is-not-pointing").length + " " + domains_not_pointing_plural + ".");
     }
   }
 }
@@ -3977,7 +4013,7 @@ function updateAutoDNSButton(cloned_dns_table){
 //show or hide mark unlisted button
 function updateMarkUnlistedButton(){
   var current_visible_unverified_listing_info = $(".cloned-dns-table:not(.is-hidden)").data('listing_info');
-  if (current_visible_unverified_listing_info.status == 4){
+  if (current_visible_unverified_listing_info && current_visible_unverified_listing_info.status == 4){
     $("#not-listed-button").addClass("is-hidden");
   }
   else {
