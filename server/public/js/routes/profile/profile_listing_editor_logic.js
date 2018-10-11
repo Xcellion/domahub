@@ -1850,6 +1850,7 @@ function setupOfferButtons(selected_domain_ids){
 
     //refresh offers button
     $("#refresh-offers-button").removeClass('is-hidden').off().on('click', function(){
+      clearNotification();
       showLoadingOffers();
       createOffersTable(selected_domain_ids, true);
     });
@@ -2230,7 +2231,7 @@ function getOffer(offers, offer_id){
   }
 }
 
-//function for offer accept success
+//function for offer accept/reject success
 function offerSuccessHandler(accept, listing_info, offer, response_to_offerer){
   successMessage("Successfully " + ((accept) ? "accepted" :  "rejected") + " the offer!");
 
@@ -2246,6 +2247,11 @@ function offerSuccessHandler(accept, listing_info, offer, response_to_offerer){
 
   //accepted offer
   if (accept){
+
+    //change counts
+    total_accepted++;
+    total_outstanding--;
+
     //change class on the offer row
     $("#offer-row-" + offer.id).removeClass('unaccepted-offer').find(".td-offer-status").text('Accepted').addClass('is-primary');
     whatsNextOfferView(real_listing_info_obj);
@@ -2254,6 +2260,13 @@ function offerSuccessHandler(accept, listing_info, offer, response_to_offerer){
   else {
     //change class on the offer row
     $("#offer-row-" + offer.id).addClass("is-hidden rejected-offer").find(".td-offer-status").text('Rejected').addClass('is-danger');
+
+    //change counts
+    total_rejected++;
+    total_outstanding--;
+    refreshOfferRows($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
+    $("#total-rejected").text(pluralizeOffer(total_rejected));
+    $("#total-outstanding").text(pluralizeOffer(total_outstanding));
   }
 }
 
