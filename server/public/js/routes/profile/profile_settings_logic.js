@@ -149,6 +149,9 @@ $(document).ready(function() {
               row_details.push(formatCurrency(row[headers[x]], user.default_currency));
             }
           }
+          else if (row[headers[x]] && headers[x] == "description"){
+            row_details.push(row[headers[x]].replace(/(\r\n\t|\n|\r\t)/gm,""));
+          }
           //format registrar cost currency before pushing
           else if (row[headers[x]] && headers[x] == "registrar_cost"){
             if (row["registrar_cost_currency"]){
