@@ -851,6 +851,7 @@ function viewDomainDNS(push){
 
   //display delete confirmation modal
   function confirmDeleteListings(){
+    clearNotification();
     $("#delete-modal").addClass('is-active');
     var selected_domain_names = getSelectedDomains("domain_name");
     $("#delete-modal-count").text((selected_domain_names.length > 1) ? selected_domain_names.length : "");

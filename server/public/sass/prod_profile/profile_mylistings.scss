@@ -389,7 +389,8 @@ td.has-cursor-pointer {
 }
 
 #hub-drop-apply {
-  border-radius: 0;
+  border-radius: 0 0 5px 5px;
+  padding: 5px;
 }
 
 #hub-drop {
