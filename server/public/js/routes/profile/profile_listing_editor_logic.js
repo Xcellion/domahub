@@ -3868,14 +3868,6 @@ function checkDNSAllDone(total_unverified, not_pointing_domains){
       return ($(a).data("index") < $(b).data("index")) ? -1 : ($(a).data("index") > $(b).data("index")) ? 1 : 0;
     }).appendTo("#current-dns-tables");
 
-    //figure out hiding or show next/prev buttons
-    if (total_unverified > 1){
-      $("#prev-dns-table-button, #next-dns-table-button").removeClass('is-hidden');
-    }
-    else {
-      $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
-    }
-
     //show the first unfinished and hide loading
     $(".verify-hidden-while-loading").removeClass('is-hidden');
     $("#loading-dns-table").addClass('is-hidden');
@@ -3909,6 +3901,19 @@ function checkDNSAllDone(total_unverified, not_pointing_domains){
 
       var domains_not_pointing_plural = $(".cloned-dns-table.is-not-pointing").length == 1 ? "domain" : "domains";
       $("#verification-left-text").addClass('is-white').text("You have " + $(".cloned-dns-table .needs-action-row").length + " DNS entries left to modify for " + $(".cloned-dns-table.is-not-pointing").length + " " + domains_not_pointing_plural + ".");
+    }
+
+    //if only 1 selected
+    if (total_unverified == 1){
+      $("#next-not-pointing-table-button").addClass("is-hidden");
+    }
+    
+    //figure out hiding or show next/prev buttons
+    if (total_unverified > 1){
+      $("#prev-dns-table-button, #next-dns-table-button").removeClass('is-hidden');
+    }
+    else {
+      $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
     }
   }
 }
