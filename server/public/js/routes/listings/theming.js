@@ -168,7 +168,9 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
 
-  setupLegalMessage(listing_info);
+  if (typeof listing_hub_info == "undefined"){
+    setupLegalMessage(listing_info);
+  }
 
   //</editor-fold>
 
