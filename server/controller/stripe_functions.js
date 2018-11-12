@@ -283,6 +283,7 @@ module.exports = {
           listing_info.owner_vat_number = account.metadata.vat_number;
           listing_info.owner_court_locality = account.metadata.court_locality;
           listing_info.owner_registration_number = account.metadata.registration_number;
+          listing_info.owner_privacy_policy_link = account.metadata.privacy_policy_link;
         }
         else {
 
@@ -624,6 +625,11 @@ module.exports = {
       stripe_account_info.metadata.registration_number = req.body.registration_number;
     }
 
+    //optional privacy policy link
+    if (req.body.privacy_policy_link){
+      stripe_account_info.metadata.privacy_policy_link = req.body.privacy_policy_link;
+    }
+
     if (req.user.stripe_account_id){
       //cross reference with stripe
       stripe.accounts.retrieve(req.user.stripe_account_id, function(err, account) {
@@ -640,7 +646,8 @@ module.exports = {
               vat_number : req.body.vat_number,
               business_name_override : (req.body.business_name_override) ? "on" : "off",
               court_locality : req.body.court_locality,
-              registration_number : req.body.registration_number
+              registration_number : req.body.registration_number,
+              privacy_policy_link : req.body.privacy_policy_link
             }
           }, function(err, account){
             if (err){
@@ -1191,6 +1198,7 @@ function updateUserStripeAccount(user, account){
         vat_number : account.metadata.vat_number,
         court_locality : account.metadata.court_locality,
         registration_number : account.metadata.registration_number,
+        privacy_policy_link : account.metadata.privacy_policy_link,
       }
     }
   }
