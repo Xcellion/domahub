@@ -418,6 +418,7 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
     clone_col.find(".domain-name").text(punycode.toUnicode(listings_to_show[start_at + x].domain_name));
 
     //price tag
+    var price_tag = "";
     if (listings_to_show[start_at + x].buy_price){
       var price_tag = "Buy now - " + formatCurrency(listings_to_show[start_at + x].buy_price, listings_to_show[start_at + x].default_currency);
     }
@@ -426,7 +427,7 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
     }
 
     //available now (no min, bin, or rent)
-    if (typeof price_tag_rent == "undefined" && typeof price_tag == "undefined"){
+    if (typeof price_tag_rent == "undefined" && price_tag == ""){
       var price_tag = "Available now!"
     }
 
