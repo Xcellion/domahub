@@ -168,7 +168,9 @@ function setupFooter(){
 
   //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
 
-  setupLegalMessage(listing_info);
+  if (typeof listing_hub_info == "undefined"){
+    setupLegalMessage(listing_info);
+  }
 
   //</editor-fold>
 
@@ -254,6 +256,15 @@ function setupLegalMessage(listing_legal_info){
     }
     else {
       $("#legal-registration-wrapper").addClass("is-hidden");
+    }
+
+    //PRIVACY POLICY LINK
+    if (listing_legal_info.owner_privacy_policy_link){
+      $("#legal-privacy-policy").attr("href",listing_legal_info.owner_privacy_policy_link);
+      $("#legal-privacy-policy-wrapper").removeClass("is-hidden");
+    }
+    else {
+      $("#legal-privacy-policy-wrapper").addClass("is-hidden");
     }
 
     //show legal details
