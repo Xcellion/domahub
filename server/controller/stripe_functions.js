@@ -855,7 +855,7 @@ module.exports = {
           stripe.charges.create(stripeOptions, function(err, charge) {
             if (err) {
               error.log(err, "Failed to create Stripe charge.");
-              error.handler(req, res, "Invalid price!", "json");
+              error.handler(req, res, err.message, "json");
             }
             else {
 
