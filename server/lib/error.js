@@ -69,7 +69,7 @@ module.exports = {
 
     //notify via email of any errors
     if (process.env.NODE_ENV != "dev"){
-      if (error.code != "ECONNREFUSED" && error.code != "ER_RECORD_FILE_FULL" && error.code != "PROTOCOL_SEQUENCE_TIMEOUT" && error.code != "PROTOCOL_CONNECTION_LOST"){
+      if (error.code != "ECONNREFUSED" && error.code != "PROTOCOL_SEQUENCE_TIMEOUT" && error.code != "PROTOCOL_CONNECTION_LOST"){
         mailer.sendBasicMail({
           to: "general@domahub.com",
           from: 'general@domahub.com',

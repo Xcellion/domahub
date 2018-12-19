@@ -881,12 +881,12 @@ module.exports = {
         req.session.camefrom = req.query.camefrom;
       }
 
-      // console.log("LRF: Adding to search history...");
-      // data_model.newListingHistory(history_info, function(result){
-      //   // if (result.state == "error") {
-      //   //   error.log(result, "Something went wrong with adding new history for listing.")
-      //   // }
-      // });  //async
+      console.log("LRF: Adding to search history...");
+      data_model.newListingHistory(history_info, function(result){
+        // if (result.state == "error") {
+        //   error.log(result, "Something went wrong with adding new history for listing.")
+        // }
+      });  //async
       delete req.session.from_api;
     }
     next();
