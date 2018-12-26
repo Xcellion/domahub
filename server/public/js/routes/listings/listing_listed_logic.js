@@ -424,7 +424,7 @@ function setupRightHalf(){
       }
 
       //set up phone
-      $("#contact_phone").intlTelInput(phone_settings);
+      $("#contact_phone").removeAttr("placeholder").intlTelInput("destroy").intlTelInput(phone_settings);
 
       //placeholder + minimum on contact form
       if (listing_info.min_price > 0){
