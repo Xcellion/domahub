@@ -871,6 +871,7 @@ module.exports = {
 
         //right side
         var show_placeholder = parseFloat(req.body.show_placeholder);
+        var show_placeholder_quote = parseFloat(req.body.show_placeholder_quote);
         var show_traffic_graph = parseFloat(req.body.show_traffic_graph);
         var show_alexa_stats = parseFloat(req.body.show_alexa_stats);
         var show_history_ticker = parseFloat(req.body.show_history_ticker);
@@ -1021,6 +1022,10 @@ module.exports = {
         else if (req.body.show_placeholder && (show_placeholder != 0 && show_placeholder != 1)){
           error.handler(req, res, "That's an invalid placeholder selection! Please refresh the page and try again!", "json");
         }
+        //invalid placeholder quote
+        else if (req.body.show_placeholder_quote && (show_placeholder_quote != 0 && show_placeholder_quote != 1)){
+          error.handler(req, res, "That's an invalid quote placeholder selection! Please refresh the page and try again!", "json");
+        }
         //invalid hub
         else if (req.body.hub && (hub != 0 && hub != 1)){
           error.handler(req, res, "That's an invalid hub selection! Please refresh the page and try again!", "json");
@@ -1093,6 +1098,7 @@ module.exports = {
 
           //right side
           req.session.new_listing_info.show_placeholder = show_placeholder;
+          req.session.new_listing_info.show_placeholder_quote = show_placeholder_quote;
           req.session.new_listing_info.show_traffic_graph = show_traffic_graph;
           req.session.new_listing_info.show_alexa_stats = show_alexa_stats;
           req.session.new_listing_info.show_history_ticker = show_history_ticker;
@@ -1156,7 +1162,8 @@ module.exports = {
           req.body.show_traffic_graph ||
           req.body.show_alexa_stats ||
           req.body.show_history_ticker ||
-          req.body.placeholder ||
+          req.body.show_placeholder ||
+          req.body.show_placeholder_quote ||
           req.body.hub ||
           req.body.hub_title ||
           req.body.hub_email ||
@@ -1524,6 +1531,7 @@ module.exports = {
 
         //right side
         req.session.new_listing_info.show_placeholder = listing_to_copy_from.show_placeholder;
+        req.session.new_listing_info.show_placeholder_quote = listing_to_copy_from.show_placeholder_quote;
         req.session.new_listing_info.show_traffic_graph = listing_to_copy_from.show_traffic_graph;
         req.session.new_listing_info.show_alexa_stats = listing_to_copy_from.show_alexa_stats;
         req.session.new_listing_info.show_history_ticker = listing_to_copy_from.show_history_ticker;

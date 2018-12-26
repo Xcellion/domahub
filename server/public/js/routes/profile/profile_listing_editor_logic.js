@@ -1078,6 +1078,7 @@ function updateEditorDomains(selected_domain_ids){
   }
   function updateContentDesign(listing_info){
     checkBox(listing_info.show_placeholder, $("#placeholder-input"));
+    checkBox(listing_info.show_placeholder_quote, $("#placeholder-input-quote"));
     checkBox(listing_info.show_domain_list, $("#domain-list-input"));
     checkBox(listing_info.show_traffic_graph, $("#traffic-graph-input"));
     checkBox(listing_info.show_alexa_stats, $("#alexa-stats-input"));
@@ -3907,7 +3908,7 @@ function checkDNSAllDone(total_unverified, not_pointing_domains){
     if (total_unverified == 1){
       $("#next-not-pointing-table-button").addClass("is-hidden");
     }
-    
+
     //figure out hiding or show next/prev buttons
     if (total_unverified > 1){
       $("#prev-dns-table-button, #next-dns-table-button").removeClass('is-hidden');
