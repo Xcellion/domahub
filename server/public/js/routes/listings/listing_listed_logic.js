@@ -400,22 +400,31 @@ function setupRightHalf(){
 
   function setupContactTab(){
     if (listing_info.status == 1){
-      //set up phone
-      $("#contact_phone").intlTelInput({
-        utilsScript: "/js/jquery/utils.js"
-      });
+
+      var phone_settings = {
+        utilsScript: "/js/jquery/utils.js",
+      }
 
       //get a random char phrase
-      if (!listing_info.premium || (listing_info.premium && listing_info.show_placeholder == 1)){
+      if (!listing_info.premium || (listing_info.premium && listing_info.show_placeholder == 1 && listing_info.show_placeholder_quote == 1)){
         $("#contact_name").attr("placeholder", random_char.name);
         $("#contact_email").attr("placeholder", random_char.email);
         $("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + punycode.toUnicode(listing_info.domain_name) + ". Let's chat.");
       }
-      else {
+      else if (listing_info.premium && listing_info.show_placeholder == 1 && listing_info.show_placeholder_quote == 0){
         $("#contact_name").attr("placeholder", "John Smith");
         $("#contact_email").attr("placeholder", "john@smith.com");
         $("#contact_message").attr("placeholder", "Hey! I'm interested in buying " + punycode.toUnicode(listing_info.domain_name) + ". Let's chat.");
       }
+      else if (listing_info.premium && listing_info.show_placeholder == 0){
+        phone_settings.autoPlaceholder = "off";
+        $("#contact_name").removeAttr("placeholder");
+        $("#contact_email").removeAttr("placeholder");
+        $("#contact_message").attr("placeholder", "Hey! I'm interested in buying " + punycode.toUnicode(listing_info.domain_name) + ". Let's chat.");
+      }
+
+      //set up phone
+      $("#contact_phone").intlTelInput(phone_settings);
 
       //placeholder + minimum on contact form
       if (listing_info.min_price > 0){
