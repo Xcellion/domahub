@@ -197,6 +197,9 @@ function setupLegalMessage(listing_legal_info){
     //override name
     if (listing_legal_info.owner_business_name_override == "on"){
 
+      //hide represented
+      $("#legal-represented-wrapper").addClass("is-hidden");
+      
       //business name
       if (listing_legal_info.owner_business_name){
         $("#legal-contact").text(listing_legal_info.owner_business_name);
