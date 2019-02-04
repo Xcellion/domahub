@@ -196,6 +196,21 @@
                 <small class="tip">An optional link for your descriptive footer text and logo. Useful for linking to your listing hub.</small>
                 <input id="description-footer-link" data-name="description_footer_link" tabindex="0" class="premium-input input changeable-input" placeholder="https://link-to-my-listing-hub.com" />
               </div>
+              <div class="control">
+                <label class="label" for="forwarding-link">
+                  <span>Forwarding URL</span>
+                  <% if (!user.stripe_subscription_id) { %>
+                    <div class="icon is-small is-tooltip" data-balloon="Premium Feature" data-balloon-pos="up">
+                      <i class="fal fa-trophy-alt"></i>
+                    </div>
+                  <% } %>
+                  <div class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Leave empty for forwarding links." data-balloon-pos="top">
+                    <i class="fal fa-question-circle"></i>
+                  </div>
+                </label>
+                <small class="tip">An optional link to forward all listing traffic to. Use %DN% as a placeholder for your domain name.</small>
+                <input id="forwarding-link" data-name="forwarding_link" tabindex="0" class="premium-input input changeable-input" placeholder="https://link-to-send-traffic-to.com" />
+              </div>
             </div>
           </div>
         </div>
