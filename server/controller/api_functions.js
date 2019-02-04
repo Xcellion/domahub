@@ -27,6 +27,7 @@ module.exports = function(app){
     checkForBasicRedirect,
     renter_functions.addToSearchHistory,
     renter_functions.checkStillVerified,
+    renter_functions.redirectForwarding,
     renter_functions.renderListing
   ]);
 }
