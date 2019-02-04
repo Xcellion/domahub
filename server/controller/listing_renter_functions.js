@@ -1236,6 +1236,23 @@ module.exports = {
     });
   },
 
+  //redirect to forwarding link if it exists
+  redirectForwarding : function(req, res, next){
+    if (req.session.listing_info.premium && req.session.listing_info.forwarding_link){
+      console.log("LRF: Redirecting domain to forwarding link...");
+
+      var link_to_forward_to = req.session.listing_info.forwarding_link.replace("%DN%", req.session.listing_info.domain_name);
+      //check for http://
+      if (req.session.listing_info.forwarding_link.search(/^http[s]?:\/\//)){
+        link_to_forward_to = "http://" + link_to_forward_to;
+      }
+      res.redirect(link_to_forward_to);
+    }
+    else {
+      next();
+    }
+  },
+
   //redirect to the root domain if premium (prevent domain/listing/domain)
   redirectPremium : function(req, res, next){
     if (process.env.NODE_ENV != "dev" && req.session.listing_info.premium && req.path != "/"){

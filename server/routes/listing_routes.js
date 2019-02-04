@@ -329,7 +329,7 @@ module.exports = function(app){
 
     //<editor-fold>-------------------------------LISTING PAGE-------------------------------
 
-    //domahub easter egg page
+    //redirect to domahub for /listing/domahub or w3bbi
     app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
       res.redirect("/");
     });
@@ -344,6 +344,7 @@ module.exports = function(app){
       stripe_functions.checkStripeAccountForContactDetails,
       profile_functions.updateAccountSettingsPassthrough,
       // renter_functions.getListingFreeTimes,
+      renter_functions.redirectForwarding,
       renter_functions.redirectPremium,
       renter_functions.renderListing
     ]);

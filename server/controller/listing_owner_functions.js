@@ -910,6 +910,10 @@ module.exports = {
         else if (req.body.description_footer_link && !validator.isURL(req.body.description_footer_link)){
           error.handler(req, res, "That's an invalid footer URL! Please enter a different URL and try again!", "json");
         }
+        //invalid forwarding link
+        else if (req.body.forwarding_link && !validator.isURL(req.body.forwarding_link)){
+          error.handler(req, res, "That's an invalid forwarding URL! Please enter a different URL and try again!", "json");
+        }
         //invalid header description
         else if (req.body.description_header && (req.body.description_header.length < 0 || req.body.description_header.length > 75)){
           error.handler(req, res, "The header description cannot be more than 75 characters!", "json");
@@ -1071,6 +1075,7 @@ module.exports = {
           req.session.new_listing_info.description_footer_link = req.body.description_footer_link;
           req.session.new_listing_info.description_header = req.body.description_header;
           req.session.new_listing_info.domain_name = domain_punycode;
+          req.session.new_listing_info.forwarding_link = req.body.forwarding_link;
 
           //design
           req.session.new_listing_info.primary_color = req.body.primary_color;
@@ -1137,6 +1142,7 @@ module.exports = {
           req.body.description_footer ||
           req.body.description_header ||
           req.body.description_footer_link ||
+          req.body.forwarding_link ||
           req.body.primary_color ||
           req.body.secondary_color ||
           req.body.tertiary_color ||

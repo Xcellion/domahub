@@ -490,6 +490,7 @@ function updateEditorDomains(selected_domain_ids){
     $("#description-header").val(listing_info.description_header);
     $("#description-footer").val(listing_info.description_footer);
     $("#description-footer-link").val(listing_info.description_footer_link);
+    $("#forwarding-link").val(listing_info.forwarding_link);
     if (listing_info.domain_name){
       $("#domain-name-input").attr("placeholder", punycode.toUnicode(listing_info.domain_name)).val(punycode.toUnicode(listing_info.domain_name));
     }
