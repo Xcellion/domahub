@@ -5,11 +5,12 @@
     env: {
       "NODE_ENV": "dev",
     },
-	watch: ["./server"],
-	ignore_watch : ["./node_modules", "./uploads", "./server/lib/current-exchange-rates.*"],
-	watch_options: {
-		followSymlinks: false
-	}
+    port : 8080,
+  	watch: ["./server"],
+  	ignore_watch : ["./node_modules", "./uploads", "./server/lib/current-exchange-rates.*"],
+  	watch_options: {
+  		followSymlinks: false
+  	}
   },
   {
     name        : "DomaHub Server (LetsEncrypt Prod)",
@@ -17,10 +18,11 @@
     env: {
       "NODE_ENV": "dev",
     },
-	watch: ["./server"],
-	ignore_watch : ["./node_modules", "../uploads", "./server/lib/current-exchange-rates.*"],
-	watch_options: {
-		followSymlinks: false
-	}
+    port : 8080,
+  	watch: ["./server"],
+  	ignore_watch : ["./node_modules", "../uploads", "./server/lib/current-exchange-rates.*"],
+  	watch_options: {
+  		followSymlinks: false
+  	}
   }]
 }
