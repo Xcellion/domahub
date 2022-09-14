@@ -48,13 +48,13 @@ module.exports = function(app){
     profile_functions.getAccountListings,
     profile_functions.getAccountTransactionsLocal,
     profile_functions.convertCurrencyTransactions,
-    profile_functions.authWithGoogle,
+    // profile_functions.authWithGoogle,
     profile_functions.renderDashboard
   ]);
 
   app.post("/profile/refreshGoogleAPI", [
     auth_functions.checkLoggedIn,
-    profile_functions.deleteGoogleAPI
+    // profile_functions.deleteGoogleAPI
   ]);
 
   //</editor-fold>
@@ -67,7 +67,7 @@ module.exports = function(app){
     profile_functions.getAccountListings,
     stripe_functions.getStripeAccount,
     stripe_functions.getStripeSubscription,
-    profile_functions.authWithGoogle,
+    // profile_functions.authWithGoogle,
     profile_functions.renderMyListings
   ]);
 

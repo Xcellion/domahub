@@ -1,9 +1,9 @@
 module.exports = function(app){
 
-  //development routes
-  if (process.env.NODE_ENV == "dev"){
-    require('./dev_routes.js')(app);
-  }
+  // //development routes
+  // if (process.env.NODE_ENV == "dev"){
+  //   require('./dev_routes.js')(app);
+  // }
 
   //admin routes
   require('./admin_routes.js')(app);

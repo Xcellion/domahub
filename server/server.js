@@ -16,13 +16,6 @@ app.set('views', __dirname + '/views');
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-//to delete any temporary uploaded files left
-var autoReap = require('multer-autoreap');
-autoReap.options = {
-  reapOnError: true
-};
-app.use(autoReap);
-
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
 
@@ -41,47 +34,18 @@ app.use(function(req, res, next) {
 //which session store to use depending on DEV or PROD
 var session = require('express-session');
 app.set('json spaces', 2);    //pretty json
-if (process.env.NODE_ENV == "dev"){
-  console.log("Development environment! Using memory for sessions store.");
+console.log("Development environment! Using memory for sessions store.");
 
-  //express session in memory
-  app.use(session({
-    secret: 'domahub_market',
-    cookie: {
-      secure: false
-    },
-    saveUninitialized: false,
-    resave: false,
-    rolling: true
-  }));
-}
-else {
-  console.log("Production environment! Using redis for sessions store.");
-  var redisStore = require('connect-redis')(session);
-  app.set('trust proxy', "loopback");
-
-  //redis store session
-  app.use(session({
-    store: new redisStore({
-      host:'127.0.0.1',
-      port: 6379,
-      pass:"wonmin33"
-    }),
-    cookie: {
-      maxAge: 1800000, //30 minutes
-      secure: true
-    },
-    proxy: true,
-    secret: 'domahub_market',
-    saveUninitialized: true,
-    resave: true,
-    rolling: true
-  }));
-
-  //compression for production traffic
-  var compression = require("compression");
-  app.use(compression());
-}
+//express session in memory
+app.use(session({
+  secret: 'domahub_market',
+  cookie: {
+    secure: false
+  },
+  saveUninitialized: false,
+  resave: false,
+  rolling: true
+}));
 
 //</editor-fold>
 
