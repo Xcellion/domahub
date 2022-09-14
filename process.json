@@ -3,7 +3,7 @@
     name        : "DomaHub Server (Prod)",
     script      : "./server/server.js",
     env: {
-      "NODE_ENV": "prod",
+      "NODE_ENV": "dev",
     },
 	watch: ["./server"],
 	ignore_watch : ["./node_modules", "./uploads", "./server/lib/current-exchange-rates.*"],
@@ -15,7 +15,7 @@
     name        : "DomaHub Server (LetsEncrypt Prod)",
     script      : "./server/api_server.js",
     env: {
-      "NODE_ENV": "prod",
+      "NODE_ENV": "dev",
     },
 	watch: ["./server"],
 	ignore_watch : ["./node_modules", "../uploads", "./server/lib/current-exchange-rates.*"],
