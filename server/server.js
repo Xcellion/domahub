@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
 //which session store to use depending on DEV or PROD
 var session = require('express-session');
 app.set('json spaces', 2);    //pretty json
-console.log("Development environment! Using memory for sessions store.");
+console.log("Using memory for sessions store.");
 
 //express session in memory
 app.use(session({
@@ -70,6 +70,10 @@ require('./routes/router.js')(app);
 //</editor-fold>
 
 //HTTP website on port 8080
-serverHTTP(app).listen(8080, function(){
+serverHTTP(app).listen(process.env.PORT || 8080, function(){
   console.log("DomaHub HTTP website listening on port 8080");
+});
+
+app.get('/', (req, res) => {
+  res.sendStatus(200)
 });
