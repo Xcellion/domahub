@@ -29,7 +29,7 @@ var parser = require('parse-whois');
 var moment = require('moment');
 
 var multer = require("multer");
-var parseDomain = require("parse-domain");
+// var parseDomain = require("parse-domain");
 var punycode = require("punycode");
 var Q = require('q');
 var qlimit = require("qlimit");
@@ -1959,7 +1959,7 @@ function getUserListingObjByID(listings, id){
 function checkPostedDomainName(user, domains_sofar, domain_name, min_price, buy_price){
   var bad_reasons = [];
   var parsed_domain = punycode.toASCII(domain_name);
-  parsed_domain = parseDomain(parsed_domain);
+  // parsed_domain = parseDomain(parsed_domain);
 
   //check domain
   if (parsed_domain == null || !validator.isFQDN(domain_name)){
