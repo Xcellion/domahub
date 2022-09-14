@@ -117,28 +117,29 @@ module.exports = {
 
 //send email to domahub
 function sendDomaHubMail(req, res, next){
-  mailer.sendBasicMail({
-    from: req.body.contact_email,
-    to: 'general@domahub.com',
-    subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
-    text: req.body.contact_message
-  }, function(state) {
-    if (!state){
-      error.handler(req, res, "Something went wrong when contacting us! Please try emailing us at general@domahub.com for support.", "json");
-    }
-    else {
-      //email thank you for contacting email
-      mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'thank_you_contact.ejs'), {
-        contact_name : req.body.contact_name
-      }, {
-        to: req.body.contact_email,
-        from: 'DomaHub <general@domahub.com>',
-        subject: 'Thank you for contacting DomaHub!',
-      });
-
-      res.send({
-        state: "success"
-      });
-    }
-  });
+  error.handler(req, res, "This doesn't work anymore! It's just a demo.", "json");
+  // mailer.sendBasicMail({
+  //   from: req.body.contact_email,
+  //   to: 'general@domahub.com',
+  //   subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
+  //   text: req.body.contact_message
+  // }, function(state) {
+  //   if (!state){
+  //     error.handler(req, res, "This page doesn't work anymore! It's just a demo.", "json");
+  //   }
+  //   else {
+  //     //email thank you for contacting email
+  //     mailer.sendEJSMail(path.resolve(process.cwd(), 'server', 'views', 'email', 'thank_you_contact.ejs'), {
+  //       contact_name : req.body.contact_name
+  //     }, {
+  //       to: req.body.contact_email,
+  //       from: 'DomaHub <general@domahub.com>',
+  //       subject: 'Thank you for contacting DomaHub!',
+  //     });
+  //
+  //     res.send({
+  //       state: "success"
+  //     });
+  //   }
+  // });
 }

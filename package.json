@@ -20,7 +20,6 @@
     "express-session": "1.17.3",
     "glob": "8.0.3",
     "google-libphonenumber": "3.2.30",
-    "googleapis": "107.0.0",
     "humanparser": "2.6.0",
     "json2csv": "5.0.7",
     "moment": "2.29.4",
@@ -67,6 +66,9 @@
   },
   "scripts": {
     "start": "node server/server.js"
+  },
+  "env" : {
+    "NODE_ENV": "dev"
   },
   "engines": {
     "node": ">7.6.0",

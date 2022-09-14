@@ -9,7 +9,7 @@ function errorMessage(message){
 
   //domahub demo
   if (message == "demo-error"){
-    infoMessage("Oops! You cannot do that in the DomaHub demo! Click here to <a class='is-underlined' href='/signup'>sign up</a> for a new account.");
+    infoMessage("Oops! You cannot do that in the DomaHub demo! But in the real thing you would've been able to :)");
   }
   else if (message){
 

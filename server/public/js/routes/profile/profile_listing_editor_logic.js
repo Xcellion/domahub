@@ -543,7 +543,7 @@ function updateEditorDomains(selected_domain_ids){
     //registrar currency and cost
     if (listing_info.registrar_cost && listing_info.registrar_cost_currency){
       $("#annual-cost-currency-input").val(listing_info.registrar_cost_currency);
-      var registrar_cost_currency_multiplier = (listing_info.registrar_cost_currency) ? Math.pow(10, currency_codes[$("#annual-cost-currency-input").val().toUpperCase()].fractionSize) : 1;
+      var registrar_cost_currency_multiplier = (listing_info.registrar_cost_currency) ? Math.pow(10, currency_codes[listing_info.registrar_cost_currency.toUpperCase()].fractionSize) : 1;
       $("#annual-cost-input").val(listing_info.registrar_cost / registrar_cost_currency_multiplier);
     }
 

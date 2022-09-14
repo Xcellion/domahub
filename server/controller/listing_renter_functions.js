@@ -1033,39 +1033,45 @@ module.exports = {
 
   //gets the listing info if it is listed
   getListingInfo : function(req, res, next) {
-    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-
-    //skip listed check if we've already determined it's unlisted and got redirected to domahub from custom URL
-    if (req.session.skip_listed_check == domain_name){
-      console.log("LRF: Skipping database check for unlisted domain");
-      var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-      if (hostname != "domahub.com" && hostname != "localhost:8080" && hostname != "localhost"){
-        delete req.session.skip_listed_check;
-        req.session.skip_listed_check = domain_name;
-        res.redirect("https://domahub.com/listing/" + hostname);
-      }
-      else {
-        checkListedOrCompare(req, res, next, domain_name, true);
-      }
+    console.log("LRF: Redirecting to compare");
+    if (req.query.compare != "true"){
+      res.redirect("/listing/" + req.params.domain_name + "?compare=true&theme=random");
     }
     else {
-      console.log("LRF: Checking if " + domain_name + " is listed on DomaHub...");
-      getVerifiedListing(req, res, domain_name, function(result){
-        //if unlisted and hostname isn't domahub, redirect to domahub
-        var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-        if (hostname != "domahub.com" && hostname != "localhost:8080" && hostname != "localhost"){
-          req.session.skip_listed_check = domain_name;
-          res.redirect("https://domahub.com/listing/" + hostname);
-        }
-        else {
-          checkListedOrCompare(req, res, next, domain_name, true);
-        }
-      }, function(result){
-        //listed! go on with routes
-        req.session.listing_info = result.info[0];
-        checkListedOrCompare(req, res, next, domain_name, false);
-      });
+      checkListedOrCompare(req, res, next, req.params.domain_name, true);
     }
+
+    // //skip listed check if we've already determined it's unlisted and got redirected to domahub from custom URL
+    // if (req.session.skip_listed_check == domain_name){
+    //   console.log("LRF: Skipping database check for unlisted domain");
+    //   var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+    //   if (hostname != "domahub.com" && hostname != "localhost:8080" && hostname != "localhost"){
+    //     delete req.session.skip_listed_check;
+    //     req.session.skip_listed_check = domain_name;
+    //     res.redirect("https://domahub.com/listing/" + hostname);
+    //   }
+    //   else {
+    //     checkListedOrCompare(req, res, next, domain_name, true);
+    //   }
+    // }
+    // else {
+    //   console.log("LRF: Checking if " + domain_name + " is listed on DomaHub...");
+    //   getVerifiedListing(req, res, domain_name, function(result){
+    //     //if unlisted and hostname isn't domahub, redirect to domahub
+    //     var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+    //     if (hostname != "domahub.com" && hostname != "localhost:8080" && hostname != "localhost"){
+    //       req.session.skip_listed_check = domain_name;
+    //       res.redirect("https://domahub.com/listing/" + hostname);
+    //     }
+    //     else {
+    //       checkListedOrCompare(req, res, next, domain_name, true);
+    //     }
+    //   }, function(result){
+    //     //listed! go on with routes
+    //     req.session.listing_info = result.info[0];
+    //     checkListedOrCompare(req, res, next, domain_name, false);
+    //   });
+    // }
   },
 
   //gets the next year's events for calendar
@@ -1224,16 +1230,17 @@ module.exports = {
   //get alexa traffic info
   getListingAlexa : function(req, res, next){
     console.log("LRF: Getting all Alexa information for domain: " + req.params.domain_name + "...");
+    error.handler(req, res, "Invalid Alexa!", 'json');
 
-    alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-      if (error){error.handler(req, res, "Invalid Alexa!", 'json');}
-      else {
-        res.json({
-          state : "success",
-          alexa : result
-        });
-      }
-    });
+    // alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+    //   if (error){error.handler(req, res, "Invalid Alexa!", 'json');}
+    //   else {
+    //     res.json({
+    //       state : "success",
+    //       alexa : result
+    //     });
+    //   }
+    // });
   },
 
   //redirect to forwarding link if it exists
@@ -1419,75 +1426,68 @@ function checkListedOrCompare(req, res, next, domain_name, unlisted){
       unlisted: true,
     }
 
-    //COMPARE TOOL VARIABLES
-    if (req.query.compare == "true"){
-      console.log("LRF: Rendering the comparison tool!");
+    console.log("LRF: Rendering the comparison tool!");
 
-      var array_of_registrars = ["GoDaddy", "Google", "NameSilo", "NameCheap", "Bluehost", "HostGator", "Hover", "Gandi"];
-      listing_info.registrar_name = array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)];
+    var array_of_registrars = ["GoDaddy", "Google", "NameSilo", "NameCheap", "Bluehost", "HostGator", "Hover", "Gandi"];
+    listing_info.registrar_name = array_of_registrars[Math.floor(Math.random() * array_of_registrars.length)];
 
-      //random info for compare tool
-      listing_info.status = 1;
-      listing_info.premium = true;
-      listing_info.username = "The Domain Master";
-      listing_info.owner_id = "compare";
-      listing_info.email = "domainowner@domains.com";
-      listing_info.date_registered = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
-      listing_info.date_updated = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
-      listing_info.categories = Categories.randomBackAsString();
-      listing_info.date_created = new Date().getTime();
-      listing_info.description = Descriptions.random();
-      listing_info.description_footer = "The greatest domains in the industry.";
-      listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000) * 100000;
-      listing_info.buy_price = listing_info.min_price * 2;
-      listing_info.default_currency = "usd";
+    //random info for compare tool
+    listing_info.status = 1;
+    listing_info.premium = true;
+    listing_info.username = "The Domain Master";
+    listing_info.owner_id = "compare";
+    listing_info.email = "domainowner@domains.com";
+    listing_info.date_registered = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
+    listing_info.date_updated = moment().subtract(Math.floor(Math.random() * 100), "day").format("YYYY-MM-DD HH:mm");
+    listing_info.categories = Categories.randomBackAsString();
+    listing_info.date_created = new Date().getTime();
+    listing_info.description = Descriptions.random();
+    listing_info.description_footer = "The greatest domains in the industry.";
+    listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000) * 100000;
+    listing_info.buy_price = listing_info.min_price * 2;
+    listing_info.default_currency = "usd";
 
-      //rental
-      listing_info.rentable = 1;
-      listing_info.price_rate = Math.round(Math.random() * 25000);
-      listing_info.price_type = "day";
+    //rental
+    listing_info.rentable = 1;
+    listing_info.price_rate = Math.round(Math.random() * 25000);
+    listing_info.price_type = "day";
 
-      //design
-      listing_info.primary_color = "#3CBC8D";
-      listing_info.secondary_color = "#FF5722";
-      listing_info.tertiary_color = "#2196F3";
-      listing_info.font_color = "#000000";
-      listing_info.font_name = "Nunito Sans";
-      listing_info.background_color = "#FFFFFF";
-      listing_info.background_image = "";
-      listing_info.logo = "";
+    //design
+    listing_info.primary_color = "#3CBC8D";
+    listing_info.secondary_color = "#FF5722";
+    listing_info.tertiary_color = "#2196F3";
+    listing_info.font_color = "#000000";
+    listing_info.font_name = "Nunito Sans";
+    listing_info.background_color = "#FFFFFF";
+    listing_info.background_image = "";
+    listing_info.logo = "";
 
-      //left side
-      listing_info.show_registrar = 1;
-      listing_info.show_registration_date = 1;
-      listing_info.show_categories = 1;
-      listing_info.show_godaddy_appraisal = 1;
-      listing_info.show_domainindex_appraisal = 1;
-      listing_info.show_freevaluator_appraisal = 1;
-      listing_info.show_estibot_appraisal = 1;
-      listing_info.show_placeholder = 1;
+    //left side
+    listing_info.show_registrar = 1;
+    listing_info.show_registration_date = 1;
+    listing_info.show_categories = 1;
+    listing_info.show_godaddy_appraisal = 1;
+    listing_info.show_domainindex_appraisal = 1;
+    listing_info.show_freevaluator_appraisal = 1;
+    listing_info.show_estibot_appraisal = 1;
+    listing_info.show_placeholder = 1;
 
-      //right side
-      listing_info.show_social_sharing = 1;
-      listing_info.show_traffic_graph = 1;
-      listing_info.show_alexa_stats = 1;
-      listing_info.show_history_ticker = 1;
-      listing_info.show_domain_list = 1;
-    }
-
-    req.session.listing_info = listing_info;
-    res.render("listings/listing.ejs", {
-      user: req.user,
-      listing_info: listing_info,
-      compare : (req.query.compare == "true") ? true : false,
-      fonts : Fonts.all(),
-      categories : Categories.all()
-    });
+    //right side
+    listing_info.show_social_sharing = 1;
+    listing_info.show_traffic_graph = 1;
+    listing_info.show_alexa_stats = 1;
+    listing_info.show_history_ticker = 1;
+    listing_info.show_domain_list = 1;
   }
-  //domain is listed on DomaHub, go next
-  else {
-    next();
-  }
+
+  req.session.listing_info = listing_info;
+  res.render("listings/listing.ejs", {
+    user: req.user,
+    listing_info: listing_info,
+    compare : true,
+    fonts : Fonts.all(),
+    categories : Categories.all()
+  });
 }
 
 //helper function to add http or https

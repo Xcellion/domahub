@@ -692,20 +692,24 @@ module.exports = {
   logoutDemo : function(req, res, next){
     if (req.isAuthenticated() && !req.user.id){
       console.log("AUF: Logging out as the Domahub demo user...");
-      req.logout();
+      req.logout(()=>{
+        next();
+      });
     }
-    next();
+    else {
+      next();
+    }
   },
 
   //login as demo user
   loginToDemo : function(req, res, next){
 
     //if user is authenticated, log them out first
-    if (req.isAuthenticated()){
-      console.log("AUF: Logging out existing user before DomaHub demo...");
-      req.logout();
-      delete req.user;
-    }
+    // if (req.isAuthenticated()){
+    //   console.log("AUF: Logging out existing user before DomaHub demo...");
+    //   req.logout();
+    //   delete req.user;
+    // }
 
     console.log("AUF: Attempting to log in as the DomaHub demo user...");
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -836,7 +840,7 @@ module.exports = {
         req.logIn(user, function(err) {
           if (err) {
             error.log(err, "Failed to login via passport.");
-            error.handler(req, res, "Something went wrong while logging in! Please refresh the page and try again!</br></br>If this continues, please <a class='is-underlined' href='/contact'>contact us</a> for assistance.");
+            error.handler(req, res, "Sign in has been disabled! Please <a class='is-underlined' href='/demo'>click here</a> to check out the demo.");
           }
           else {
             var now = new Date();
