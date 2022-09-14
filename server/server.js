@@ -61,8 +61,8 @@ require('./lib/passport.js').init(app);
 
 //<editor-fold>------------------------------------------ROUTES---------------------------------------
 
-//route to determine host
-require('./controller/api_functions.js')(app);
+// //route to determine host
+// require('./controller/api_functions.js')(app);
 
 //main routes
 require('./routes/router.js')(app);
