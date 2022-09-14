@@ -23,6 +23,7 @@
     "humanparser": "2.6.0",
     "json2csv": "5.0.7",
     "moment": "2.29.4",
+    "gulp-live-server": "^0.0.31",
     "money": "0.2.0",
     "multer": "1.1.0",
     "mysql": "2.18.1",
