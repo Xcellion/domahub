@@ -12,14 +12,20 @@ module.exports = function(app){
 
   //signup normal (no referral)
   app.get('/signup', [
-    auth_functions.isNotLoggedIn,
-    auth_functions.renderSignup
+    function(req, res){
+      res.redirect("/");
+    }
+    // auth_functions.isNotLoggedIn,
+    // auth_functions.renderSignup
   ]);
 
   //signup referrals
   app.get("/signup/:promo_code", [
-    auth_functions.isNotLoggedIn,
-    auth_functions.checkReferralCode
+    function(req, res){
+      res.redirect("/");
+    }
+    // auth_functions.isNotLoggedIn,
+    // auth_functions.checkReferralCode
   ]);
 
   //post for a new signup
@@ -40,11 +46,14 @@ module.exports = function(app){
 
   //render login page
   app.get('/login', [
-    auth_functions.logoutDemo,
-    auth_functions.checkLoggedIn,
     function(req, res){
-      res.redirect("/profile/dashboard");
+      res.redirect("/");
     }
+    // auth_functions.logoutDemo,
+    // auth_functions.checkLoggedIn,
+    // function(req, res){
+    //   res.redirect("/profile/dashboard");
+    // }
   ]);
 
   //logout

@@ -43,15 +43,15 @@ var namesilo_url = (process.env.NODE_ENV == "dev") ? "http://sandbox.namesilo.co
 var parseString = require('xml2js').parseString;
 
 //google analytics authentication
-// var google = require('googleapis');
-// var key = require("../lib/google_embed_api_key.json");
-// var jwtClient = new google.auth.JWT(
-//   key.client_email,
-//   null,
-//   key.private_key,
-//   ["https://www.googleapis.com/auth/analytics.readonly"],   // array of auth scopes
-//   null
-// );
+var google = require('googleapis');
+var key = require("../lib/google_embed_api_key.json");
+var jwtClient = new google.auth.JWT(
+  key.client_email,
+  null,
+  key.private_key,
+  ["https://www.googleapis.com/auth/analytics.readonly"],   // array of auth scopes
+  null
+);
 
 //</editor-fold>
 
@@ -105,36 +105,36 @@ module.exports = {
   //<editor-fold>-------------------------------------GOOGLE ANALYTICS-------------------------------
 
   // //google embed analytics authentication
-  // authWithGoogle : function(req, res, next){
-  //   if (!req.user.ga_access_token){
-  //     console.log("PF: Authenticating with Google Analytics API...");
-  //     jwtClient.authorize(function (err, tokens) {
-  //       if (err) {
-  //         error.log(err, "Failed to authenticate with Google for the GA API");
-  //       }
-  //       req.user.ga_access_token = (tokens) ? tokens.access_token : false;
-  //       next();
-  //     });
-  //   }
-  //   else {
-  //     next();
-  //   }
-  // },
+  authWithGoogle : function(req, res, next){
+    if (!req.user.ga_access_token){
+      console.log("PF: Authenticating with Google Analytics API...");
+      jwtClient.authorize(function (err, tokens) {
+        if (err) {
+          error.log(err, "Failed to authenticate with Google for the GA API");
+        }
+        req.user.ga_access_token = (tokens) ? tokens.access_token : false;
+        next();
+      });
+    }
+    else {
+      next();
+    }
+  },
 
-  // //replace existing google embed analytics authentication
-  // deleteGoogleAPI : function(req, res, next){
-  //   console.log("PF: Re-authenticating with Google Analytics API...");
-  //   jwtClient.authorize(function (err, tokens) {
-  //     if (err) {
-  //       error.log(err, "Failed to authenticate with Google for the GA API");
-  //     }
-  //     req.user.ga_access_token = (tokens) ? tokens.access_token : false;
-  //     res.send({
-  //       state : "success",
-  //       user : req.user
-  //     });
-  //   });
-  // },
+  //replace existing google embed analytics authentication
+  deleteGoogleAPI : function(req, res, next){
+    console.log("PF: Re-authenticating with Google Analytics API...");
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        error.log(err, "Failed to authenticate with Google for the GA API");
+      }
+      req.user.ga_access_token = (tokens) ? tokens.access_token : false;
+      res.send({
+        state : "success",
+        user : req.user
+      });
+    });
+  },
 
   //</editor-fold>
 

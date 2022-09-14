@@ -2,7 +2,9 @@
   var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
 </script>
 <script src="/js/routes/profile/profile_navbar_logic.js" type="text/javascript"></script>
-
+<!--       <% if (process.env.NODE_ENV == "dev" || (user.email == "won2blee@gmail.com" && user.id == 1)) { %>
+        <li><a href="/admin" title="Admin">Admin Panel</a></li>
+      <% } %> -->
 <div class="profile-nav is-bar">
   <div class="menu-button is-open nav-item" title="Open Menu">
     <div class="icon is-relative">
@@ -145,9 +147,6 @@
     </ul>
     <p class="menu-label">Account</p>
     <ul class="menu-list">
-      <% if (process.env.NODE_ENV == "dev" || (user.email == "won2blee@gmail.com" && user.id == 1)) { %>
-        <li><a href="/admin" title="Admin">Admin Panel</a></li>
-      <% } %>
       <li><a href="/logout" title="Log Out">Log Out</a></li>
     </ul>
   </div>

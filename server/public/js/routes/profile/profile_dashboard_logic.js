@@ -203,11 +203,11 @@ function formatCurrency(number){
 
   //authorize user with google analytics and then build all charts
   function googleAuthAndBuildCharts(){
-    gapi.analytics.auth.authorize({
-      'serverAuth': {
-        'access_token': user.ga_access_token
-      }
-    });
+    // gapi.analytics.auth.authorize({
+    //   'serverAuth': {
+    //     'access_token': user.ga_access_token
+    //   }
+    // });
 
     //filter out only user listings
     var listing_filters = user.listings.map(function(listing){
@@ -308,168 +308,170 @@ function formatCurrency(number){
       "max-results": 100000
     });
 
-    //wait for all promises to finish
-    Promise.all([currentRange, lastRange]).then(function(results) {
+    showLoadingOrNone(canvas_id, false);
 
-      //analyze data, remove non-owned domains, add 0 count days
-      var parsed_data_1 = removeUnownedAddZeroCounts(start_time_1, end_time_1, results[0].rows, listing_regex, average);
-      var parsed_data_2 = removeUnownedAddZeroCounts(start_time_2, end_time_2, results[1].rows, listing_regex, average);
-
-      //no matching data
-      if (parsed_data_1.length + parsed_data_2.length == 0){
-        showLoadingOrNone(canvas_id, false);
-      }
-      else {
-        //split data into weekly sets (if necessary)
-        var chart_data1 = splitDataToWeekly(days_to_go_back, parsed_data_1, average);
-        var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
-        var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
-
-        //declare some global font styling
-        Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Helvetica', sans-serif";
-        Chart.defaults.global.defaultFontSize = 14;
-
-        //make chart
-        var chartOptions = {
-          type : "line",
-          options: {
-            maintainAspectRatio: false,
-            layout: {
-              padding: {
-                top: 20,
-                bottom: 20,
-                left: 0,
-                right: 0
-              }
-            },
-            legend: {
-              display: false
-            },
-            tooltips: {
-              mode: 'x-axis',
-              backgroundColor: 'rgba(17, 17, 17, 0.9)',
-              xPadding: 12,
-              yPadding: 12,
-              bodySpacing: 10,
-              titleMarginBottom: 10,
-              callbacks : {
-                title : function(tooltipItem, data){
-                  return data.labels[tooltipItem[0].index]
-                },
-                label : function(tooltipItem, data){
-                  switch (tooltip_type){
-                    case ("time"):
-                      var now_rounded = Math.round(tooltipItem.yLabel);
-                      return data.datasets[0].label + " : " + Math.floor(now_rounded/60) + "m " + now_rounded%60 + "s";
-                      break;
-                    case ("percent"):
-                      return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2) + "%";
-                      break;
-                    case ("sessionsPerUser"):
-                      return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2);
-                      break;
-                    default:
-                      return data.datasets[0].label + " : " + tooltipItem.yLabel;
-                      break;
-                  }
-                },
-                footer : function(tooltipItem, data){
-                  var prev_range = (tooltipItem[1]) ? tooltipItem[1].yLabel : 0;
-                  var cur_range = (tooltipItem[0]) ? tooltipItem[0].yLabel : 0;
-                  var percent_change = Math.round((((cur_range - prev_range) / prev_range) * 100) * 10) / 10;
-                  var increase_or_decrease = (percent_change == 0) ? "No change" : ((percent_change > 0) ? "An increase of" : "A decrease of") + " " + Math.abs(percent_change).toFixed(2) + "%";
-                  return (!isFinite(percent_change) || isNaN(percent_change)) ? "" : (increase_or_decrease);
-                }
-              }
-            },
-            scales: {
-              xAxes: [{
-                gridLines : {
-                    display : false,
-                },
-                ticks: {
-                  fontStyle: 400,
-                  fontColor: 'rgba(0,0,0,0.66)',
-                  padding: 10,
-                  // only return month axis ticks
-                  callback: function(value, index, values){
-                    return (value.split(" - ")[0]);
-                  }
-                }
-              }],
-              yAxes: [{
-                gridLines : {
-                  color: '#f6f9fc',
-                  lineWidth: 2,
-                  drawBorder: false,
-                  drawTicks: false
-                },
-                ticks: {
-                  fontStyle: 400,
-                  fontColor: 'rgba(0,0,0,0.66)',
-                  padding: 20,
-                  suggestedMax: 5,
-                  beginAtZero: true,   // minimum value will be 0.
-                  callback: function(value, index, values){
-                    if (Math.floor(value) === value) {
-                        return value;
-                    }
-                  }
-                }
-              }]
-            }
-          },
-          data : {
-            labels : chart_labels,
-            datasets : [
-              {
-                label: stat_to_get_desc,
-                backgroundColor : 'rgba(60,188,141,0.2)',
-                borderColor : 'rgba(60,188,141,1)',
-                borderWidth: 4,
-                pointBackgroundColor: '#fff',
-                pointBorderColor: 'rgba(60,188,141,1)',
-                pointBorderWidth: 4,
-                pointHoverRadius: 6,
-                pointHoverBorderWidth: 3,
-                pointHoverBackgroundColor: "#fff",
-                pointRadius: 5,
-                data : chart_data1
-              },
-              {
-                label: stat_to_get_desc,
-                backgroundColor: 'rgba(210,210,210,0.1)',
-                borderColor : 'rgba(0,0,0,0.4)',
-                borderWidth: 2,
-                borderDash: [5,5],
-                pointBackgroundColor: '#fff',
-                pointBorderColor: 'rgba(0,0,0,0.4)',
-                pointBorderWidth: 4,
-                pointHoverRadius: 6,
-                pointHoverBorderWidth: 3,
-                pointHoverBackgroundColor: "#fff",
-                pointRadius: 5,
-                data : chart_data2
-              }
-            ]
-          }
-        };
-
-        //remove loading
-        $("#" + canvas_id + "-overlay").addClass('is-hidden');
-
-        var ctx = document.getElementById(canvas_id).getContext('2d');
-        if (time_chart){
-          time_chart.destroy();
-        }
-        time_chart = new Chart(ctx, chartOptions);
-
-        //display current stat name
-        $("#current-stat-name").text(stat_to_get_desc);
-      }
-    }).catch(function(err){
-      gaErrorHandler(err);
-    });
+    // //wait for all promises to finish
+    // Promise.all([currentRange, lastRange]).then(function(results) {
+    //
+    //   //analyze data, remove non-owned domains, add 0 count days
+    //   var parsed_data_1 = removeUnownedAddZeroCounts(start_time_1, end_time_1, results[0].rows, listing_regex, average);
+    //   var parsed_data_2 = removeUnownedAddZeroCounts(start_time_2, end_time_2, results[1].rows, listing_regex, average);
+    //
+    //   //no matching data
+    //   if (parsed_data_1.length + parsed_data_2.length == 0){
+    //     showLoadingOrNone(canvas_id, false);
+    //   }
+    //   else {
+    //     //split data into weekly sets (if necessary)
+    //     var chart_data1 = splitDataToWeekly(days_to_go_back, parsed_data_1, average);
+    //     var chart_data2 = splitDataToWeekly(days_to_go_back, parsed_data_2, average);
+    //     var chart_labels = createChartLabels(days_to_go_back, parsed_data_1);
+    //
+    //     //declare some global font styling
+    //     Chart.defaults.global.defaultFontFamily = "'Nunito Sans', 'Helvetica', sans-serif";
+    //     Chart.defaults.global.defaultFontSize = 14;
+    //
+    //     //make chart
+    //     var chartOptions = {
+    //       type : "line",
+    //       options: {
+    //         maintainAspectRatio: false,
+    //         layout: {
+    //           padding: {
+    //             top: 20,
+    //             bottom: 20,
+    //             left: 0,
+    //             right: 0
+    //           }
+    //         },
+    //         legend: {
+    //           display: false
+    //         },
+    //         tooltips: {
+    //           mode: 'x-axis',
+    //           backgroundColor: 'rgba(17, 17, 17, 0.9)',
+    //           xPadding: 12,
+    //           yPadding: 12,
+    //           bodySpacing: 10,
+    //           titleMarginBottom: 10,
+    //           callbacks : {
+    //             title : function(tooltipItem, data){
+    //               return data.labels[tooltipItem[0].index]
+    //             },
+    //             label : function(tooltipItem, data){
+    //               switch (tooltip_type){
+    //                 case ("time"):
+    //                   var now_rounded = Math.round(tooltipItem.yLabel);
+    //                   return data.datasets[0].label + " : " + Math.floor(now_rounded/60) + "m " + now_rounded%60 + "s";
+    //                   break;
+    //                 case ("percent"):
+    //                   return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2) + "%";
+    //                   break;
+    //                 case ("sessionsPerUser"):
+    //                   return data.datasets[0].label + " : " + parseFloat(tooltipItem.yLabel).toFixed(2);
+    //                   break;
+    //                 default:
+    //                   return data.datasets[0].label + " : " + tooltipItem.yLabel;
+    //                   break;
+    //               }
+    //             },
+    //             footer : function(tooltipItem, data){
+    //               var prev_range = (tooltipItem[1]) ? tooltipItem[1].yLabel : 0;
+    //               var cur_range = (tooltipItem[0]) ? tooltipItem[0].yLabel : 0;
+    //               var percent_change = Math.round((((cur_range - prev_range) / prev_range) * 100) * 10) / 10;
+    //               var increase_or_decrease = (percent_change == 0) ? "No change" : ((percent_change > 0) ? "An increase of" : "A decrease of") + " " + Math.abs(percent_change).toFixed(2) + "%";
+    //               return (!isFinite(percent_change) || isNaN(percent_change)) ? "" : (increase_or_decrease);
+    //             }
+    //           }
+    //         },
+    //         scales: {
+    //           xAxes: [{
+    //             gridLines : {
+    //                 display : false,
+    //             },
+    //             ticks: {
+    //               fontStyle: 400,
+    //               fontColor: 'rgba(0,0,0,0.66)',
+    //               padding: 10,
+    //               // only return month axis ticks
+    //               callback: function(value, index, values){
+    //                 return (value.split(" - ")[0]);
+    //               }
+    //             }
+    //           }],
+    //           yAxes: [{
+    //             gridLines : {
+    //               color: '#f6f9fc',
+    //               lineWidth: 2,
+    //               drawBorder: false,
+    //               drawTicks: false
+    //             },
+    //             ticks: {
+    //               fontStyle: 400,
+    //               fontColor: 'rgba(0,0,0,0.66)',
+    //               padding: 20,
+    //               suggestedMax: 5,
+    //               beginAtZero: true,   // minimum value will be 0.
+    //               callback: function(value, index, values){
+    //                 if (Math.floor(value) === value) {
+    //                     return value;
+    //                 }
+    //               }
+    //             }
+    //           }]
+    //         }
+    //       },
+    //       data : {
+    //         labels : chart_labels,
+    //         datasets : [
+    //           {
+    //             label: stat_to_get_desc,
+    //             backgroundColor : 'rgba(60,188,141,0.2)',
+    //             borderColor : 'rgba(60,188,141,1)',
+    //             borderWidth: 4,
+    //             pointBackgroundColor: '#fff',
+    //             pointBorderColor: 'rgba(60,188,141,1)',
+    //             pointBorderWidth: 4,
+    //             pointHoverRadius: 6,
+    //             pointHoverBorderWidth: 3,
+    //             pointHoverBackgroundColor: "#fff",
+    //             pointRadius: 5,
+    //             data : chart_data1
+    //           },
+    //           {
+    //             label: stat_to_get_desc,
+    //             backgroundColor: 'rgba(210,210,210,0.1)',
+    //             borderColor : 'rgba(0,0,0,0.4)',
+    //             borderWidth: 2,
+    //             borderDash: [5,5],
+    //             pointBackgroundColor: '#fff',
+    //             pointBorderColor: 'rgba(0,0,0,0.4)',
+    //             pointBorderWidth: 4,
+    //             pointHoverRadius: 6,
+    //             pointHoverBorderWidth: 3,
+    //             pointHoverBackgroundColor: "#fff",
+    //             pointRadius: 5,
+    //             data : chart_data2
+    //           }
+    //         ]
+    //       }
+    //     };
+    //
+    //     //remove loading
+    //     $("#" + canvas_id + "-overlay").addClass('is-hidden');
+    //
+    //     var ctx = document.getElementById(canvas_id).getContext('2d');
+    //     if (time_chart){
+    //       time_chart.destroy();
+    //     }
+    //     time_chart = new Chart(ctx, chartOptions);
+    //
+    //     //display current stat name
+    //     $("#current-stat-name").text(stat_to_get_desc);
+    //   }
+    // }).catch(function(err){
+    //   gaErrorHandler(err);
+    // });
   }
 
   //analyze data, remove non-owned domains, add 0 count days
@@ -707,118 +709,120 @@ function formatCurrency(number){
       showLoadingOrNone(canvas_id, true);
     }
 
-    //build the query
-    gaQuery({
-      'ids': 'ga:141565191',
-      'metrics': 'ga:users',
-      'dimensions': 'ga:pagePathLevel2,ga:channelGrouping',
-      'sort': '-ga:users',
-      'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
-      'end-date': moment(now).format('YYYY-MM-DD'),
-      'include-empty-rows': false,
-      'max-results': 100000
-    }).then(function(results) {
-      //no matching data
-      if (results.totalResults == 0){
-        showLoadingOrNone(canvas_id, false);
-        if (channels_chart){
-          channels_chart.destroy();
-        }
-      }
-      else {
-        //extract data
-        var data = [];
-        var labels = [];
-        var backgroundColors = [
-          "#00bfa5",
-          "#F38181",
-          "#FCE38A",
-          "#3F4B83",
-          "#95E1D3"
-        ];
+    showLoadingOrNone(canvas_id, false);
 
-        //sort the results by listing name and filter out not owner domains and sort by country name
-        var listings_data_sorted = results.rows.map(function(row){
-          var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
-          return [domain_name, row[1], row[2]];
-        }).filter(function(row){
-          return listing_regex.test(row[0]);
-        }).sort(function(a, b){
-          return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
-        });
-
-        //if nothing exists
-        if (listings_data_sorted.length == 0){
-          showLoadingOrNone(canvas_id, false);
-          if (countries_chart){
-            countries_chart.destroy();
-          }
-        }
-        else {
-
-          //collapse by country and sort
-          var seen = {};
-          listings_data_sorted.forEach(function(row) {
-            if (seen.hasOwnProperty(row[1])){
-              seen[row[1]] += parseFloat(row[2]);
-            }
-            else {
-              seen[row[1]] = parseFloat(row[2]);
-            }
-          });
-          listings_data_sorted = [];
-          for (var x in seen){
-            listings_data_sorted.push([x, seen[x]]);
-          }
-
-          //sort by user count and get top 5
-          listings_data_sorted.sort(function(a,b){
-            return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
-          }).slice(0,5).forEach(function(row){
-            labels.push(row[0]);
-            data.push(row[1]);
-          });
-
-          //make chart
-          var chartOptions = {
-            type : "doughnut",
-            options : {
-              responsive : true,
-              maintainAspectRatio : false,
-              legend : {
-                position: "left"
-              },
-              tooltips: {
-                backgroundColor: 'rgba(17, 17, 17, 0.9)',
-                xPadding: 10,
-                yPadding: 10
-              }
-            },
-            data : {
-              labels : labels,
-              datasets : [
-                {
-                  data : data,
-                  backgroundColor : backgroundColors,
-                  borderWidth: 3
-                }
-              ]
-            }
-          };
-
-          //remove loading overlay
-          $("#" + canvas_id + "-overlay").addClass('is-hidden');
-          if (channels_chart){
-            channels_chart.destroy();
-          }
-          var ctx = document.getElementById(canvas_id).getContext('2d');
-          channels_chart = new Chart(ctx, chartOptions);
-
-        }
-      }
-    }).catch(function(err){
-      gaErrorHandler(err);
-    });
+    // //build the query
+    // gaQuery({
+    //   'ids': 'ga:141565191',
+    //   'metrics': 'ga:users',
+    //   'dimensions': 'ga:pagePathLevel2,ga:channelGrouping',
+    //   'sort': '-ga:users',
+    //   'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
+    //   'end-date': moment(now).format('YYYY-MM-DD'),
+    //   'include-empty-rows': false,
+    //   'max-results': 100000
+    // }).then(function(results) {
+    //   //no matching data
+    //   if (results.totalResults == 0){
+    //     showLoadingOrNone(canvas_id, false);
+    //     if (channels_chart){
+    //       channels_chart.destroy();
+    //     }
+    //   }
+    //   else {
+    //     //extract data
+    //     var data = [];
+    //     var labels = [];
+    //     var backgroundColors = [
+    //       "#00bfa5",
+    //       "#F38181",
+    //       "#FCE38A",
+    //       "#3F4B83",
+    //       "#95E1D3"
+    //     ];
+    //
+    //     //sort the results by listing name and filter out not owner domains and sort by country name
+    //     var listings_data_sorted = results.rows.map(function(row){
+    //       var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+    //       return [domain_name, row[1], row[2]];
+    //     }).filter(function(row){
+    //       return listing_regex.test(row[0]);
+    //     }).sort(function(a, b){
+    //       return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+    //     });
+    //
+    //     //if nothing exists
+    //     if (listings_data_sorted.length == 0){
+    //       showLoadingOrNone(canvas_id, false);
+    //       if (countries_chart){
+    //         countries_chart.destroy();
+    //       }
+    //     }
+    //     else {
+    //
+    //       //collapse by country and sort
+    //       var seen = {};
+    //       listings_data_sorted.forEach(function(row) {
+    //         if (seen.hasOwnProperty(row[1])){
+    //           seen[row[1]] += parseFloat(row[2]);
+    //         }
+    //         else {
+    //           seen[row[1]] = parseFloat(row[2]);
+    //         }
+    //       });
+    //       listings_data_sorted = [];
+    //       for (var x in seen){
+    //         listings_data_sorted.push([x, seen[x]]);
+    //       }
+    //
+    //       //sort by user count and get top 5
+    //       listings_data_sorted.sort(function(a,b){
+    //         return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+    //       }).slice(0,5).forEach(function(row){
+    //         labels.push(row[0]);
+    //         data.push(row[1]);
+    //       });
+    //
+    //       //make chart
+    //       var chartOptions = {
+    //         type : "doughnut",
+    //         options : {
+    //           responsive : true,
+    //           maintainAspectRatio : false,
+    //           legend : {
+    //             position: "left"
+    //           },
+    //           tooltips: {
+    //             backgroundColor: 'rgba(17, 17, 17, 0.9)',
+    //             xPadding: 10,
+    //             yPadding: 10
+    //           }
+    //         },
+    //         data : {
+    //           labels : labels,
+    //           datasets : [
+    //             {
+    //               data : data,
+    //               backgroundColor : backgroundColors,
+    //               borderWidth: 3
+    //             }
+    //           ]
+    //         }
+    //       };
+    //
+    //       //remove loading overlay
+    //       $("#" + canvas_id + "-overlay").addClass('is-hidden');
+    //       if (channels_chart){
+    //         channels_chart.destroy();
+    //       }
+    //       var ctx = document.getElementById(canvas_id).getContext('2d');
+    //       channels_chart = new Chart(ctx, chartOptions);
+    //
+    //     }
+    //   }
+    // }).catch(function(err){
+    //   gaErrorHandler(err);
+    // });
   }
 
   //</editor-fold>
@@ -833,117 +837,119 @@ function formatCurrency(number){
       showLoadingOrNone(canvas_id, true);
     }
 
-    //build the query
-    gaQuery({
-      'ids': 'ga:141565191',
-      'metrics': 'ga:users',
-      'dimensions': 'ga:pagePathLevel2,ga:country',
-      'sort': '-ga:country',
-      'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
-      'end-date': moment(now).format('YYYY-MM-DD'),
-      'include-empty-rows': false,
-      'max-results' : 100000,
-    }).then(function(results) {
-      //no matching data
-      if (results.totalResults == 0){
-        showLoadingOrNone(canvas_id, false);
-        if (countries_chart){
-          countries_chart.destroy();
-        }
-      }
-      else {
-        //extract data
-        var data = [];
-        var labels = [];
-        var backgroundColors = [
-          "#00bfa5",
-          "#F38181",
-          "#FCE38A",
-          "#3F4B83",
-          "#95E1D3"
-        ];
+    showLoadingOrNone(canvas_id, false);
 
-        //sort the results by listing name and filter out not owner domains and sort by country name
-        var listings_data_sorted = results.rows.map(function(row){
-          var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
-          return [domain_name, row[1], row[2]];
-        }).filter(function(row){
-          return listing_regex.test(row[0]) && row[1] != "(not set)";
-        }).sort(function(a, b){
-          return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
-        });
-
-        //if nothing exists
-        if (listings_data_sorted.length == 0){
-          showLoadingOrNone(canvas_id, false);
-          if (countries_chart){
-            countries_chart.destroy();
-          }
-        }
-        else {
-
-          //collapse by country and sort
-          var seen = {};
-          listings_data_sorted.forEach(function(row) {
-            if (seen.hasOwnProperty(row[1])){
-              seen[row[1]] += parseFloat(row[2]);
-            }
-            else {
-              seen[row[1]] = parseFloat(row[2]);
-            }
-          });
-          listings_data_sorted = [];
-          for (var x in seen){
-            listings_data_sorted.push([x, seen[x]]);
-          }
-
-          //sort by user count and get top 5
-          listings_data_sorted.sort(function(a,b){
-            return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
-          }).slice(0,5).forEach(function(row){
-            labels.push(row[0]);
-            data.push(row[1]);
-          });
-
-          //make chart
-          var chartOptions = {
-            type : "pie",
-            options : {
-              responsive : true,
-              maintainAspectRatio : false,
-              legend : {
-                position: "left"
-              },
-              tooltips: {
-                backgroundColor: 'rgba(17, 17, 17, 0.9)',
-                xPadding: 10,
-                yPadding: 10
-              }
-            },
-            data : {
-              labels : labels,
-              datasets : [
-                {
-                  data : data,
-                  backgroundColor : backgroundColors,
-                  borderWidth: 3
-                }
-              ]
-            }
-          };
-
-          //remove loading overlay
-          $("#" + canvas_id + "-overlay").addClass('is-hidden');
-          if (countries_chart){
-            countries_chart.destroy();
-          }
-          var ctx = document.getElementById(canvas_id).getContext('2d');
-          countries_chart = new Chart(ctx, chartOptions);
-        }
-      }
-    }).catch(function(err){
-      gaErrorHandler(err);
-    });
+    // //build the query
+    // gaQuery({
+    //   'ids': 'ga:141565191',
+    //   'metrics': 'ga:users',
+    //   'dimensions': 'ga:pagePathLevel2,ga:country',
+    //   'sort': '-ga:country',
+    //   'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
+    //   'end-date': moment(now).format('YYYY-MM-DD'),
+    //   'include-empty-rows': false,
+    //   'max-results' : 100000,
+    // }).then(function(results) {
+    //   //no matching data
+    //   if (results.totalResults == 0){
+    //     showLoadingOrNone(canvas_id, false);
+    //     if (countries_chart){
+    //       countries_chart.destroy();
+    //     }
+    //   }
+    //   else {
+    //     //extract data
+    //     var data = [];
+    //     var labels = [];
+    //     var backgroundColors = [
+    //       "#00bfa5",
+    //       "#F38181",
+    //       "#FCE38A",
+    //       "#3F4B83",
+    //       "#95E1D3"
+    //     ];
+    //
+    //     //sort the results by listing name and filter out not owner domains and sort by country name
+    //     var listings_data_sorted = results.rows.map(function(row){
+    //       var domain_name = row[0].replace(/\//g, "").split("?")[0].toLowerCase();
+    //       return [domain_name, row[1], row[2]];
+    //     }).filter(function(row){
+    //       return listing_regex.test(row[0]) && row[1] != "(not set)";
+    //     }).sort(function(a, b){
+    //       return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+    //     });
+    //
+    //     //if nothing exists
+    //     if (listings_data_sorted.length == 0){
+    //       showLoadingOrNone(canvas_id, false);
+    //       if (countries_chart){
+    //         countries_chart.destroy();
+    //       }
+    //     }
+    //     else {
+    //
+    //       //collapse by country and sort
+    //       var seen = {};
+    //       listings_data_sorted.forEach(function(row) {
+    //         if (seen.hasOwnProperty(row[1])){
+    //           seen[row[1]] += parseFloat(row[2]);
+    //         }
+    //         else {
+    //           seen[row[1]] = parseFloat(row[2]);
+    //         }
+    //       });
+    //       listings_data_sorted = [];
+    //       for (var x in seen){
+    //         listings_data_sorted.push([x, seen[x]]);
+    //       }
+    //
+    //       //sort by user count and get top 5
+    //       listings_data_sorted.sort(function(a,b){
+    //         return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+    //       }).slice(0,5).forEach(function(row){
+    //         labels.push(row[0]);
+    //         data.push(row[1]);
+    //       });
+    //
+    //       //make chart
+    //       var chartOptions = {
+    //         type : "pie",
+    //         options : {
+    //           responsive : true,
+    //           maintainAspectRatio : false,
+    //           legend : {
+    //             position: "left"
+    //           },
+    //           tooltips: {
+    //             backgroundColor: 'rgba(17, 17, 17, 0.9)',
+    //             xPadding: 10,
+    //             yPadding: 10
+    //           }
+    //         },
+    //         data : {
+    //           labels : labels,
+    //           datasets : [
+    //             {
+    //               data : data,
+    //               backgroundColor : backgroundColors,
+    //               borderWidth: 3
+    //             }
+    //           ]
+    //         }
+    //       };
+    //
+    //       //remove loading overlay
+    //       $("#" + canvas_id + "-overlay").addClass('is-hidden');
+    //       if (countries_chart){
+    //         countries_chart.destroy();
+    //       }
+    //       var ctx = document.getElementById(canvas_id).getContext('2d');
+    //       countries_chart = new Chart(ctx, chartOptions);
+    //     }
+    //   }
+    // }).catch(function(err){
+    //   gaErrorHandler(err);
+    // });
   }
 
   //</editor-fold>
@@ -958,130 +964,132 @@ function formatCurrency(number){
       showLoadingOrNone(canvas_id, true);
     }
 
-    //build the query
-    gaQuery({
-      'ids': 'ga:141565191',
-      'metrics': 'ga:users',
-      'dimensions': 'ga:pagePathLevel2',
-      'sort': '-ga:pagePathLevel2',
-      'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
-      'end-date': moment(now).format('YYYY-MM-DD'),
-      'include-empty-rows': false,
-    }).then(function(results) {
-      //no matching data
-      if (results.totalResults == 0){
-        showLoadingOrNone(canvas_id, false);
-        if (popular_chart){
-          popular_chart.destroy();
-        }
-      }
-      else {
-
-        //set colors
-        var data = [];
-        var labels = [];
-        var backgroundColors = [
-          "#00bfa5",
-          "#F38181",
-          "#FCE38A",
-          "#3F4B83",
-          "#95E1D3"
-        ];
-
-        //sort the results by listing name and filter out not owner domains
-        var listings_data_sorted = results.rows.map(function(row){
-          var domain_name = punycode.toUnicode(row[0].replace(/\//g, "").split("?")[0].toLowerCase());
-          return [domain_name, row[1]];
-        }).filter(function(row){
-          return listing_regex.test(row[0]);
-        }).sort(function(a, b){
-          return ((a[0] > b[0]) ? -1 : ((a[0] == b[0]) ? 0 : 1));
-        });
-
-        //if nothing exists
-        if (listings_data_sorted.length == 0){
-          showLoadingOrNone(canvas_id, false);
-          if (popular_chart){
-            popular_chart.destroy();
-          }
-        }
-        else {
-          //collapse data by domain name and sort
-          var seen = {};
-          listings_data_sorted.forEach(function(row) {
-            if (seen.hasOwnProperty(row[0])){
-              seen[row[0]] += parseFloat(row[1]);
-            }
-            else {
-              seen[row[0]] = parseFloat(row[1]);
-            }
-          });
-          listings_data_sorted = [];
-          for (var x in seen){
-            listings_data_sorted.push([x, seen[x]]);
-          }
-
-          //sort by users and get top 5
-          listings_data_sorted.sort(function(a, b){
-            return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
-          }).slice(0, 5).forEach(function(row){
-            labels.push(row[0]);
-            data.push(row[1]);
-          });
-
-          //make chart
-          var chartOptions = {
-            type : "horizontalBar",
-            options : {
-              responsive : true,
-              maintainAspectRatio : false,
-              legend : {
-                display: false
-              },
-              tooltips: {
-                backgroundColor: 'rgba(17, 17, 17, 0.9)',
-                xPadding: 10,
-                yPadding: 10,
-                titleMarginBottom: 10
-              },
-              scales: {
-                xAxes: [{
-                  ticks: {
-                    suggestedMax: 5,
-                    beginAtZero: true,   // minimum value will be 0.
-                    callback: function(value, index, values){
-                      if (Math.floor(value) === value) {
-                        return value;
-                      }
-                    }
-                  }
-                }]
-              }
-            },
-            data : {
-              labels : labels,
-              datasets : [
-                {
-                  data : data,
-                  backgroundColor : backgroundColors,
-                }
-              ]
-            }
-          };
-
-          //remove loading overlay
-          $("#" + canvas_id + "-overlay").addClass('is-hidden');
-
-          var ctx = document.getElementById(canvas_id).getContext('2d');
-          if (popular_chart){
-            popular_chart.destroy();
-          }
-          popular_chart = new Chart(ctx, chartOptions);
-        }
-      }
-    }).catch(function(err){
-      gaErrorHandler(err);
-    });
+    showLoadingOrNone(canvas_id, false);
+    
+    // //build the query
+    // gaQuery({
+    //   'ids': 'ga:141565191',
+    //   'metrics': 'ga:users',
+    //   'dimensions': 'ga:pagePathLevel2',
+    //   'sort': '-ga:pagePathLevel2',
+    //   'start-date': moment(now).day(7).subtract($("#last-days-select").val(), 'day').day(0).format('YYYY-MM-DD'),
+    //   'end-date': moment(now).format('YYYY-MM-DD'),
+    //   'include-empty-rows': false,
+    // }).then(function(results) {
+    //   //no matching data
+    //   if (results.totalResults == 0){
+    //     showLoadingOrNone(canvas_id, false);
+    //     if (popular_chart){
+    //       popular_chart.destroy();
+    //     }
+    //   }
+    //   else {
+    //
+    //     //set colors
+    //     var data = [];
+    //     var labels = [];
+    //     var backgroundColors = [
+    //       "#00bfa5",
+    //       "#F38181",
+    //       "#FCE38A",
+    //       "#3F4B83",
+    //       "#95E1D3"
+    //     ];
+    //
+    //     //sort the results by listing name and filter out not owner domains
+    //     var listings_data_sorted = results.rows.map(function(row){
+    //       var domain_name = punycode.toUnicode(row[0].replace(/\//g, "").split("?")[0].toLowerCase());
+    //       return [domain_name, row[1]];
+    //     }).filter(function(row){
+    //       return listing_regex.test(row[0]);
+    //     }).sort(function(a, b){
+    //       return ((a[0] > b[0]) ? -1 : ((a[0] == b[0]) ? 0 : 1));
+    //     });
+    //
+    //     //if nothing exists
+    //     if (listings_data_sorted.length == 0){
+    //       showLoadingOrNone(canvas_id, false);
+    //       if (popular_chart){
+    //         popular_chart.destroy();
+    //       }
+    //     }
+    //     else {
+    //       //collapse data by domain name and sort
+    //       var seen = {};
+    //       listings_data_sorted.forEach(function(row) {
+    //         if (seen.hasOwnProperty(row[0])){
+    //           seen[row[0]] += parseFloat(row[1]);
+    //         }
+    //         else {
+    //           seen[row[0]] = parseFloat(row[1]);
+    //         }
+    //       });
+    //       listings_data_sorted = [];
+    //       for (var x in seen){
+    //         listings_data_sorted.push([x, seen[x]]);
+    //       }
+    //
+    //       //sort by users and get top 5
+    //       listings_data_sorted.sort(function(a, b){
+    //         return ((a[1] > b[1]) ? -1 : ((a[1] == b[1]) ? 0 : 1));
+    //       }).slice(0, 5).forEach(function(row){
+    //         labels.push(row[0]);
+    //         data.push(row[1]);
+    //       });
+    //
+    //       //make chart
+    //       var chartOptions = {
+    //         type : "horizontalBar",
+    //         options : {
+    //           responsive : true,
+    //           maintainAspectRatio : false,
+    //           legend : {
+    //             display: false
+    //           },
+    //           tooltips: {
+    //             backgroundColor: 'rgba(17, 17, 17, 0.9)',
+    //             xPadding: 10,
+    //             yPadding: 10,
+    //             titleMarginBottom: 10
+    //           },
+    //           scales: {
+    //             xAxes: [{
+    //               ticks: {
+    //                 suggestedMax: 5,
+    //                 beginAtZero: true,   // minimum value will be 0.
+    //                 callback: function(value, index, values){
+    //                   if (Math.floor(value) === value) {
+    //                     return value;
+    //                   }
+    //                 }
+    //               }
+    //             }]
+    //           }
+    //         },
+    //         data : {
+    //           labels : labels,
+    //           datasets : [
+    //             {
+    //               data : data,
+    //               backgroundColor : backgroundColors,
+    //             }
+    //           ]
+    //         }
+    //       };
+    //
+    //       //remove loading overlay
+    //       $("#" + canvas_id + "-overlay").addClass('is-hidden');
+    //
+    //       var ctx = document.getElementById(canvas_id).getContext('2d');
+    //       if (popular_chart){
+    //         popular_chart.destroy();
+    //       }
+    //       popular_chart = new Chart(ctx, chartOptions);
+    //     }
+    //   }
+    // }).catch(function(err){
+    //   gaErrorHandler(err);
+    // });
   }
 
   //</editor-fold>

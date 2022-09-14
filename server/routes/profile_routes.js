@@ -48,7 +48,7 @@ module.exports = function(app){
     profile_functions.getAccountListings,
     profile_functions.getAccountTransactionsLocal,
     profile_functions.convertCurrencyTransactions,
-    // profile_functions.authWithGoogle,
+    profile_functions.authWithGoogle,
     profile_functions.renderDashboard
   ]);
 

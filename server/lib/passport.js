@@ -56,7 +56,7 @@ module.exports = {
         account_model.checkAccountEmail(email, function(result){
           //email exists
           if (result.state=="error" || result.info.length){
-            return done(false, {message: 'A user with that email exists already!'});
+            return done(false, {message: "Sign in has been disabled! Please <a class='is-underlined' href='/demo'>click here</a> to check out the demo."});
           }
 
           else {

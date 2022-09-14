@@ -2075,29 +2075,29 @@ module.exports = {
     var current_exchange_rates = JSON.parse(fs.readFileSync(__dirname + "/current-exchange-rates.json"));
 
     //if exchange rates are still good (last time rates gotten is less than an hour)
-    if (process.env.NODE_ENV == "dev" || (current_exchange_rates && current_exchange_rates.date && moment.duration(moment().diff(moment(current_exchange_rates.date))).asHours() < 1)){
-      fx.rates = current_exchange_rates.rates;
-    	fx.base = current_exchange_rates.base;
+    // if (process.env.NODE_ENV == "dev" || (current_exchange_rates && current_exchange_rates.date && moment.duration(moment().diff(moment(current_exchange_rates.date))).asHours() < 1)){
+    fx.rates = current_exchange_rates.rates;
+  	fx.base = current_exchange_rates.base;
 
-      next();
-    }
-    else {
-      console.log("CF: Getting new exchange rates...");
-      oxr.latest(function() {
-        var current_exchange_rates = {
-          rates : oxr.rates,
-          base : oxr.base,
-          date : moment().format("YYYY-MM-DD HH:mm")
-        }
-
-        //rewrite old file
-        fs.writeFileSync(__dirname + "/current-exchange-rates.json", JSON.stringify(current_exchange_rates, null, 4), "utf8");
-        fx.rates = current_exchange_rates.rates;
-      	fx.base = current_exchange_rates.base;
-      });
-
-      next();
-    }
+    next();
+    // }
+    // else {
+    //   console.log("CF: Getting new exchange rates...");
+    //   oxr.latest(function() {
+    //     var current_exchange_rates = {
+    //       rates : oxr.rates,
+    //       base : oxr.base,
+    //       date : moment().format("YYYY-MM-DD HH:mm")
+    //     }
+    //
+    //     //rewrite old file
+    //     fs.writeFileSync(__dirname + "/current-exchange-rates.json", JSON.stringify(current_exchange_rates, null, 4), "utf8");
+    //     fx.rates = current_exchange_rates.rates;
+    //   	fx.base = current_exchange_rates.base;
+    //   });
+    //
+    //   next();
+    // }
   },
 
   //</editor-fold>
