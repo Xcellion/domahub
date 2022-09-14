@@ -65,7 +65,8 @@
     "gulp-uncss": "1.0.6"
   },
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "build": "node server/server.js"
   },
   "env" : {
     "NODE_ENV": "dev"
