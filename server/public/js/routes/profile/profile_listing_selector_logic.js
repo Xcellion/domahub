@@ -8,7 +8,7 @@ window.onpopstate = function(event) {
 $(document).ready(function(){
   createRows();
 
-  //<editor-fold>-------------------------------FILTERS / SORT / SEARCH-------------------------------
+  //#region -------------------------------FILTERS / SORT / SEARCH-------------------------------
 
   //sort by header
   $(".listing-header-sort").on("click", function(){
@@ -57,9 +57,9 @@ $(document).ready(function(){
     showRows();
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------BUTTONS-------------------------------
+  //#region -------------------------------BUTTONS-------------------------------
 
   //select dropper
   $("#selector-select-button").on('click', function(e){
@@ -154,13 +154,13 @@ $(document).ready(function(){
     });
   });
 
-  //</editor-fold>
+  //#endregion
 
   showBasedOnURL();
 
 });
 
-//<editor-fold>-------------------------------SELECTOR FUNCTIONS-------------------------------
+//#region -------------------------------SELECTOR FUNCTIONS-------------------------------
 
 //return to domain selector
 function showEditor(url_tab, selected_domain_ids, push){
@@ -285,9 +285,9 @@ function showRows(){
   multiSelectButtons();
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------CREATE ROWS OF DOMAINS-------------------------------
+//#region -------------------------------CREATE ROWS OF DOMAINS-------------------------------
 
 //create all rows
 function createRows(selected_ids){
@@ -494,9 +494,9 @@ function updateDomainRow(tempRow, listing_info, now){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------LISTING HUB-------------------------------
+//#region -------------------------------LISTING HUB-------------------------------
 
 //create a hub row for the add to hub dropdown
 function createHubRow(listing_info){
@@ -628,9 +628,9 @@ function submitHubChanges(){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------SELECT ROW-------------------------------
+//#region -------------------------------SELECT ROW-------------------------------
 
 //select a row
 function selectRow(row, selected, dont_update_buttons){
@@ -772,9 +772,9 @@ function multiSelectButtons(clicked_row){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------SELECTOR BUTTONS (EDIT, VERIFY, OFFERS, STATS)-------------------------------
+//#region -------------------------------SELECTOR BUTTONS (EDIT, VERIFY, OFFERS, STATS)-------------------------------
 
 //view domain details and edit them
 function viewDomainDetails(push, url_tab){
@@ -847,7 +847,7 @@ function viewDomainDNS(push){
   }
 }
 
-  //<editor-fold>-------------------------------DELETE LISTINGS-------------------------------
+  //#region -------------------------------DELETE LISTINGS-------------------------------
 
   //display delete confirmation modal
   function confirmDeleteListings(){
@@ -919,11 +919,11 @@ function viewDomainDNS(push){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
+//#region -------------------------------HELPER FUNCTIONS--------------------------------
 
 //get the multiplier of a currency
 function multiplier(code){
@@ -1090,4 +1090,4 @@ function getDomainByID(domain_id){
   }
 }
 
-//</editor-fold>
+//#endregion

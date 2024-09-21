@@ -1,23 +1,23 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var auth_functions = require('./auth_functions.js');
 
 var error = require('../lib/error.js');
 var mailer = require('../lib/mailer.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var validator = require('validator');
 var path = require('path');
 var request = require('request');
 
-//</editor-fold>>
+//#endregion>
 
 module.exports = {
 
-  //<editor-fold>-------------------------------RENDER-------------------------------
+  //#region -------------------------------RENDER-------------------------------
 
   //display main page
   renderMainPage : function(req, res, next){
@@ -43,9 +43,9 @@ module.exports = {
     res.redirect("/listing/cooldomains.com?compare=true&theme=Random")
   },
 
-  //</editor-fold>>
+  //#endregion>
 
-  //<editor-fold>-------------------------------CONTACT-------------------------------
+  //#region -------------------------------CONTACT-------------------------------
 
   //handle contact us form submission
   contactUs : function(req, res, next){
@@ -100,9 +100,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>>
+  //#endregion>
 
-  //<editor-fold>-------------------------------404-------------------------------
+  //#region -------------------------------404-------------------------------
 
   //404 not found
   notFound : function(req, res){
@@ -111,7 +111,7 @@ module.exports = {
     res.redirect('/nothinghere');
   },
 
-  //</editor-fold>
+  //#endregion
 
 }
 

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  //<editor-fold>-------------------------------LOGIN MODAL-------------------------------
+  //#region -------------------------------LOGIN MODAL-------------------------------
 
   //show login modal if there was an error
   if (typeof message != "undefined" && message){
@@ -25,9 +25,9 @@ $(document).ready(function() {
     }
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------NAVBAR-------------------------------
+  //#region -------------------------------NAVBAR-------------------------------
 
   //hamburger toggle button (not logged in)
   $(".nav-toggle, #profile-button").on("click", function() {

@@ -10,7 +10,7 @@ var database = require('../lib/database.js');
 
 module.exports = {
 
-  //<editor-fold>-------------------------------CHECKS-------------------------------
+  //#region -------------------------------CHECKS-------------------------------
 
   //check if a listing exists
   checkListing : function(domain_name, callback){
@@ -80,9 +80,9 @@ module.exports = {
     database.query(query, "Failed to get listings above 100 basic limit!", callback, stripe_customer_id);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------NEW/EDIT EXISTING LISTING-------------------------------
+  //#region -------------------------------NEW/EDIT EXISTING LISTING-------------------------------
 
   //creates a new listing
   newListing : function(listing_info, callback){
@@ -219,9 +219,9 @@ module.exports = {
     database.query(query, "Failed to deactivate " + listings_to_verify.length + " listings!", callback, [listings_to_verify]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DELETE LISTING-------------------------------
+  //#region -------------------------------DELETE LISTING-------------------------------
 
   //deletes a specific listing
   deleteListing : function(listing_id, callback){
@@ -248,9 +248,9 @@ module.exports = {
     database.query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DOMAIN EXPENSE-------------------------------
+  //#region -------------------------------DOMAIN EXPENSE-------------------------------
 
   //get any existing domain expenses for listings
   getDomainExpenses : function(listing_ids, callback){
@@ -287,9 +287,9 @@ module.exports = {
     database.query(query, "Failed to delete existing domain expenses!", callback, [expense_ids]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DOMAIN RENTAL-------------------------------
+  //#region -------------------------------DOMAIN RENTAL-------------------------------
 
   //check if rental time is okay
   crossCheckRentalTime : function(domain_name, path, starttime, endtime, callback){
@@ -439,9 +439,9 @@ module.exports = {
     database.query(query, "Failed to mark " + sale_ids.length + " sales as having been withdrawn!", callback, [withdrawn_on, sale_ids]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DISPLAY A LISTING-------------------------------
+  //#region -------------------------------DISPLAY A LISTING-------------------------------
 
   //gets all info for an active listing including owner name and email
   getVerifiedListing : function(domain_name, callback){
@@ -591,9 +591,9 @@ module.exports = {
     database.query(query, "Failed to get other listings by the same owner!", callback, [hub_id, owner_id]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------LISTING HUB-------------------------------
+  //#region -------------------------------LISTING HUB-------------------------------
 
   //insert new listings into listing hubs
   addListingHubGrouping : function(formatted_hub_additions, callback){
@@ -613,9 +613,9 @@ module.exports = {
     database.query(query, "Failed to delete all listings for multiple hubs!", callback, [listing_hub_ids]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>----------------SEARCH FOR A SPECIFIC LISTING PAGE (DEPRECATED)-------------------------------
+  //#region ----------------SEARCH FOR A SPECIFIC LISTING PAGE (DEPRECATED)-------------------------------
 
   //gets all active listings with X category, X domain name, X price -- and all active rentals/rental_times for them
   getListingByFilter : function(filter_name, filter_price, filter_date, callback){
@@ -718,6 +718,6 @@ module.exports = {
     database.query(query, "Failed to get a random listing with category: " + category + "!", callback, category);
   },
 
-  //</editor-fold>
+  //#endregion
 
 }

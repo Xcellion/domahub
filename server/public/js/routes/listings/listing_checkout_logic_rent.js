@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-  //<editor-fold>------------------------------------------PAGE SETUP----------------------------------------
+  //#region ------------------------------------------PAGE SETUP----------------------------------------
 
   //punycode the domain name
   $(".punycode-domain").each(function(){
@@ -16,9 +16,9 @@ $(document).ready(function () {
     trackCheckoutBehavior($(this).attr("id"));
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>------------------------------------------LISTING DETAILS CARD----------------------------------------
+  //#region ------------------------------------------LISTING DETAILS CARD----------------------------------------
 
   var starttime = moment(new_rental_info.starttime);
   var endtime = moment(new_rental_info.endtime);
@@ -91,9 +91,9 @@ $(document).ready(function () {
     }
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>------------------------------------------CHOICE BLOCKS (RENTAL / PAYMENT TYPE)----------------------------------------
+  //#region ------------------------------------------CHOICE BLOCKS (RENTAL / PAYMENT TYPE)----------------------------------------
 
   //click choice block (what type of rental / payment you want)
   $(".choice-block").on("click", function() {
@@ -195,9 +195,9 @@ $(document).ready(function () {
     });
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>------------------------------------------PAYMENT----------------------------------------
+  //#region ------------------------------------------PAYMENT----------------------------------------
 
   //submit checkout handler
   $('#checkout-button').on("click", function(e){
@@ -207,14 +207,14 @@ $(document).ready(function () {
   //if there is a price
   if (new_rental_info.price != 0){
 
-    //<editor-fold>------------------------------------------PAYPAL----------------------------------------
+    //#region ------------------------------------------PAYPAL----------------------------------------
 
     //create a paypal button
     createPayPalButton();
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>------------------------------------------STRIPE----------------------------------------
+    //#region ------------------------------------------STRIPE----------------------------------------
 
     //key for stripe
     if (node_env == "dev"){
@@ -266,15 +266,15 @@ $(document).ready(function () {
       }
     });
 
-    //</editor-fold>
+    //#endregion
 
   }
 
-  //</editor-fold>
+  //#endregion
 
 });
 
-//<editor-fold>------------------------------------------CHECKS----------------------------------------
+//#region ------------------------------------------CHECKS----------------------------------------
 
 //check the address of the site
 function checkAddress(address){
@@ -302,9 +302,9 @@ function checkCC(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------PAYPAL----------------------------------------
+//#region ------------------------------------------PAYPAL----------------------------------------
 
 //create a paypal checkout button
 function createPayPalButton(){
@@ -364,9 +364,9 @@ function createPayPalButton(){
   }, '#paypal-button');
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------STRIPE----------------------------------------
+//#region ------------------------------------------STRIPE----------------------------------------
 
 //client side check and then submit for a new stripe token
 function submitCheckout(){
@@ -388,9 +388,9 @@ function submitCheckout(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------SUBMIT PAYMENT----------------------------------------
+//#region ------------------------------------------SUBMIT PAYMENT----------------------------------------
 
 //submit for a new rental
 function submitNewRental(type, token){
@@ -533,9 +533,9 @@ function successHandler(rental_id, owner_hash_id){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------HELPERS----------------------------------------
+//#region ------------------------------------------HELPERS----------------------------------------
 
 //to format a number for currency
 function formatCurrency(number, currency_code){
@@ -666,4 +666,4 @@ function anyFreeDayOverlap(starttime, endtime){
   }
 }
 
-//</editor-fold>
+//#endregion

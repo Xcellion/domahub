@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
@@ -7,9 +7,9 @@ var error = require('../lib/error.js');
 var mailer = require('../lib/mailer.js');
 var Currencies = require('../lib/currencies.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
@@ -21,11 +21,11 @@ var ejs = require('ejs');
 var path = require("path");
 var moment = require('moment');
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------------OFFER FOR PURCHASE-------------------------------
+  //#region -------------------------------------OFFER FOR PURCHASE-------------------------------
 
   //check buy-now contact details
   checkContactInfo : function(req, res, next){
@@ -316,9 +316,9 @@ module.exports = {
     });
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------BUYING A LISTING CHECKOUT-------------------------------------
+  //#region -------------------------------------BUYING A LISTING CHECKOUT-------------------------------------
 
   redirectToCheckout : function(req, res, next){
     req.session.new_buying_info = {
@@ -403,9 +403,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------BUY A LISTING-------------------------------------
+  //#region -------------------------------------BUY A LISTING-------------------------------------
 
   //create a record for this purchase
   createBuyContactRecord : function(req, res, next){
@@ -602,9 +602,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------VERIFICATION OF TRANSFER-------------------------------------
+  //#region -------------------------------------VERIFICATION OF TRANSFER-------------------------------------
 
   //check the posted verification code
   checkContactVerified : function(req, res, next){
@@ -678,11 +678,11 @@ module.exports = {
     });
   },
 
-  //</editor-fold>
+  //#endregion
 
 }
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//#region -------------------------------HELPERS-------------------------------
 
 //helper function to get a user's ip
 function getIP(req){
@@ -788,4 +788,4 @@ function calculateLuminance(rgb) {
   }
 }
 
-//</editor-fold>
+//#endregion

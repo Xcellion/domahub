@@ -10,7 +10,7 @@ var database = require('../lib/database.js');
 
 module.exports = {
 
-  //<editor-fold>-------------------------------CHECKS-------------------------------
+  //#region -------------------------------CHECKS-------------------------------
 
   //check if a specific offer is verified and not yet accepted/rejected
   checkContactVerified : function(domain_name, offer_id, callback){
@@ -52,9 +52,9 @@ module.exports = {
     database.query(query, "Failed to get check if offer for domain " + domain_name + " was accepted!", callback, [domain_name, offer_id]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------ANALYZE DATA-------------------------------
+  //#region -------------------------------ANALYZE DATA-------------------------------
 
   //gets total number of users
   getVerifiedUserCount : function(callback){
@@ -397,9 +397,9 @@ module.exports = {
     database.query(query, "Failed to get checkout actions for " + domain_name + "!", callback, domain_name);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------GETS-------------------------------
+  //#region -------------------------------GETS-------------------------------
 
   //gets specific offer details for a specific domain by offer ID
   getListingOffererContactInfoByID : function(domain_name, offer_id, callback){
@@ -511,9 +511,9 @@ module.exports = {
     database.query(query, "Failed to get statistics for " + domain_name + "!", callback, domain_name);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------SETS-------------------------------
+  //#region -------------------------------SETS-------------------------------
 
   //creates a new entry for a listing data row
   newListingHistory : function(history_info, callback){
@@ -563,9 +563,9 @@ module.exports = {
     database.query(query, "Failed to add checkout check action item for domain:" + history_info.domain_name + "!", callback, history_info);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------UPDATES-------------------------------
+  //#region -------------------------------UPDATES-------------------------------
 
   //verifies the email on the offer contact history db
   verifyContactHistory : function(verification_code, domain_name, callback){
@@ -613,6 +613,6 @@ module.exports = {
     database.query(query, "Failed to mark " + stats_contact_history_ids.length + " offers as having been withdrawn!", callback, [withdrawn_on, stats_contact_history_ids]);
   },
 
-  //</editor-fold>
+  //#endregion
 
 }

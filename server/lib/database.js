@@ -1,12 +1,12 @@
 console.log("Connecting to database...");
 
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var error = require('./error.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var mysql = require('mysql');
 var mysql_options = {
@@ -22,11 +22,11 @@ var mysql_options = {
   connectionLimit: 100
 }
 
-//</editor-fold>
+//#endregion
 
 //scp -r wonmin@208.68.37.82:/home/wonmin/.pm2/logs/DomaHub-Server--Prod--out-0.log lol.txt
 
-//<editor-fold>-------------------------------PROD INSTRUCTIONS ON MYSQL SETUP-------------------------------
+//#region -------------------------------PROD INSTRUCTIONS ON MYSQL SETUP-------------------------------
 
 ////////////////////////////////////////////////////////OPEN UFW PORT
 //will revert on iptables on reboot (remain on ufw)
@@ -56,13 +56,13 @@ var mysql_options = {
 //enter password from keepbase database (MYSQL root)
 //scp -r wonmin@208.68.37.82:/home/wonmin/domahub.sql other/Technical/MySQL\ Backups/domahub.sql
 
-//</editor-fold>
+//#endregion
 
 var pool = mysql.createPool(mysql_options);
 
 module.exports = {
 
-  //<editor-fold>-------------------------------FUNCTIONS-------------------------------
+  //#region -------------------------------FUNCTIONS-------------------------------
 
   //grab a connection from the pool, then run SQL query
   query: function(custom_query, error_description, callback, post){
@@ -97,6 +97,6 @@ module.exports = {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
 };

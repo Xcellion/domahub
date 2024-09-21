@@ -9,7 +9,7 @@ $(document).ready(function() {
     $("#dh-footer").removeClass('is-hidden');
   }
 
-  //<editor-fold>-------------------------------MODAL--------------------------------
+  //#region -------------------------------MODAL--------------------------------
 
   $(document).on("keyup", function(e) {
     if (e.which == 27) {
@@ -22,10 +22,10 @@ $(document).ready(function() {
     closeModals();
   });
 
-  //</editor-fold>
+  //#endregion
 });
 
-//<editor-fold>-------------------------------SET UP THEMING-------------------------------
+//#region -------------------------------SET UP THEMING-------------------------------
 
 function setupTheming(){
 
@@ -113,15 +113,15 @@ function setupCustomColorsListing(){
   stylize(listing_info.primary_color, ".page-contents .icon-box:not(.legal-icon-box)", "background-color", true);
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------SET UP FOOTER-------------------------------
+//#region -------------------------------SET UP FOOTER-------------------------------
 
 function setupFooter(){
 
   console.log("Setting up custom footer...");
 
-  //<editor-fold>-------------------------------FOOTER LOGO-------------------------------
+  //#region -------------------------------FOOTER LOGO-------------------------------
 
   if (listing_info.premium && listing_info.logo){
     $(".page-contents #listing-footer-logo").attr("src", listing_info.logo);
@@ -138,9 +138,9 @@ function setupFooter(){
     $(".page-contents .logo-item").closest("a").attr('title', "DomaHub Domains");
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------FOOTER TEXT-------------------------------
+  //#region -------------------------------FOOTER TEXT-------------------------------
 
   //footer text
   if (listing_info.premium && listing_info.description_footer){
@@ -164,15 +164,15 @@ function setupFooter(){
     $(".page-contents #listing-footer, #listing-footer-logo-link").attr("href", "https://domahub.com").addClass("is-underlined");;
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
+  //#region -------------------------------LEGAL MESSAGE-------------------------------
 
   if (typeof listing_hub_info == "undefined"){
     setupLegalMessage(listing_info);
   }
 
-  //</editor-fold>
+  //#endregion
 
 }
 
@@ -303,9 +303,9 @@ function setupLegalMessage(listing_legal_info){
     }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------MODAL HELPERS-------------------------
+//#region -------------------------------MODAL HELPERS-------------------------
 
 //close modals
 function closeModals(){
@@ -325,9 +325,9 @@ function closeModals(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------SET UP HEADER-------------------------------
+//#region -------------------------------SET UP HEADER-------------------------------
 
 function setupListingHeader(){
   if (listing_info.premium && listing_info.description_header){
@@ -350,9 +350,9 @@ function setupListingHeader(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//#region -------------------------------HELPERS-------------------------------
 
 //return white or black text based on luminance
 function calculateLuminance(rgb) {
@@ -416,4 +416,4 @@ function stylize(color, element, style, calculateluminance) {
   }
 }
 
-//</editor-fold>
+//#endregion

@@ -5,7 +5,7 @@ $(window).resize(function(){
 
 $(document).ready(function() {
 
-  //<editor-fold>-------------------------------SET UP TRANSACTIONS-------------------------------
+  //#region -------------------------------SET UP TRANSACTIONS-------------------------------
 
   //get transactions if we dont have it already
   if (!user.transactions || !user.transactions_remote){
@@ -73,13 +73,13 @@ $(document).ready(function() {
     showTransactionRows();
   });
 
-  //</editor-fold>
+  //#endregion
 
 });
 
-//<editor-fold>-------------------------------TRANSACTIONS TAB-------------------------------
+//#region -------------------------------TRANSACTIONS TAB-------------------------------
 
-  //<editor-fold>-------------------------------CREATE ROWS-------------------------------
+  //#region -------------------------------CREATE ROWS-------------------------------
 
   //get transactions
   function getTransactions(){
@@ -378,9 +378,9 @@ $(document).ready(function() {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------EDIT ROWS-------------------------------
+  //#region -------------------------------EDIT ROWS-------------------------------
 
   //sets the toggle free transactions button on or off
   function toggleFreeTransactionsButton(toggled){
@@ -465,9 +465,9 @@ $(document).ready(function() {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------TRANSACTION MODAL-------------------------------
+  //#region -------------------------------TRANSACTION MODAL-------------------------------
 
   //set up the transactions modal
   function setupTransactionsModal(temp_row, transaction){
@@ -724,9 +724,9 @@ $(document).ready(function() {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------WITHDRAWAL-------------------------------
+  //#region -------------------------------WITHDRAWAL-------------------------------
 
   //for withdrawal selection
   function setupWithdrawModal(){
@@ -810,11 +810,11 @@ $(document).ready(function() {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//#region -------------------------------HELPERS-------------------------------
 
 //get the multiplier of a currency
 function multiplier(code){
@@ -883,4 +883,4 @@ function updateMarqueeHandler(elem){
   });
 }
 
-//</editor-fold>
+//#endregion

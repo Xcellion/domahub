@@ -1,14 +1,14 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var crypto = require("crypto");
 var encryption_algorithm = "aes-256-ctr";
 var encryption_password = "domahubruleswoohoo_registrar";
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------ENCRYPTION FUNCTIONS-------------------------------
+  //#region -------------------------------ENCRYPTION FUNCTIONS-------------------------------
 
   encryptText : function(text){
     var cipher = crypto.createCipher(encryption_algorithm, encryption_password)
@@ -24,6 +24,6 @@ module.exports = {
     return dec;
   }
 
-  //</editor-fold>
+  //#endregion
 
 }

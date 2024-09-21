@@ -1,4 +1,4 @@
-//<editor-fold>------------------------------------------ENVIRONMENT SETTINGS---------------------------------------
+//#region ------------------------------------------ENVIRONMENT SETTINGS---------------------------------------
 
 //http server
 var express = require('express');
@@ -27,9 +27,9 @@ app.use(function(req, res, next) {
   next();
 });
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------SESSION---------------------------------------
+//#region ------------------------------------------SESSION---------------------------------------
 
 //which session store to use depending on DEV or PROD
 var session = require('express-session');
@@ -47,9 +47,9 @@ app.use(session({
   rolling: true
 }));
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------DATABASE / AUTH---------------------------------------
+//#region ------------------------------------------DATABASE / AUTH---------------------------------------
 
 //connect to the database
 var db = require('./lib/database.js');
@@ -57,9 +57,9 @@ var db = require('./lib/database.js');
 //authentication
 require('./lib/passport.js').init(app);
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------ROUTES---------------------------------------
+//#region ------------------------------------------ROUTES---------------------------------------
 
 // //route to determine host
 // require('./controller/api_functions.js')(app);
@@ -67,7 +67,7 @@ require('./lib/passport.js').init(app);
 //main routes
 require('./routes/router.js')(app);
 
-//</editor-fold>
+//#endregion
 
 //HTTP website on port 8080
 serverHTTP(app).listen(process.env.PORT || 8080, function(){

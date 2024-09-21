@@ -10,7 +10,7 @@ var database = require('../lib/database.js');
 
 module.exports = {
 
-  //<editor-fold>-------------------------------CHECK-------------------------------
+  //#region -------------------------------CHECK-------------------------------
 
   //check if an account email exists
   checkAccountEmail : function(email, callback){
@@ -47,9 +47,9 @@ module.exports = {
     database.query(query, "Promo code does not exist!", callback, code);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------GETS-------------------------------
+  //#region -------------------------------GETS-------------------------------
 
   //get unverified account emails
   getUnverifiedAccount : function(callback){
@@ -286,9 +286,9 @@ module.exports = {
     database.query(query, "Failed to get unredeemed coupon codes!", callback, [account_id, account_id]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------CREATES-------------------------------
+  //#region -------------------------------CREATES-------------------------------
 
   //creates a new account
   newAccount : function(account_info, callback){
@@ -328,9 +328,9 @@ module.exports = {
     database.query(query, "Failed to create or update registrar information!", callback, [registrar_array]);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------UPDATES-------------------------------
+  //#region -------------------------------UPDATES-------------------------------
 
   //updates a new account
   updateAccount : function(account_info, email, callback){
@@ -392,9 +392,9 @@ module.exports = {
     database.query(query, "Failed to cancel Stripe subscription!", callback, stripe_customer_id);
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DELETES-------------------------------
+  //#region -------------------------------DELETES-------------------------------
 
   //deletes a specific coupon code
   deletePromoCode : function(code, callback){
@@ -405,6 +405,6 @@ module.exports = {
     database.query(query, "Failed to delete coupon code!", callback, [code]);
   },
 
-  //</editor-fold>
+  //#endregion
 
 };

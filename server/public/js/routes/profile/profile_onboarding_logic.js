@@ -8,7 +8,7 @@ var domain_created_by = "";
 
 $(document).ready(function() {
 
-  //<editor-fold>-------------------------------GENERIC STEP LOGIC-------------------------------
+  //#region -------------------------------GENERIC STEP LOGIC-------------------------------
 
   //click next button to submit form for current step
   $(".onboarding-step-form").on("submit", function(e){
@@ -61,9 +61,9 @@ $(document).ready(function() {
     closeModals();
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------PAGE SETUP-------------------------------
+  //#region -------------------------------PAGE SETUP-------------------------------
 
   //pre-fill any existing user stripe information
   if (user.stripe_account){
@@ -106,11 +106,11 @@ $(document).ready(function() {
   $('#cc-cvc').payment('formatCardCVC');
   $('#cc-zip').payment('restrictNumeric');
 
-  //</editor-fold>
+  //#endregion
 
 });
 
-//<editor-fold>-------------------------------GENERIC STEP LOGIC-------------------------------
+//#region -------------------------------GENERIC STEP LOGIC-------------------------------
 
 //shows a specific step or gets the current step from URL (or show first step)
 //push = whether or not to add to history
@@ -345,11 +345,11 @@ function toggleLoadingScreen(current_form, show, message) {
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------STEP SPECIFIC LOGIC-------------------------------
+//#region -------------------------------STEP SPECIFIC LOGIC-------------------------------
 
-  //<editor-fold>-------------------------------STEP 1 (WELCOME MESSAGE)-------------------------------
+  //#region -------------------------------STEP 1 (WELCOME MESSAGE)-------------------------------
 
   function stepOneLogic(backwards, cb){
     //console.log("step 1 specific logic");
@@ -368,9 +368,9 @@ function toggleLoadingScreen(current_form, show, message) {
     showSpecificStep(true, "2");
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 2 (PERSONAL DETAILS)-------------------------------
+  //#region -------------------------------STEP 2 (PERSONAL DETAILS)-------------------------------
 
   function stepTwoLogic(backwards, cb){
     //set substep number
@@ -390,9 +390,9 @@ function toggleLoadingScreen(current_form, show, message) {
     showSpecificStep(true, "3");
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 3 (ADDRESS DETAILS)-------------------------------
+  //#region -------------------------------STEP 3 (ADDRESS DETAILS)-------------------------------
 
   function stepThreeLogic(backwards, cb){
     //set substep number
@@ -431,9 +431,9 @@ function toggleLoadingScreen(current_form, show, message) {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 4 (PAYOUT METHODS)-------------------------------
+  //#region -------------------------------STEP 4 (PAYOUT METHODS)-------------------------------
 
   function stepFourLogic(backwards, cb){
     //check previous step and change substep for current
@@ -463,9 +463,9 @@ function toggleLoadingScreen(current_form, show, message) {
     // console.log("step 4 specific form submission");
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 5 (BANK ACCOUNT)-------------------------------
+  //#region -------------------------------STEP 5 (BANK ACCOUNT)-------------------------------
 
   function stepFiveLogic(backwards, cb){
     //check previous step and change substep for current
@@ -634,9 +634,9 @@ function toggleLoadingScreen(current_form, show, message) {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 6 (PAYPAL)-------------------------------
+  //#region -------------------------------STEP 6 (PAYPAL)-------------------------------
 
   function stepSixLogic(backwards, cb){
     //check previous step and change substep for current
@@ -675,9 +675,9 @@ function toggleLoadingScreen(current_form, show, message) {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 7 (ACCOUNT SETUP FINISHED)-------------------------------
+  //#region -------------------------------STEP 7 (ACCOUNT SETUP FINISHED)-------------------------------
 
   function stepSevenLogic(backwards, cb){
     //check previous step and change substep for current
@@ -708,9 +708,9 @@ function toggleLoadingScreen(current_form, show, message) {
     // console.log("step 7 specific form submission");
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 8 (CONNECT REGISTRAR)-------------------------------
+  //#region -------------------------------STEP 8 (CONNECT REGISTRAR)-------------------------------
 
   function stepEightLogic(backwards, cb){
     //check previous step and change substep for current
@@ -778,9 +778,9 @@ function toggleLoadingScreen(current_form, show, message) {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 9 (MANUAL DOMAIN ENTRY)-------------------------------
+  //#region -------------------------------STEP 9 (MANUAL DOMAIN ENTRY)-------------------------------
 
   function stepNineLogic(backwards, cb){
     //check previous step and change substep for current
@@ -834,9 +834,9 @@ function toggleLoadingScreen(current_form, show, message) {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 10 (DOMAIN TABLE)-------------------------------
+  //#region -------------------------------STEP 10 (DOMAIN TABLE)-------------------------------
 
   function stepTenLogic(backwards, cb){
     //check previous step and change substep for current
@@ -862,7 +862,7 @@ function toggleLoadingScreen(current_form, show, message) {
     submitDomains(form_elem);
   }
 
-    //<editor-fold>-------------------------------TABLE SET UP-------------------------------
+    //#region -------------------------------TABLE SET UP-------------------------------
 
     //create domains table
     function createDomainsTable(bad_listings, good_listings){
@@ -970,9 +970,9 @@ function toggleLoadingScreen(current_form, show, message) {
       }
     }
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------TABLE SUBMIT-------------------------------
+    //#region -------------------------------TABLE SUBMIT-------------------------------
 
     //get the table row values for ajax submission
     function getTableListingInfo(){
@@ -1036,9 +1036,9 @@ function toggleLoadingScreen(current_form, show, message) {
       }
     }
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------TABLE BUTTONS-------------------------------
+    //#region -------------------------------TABLE BUTTONS-------------------------------
 
     //delete empty table rows
     function deleteEmptyTableRows(){
@@ -1065,9 +1065,9 @@ function toggleLoadingScreen(current_form, show, message) {
       }
     }
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------TABLE UPDATE-------------------------------
+    //#region -------------------------------TABLE UPDATE-------------------------------
 
     //refresh rows on ajax return
     function updateRows(bad_listings, good_listings){
@@ -1099,11 +1099,11 @@ function toggleLoadingScreen(current_form, show, message) {
       }
     }
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP 11 (CHECKOUT)-------------------------------
+  //#region -------------------------------STEP 11 (CHECKOUT)-------------------------------
 
   function stepElevenLogic(backwards, cb){
     //check previous step
@@ -1157,9 +1157,9 @@ function toggleLoadingScreen(current_form, show, message) {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------STEP FINAL-------------------------------
+  //#region -------------------------------STEP FINAL-------------------------------
 
   //logic for after all steps are finished
   function finishedAllStepsLogic(cb){
@@ -1190,11 +1190,11 @@ function toggleLoadingScreen(current_form, show, message) {
     cb();
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//#region -------------------------------HELPERS-------------------------------
 
 //modal close function
 function closeModals(){
@@ -1242,4 +1242,4 @@ function updateQueryStringParam(key, value, push) {
   }
 };
 
-//</editor-fold>
+//#endregion

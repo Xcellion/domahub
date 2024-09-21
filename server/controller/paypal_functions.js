@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
@@ -7,9 +7,9 @@ var error = require('../lib/error.js');
 var mailer = require('../lib/mailer.js');
 var Currencies = require('../lib/currencies.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var paypal = require('paypal-rest-sdk');
 paypal.configure({
@@ -27,11 +27,11 @@ var moneyFormat = wNumb({
   decimals: 2
 });
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------PAYMENTS (FOR RENTAL + BIN)-------------------------------
+  //#region -------------------------------PAYMENTS (FOR RENTAL + BIN)-------------------------------
 
   //promise to get transaction details
   get_paypal_transaction_details : get_paypal_transaction_details,
@@ -327,9 +327,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------WITHDRAW TO BANK-------------------------------
+  //#region -------------------------------WITHDRAW TO BANK-------------------------------
 
   //withdraw money to a paypal account
   withdrawToPayPal : function(req, res, next){
@@ -350,11 +350,11 @@ module.exports = {
     next();
   },
 
-  //</editor-fold>
+  //#endregion
 
 }
 
-//<editor-fold>-------------------------------TRANSACTION HELPERS (PROMISES)-------------------------------
+//#region -------------------------------TRANSACTION HELPERS (PROMISES)-------------------------------
 
 //get paypal transaction details
 function get_paypal_transaction_details(transaction_id, index){
@@ -379,9 +379,9 @@ function get_paypal_transaction_details(transaction_id, index){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPERS -------------------------------
+//#region -------------------------------HELPERS -------------------------------
 
 //get the doma fees
 function getDomaFees(amount){
@@ -401,4 +401,4 @@ function getPaypalFees(amount, currency){
   }
 }
 
-//</editor-fold>
+//#endregion

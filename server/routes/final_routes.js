@@ -1,13 +1,13 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var renter_functions = require("../controller/listing_renter_functions.js");
 var main_functions = require("../controller/main_functions.js");
 
-//</editor-fold>
+//#endregion
 
 module.exports = function(app){
 
-  //<editor-fold>-------------------------------FINAL ROUTES (ico, rental forward, 404)-------------------------------
+  //#region -------------------------------FINAL ROUTES (ico, rental forward, 404)-------------------------------
 
   //drop favicon requests
   app.get('*.ico', function(){});
@@ -22,6 +22,6 @@ module.exports = function(app){
     main_functions.notFound
   ]);
 
-  //</editor-fold>
+  //#endregion
 
 }

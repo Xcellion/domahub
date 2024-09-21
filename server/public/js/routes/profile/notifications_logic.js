@@ -1,4 +1,4 @@
-//<editor-fold>----------------------------------NOTIFICATION FUNCTIONS--------------------------------
+//#region ----------------------------------NOTIFICATION FUNCTIONS--------------------------------
 
 var times_errored = 0;
 
@@ -101,9 +101,9 @@ function loadNotification() {
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>----------------------------------CONTACT US--------------------------------
+//#region ----------------------------------CONTACT US--------------------------------
 
 //any link that says to contact us
 function contactLinkHandler(){
@@ -117,7 +117,7 @@ function contactLinkHandler(){
   });
 }
 
-//</editor-fold>
+//#endregion
 
 $(document).ready(function(){
 

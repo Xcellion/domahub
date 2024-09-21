@@ -1,10 +1,10 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var error = require('../lib/error.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json({limit: '500mb'});
@@ -14,7 +14,7 @@ var urlencodedParser = bodyParser.urlencoded({
   parameterLimit:500000
 });
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 

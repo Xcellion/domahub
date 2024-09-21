@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var general_functions = require('../controller/general_functions.js');
 var auth_functions = require('../controller/auth_functions.js');
@@ -10,13 +10,13 @@ var profile_functions = require("../controller/profile_functions.js");
 var stripe_functions = require("../controller/stripe_functions.js");
 var paypal_functions = require("../controller/paypal_functions.js");
 
-//</editor-fold>>
+//#endregion>
 
 module.exports = function(app){
 
-  //<editor-fold>-------------------------------OWNER RELATED-------------------------------
+  //#region -------------------------------OWNER RELATED-------------------------------
 
-    //<editor-fold>-------------------------------LISTING CREATE-------------------------------
+    //#region -------------------------------LISTING CREATE-------------------------------
 
     //render listing create
     app.get('/listings/create', [
@@ -54,9 +54,9 @@ module.exports = function(app){
       res.redirect("/listings/create");
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------LISTING UPDATE-------------------------------
+    //#region -------------------------------LISTING UPDATE-------------------------------
 
     //update listing information (single)
     app.post('/listing/:domain_name/update', [
@@ -125,7 +125,7 @@ module.exports = function(app){
       owner_functions.updateListingsInfo
     ]);
 
-    //<editor-fold>-------------------------------DOMAIN EXPENSES-------------------------------
+    //#region -------------------------------DOMAIN EXPENSES-------------------------------
 
     //get any existing expenses
     app.post("/listings/getexpenses", [
@@ -171,15 +171,15 @@ module.exports = function(app){
       owner_functions.getDomainExpenses
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------BUYING RELATED-------------------------------
+  //#region -------------------------------BUYING RELATED-------------------------------
 
-    //<editor-fold>-------------------------------CREATE / VERIFY OFFER-------------------------------
+    //#region -------------------------------CREATE / VERIFY OFFER-------------------------------
 
     //create a new offer history item
     app.post("/listing/:domain_name/contact/offer", [
@@ -205,9 +205,9 @@ module.exports = function(app){
       buyer_functions.verifyContactHistory
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------ACCEPT / TRANSFER-------------------------------
+    //#region -------------------------------ACCEPT / TRANSFER-------------------------------
 
     //accept or reject an offer
     app.post(["/listing/:domain_name/contact/:offer_id/accept",
@@ -267,9 +267,9 @@ module.exports = function(app){
       buyer_functions.verifyTransferOwnership
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------BUY-------------------------------
+    //#region -------------------------------BUY-------------------------------
 
     //new buy it now (render the BIN checkout page)
     app.post("/listing/:domain_name/contact/buy", [
@@ -321,13 +321,13 @@ module.exports = function(app){
       owner_functions.updateListingsInfo
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------RENTAL RELATED-------------------------------
+  //#region -------------------------------RENTAL RELATED-------------------------------
 
-    //<editor-fold>-------------------------------LISTING PAGE-------------------------------
+    //#region -------------------------------LISTING PAGE-------------------------------
 
     //redirect to domahub for /listing/domahub or w3bbi
     app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
@@ -380,9 +380,9 @@ module.exports = function(app){
       renter_functions.getListingTimes
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------RENTAL CHECKOUT-------------------------------
+    //#region -------------------------------RENTAL CHECKOUT-------------------------------
 
     //render rental checkout page
     app.get('/listing/:domain_name/checkout/rent', [
@@ -421,9 +421,9 @@ module.exports = function(app){
       paypal_functions.createPaymentIDRent
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------CREATE RENTAL-------------------------------
+    //#region -------------------------------CREATE RENTAL-------------------------------
 
     //create a new rental
     app.post('/listing/:domain_name/rent', [
@@ -462,9 +462,9 @@ module.exports = function(app){
       renter_functions.redirectToPreview
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------EDIT RENTAL-------------------------------
+    //#region -------------------------------EDIT RENTAL-------------------------------
 
     //render rental page
     app.get('/rentalpreview', [
@@ -517,8 +517,8 @@ module.exports = function(app){
       renter_functions.updateRentalObject
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
 }

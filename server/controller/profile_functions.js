@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
@@ -16,9 +16,9 @@ var Currencies = require("../lib/currencies.js");
 var error = require('../lib/error.js');
 var encryptor = require('../lib/encryptor.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var Q = require('q');
 var qlimit = require("qlimit");
@@ -53,11 +53,11 @@ var parseString = require('xml2js').parseString;
 //   null
 // );
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------------ONBOARDING-------------------------------
+  //#region -------------------------------------ONBOARDING-------------------------------
 
   checkOnboardingStep : function(req, res, next){
     if (!req.user.onboarding_step || [0,1,2,3,4,5,6,7,8,9,10,11].indexOf(parseFloat(req.user.onboarding_step)) == -1){
@@ -100,9 +100,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------GOOGLE ANALYTICS-------------------------------
+  //#region -------------------------------------GOOGLE ANALYTICS-------------------------------
 
   // // //google embed analytics authentication
   // authWithGoogle : function(req, res, next){
@@ -136,9 +136,9 @@ module.exports = {
   //   });
   // },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------GET ACCOUNT INFO-------------------------------
+  //#region -------------------------------------GET ACCOUNT INFO-------------------------------
 
   //gets all listings for a user
   getAccountListings : function(req, res, next){
@@ -327,9 +327,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------MULTI-------------------------------
+  //#region -------------------------------------MULTI-------------------------------
 
   //check that the requesting user owns the domains posted
   checkPostedRowOwnership : function(req, res, next){
@@ -362,7 +362,7 @@ module.exports = {
     }
   },
 
-    //<editor-fold>-------------------------------------HUB-------------------------------
+    //#region -------------------------------------HUB-------------------------------
 
     //check that the domains being added are legit (not the same hub, not unlisted, not unverified)
     checkPostedRowForHubValidity : function(req, res, next){
@@ -588,9 +588,9 @@ module.exports = {
       });
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------------DELETE-------------------------------
+    //#region -------------------------------------DELETE-------------------------------
 
     //format the posted ids to be deleted
     formatPostedDeletionRows : function(req, res, next){
@@ -626,9 +626,9 @@ module.exports = {
       });
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------------VERIFY-------------------------------
+    //#region -------------------------------------VERIFY-------------------------------
 
     //format the posted domain IDs to be verified
     formatAndCheckIPVerify : function(req, res, next){
@@ -1051,7 +1051,7 @@ module.exports = {
       });
     },
 
-      //<editor-fold>-------------------------------------AUTO VERIFY DNS-------------------------------
+      //#region -------------------------------------AUTO VERIFY DNS-------------------------------
 
       //format the posted domain IDs, and update DNS
       formatAndUpdateDNS : function(req, res, next){
@@ -1203,11 +1203,11 @@ module.exports = {
         });
       },
 
-      //</editor-fold>
+      //#endregion
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------------OFFERS-------------------------------
+    //#region -------------------------------------OFFERS-------------------------------
 
     //gets all offers for multiple listings
     getOffersMulti : function(req, res, next){
@@ -1283,9 +1283,9 @@ module.exports = {
       });
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------------STATS-------------------------------
+    //#region -------------------------------------STATS-------------------------------
 
     //gets all stats for multiple listings
     getStatsMulti : function(req, res, next){
@@ -1341,11 +1341,11 @@ module.exports = {
       });
     },
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------UPDATE ACCOUNT-------------------------------
+  //#region -------------------------------------UPDATE ACCOUNT-------------------------------
 
   //check account settings posted
   checkAccountSettings: function(req, res, next){
@@ -1506,9 +1506,9 @@ module.exports = {
 
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------UPDATE REGISTRAR-------------------------------
+  //#region -------------------------------------UPDATE REGISTRAR-------------------------------
 
   //check if registrar info is properly formatted
   checkRegistrarInfo : function(req, res, next){
@@ -1643,9 +1643,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------RENDERS-------------------------------
+  //#region -------------------------------------RENDERS-------------------------------
 
   renderDashboard : function(req, res, next){
     console.log("PF: Rendering profile dashboard...");
@@ -1695,9 +1695,9 @@ module.exports = {
     }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------PROMO CODE-------------------------------
+  //#region -------------------------------------PROMO CODE-------------------------------
 
   //create promo codes locally (only domahub database)
   createPromoCodes : createPromoCodes,
@@ -1822,9 +1822,9 @@ module.exports = {
     });
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------WITHDRAWAL-------------------------------
+  //#region -------------------------------------WITHDRAWAL-------------------------------
 
   //check if the account being withdrawn to is legit
   checkWithdrawalAccounts : function(req, res, next){
@@ -1973,11 +1973,11 @@ module.exports = {
     next();
   },
 
-  //</editor-fold>
+  //#endregion
 
 }
 
-//<editor-fold>-------------------------------------VERIFICATION HELPERS-------------------------------
+//#region -------------------------------------VERIFICATION HELPERS-------------------------------
 
   //set the user.listings object after changing DNS settings automatically
   function setListingObjAfterDNS(req, res, dns_unchanged_listing_ids, pending_dns_ids, verified_ids){
@@ -2008,7 +2008,7 @@ module.exports = {
     });
   }
 
-  //<editor-fold>-------------------------------------VERIFICATION HELPERS (promises)-------------------------------
+  //#region -------------------------------------VERIFICATION HELPERS (promises)-------------------------------
 
   //promise function to look up the existing DNS records for a domain name
   function get_domain_dns(listing_obj, get_a){
@@ -2071,11 +2071,11 @@ module.exports = {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------------WITHDRAWAL HELPERS (promises)-------------------------------
+//#region -------------------------------------WITHDRAWAL HELPERS (promises)-------------------------------
 
 //custom promise creation, marks a rental as withdrawn
 function mark_rentals_withdrawn(withdrawal_obj){
@@ -2121,11 +2121,11 @@ function mark_sales_withdrawn(withdrawal_obj){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------------REGISTRAR HELPERS-------------------------------
+//#region -------------------------------------REGISTRAR HELPERS-------------------------------
 
-  //<editor-fold>-------------------------------------REGISTRAR CHECK POSTED API INFORMATION-------------------------------
+  //#region -------------------------------------REGISTRAR CHECK POSTED API INFORMATION-------------------------------
 
   //check posted godaddy api info
   function checkGoDaddyRegistrarInfo(req, res, next){
@@ -2292,9 +2292,9 @@ function mark_sales_withdrawn(withdrawal_obj){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------------REGISTRAR GET DOMAINS-------------------------------
+  //#region -------------------------------------REGISTRAR GET DOMAINS-------------------------------
 
   //get godaddy list of domains
   function get_domains_godaddy_promise(registrar_info){
@@ -2472,11 +2472,11 @@ function mark_sales_withdrawn(withdrawal_obj){
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------------HELPERS-------------------------------
+//#region -------------------------------------HELPERS-------------------------------
 
 //helper function to get listing by ID
 function getListingByID(listings, id){
@@ -2492,9 +2492,9 @@ function isEmptyObject(obj) {
   return !Object.keys(obj).length;
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------------UPDATE USER OBJ-------------------------------
+//#region -------------------------------------UPDATE USER OBJ-------------------------------
 
 //helper function to update req.user.listings after deleting
 function updateUserListingsObjectDelete(user_listings, to_delete_formatted){
@@ -2648,9 +2648,9 @@ function updateTransactionsWithRenewals(req){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------------CREATE COUPON CODE-------------------------------
+//#region -------------------------------------CREATE COUPON CODE-------------------------------
 
 //create local coupon codes (only domahub database)
 function createPromoCodes(number, amount_off, referer_id, cb){
@@ -2689,9 +2689,9 @@ function insertPromoCodes(codes, number, amount_off, referrer, cb){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------------HUB HELPERS-------------------------------
+//#region -------------------------------------HUB HELPERS-------------------------------
 
 //delete from hub promise
 function delete_from_hub_promise(formatted_hub_deletions){
@@ -2766,4 +2766,4 @@ function updateListingsHubReq(listings, formatted_hub_additions, formatted_hub_d
   }
 }
 
-//</editor-fold>
+//#endregion

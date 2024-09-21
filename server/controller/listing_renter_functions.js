@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var listing_model = require('../models/listing_model.js');
 var account_model = require('../models/account_model.js');
@@ -10,9 +10,9 @@ var Currencies = require("../lib/currencies.js");
 var Fonts = require("../lib/fonts.js");
 var error = require('../lib/error.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var validator = require("validator");
 var whois = require("whois");
@@ -33,11 +33,11 @@ var fs = require('fs');
 var path = require("path");
 var safe_browse_key = "AIzaSyDjjsGtrO_4QwFDBA1cq9rCweeO4v3YLfs";
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------DELETE-------------------------------
+  //#region -------------------------------DELETE-------------------------------
 
   //delete session rental info if it exists
   deleteRentalInfo : function(req, res, next){
@@ -61,9 +61,9 @@ module.exports = {
     next();
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------CREATE A NEW RENTAL-------------------------------
+  //#region -------------------------------CREATE A NEW RENTAL-------------------------------
 
   //create a rental object for checking (for new)
   createNewRentalObject : function(req, res, next){
@@ -387,11 +387,11 @@ module.exports = {
     });
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------EDIT RENTAL-------------------------------
+  //#region -------------------------------EDIT RENTAL-------------------------------
 
-    //<editor-fold>-------------------------------GETS-------------------------------
+    //#region -------------------------------GETS-------------------------------
 
     //gets the rental/listing info
     getRental : function(req, res, next){
@@ -434,9 +434,9 @@ module.exports = {
       });
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------CHECKS-------------------------------
+    //#region -------------------------------CHECKS-------------------------------
 
     //check domain name for rental
     checkRentalDomain : function(req, res, next){
@@ -564,9 +564,9 @@ module.exports = {
       }
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------EDITS-------------------------------
+    //#region -------------------------------EDITS-------------------------------
 
     //create a rental object for updating DB
     createRentalObject : function(req, res, next){
@@ -652,9 +652,9 @@ module.exports = {
       });
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------PREVIEW-------------------------------
+    //#region -------------------------------PREVIEW-------------------------------
 
     //check to make sure we should display edit overlay
     checkForPreview : function(req, res, next){
@@ -762,11 +762,11 @@ module.exports = {
 
     },
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DISPLAY LISTING-------------------------------
+  //#region -------------------------------DISPLAY LISTING-------------------------------
 
   //checks to make sure listing is still verified
   checkStillVerified : function(req, res, next){
@@ -1285,7 +1285,7 @@ module.exports = {
     });
   },
 
-  //</editor-fold>
+  //#endregion
 
   //<editor-fold--------------------------------RENTAL FORWARDING-------------------------------
 
@@ -1306,11 +1306,11 @@ module.exports = {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
 }
 
-//<editor-fold>-------------------------------RENTAL TIME HELPERS-------------------------------
+//#region -------------------------------RENTAL TIME HELPERS-------------------------------
 
 //helper function to create new rental times
 function newRentalTimes(req, res, rental_id, times, callback){
@@ -1347,9 +1347,9 @@ function joinRentalTimes(rental_times){
   return temp_times;
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPER FUNCTIONS-------------------------------
+//#region -------------------------------HELPER FUNCTIONS-------------------------------
 
 //get a verified listing's details
 function getVerifiedListing(req, res, domain_name, callback_error, callback_success){
@@ -1594,4 +1594,4 @@ function getUserListingObj(listings, domain_name){
   }
 }
 
-//</editor-fold>
+//#endregion

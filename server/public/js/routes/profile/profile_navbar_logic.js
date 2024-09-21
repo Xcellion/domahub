@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  //<editor-fold>-------------------------------PROFILE NAVBAR--------------------------------
+  //#region -------------------------------PROFILE NAVBAR--------------------------------
 
   showNotifications();
 
@@ -17,9 +17,9 @@ $(document).ready(function() {
     $("#" + $(this).data("menu")).removeClass("is-hidden").find("textarea").focus();
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------MODAL--------------------------------
+  //#region -------------------------------MODAL--------------------------------
 
   $(document).on("keyup", function(e) {
     if (e.which == 27) {
@@ -32,9 +32,9 @@ $(document).ready(function() {
     closeModals();
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------LEFT MENU VISUAL--------------------------------
+  //#region -------------------------------LEFT MENU VISUAL--------------------------------
 
   leftMenuActive();
 
@@ -47,9 +47,9 @@ $(document).ready(function() {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------CONTACT US--------------------------------
+  //#region -------------------------------CONTACT US--------------------------------
 
   contactLinkHandler();
 
@@ -79,7 +79,7 @@ $(document).ready(function() {
     });
   });
 
-  //</editor-fold>
+  //#endregion
 
   $(".right-content").scroll(function(e){
     if ($(this).scrollTop() > 0){
@@ -94,7 +94,7 @@ $(document).ready(function() {
 
 });
 
-//<editor-fold>----------------------------------MODAL HELPERS-------------------------
+//#region ----------------------------------MODAL HELPERS-------------------------
 
 //close modals
 function closeModals(){
@@ -114,9 +114,9 @@ function closeModals(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>----------------------------------URL HELPER FUNCTIONS-------------------------
+//#region ----------------------------------URL HELPER FUNCTIONS-------------------------
 
 //add active to left menu
 function leftMenuActive(){
@@ -210,9 +210,9 @@ function removeURLParameter(parameter) {
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>----------------------------------NOTIFICATIONS-------------------------
+//#region ----------------------------------NOTIFICATIONS-------------------------
 
 //populate the notifications tray
 function showNotifications() {
@@ -312,9 +312,9 @@ function appendNotification(id, link, text, tooltip) {
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>----------------------------------ANNOUNCEMENT COOKIE-------------------------------
+//#region ----------------------------------ANNOUNCEMENT COOKIE-------------------------------
 
 //helper function to make cookie
 function bakeCookie(name, value) {
@@ -322,4 +322,4 @@ function bakeCookie(name, value) {
   document.cookie = cookie;
 }
 
-//</editor-fold>
+//#endregion

@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-  //<editor-fold>------------------------------------------PAGE SETUP----------------------------------------
+  //#region ------------------------------------------PAGE SETUP----------------------------------------
 
   //punycode the domain name
   $(".punycode-domain").each(function(){
@@ -19,9 +19,9 @@ $(document).ready(function () {
       trackCheckoutBehavior($(this).attr("id"));
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>------------------------------------------PAYMENT METHOD SELECTION----------------------------------------
+  //#region ------------------------------------------PAYMENT METHOD SELECTION----------------------------------------
 
   //click choice block
   $(".choice-block").on("click", function() {
@@ -66,9 +66,9 @@ $(document).ready(function () {
   //create paypal button
   createPayPalButton();
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>------------------------------------------STRIPE----------------------------------------
+  //#region ------------------------------------------STRIPE----------------------------------------
 
   //key for stripe
   if (node_env == "dev"){
@@ -125,11 +125,11 @@ $(document).ready(function () {
     }
   });
 
-  //</editor-fold>
+  //#endregion
 
 });
 
-//<editor-fold>------------------------------------------PAYPAL----------------------------------------
+//#region ------------------------------------------PAYPAL----------------------------------------
 
 //create a paypal checkout button
 function createPayPalButton(){
@@ -189,9 +189,9 @@ function createPayPalButton(){
   }, '#paypal-button');
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------STRIPE----------------------------------------
+//#region ------------------------------------------STRIPE----------------------------------------
 
 //check the CC info
 function checkCC(){
@@ -229,9 +229,9 @@ function submitStripe(checkout_button){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------SUBMIT PAYMENT----------------------------------------
+//#region ------------------------------------------SUBMIT PAYMENT----------------------------------------
 
 //submit for a new purchase
 function submitNewPurchase(type, token){
@@ -294,9 +294,9 @@ function successHandler(rental_id, owner_hash_id){
   showMessage("stripe-success-message", "Hurray! Your purchase has been completed. Please check your email for further instructions on ownership transfer.");
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------HELPERS----------------------------------------
+//#region ------------------------------------------HELPERS----------------------------------------
 
 //used to see what people are doing on this checkout page
 function trackCheckoutBehavior(id){
@@ -350,4 +350,4 @@ function getCurrencyMultiplier(currency_code){
   return Math.pow(10, default_currency_details.fractionSize);
 }
 
-//</editor-fold>
+//#endregion

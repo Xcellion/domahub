@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
-  //<editor-fold>-------------------------------ACCOUNT TAB-------------------------------
+  //#region -------------------------------ACCOUNT TAB-------------------------------
 
-    //<editor-fold>-------------------------------ACCOUNT INFO-------------------------------
+    //#region -------------------------------ACCOUNT INFO-------------------------------
 
     //to show submit/cancel when data changes for account inputs
     $(".account-input").on("input", function(e){
@@ -34,9 +34,9 @@ $(document).ready(function() {
       cancelChanges();
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------PASSWORD CHANGE-------------------------------
+    //#region -------------------------------PASSWORD CHANGE-------------------------------
 
     //change password modal
     $("#change-password-button").on("click", function(){
@@ -51,15 +51,15 @@ $(document).ready(function() {
       submitChanges(checkAccountPassword());
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------CONNECT A REGISTRAR-------------------------------
+    //#region -------------------------------CONNECT A REGISTRAR-------------------------------
 
     updateRegistrars();
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------EXPORT LISTINGS DATA-------------------------------
+    //#region -------------------------------EXPORT LISTINGS DATA-------------------------------
 
     //export all listings details
     $("#csv-export-button").on("click", function(){
@@ -180,13 +180,13 @@ $(document).ready(function() {
       $(this).removeClass("is-loading");
     });
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------PREMIUM TAB-------------------------------
+  //#region -------------------------------PREMIUM TAB-------------------------------
 
-    //<editor-fold>-------------------------------STRIPE SET UP-------------------------------
+    //#region -------------------------------STRIPE SET UP-------------------------------
 
     if (typeof Stripe != "undefined"){
       if (window.location.hostname == "localhost"){
@@ -199,9 +199,9 @@ $(document).ready(function() {
 
     setupUpgradeTab();
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------CREDIT CARD CHANGE-------------------------------
+    //#region -------------------------------CREDIT CARD CHANGE-------------------------------
 
     //format stripe cc icons
     $("#credit-card-form").find(".input").on("change keyup paste", function(){
@@ -245,9 +245,9 @@ $(document).ready(function() {
       submitForToken();
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------UPGRADE TO PREMIUM-------------------------------
+    //#region -------------------------------UPGRADE TO PREMIUM-------------------------------
 
     //upgrade to premium with existing credit card
     $("#upgrade-button").on("click", function(){
@@ -269,9 +269,9 @@ $(document).ready(function() {
       setupCancelPremiumModal(false);
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------PROMO CODE-------------------------------
+    //#region -------------------------------PROMO CODE-------------------------------
 
     $("#refresh-referral-table-button").on('click', function(e){
       getReferrals();
@@ -306,19 +306,19 @@ $(document).ready(function() {
       });
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------REFERRAL-------------------------------
+    //#region -------------------------------REFERRAL-------------------------------
 
     referralLinkCopy();
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------PAYMENT TAB-------------------------------
+  //#region -------------------------------PAYMENT TAB-------------------------------
 
-    //<editor-fold>-------------------------------PERSONAL INFORMATION-------------------------------
+    //#region -------------------------------PERSONAL INFORMATION-------------------------------
 
     //fill out stripe info
     prefillStripeInfo();
@@ -380,9 +380,9 @@ $(document).ready(function() {
       });
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------BANK INFORMATION-------------------------------
+    //#region -------------------------------BANK INFORMATION-------------------------------
 
     //change the bank forms based on country
     $("#currency-input").on("change", function(e){
@@ -433,9 +433,9 @@ $(document).ready(function() {
       });
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------CURRENCY-------------------------------
+    //#region -------------------------------CURRENCY-------------------------------
 
     //change default currency
     $("#default_currency-input").on("input", function(){
@@ -454,9 +454,9 @@ $(document).ready(function() {
       });
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------PAYMENTS-------------------------------
+    //#region -------------------------------PAYMENTS-------------------------------
 
     //account payments
     $(".account-payments-input").on("input", function(){
@@ -479,11 +479,11 @@ $(document).ready(function() {
       });
     });
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------SHOW TAB-------------------------------
+  //#region -------------------------------SHOW TAB-------------------------------
 
     //function that runs when back button is pressed
     window.onpopstate = function(event) {
@@ -524,11 +524,11 @@ $(document).ready(function() {
       }
     });
 
-    //</editor-fold>
+    //#endregion
 
 });
 
-//<editor-fold>-------------------------------SHOW TAB-------------------------------
+//#region -------------------------------SHOW TAB-------------------------------
 
 //show a specific section
 function showSection(section_id){
@@ -576,9 +576,9 @@ function showSectionByURL(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------ACCOUNT TAB-------------------------------
+//#region -------------------------------ACCOUNT TAB-------------------------------
 
   //prefills all domahub account info
   function prefillAccountInfo(){
@@ -587,7 +587,7 @@ function showSectionByURL(){
     });
   }
 
-  //<editor-fold>-------------------------------SUBMIT ACCOUNT CHANGES-------------------------------
+  //#region -------------------------------SUBMIT ACCOUNT CHANGES-------------------------------
 
   //submit account changes AJAX
   function submitChanges(submit_data){
@@ -644,13 +644,13 @@ function showSectionByURL(){
     closeModals();
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------PREMIUM TAB-------------------------------
+//#region -------------------------------PREMIUM TAB-------------------------------
 
-  //<editor-fold>-------------------------------SET UP PREMIUM TAB CARD-------------------------------
+  //#region -------------------------------SET UP PREMIUM TAB CARD-------------------------------
 
   //set up upgrade card appearance
   function setupUpgradeTab(){
@@ -879,9 +879,9 @@ function showSectionByURL(){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------CREDIT CARD CHANGE-------------------------------
+  //#region -------------------------------CREDIT CARD CHANGE-------------------------------
 
   //submit to Stripe for a new token
   function submitForToken(){
@@ -952,9 +952,9 @@ function showSectionByURL(){
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------UPGRADE TO PREMIUM-------------------------------
+  //#region -------------------------------UPGRADE TO PREMIUM-------------------------------
 
   //submit a new premium or to renew the premium again
   function submitPremium(button_elem, renew, annual){
@@ -1014,9 +1014,9 @@ function showSectionByURL(){
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------REFERRALS-------------------------------
+  //#region -------------------------------REFERRALS-------------------------------
 
   //get referrals
   function getReferrals(){
@@ -1138,13 +1138,13 @@ function showSectionByURL(){
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------PAYMENT TAB-------------------------------
+//#region -------------------------------PAYMENT TAB-------------------------------
 
-  //<editor-fold>-------------------------------STRIPE ACCOUNT-------------------------------
+  //#region -------------------------------STRIPE ACCOUNT-------------------------------
 
   //handle checkboxes
   function checkBox(module_value, elem){
@@ -1222,9 +1222,9 @@ function showSectionByURL(){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------BANK INFORMATION-------------------------------
+  //#region -------------------------------BANK INFORMATION-------------------------------
 
   //submit stripe token for bank info
   function submitBank(stripe_token, updating_bank){
@@ -1325,11 +1325,11 @@ function showSectionByURL(){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//#region -------------------------------HELPERS-------------------------------
 
 function hideSaveCancelButtons(){
   $(".toolbar-submit-button, .toolbar-button").removeClass('is-loading');
@@ -1365,4 +1365,4 @@ function formatCurrency(number, currency_code, decimals){
   return wNumb(currency_details).to(number / Math.pow(10, default_currency_details.fractionSize));
 }
 
-//</editor-fold>
+//#endregion

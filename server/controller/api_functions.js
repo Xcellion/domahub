@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var listing_model = require('../models/listing_model.js');
 
@@ -6,9 +6,9 @@ var search_functions = require("./listing_general_functions.js");
 var renter_functions = require("./listing_renter_functions.js");
 var stripe_functions = require("./stripe_functions.js");
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var validator = require("validator");
 var request = require('request');
@@ -16,7 +16,7 @@ var url = require('url');
 var fs = require('fs');
 var path = require('path');
 
-//</editor-fold>
+//#endregion
 
 module.exports = function(app){
   app.all("*", [
@@ -32,7 +32,7 @@ module.exports = function(app){
   ]);
 }
 
-//<editor-fold>------------------------------------------FUNCTIONS---------------------------------------
+//#region ------------------------------------------FUNCTIONS---------------------------------------
 
 //check if the requested host is not for domahub
 function checkHost(req, res, next){
@@ -217,9 +217,9 @@ function requestProxy(req, res, rental_info){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------HELPERS---------------------------------------
+//#region ------------------------------------------HELPERS---------------------------------------
 
 //add http or https
 function addProtocol(address){
@@ -232,4 +232,4 @@ function addProtocol(address){
   return address;
 }
 
-//</editor-fold>
+//#endregion

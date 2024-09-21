@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var general_functions = require('../controller/general_functions.js');
 var auth_functions = require('../controller/auth_functions.js');
@@ -7,11 +7,11 @@ var owner_functions = require('../controller/listing_owner_functions.js');
 var stripe_functions = require('../controller/stripe_functions.js');
 var paypal_functions = require('../controller/paypal_functions.js');
 
-//</editor-fold>
+//#endregion
 
 module.exports = function(app){
 
-  //<editor-fold>-------------------------------ONBOARDING-------------------------------
+  //#region -------------------------------ONBOARDING-------------------------------
 
   //render onboarding page
   app.get("/profile/welcome", [
@@ -34,9 +34,9 @@ module.exports = function(app){
     profile_functions.updateAccountSettingsPost
   ]);
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DASHBOARD-------------------------------
+  //#region -------------------------------DASHBOARD-------------------------------
 
   //dashboard
   app.get("/profile/dashboard", [
@@ -57,9 +57,9 @@ module.exports = function(app){
     // profile_functions.deleteGoogleAPI
   ]);
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------MY LISTINGS-------------------------------
+  //#region -------------------------------MY LISTINGS-------------------------------
 
   //mylistings pages
   app.get("/profile/mylistings", [
@@ -158,11 +158,11 @@ module.exports = function(app){
     profile_functions.addRemoveHubRows
   ]);
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------SETTINGS-------------------------------
+  //#region -------------------------------SETTINGS-------------------------------
 
-    //<editor-fold>-------------------------------ACCOUNT DETAILS CHANGE-------------------------------
+    //#region -------------------------------ACCOUNT DETAILS CHANGE-------------------------------
 
     //settings
     app.get("/profile/settings", [
@@ -187,9 +187,9 @@ module.exports = function(app){
       profile_functions.updateAccountSettingsPost
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------STRIPE SUBSCRIPTION-------------------------------
+    //#region -------------------------------STRIPE SUBSCRIPTION-------------------------------
 
     //add a new card to user (stripe subscription)
     app.post("/profile/newcard", [
@@ -225,9 +225,9 @@ module.exports = function(app){
       stripe_functions.cancelStripeSubscription
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------STRIPE BANK-------------------------------
+    //#region -------------------------------STRIPE BANK-------------------------------
 
     //post to create new stripe managed account or update stripe managed account
     app.post("/profile/payout", [
@@ -249,9 +249,9 @@ module.exports = function(app){
       stripe_functions.createStripeBank
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------PROMO CODES-------------------------------
+    //#region -------------------------------PROMO CODES-------------------------------
 
     //get all existing referral promo codes for user
     app.post("/profile/getreferrals", [
@@ -270,13 +270,13 @@ module.exports = function(app){
       profile_functions.applyPromoCode
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------TRANSACTIONS-------------------------------
+  //#region -------------------------------TRANSACTIONS-------------------------------
 
-    //<editor-fold>-------------------------------RENDER-------------------------------
+    //#region -------------------------------RENDER-------------------------------
 
     //settings
     app.get("/profile/transactions", [
@@ -300,9 +300,9 @@ module.exports = function(app){
       profile_functions.convertCurrencyTransactions
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------WITHDRAWAL-------------------------------
+    //#region -------------------------------WITHDRAWAL-------------------------------
 
     //transfer to bank
     app.post("/profile/transfer", [
@@ -323,13 +323,13 @@ module.exports = function(app){
       profile_functions.convertCurrencyTransactions
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------OTHER-------------------------------
+  //#region -------------------------------OTHER-------------------------------
 
-    //<editor-fold>-------------------------------REGISTRAR-------------------------------
+    //#region -------------------------------REGISTRAR-------------------------------
 
     //post to update registrar
     app.post("/profile/registrar", [
@@ -347,9 +347,9 @@ module.exports = function(app){
       profile_functions.getRegistrarDomains
     ]);
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------REDIRECT-------------------------------
+    //#region -------------------------------REDIRECT-------------------------------
 
     //redirect upgrade premium to right link
     app.get([
@@ -369,8 +369,8 @@ module.exports = function(app){
     //redirect anything not caught above to /profile
     app.get("/profile*", profile_functions.redirectProfile);
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
 }

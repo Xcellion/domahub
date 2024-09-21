@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var listing_model = require('../models/listing_model.js');
 var account_model = require('../models/account_model.js');
@@ -11,9 +11,9 @@ var Descriptions = require("../lib/descriptions.js");
 var error = require('../lib/error.js');
 var encryptor = require('../lib/encryptor.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var request = require("request");
 var dns = require("dns");
@@ -44,11 +44,11 @@ var parseString = require('xml2js').parseString;
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------RENDERS-------------------------------
+  //#region -------------------------------RENDERS-------------------------------
 
   //display the create listing choice page
   renderCreateListing : function(req, res, next){
@@ -64,11 +64,11 @@ module.exports = {
     });
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------CREATE------------------------------
+  //#region -------------------------------CREATE------------------------------
 
-    //<editor-fold>-------------------------------CHECKS (CREATE)------------------------------
+    //#region -------------------------------CHECKS (CREATE)------------------------------
 
     //check all posted domain names
     checkPostedDomainNames : function(req, res, next){
@@ -190,9 +190,9 @@ module.exports = {
 
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------EXECUTE (CREATE)------------------------------
+    //#region -------------------------------EXECUTE (CREATE)------------------------------
 
     //if creating via registrar tool, set the DNS to point to domahub
     setDNSViaRegistrar : function(req, res, next){
@@ -400,13 +400,13 @@ module.exports = {
     pending_dns_promise : pending_dns_promise,
     verified_dns_promise : verified_dns_promise,
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------UPDATE/DELETE------------------------------
+  //#region -------------------------------UPDATE/DELETE------------------------------
 
-    //<editor-fold>-------------------------------CHECKS (UPDATE LISTINGS)------------------------------
+    //#region -------------------------------CHECKS (UPDATE LISTINGS)------------------------------
 
     //create a new listing info object to make changes to
     createNewListingInfoObj : function(req, res, next){
@@ -1478,9 +1478,9 @@ module.exports = {
       }
     },
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------EXECUTE------------------------------
+    //#region -------------------------------EXECUTE------------------------------
 
     //copy listing details from an existing listing
     copyListingDetails: function(req, res, next){
@@ -1729,11 +1729,11 @@ module.exports = {
       }
     },
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------EXPENSES------------------------------
+  //#region -------------------------------EXPENSES------------------------------
 
   //check expense info if it's legit
   checkExpenseDetails : function(req, res, next){
@@ -1892,11 +1892,11 @@ module.exports = {
     });
   },
 
-  //</editor-fold>
+  //#endregion
 
 }
 
-//<editor-fold>-------------------------------HELPERS------------------------------
+//#region -------------------------------HELPERS------------------------------
 
 //helper function to update req.user.listings after updating a listing
 function updateUserListingsObject(req, res, domain_names){
@@ -1951,9 +1951,9 @@ function getUserListingObjByID(listings, id){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------LISTING CREATE HELPERS------------------------------
+//#region -------------------------------LISTING CREATE HELPERS------------------------------
 
 //check to see if domain name is legit
 function checkPostedDomainName(user, domains_sofar, domain_name, min_price, buy_price){
@@ -2128,7 +2128,7 @@ function checkInsertedIDs(req, res, inserted_ids){
   }
 }
 
-  //<editor-fold>-------------------------------LISTING CREATE HELPERS (promises)------------------------------
+  //#region -------------------------------LISTING CREATE HELPERS (promises)------------------------------
 
   //promise function for verified DNS status change
   function verified_dns_promise(various_ids){
@@ -2244,11 +2244,11 @@ function checkInsertedIDs(req, res, inserted_ids){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------REGISTRAR DNS HELPERS------------------------------
+//#region -------------------------------REGISTRAR DNS HELPERS------------------------------
 
 //returns a promise to set DNS for godaddy domains
 function set_dns_godaddy_promise(registrar_info, registrar_domain_name, listing_id){
@@ -2620,4 +2620,4 @@ function addDNSRecordNameSilo(namesilo_api_key, registrar_domain_name, rrtype, r
   });
 }
 
-//</editor-fold>
+//#endregion

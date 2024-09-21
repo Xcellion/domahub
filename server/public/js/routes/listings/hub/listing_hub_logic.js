@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var start_at = 0;
 var listings_per_page = listing_hub_info.hub_layout_count || 10;
@@ -8,7 +8,7 @@ for (var x = 0 ; x < categories.length ; x++){
   categories_hash[categories[x].back] = categories[x].front;
 }
 
-//</editor-fold>
+//#endregion
 
 //on back button
 window.onpopstate = function(event) {
@@ -22,7 +22,7 @@ $(document).ready(function() {
     $(this).text(punycode.toUnicode($(this).text()));
   });
 
-  //<editor-fold>-------------------------------DOMAIN TABLE-------------------------------
+  //#region -------------------------------DOMAIN TABLE-------------------------------
 
   findOtherDomainsHub(false);
 
@@ -44,18 +44,18 @@ $(document).ready(function() {
     $(".modal").removeClass('is-active');
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------DETAILED VIEW SETUP-------------------------------
+  //#region -------------------------------DETAILED VIEW SETUP-------------------------------
 
   //leave detailed view
   $("#back-to-list-button, .logo-item").on("click", function(){
     showDomainListView(true);
   });
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------HUB FOOTER-------------------------------
+  //#region -------------------------------HUB FOOTER-------------------------------
 
   //footer text
   if (listing_hub_info.description_footer){
@@ -76,11 +76,11 @@ $(document).ready(function() {
     $("#listing-footer, #listing-footer-logo-link, #listing-hub-logo-link").attr("href", "https://domahub.com").addClass("is-underlined");;
   }
 
-  //</editor-fold>
+  //#endregion
 
 });
 
-//<editor-fold>-------------------------------PAGE SETUP-------------------------------
+//#region -------------------------------PAGE SETUP-------------------------------
 
 function showBasedOnURL(push){
   var domain_name = getParameterByName("listing");
@@ -227,9 +227,9 @@ function findOtherDomainsHub(push){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------TABLE SETUP-------------------------------
+//#region -------------------------------TABLE SETUP-------------------------------
 
 //create the table of domains owned (depending on sort and search)
 function createDomainView(){
@@ -453,9 +453,9 @@ function createDomainTiles(listings_to_show, start_at, listings_per_page){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------DETAIL VIEW SETUP-------------------------------
+//#region -------------------------------DETAIL VIEW SETUP-------------------------------
 
 //show the detailed view
 function showDetails(listing_info_local, push){
@@ -500,9 +500,9 @@ function showDomainListView(push){
   removeURLParameter("listing", push);
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//#region -------------------------------HELPERS-------------------------------
 
 //encode and decode ROT13
 function rot13(s) {
@@ -525,4 +525,4 @@ function arrayUnique(array) {
   return a;
 }
 
-//</editor-fold>
+//#endregion

@@ -20,11 +20,11 @@ $(document).ready(function() {
   //remove class to prevent screen flash DH green
   $("body").removeClass('is-hidden');
 
-  //<editor-fold>-------------------------------LEGAL MESSAGE-------------------------------
+  //#region -------------------------------LEGAL MESSAGE-------------------------------
 
   setupLegalMessage(listing_hub_info);
 
-  //</editor-fold>
+  //#endregion
 
 });
 

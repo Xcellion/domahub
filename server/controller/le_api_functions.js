@@ -1,17 +1,17 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var listing_model = require('../models/listing_model.js');
 
 var stripe_functions = require("../controller/stripe_functions.js");
 
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var validator = require("validator");
 
-//</editor-fold>
+//#endregion
 
 //Lets Encrypt server for custom SSL on demand for all domains listed at DomaHub
 module.exports = function(app){
@@ -23,7 +23,7 @@ module.exports = function(app){
   ]);
 }
 
-//<editor-fold>-------------------------------FUNCTIONS-------------------------------
+//#region -------------------------------FUNCTIONS-------------------------------
 
 //check for hostname
 function checkHost(req, res, next){
@@ -87,4 +87,4 @@ function sendOkayToNginx(req, res, next){
   }
 }
 
-//</editor-fold>
+//#endregion

@@ -1,10 +1,10 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var error = require('./error.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var account_model = require('../models/account_model.js');
 
@@ -14,11 +14,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require("crypto");
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------SET UP PASSPORT-------------------------------
+  //#region -------------------------------SET UP PASSPORT-------------------------------
 
   passport : passport,
 
@@ -134,6 +134,6 @@ module.exports = {
 
   }
 
-  //</editor-fold>
+  //#endregion
 
 }

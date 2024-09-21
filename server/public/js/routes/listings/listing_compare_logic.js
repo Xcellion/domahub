@@ -3,7 +3,7 @@ var listing_description_tour = false;
 
 $(document).ready(function() {
 
-  //<editor-fold>---------------------------------COMPARE TOOL SETUP--------------------------------------------------
+  //#region ---------------------------------COMPARE TOOL SETUP--------------------------------------------------
 
   //hide bottom right notification button
   $("#compare-msg .delete").on("click", function(e){
@@ -52,9 +52,9 @@ $(document).ready(function() {
   loadPremiumAndBasicHandler();
   menuButtonHandlers();
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>---------------------------------TUTORIAL--------------------------------------------------
+  //#region ---------------------------------TUTORIAL--------------------------------------------------
 
   if (getParameterByName("tutorial") != "false"){
     tutorial_tour = new Tour({
@@ -473,11 +473,11 @@ $(document).ready(function() {
     tutorial_tour.end();
   });
 
-  //</editor-fold>
+  //#endregion
 
 });
 
-//<editor-fold>---------------------------------MENU--------------------------------------------------
+//#region ---------------------------------MENU--------------------------------------------------
 
 //hide and show menu
 function menuButtonHandlers() {
@@ -520,9 +520,9 @@ function toggleMenu(show){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>---------------------------------THEMES--------------------------------------------------
+//#region ---------------------------------THEMES--------------------------------------------------
 
 //switch theme
 function switchTheme(theme_name){
@@ -570,9 +570,9 @@ function switchTheme(theme_name){
   updateQueryStringParam("theme", theme_to_load.theme_name);
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>---------------------------------INFO TAB--------------------------------------------------
+//#region ---------------------------------INFO TAB--------------------------------------------------
 
 //update the description / description footer
 function updateDescription(){
@@ -706,9 +706,9 @@ function updateBIN(){
   });
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>---------------------------------DESIGN TAB--------------------------------------------------
+//#region ---------------------------------DESIGN TAB--------------------------------------------------
 
 //change URL to custom for premium v basic
 function loadPremiumAndBasicHandler(){
@@ -951,9 +951,9 @@ function checkBox(module_value, elem){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>---------------------------------MODULES--------------------------------------------------
+//#region ---------------------------------MODULES--------------------------------------------------
 
 //create a test chart
 function createTestChart(){
@@ -1094,9 +1094,9 @@ function createTestRentals(){
   listing_info.rentals = temp_rentals;
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>---------------------------------UPDATE HANDLERS--------------------------------------------------
+//#region ---------------------------------UPDATE HANDLERS--------------------------------------------------
 
 //do submit buy handler
 function testSubmitBuyHandler(button_id){
@@ -1139,9 +1139,9 @@ function testCalendarHandler(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>---------------------------------HELPER FUNCTIONS--------------------------------------------------
+//#region ---------------------------------HELPER FUNCTIONS--------------------------------------------------
 
 function randomIntFromInterval(min,max){
   return Math.floor(Math.random()*(max-min+1)+min);
@@ -1195,4 +1195,4 @@ function updateQueryStringParam(key, value) {
   window.history.replaceState({}, "", baseUrl + params);
 };
 
-//</editor-fold>
+//#endregion

@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
@@ -7,13 +7,13 @@ var Categories = require("../lib/categories.js");
 var price_rate_list = ["hour_price", "day_price", "week_price", "month_price", "none"];
 var error = require('../lib/error.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var validator = require("validator");
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
@@ -282,7 +282,7 @@ module.exports = {
 
 }
 
-//<editor-fold>-------------------------------HELPER-------------------------------
+//#region -------------------------------HELPER-------------------------------
 
 //join all rental times
 function joinRentalTimes(rental_times){
@@ -394,4 +394,4 @@ function checkAllListingCategories(listings, posted_categories){
   return temp_listings;
 }
 
-//</editor-fold>
+//#endregion

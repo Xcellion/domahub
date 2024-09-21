@@ -1,4 +1,4 @@
-//<editor-fold>------------------------------------------ENVIRONMENT SETTINGS---------------------------------------
+//#region ------------------------------------------ENVIRONMENT SETTINGS---------------------------------------
 
 //http server
 var express = require('express');
@@ -16,9 +16,9 @@ app.set('views', __dirname + '/views');
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------SESSION---------------------------------------
+//#region ------------------------------------------SESSION---------------------------------------
 
 //which session store to use depending on DEV or PROD
 var session = require('express-session');
@@ -61,15 +61,15 @@ else {
   }));
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------DATABASE---------------------------------------
+//#region ------------------------------------------DATABASE---------------------------------------
 
 var db = require('./lib/database.js');
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>------------------------------------------ROUTES---------------------------------------
+//#region ------------------------------------------ROUTES---------------------------------------
 
 //API for Lets Encrypt SSL certs for premium domains listed on domahub
 require('./controller/le_api_functions.js')(app);
@@ -81,7 +81,7 @@ app.get('*', function(req, res){
   res.sendStatus(404);
 });
 
-//</editor-fold>
+//#endregion
 
 //lets encrypt server on port 9090
 serverHTTP(app).listen(9090, function(){

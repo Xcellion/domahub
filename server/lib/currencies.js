@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var currency_codes = {
   "AED": {
@@ -2063,11 +2063,11 @@ var wNumb = require("wnumb");
 var moment = require('moment');
 var fs = require('fs');
 
-//</editor-fold>
+//#endregion
 
 module.exports = {
 
-  //<editor-fold>-------------------------------SETUP-------------------------------
+  //#region -------------------------------SETUP-------------------------------
 
   //check if current exchange rates are legit, if not update to today's exchange rates
   checkExchangeRates : function(req, res, next){
@@ -2100,9 +2100,9 @@ module.exports = {
     // }
   },
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------FUNCTIONS-------------------------------
+  //#region -------------------------------FUNCTIONS-------------------------------
 
   //does a currency exist
   exists : function(code){
@@ -2143,6 +2143,6 @@ module.exports = {
     return (currency_codes[code].paypalFee) ? currency_codes[code].paypalFee : false;
   },
 
-  //</editor-fold>
+  //#endregion
 
 }

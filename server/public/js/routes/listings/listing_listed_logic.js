@@ -1,4 +1,4 @@
-//<editor-fold>-------------------------------VARIABLES-------------------------------
+//#region -------------------------------VARIABLES-------------------------------
 
 var myPath;
 var traffic_chart = false;
@@ -10,7 +10,7 @@ for (var x = 0 ; x < categories.length ; x++){
   categories_hash[categories[x].back] = categories[x].front;
 }
 
-//</editor-fold>
+//#endregion
 
 //use a set up function for the whole page so we can re-use in hub
 $(document).ready(function() {
@@ -19,7 +19,7 @@ $(document).ready(function() {
   }
 });
 
-//<editor-fold>-------------------------------SET UP THE PAGE-------------------------------
+//#region -------------------------------SET UP THE PAGE-------------------------------
 
 function setupListedPage(){
 
@@ -45,9 +45,9 @@ function setupListedPage(){
   setupFooter();
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------LEFT HALF-------------------------------
+//#region -------------------------------LEFT HALF-------------------------------
 
 function setupLeftHalf(){
   //domain name
@@ -63,7 +63,7 @@ function setupLeftHalf(){
   setupSocial();
 }
 
-//<editor-fold>-------------------------------MAIN IMAGE-------------------------------
+//#region -------------------------------MAIN IMAGE-------------------------------
 
 function setupMainImage(){
   if (listing_info.premium && listing_info.main_image){
@@ -74,9 +74,9 @@ function setupMainImage(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------PRICE TAGS-------------------------------
+//#region -------------------------------PRICE TAGS-------------------------------
 
 function setupPriceTags(){
   //buy now
@@ -142,17 +142,17 @@ function setupPriceTags(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------DESCRIPTION-------------------------------
+//#region -------------------------------DESCRIPTION-------------------------------
 
 function setupDescription(){
   $("#listing-description").text((listing_info.description) ? listing_info.description : "");
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------REGISTRAR-------------------------------
+//#region -------------------------------REGISTRAR-------------------------------
 
 function setupRegistrar(){
   if ((!listing_info.premium || (listing_info.show_registrar == 1 && listing_info.registrar_name)) && listing_info.registrar_name){
@@ -163,9 +163,9 @@ function setupRegistrar(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------DATE REGISTERED-------------------------------
+//#region -------------------------------DATE REGISTERED-------------------------------
 
 function setupDateRegistered(){
   if ((!listing_info.premium || (listing_info.show_registration_date == 1 && listing_info.date_registered)) && listing_info.date_registered){
@@ -176,9 +176,9 @@ function setupDateRegistered(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------CATEGORIES-------------------------------
+//#region -------------------------------CATEGORIES-------------------------------
 
 function setupCategories(){
   if (!listing_info.categories || listing_info.categories == "" || (listing_info.premium && listing_info.show_categories == 0)){
@@ -191,9 +191,9 @@ function setupCategories(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------APPRAISAL-------------------------------
+//#region -------------------------------APPRAISAL-------------------------------
 
 function setupAppraisal(){
 
@@ -240,9 +240,9 @@ function setupAppraisal(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------SOCIAL SHARE-------------------------------
+//#region -------------------------------SOCIAL SHARE-------------------------------
 
 function setupSocial(){
   if (!listing_info.premium || (listing_info.show_social_sharing == 1)){
@@ -256,11 +256,11 @@ function setupSocial(){
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------RIGHT HALF-------------------------------
+//#region -------------------------------RIGHT HALF-------------------------------
 
 function setupRightHalf(){
   setupContactTab();
@@ -270,11 +270,11 @@ function setupRightHalf(){
   setUpTabs();
 }
 
-  //<editor-fold>-------------------------------TABS-------------------------------
+  //#region -------------------------------TABS-------------------------------
 
   function setUpTabs(){
 
-    //<editor-fold>-------------------------------TABS LOGIC-------------------------------
+    //#region -------------------------------TABS LOGIC-------------------------------
 
     //switch tabs
     $(".tab").off().on("click", function(){
@@ -321,9 +321,9 @@ function setupRightHalf(){
       $(".module-tab.is-active").removeClass("is-active");
     }
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------SPECIFIC TAB LOGIC-------------------------------
+    //#region -------------------------------SPECIFIC TAB LOGIC-------------------------------
 
     //hide or show rental tab
     if (!listing_info.rentable || listing_info.status == 0){
@@ -391,12 +391,12 @@ function setupRightHalf(){
       $(".module-tab").addClass('is-hidden');
     }
 
-    //</editor-fold>
+    //#endregion
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------CONTACT FORM-------------------------------
+  //#region -------------------------------CONTACT FORM-------------------------------
 
   function setupContactTab(){
     if (listing_info.status == 1){
@@ -510,9 +510,9 @@ function setupRightHalf(){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------RENTAL-------------------------------
+  //#region -------------------------------RENTAL-------------------------------
 
   function setupRentalTab(){
     if (listing_info.rentable && listing_info.status == 1){
@@ -527,7 +527,7 @@ function setupRightHalf(){
         getTimes();
       });
 
-      //<editor-fold>-------------------------------TYPED PATH-------------------------------
+      //#region -------------------------------TYPED PATH-------------------------------
 
       //initiate typed JS
       $("#typed-slash").typed({
@@ -616,9 +616,9 @@ function setupRightHalf(){
       rental_domain_title = (rental_domain_title.length > 20) ? rental_domain_title.substr(0,12) + "..." + rental_domain_title.substr(-8) : rental_domain_title;
       $("#rental-domain-title").text(rental_domain_title);
 
-      //</editor-fold>
+      //#endregion
 
-      //<editor-fold>-------------------------------RENTAL FREE TIMES-------------------------------
+      //#region -------------------------------RENTAL FREE TIMES-------------------------------
 
       //if and any free times
       if (listing_info.freetimes && listing_info.freetimes.length > 0){
@@ -640,12 +640,12 @@ function setupRightHalf(){
         }
       }
 
-      //</editor-fold>
+      //#endregion
 
     }
   }
 
-    //<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
+    //#region -------------------------------SUBMIT TIMES-------------------------------
 
     //check if everything is legit
     function checkTimes(){
@@ -721,9 +721,9 @@ function setupRightHalf(){
       }
     }
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------CALENDAR SET UP-------------------------------
+    //#region -------------------------------CALENDAR SET UP-------------------------------
 
   //get times from the server
   function getTimes(){
@@ -985,11 +985,11 @@ function setupRightHalf(){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------TRAFFIC-------------------------------
+  //#region -------------------------------TRAFFIC-------------------------------
 
   function setupTrafficTab(){
 
@@ -1022,7 +1022,7 @@ function setupRightHalf(){
     }
   }
 
-    //<editor-fold>-------------------------------TRAFFIC CHART-------------------------------
+    //#region -------------------------------TRAFFIC CHART-------------------------------
 
     //get traffic data if we havent yet
     function getTrafficData(){
@@ -1314,9 +1314,9 @@ function setupRightHalf(){
       });
     }
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------ALEXA STATS-------------------------------
+    //#region -------------------------------ALEXA STATS-------------------------------
 
     //get alexa data
     function getAlexaData(){
@@ -1347,11 +1347,11 @@ function setupRightHalf(){
       }
     }
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------HISTORY TICKER-------------------------------
+  //#region -------------------------------HISTORY TICKER-------------------------------
 
   //ajax call to get ticker information
   function getTickerData(loadmore){
@@ -1611,9 +1611,9 @@ function setupRightHalf(){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------OTHER DOMAINS-------------------------------
+  //#region -------------------------------OTHER DOMAINS-------------------------------
 
   function setupOtherDomainsTab(){
     if ((listing_info.premium && listing_info.show_domain_list) || !listing_info.premium){
@@ -1621,7 +1621,7 @@ function setupRightHalf(){
     }
   }
 
-  //<editor-fold>-------------------------------OTHER DOMAINS-------------------------------
+  //#region -------------------------------OTHER DOMAINS-------------------------------
 
   //other domains by same owner
   function findOtherDomainsListing(){
@@ -1709,13 +1709,13 @@ function setupRightHalf(){
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------HELPERS-------------------------------
+//#region -------------------------------HELPERS-------------------------------
 
 //get the hostname of a URL
 function getHost(href) {
@@ -1822,4 +1822,4 @@ function getCurrencyMultiplier(currency_code){
   return Math.pow(10, default_currency_details.fractionSize);
 }
 
-//</editor-fold>
+//#endregion

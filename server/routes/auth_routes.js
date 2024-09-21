@@ -1,14 +1,14 @@
-//<editor-fold>-------------------------------DOMA LIB FUNCTIONS-------------------------------
+//#region -------------------------------DOMA LIB FUNCTIONS-------------------------------
 
 var general_functions = require('../controller/general_functions.js');
 var auth_functions = require('../controller/auth_functions.js');
 var currencies = require('../lib/currencies.js');
 
-//</editor-fold>>
+//#endregion>
 
 module.exports = function(app){
 
-  //<editor-fold>-------------------------------SIGNUP / REFERRAL-------------------------------
+  //#region -------------------------------SIGNUP / REFERRAL-------------------------------
 
   //signup normal (no referral)
   app.get('/signup', [
@@ -35,9 +35,9 @@ module.exports = function(app){
     auth_functions.signupPost
   ]);
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------LOGIN / LOGOUT-------------------------------
+  //#region -------------------------------LOGIN / LOGOUT-------------------------------
 
   //login to demo user
   app.get("/demo", [
@@ -67,9 +67,9 @@ module.exports = function(app){
     auth_functions.loginPost
   ]);
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------VERIFY EMAIL-------------------------------
+  //#region -------------------------------VERIFY EMAIL-------------------------------
 
   //verify email
   app.get("/verify/:token", [
@@ -90,9 +90,9 @@ module.exports = function(app){
     auth_functions.verifyPost
   ]);
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------FORGOT PASSWORD-------------------------------
+  //#region -------------------------------FORGOT PASSWORD-------------------------------
 
   //render forgot PW page
   app.get('/forgot', [
@@ -108,9 +108,9 @@ module.exports = function(app){
     auth_functions.forgotPost
   ]);
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------RESET PASSWORD-------------------------------
+  //#region -------------------------------RESET PASSWORD-------------------------------
 
   //to render reset pw page
   app.get("/reset/:token", [
@@ -127,6 +127,6 @@ module.exports = function(app){
     auth_functions.resetPost
   ]);
 
-  //</editor-fold>
+  //#endregion
 
 }

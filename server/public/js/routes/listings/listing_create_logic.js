@@ -7,9 +7,9 @@ $(document).ready(function() {
     showListingCreateSelector();
   }
 
-  //<editor-fold>-------------------------------MANUAL CREATE-------------------------------
+  //#region -------------------------------MANUAL CREATE-------------------------------
 
-    //<editor-fold>-------------------------------TEXTAREA BINDINGS-------------------------------
+    //#region -------------------------------TEXTAREA BINDINGS-------------------------------
 
     //submit to submit textarea and create the table
     $("#domain-input-form").on("submit", function(e){
@@ -25,9 +25,9 @@ $(document).ready(function() {
       }
     });
 
-    //</editor-fold>
+    //#endregion
 
-    //<editor-fold>-------------------------------TABLE BINDINGS-------------------------------
+    //#region -------------------------------TABLE BINDINGS-------------------------------
 
     //go back to
     $("#back-to-listing-create-selector").on("click", function(e){
@@ -73,11 +73,11 @@ $(document).ready(function() {
       submitDomains();
     });
 
-    //</editor-fold>
+    //#endregion
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------CSV UPLOAD CREATE-------------------------------
+  //#region -------------------------------CSV UPLOAD CREATE-------------------------------
 
   //selecting a CSV file
   $("#csv-select-input").on("input", function(){
@@ -129,10 +129,10 @@ $(document).ready(function() {
     }
   });
 
-  //</editor-fold>
+  //#endregion
 
 
-  //<editor-fold>-------------------------------LOOK UP REGISTAR-------------------------------
+  //#region -------------------------------LOOK UP REGISTAR-------------------------------
 
   updateRegistrars();
 
@@ -141,13 +141,13 @@ $(document).ready(function() {
     lookupRegistrars();
   });
 
-  //</editor-fold>
+  //#endregion
 
 });
 
-//<editor-fold>-------------------------------MANUAL CREATE-------------------------------
+//#region -------------------------------MANUAL CREATE-------------------------------
 
-  //<editor-fold>-------------------------------MANUAL TEXTAREA-------------------------------
+  //#region -------------------------------MANUAL TEXTAREA-------------------------------
 
   //show the textarea manual domain submitter
   function showListingCreateSelector(){
@@ -188,9 +188,9 @@ $(document).ready(function() {
     });
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------MANUAL TABLE-------------------------------
+  //#region -------------------------------MANUAL TABLE-------------------------------
 
   //show the table
   function showManualTable(){
@@ -323,9 +323,9 @@ $(document).ready(function() {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------MANUAL TABLE SUBMIT-------------------------------
+  //#region -------------------------------MANUAL TABLE SUBMIT-------------------------------
 
   //show or disable submit
   function handleSubmitDisabled(){
@@ -404,9 +404,9 @@ $(document).ready(function() {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------TABLE BUTTONS-------------------------------
+  //#region -------------------------------TABLE BUTTONS-------------------------------
 
   //delete empty table rows
   function deleteEmptyTableRows(){
@@ -433,9 +433,9 @@ $(document).ready(function() {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-  //<editor-fold>-------------------------------TABLE UPDATE-------------------------------
+  //#region -------------------------------TABLE UPDATE-------------------------------
 
   //clear all successful rows
   function clearSuccessRows(){
@@ -488,11 +488,11 @@ $(document).ready(function() {
     }
   }
 
-  //</editor-fold>
+  //#endregion
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------CSV UPLOAD-------------------------------
+//#region -------------------------------CSV UPLOAD-------------------------------
 
 function isAPIAvailable() {
   // Check for the various File API support.
@@ -517,9 +517,9 @@ function isAPIAvailable() {
   }
 }
 
-//</editor-fold>
+//#endregion
 
-//<editor-fold>-------------------------------LOOKUP REGISTAR-------------------------------
+//#region -------------------------------LOOKUP REGISTAR-------------------------------
 
 //initialize the registrar domain name look ups
 function lookupRegistrars(){
@@ -556,4 +556,4 @@ function lookupRegistrars(){
   }
 }
 
-//</editor-fold>
+//#endregion
