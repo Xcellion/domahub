@@ -48,7 +48,7 @@ function setupDomaTutorial() {
       //main welcome step - 0
       {
         template:
-          "<div class='popover tour'> \
+          "<div class='popover tour' style='margin:15px'> \
                     <h3 class='popover-title'></h3> \
                     <div class='popover-content content'></div> \
                     <div> \
@@ -58,7 +58,7 @@ function setupDomaTutorial() {
                             <span class='icon is-small'> \
                               <i class='fal fa-thumbs-up'></i> \
                             </span> \
-                            <span>Yes! Show me how it works.</span> \
+                            <span>Yes! Show me please.</span> \
                           </button> \
                         </div> \
                         <div class='control is-expanded'> \
