@@ -12,7 +12,12 @@
   padding-top: 60px;
 }
 
+.tour {
+  background-color: red;
+}
+
 // margins list contains 0-100 (mults of 5), 150, and 200
+$margins: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 150, 200;
 @each $margin in $margins {
   .margin-#{$margin} {
     margin: #{$margin}px !important;
@@ -65,6 +70,7 @@
   vertical-align: middle !important;
 }
 
+$border: #ddd; // or any other border color or value
 .has-border-bottom {
   border-bottom: 1px solid $border;
 }

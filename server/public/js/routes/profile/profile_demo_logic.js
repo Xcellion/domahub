@@ -48,7 +48,7 @@ function setupDomaTutorial() {
       //main welcome step - 0
       {
         template:
-          "<div class='popover tour' style='margin:15px'> \
+          "<div class='popover tour' style='margin:15px; width:calc(100% - 30px);'> \
                     <h3 class='popover-title'></h3> \
                     <div class='popover-content content'></div> \
                     <div> \
@@ -58,7 +58,7 @@ function setupDomaTutorial() {
                             <span class='icon is-small'> \
                               <i class='fal fa-thumbs-up'></i> \
                             </span> \
-                            <span>Yes! Show me please.</span> \
+                            <span>Yes! Show me.</span> \
                           </button> \
                         </div> \
                         <div class='control is-expanded'> \
@@ -66,7 +66,7 @@ function setupDomaTutorial() {
                             <span class='icon is-small'> \
                               <i class='fal fa-frown'></i> \
                             </span> \
-                            <span>No, I'll figure it out.</span> \
+                            <span>No thanks.</span> \
                           </button> \
                         </div> \
                       </div> \
@@ -282,6 +282,8 @@ function setupDomaTutorial() {
 
   profile_demo_tour.init();
   profile_demo_tour.start();
+
+  $("#step-0").css("left", "0px");
 
   //restart button if not domademo
   if (user.username != "DomaHubDemo") {
